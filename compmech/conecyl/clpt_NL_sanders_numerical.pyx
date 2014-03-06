@@ -12,7 +12,7 @@ from scipy.sparse import coo_matrix
 from cython.parallel import prange
 from libc.stdlib cimport malloc, free
 
-from desicos.clpt_commons cimport cfv, cfN, cfuvw_x, cfuvw_t
+from compmech.conecyl.clpt_commons cimport cfv, cfN, cfuvw_x, cfuvw_t
 
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64

@@ -706,6 +706,9 @@ class ConeCyl(object):
 
         c = self.calc_full_c(c, inc=inc)
 
+        if self.k0==None:
+            self.calc_linear_matrices()
+
         print('\t\tCalculating non-linear matrices... '),
         NL_kinematics = self.NL_kinematics
         alpharad = self.alpharad

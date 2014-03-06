@@ -1,1 +1,1 @@
-import conecyl
+from conecyl import load, ConeCyl
