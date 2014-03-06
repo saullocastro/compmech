@@ -8,12 +8,13 @@ Computational Mechanics (compmech)
 A collection of theories and implementations on the field of Mechanics.
 
 The development of the theories and the implementation details are given 
-in ``./theories``
+in `theories <https://github.com/saullocastro/compmech/blob/master/theories/README.rst/>`_
+ 
 
 Implemented modules 
 -------------------
 
-- `conecyl <https://raw.github.com/saullocastro/compmech/master/doc/conecyl/README.rst/>`_
+- `conecyl <https://github.com/saullocastro/compmech/blob/master/doc/conecyl/README.rst/>`_
 
 Requirements
 ------------
