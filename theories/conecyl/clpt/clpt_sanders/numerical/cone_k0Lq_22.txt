@@ -1,0 +1,19 @@
+{{0, 0, (k2*Pi*vx*Cos[(k2*Pi*x)/L]*Sin[l2*t])/L, 
+  (k2*Pi*vx*Cos[l2*t]*Cos[(k2*Pi*x)/L])/L, 
+  (k2*Pi*wx*Cos[(k2*Pi*x)/L]*Sin[l2*t])/L, 
+  (k2*Pi*wx*Cos[l2*t]*Cos[(k2*Pi*x)/L])/L}, 
+ {-((l2*sina*v*Cos[l2*t]*Sin[(k2*Pi*x)/L])/r^2), 
+  (l2*sina*v*Sin[l2*t]*Sin[(k2*Pi*x)/L])/r^2, 
+  ((-(sina*ut) + v - cosa*wt)*Sin[l2*t]*Sin[(k2*Pi*x)/L])/r^2, 
+  ((-(sina*ut) + v - cosa*wt)*Cos[l2*t]*Sin[(k2*Pi*x)/L])/r^2, 
+  (l2*(-(cosa*v) + wt)*Cos[l2*t]*Sin[(k2*Pi*x)/L])/r^2, 
+  (l2*(cosa*v - wt)*Sin[l2*t]*Sin[(k2*Pi*x)/L])/r^2}, 
+ {-((k2*Pi*sina*v*Cos[(k2*Pi*x)/L]*Sin[l2*t])/(L*r)), 
+  -((k2*Pi*sina*v*Cos[l2*t]*Cos[(k2*Pi*x)/L])/(L*r)), 
+  -(((sina*ux + cosa*wx)*Sin[l2*t]*Sin[(k2*Pi*x)/L])/r), 
+  -(((sina*ux + cosa*wx)*Cos[l2*t]*Sin[(k2*Pi*x)/L])/r), 
+  (k2*Pi*(-(cosa*v) + wt)*Cos[(k2*Pi*x)/L]*Sin[l2*t] + 
+    L*l2*wx*Cos[l2*t]*Sin[(k2*Pi*x)/L])/(L*r), 
+  (k2*Pi*(-(cosa*v) + wt)*Cos[l2*t]*Cos[(k2*Pi*x)/L] - 
+    L*l2*wx*Sin[l2*t]*Sin[(k2*Pi*x)/L])/(L*r)}, {0, 0, 0, 0, 0, 0}, 
+ {0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0}}

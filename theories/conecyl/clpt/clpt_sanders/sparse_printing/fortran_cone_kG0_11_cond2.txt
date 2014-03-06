@@ -1,0 +1,26 @@
+# kG0_11
+# kG0_11_num=6
+c += 1
+kG0r[c] = row+0
+kG0c[c] = col+1
+kG0v[c] += T*i1*sina*(-i1*sin(pi*i1*xa/L)*sin(pi*k1*xa/L) + i1*sin(pi*i1*xb/L)*sin(pi*k1*xb/L) - k1*cos(pi*i1*xa/L)*cos(pi*k1*xa/L) + k1*cos(pi*i1*xb/L)*cos(pi*k1*xb/L))/(r**2*(i1**2 - k1**2))
+c += 1
+kG0r[c] = row+1
+kG0c[c] = col+0
+kG0v[c] += T*k1*sina*(i1*cos(pi*i1*xa/L)*cos(pi*k1*xa/L) - i1*cos(pi*i1*xb/L)*cos(pi*k1*xb/L) + k1*sin(pi*i1*xa/L)*sin(pi*k1*xa/L) - k1*sin(pi*i1*xb/L)*sin(pi*k1*xb/L))/(r**2*(i1**2 - k1**2))
+c += 1
+kG0r[c] = row+1
+kG0c[c] = col+1
+kG0v[c] += (i1*(-2*L**2*P + pi*k1**2*(Fc - pi*P*r**2))*sin(pi*k1*xb/L)*cos(pi*i1*xb/L) + i1*(2*L**2*P + pi*k1**2*(-Fc + pi*P*r**2))*sin(pi*k1*xa/L)*cos(pi*i1*xa/L) + k1*(-2*L**2*P + pi*i1**2*(Fc - pi*P*r**2))*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) + k1*(2*L**2*P + pi*i1**2*(-Fc + pi*P*r**2))*sin(pi*i1*xb/L)*cos(pi*k1*xb/L))/(L*cosa*(i1 - k1)*(i1 + k1))
+c += 1
+kG0r[c] = row+1
+kG0c[c] = col+2
+kG0v[c] += T*cosa*k1*(i1*cos(pi*i1*xa/L)*cos(pi*k1*xa/L) - i1*cos(pi*i1*xb/L)*cos(pi*k1*xb/L) + k1*sin(pi*i1*xa/L)*sin(pi*k1*xa/L) - k1*sin(pi*i1*xb/L)*sin(pi*k1*xb/L))/(r**2*(i1**2 - k1**2))
+c += 1
+kG0r[c] = row+2
+kG0c[c] = col+1
+kG0v[c] += T*cosa*i1*(-i1*sin(pi*i1*xa/L)*sin(pi*k1*xa/L) + i1*sin(pi*i1*xb/L)*sin(pi*k1*xb/L) - k1*cos(pi*i1*xa/L)*cos(pi*k1*xa/L) + k1*cos(pi*i1*xb/L)*cos(pi*k1*xb/L))/(r**2*(i1**2 - k1**2))
+c += 1
+kG0r[c] = row+2
+kG0c[c] = col+2
+kG0v[c] += pi*i1*k1*(Fc - pi*P*r**2)*(i1*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) - i1*sin(pi*i1*xb/L)*cos(pi*k1*xb/L) - k1*sin(pi*k1*xa/L)*cos(pi*i1*xa/L) + k1*sin(pi*k1*xb/L)*cos(pi*i1*xb/L))/(L*cosa*(i1 - k1)*(i1 + k1))

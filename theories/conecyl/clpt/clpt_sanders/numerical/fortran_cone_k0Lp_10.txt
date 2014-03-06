@@ -1,0 +1,27 @@
+List(List((A11*i1*Pi*r*Cos((i1*Pi*x)/L))/L + A12*sina*Sin((i1*Pi*x)/L),
+   (A12*i1*Pi*r*Cos((i1*Pi*x)/L))/L + A22*sina*Sin((i1*Pi*x)/L),
+   (A16*i1*Pi*r*Cos((i1*Pi*x)/L))/L + A26*sina*Sin((i1*Pi*x)/L),
+   (B11*i1*Pi*r*Cos((i1*Pi*x)/L))/L + B12*sina*Sin((i1*Pi*x)/L),
+   (B12*i1*Pi*r*Cos((i1*Pi*x)/L))/L + B22*sina*Sin((i1*Pi*x)/L),
+   (B16*i1*Pi*r*Cos((i1*Pi*x)/L))/L + B26*sina*Sin((i1*Pi*x)/L)),
+  List(((B16 + A16*r)*(i1*Pi*r*Cos((i1*Pi*x)/L) - L*sina*Sin((i1*Pi*x)/L)))/
+    (L*r),((B26 + A26*r)*(i1*Pi*r*Cos((i1*Pi*x)/L) - 
+        L*sina*Sin((i1*Pi*x)/L)))/(L*r),
+   ((B66 + A66*r)*(i1*Pi*r*Cos((i1*Pi*x)/L) - L*sina*Sin((i1*Pi*x)/L)))/
+    (L*r),((D16 + B16*r)*(i1*Pi*r*Cos((i1*Pi*x)/L) - 
+        L*sina*Sin((i1*Pi*x)/L)))/(L*r),
+   ((D26 + B26*r)*(i1*Pi*r*Cos((i1*Pi*x)/L) - L*sina*Sin((i1*Pi*x)/L)))/
+    (L*r),((D66 + B66*r)*(i1*Pi*r*Cos((i1*Pi*x)/L) - 
+        L*sina*Sin((i1*Pi*x)/L)))/(L*r)),
+  List((-(B12*i1*L*Pi*sina*Cos((i1*Pi*x)/L)) + 
+      (A12*cosa*L**2 + B11*i1**2*Pi**2*r)*Sin((i1*Pi*x)/L))/L**2,
+   (-(B22*i1*L*Pi*sina*Cos((i1*Pi*x)/L)) + 
+      (A22*cosa*L**2 + B12*i1**2*Pi**2*r)*Sin((i1*Pi*x)/L))/L**2,
+   (-(B26*i1*L*Pi*sina*Cos((i1*Pi*x)/L)) + 
+      (A26*cosa*L**2 + B16*i1**2*Pi**2*r)*Sin((i1*Pi*x)/L))/L**2,
+   (-(D12*i1*L*Pi*sina*Cos((i1*Pi*x)/L)) + 
+      (B12*cosa*L**2 + D11*i1**2*Pi**2*r)*Sin((i1*Pi*x)/L))/L**2,
+   (-(D22*i1*L*Pi*sina*Cos((i1*Pi*x)/L)) + 
+      (B22*cosa*L**2 + D12*i1**2*Pi**2*r)*Sin((i1*Pi*x)/L))/L**2,
+   (-(D26*i1*L*Pi*sina*Cos((i1*Pi*x)/L)) + 
+      (B26*cosa*L**2 + D16*i1**2*Pi**2*r)*Sin((i1*Pi*x)/L))/L**2))

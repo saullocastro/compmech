@@ -1,0 +1,25 @@
+k0L_21 with 6 non-null terms
+c += 1
+rows[c] = row+0
+cols[c] = col+2
+out[c] = beta*out[c] + alpha*(p00*q02 + p02*q22)
+c += 1
+rows[c] = row+1
+cols[c] = col+2
+out[c] = beta*out[c] + alpha*(p10*q02 + p12*q22)
+c += 1
+rows[c] = row+2
+cols[c] = col+2
+out[c] = beta*out[c] + alpha*(p20*q02 + p22*q22)
+c += 1
+rows[c] = row+3
+cols[c] = col+2
+out[c] = beta*out[c] + alpha*(p30*q02 + p32*q22)
+c += 1
+rows[c] = row+4
+cols[c] = col+2
+out[c] = beta*out[c] + alpha*(p40*q02 + p42*q22)
+c += 1
+rows[c] = row+5
+cols[c] = col+2
+out[c] = beta*out[c] + alpha*(p50*q02 + p52*q22)

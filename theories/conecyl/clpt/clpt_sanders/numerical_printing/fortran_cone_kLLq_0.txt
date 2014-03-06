@@ -1,0 +1,39 @@
+kLLq_0
+q01 = -r2*vx/L
+q11 = -r2*(L - x)*(cosa*wt + sina*ut - v)/(L*r**2)
+q12 = sina*v*(-L + x)*sin(t - tLA)/(L*cosa*r**2)
+q20 = sina*v/(L*cosa*r)
+q21 = -r2*(L - x)*(cosa*wx + sina*ux)/(L*r)
+q22 = -sina*v*(cos(t - tLA) - 1)/(L*cosa*r)
+
+# create buffer
+kLLq_0
+kLLq_0_q01[pos] = q01
+kLLq_0_q11[pos] = q11
+kLLq_0_q12[pos] = q12
+kLLq_0_q20[pos] = q20
+kLLq_0_q21[pos] = q21
+kLLq_0_q22[pos] = q22
+
+# access buffer
+q01 = kLLq_0_q01[pos]
+q11 = kLLq_0_q11[pos]
+q12 = kLLq_0_q12[pos]
+q20 = kLLq_0_q20[pos]
+q21 = kLLq_0_q21[pos]
+q22 = kLLq_0_q22[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

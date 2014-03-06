@@ -1,0 +1,57 @@
+kGq_2
+q00 = pi*cosk2x*k2*sinl2t/L
+q01 = pi*cosk2x*cosl2t*k2/L
+q10 = cosl2t*l2*sink2x/r
+q11 = -l2*sink2x*sinl2t/r
+q22 = sink2x*sinl2t/r
+q23 = cosl2t*sink2x/r
+q32 = pi*cosk2x*k2*sinl2t/L
+q33 = pi*cosk2x*cosl2t*k2/L
+q44 = pi*cosk2x*k2*sinl2t/L
+q45 = pi*cosk2x*cosl2t*k2/L
+q54 = cosl2t*l2*sink2x/r
+q55 = -l2*sink2x*sinl2t/r
+
+# create buffer
+kGq_2
+kGq_2_q00[pos] = q00
+kGq_2_q01[pos] = q01
+kGq_2_q10[pos] = q10
+kGq_2_q11[pos] = q11
+kGq_2_q22[pos] = q22
+kGq_2_q23[pos] = q23
+kGq_2_q32[pos] = q32
+kGq_2_q33[pos] = q33
+kGq_2_q44[pos] = q44
+kGq_2_q45[pos] = q45
+kGq_2_q54[pos] = q54
+kGq_2_q55[pos] = q55
+
+# access buffer
+q00 = kGq_2_q00[pos]
+q01 = kGq_2_q01[pos]
+q10 = kGq_2_q10[pos]
+q11 = kGq_2_q11[pos]
+q22 = kGq_2_q22[pos]
+q23 = kGq_2_q23[pos]
+q32 = kGq_2_q32[pos]
+q33 = kGq_2_q33[pos]
+q44 = kGq_2_q44[pos]
+q45 = kGq_2_q45[pos]
+q54 = kGq_2_q54[pos]
+q55 = kGq_2_q55[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

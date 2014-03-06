@@ -1,0 +1,22 @@
+# k0edges_11
+# k0edges_11_num=5
+c += 1
+k0edgesr[c] = row+1
+k0edgesc[c] = col+1
+k0edgesv[c] += pi*r*(2*kuBot + 2*kuTop)
+c += 1
+k0edgesr[c] = row+3
+k0edgesc[c] = col+3
+k0edgesv[c] += pi*r*(2*kvBot + 2*kvTop)
+c += 1
+k0edgesr[c] = row+5
+k0edgesc[c] = col+5
+k0edgesv[c] += pi*r*(2*kwBot + 2*kwTop)
+c += 1
+k0edgesr[c] = row+7
+k0edgesc[c] = col+7
+k0edgesv[c] += pi*r*(2*kphixBot + 2*kphixTop)
+c += 1
+k0edgesr[c] = row+9
+k0edgesc[c] = col+9
+k0edgesv[c] += pi*r*(2*kphitBot + 2*kphitTop)

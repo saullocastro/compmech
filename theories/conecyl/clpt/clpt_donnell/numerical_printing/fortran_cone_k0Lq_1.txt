@@ -1,0 +1,27 @@
+k0Lq_1
+q02 = pi*cosk1x*k1*wx/L
+q22 = pi*cosk1x*k1*wt/(L*r)
+
+# create buffer
+k0Lq_1
+k0Lq_1_q02[pos] = q02
+k0Lq_1_q22[pos] = q22
+
+# access buffer
+q02 = k0Lq_1_q02[pos]
+q22 = k0Lq_1_q22[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

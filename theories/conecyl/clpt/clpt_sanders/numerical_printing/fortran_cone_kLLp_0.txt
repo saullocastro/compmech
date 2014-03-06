@@ -1,0 +1,75 @@
+kLLp_0
+p00 = A16*sina*v/(L*cosa)
+p01 = A26*sina*v/(L*cosa)
+p02 = A66*sina*v/(L*cosa)
+p03 = B16*sina*v/(L*cosa)
+p04 = B26*sina*v/(L*cosa)
+p05 = B66*sina*v/(L*cosa)
+p10 = -r2*(A12*(L - x)*(cosa*wt + sina*ut - v) + r*(A11*r*vx + A16*(L - x)*(cosa*wx + sina*ux)))/(L*r)
+p11 = -r2*(A22*(L - x)*(cosa*wt + sina*ut - v) + r*(A12*r*vx + A26*(L - x)*(cosa*wx + sina*ux)))/(L*r)
+p12 = -r2*(A26*(L - x)*(cosa*wt + sina*ut - v) + r*(A16*r*vx + A66*(L - x)*(cosa*wx + sina*ux)))/(L*r)
+p13 = -r2*(B12*(L - x)*(cosa*wt + sina*ut - v) + r*(B11*r*vx + B16*(L - x)*(cosa*wx + sina*ux)))/(L*r)
+p14 = -r2*(B22*(L - x)*(cosa*wt + sina*ut - v) + r*(B12*r*vx + B26*(L - x)*(cosa*wx + sina*ux)))/(L*r)
+p15 = -r2*(B26*(L - x)*(cosa*wt + sina*ut - v) + r*(B16*r*vx + B66*(L - x)*(cosa*wx + sina*ux)))/(L*r)
+p20 = sina*v*(A12*(-L + x)*sin(t - tLA) - A16*r*cos(t - tLA) + A16*r)/(L*cosa*r)
+p21 = sina*v*(A22*(-L + x)*sin(t - tLA) - A26*r*cos(t - tLA) + A26*r)/(L*cosa*r)
+p22 = sina*v*(A26*(-L + x)*sin(t - tLA) - A66*r*cos(t - tLA) + A66*r)/(L*cosa*r)
+p23 = sina*v*(B12*(-L + x)*sin(t - tLA) - B16*r*cos(t - tLA) + B16*r)/(L*cosa*r)
+p24 = sina*v*(B22*(-L + x)*sin(t - tLA) - B26*r*cos(t - tLA) + B26*r)/(L*cosa*r)
+p25 = sina*v*(B26*(-L + x)*sin(t - tLA) - B66*r*cos(t - tLA) + B66*r)/(L*cosa*r)
+
+# create buffer
+kLLp_0
+kLLp_0_p00[pos] = p00
+kLLp_0_p01[pos] = p01
+kLLp_0_p02[pos] = p02
+kLLp_0_p03[pos] = p03
+kLLp_0_p04[pos] = p04
+kLLp_0_p05[pos] = p05
+kLLp_0_p10[pos] = p10
+kLLp_0_p11[pos] = p11
+kLLp_0_p12[pos] = p12
+kLLp_0_p13[pos] = p13
+kLLp_0_p14[pos] = p14
+kLLp_0_p15[pos] = p15
+kLLp_0_p20[pos] = p20
+kLLp_0_p21[pos] = p21
+kLLp_0_p22[pos] = p22
+kLLp_0_p23[pos] = p23
+kLLp_0_p24[pos] = p24
+kLLp_0_p25[pos] = p25
+
+# access buffer
+p00 = kLLp_0_p00[pos]
+p01 = kLLp_0_p01[pos]
+p02 = kLLp_0_p02[pos]
+p03 = kLLp_0_p03[pos]
+p04 = kLLp_0_p04[pos]
+p05 = kLLp_0_p05[pos]
+p10 = kLLp_0_p10[pos]
+p11 = kLLp_0_p11[pos]
+p12 = kLLp_0_p12[pos]
+p13 = kLLp_0_p13[pos]
+p14 = kLLp_0_p14[pos]
+p15 = kLLp_0_p15[pos]
+p20 = kLLp_0_p20[pos]
+p21 = kLLp_0_p21[pos]
+p22 = kLLp_0_p22[pos]
+p23 = kLLp_0_p23[pos]
+p24 = kLLp_0_p24[pos]
+p25 = kLLp_0_p25[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

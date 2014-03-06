@@ -1,0 +1,22 @@
+# kG0_00
+# kG0_00_num=5
+c += 1
+kG0r[c] = 0
+kG0c[c] = 1
+kG0v[c] += 0.5*T*r2*sina*(xa - xb)*(2*L - xa - xb)/(L**2*cosa*r**2)
+c += 1
+kG0r[c] = 1
+kG0c[c] = 0
+kG0v[c] += 0.5*T*r2*sina*(xa - xb)*(2*L - xa - xb)/(L**2*cosa*r**2)
+c += 1
+kG0r[c] = 1
+kG0c[c] = 1
+kG0v[c] += -0.333333333333333*r2**2*(-3*Fc + pi*P*(6*L**2 - 6*L*(xa + xb) + 3*r**2 + 2*xa**2 + 2*xa*xb + 2*xb**2))*(xa - xb)/(L**2*cosa)
+c += 1
+kG0r[c] = 1
+kG0c[c] = 2
+kG0v[c] += 0.5*T*r2*sina*(xa - xb)*(2*L - xa - xb)/(L**2*cosa*r**2)
+c += 1
+kG0r[c] = 2
+kG0c[c] = 1
+kG0v[c] += 0.5*T*r2*sina*(xa - xb)*(2*L - xa - xb)/(L**2*cosa*r**2)

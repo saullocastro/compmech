@@ -1,0 +1,75 @@
+k0Lp_0
+p00 = (-A11*r + A12*sina*(L - x))/(L*cosa)
+p01 = (-A12*r + A22*sina*(L - x))/(L*cosa)
+p02 = (-A16*r + A26*sina*(L - x))/(L*cosa)
+p03 = (-B11*r + B12*sina*(L - x))/(L*cosa)
+p04 = (-B12*r + B22*sina*(L - x))/(L*cosa)
+p05 = (-B16*r + B26*sina*(L - x))/(L*cosa)
+p10 = -r2*(r + sina*(L - x))*(A16*r + B16)/(L*r)
+p11 = -r2*(r + sina*(L - x))*(A26*r + B26)/(L*r)
+p12 = -r2*(r + sina*(L - x))*(A66*r + B66)/(L*r)
+p13 = -r2*(r + sina*(L - x))*(B16*r + D16)/(L*r)
+p14 = -r2*(r + sina*(L - x))*(B26*r + D26)/(L*r)
+p15 = -r2*(r + sina*(L - x))*(B66*r + D66)/(L*r)
+p20 = (A16*(L - x)*sin(t - tLA) + (A11*r + A12*sina*(-L + x))*(cos(t - tLA) - 1))/(L*cosa)
+p21 = (A26*(L - x)*sin(t - tLA) + (A12*r + A22*sina*(-L + x))*(cos(t - tLA) - 1))/(L*cosa)
+p22 = (A66*(L - x)*sin(t - tLA) + (A16*r + A26*sina*(-L + x))*(cos(t - tLA) - 1))/(L*cosa)
+p23 = (B16*(L - x)*sin(t - tLA) + (B11*r + B12*sina*(-L + x))*(cos(t - tLA) - 1))/(L*cosa)
+p24 = (B26*(L - x)*sin(t - tLA) + (B12*r + B22*sina*(-L + x))*(cos(t - tLA) - 1))/(L*cosa)
+p25 = (B66*(L - x)*sin(t - tLA) + (B16*r + B26*sina*(-L + x))*(cos(t - tLA) - 1))/(L*cosa)
+
+# create buffer
+k0Lp_0
+k0Lp_0_p00[pos] = p00
+k0Lp_0_p01[pos] = p01
+k0Lp_0_p02[pos] = p02
+k0Lp_0_p03[pos] = p03
+k0Lp_0_p04[pos] = p04
+k0Lp_0_p05[pos] = p05
+k0Lp_0_p10[pos] = p10
+k0Lp_0_p11[pos] = p11
+k0Lp_0_p12[pos] = p12
+k0Lp_0_p13[pos] = p13
+k0Lp_0_p14[pos] = p14
+k0Lp_0_p15[pos] = p15
+k0Lp_0_p20[pos] = p20
+k0Lp_0_p21[pos] = p21
+k0Lp_0_p22[pos] = p22
+k0Lp_0_p23[pos] = p23
+k0Lp_0_p24[pos] = p24
+k0Lp_0_p25[pos] = p25
+
+# access buffer
+p00 = k0Lp_0_p00[pos]
+p01 = k0Lp_0_p01[pos]
+p02 = k0Lp_0_p02[pos]
+p03 = k0Lp_0_p03[pos]
+p04 = k0Lp_0_p04[pos]
+p05 = k0Lp_0_p05[pos]
+p10 = k0Lp_0_p10[pos]
+p11 = k0Lp_0_p11[pos]
+p12 = k0Lp_0_p12[pos]
+p13 = k0Lp_0_p13[pos]
+p14 = k0Lp_0_p14[pos]
+p15 = k0Lp_0_p15[pos]
+p20 = k0Lp_0_p20[pos]
+p21 = k0Lp_0_p21[pos]
+p22 = k0Lp_0_p22[pos]
+p23 = k0Lp_0_p23[pos]
+p24 = k0Lp_0_p24[pos]
+p25 = k0Lp_0_p25[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

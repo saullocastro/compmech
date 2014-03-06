@@ -1,0 +1,33 @@
+kGp_2
+p40 = Nxt*cosj2t*j2*sini2x + pi*Nxx*cosi2x*i2*r*sinj2t/L
+p41 = Ntt*cosj2t*j2*sini2x + pi*Nxt*cosi2x*i2*r*sinj2t/L
+p50 = -Nxt*j2*sini2x*sinj2t + pi*Nxx*cosi2x*cosj2t*i2*r/L
+p51 = -Ntt*j2*sini2x*sinj2t + pi*Nxt*cosi2x*cosj2t*i2*r/L
+
+# create buffer
+kGp_2
+kGp_2_p40[pos] = p40
+kGp_2_p41[pos] = p41
+kGp_2_p50[pos] = p50
+kGp_2_p51[pos] = p51
+
+# access buffer
+p40 = kGp_2_p40[pos]
+p41 = kGp_2_p41[pos]
+p50 = kGp_2_p50[pos]
+p51 = kGp_2_p51[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

@@ -1,0 +1,51 @@
+kGp_1
+p02 = -pi*Nxt*cosi1x*i1*r*sina/L
+p10 = -Nxt*sina*sini1x
+p11 = -Ntt*sina*sini1x
+p12 = Ntt*sini1x
+p13 = pi*Nxx*cosi1x*i1*r/L
+p14 = -Nxt*cosa*sini1x
+p15 = -Ntt*cosa*sini1x
+p22 = -pi*Nxt*cosa*cosi1x*i1*r/L
+p24 = pi*Nxx*cosi1x*i1*r/L
+p25 = pi*Nxt*cosi1x*i1*r/L
+
+# create buffer
+kGp_1
+kGp_1_p02[pos] = p02
+kGp_1_p10[pos] = p10
+kGp_1_p11[pos] = p11
+kGp_1_p12[pos] = p12
+kGp_1_p13[pos] = p13
+kGp_1_p14[pos] = p14
+kGp_1_p15[pos] = p15
+kGp_1_p22[pos] = p22
+kGp_1_p24[pos] = p24
+kGp_1_p25[pos] = p25
+
+# access buffer
+p02 = kGp_1_p02[pos]
+p10 = kGp_1_p10[pos]
+p11 = kGp_1_p11[pos]
+p12 = kGp_1_p12[pos]
+p13 = kGp_1_p13[pos]
+p14 = kGp_1_p14[pos]
+p15 = kGp_1_p15[pos]
+p22 = kGp_1_p22[pos]
+p24 = kGp_1_p24[pos]
+p25 = kGp_1_p25[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

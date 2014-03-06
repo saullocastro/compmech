@@ -1,0 +1,22 @@
+{{(-(A11*r) + A12*sina*(L - x))/(cosa*L), (-(A12*r) + A22*sina*(L - x))/
+   (cosa*L), (-(A16*r) + A26*sina*(L - x))/(cosa*L), 
+  (-(B11*r) + B12*sina*(L - x))/(cosa*L), (-(B12*r) + B22*sina*(L - x))/
+   (cosa*L), (-(B16*r) + B26*sina*(L - x))/(cosa*L)}, 
+ {-(((B16 + A16*r)*r2*(r + sina*(L - x)))/(L*r)), 
+  -(((B26 + A26*r)*r2*(r + sina*(L - x)))/(L*r)), 
+  -(((B66 + A66*r)*r2*(r + sina*(L - x)))/(L*r)), 
+  -(((D16 + B16*r)*r2*(r + sina*(L - x)))/(L*r)), 
+  -(((D26 + B26*r)*r2*(r + sina*(L - x)))/(L*r)), 
+  -(((D66 + B66*r)*r2*(r + sina*(L - x)))/(L*r))}, 
+ {((A11*r + A12*sina*(-L + x))*(-1 + Cos[t - tLA]) + 
+    A16*(L - x)*Sin[t - tLA])/(cosa*L), 
+  ((A12*r + A22*sina*(-L + x))*(-1 + Cos[t - tLA]) + 
+    A26*(L - x)*Sin[t - tLA])/(cosa*L), 
+  ((A16*r + A26*sina*(-L + x))*(-1 + Cos[t - tLA]) + 
+    A66*(L - x)*Sin[t - tLA])/(cosa*L), 
+  ((B11*r + B12*sina*(-L + x))*(-1 + Cos[t - tLA]) + 
+    B16*(L - x)*Sin[t - tLA])/(cosa*L), 
+  ((B12*r + B22*sina*(-L + x))*(-1 + Cos[t - tLA]) + 
+    B26*(L - x)*Sin[t - tLA])/(cosa*L), 
+  ((B16*r + B26*sina*(-L + x))*(-1 + Cos[t - tLA]) + 
+    B66*(L - x)*Sin[t - tLA])/(cosa*L)}}
