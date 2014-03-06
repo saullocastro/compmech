@@ -1,14 +1,12 @@
-.. image:: https://raw.github.com/saullocastro/compmech/master/cubature_logo.png
-    :align: center
-
 ==================================
 Computational Mechanics (compmech)
 ==================================
 
-A collection of theories and implementations on the field of Mechanics.
+This repository was built with the intention to become a collection of
+theories and implementations on the field of Mechanics.
 
-The development of the theories and the implementation details are given 
-in `theories <https://github.com/saullocastro/compmech/blob/master/theories/README.rst/>`_
+The details about the theories and the implementation are given 
+in `the theories section <https://github.com/saullocastro/compmech/blob/master/theories/README.rst/>`_.
  
 
 Implemented modules 
