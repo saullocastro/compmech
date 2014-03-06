@@ -12,7 +12,7 @@ in `the theories section <https://github.com/saullocastro/compmech/blob/master/t
 Implemented modules 
 -------------------
 
-- `Semi-analytical tools for the linear and non-linear analysis of imperfect 
+`Semi-analytical tools for the linear and non-linear analysis of imperfect 
 laminated composite cones and cylinders under axial compression, torsion
 and pressure. <https://github.com/saullocastro/compmech/blob/master/doc/conecyl/README.rst/>`_
 
