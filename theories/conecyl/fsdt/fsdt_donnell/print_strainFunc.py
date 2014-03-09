@@ -10,8 +10,10 @@ var('x, t, xa, xb, L, r, r2, sina, cosa')
 var('A11, A12, A16, A22, A26, A66, A44, A45, A55')
 var('B11, B12, B16, B22, B26, B66')
 var('D11, D12, D16, D22, D26, D66')
-var('phix, phit')
-c = sympy.var('c00, c01, c02, c0i, c1i, c2i, c3i, c4i, c0ij, c1ij, c2ij, c3ij, c4ij, c5ij, c6ij, c7ij, c8ij, c9ij')
+var('phix, phit, tLA')
+sympy.var('c00, c01, c02, c0i, c1i, c2i, c3i, c4i, c5i, c6i')
+sympy.var('c0ij, c1ij, c2ij, c3ij, c4ij, c5ij, c6ij')
+sympy.var('c7ij, c8ij, c9ij, c10ij, c11ij, c12ij, c13ij')
 
 def List(*e):
     return list(e)

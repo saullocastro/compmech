@@ -1,0 +1,57 @@
+kLLq_2
+q0008 = phix*sink2x*sinl2t
+q0009 = cosl2t*phix*sink2x
+q0010 = cosk2x*phix*sinl2t
+q0011 = cosk2x*cosl2t*phix
+q0112 = phit*sink2x*sinl2t
+q0113 = cosl2t*phit*sink2x
+q0208 = phit*sink2x*sinl2t
+q0209 = cosl2t*phit*sink2x
+q0210 = cosk2x*phit*sinl2t
+q0211 = cosk2x*cosl2t*phit
+q0212 = phix*sink2x*sinl2t
+q0213 = cosl2t*phix*sink2x
+
+# create buffer
+kLLq_2
+kLLq_2_q0008[pos] = q0008
+kLLq_2_q0009[pos] = q0009
+kLLq_2_q0010[pos] = q0010
+kLLq_2_q0011[pos] = q0011
+kLLq_2_q0112[pos] = q0112
+kLLq_2_q0113[pos] = q0113
+kLLq_2_q0208[pos] = q0208
+kLLq_2_q0209[pos] = q0209
+kLLq_2_q0210[pos] = q0210
+kLLq_2_q0211[pos] = q0211
+kLLq_2_q0212[pos] = q0212
+kLLq_2_q0213[pos] = q0213
+
+# access buffer
+q0008 = kLLq_2_q0008[pos]
+q0009 = kLLq_2_q0009[pos]
+q0010 = kLLq_2_q0010[pos]
+q0011 = kLLq_2_q0011[pos]
+q0112 = kLLq_2_q0112[pos]
+q0113 = kLLq_2_q0113[pos]
+q0208 = kLLq_2_q0208[pos]
+q0209 = kLLq_2_q0209[pos]
+q0210 = kLLq_2_q0210[pos]
+q0211 = kLLq_2_q0211[pos]
+q0212 = kLLq_2_q0212[pos]
+q0213 = kLLq_2_q0213[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

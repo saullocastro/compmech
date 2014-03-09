@@ -5,7 +5,7 @@ import numpy as np
 import sympy
 from sympy import pi, sin, cos
 
-from compmech.conecyl.sympytools.matrixtools import mprint_as_sparse
+from compmech.conecyl.sympytools import mprint_as_sparse
 
 sympy.var('i1, k1, i2, j2, k2, l2', integer=True)
 sympy.var('i1a, i1b, i1c, i2a, i2b, i2c, j2a, j2b, j2c', integer=True)

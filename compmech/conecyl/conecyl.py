@@ -153,7 +153,9 @@ class ConeCyl(object):
         self.kG0uu = None
         self.kG0 = None
         self.kG = None
+        self.kGuu = None
         self.kL = None
+        self.kLuu = None
         self.lam = None
         self.u = None
         self.v = None
@@ -332,6 +334,9 @@ class ConeCyl(object):
             the others are 2-D `np.ndarray` objects.
 
         '''
+        if not isinstance(k, coo_matrix):
+            raise ValueError('ERROR - A coo_matrix is required!')
+
         kuu = k.copy()
 
         if return_kkk:
@@ -774,7 +779,7 @@ class ConeCyl(object):
         self.kSuk = k['kuk']
         self.kSuu = k['kuu']
 
-        #NOTE aimed to be used in a NL eigenvalue analysis
+        #NOTE intended to be used in an eigenvalue analysis using NL stresses
         self.kL = csr_matrix(self.k0 + k0L + kL0 + kLL)
         self.kG = csr_matrix(kG)
 

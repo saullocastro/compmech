@@ -48,18 +48,19 @@ def fstrain(np.ndarray[cDOUBLE, ndim=1] c, double sina, double cosa,
             evec[ix*8 + ie] = e[ie]
     return evec
 
-cdef void cfN(double *c, double sina, double cosa,
+
+cdef void cfN(double *c, double sina, double cosa, double tLA,
               double x, double t, double r, double r2, double L, double *F,
               int m1, int m2, int n2, double *N, int NL_kinematics) nogil:
     # NL_kinematics = 0 donnell
     # NL_kinematics = 1 sanders
-    cdef double exx, ett, gxt, kxx, ktt, kxt
+    cdef double exx, ett, gxt, kxx, ktt, kxt, exz, etz
     cdef cfstraintype *cfstrain
     if NL_kinematics==0:
         cfstrain = &cfstrain_donnell
     elif NL_kinematics==1:
         cfstrain = &cfstrain_sanders
-    cfstrain(c, sina, cosa, x, t, r, r2, L, m1, m2, n2, N)
+    cfstrain(c, sina, cosa, tLA, x, t, r, r2, L, m1, m2, n2, N)
     #NOTE using array N to transfer values of strains
     exx = N[0]
     ett = N[1]
@@ -96,10 +97,14 @@ cdef void cfuvw(double *c, int m1, int m2, int n2, double r2,
         col = (i1-1)*num1 + num0
         u += c[col+0]*sinbi
         u += c[col+1]*cosbi
+
         v += c[col+2]*sinbi
+
         w += c[col+3]*sinbi
+
         phix += c[col+4]*sinbi
         phix += c[col+5]*cosbi
+
         phit += c[col+6]*sinbi
 
     for j2 in range(1, n2+1):
@@ -113,14 +118,18 @@ cdef void cfuvw(double *c, int m1, int m2, int n2, double r2,
             u += c[col+1]*sinbi*cosbj
             u += c[col+2]*cosbi*sinbj
             u += c[col+3]*cosbi*cosbj
+
             v += c[col+4]*sinbi*sinbj
             v += c[col+5]*sinbi*cosbj
+
             w += c[col+6]*sinbi*sinbj
             w += c[col+7]*sinbi*cosbj
+
             phix += c[col+8]*sinbi*sinbj
             phix += c[col+9]*sinbi*cosbj
             phix += c[col+10]*cosbi*sinbj
             phix += c[col+11]*cosbi*cosbj
+
             phit += c[col+12]*sinbi*sinbj
             phit += c[col+13]*sinbi*cosbj
 
@@ -228,10 +237,14 @@ cdef cfg(double[:, ::1] gss, int m1, int m2, int n2,
         col = (i1-1)*num1 + num0
         gss[0, col+0] = sinbi
         gss[0, col+1] = cosbi
+
         gss[1, col+2] = sinbi
+
         gss[2, col+3] = sinbi
+
         gss[3, col+4] = sinbi
         gss[3, col+5] = cosbi
+
         gss[4, col+6] = sinbi
 
     for i2 in range(1, m2+1):
@@ -261,7 +274,7 @@ cdef cfg(double[:, ::1] gss, int m1, int m2, int n2,
             gss[4, col+13] = sinbi*cosbj
 
 
-cdef void *cfstrain_donnell(double *c, double sina, double cosa,
+cdef void *cfstrain_donnell(double *c, double sina, double cosa, double tLA,
         double x, double t, double r, double r2, double L,
         int m1, int m2, int n2, double *e) nogil:
     cdef int i1, i2, j2, col
@@ -281,34 +294,52 @@ cdef void *cfstrain_donnell(double *c, double sina, double cosa,
     exz = 0
     etz = 0
 
-    exx =
-    ett =
-    gxt =
+    exx = (-c[0]/(L*cosa)
+           + c[2]*(cos(t - tLA) - 1)/(L*cosa))
+
+    ett = (c[0]*sina*(L - x)/(L*cosa*r)
+           -c[2]*sina*(L - x)*(cos(t - tLA) - 1)/(L*cosa*r))
+
+    gxt = (-c[1]*r2*(r + sina*(L - x))/(L*r)
+           + c[2]*(L - x)*sin(t - tLA)/(L*cosa*r))
+
+    exz = c[1]*cosa*r2*(-L + x)/(L*r)
+
 
     for i1 in range(1, m1+1):
         sini1x = sin(pi*i1*x/L)
         cosi1x = cos(pi*i1*x/L)
         col = (i1-1)*num1 + num0
 
-        exx += (
+        exx += (pi*c[col+0]*cosi1x*i1/L
+                -pi*c[col+1]*i1*sini1x/L
+                + 0.5*c[col+4]*phix*sini1x
+                + 0.5*c[col+5]*cosi1x*phix)
 
-                )
+        ett += (c[col+0]*sina*sini1x/r
+                + c[col+1]*cosi1x*sina/r
+                + c[col+3]*cosa*sini1x/r
+                + 0.5*c[col+6]*phit*sini1x)
 
-        ett += (
+        gxt += (c[col+2]*(-sina*sini1x/r + pi*cosi1x*i1/L)
+                + 0.5*c[col+4]*phit*sini1x
+                + 0.5*c[col+5]*cosi1x*phit
+                + 0.5*c[col+6]*phix*sini1x)
 
-                )
+        kxx += (pi*c[col+4]*cosi1x*i1/L
+                -pi*c[col+5]*i1*sini1x/L)
 
-        gxt += (
+        ktt += (c[col+4]*sina*sini1x/r
+                + c[col+5]*cosi1x*sina/r)
 
-                )
+        kxt += c[col+6]*(-sina*sini1x/r + pi*cosi1x*i1/L)
 
-        kxx += (
+        exz += (-c[col+2]*cosa*sini1x/r
+                + c[col+6]*sini1x)
 
-                )
-
-        ktt += (
-
-                )
+        etz += (pi*c[col+3]*cosi1x*i1/L
+                + c[col+4]*sini1x
+                + c[col+5]*cosi1x)
 
     for j2 in range(1, n2+1):
         sinj2t = sin(j2*t)
@@ -318,29 +349,71 @@ cdef void *cfstrain_donnell(double *c, double sina, double cosa,
             cosi2x = cos(pi*i2*x/L)
             col = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
 
-            exx += (
+            exx += (pi*c[col+0]*cosi2x*i2*sinj2t/L
+                    + pi*c[col+1]*cosi2x*cosj2t*i2/L
+                    -pi*c[col+2]*i2*sini2x*sinj2t/L
+                    -pi*c[col+3]*cosj2t*i2*sini2x/L
+                    + 0.5*c[col+8]*phix*sini2x*sinj2t
+                    + 0.5*c[col+9]*cosj2t*phix*sini2x
+                    + 0.5*c[col+10]*cosi2x*phix*sinj2t
+                    + 0.5*c[col+11]*cosi2x*cosj2t*phix)
 
-                    )
+            ett += (c[col+0]*sina*sini2x*sinj2t/r
+                    + c[col+1]*cosj2t*sina*sini2x/r
+                    + c[col+2]*cosi2x*sina*sinj2t/r
+                    + c[col+3]*cosi2x*cosj2t*sina/r
+                    + c[col+4]*cosj2t*j2*sini2x/r
+                    -c[col+5]*j2*sini2x*sinj2t/r
+                    + c[col+6]*cosa*sini2x*sinj2t/r
+                    + c[col+7]*cosa*cosj2t*sini2x/r
+                    + 0.5*c[col+12]*phit*sini2x*sinj2t
+                    + 0.5*c[col+13]*cosj2t*phit*sini2x)
 
-            ett += (
+            gxt += (c[col+0]*cosj2t*j2*sini2x/r
+                    -c[col+1]*j2*sini2x*sinj2t/r
+                    + c[col+2]*cosi2x*cosj2t*j2/r
+                    -c[col+3]*cosi2x*j2*sinj2t/r
+                    + c[col+4]*sinj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
+                    + c[col+5]*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
+                    + 0.5*c[col+8]*phit*sini2x*sinj2t
+                    + 0.5*c[col+9]*cosj2t*phit*sini2x
+                    + 0.5*c[col+10]*cosi2x*phit*sinj2t
+                    + 0.5*c[col+11]*cosi2x*cosj2t*phit
+                    + 0.5*c[col+12]*phix*sini2x*sinj2t
+                    + 0.5*c[col+13]*cosj2t*phix*sini2x)
 
-                    )
+            kxx += (pi*c[col+8]*cosi2x*i2*sinj2t/L
+                    + pi*c[col+9]*cosi2x*cosj2t*i2/L
+                    -pi*c[col+10]*i2*sini2x*sinj2t/L
+                    -pi*c[col+11]*cosj2t*i2*sini2x/L)
 
-            gxt += (
+            ktt += (c[col+8]*sina*sini2x*sinj2t/r
+                    + c[col+9]*cosj2t*sina*sini2x/r
+                    + c[col+10]*cosi2x*sina*sinj2t/r
+                    + c[col+11]*cosi2x*cosj2t*sina/r
+                    + c[col+12]*cosj2t*j2*sini2x/r
+                    -c[col+13]*j2*sini2x*sinj2t/r)
 
-                    )
+            kxt += (c[col+8]*cosj2t*j2*sini2x/r
+                    -c[col+9]*j2*sini2x*sinj2t/r
+                    + c[col+10]*cosi2x*cosj2t*j2/r
+                    -c[col+11]*cosi2x*j2*sinj2t/r
+                    + c[col+12]*sinj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
+                    + c[col+13]*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r))
 
-            kxx += (
+            exz += (-c[col+4]*cosa*sini2x*sinj2t/r
+                    -c[col+5]*cosa*cosj2t*sini2x/r
+                    + c[col+6]*cosj2t*j2*sini2x/r
+                    -c[col+7]*j2*sini2x*sinj2t/r
+                    + c[col+12]*sini2x*sinj2t
+                    + c[col+13]*cosj2t*sini2x)
 
-                    )
-
-            ktt += (
-
-                    )
-
-            kxt += (
-
-                    )
+            etz += (pi*c[col+6]*cosi2x*i2*sinj2t/L
+                    + pi*c[col+7]*cosi2x*cosj2t*i2/L
+                    + c[col+8]*sini2x*sinj2t
+                    + c[col+9]*cosj2t*sini2x
+                    + c[col+10]*cosi2x*sinj2t
+                    + c[col+11]*cosi2x*cosj2t)
 
     e[0] = exx
     e[1] = ett
@@ -350,4 +423,5 @@ cdef void *cfstrain_donnell(double *c, double sina, double cosa,
     e[5] = kxt
     e[6] = exz
     e[7] = etz
+
 

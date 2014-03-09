@@ -1,0 +1,75 @@
+kLLp_1
+p0400 = r*sini1x*(A11*phix + A16*phit)
+p0401 = r*sini1x*(A12*phix + A26*phit)
+p0402 = r*sini1x*(A16*phix + A66*phit)
+p0403 = r*sini1x*(B11*phix + B16*phit)
+p0404 = r*sini1x*(B12*phix + B26*phit)
+p0405 = r*sini1x*(B16*phix + B66*phit)
+p0500 = cosi1x*r*(A11*phix + A16*phit)
+p0501 = cosi1x*r*(A12*phix + A26*phit)
+p0502 = cosi1x*r*(A16*phix + A66*phit)
+p0503 = cosi1x*r*(B11*phix + B16*phit)
+p0504 = cosi1x*r*(B12*phix + B26*phit)
+p0505 = cosi1x*r*(B16*phix + B66*phit)
+p0600 = r*sini1x*(A12*phit + A16*phix)
+p0601 = r*sini1x*(A22*phit + A26*phix)
+p0602 = r*sini1x*(A26*phit + A66*phix)
+p0603 = r*sini1x*(B12*phit + B16*phix)
+p0604 = r*sini1x*(B22*phit + B26*phix)
+p0605 = r*sini1x*(B26*phit + B66*phix)
+
+# create buffer
+kLLp_1
+kLLp_1_p0400[pos] = p0400
+kLLp_1_p0401[pos] = p0401
+kLLp_1_p0402[pos] = p0402
+kLLp_1_p0403[pos] = p0403
+kLLp_1_p0404[pos] = p0404
+kLLp_1_p0405[pos] = p0405
+kLLp_1_p0500[pos] = p0500
+kLLp_1_p0501[pos] = p0501
+kLLp_1_p0502[pos] = p0502
+kLLp_1_p0503[pos] = p0503
+kLLp_1_p0504[pos] = p0504
+kLLp_1_p0505[pos] = p0505
+kLLp_1_p0600[pos] = p0600
+kLLp_1_p0601[pos] = p0601
+kLLp_1_p0602[pos] = p0602
+kLLp_1_p0603[pos] = p0603
+kLLp_1_p0604[pos] = p0604
+kLLp_1_p0605[pos] = p0605
+
+# access buffer
+p0400 = kLLp_1_p0400[pos]
+p0401 = kLLp_1_p0401[pos]
+p0402 = kLLp_1_p0402[pos]
+p0403 = kLLp_1_p0403[pos]
+p0404 = kLLp_1_p0404[pos]
+p0405 = kLLp_1_p0405[pos]
+p0500 = kLLp_1_p0500[pos]
+p0501 = kLLp_1_p0501[pos]
+p0502 = kLLp_1_p0502[pos]
+p0503 = kLLp_1_p0503[pos]
+p0504 = kLLp_1_p0504[pos]
+p0505 = kLLp_1_p0505[pos]
+p0600 = kLLp_1_p0600[pos]
+p0601 = kLLp_1_p0601[pos]
+p0602 = kLLp_1_p0602[pos]
+p0603 = kLLp_1_p0603[pos]
+p0604 = kLLp_1_p0604[pos]
+p0605 = kLLp_1_p0605[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

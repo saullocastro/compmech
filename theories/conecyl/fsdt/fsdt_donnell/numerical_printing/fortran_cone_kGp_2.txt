@@ -1,0 +1,57 @@
+kGp_2
+p0800 = Nxx*r*sini2x*sinj2t
+p0801 = Nxt*r*sini2x*sinj2t
+p0900 = Nxx*cosj2t*r*sini2x
+p0901 = Nxt*cosj2t*r*sini2x
+p1000 = Nxx*cosi2x*r*sinj2t
+p1001 = Nxt*cosi2x*r*sinj2t
+p1100 = Nxx*cosi2x*cosj2t*r
+p1101 = Nxt*cosi2x*cosj2t*r
+p1200 = Nxt*r*sini2x*sinj2t
+p1201 = Ntt*r*sini2x*sinj2t
+p1300 = Nxt*cosj2t*r*sini2x
+p1301 = Ntt*cosj2t*r*sini2x
+
+# create buffer
+kGp_2
+kGp_2_p0800[pos] = p0800
+kGp_2_p0801[pos] = p0801
+kGp_2_p0900[pos] = p0900
+kGp_2_p0901[pos] = p0901
+kGp_2_p1000[pos] = p1000
+kGp_2_p1001[pos] = p1001
+kGp_2_p1100[pos] = p1100
+kGp_2_p1101[pos] = p1101
+kGp_2_p1200[pos] = p1200
+kGp_2_p1201[pos] = p1201
+kGp_2_p1300[pos] = p1300
+kGp_2_p1301[pos] = p1301
+
+# access buffer
+p0800 = kGp_2_p0800[pos]
+p0801 = kGp_2_p0801[pos]
+p0900 = kGp_2_p0900[pos]
+p0901 = kGp_2_p0901[pos]
+p1000 = kGp_2_p1000[pos]
+p1001 = kGp_2_p1001[pos]
+p1100 = kGp_2_p1100[pos]
+p1101 = kGp_2_p1101[pos]
+p1200 = kGp_2_p1200[pos]
+p1201 = kGp_2_p1201[pos]
+p1300 = kGp_2_p1300[pos]
+p1301 = kGp_2_p1301[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

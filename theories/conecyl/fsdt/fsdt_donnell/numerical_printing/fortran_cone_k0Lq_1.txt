@@ -1,0 +1,39 @@
+k0Lq_1
+q0004 = phix*sink1x
+q0005 = cosk1x*phix
+q0106 = phit*sink1x
+q0204 = phit*sink1x
+q0205 = cosk1x*phit
+q0206 = phix*sink1x
+
+# create buffer
+k0Lq_1
+k0Lq_1_q0004[pos] = q0004
+k0Lq_1_q0005[pos] = q0005
+k0Lq_1_q0106[pos] = q0106
+k0Lq_1_q0204[pos] = q0204
+k0Lq_1_q0205[pos] = q0205
+k0Lq_1_q0206[pos] = q0206
+
+# access buffer
+q0004 = k0Lq_1_q0004[pos]
+q0005 = k0Lq_1_q0005[pos]
+q0106 = k0Lq_1_q0106[pos]
+q0204 = k0Lq_1_q0204[pos]
+q0205 = k0Lq_1_q0205[pos]
+q0206 = k0Lq_1_q0206[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x
