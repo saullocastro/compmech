@@ -3382,8 +3382,10 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                         k0v[c] += pi*D26*i2*j2*k2*(2*(-1)**(i2 + k2) - 2)/(i2**2 - k2**2)
 
 
-    k0 = coo_matrix((k0v, (k0r, k0c)), shape=(num0 + num1*m1 + num2*m2*n2,
-                                              num0 + num1*m1 + num2*m2*n2))
+    size = num0 + num1*m1 + num2*m2*n2
+
+    k0 = coo_matrix((k0v, (k0r, k0c)), shape=(size, size))
+
     return k0
 
 
@@ -3408,6 +3410,8 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
     k0edgesr = np.zeros((fdim,), dtype=INT)
     k0edgesc = np.zeros((fdim,), dtype=INT)
     k0edgesv = np.zeros((fdim,), dtype=DOUBLE)
+
+    c = -1
 
     for i1 in range(1, m1+1):
         row = (i1-1)*num1 + num0
@@ -3480,9 +3484,9 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
                         k0edgesv[c] += pi*((-1)**(i2 + k2)*kphixBot*r1 - kphixTop*r2)
 
 
-    k0edges = coo_matrix((k0edgesv, (k0edgesr, k0edgesc)),
-                         shape=(num0 + num1*m1 + num2*m2*n2,
-                                num0 + num1*m1 + num2*m2*n2))
+    size = num0 + num1*m1 + num2*m2*n2
+
+    k0edges = coo_matrix((k0edgesv, (k0edgesr, k0edgesc)), shape=(size, size))
 
     return k0edges
 

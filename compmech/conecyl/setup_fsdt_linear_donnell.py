@@ -4,7 +4,7 @@ from Cython.Distutils import build_ext
 ext_modules = [Extension('fsdt_linear_donnell',
                          ['fsdt_linear_donnell.pyx'],
                    extra_compile_args=['/openmp',
-                       '/O2', '/favor:INTEL64', '/fp:fast'],
+                       '/O2', '/favor:INTEL64'],
                    extra_link_args=[],
                          )]
 setup(

@@ -23,7 +23,8 @@ cdef int num1 = 7
 cdef int num2 = 14
 cdef double pi=3.141592653589793
 
-def fstrain(np.ndarray[cDOUBLE, ndim=1] c, double sina, double cosa,
+def fstrain(np.ndarray[cDOUBLE, ndim=1] c,
+            double sina, double cosa, double tLA,
             np.ndarray[cDOUBLE, ndim=1] xvec,
             np.ndarray[cDOUBLE, ndim=1] tvec,
             double r2, double L, int m1, int m2, int n2, int NL_kinematics):
@@ -37,13 +38,14 @@ def fstrain(np.ndarray[cDOUBLE, ndim=1] c, double sina, double cosa,
     if NL_kinematics==0:
         cfstrain = &cfstrain_donnell
     elif NL_kinematics==1:
-        cfstrain = &cfstrain_sanders
+        raise NotImplementedError
+        #cfstrain = &cfstrain_sanders
     evec = np.zeros((xvec.shape[0]*8), dtype=DOUBLE)
     for ix in range(xvec.shape[0]):
         x = xvec[ix]
         t = tvec[ix]
         r = r2 + x*sina
-        cfstrain(&c[0], sina, cosa, x, t, r, r2, L, m1, m2, n2, e)
+        cfstrain(&c[0], sina, cosa, tLA, x, t, r, r2, L, m1, m2, n2, e)
         for ie in range(8):
             evec[ix*8 + ie] = e[ie]
     return evec
@@ -59,7 +61,8 @@ cdef void cfN(double *c, double sina, double cosa, double tLA,
     if NL_kinematics==0:
         cfstrain = &cfstrain_donnell
     elif NL_kinematics==1:
-        cfstrain = &cfstrain_sanders
+        pass
+        #cfstrain = &cfstrain_sanders
     cfstrain(c, sina, cosa, tLA, x, t, r, r2, L, m1, m2, n2, N)
     #NOTE using array N to transfer values of strains
     exx = N[0]
@@ -194,7 +197,7 @@ cdef void cfphit(double *c, int m1, int m2, int n2, double L,
 def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
          double alpharad, double r2, double L, double tLA,
          np.ndarray[cDOUBLE, ndim=1] xvec,
-         np.ndarray[cDOUBLE, ndim=1] tvec, ss):
+         np.ndarray[cDOUBLE, ndim=1] tvec):
     cdef int ix
     cdef double x, t, sina, cosa
     cdef double uvw[5]
@@ -206,6 +209,8 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
     u = np.zeros(np.shape(xvec), dtype=DOUBLE)
     v = np.zeros(np.shape(xvec), dtype=DOUBLE)
     w = np.zeros(np.shape(xvec), dtype=DOUBLE)
+    phix = np.zeros(np.shape(xvec), dtype=DOUBLE)
+    phit = np.zeros(np.shape(xvec), dtype=DOUBLE)
 
     for ix in range(xvec.shape[0]):
         x = xvec[ix]

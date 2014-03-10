@@ -14,6 +14,7 @@ from numpy import linspace, pi, cos, sin, tan, deg2rad
 
 import mapy.model.properties.composite as composite
 import clpt_commons
+import fsdt_commons
 import clpt_linear_donnell
 import clpt_linear_sanders
 import fsdt_linear_donnell
@@ -39,26 +40,37 @@ class ConeCyl(object):
 
         # boundary conditions
         self.bc = 'ss'
-        self.kuBot = 1.e6
-        self.kuTop = 1.e6
-        self.kvBot = 1.e6
-        self.kvTop = 1.e6
-        self.kwBot = 1.e6
-        self.kwTop = 1.e6
-        self.kphixBot = 1.e6
-        self.kphixTop = 1.e6
-        self.kphitBot = 1.e6
-        self.kphitTop = 1.e6
+        self.kuBot = 1.e15
+        self.kuTop = -1.e15
 
+        self.kvBot = 1.e15
+        self.kvTop = -1.e15
+
+        self.kwBot = 1.e15
+        self.kwTop = -1.e15
+
+        self.kphixBot = 1.e15
+        self.kphixTop = -1.e15
+
+        self.kphitBot = 1.e15
+        self.kphitTop = -1.e15
+
+
+        # default equations
         self.linear_kinematics = 'clpt_donnell'
         self.NL_kinematics = 'donnell_numerical'
 
+        # approximation series
         self.m1 = 40
         self.m2 = 40
         self.n2 = 40
+
+        # analytical integration for cones
+        self.s = 80
+
+        # numerical integration
         self.nx = 50
         self.nt = 100
-        self.s = 80
 
         # internal pressure measured in force/area
         self.P = 0.
@@ -74,7 +86,7 @@ class ConeCyl(object):
         self.thetaTdeg = 0.
         self.thetaTrad = 0.
 
-        # load asymmetry (la) #TODO
+        # load asymmetry (la)
         self.pdLA = True
         self.tLAdeg = 0.
         self.tLArad = 0.
@@ -162,7 +174,7 @@ class ConeCyl(object):
         self.w = None
         self.phix = None
         self.phit = None
-        #
+
         gc.collect()
 
     def rebuild(self):
@@ -172,9 +184,37 @@ class ConeCyl(object):
             except AttributeError:
                 print('WARNING - ConeCyl name unchanged')
 
+
         self.linear_kinematics = self.linear_kinematics.lower()
+
+        valid_linear_kinematics = ['clpt_donnell', 'clpt_sanders',
+                                   'fsdt_donnell']
+
+        if not self.linear_kinematics in valid_linear_kinematics:
+            raise ValueError('ERROR - valid linear theories are:\n' +
+                     '\t' + ', '.join(valid_linear_kinematics))
+
+
         self.NL_kinematics = self.NL_kinematics.lower()
+
+        valid_NL_kinematics = ['donnell_numerical', 'sanders_numerical']
+
+        if not self.NL_kinematics in valid_NL_kinematics:
+            raise ValueError('ERROR - valid non-linear theories are:\n' +
+                     '\t' + ', '.join(valid_NL_kinematics))
+
+
         self.bc = self.bc.lower()
+
+        if self.bc == 'ss':
+            self.kphixBot = 1.e-15
+            self.kphixTop = -1.e-15
+        elif self.bc == 'cc':
+            self.kphixBot = 1.e15
+            self.kphixTop = -1.e15
+        else:
+            raise ValueError('{} is an invalid value for "bc"'.format(
+                             self.bc))
 
         self.alpharad = deg2rad(self.alphadeg)
         self.sina = sin(self.alpharad)
@@ -187,7 +227,7 @@ class ConeCyl(object):
 
         if not self.r2:
             if not self.r1:
-                raise ValueError('The radius must be specified!')
+                raise ValueError('Radius "r1" or "r2" must be specified')
             else:
                 self.r2 = self.r1 - self.L*self.sina
         else:
@@ -211,9 +251,9 @@ class ConeCyl(object):
             self.is_cylinder = False
 
         if self.pdC==None:
-            raise ValueError('ConeCyl().pdC must be defined!')
+            raise ValueError('ConeCyl().pdC must be defined')
         if self.pdT==None:
-            raise ValueError('ConeCyl().pdT must be defined!')
+            raise ValueError('ConeCyl().pdT must be defined')
 
         self.excluded_dofs = []
         self.excluded_dofs_ck = []
@@ -335,7 +375,7 @@ class ConeCyl(object):
 
         '''
         if not isinstance(k, coo_matrix):
-            raise ValueError('ERROR - A coo_matrix is required!')
+            raise ValueError('ERROR - A coo_matrix is required')
 
         kuu = k.copy()
 
@@ -371,7 +411,7 @@ class ConeCyl(object):
         cols = sorted(self.excluded_dofs)[::-1]
 
         for r in rows:
-            check = kuu.row!=r
+            check = kuu.row != r
             kuu.row[kuu.row > r] -= 1
             kuu.row = kuu.row[check]
             kuu.col = kuu.col[check]
@@ -380,7 +420,7 @@ class ConeCyl(object):
             kuu = coo_matrix(kuu)
 
         for c in cols:
-            check = kuu.col!=c
+            check = kuu.col != c
             kuu.col[kuu.col > c] -= 1
             kuu.row = kuu.row[check]
             kuu.col = kuu.col[check]
@@ -409,8 +449,8 @@ class ConeCyl(object):
         t = np.atleast_1d(np.array(t, dtype=float))
         xshape = x.shape
         tshape = t.shape
-        if xshape!=tshape:
-            raise ValueError('Arrays x and t must have the same shape!')
+        if xshape != tshape:
+            raise ValueError('Arrays x and t must have the same shape')
         self.Xs = x
         self.Ts = t
         x = x.ravel()
@@ -477,8 +517,8 @@ class ConeCyl(object):
             c = self.calc_full_c(c)
 
         if 'fsdt_donnell' in linear_kinematics:
-            u, v, w, phix, phit = fsdt_linear.fuvw(
-                    m2, n2, L, x, t, c, bc=bc, pd=self.pdC)
+            u, v, w, phix, phit = fsdt_commons.fuvw(c, m1, m2, n2,
+                                      alpharad, r2, L, tLArad, x, t)
             self.u = u.reshape(xshape)
             self.v = v.reshape(xshape)
             self.w = w.reshape(xshape)
@@ -519,6 +559,7 @@ class ConeCyl(object):
 
         alpharad = self.alpharad
         cosa = self.cosa
+        r1 = self.r1
         r2 = self.r2
         L = self.L
         h = self.h
@@ -534,122 +575,92 @@ class ConeCyl(object):
         bc = self.bc
         s = self.s
         linear_kinematics = self.linear_kinematics
-        if self.stack!=[]:
+        if self.stack != []:
             lam = composite.read_stack(stack, plyts, laminaprops=laminaprops)
-        #
-        k0uk = None
+
+        k0edges = None
         if 'fsdt' in linear_kinematics:
-            if lam!=None:
+            if lam != None:
                 F = lam.ABDE
                 F[6:,6:] *= self.K
                 self.F = F
             else:
                 F = self.F
 
-            if 'fsdt_general' in linear_kinematics:
-                import fsdt_general_linear_donnell
-                if self.is_cylinder:
-                    k0 = fsdt_general_linear_donnell.fk0_cyl(r2, L, F,
-                                                             m1, m2, n2)
-                    kG0 = fsdt_general_linear_donnell.fkG_cyl(Fc, P, T, r2, L,
-                                                             m1, m2, n2)
-                    k0edges = fsdt_general_linear_donnell.fk0edges_cyl(
-                                m1, m2, n2, r2,
-                                self.kuBot, self.kuTop,
-                                self.kvBot, self.kvTop,
-                                self.kwBot, self.kwTop,
-                                self.kphixBot, self.kphixTop,
-                                self.kphitBot, self.kphitTop)
+            if 'fsdt_donnell' in linear_kinematics:
+                from fsdt_linear_donnell import (fk0,
+                                                 fk0_cyl,
+                                                 fk0edges,
+                                                 fkG0,
+                                                 fkG0_cyl)
 
-                else:
-                    k0 = fsdt_general_linear_donnell.fk0(alpharad, r2, L, F,
-                                                         m1, m2, n2, s)
-                    kG0 = fsdt_general_linear_donnell.fkG(Fc, P, T, r2,
-                                                         alpharad, L,
-                                                         m1, m2, n2, s)
+                k0edges = fk0edges(m1, m2, n2, r1, r2,
+                            self.kuBot, self.kuTop,
+                            self.kphixBot, self.kphixTop)
 
-                    k0edges = fsdt_general_linear_donnell.fk0edges(
-                                m1, m2, n2, r2,
-                                self.kuBot, self.kuTop,
-                                self.kvBot, self.kvTop,
-                                self.kwBot, self.kwTop,
-                                self.kphixBot, self.kphixTop,
-                                self.kphitBot, self.kphitTop)
+            elif 'fsdt_general' in linear_kinematics:
+                from fsdt_general_linear_donnell import (fk0,
+                                                         fk0_cyl,
+                                                         fkG0,
+                                                         fkG0_cyl)
 
-                k = self.exclude_dofs_matrix(k0, return_kuk=True)
-                k0uk = k['kuk']
-                k0uu = k['kuu']
-
-                k = self.exclude_dofs_matrix(k0edges, return_kuk=True)
-                k0edgesuk = k['kuk']
-                k0edgesuu = k['kuu']
-
-                k0uk = k0uk - k0edgesuk
-                k0uu = k0uu - k0edgesuu
-
-                kG0uu = self.exclude_dofs_matrix(kG0)['kuu']
-
-            else:
-                k0, kG0 = fsdt_linear.pre_solver(
-                                          alpharad, r2, L, F, m2, n2, bc, s,
-                                          self.pdC)
-                if self.pdC:
-                    #TODO implement k0uk for FSDT
-                    print('WARNING - prescribed axial compression not implemented for fsdt!')
+                k0edges = fsdt_general_linear_donnell.fk0edges_cyl(
+                            m1, m2, n2, r2,
+                            self.kuBot, self.kuTop,
+                            self.kvBot, self.kvTop,
+                            self.kwBot, self.kwTop,
+                            self.kphixBot, self.kphixTop,
+                            self.kphitBot, self.kphitTop)
 
         elif 'clpt' in linear_kinematics:
-            if lam!=None:
+            if lam != None:
                 F = lam.ABD
                 self.F = F
             else:
                 F = self.F
             if bc != 'ss':
-                print('WARNING - With CLPT only bc="ss" is supported!')
+                print('WARNING - With CLPT only bc="ss" is supported')
 
-            # kG0
             if linear_kinematics=='clpt_donnell':
-                if self.is_cylinder:
-                    kG0 = clpt_linear_donnell.fkG_cyl(Fc, P, T, r2, L,
-                                                     m1, m2, n2)
-                    k0 = clpt_linear_donnell.fk0_cyl(r2, L, F, m1, m2, n2)
-                else:
-                    kG0 = clpt_linear_donnell.fkG(Fc, P, T, r2, alpharad, L,
-                                                 m1, m2, n2, s)
-                    k0 = clpt_linear_donnell.fk0(alpharad, r2, L, F,
-                                                 m1, m2, n2, s)
-
+                from clpt_linear_donnell import (fk0,
+                                                 fk0_cyl,
+                                                 fkG0,
+                                                 fkG0_cyl)
             elif linear_kinematics=='clpt_sanders':
-                if self.is_cylinder:
-                    kG0 = clpt_linear_sanders.fkG_cyl(Fc, P, T, r2, L,
-                                                     m1, m2, n2)
-                    k0 = clpt_linear_sanders.fk0_cyl(r2, L, F, m1, m2, n2)
-                else:
-                    kG0 = clpt_linear_sanders.fkG(Fc, P, T, r2, alpharad, L,
-                                                 m1, m2, n2, s)
-                    k0 = clpt_linear_sanders.fk0(alpharad, r2, L, F,
-                                                 m1, m2, n2, s)
+                from clpt_linear_sanders import (fk0,
+                                                 fk0_cyl,
+                                                 fkG0,
+                                                 fkG0_cyl)
 
-            else:
-                raise NotImplementedError(
-                'ERROR - "{}" is an invalid linear relation'.format(
-                    linear_kinematics))
-
-            k = self.exclude_dofs_matrix(k0, return_kuk=True)
-            k0uk = k['kuk']
-            k0uu = k['kuu']
-            kG0uu = self.exclude_dofs_matrix(kG0)['kuu']
-
+        if self.is_cylinder:
+            k0 = fk0_cyl(r2, L, F, m1, m2, n2)
+            kG0 = fkG0_cyl(Fc, P, T, r2, L, m1, m2, n2)
         else:
-            raise ValueError('ERROR - valid linear theories are:\n' +
-                             '\t"clpt_donnell", "clpt_sanders" and "fsdt"')
+            k0 = fk0(alpharad, r2, L, F, m1, m2, n2, s)
+            kG0 = fkG0(Fc, P, T, r2, alpharad, L, m1, m2, n2, s)
+
+        k = self.exclude_dofs_matrix(k0, return_kuk=True)
+        k0uk = k['kuk']
+        k0uu = k['kuu']
+        kG0uu = self.exclude_dofs_matrix(kG0)['kuu']
+
+        if k0edges:
+            k = self.exclude_dofs_matrix(k0edges, return_kuk=True)
+            k0edgesuk = k['kuk']
+            k0edgesuu = k['kuu']
+
+            k0uk = k0uk + k0edgesuk
+            k0uu = k0uu + k0edgesuu
+
         self.k0 = k0
         self.k0uk = k0uk
         self.k0uu = k0uu
         self.kG0 = kG0
         self.kG0uu = kG0uu
+
         #NOTE forcing Python garbage collector to clear the memory
         #     it DOES make a difference! There is a memory leak not
-        #     identified, probably form the csr_matrix
+        #     identified, probably in the csr_matrix process
 
         gc.collect()
 
@@ -716,6 +727,7 @@ class ConeCyl(object):
 
         print('\t\tCalculating non-linear matrices... '),
         NL_kinematics = self.NL_kinematics
+        linear_linematics = self.linear_kinematics
         alpharad = self.alpharad
         r2 = self.r2
         L = self.L
@@ -726,41 +738,72 @@ class ConeCyl(object):
         n2 = self.n2
 
         if NL_kinematics=='donnell_numerical':
-            from clpt_NL_donnell_numerical import (calc_k0L,
-                                                   calc_kG,
-                                                   calc_kLL)
-            k0L = calc_k0L(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                           nx=self.nx, nt=self.nt,
-                           num_cores=num_cores,
-                           method=self.ni_method)
-            kG = calc_kG(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                         nx=self.nx, nt=self.nt,
-                         num_cores=num_cores,
-                         method=self.ni_method)
-            kLL = calc_kLL(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                           nx=self.nx, nt=self.nt,
-                           num_cores=num_cores,
-                           method=self.ni_method)
+            if 'clpt' in linear_kinematics:
+                from clpt_NL_donnell_numerical import (calc_k0L,
+                                                       calc_kG,
+                                                       calc_kLL)
+                k0L = calc_k0L(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                               nx=self.nx, nt=self.nt,
+                               num_cores=num_cores,
+                               method=self.ni_method)
+                kG = calc_kG(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                             nx=self.nx, nt=self.nt,
+                             num_cores=num_cores,
+                             method=self.ni_method)
+                kLL = calc_kLL(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                               nx=self.nx, nt=self.nt,
+                               num_cores=num_cores,
+                               method=self.ni_method)
+            elif 'fsdt' in linear_kinematics:
+                from fsdt_NL_donnell_numerical import (calc_k0L,
+                                                       calc_kG,
+                                                       calc_kLL)
+                k0L = calc_k0L(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                               nx=self.nx, nt=self.nt,
+                               num_cores=num_cores,
+                               method=self.ni_method)
+                kG = calc_kG(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                             nx=self.nx, nt=self.nt,
+                             num_cores=num_cores,
+                             method=self.ni_method)
+                kLL = calc_kLL(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                               nx=self.nx, nt=self.nt,
+                               num_cores=num_cores,
+                               method=self.ni_method)
+            else:
+                raise ValueError(
+                        '{} is an nvalid linear_kinematics option'.format(
+                            linear_kinematics))
 
         elif NL_kinematics=='sanders_numerical':
-            from clpt_NL_sanders_numerical import (calc_k0L,
-                                                   calc_kG,
-                                                   calc_kLL)
-            k0L = calc_k0L(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                           nx=self.nx, nt=self.nt,
-                           num_cores=num_cores,
-                           method=self.ni_method)
-            kG = calc_kG(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                         nx=self.nx, nt=self.nt,
-                         num_cores=num_cores,
-                         method=self.ni_method)
-            kLL = calc_kLL(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                           nx=self.nx, nt=self.nt,
-                           num_cores=num_cores,
-                           method=self.ni_method)
+            if 'clpt' in linear_kinematics:
+                from clpt_NL_sanders_numerical import (calc_k0L,
+                                                       calc_kG,
+                                                       calc_kLL)
+                k0L = calc_k0L(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                               nx=self.nx, nt=self.nt,
+                               num_cores=num_cores,
+                               method=self.ni_method)
+                kG = calc_kG(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                             nx=self.nx, nt=self.nt,
+                             num_cores=num_cores,
+                             method=self.ni_method)
+                kLL = calc_kLL(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
+                               nx=self.nx, nt=self.nt,
+                               num_cores=num_cores,
+                               method=self.ni_method)
+            elif 'fsdt' in linear_kinematics:
+                raise NotImplementedError(
+                        'Sanders not implemented for FSDT')
+            else:
+                raise ValueError(
+                        '{} is an nvalid "linear_kinematics" option'.format(
+                            linear_kinematics))
 
         else:
-            raise ValueError('Invalid value for NL_kinematics')
+            raise ValueError(
+                    '{} is an invalid "NL_kinematics" option'.format(
+                    NL_kinematics))
 
 
         kL0 = k0L.T
@@ -794,27 +837,33 @@ class ConeCyl(object):
         r2 = self.r2
         sina = self.sina
         cosa = self.cosa
+        tLArad = self.tLArad
         m1 = self.m1
         m2 = self.m2
         n2 = self.n2
 
         NL_kinematics = self.NL_kinematics
         if NL_kinematics=='fsdt':
-            raise NotImplementedError('Strain not implemented for FSDT')
+            e_num = 8
+            from fsdt_commons import fstrain
         else:
+            e_num = 6
             from clpt_commons import fstrain
         if 'donnell' in NL_kinematics:
             int_NL_kinematics = 0
         elif 'sanders' in NL_kinematics:
             int_NL_kinematics = 1
         else:
-            raise NotImplementedError('Not recognized: {}'.
-                    format(NL_kinematics))
+            raise NotImplementedError(
+                    '{} is an invalid "NL_kinematics" option'.format(
+                    NL_kinematics))
 
         c = self.calc_full_c(c, inc=inc)
-        evec = fstrain(c, sina, cosa, x, t, r2, L, m1, m2, n2,
-                       int_NL_kinematics)
-        return evec.reshape((x.shape + (6,)))
+
+        evec = fstrain(c, sina, cosa, tLArad, x, t, r2, L,
+                       m1, m2, n2, int_NL_kinematics)
+
+        return evec.reshape((x.shape + (e_num,)))
 
     def calc_f_ext(self, inc=None, kuk=None, increment_PL=None):
         print('\t\tCalculating external forces... '),
@@ -854,7 +903,7 @@ class ConeCyl(object):
             import fsdt_general_commons
             fg = fsdt_general_commons.fg
 
-        elif 'fsdt_linear_donnell' in linear_kinematics:
+        elif 'fsdt_donnell' in linear_kinematics:
             dofs = 5
             num1 = 7
             num2 = 14
@@ -867,8 +916,9 @@ class ConeCyl(object):
             fg = clpt_commons.fgss
 
         else:
-            raise ValueError('{} is an invalid linear kinematics!'.format(
-                             linear_kinematics))
+            raise ValueError(
+                    '{} is an invalid "linear_kinematics" option'.format(
+                    linear_kinematics))
 
         g = np.zeros((dofs, num0 + num1*m1 + num2*m2*n2), dtype=float)
         f_ext = np.zeros((num0 + num1*m1 + num2*m2*n2), dtype=float)
@@ -878,8 +928,6 @@ class ConeCyl(object):
         for i, PL in enumerate(PLvalues):
             PLx = PLxs[i]
             PLtheta = PLthetas[i]
-            if bc != 'ss':
-                print('WARNING - With CLPT only bc="ss" is supported!')
             fg(g, m1, m2, n2, r2, PLx, PLtheta, L, cosa, tLArad)
             gu = np.delete(g, self.excluded_dofs, axis=1).copy()
 
@@ -928,10 +976,15 @@ class ConeCyl(object):
             f_ext += fpt.T.dot(gu).ravel()
 
         # pressure
-        #TODO perhaps move to clpt_commons.pyx
-        for i1 in range(1, m1+1):
-            col = num0 + (i1-1)*num1 + 2
-            f_ext[col] += self.P*(2/i1*(r2 - (-1)**i1*(r2 + L*sina)))
+        if self.P != 0.:
+            if 'clpt' in linear_kinematics:
+                for i1 in range(1, m1+1):
+                    col = num0 + (i1-1)*num1 + 2
+                    f_ext[col] += self.P*(2/i1*(r2 - (-1)**i1*(r2 + L*sina)))
+
+            elif 'fsdt' in linear_kinematics:
+                #TODO it might be the same as for the CLPT
+                raise NotImplementedError('pressure not implemented for FSDT')
 
         print('finished!')
 
@@ -999,7 +1052,7 @@ class ConeCyl(object):
 
         Notes
         -----
-        The returned `cs` is stored into a `cs` parameter in the `ConeCyl`
+        The returned `cs` is stored in the `cs` parameter in the `ConeCyl`
         object. The actual increments used in the non-linear analysis are
         stored in the `increments` parameter.
 
