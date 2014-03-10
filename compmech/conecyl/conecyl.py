@@ -697,6 +697,9 @@ class ConeCyl(object):
         #NOTE runs faster for self.k0 than -self.k0, so that the negative
         #     sign is applied later
         print('\t\tEigenvalue solver... '),
+
+        #self.k0uu.data[np.abs(self.k0uu.data)<1.e-12] = 0.
+
         if c==None:
             eigvals, eigvecs = eigsh(self.kG0uu, k=self.num_eigvalues,
                                      which='SM', M=self.k0uu, sigma=1.)
@@ -704,8 +707,8 @@ class ConeCyl(object):
             raise ('FIXME')
             eigvals, eigvecs = eigsh(self.kG0uu, k=self.num_eigvalues,
                                      which='SM',
-                                     M=(self.k0 + self.k0L + self.kL0 + self.kLL),
-                                     sigma=1.)
+                                 M=(self.k0 + self.k0L + self.kL0 + self.kLL),
+                                 sigma=1.)
         eigvals = (-1./eigvals)
         self.eigvecs = eigvecs
         self.eigvals = eigvals
@@ -727,7 +730,7 @@ class ConeCyl(object):
 
         print('\t\tCalculating non-linear matrices... '),
         NL_kinematics = self.NL_kinematics
-        linear_linematics = self.linear_kinematics
+        linear_kinematics = self.linear_kinematics
         alpharad = self.alpharad
         r2 = self.r2
         L = self.L

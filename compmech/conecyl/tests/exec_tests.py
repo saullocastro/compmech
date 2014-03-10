@@ -133,35 +133,37 @@ if True:
     cc.laminaprop = (123.55e3 , 8.708e3,  0.319, 5.695e3, 5.695e3, 5.695e3)
     cc.stack = [0, 0, 19, -19, 37, -37, 45, -45, 51, -51]
     cc.plyt = 0.125
-    #cc.alphadeg = 35.
+    #cc.alphadeg = 15.
     cc.r2 = 150.
     cc.H = 100.
-    cc.linear_kinematics = 'clpt_donnell'
+    cc.linear_kinematics = 'fsdt_donnell'
     cc.NL_kinematics = 'donnell_numerical'
 
     # shape functions
-    cc.m1 = 20
-    cc.m2 = 21
-    cc.n2 = 22
+    cc.m1 = 15
+    cc.m2 = 15
+    cc.n2 = 15
 
-    cc.bc = 'ss'
+    cc.bc = 'cc'
 
-    # lb
-    cc.Fc = 1.
-    cc.pdC = False
-    cc.lb()
+    if False:
+        # lb
+        cc.Fc = 1.
+        cc.pdC = False
+        cc.lb()
+        cc.plot(cc.eigvecs[0,:], vec='w', filename=r'C:\Temp\test_res.png')
 
-    raise
+    if True:
+        cc.Fc = 100000
+        cc.pdC = False
+        cc.add_SPL(100.)
 
+        cc.ni_num_cores = 7
+        cc.static(NLgeom=True)
+        cc.initialInc = 0.5
 
-    # applying perturbation load
-    cc.Fc = 100000
-    cc.pdC = False
-    cc.add_SPL(100.)
+        cc.plot(cc.cs[-1], vec='w', filename=r'C:\Temp\test_res.png')
 
-    cc.static()
-
-    cc.plot(cc.cs[-1], vec='w', filename=r'C:\Temp\test_res.png')
     raise
 
 if __name__=='__main__':

@@ -24,11 +24,10 @@ Requirements
 - mapy (modeling-analysis-python at https://github.com/saullocastro/mapy)
 - alg3dpy (https://code.google.com/p/alg3dpy)
 
-Licensing:
-----------
+Licensing
+---------
 
 The new BSD License (`see the LICENSE file for details 
 <https://raw.github.com/saullocastro/compmech/master/LICENSE/>`_)
-covers all files
-in the compmech repository unless stated otherwise.
+covers all files in the compmech repository unless stated otherwise.
 
