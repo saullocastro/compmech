@@ -1,4 +1,5 @@
-=======================================
+.. section-numbering::
+
 CLPT - Classical Laminated Plate Theory
 =======================================
 
