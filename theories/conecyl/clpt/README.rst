@@ -1,11 +1,5 @@
-.. section-numbering::
-
-=======================================
 CLPT - Classical Laminated Plate Theory
 =======================================
-------------
-Introduction
-------------
 
 For the CLPT the displacement field components are:
 

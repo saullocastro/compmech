@@ -1,5 +1,3 @@
-.. section-numbering::
-
 FSDT - First-order Shear Deformation Theory
 ===========================================
 
@@ -38,8 +36,8 @@ by using elastic stiffnesses for the corresponding degrees of freedom.
  
 .. _fsdt_donnell: 
 
-fsdt_donnell
-------------
+1. fsdt_donnell
+---------------
 
 The approximation functions are:
 
@@ -111,8 +109,8 @@ Observations:
 
 .. _fsdt_donnell2:
 
-fsdt_donnell2
--------------
+2. fsdt_donnell2
+----------------
 
 With the aim to remove the rigid body translation found in fsdt_donnell_,
 only the function for :math:`u`  has been changed:
@@ -139,8 +137,8 @@ Observations:
 
 .. _fsdt_donnell3:
 
-fsdt_donnell3
--------------
+3. fsdt_donnell3
+----------------
 
 Tried to remove some terms of fsdt_donnell2_ in order to make the linear
 buckling analysis work. Only the :math:`cos` function of
@@ -165,8 +163,8 @@ Observations:
 
 .. _fsdt_donnell4:
 
-fsdt_donnell4
--------------
+4. fsdt_donnell4
+----------------
 
 Tried to remove some terms of fsdt_donnell3_. The :math:`cos` functions
 of :math:`u_2` was removed, the :math:`cos` function of :math:`{\phi_x}_1` was
@@ -201,8 +199,8 @@ Observations:
 
 .. _fsdt_donnell5:
 
-fsdt_donnell5
--------------
+5. fsdt_donnell5
+----------------
 
 From the four previous attempts, the fsdt_donnell2_ and fsdt_donnell3_ 
 give the same results and the fsdt_donnell3_ is preferred because it has less
@@ -256,8 +254,8 @@ previous know-how. The resulting approximation functions are:
 
 .. _fsdt_donnell6:
 
-fsdt_donnell6
--------------
+6. fsdt_donnell6
+----------------
 
 With an attempt to make the linear buckling analysis to work for FSDT, this
 uses very simple approximation functions, design to produce results for
