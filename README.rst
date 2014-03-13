@@ -6,7 +6,8 @@ This repository was built with the intention to become a collection of
 theories and implementations on the field of Mechanics.
 
 The details about the theories and the implementation are given 
-in `the theories section <https://github.com/saullocastro/compmech/blob/master/theories/README.rst/>`_.
+in `the theories section 
+<https://github.com/saullocastro/compmech/blob/master/theories/README.rst/>`_.
  
 
 Implemented modules 
@@ -14,7 +15,9 @@ Implemented modules
 
 `A semi-analytical approach for the linear and non-linear buckling analysis of
 imperfect unstiffened laminated composite cylinders and cones under axial, 
-torsion and pressure loads. <https://github.com/saullocastro/compmech/blob/master/doc/conecyl/README.rst/>`_
+torsion and pressure loads.
+<https://github.com/saullocastro/compmech/blob/master/
+doc/conecyl/README.rst/>`_
 
 Requirements
 ------------

@@ -19,6 +19,7 @@ import fsdt_commons2
 import fsdt_commons3
 import fsdt_commons4
 import fsdt_commons5
+import fsdt_commons6
 import non_linear
 
 from plotutils import get_filename
@@ -192,7 +193,7 @@ class ConeCyl(object):
         valid_linear_kinematics = ['clpt_donnell', 'clpt_sanders',
                                    'fsdt_donnell', 'fsdt_donnell2',
                                    'fsdt_donnell3', 'fsdt_donnell4',
-                                   'fsdt_donnell5']
+                                   'fsdt_donnell5', 'fsdt_donnell6']
 
         if not self.linear_kinematics in valid_linear_kinematics:
             raise ValueError('ERROR - valid linear theories are:\n' +
@@ -579,6 +580,15 @@ class ConeCyl(object):
             self.phix = phix.reshape(xshape)
             self.phit = phit.reshape(xshape)
 
+        elif 'fsdt_donnell6'==linear_kinematics:
+            u, v, w, phix, phit = fsdt_commons6.fuvw(c, m1, m2, n2,
+                                      alpharad, r2, L, tLArad, x, t)
+            self.u = u.reshape(xshape)
+            self.v = v.reshape(xshape)
+            self.w = w.reshape(xshape)
+            self.phix = phix.reshape(xshape)
+            self.phit = phit.reshape(xshape)
+
         elif 'fsdt_general_donnell' in linear_kinematics:
             import fsdt_general_commons
             u, v, w, phix, phit = fsdt_general_commons.fuvw(c, m1, m2, n2,
@@ -685,6 +695,17 @@ class ConeCyl(object):
 
             elif 'fsdt_donnell5'==linear_kinematics:
                 from fsdt_linear_donnell5 import (fk0,
+                                                  fk0_cyl,
+                                                  fk0edges,
+                                                  fkG0,
+                                                  fkG0_cyl)
+
+                k0edges = fk0edges(m1, m2, n2, r1, r2,
+                            self.kuBot, self.kuTop,
+                            self.kphixBot, self.kphixTop)
+
+            elif 'fsdt_donnell6'==linear_kinematics:
+                from fsdt_linear_donnell6 import (fk0,
                                                   fk0_cyl,
                                                   fk0edges,
                                                   fkG0,
@@ -1017,6 +1038,10 @@ class ConeCyl(object):
             e_num = 8
             from fsdt_commons5 import fstrain
 
+        elif 'fsdt_donnell6'==self.linear_kinematics:
+            e_num = 8
+            from fsdt_commons6 import fstrain
+
         else:
             e_num = 6
             from clpt_commons import fstrain
@@ -1105,6 +1130,12 @@ class ConeCyl(object):
             num2 = 12
             fg = fsdt_commons5.fg
 
+        elif 'fsdt_donnell6'==linear_kinematics:
+            dofs = 5
+            num1 = 5
+            num2 = 10
+            fg = fsdt_commons6.fg
+
         elif 'clpt' in linear_kinematics:
             dofs = 3
             num1 = 3
@@ -1164,7 +1195,8 @@ class ConeCyl(object):
         elif ('fsdt_donnell2'==linear_kinematics
            or 'fsdt_donnell3'==linear_kinematics
            or 'fsdt_donnell4'==linear_kinematics
-           or 'fsdt_donnell5'==linear_kinematics):
+           or 'fsdt_donnell5'==linear_kinematics
+           or 'fsdt_donnell6'==linear_kinematics):
             if pdC:
                 if kuk==None:
                     kuk_C = self.k0uk[:, 0].ravel()

@@ -142,8 +142,8 @@ def main(which=['standard']):
     cc.plyt = 0.125
 
     #cc.alphadeg = 0.1
-    cc.linear_kinematics = 'fsdt_donnell2'
-    #cc.linear_kinematics = 'clpt_donnell'
+    cc.linear_kinematics = 'fsdt_donnell6'
+    cc.linear_kinematics = 'clpt_donnell'
     cc.NL_kinematics = 'donnell_numerical'
 
     # shape functions
@@ -151,11 +151,11 @@ def main(which=['standard']):
     cc.m2 = 16
     cc.n2 = 17
 
-    cc.kuBot = 0.
-    cc.kuTop = 0.
+    cc.kuBot = 1.e6
+    cc.kuTop = 1.e6
 
-    cc.kphixBot = 1.e10
-    cc.kphixTop = 1.e10
+    cc.kphixBot = 0.#1.e10
+    cc.kphixTop = 0.#1.e10
 
     if 'lb' in which:
         # lb
@@ -198,12 +198,12 @@ def main(which=['standard']):
 
         xs = np.zeros_like(ts)
         cc.uvw(cc.cs[-1], x=xs, t=ts)
-        axes[0].plot(ts, cc.u)
+        axes[0].plot(ts, cc.phix)
         axes[0].invert_yaxis()
 
         xs = np.zeros_like(ts) + cc.L
         cc.uvw(cc.cs[-1], x=xs, t=ts)
-        axes[1].plot(ts, cc.u)
+        axes[1].plot(ts, cc.phix)
         axes[1].invert_yaxis()
 
         plt.gcf().savefig(r'C:\Temp\test_res2.png', bbox_inches='tight')
