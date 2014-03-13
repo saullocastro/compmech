@@ -1,0 +1,17 @@
+.. compmech documentation master file, created by
+   sphinx-quickstart.
+
+Computational Mechanics (compmech)
+==================================
+
+This repository was built with the intention to become a collection of
+theory and implementations on the field of Mechanics.
+
+The details about the theory of the implementations are given 
+in :ref:`theory`.
+ 
+.. toctree::
+   :maxdepth: 2
+ 	
+   theory/index.rst
+   about.rst

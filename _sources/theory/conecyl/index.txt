@@ -1,0 +1,17 @@
+.. _theory-conecyl:
+
+Semi-analytical models for conical and cylindrical shells (conecyl)
+===================================================================
+
+A semi-analytical approach for the linear and non-linear buckling analysis of
+imperfect unstiffened laminated composite cylinders and cones under axial, 
+torsion and pressure loads.
+
+The contained in this module were initially developed in the context
+of the European Project DESICOS (http://www.desicos.eu).
+
+.. toctree::
+   :maxdepth: 4
+
+   dev_of_conecyl.rst
+   esl_theories.rst

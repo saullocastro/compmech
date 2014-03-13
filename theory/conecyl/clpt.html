@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>CLPT - Classical Laminated Plate Theory &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../_static/SymPy-Favicon.ico"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="clpt-classical-laminated-plate-theory">
+<span id="theory-conecyl-clpt"></span><h1>CLPT - Classical Laminated Plate Theory<a class="headerlink" href="#clpt-classical-laminated-plate-theory" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>For the CLPT the displacement field components are:</p>
+<div class="math">
+\[u, v, w\]</div>
+<p>and that the approximations can be separated as:</p>
+<div class="math">
+\[\begin{split}u = u_0 + u_1 + u_2\\
+v = v_0 + v_1 + v_2\\
+w = w_0 + w_1 + w_2\\\end{split}\]</div>
+<p>where <span class="math">\(u_0\)</span> contains the approximation functions corresponding to the
+prescribed degrees of freedom, <span class="math">\(u_1\)</span> contains the functions independent
+of <span class="math">\(\theta\)</span> and <span class="math">\(u_2\)</span> the functions that depend on both <span class="math">\(x\)</span>
+and <span class="math">\(\theta\)</span>.</p>
+<p>The aim is to have models capable of simulating the displacement field of
+cones and cylinders. The approximation functions are the same
+for both the Donnell&#8217;s and the Sanders&#8217; models.
+The approximation functions are:</p>
+<div class="math" id="clpt-approx-functions">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+            \right)
+\\\end{split}\]</div>
+<p>with:</p>
+<div class="math">
+\[\begin{split}{b_x}_1 = i_1 \pi \frac x L \\
+{b_x}_2 = i_2 \pi \frac x L\end{split}\]</div>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\checkmark\)</span> linear static</p>
+<p><span class="math">\(\checkmark\)</span> linear buckling</p>
+<p><span class="math">\(\checkmark\)</span> non-linear analysis</p>
+</div></blockquote>
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<p>Below it follows a more detailed description of each of the implementations:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#clpt-donnell">clpt_donnell</a></li>
+<li><a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a></li>
+<li><a class="reference internal" href="#clpt-sanders">clpt_sanders</a></li>
+<li><a class="reference internal" href="#clpt-sanders2">clpt_sanders2</a></li>
+</ul>
+<p>Each model can be accessed using the <tt class="docutils literal"><span class="pre">linear_kinematics</span></tt> parameter of the
+<tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+<div class="section" id="clpt-donnell">
+<span id="id1"></span><h3>clpt_donnell<a class="headerlink" href="#clpt-donnell" title="Permalink to this headline">¶</a></h3>
+<p>Simply supported edges with the Donnell&#8217;s equations. The <a class="reference internal" href="esl_theories.html#clpt-approx-functions"><em>approximation
+functions</em></a> are showed above and no elastic
+restraints are imposed to the shell rotation at the edges.</p>
+</div>
+<div class="section" id="clpt-donnell2">
+<span id="id2"></span><h3>clpt_donnell2<a class="headerlink" href="#clpt-donnell2" title="Permalink to this headline">¶</a></h3>
+<p>Elastic restrained edges with the Donnell&#8217;s equations. The <a class="reference internal" href="esl_theories.html#clpt-approx-functions"><em>approximation
+functions</em></a> are showed above and the
+elastic restraints are imposed
+adding to the strain energy rotational springs at the bottom and top edges.</p>
+<p>Basically the following terms should be added to the strain energy:</p>
+<div class="math">
+\[\begin{split}U_{springs} = \int_\theta r_1 \left(
+                  K_Bot^u u(x=L, \theta)^2
+                + K_Bot^v v(x=L, \theta)^2
+                + K_Bot^w w(x=L, \theta)^2
+                + K_Bot^{\phi_x} {\phi_x}(x=L, \theta)^2
+                + K_Bot^{\phi_\theta} {\phi_\theta}(x=L, \theta)^2
+              \right)
+              \\
+            + \int_\theta r_2 \left(
+                  K_Top^u u(x=0, \theta)^2
+                + K_Top^v v(x=0, \theta)^2
+                + K_Top^w w(x=0, \theta)^2
+                + K_Top^{\phi_x} {\phi_x}(x=0, \theta)^2
+                + K_Top^{\phi_\theta} {\phi_\theta}(x=0, \theta)^2
+              \right)\end{split}\]</div>
+<p>Writting in matrix form the following operation is performed to the
+linear stiffness matrix <span class="math">\([K_0]\)</span>:</p>
+<div class="math">
+\[[K_0]_{new} = [K_0] + [K_0]_{edges}\]\[[K_0]_{edges} = \int_{\theta} { \left(
+                    r_1 [g_{new}]_{x=L}^T [K]_{Bot} [g_{new}]_{x=L}^.
+                  + r_2 [g_{new}]_{x=0}^T [K]_{Top} [g_{new}]_{x=0}^.
+                     \right) d\theta
+                    }\]</div>
+<p>with :</p>
+<div class="math">
+\[\begin{split}[K]_{Bot} = \begin{bmatrix}
+      K_Bot^u &amp;       0 &amp;       0 &amp;              0 &amp;             0 \\
+            0 &amp; K_Bot^v &amp;       0 &amp;              0 &amp;             0 \\
+            0 &amp;       0 &amp; K_Bot^w &amp;              0 &amp;             0 \\
+            0 &amp;       0 &amp;       0 &amp; K_Bot^{\phi_x} &amp;             0 \\
+            0 &amp;       0 &amp;       0 &amp;              0 &amp;K_Bot^{\phi_\theta}
+                \end{bmatrix}\end{split}\]</div>
+<p>and:</p>
+<div class="math">
+\[\begin{split}[K]_{Top} = \begin{bmatrix}
+      K_Top^u &amp;       0 &amp;       0 &amp;              0 &amp;             0 \\
+            0 &amp; K_Top^v &amp;       0 &amp;              0 &amp;             0 \\
+            0 &amp;       0 &amp; K_Top^w &amp;              0 &amp;             0 \\
+            0 &amp;       0 &amp;       0 &amp; K_Top^{\phi_x} &amp;             0 \\
+            0 &amp;       0 &amp;       0 &amp;              0 &amp;K_Top^{\phi_\theta}
+                \end{bmatrix}\end{split}\]</div>
+<p>The shape functions <span class="math">\([g_{new}]\)</span> contains two extra rows that are built
+from the relations:</p>
+<div class="math">
+\[\begin{split}\phi_x = - \frac{\partial w}{\partial x}
+\\
+\phi_t = \frac{\partial w}{\partial \theta}\end{split}\]</div>
+<p>and therefore:</p>
+<div class="math">
+\[\begin{split}[g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x}
+\\
+[g^{\phi_\theta}] = \frac {\partial [g^w]} {\partial \theta}
+\\
+[g_{new}]^T = \left[ [g^u], [g^v], [g^w],
+                      [g^{\phi_x}], [g^{\phi_\theta}] \right]\end{split}\]</div>
+</div>
+<div class="section" id="clpt-sanders">
+<span id="id3"></span><h3>clpt_sanders<a class="headerlink" href="#clpt-sanders" title="Permalink to this headline">¶</a></h3>
+<p>Simply supported edges with the Sanders&#8217;s equations. The <a class="reference internal" href="esl_theories.html#clpt-approx-functions"><em>approximation
+functions</em></a> are showed above and no elastic
+restraints are imposed.  Analogous to the <a class="reference internal" href="#clpt-donnell">clpt_donnell</a>.</p>
+</div>
+<div class="section" id="clpt-sanders2">
+<span id="id4"></span><h3>clpt_sanders2<a class="headerlink" href="#clpt-sanders2" title="Permalink to this headline">¶</a></h3>
+<p>Analogous to the <a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a> using the Sanders non-linear equations.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/sympylogo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">CLPT - Classical Laminated Plate Theory</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#implementations">Implementations</a><ul>
+<li><a class="reference internal" href="#clpt-donnell">clpt_donnell</a></li>
+<li><a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a></li>
+<li><a class="reference internal" href="#clpt-sanders">clpt_sanders</a></li>
+<li><a class="reference internal" href="#clpt-sanders2">clpt_sanders2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/theory/conecyl/clpt.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 CompMech Development Team.
+      Last updated on Mar 13, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
