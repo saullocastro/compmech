@@ -138,24 +138,24 @@ def main(which=['standard']):
     cc.laminaprop = (123.55e3 , 8.708e3,  0.319, 5.695e3, 5.695e3, 5.695e3)
     cc.stack = [0, 0, 19, -19, 37, -37, 45, -45, 51, -51]
     cc.r2 = 250.
-    cc.H = 500.
+    cc.H = 100.
     cc.plyt = 0.125
 
     #cc.alphadeg = 0.1
     cc.linear_kinematics = 'fsdt_donnell6'
-    cc.linear_kinematics = 'clpt_donnell'
+    cc.linear_kinematics = 'clpt_donnell2'
     cc.NL_kinematics = 'donnell_numerical'
 
     # shape functions
-    cc.m1 = 15
-    cc.m2 = 16
-    cc.n2 = 17
+    cc.m1 = 45
+    cc.m2 = 46
+    cc.n2 = 47
 
-    cc.kuBot = 1.e6
-    cc.kuTop = 1.e6
+    cc.kuBot = 1.e8
+    cc.kuTop = 1.e8
 
-    cc.kphixBot = 0.#1.e10
-    cc.kphixTop = 0.#1.e10
+    cc.kphixBot = 1.e10
+    cc.kphixTop = 1.e10
 
     if 'lb' in which:
         # lb
@@ -182,7 +182,7 @@ def main(which=['standard']):
 
     if 'static' in which:
         # linear static
-        cc.Fc = 100.
+        cc.Fc = 0.
         cc.uTM = 0.6
         cc.pdC = False
         cc.add_SPL(10.)
@@ -198,12 +198,12 @@ def main(which=['standard']):
 
         xs = np.zeros_like(ts)
         cc.uvw(cc.cs[-1], x=xs, t=ts)
-        axes[0].plot(ts, cc.phix)
+        axes[0].plot(ts, cc.w)
         axes[0].invert_yaxis()
 
         xs = np.zeros_like(ts) + cc.L
         cc.uvw(cc.cs[-1], x=xs, t=ts)
-        axes[1].plot(ts, cc.phix)
+        axes[1].plot(ts, cc.w)
         axes[1].invert_yaxis()
 
         plt.gcf().savefig(r'C:\Temp\test_res2.png', bbox_inches='tight')

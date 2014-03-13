@@ -21,11 +21,11 @@ of :math:`\theta` and :math:`u_2` the functions that depend on both :math:`x`
 and :math:`\theta`.
 
 The aim is to have models capable of simulating the displacement field of
-simply supported cones and cylinders. The approximation functions are the same
-for both the Donnell's and the Sanders' models. The models are accessed
-using for the ``linear_kinematics`` parameter ``"clpt_donnell"`` or
-``"clpt_sanders"``.
+cones and cylinders. The approximation functions are the same
+for both the Donnell's and the Sanders' models.
+The approximation functions are:
 
+.. _shape_functions:
 
 .. math::
 
@@ -64,3 +64,98 @@ Observations:
     :math:`\checkmark` non-linear analysis
 
 
+.. contents:: Below it follows a more detailed description of each of the implementations:
+ 
+Each model can be accessed using the ``linear_kinematics`` parameter of the
+``ConeCyl`` object.
+
+
+.. _clpt_donnell:
+
+1. clpt_donnell
+---------------
+
+Simply supported edges with the Donnell's equations. The `shape functions
+<shape_functions_>`_ are showed above and no elastic restraints are imposed
+to the shell rotation at the edges.
+
+
+.. _clpt_donnell2:
+
+2. clpt_donnell2
+----------------
+
+Elastic restrained edges with the Donnell's equations. The `shape functions
+<shape_functions_>`_ are showed above and the elastic restraint is imposed
+adding to the strain energy rotational springs at the bottom and top edges.
+The following matrix operation is performed to the the linear stiffness
+matrix :math:`[K_0]`:
+
+.. math::
+
+    [K_0]_{new} = [K_0] + [K_0]_{edges}
+
+    [K_0]_{edges} = \iint_{x\theta} { \left(
+                        _1 [g_{new}]_{x=L}^T [K]_{Bot} [g_{new}]_{x=L}^.
+                      + r_2 [g_{new}]_{x=0}^T [K]_{Top} [g_{new}]_{x=0}^.
+                         \right) d\theta dx
+                        }
+
+
+with :
+
+.. math::
+
+    [K]_{Bot} = \begin{bmatrix}
+          K_Bot^u &       0 &       0 &              0 &             0 \\
+                0 & K_Bot^v &       0 &              0 &             0 \\
+                0 &       0 & K_Bot^w &              0 &             0 \\
+                0 &       0 &       0 & K_Bot^{\phi_x} &             0 \\
+                0 &       0 &       0 &              0 &K_Bot^{\phi_\theta} 
+                    \end{bmatrix}
+
+and:
+
+.. math::
+
+    [K]_{Top} = \begin{bmatrix}
+          K_Top^u &       0 &       0 &              0 &             0 \\
+                0 & K_Top^v &       0 &              0 &             0 \\
+                0 &       0 & K_Top^w &              0 &             0 \\
+                0 &       0 &       0 & K_Top^{\phi_x} &             0 \\
+                0 &       0 &       0 &              0 &K_Top^{\phi_\theta} 
+                    \end{bmatrix}
+
+
+The shape functions :math:`[g_{new}]` contains two extra rows that are built
+from the relations:
+
+.. math::
+
+    \phi_x = - \frac{\partial w}{\partial x}
+    \\
+    \phi_t = \frac{\partial w}{\partial \theta}
+
+and therefore:
+
+.. math::
+
+    [g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x}
+    \\
+    [g^{\phi_\theta}] = \frac {\partial [g^w]} {\partial \theta}
+    \\
+    [g_{new}]^T = \right[ [g^u], [g^v], [g^w],
+                          [g^{\phi_x}], [g^{\phi_\theta}] \right]
+
+
+3. clpt_sanders
+---------------
+
+Simply supported edges with the Sanders's equations. The `shape functions
+<shape_functions_>`_ are showed above and no elastic restraints are imposed.
+Analogous to the clpt_donnell_.
+
+4. clpt_sanders2
+----------------
+
+Analogous to the clpt_donnell2_ using the Sanders non-linear equations.

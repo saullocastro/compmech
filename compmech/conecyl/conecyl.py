@@ -190,10 +190,11 @@ class ConeCyl(object):
 
         self.linear_kinematics = self.linear_kinematics.lower()
 
-        valid_linear_kinematics = ['clpt_donnell', 'clpt_sanders',
-                                   'fsdt_donnell', 'fsdt_donnell2',
-                                   'fsdt_donnell3', 'fsdt_donnell4',
-                                   'fsdt_donnell5', 'fsdt_donnell6']
+        valid_linear_kinematics = [
+                'clpt_donnell', 'clpt_donnell2',
+                'clpt_sanders',
+                'fsdt_donnell', 'fsdt_donnell2', 'fsdt_donnell3',
+                'fsdt_donnell4', 'fsdt_donnell5', 'fsdt_donnell6']
 
         if not self.linear_kinematics in valid_linear_kinematics:
             raise ValueError('ERROR - valid linear theories are:\n' +
@@ -589,18 +590,6 @@ class ConeCyl(object):
             self.phix = phix.reshape(xshape)
             self.phit = phit.reshape(xshape)
 
-        elif 'fsdt_general_donnell' in linear_kinematics:
-            import fsdt_general_commons
-            u, v, w, phix, phit = fsdt_general_commons.fuvw(c, m1, m2, n2,
-                                      alpharad, r2, L, tLArad, x, t)
-            self.u = u.reshape(xshape)
-            self.v = v.reshape(xshape)
-            self.w = w.reshape(xshape)
-            self.phix = phix.reshape(xshape)
-            self.phit = phit.reshape(xshape)
-
-            return self.u, self.v, self.w, self.phix, self.phit
-
         elif 'clpt' in linear_kinematics:
             u, v, w = clpt_commons.fuvw(c, m1, m2, n2, alpharad, r2, L,
                                         tLArad, x, t)
@@ -716,21 +705,6 @@ class ConeCyl(object):
                             self.kphixBot, self.kphixTop)
 
 
-            elif 'fsdt_general' in linear_kinematics:
-                from fsdt_general_linear_donnell import (fk0,
-                                                         fk0_cyl,
-                                                         fk0edges_cyl,
-                                                         fkG0,
-                                                         fkG0_cyl)
-
-                k0edges = fk0edges_cyl(
-                            m1, m2, n2, r2,
-                            self.kuBot, self.kuTop,
-                            self.kvBot, self.kvTop,
-                            self.kwBot, self.kwTop,
-                            self.kphixBot, self.kphixTop,
-                            self.kphitBot, self.kphitTop)
-
         elif 'clpt' in linear_kinematics:
             if lam != None:
                 F = lam.ABD
@@ -745,6 +719,17 @@ class ConeCyl(object):
                                                  fk0_cyl,
                                                  fkG0,
                                                  fkG0_cyl)
+
+            elif linear_kinematics=='clpt_donnell2':
+                from clpt_linear_donnell2 import (fk0,
+                                                 fk0_cyl,
+                                                 fk0edges,
+                                                 fkG0,
+                                                 fkG0_cyl)
+
+                k0edges = fk0edges(m1, m2, n2, r1, r2, L,
+                                   self.kphixBot, self.kphixTop)
+
             elif linear_kinematics=='clpt_sanders':
                 from clpt_linear_sanders import (fk0,
                                                  fk0_cyl,
@@ -1093,14 +1078,7 @@ class ConeCyl(object):
         num0 = self.num0
 
 
-        if 'fsdt_general' in linear_kinematics:
-            dofs = 5
-            num1 = 10
-            num2 = 20
-            import fsdt_general_commons
-            fg = fsdt_general_commons.fg
-
-        elif 'fsdt_donnell'==linear_kinematics:
+        if 'fsdt_donnell'==linear_kinematics:
             dofs = 5
             num1 = 7
             num2 = 14
