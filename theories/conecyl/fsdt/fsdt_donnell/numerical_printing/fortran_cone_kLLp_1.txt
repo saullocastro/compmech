@@ -1,63 +1,27 @@
 kLLp_1
-p0400 = r*sini1x*(A11*phix + A16*phit)
-p0401 = r*sini1x*(A12*phix + A26*phit)
-p0402 = r*sini1x*(A16*phix + A66*phit)
-p0403 = r*sini1x*(B11*phix + B16*phit)
-p0404 = r*sini1x*(B12*phix + B26*phit)
-p0405 = r*sini1x*(B16*phix + B66*phit)
-p0500 = cosi1x*r*(A11*phix + A16*phit)
-p0501 = cosi1x*r*(A12*phix + A26*phit)
-p0502 = cosi1x*r*(A16*phix + A66*phit)
-p0503 = cosi1x*r*(B11*phix + B16*phit)
-p0504 = cosi1x*r*(B12*phix + B26*phit)
-p0505 = cosi1x*r*(B16*phix + B66*phit)
-p0600 = r*sini1x*(A12*phit + A16*phix)
-p0601 = r*sini1x*(A22*phit + A26*phix)
-p0602 = r*sini1x*(A26*phit + A66*phix)
-p0603 = r*sini1x*(B12*phit + B16*phix)
-p0604 = r*sini1x*(B22*phit + B26*phix)
-p0605 = r*sini1x*(B26*phit + B66*phix)
+p0300 = pi*cosi1x*i1*(A11*r*wx + A16*wt)/L
+p0301 = pi*cosi1x*i1*(A12*r*wx + A26*wt)/L
+p0302 = pi*cosi1x*i1*(A16*r*wx + A66*wt)/L
+p0303 = pi*cosi1x*i1*(B11*r*wx + B16*wt)/L
+p0304 = pi*cosi1x*i1*(B12*r*wx + B26*wt)/L
+p0305 = pi*cosi1x*i1*(B16*r*wx + B66*wt)/L
 
 # create buffer
 kLLp_1
-kLLp_1_p0400[pos] = p0400
-kLLp_1_p0401[pos] = p0401
-kLLp_1_p0402[pos] = p0402
-kLLp_1_p0403[pos] = p0403
-kLLp_1_p0404[pos] = p0404
-kLLp_1_p0405[pos] = p0405
-kLLp_1_p0500[pos] = p0500
-kLLp_1_p0501[pos] = p0501
-kLLp_1_p0502[pos] = p0502
-kLLp_1_p0503[pos] = p0503
-kLLp_1_p0504[pos] = p0504
-kLLp_1_p0505[pos] = p0505
-kLLp_1_p0600[pos] = p0600
-kLLp_1_p0601[pos] = p0601
-kLLp_1_p0602[pos] = p0602
-kLLp_1_p0603[pos] = p0603
-kLLp_1_p0604[pos] = p0604
-kLLp_1_p0605[pos] = p0605
+kLLp_1_p0300[pos] = p0300
+kLLp_1_p0301[pos] = p0301
+kLLp_1_p0302[pos] = p0302
+kLLp_1_p0303[pos] = p0303
+kLLp_1_p0304[pos] = p0304
+kLLp_1_p0305[pos] = p0305
 
 # access buffer
-p0400 = kLLp_1_p0400[pos]
-p0401 = kLLp_1_p0401[pos]
-p0402 = kLLp_1_p0402[pos]
-p0403 = kLLp_1_p0403[pos]
-p0404 = kLLp_1_p0404[pos]
-p0405 = kLLp_1_p0405[pos]
-p0500 = kLLp_1_p0500[pos]
-p0501 = kLLp_1_p0501[pos]
-p0502 = kLLp_1_p0502[pos]
-p0503 = kLLp_1_p0503[pos]
-p0504 = kLLp_1_p0504[pos]
-p0505 = kLLp_1_p0505[pos]
-p0600 = kLLp_1_p0600[pos]
-p0601 = kLLp_1_p0601[pos]
-p0602 = kLLp_1_p0602[pos]
-p0603 = kLLp_1_p0603[pos]
-p0604 = kLLp_1_p0604[pos]
-p0605 = kLLp_1_p0605[pos]
+p0300 = kLLp_1_p0300[pos]
+p0301 = kLLp_1_p0301[pos]
+p0302 = kLLp_1_p0302[pos]
+p0303 = kLLp_1_p0303[pos]
+p0304 = kLLp_1_p0304[pos]
+p0305 = kLLp_1_p0305[pos]
 
 subs
 

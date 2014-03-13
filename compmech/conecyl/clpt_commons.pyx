@@ -90,6 +90,7 @@ cdef void cfuvw(double *c, int m1, int m2, int n2, double r2, double L,
         u += c[col+0]*sinbi
         v += c[col+1]*sinbi
         w += c[col+2]*sinbi
+
     for j2 in range(1, n2+1):
         sinbj = sin(j2*t)
         cosbj = cos(j2*t)
@@ -288,6 +289,7 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
     u = np.zeros(np.shape(xvec), dtype=DOUBLE)
     v = np.zeros(np.shape(xvec), dtype=DOUBLE)
     w = np.zeros(np.shape(xvec), dtype=DOUBLE)
+
     for ix in range(xvec.shape[0]):
         x = xvec[ix]
         t = tvec[ix]

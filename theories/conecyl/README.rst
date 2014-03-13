@@ -2,6 +2,10 @@
 conecyl
 =======
 
+.. sectnum::
+
+.. contents:: Topics:
+
 Current implementations
 -----------------------
 
@@ -28,8 +32,14 @@ expensive step.
 SymPy is used to post process the results from Mathematica and print the
 matrices in a ready-to-paste-into-Cython form.
 
-In the following sections ``ESL theory`` can be either the Classical Laminated
-Plate Theory (CLPT) or the First-order Shear Deformation Theory (FSDT), and
+In the following sections ``ESL theory`` can be either the
+`Classical Laminated Plate Theory (CLPT)
+<https://github.com/saullocastro/compmech/blob/master/theories/
+conecyl/clpt/README.rst/>`_
+or the `First-order Shear Deformation Theory (FSDT)
+<https://github.com/saullocastro/compmech/blob/master/theories/
+conecyl/fsdt/README.rst/>`_
+, and
 the ``equation type`` can be either the ``Donnell``'s or ``Sanders``'
 equations.
 
@@ -148,3 +158,4 @@ which is easy to implement in the Cython codes::
     fsdt_commons.pyx
 
 depending on each case.
+

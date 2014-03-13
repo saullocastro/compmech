@@ -1,27 +1,15 @@
 kGp_1
-p0400 = Nxx*r*sini1x
-p0401 = Nxt*r*sini1x
-p0500 = Nxx*cosi1x*r
-p0501 = Nxt*cosi1x*r
-p0600 = Nxt*r*sini1x
-p0601 = Ntt*r*sini1x
+p0300 = pi*Nxx*cosi1x*i1*r/L
+p0301 = pi*Nxt*cosi1x*i1*r/L
 
 # create buffer
 kGp_1
-kGp_1_p0400[pos] = p0400
-kGp_1_p0401[pos] = p0401
-kGp_1_p0500[pos] = p0500
-kGp_1_p0501[pos] = p0501
-kGp_1_p0600[pos] = p0600
-kGp_1_p0601[pos] = p0601
+kGp_1_p0300[pos] = p0300
+kGp_1_p0301[pos] = p0301
 
 # access buffer
-p0400 = kGp_1_p0400[pos]
-p0401 = kGp_1_p0401[pos]
-p0500 = kGp_1_p0500[pos]
-p0501 = kGp_1_p0501[pos]
-p0600 = kGp_1_p0600[pos]
-p0601 = kGp_1_p0601[pos]
+p0300 = kGp_1_p0300[pos]
+p0301 = kGp_1_p0301[pos]
 
 subs
 

@@ -1,0 +1,57 @@
+kLLp_2
+p0400 = cosj2t*j2*sini2x*(A12*wt + A16*r*wx)/r + pi*cosi2x*i2*sinj2t*(A11*r*wx + A16*wt)/L
+p0401 = cosj2t*j2*sini2x*(A22*wt + A26*r*wx)/r + pi*cosi2x*i2*sinj2t*(A12*r*wx + A26*wt)/L
+p0402 = cosj2t*j2*sini2x*(A26*wt + A66*r*wx)/r + pi*cosi2x*i2*sinj2t*(A16*r*wx + A66*wt)/L
+p0403 = cosj2t*j2*sini2x*(B12*wt + B16*r*wx)/r + pi*cosi2x*i2*sinj2t*(B11*r*wx + B16*wt)/L
+p0404 = cosj2t*j2*sini2x*(B22*wt + B26*r*wx)/r + pi*cosi2x*i2*sinj2t*(B12*r*wx + B26*wt)/L
+p0405 = cosj2t*j2*sini2x*(B26*wt + B66*r*wx)/r + pi*cosi2x*i2*sinj2t*(B16*r*wx + B66*wt)/L
+p0500 = -j2*sini2x*sinj2t*(A12*wt + A16*r*wx)/r + pi*cosi2x*cosj2t*i2*(A11*r*wx + A16*wt)/L
+p0501 = -j2*sini2x*sinj2t*(A22*wt + A26*r*wx)/r + pi*cosi2x*cosj2t*i2*(A12*r*wx + A26*wt)/L
+p0502 = -j2*sini2x*sinj2t*(A26*wt + A66*r*wx)/r + pi*cosi2x*cosj2t*i2*(A16*r*wx + A66*wt)/L
+p0503 = -j2*sini2x*sinj2t*(B12*wt + B16*r*wx)/r + pi*cosi2x*cosj2t*i2*(B11*r*wx + B16*wt)/L
+p0504 = -j2*sini2x*sinj2t*(B22*wt + B26*r*wx)/r + pi*cosi2x*cosj2t*i2*(B12*r*wx + B26*wt)/L
+p0505 = -j2*sini2x*sinj2t*(B26*wt + B66*r*wx)/r + pi*cosi2x*cosj2t*i2*(B16*r*wx + B66*wt)/L
+
+# create buffer
+kLLp_2
+kLLp_2_p0400[pos] = p0400
+kLLp_2_p0401[pos] = p0401
+kLLp_2_p0402[pos] = p0402
+kLLp_2_p0403[pos] = p0403
+kLLp_2_p0404[pos] = p0404
+kLLp_2_p0405[pos] = p0405
+kLLp_2_p0500[pos] = p0500
+kLLp_2_p0501[pos] = p0501
+kLLp_2_p0502[pos] = p0502
+kLLp_2_p0503[pos] = p0503
+kLLp_2_p0504[pos] = p0504
+kLLp_2_p0505[pos] = p0505
+
+# access buffer
+p0400 = kLLp_2_p0400[pos]
+p0401 = kLLp_2_p0401[pos]
+p0402 = kLLp_2_p0402[pos]
+p0403 = kLLp_2_p0403[pos]
+p0404 = kLLp_2_p0404[pos]
+p0405 = kLLp_2_p0405[pos]
+p0500 = kLLp_2_p0500[pos]
+p0501 = kLLp_2_p0501[pos]
+p0502 = kLLp_2_p0502[pos]
+p0503 = kLLp_2_p0503[pos]
+p0504 = kLLp_2_p0504[pos]
+p0505 = kLLp_2_p0505[pos]
+
+subs
+
+sin(pi*k1*x/L) = sink1x
+sin(l2*t) = sinl2t
+cos(pi*k2*x/L) = cosk2x
+sin(pi*i2*x/L) = sini2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+cos(pi*k1*x/L) = cosk1x
+sin(pi*k2*x/L) = sink2x
+cos(l2*t) = cosl2t
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+sin(pi*i1*x/L) = sini1x

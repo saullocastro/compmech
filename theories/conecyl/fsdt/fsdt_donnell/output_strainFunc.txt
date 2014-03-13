@@ -10,54 +10,42 @@ sin(pi*i2*x/L) = sini2x
 expressions
 
 e[0] = 
+    0.5*pi*c7ij*cosi2x*cosj2t*i2*wx/L
     pi*c0ij*cosi2x*i2*sinj2t/L
-    0.5*c8ij*phix*sini2x*sinj2t
-    0.5*c11ij*cosi2x*cosj2t*phix
+    0.5*pi*c3i*cosi1x*i1*wx/L
     -c00/(L*cosa)
-    0.5*c5i*cosi1x*phix
     -pi*c2ij*i2*sini2x*sinj2t/L
+    0.5*pi*c6ij*cosi2x*i2*sinj2t*wx/L
     pi*c0i*cosi1x*i1/L
-    0.5*c4i*phix*sini1x
     -pi*c3ij*cosj2t*i2*sini2x/L
     pi*c1ij*cosi2x*cosj2t*i2/L
-    0.5*c10ij*cosi2x*phix*sinj2t
     -pi*c1i*i1*sini1x/L
     c02*(cos(t - tLA) - 1)/(L*cosa)
-    0.5*c9ij*cosj2t*phix*sini2x
 e[1] = 
     -c02*sina*(L - x)*(cos(t - tLA) - 1)/(L*cosa*r)
     c1ij*cosj2t*sina*sini2x/r
     c4ij*cosj2t*j2*sini2x/r
     c1i*cosi1x*sina/r
     c3i*cosa*sini1x/r
-    0.5*c13ij*cosj2t*phit*sini2x
+    0.5*c6ij*sini2x*(2*cosa*r*sinj2t + cosj2t*j2*wt)/r**2
     c3ij*cosi2x*cosj2t*sina/r
-    0.5*c12ij*phit*sini2x*sinj2t
     c0i*sina*sini1x/r
     c2ij*cosi2x*sina*sinj2t/r
     c0ij*sina*sini2x*sinj2t/r
-    c6ij*cosa*sini2x*sinj2t/r
-    c7ij*cosa*cosj2t*sini2x/r
+    0.5*c7ij*sini2x*(2*cosa*cosj2t*r - j2*sinj2t*wt)/r**2
     c00*sina*(L - x)/(L*cosa*r)
     -c5ij*j2*sini2x*sinj2t/r
-    0.5*c6i*phit*sini1x
 e[2] = 
-    0.5*c5i*cosi1x*phit
-    0.5*c9ij*cosj2t*phit*sini2x
-    0.5*c6i*phix*sini1x
-    0.5*c12ij*phix*sini2x*sinj2t
+    0.5*c6ij*(L*cosj2t*j2*sini2x*wx + pi*cosi2x*i2*sinj2t*wt)/(L*r)
     c02*(L - x)*sin(t - tLA)/(L*cosa*r)
+    0.5*pi*c3i*cosi1x*i1*wt/(L*r)
     c2i*(-sina*sini1x/r + pi*cosi1x*i1/L)
-    0.5*c8ij*phit*sini2x*sinj2t
     c0ij*cosj2t*j2*sini2x/r
     c5ij*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
     c2ij*cosi2x*cosj2t*j2/r
-    0.5*c11ij*cosi2x*cosj2t*phit
-    0.5*c13ij*cosj2t*phix*sini2x
-    0.5*c4i*phit*sini1x
     -c01*r2*(r + sina*(L - x))/(L*r)
-    0.5*c10ij*cosi2x*phit*sinj2t
     -c1ij*j2*sini2x*sinj2t/r
+    0.5*c7ij*(-L*j2*sini2x*sinj2t*wx + pi*cosi2x*cosj2t*i2*wt)/(L*r)
     -c3ij*cosi2x*j2*sinj2t/r
     c4ij*sinj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
 e[3] = 

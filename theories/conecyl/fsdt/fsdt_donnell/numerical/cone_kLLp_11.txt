@@ -1,14 +1,8 @@
 {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}, 
- {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}, 
- {(A16*phit + A11*phix)*r*Sin[(i1*Pi*x)/L], (A26*phit + A12*phix)*r*
-   Sin[(i1*Pi*x)/L], (A66*phit + A16*phix)*r*Sin[(i1*Pi*x)/L], 
-  (B16*phit + B11*phix)*r*Sin[(i1*Pi*x)/L], (B26*phit + B12*phix)*r*
-   Sin[(i1*Pi*x)/L], (B66*phit + B16*phix)*r*Sin[(i1*Pi*x)/L], 0, 0}, 
- {(A16*phit + A11*phix)*r*Cos[(i1*Pi*x)/L], (A26*phit + A12*phix)*r*
-   Cos[(i1*Pi*x)/L], (A66*phit + A16*phix)*r*Cos[(i1*Pi*x)/L], 
-  (B16*phit + B11*phix)*r*Cos[(i1*Pi*x)/L], (B26*phit + B12*phix)*r*
-   Cos[(i1*Pi*x)/L], (B66*phit + B16*phix)*r*Cos[(i1*Pi*x)/L], 0, 0}, 
- {(A12*phit + A16*phix)*r*Sin[(i1*Pi*x)/L], (A22*phit + A26*phix)*r*
-   Sin[(i1*Pi*x)/L], (A26*phit + A66*phix)*r*Sin[(i1*Pi*x)/L], 
-  (B12*phit + B16*phix)*r*Sin[(i1*Pi*x)/L], (B22*phit + B26*phix)*r*
-   Sin[(i1*Pi*x)/L], (B26*phit + B66*phix)*r*Sin[(i1*Pi*x)/L], 0, 0}}
+ {0, 0, 0, 0, 0, 0, 0, 0}, {(i1*Pi*(A16*wt + A11*r*wx)*Cos[(i1*Pi*x)/L])/L, 
+  (i1*Pi*(A26*wt + A12*r*wx)*Cos[(i1*Pi*x)/L])/L, 
+  (i1*Pi*(A66*wt + A16*r*wx)*Cos[(i1*Pi*x)/L])/L, 
+  (i1*Pi*(B16*wt + B11*r*wx)*Cos[(i1*Pi*x)/L])/L, 
+  (i1*Pi*(B26*wt + B12*r*wx)*Cos[(i1*Pi*x)/L])/L, 
+  (i1*Pi*(B66*wt + B16*r*wx)*Cos[(i1*Pi*x)/L])/L, 0, 0}, 
+ {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}}

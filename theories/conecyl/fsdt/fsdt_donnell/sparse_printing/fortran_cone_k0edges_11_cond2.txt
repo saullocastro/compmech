@@ -3,8 +3,8 @@
 c += 1
 k0edgesr[c] = row+1
 k0edgesc[c] = col+1
-k0edgesv[c] += 2*pi*((-1)**(i1 + k1)*kuBot*r1 - kuTop*r2)
+k0edgesv[c] += 2*pi*((-1)**(i1 + k1)*kuBot*r1 + kuTop*r2)
 c += 1
 k0edgesr[c] = row+5
 k0edgesc[c] = col+5
-k0edgesv[c] += 2*pi*((-1)**(i1 + k1)*kphixBot*r1 - kphixTop*r2)
+k0edgesv[c] += 2*pi*((-1)**(i1 + k1)*kphixBot*r1 + kphixTop*r2)

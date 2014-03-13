@@ -15,9 +15,10 @@ from numpy import linspace, pi, cos, sin, tan, deg2rad
 import mapy.model.properties.composite as composite
 import clpt_commons
 import fsdt_commons
-import clpt_linear_donnell
-import clpt_linear_sanders
-import fsdt_linear_donnell
+import fsdt_commons2
+import fsdt_commons3
+import fsdt_commons4
+import fsdt_commons5
 import non_linear
 
 from plotutils import get_filename
@@ -40,20 +41,20 @@ class ConeCyl(object):
 
         # boundary conditions
         self.bc = 'ss'
-        self.kuBot = 1.e15
-        self.kuTop = -1.e15
+        self.kuBot = 1.e6
+        self.kuTop = 1.e6
 
-        self.kvBot = 1.e15
-        self.kvTop = -1.e15
+        self.kvBot = 1.e6
+        self.kvTop = 1.e6
 
-        self.kwBot = 1.e15
-        self.kwTop = -1.e15
+        self.kwBot = 1.e6
+        self.kwTop = 1.e6
 
-        self.kphixBot = 1.e15
-        self.kphixTop = -1.e15
+        self.kphixBot = 1.e-6 # will lead to ss conditions
+        self.kphixTop = 1.e-6 # will lead to ss conditions
 
-        self.kphitBot = 1.e15
-        self.kphitTop = -1.e15
+        self.kphitBot = 1.e6
+        self.kphitTop = 1.e6
 
 
         # default equations
@@ -61,6 +62,7 @@ class ConeCyl(object):
         self.NL_kinematics = 'donnell_numerical'
 
         # approximation series
+        self.init = 1
         self.m1 = 40
         self.m2 = 40
         self.n2 = 40
@@ -188,7 +190,9 @@ class ConeCyl(object):
         self.linear_kinematics = self.linear_kinematics.lower()
 
         valid_linear_kinematics = ['clpt_donnell', 'clpt_sanders',
-                                   'fsdt_donnell']
+                                   'fsdt_donnell', 'fsdt_donnell2',
+                                   'fsdt_donnell3', 'fsdt_donnell4',
+                                   'fsdt_donnell5']
 
         if not self.linear_kinematics in valid_linear_kinematics:
             raise ValueError('ERROR - valid linear theories are:\n' +
@@ -206,15 +210,16 @@ class ConeCyl(object):
 
         self.bc = self.bc.lower()
 
-        if self.bc == 'ss':
-            self.kphixBot = 1.e-15
-            self.kphixTop = -1.e-15
-        elif self.bc == 'cc':
-            self.kphixBot = 1.e15
-            self.kphixTop = -1.e15
-        else:
-            raise ValueError('{} is an invalid value for "bc"'.format(
-                             self.bc))
+        #TODO
+        #if self.bc == 'ss':
+            #self.kphixBot = 1.e-6
+            #self.kphixTop = 1.e-6
+        #elif self.bc == 'cc':
+            #self.kphixBot = 1.e6
+            #self.kphixTop = 1.e6
+        #else:
+            #raise ValueError('{} is an invalid value for "bc"'.format(
+                             #self.bc))
 
         self.alpharad = deg2rad(self.alphadeg)
         self.sina = sin(self.alpharad)
@@ -306,6 +311,9 @@ class ConeCyl(object):
             D22 = E11*h**3/(12*(1 - nu**2))
             D26 = 0
             D66 = G12*h**3/12
+            # TODO, what if FSDT is used?
+            if 'fsdt' in self.linear_kinematics:
+                raise NotImplementedError('laminaprop must be defined!')
             self.F = np.array([[A11, A12, A16, 0, 0, 0],
                                [A12, A22, A26, 0, 0, 0],
                                [A16, A26, A66, 0, 0, 0],
@@ -317,9 +325,18 @@ class ConeCyl(object):
         '''Returns the full set of Ritz constants.
 
         When prescribed displacements take place the matrices and the Ritz
-        constants are partitioned, this function takes the prescribed degrees
-        of freedom (`ck`) and join them with the calculated ones (`cu`) in
-        order to build a full set of Ritz constants.
+        constants are partitioned like:
+
+            k = | kkk    kku |
+                | kuk    kuu |
+
+        and the corresponding Ritz constants:
+
+            c = | ck |
+                | cu |
+
+        Function `calc_full_c` adds the set of known `ck` Ritz constants
+        to the set of unknown `cu` based on the prescribed displacements.
 
         Parameters
         ----------
@@ -335,9 +352,14 @@ class ConeCyl(object):
             The full set of Ritz constants.
 
         '''
-        #TODO check of size
-
         c = cu.copy()
+
+        if self.k0:
+            if c.shape[0] == self.k0.shape[0]:
+                for dof in self.excluded_dofs:
+                    c[dof] *= inc
+
+                return c
 
         ordered = sorted(zip(self.excluded_dofs,
                              self.excluded_dofs_ck), key=lambda x:x[0])
@@ -505,18 +527,12 @@ class ConeCyl(object):
         n2 = self.n2
         r2 = self.r2
         L = self.L
-        bc = self.bc
-        uTM = 0.
-        if self.uTM != None:
-            uTM = self.uTM
         linear_kinematics = self.linear_kinematics
 
-        if c.shape[0] != self.k0.shape[0]:
-            print ''
-            print '\t\tWARNING - completing cu with ck'
-            c = self.calc_full_c(c)
+        c = self.calc_full_c(c)
 
-        if 'fsdt_donnell' in linear_kinematics:
+        #TODO remove repeated code in these ifs
+        if 'fsdt_donnell'==linear_kinematics:
             u, v, w, phix, phit = fsdt_commons.fuvw(c, m1, m2, n2,
                                       alpharad, r2, L, tLArad, x, t)
             self.u = u.reshape(xshape)
@@ -526,6 +542,42 @@ class ConeCyl(object):
             self.phit = phit.reshape(xshape)
 
             return self.u, self.v, self.w, self.phix, self.phit
+
+        elif 'fsdt_donnell2'==linear_kinematics:
+            u, v, w, phix, phit = fsdt_commons2.fuvw(c, m1, m2, n2,
+                                      alpharad, r2, L, tLArad, x, t)
+            self.u = u.reshape(xshape)
+            self.v = v.reshape(xshape)
+            self.w = w.reshape(xshape)
+            self.phix = phix.reshape(xshape)
+            self.phit = phit.reshape(xshape)
+
+        elif 'fsdt_donnell3'==linear_kinematics:
+            u, v, w, phix, phit = fsdt_commons3.fuvw(c, m1, m2, n2,
+                                      alpharad, r2, L, tLArad, x, t)
+            self.u = u.reshape(xshape)
+            self.v = v.reshape(xshape)
+            self.w = w.reshape(xshape)
+            self.phix = phix.reshape(xshape)
+            self.phit = phit.reshape(xshape)
+
+        elif 'fsdt_donnell4'==linear_kinematics:
+            u, v, w, phix, phit = fsdt_commons4.fuvw(c, m1, m2, n2,
+                                      alpharad, r2, L, tLArad, x, t)
+            self.u = u.reshape(xshape)
+            self.v = v.reshape(xshape)
+            self.w = w.reshape(xshape)
+            self.phix = phix.reshape(xshape)
+            self.phit = phit.reshape(xshape)
+
+        elif 'fsdt_donnell5'==linear_kinematics:
+            u, v, w, phix, phit = fsdt_commons5.fuvw(c, m1, m2, n2,
+                                      alpharad, r2, L, tLArad, x, t)
+            self.u = u.reshape(xshape)
+            self.v = v.reshape(xshape)
+            self.w = w.reshape(xshape)
+            self.phix = phix.reshape(xshape)
+            self.phit = phit.reshape(xshape)
 
         elif 'fsdt_general_donnell' in linear_kinematics:
             import fsdt_general_commons
@@ -587,7 +639,7 @@ class ConeCyl(object):
             else:
                 F = self.F
 
-            if 'fsdt_donnell' in linear_kinematics:
+            if 'fsdt_donnell'==linear_kinematics:
                 from fsdt_linear_donnell import (fk0,
                                                  fk0_cyl,
                                                  fk0edges,
@@ -598,13 +650,59 @@ class ConeCyl(object):
                             self.kuBot, self.kuTop,
                             self.kphixBot, self.kphixTop)
 
+            elif 'fsdt_donnell2'==linear_kinematics:
+                from fsdt_linear_donnell2 import (fk0,
+                                                  fk0_cyl,
+                                                  fk0edges,
+                                                  fkG0,
+                                                  fkG0_cyl)
+
+                k0edges = fk0edges(m1, m2, n2, r1, r2,
+                            self.kuBot, self.kuTop,
+                            self.kphixBot, self.kphixTop)
+
+            elif 'fsdt_donnell3'==linear_kinematics:
+                from fsdt_linear_donnell3 import (fk0,
+                                                  fk0_cyl,
+                                                  fk0edges,
+                                                  fkG0,
+                                                  fkG0_cyl)
+
+                k0edges = fk0edges(m1, m2, n2, r1, r2,
+                            self.kuBot, self.kuTop,
+                            self.kphixBot, self.kphixTop)
+
+            elif 'fsdt_donnell4'==linear_kinematics:
+                from fsdt_linear_donnell4 import (fk0,
+                                                  fk0_cyl,
+                                                  fk0edges,
+                                                  fkG0,
+                                                  fkG0_cyl)
+
+                k0edges = fk0edges(m1, m2, n2, r1, r2,
+                            self.kuBot, self.kuTop,
+                            self.kphixBot, self.kphixTop)
+
+            elif 'fsdt_donnell5'==linear_kinematics:
+                from fsdt_linear_donnell5 import (fk0,
+                                                  fk0_cyl,
+                                                  fk0edges,
+                                                  fkG0,
+                                                  fkG0_cyl)
+
+                k0edges = fk0edges(m1, m2, n2, r1, r2,
+                            self.kuBot, self.kuTop,
+                            self.kphixBot, self.kphixTop)
+
+
             elif 'fsdt_general' in linear_kinematics:
                 from fsdt_general_linear_donnell import (fk0,
                                                          fk0_cyl,
+                                                         fk0edges_cyl,
                                                          fkG0,
                                                          fkG0_cyl)
 
-                k0edges = fsdt_general_linear_donnell.fk0edges_cyl(
+                k0edges = fk0edges_cyl(
                             m1, m2, n2, r2,
                             self.kuBot, self.kuTop,
                             self.kvBot, self.kvTop,
@@ -639,18 +737,17 @@ class ConeCyl(object):
             k0 = fk0(alpharad, r2, L, F, m1, m2, n2, s)
             kG0 = fkG0(Fc, P, T, r2, alpharad, L, m1, m2, n2, s)
 
+        if k0edges:
+            k0 = coo_matrix(k0 + k0edges)
+
+        k0.data = np.nan_to_num(k0.data)
+        kG0.data = np.nan_to_num(kG0.data)
+
         k = self.exclude_dofs_matrix(k0, return_kuk=True)
         k0uk = k['kuk']
         k0uu = k['kuu']
         kG0uu = self.exclude_dofs_matrix(kG0)['kuu']
 
-        if k0edges:
-            k = self.exclude_dofs_matrix(k0edges, return_kuk=True)
-            k0edgesuk = k['kuk']
-            k0edgesuu = k['kuu']
-
-            k0uk = k0uk + k0edgesuk
-            k0uu = k0uu + k0edgesuu
 
         self.k0 = k0
         self.k0uk = k0uk
@@ -666,7 +763,53 @@ class ConeCyl(object):
 
         print('finished!')
 
-    def lb(self, c=None):
+    def lb_test(self):
+        self.calc_linear_matrices()
+        print('Running linear buckling analysis...')
+
+        print('\t\tFinding sub-matrix 22'),
+        self.num1 = 6
+        self.num2 = 14
+        size = self.num0 + self.num1*self.m1 + self.num2*self.m2*self.n2
+        pos = size - self.num2*self.m2*self.n2
+
+        sparse = True
+        if sparse:
+            kG0_22 = csr_matrix(self.kG0.toarray()[pos:, pos:])
+            k0_22 = csr_matrix(self.k0.toarray()[pos:, pos:])
+            print('\t\tfinished!')
+
+            print('\t\tEigenvalue solver... '),
+            eigvals, eigvecs = eigsh(kG0_22, k=self.num_eigvalues,
+                                     which='SM', M=k0_22, sigma=1.)
+            eigvals = (-1./eigvals)
+
+        else:
+            from scipy.linalg import eigh
+            kG0_22 = self.kG0.toarray()[pos:, pos:]
+            k0_22 = self.k0.toarray()[pos:, pos:]
+            print('\t\tfinished!')
+
+            print('\t\tEigenvalue solver... '),
+            eigvals, eigvecs = eigh(a=kG0_22, b=k0_22,
+                                    check_finite=False, turbo=True,
+                                    type=1, lower=False)
+            eigvals = (-1./eigvals)
+
+        self.eigvecs = np.zeros((size, self.num_eigvalues))
+        self.eigvecs[pos:, :] = eigvecs
+
+        self.eigvals = eigvals
+
+        print('finished!')
+
+        print('    first {} eigenvalues:'.format(self.num_eigvalues_print))
+        for eig in self.eigvals[:self.num_eigvalues_print]:
+            print('        {}'.format(eig))
+        self.last_analysis = 'lb'
+
+
+    def lb(self, c=None, tol=0):
         '''Linear Buckling analysis.
 
         The following parameters of the `ConeCyl` object will affect the
@@ -698,22 +841,30 @@ class ConeCyl(object):
         #     sign is applied later
         print('\t\tEigenvalue solver... '),
 
-        #self.k0uu.data[np.abs(self.k0uu.data)<1.e-12] = 0.
-
         if c==None:
-            eigvals, eigvecs = eigsh(self.kG0uu, k=self.num_eigvalues,
-                                     which='SM', M=self.k0uu, sigma=1.)
+            A = self.kG0
+            M = self.k0
+
+            if not isinstance(A, csr_matrix):
+                A = csr_matrix(A)
+            if not isinstance(M, csr_matrix):
+                M = csr_matrix(M)
+
+            eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues, which='SM',
+                                     M=M, tol=tol, sigma=1.)
         else:
             raise ('FIXME')
             eigvals, eigvecs = eigsh(self.kG0uu, k=self.num_eigvalues,
-                                     which='SM',
-                                 M=(self.k0 + self.k0L + self.kL0 + self.kLL),
-                                 sigma=1.)
+                                     which='SM', M=self.kL, sigma=1.,
+                                     tol=tol)
+
         eigvals = (-1./eigvals)
-        self.eigvecs = eigvecs
         self.eigvals = eigvals
-        pcr = eigvals[0]
+
+        self.eigvecs = eigvecs
+
         print('finished!')
+
         print('    first {} eigenvalues:'.format(self.num_eigvalues_print))
         for eig in eigvals[:self.num_eigvalues_print]:
             print('        {}'.format(eig))
@@ -846,12 +997,30 @@ class ConeCyl(object):
         n2 = self.n2
 
         NL_kinematics = self.NL_kinematics
-        if NL_kinematics=='fsdt':
+        if 'fsdt_donnell'==self.linear_kinematics:
             e_num = 8
             from fsdt_commons import fstrain
+
+        elif 'fsdt_donnell2'==self.linear_kinematics:
+            e_num = 8
+            from fsdt_commons2 import fstrain
+
+        elif 'fsdt_donnell3'==self.linear_kinematics:
+            e_num = 8
+            from fsdt_commons3 import fstrain
+
+        elif 'fsdt_donnell4'==self.linear_kinematics:
+            e_num = 8
+            from fsdt_commons4 import fstrain
+
+        elif 'fsdt_donnell5'==self.linear_kinematics:
+            e_num = 8
+            from fsdt_commons5 import fstrain
+
         else:
             e_num = 6
             from clpt_commons import fstrain
+
         if 'donnell' in NL_kinematics:
             int_NL_kinematics = 0
         elif 'sanders' in NL_kinematics:
@@ -887,10 +1056,10 @@ class ConeCyl(object):
         r2 = self.r2
         L = self.L
         tLArad = self.tLArad
+        init = self.init
         m1 = self.m1
         m2 = self.m2
         n2 = self.n2
-        bc = self.bc
         pdC = self.pdC
         pdT = self.pdT
         linear_kinematics = self.linear_kinematics
@@ -906,11 +1075,35 @@ class ConeCyl(object):
             import fsdt_general_commons
             fg = fsdt_general_commons.fg
 
-        elif 'fsdt_donnell' in linear_kinematics:
+        elif 'fsdt_donnell'==linear_kinematics:
             dofs = 5
             num1 = 7
             num2 = 14
             fg = fsdt_commons.fg
+
+        elif 'fsdt_donnell2'==linear_kinematics:
+            dofs = 5
+            num1 = 6
+            num2 = 14
+            fg = fsdt_commons2.fg
+
+        elif 'fsdt_donnell3'==linear_kinematics:
+            dofs = 5
+            num1 = 5
+            num2 = 14
+            fg = fsdt_commons3.fg
+
+        elif 'fsdt_donnell4'==linear_kinematics:
+            dofs = 5
+            num1 = 6
+            num2 = 12
+            fg = fsdt_commons4.fg
+
+        elif 'fsdt_donnell5'==linear_kinematics:
+            dofs = 5
+            num1 = 6
+            num2 = 12
+            fg = fsdt_commons5.fg
 
         elif 'clpt' in linear_kinematics:
             dofs = 3
@@ -941,26 +1134,81 @@ class ConeCyl(object):
             f_ext += -fpt.T.dot(gu).ravel()
 
         # axial load
-        pts = float(1)
-        Fci = Fc/pts
-        uTMi = uTM/pts
-        ts = linspace(0, 2*np.pi, pts, endpoint=False)
-        for t in ts:
-            fg(g, m1, m2, n2, r2, 0, t, L, cosa, tLArad)
-            gu = np.delete(g, self.excluded_dofs, axis=1).copy()
-
+        if 'fsdt_donnell'==linear_kinematics:
             if pdC:
                 if kuk==None:
                     kuk_C = self.k0uk[:, 0].ravel()
                 else:
                     kuk_C = kuk[:, 0].ravel()
-                f_ext += -uTMi*kuk_C
+                f_ext += -uTM*kuk_C
+
             else:
-                if dofs==3:
-                    fpt = np.array([[Fci/cosa], [0], [0]])
-                elif dofs==5:
-                    fpt = np.array([[Fci/cosa], [0], [0], [0], [0]])
-                f_ext += fpt.T.dot(gu).ravel()
+                #TODO improve the efficiency of this part
+                #     to many calls to np.zeros and np.delete
+                #     maybe create a more general way to apply load
+                #     and move the for loops to Cython
+                f_ext_tmp = np.zeros((num0 + num1*m1 + num2*m2*n2),
+                                     dtype=float)
+                if not 0 in self.excluded_dofs:
+                    f_ext_tmp[0] += Fc/cosa**2
+                if not 2 in self.excluded_dofs:
+                    f_ext_tmp[2] += Fc/cosa**2
+
+                for i1 in range(init, m1+init):
+                    col = num0 + (i1-init)*num1
+                    f_ext_tmp[col+1] += Fc/cosa
+
+                f_ext_tmp = np.delete(f_ext_tmp, self.excluded_dofs)
+                f_ext += f_ext_tmp
+
+        elif ('fsdt_donnell2'==linear_kinematics
+           or 'fsdt_donnell3'==linear_kinematics
+           or 'fsdt_donnell4'==linear_kinematics
+           or 'fsdt_donnell5'==linear_kinematics):
+            if pdC:
+                if kuk==None:
+                    kuk_C = self.k0uk[:, 0].ravel()
+                else:
+                    kuk_C = kuk[:, 0].ravel()
+                f_ext += -uTM*kuk_C
+
+            else:
+                #TODO improve the efficiency of this part
+                #     to many calls to np.zeros and np.delete
+                #     maybe create a more general way to apply load
+                #     and move the for loops to Cython
+                f_ext_tmp = np.zeros((num0 + num1*m1 + num2*m2*n2),
+                                     dtype=float)
+                if not 0 in self.excluded_dofs:
+                    f_ext_tmp[0] += Fc/cosa**2
+                if not 2 in self.excluded_dofs:
+                    f_ext_tmp[2] += Fc/cosa**2
+
+                f_ext_tmp = np.delete(f_ext_tmp, self.excluded_dofs)
+                f_ext += f_ext_tmp
+
+        else:
+            pts = float(1)
+            Fci = Fc/pts
+            uTMi = uTM/pts
+            ts = linspace(0, 2*pi, pts, endpoint=False)
+            for t in ts:
+                if pdC:
+                    if kuk==None:
+                        kuk_C = self.k0uk[:, 0].ravel()
+                    else:
+                        kuk_C = kuk[:, 0].ravel()
+                    f_ext += -uTMi*kuk_C
+
+                else:
+                    fg(g, m1, m2, n2, r2, 0, t, L, cosa, tLArad)
+                    gu = np.delete(g, self.excluded_dofs, axis=1).copy()
+
+                    if dofs==3:
+                        fpt = np.array([[Fci/cosa], [0], [0]])
+                    elif dofs==5:
+                        fpt = np.array([[Fci/cosa], [0], [0], [0], [0]])
+                    f_ext += fpt.T.dot(gu).ravel()
 
         # torsion
         fg(g, m1, m2, n2, r2, 0, 0, L, cosa, tLArad)
@@ -981,9 +1229,9 @@ class ConeCyl(object):
         # pressure
         if self.P != 0.:
             if 'clpt' in linear_kinematics:
-                for i1 in range(1, m1+1):
-                    col = num0 + (i1-1)*num1 + 2
-                    f_ext[col] += self.P*(2/i1*(r2 - (-1)**i1*(r2 + L*sina)))
+                for i1 in range(init, m1+init):
+                    col = num0 + (i1-init)*num1
+                    f_ext[col+2] += self.P*(2/i1*(r2 - (-1)**i1*(r2 + L*sina)))
 
             elif 'fsdt' in linear_kinematics:
                 #TODO it might be the same as for the CLPT
@@ -1085,10 +1333,11 @@ class ConeCyl(object):
             print('Finished Linear Static Analysis')
         #
         self.last_analysis = 'static'
+
         return self.cs
 
     def plot(self, c, vec='w', filename='', figsize=(3.5, 2.), save=True,
-             add_title=True):
+             add_title=True, colorbar=False):
         '''Plot the contour of the
 
         Parameters
@@ -1110,6 +1359,9 @@ class ConeCyl(object):
             The default is `(3.5, 2.)`.
         add_title : bool
             If a title should be added to the figure. Default is `True`.
+        colorbar : bool
+            If a colorbar should be added to the contourplot.
+            Default is `False`.
 
         Returns
         -------
@@ -1120,21 +1372,23 @@ class ConeCyl(object):
 
         '''
         print('Plotting contour...'),
+
         ubkp, vbkp, wbkp = self.u, self.v, self.w
 
         import matplotlib.pyplot as plt
 
         c = self.calc_full_c(c)
 
-        self.uvw(c, x=self.L/2., t=0)
-        wPL = self.w[0]
-
         self.uvw(c)
+
         Xs = self.Xs
         Ts = self.Ts
 
         vec = getattr(self, vec)
-        levels = np.linspace(vec.min(), vec.max(), 400)
+        vmin = vec.min()
+        vmax = vec.max()
+
+        levels = np.linspace(vmin, vmax, 400)
 
         fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot(111)
@@ -1142,24 +1396,38 @@ class ConeCyl(object):
         # NOTE Xs must be plotted inverted because it starts at the top
         # for the semi-analytical model, but it starts at the bottom
         # for the finite-element model
-        ax.contourf(self.r2*Ts, Xs[:,::-1], vec, levels=levels)
 
-        ax.grid(False)
-        ax.set_aspect('equal')
+        contour = ax.contourf(self.r2*Ts, Xs[:,::-1], vec, levels=levels)
+
+        if colorbar:
+            from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes('right', size='5%', pad=0.05)
+
+            cbar = plt.colorbar(contour, ticks=[vmin, vmax], cax=cax)
+            cbar.outline.remove()
+            cbar.ax.tick_params(labelsize=8, pad=0., tick2On=False)
+
         if add_title:
             if self.last_analysis == 'static':
-                ax.set_title(r'$m2={0}$, $n2={1}$, $w_{{PL}}={2:1.3f} mm$'.
-                             format(self.m2, self.n2, wPL))
+                ax.set_title(r'$m_1={0}$, $m_2={1}$, $n_2={2}$'.
+                             format(self.m1, self.m2, self.n2))
+
             elif self.last_analysis == 'lb':
-                ax.set_title(r'$m2={0}$, $n2={1}$, $P_{{CR}}={2:1.3f} kN$'.
-                             format(self.m2, self.n2, self.eigvals[0]/1000))
+                ax.set_title(
+            r'$m_1={0}$, $m2={1}$, $n2={2}$, $P_{{CR}}={3:1.3f} kN$'.format(
+                self.m1, self.m2, self.n2, self.eigvals[0]/1000))
 
         fig.tight_layout()
+        ax.set_aspect('equal')
+        ax.grid(False)
         ax.xaxis.set_ticks_position('none')
         ax.yaxis.set_ticks_position('none')
         ax.xaxis.set_ticklabels([])
         ax.yaxis.set_ticklabels([])
         ax.set_frame_on(False)
+
         if save:
             if not filename:
                 filename = get_filename(self)
@@ -1170,6 +1438,7 @@ class ConeCyl(object):
         self.u, self.v, self.w = ubkp, vbkp, wbkp
 
         print('finished!')
+
         return ax
 
     def add_SPL(self, PL, pt=0.5, theta=0.):
@@ -1259,11 +1528,11 @@ class ConeCyl(object):
                 self.uvw(c, x=self.L/2, t=0)
                 curve['wPLs'].append(self.w[0])
                 if self.pdC:
-                    ts = np.linspace(0, np.pi*2, 1000, endpoint=False)
+                    ts = np.linspace(0, pi*2, 1000, endpoint=False)
                     xs = np.zeros_like(ts)
                     evec = self.strain(c=c, x=xs, t=ts, inc=inc)
                     fvec = self.F.dot(evec.T)
-                    Fc = -fvec[0,:].mean()*(2*self.r2*np.pi)
+                    Fc = -fvec[0,:].mean()*(2*self.r2*pi)
                     curve['Fcs'].append(Fc/1000)
                     curve['uTMs'].append(inc*self.uTM)
                 else:

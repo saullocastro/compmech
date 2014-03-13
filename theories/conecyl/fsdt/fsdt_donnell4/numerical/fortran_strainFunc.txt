@@ -1,0 +1,62 @@
+List(-(c00/(cosa*L)) + (c02*(-1 + Cos(t - tLA)))/(cosa*L) + 
+   (c0i*i1*Pi*Cos((i1*Pi*x)/L))/L + (c2i*i1*Pi*wx*Cos((i1*Pi*x)/L))/(2.*L) + 
+   (c1ij*i2*Pi*Cos(j2*t)*Cos((i2*Pi*x)/L))/L + 
+   (c5ij*i2*Pi*wx*Cos(j2*t)*Cos((i2*Pi*x)/L))/(2.*L) + 
+   (c0ij*i2*Pi*Cos((i2*Pi*x)/L)*Sin(j2*t))/L + 
+   (c4ij*i2*Pi*wx*Cos((i2*Pi*x)/L)*Sin(j2*t))/(2.*L),
+  (c00*sina*(L - x))/(cosa*L*r) - 
+   (c02*sina*(L - x)*(-1 + Cos(t - tLA)))/(cosa*L*r) + 
+   (c2i*cosa*Sin((i1*Pi*x)/L))/r + (c0i*sina*Sin((i1*Pi*x)/L))/r + 
+   (c2ij*j2*Cos(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   (c1ij*sina*Cos(j2*t)*Sin((i2*Pi*x)/L))/r - 
+   (c3ij*j2*Sin(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   (c0ij*sina*Sin(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   (c4ij*(j2*wt*Cos(j2*t) + 2*cosa*r*Sin(j2*t))*Sin((i2*Pi*x)/L))/
+    (2.*r**2) + (c5ij*(2*cosa*r*Cos(j2*t) - j2*wt*Sin(j2*t))*
+      Sin((i2*Pi*x)/L))/(2.*r**2),
+  -((c01*r2*(r + sina*(L - x)))/(L*r)) + 
+   (c2i*i1*Pi*wt*Cos((i1*Pi*x)/L))/(2.*L*r) + 
+   (c02*(L - x)*Sin(t - tLA))/(cosa*L*r) + 
+   c1i*((i1*Pi*Cos((i1*Pi*x)/L))/L - (sina*Sin((i1*Pi*x)/L))/r) + 
+   (c0ij*j2*Cos(j2*t)*Sin((i2*Pi*x)/L))/r - 
+   (c1ij*j2*Sin(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   (c3ij*Cos(j2*t)*(i2*Pi*r*Cos((i2*Pi*x)/L) - L*sina*Sin((i2*Pi*x)/L)))/
+    (L*r) + (c2ij*Sin(j2*t)*(i2*Pi*r*Cos((i2*Pi*x)/L) - 
+        L*sina*Sin((i2*Pi*x)/L)))/(L*r) + 
+   (c4ij*(i2*Pi*wt*Cos((i2*Pi*x)/L)*Sin(j2*t) + 
+        j2*L*wx*Cos(j2*t)*Sin((i2*Pi*x)/L)))/(2.*L*r) + 
+   (c5ij*(i2*Pi*wt*Cos(j2*t)*Cos((i2*Pi*x)/L) - 
+        j2*L*wx*Sin(j2*t)*Sin((i2*Pi*x)/L)))/(2.*L*r),
+  (c3i*i1*Pi*Cos((i1*Pi*x)/L))/L + 
+   (c7ij*i2*Pi*Cos(j2*t)*Cos((i2*Pi*x)/L))/L + 
+   (c6ij*i2*Pi*Cos((i2*Pi*x)/L)*Sin(j2*t))/L - 
+   (c4i*i1*Pi*Sin((i1*Pi*x)/L))/L - 
+   (c9ij*i2*Pi*Cos(j2*t)*Sin((i2*Pi*x)/L))/L - 
+   (c8ij*i2*Pi*Sin(j2*t)*Sin((i2*Pi*x)/L))/L,
+  (c4i*sina*Cos((i1*Pi*x)/L))/r + (c9ij*sina*Cos(j2*t)*Cos((i2*Pi*x)/L))/r + 
+   (c8ij*sina*Cos((i2*Pi*x)/L)*Sin(j2*t))/r + 
+   (c3i*sina*Sin((i1*Pi*x)/L))/r + (c10ij*j2*Cos(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   (c7ij*sina*Cos(j2*t)*Sin((i2*Pi*x)/L))/r - 
+   (c11ij*j2*Sin(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   (c6ij*sina*Sin(j2*t)*Sin((i2*Pi*x)/L))/r,
+  (c8ij*j2*Cos(j2*t)*Cos((i2*Pi*x)/L))/r - 
+   (c9ij*j2*Cos((i2*Pi*x)/L)*Sin(j2*t))/r + 
+   c5i*((i1*Pi*Cos((i1*Pi*x)/L))/L - (sina*Sin((i1*Pi*x)/L))/r) + 
+   (c6ij*j2*Cos(j2*t)*Sin((i2*Pi*x)/L))/r - 
+   (c7ij*j2*Sin(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   (c11ij*Cos(j2*t)*(i2*Pi*r*Cos((i2*Pi*x)/L) - L*sina*Sin((i2*Pi*x)/L)))/
+    (L*r) + (c10ij*Sin(j2*t)*(i2*Pi*r*Cos((i2*Pi*x)/L) - 
+        L*sina*Sin((i2*Pi*x)/L)))/(L*r),
+  (c01*cosa*r2*(-L + x))/(L*r) + c5i*Sin((i1*Pi*x)/L) - 
+   (c1i*cosa*Sin((i1*Pi*x)/L))/r + c11ij*Cos(j2*t)*Sin((i2*Pi*x)/L) - 
+   (c3ij*cosa*Cos(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   (c4ij*j2*Cos(j2*t)*Sin((i2*Pi*x)/L))/r + 
+   c10ij*Sin(j2*t)*Sin((i2*Pi*x)/L) - 
+   (c2ij*cosa*Sin(j2*t)*Sin((i2*Pi*x)/L))/r - 
+   (c5ij*j2*Sin(j2*t)*Sin((i2*Pi*x)/L))/r,
+  c4i*Cos((i1*Pi*x)/L) + (c2i*i1*Pi*Cos((i1*Pi*x)/L))/L + 
+   c9ij*Cos(j2*t)*Cos((i2*Pi*x)/L) + 
+   (c5ij*i2*Pi*Cos(j2*t)*Cos((i2*Pi*x)/L))/L + 
+   c8ij*Cos((i2*Pi*x)/L)*Sin(j2*t) + 
+   (c4ij*i2*Pi*Cos((i2*Pi*x)/L)*Sin(j2*t))/L + c3i*Sin((i1*Pi*x)/L) + 
+   c7ij*Cos(j2*t)*Sin((i2*Pi*x)/L) + c6ij*Sin(j2*t)*Sin((i2*Pi*x)/L))

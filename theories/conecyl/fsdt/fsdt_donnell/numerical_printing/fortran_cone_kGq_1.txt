@@ -1,18 +1,12 @@
 kGq_1
-q0004 = sink1x
-q0005 = cosk1x
-q0106 = sink1x
+q0003 = pi*cosk1x*k1/L
 
 # create buffer
 kGq_1
-kGq_1_q0004[pos] = q0004
-kGq_1_q0005[pos] = q0005
-kGq_1_q0106[pos] = q0106
+kGq_1_q0003[pos] = q0003
 
 # access buffer
-q0004 = kGq_1_q0004[pos]
-q0005 = kGq_1_q0005[pos]
-q0106 = kGq_1_q0106[pos]
+q0003 = kGq_1_q0003[pos]
 
 subs
 

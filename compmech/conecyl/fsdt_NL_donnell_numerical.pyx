@@ -12,7 +12,7 @@ from scipy.sparse import coo_matrix
 from cython.parallel import prange
 from libc.stdlib cimport malloc, free
 
-from compmech.conecyl.fsdt_commons cimport cfphix, cfphit, cfN
+from compmech.conecyl.fsdt_commons cimport cfwx, cfwt, cfN
 
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
@@ -23,6 +23,7 @@ cdef extern from "math.h":
     double cos(double t) nogil
     double sin(double t) nogil
 
+cdef int init = 1
 cdef int num0 = 3
 cdef int num1 = 7
 cdef int num2 = 14
@@ -241,7 +242,7 @@ def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
     cdef int fdim
     cdef cc_attributes args
 
-    fdim = 9*m1 + 18*m2*n2 + 21*m1**2 + 2*42*m1*m2*n2 + 84*m2**2*n2**2
+    fdim = 3*m1 + 6*m2*n2 + 7*m1**2 + 2*14*m1*m2*n2 + 28*m2**2*n2**2
 
     k0Lv = np.zeros((fdim,), dtype=DOUBLE)
     rows = np.zeros((fdim,), dtype=INT)
@@ -276,691 +277,259 @@ def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     c = -1
 
-    for k1 in range(1, m1+1):
-        col = (k1-1)*num1 + num0
+    for k1 in range(init, m1+init):
+        col = (k1-init)*num1 + num0
 
         # k0L_01
         c += 1
         rows[c] = 0
-        cols[c] = col+4
-        c += 1
-        rows[c] = 0
-        cols[c] = col+5
-        c += 1
-        rows[c] = 0
-        cols[c] = col+6
+        cols[c] = col+3
         c += 1
         rows[c] = 1
-        cols[c] = col+4
-        c += 1
-        rows[c] = 1
-        cols[c] = col+5
-        c += 1
-        rows[c] = 1
-        cols[c] = col+6
+        cols[c] = col+3
         c += 1
         rows[c] = 2
-        cols[c] = col+4
-        c += 1
-        rows[c] = 2
-        cols[c] = col+5
-        c += 1
-        rows[c] = 2
-        cols[c] = col+6
+        cols[c] = col+3
 
-    for k2 in range(1, m2+1):
-        for l2 in range(1, n2+1):
-            col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+    for k2 in range(init, m2+init):
+        for l2 in range(init, n2+init):
+            col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
 
             # k0L_02
             c += 1
             rows[c] = 0
-            cols[c] = col+8
+            cols[c] = col+6
             c += 1
             rows[c] = 0
-            cols[c] = col+9
-            c += 1
-            rows[c] = 0
-            cols[c] = col+10
-            c += 1
-            rows[c] = 0
-            cols[c] = col+11
-            c += 1
-            rows[c] = 0
-            cols[c] = col+12
-            c += 1
-            rows[c] = 0
-            cols[c] = col+13
+            cols[c] = col+7
             c += 1
             rows[c] = 1
-            cols[c] = col+8
+            cols[c] = col+6
             c += 1
             rows[c] = 1
-            cols[c] = col+9
-            c += 1
-            rows[c] = 1
-            cols[c] = col+10
-            c += 1
-            rows[c] = 1
-            cols[c] = col+11
-            c += 1
-            rows[c] = 1
-            cols[c] = col+12
-            c += 1
-            rows[c] = 1
-            cols[c] = col+13
+            cols[c] = col+7
             c += 1
             rows[c] = 2
-            cols[c] = col+8
+            cols[c] = col+6
             c += 1
             rows[c] = 2
-            cols[c] = col+9
-            c += 1
-            rows[c] = 2
-            cols[c] = col+10
-            c += 1
-            rows[c] = 2
-            cols[c] = col+11
-            c += 1
-            rows[c] = 2
-            cols[c] = col+12
-            c += 1
-            rows[c] = 2
-            cols[c] = col+13
+            cols[c] = col+7
 
-    for i1 in range(1, m1+1):
-        row = (i1-1)*num1 + num0
-        for k1 in range(1, m1+1):
-            col = (k1-1)*num1 + num0
+    for i1 in range(init, m1+init):
+        row = (i1-init)*num1 + num0
+        for k1 in range(init, m1+init):
+            col = (k1-init)*num1 + num0
 
             # k0L_11
             c += 1
             rows[c] = row+0
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+0
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+0
-            cols[c] = col+6
+            cols[c] = col+3
             c += 1
             rows[c] = row+1
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+1
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+1
-            cols[c] = col+6
+            cols[c] = col+3
             c += 1
             rows[c] = row+2
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+2
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+2
-            cols[c] = col+6
+            cols[c] = col+3
             c += 1
             rows[c] = row+3
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+3
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+3
-            cols[c] = col+6
+            cols[c] = col+3
             c += 1
             rows[c] = row+4
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+4
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+4
-            cols[c] = col+6
+            cols[c] = col+3
             c += 1
             rows[c] = row+5
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+5
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+5
-            cols[c] = col+6
+            cols[c] = col+3
             c += 1
             rows[c] = row+6
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+6
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+6
-            cols[c] = col+6
+            cols[c] = col+3
 
-        for k2 in range(1, m2+1):
-            for l2 in range(1, n2+1):
-                col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+        for k2 in range(init, m2+init):
+            for l2 in range(init, n2+init):
+                col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
 
                 # k0L_12
                 c += 1
                 rows[c] = row+0
-                cols[c] = col+8
+                cols[c] = col+6
                 c += 1
                 rows[c] = row+0
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+0
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+0
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+0
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+0
-                cols[c] = col+13
+                cols[c] = col+7
                 c += 1
                 rows[c] = row+1
-                cols[c] = col+8
+                cols[c] = col+6
                 c += 1
                 rows[c] = row+1
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+1
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+1
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+1
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+1
-                cols[c] = col+13
+                cols[c] = col+7
                 c += 1
                 rows[c] = row+2
-                cols[c] = col+8
+                cols[c] = col+6
                 c += 1
                 rows[c] = row+2
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+2
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+2
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+2
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+2
-                cols[c] = col+13
+                cols[c] = col+7
                 c += 1
                 rows[c] = row+3
-                cols[c] = col+8
+                cols[c] = col+6
                 c += 1
                 rows[c] = row+3
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+3
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+3
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+3
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+3
-                cols[c] = col+13
+                cols[c] = col+7
                 c += 1
                 rows[c] = row+4
-                cols[c] = col+8
+                cols[c] = col+6
                 c += 1
                 rows[c] = row+4
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+13
+                cols[c] = col+7
                 c += 1
                 rows[c] = row+5
-                cols[c] = col+8
+                cols[c] = col+6
                 c += 1
                 rows[c] = row+5
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+13
+                cols[c] = col+7
                 c += 1
                 rows[c] = row+6
-                cols[c] = col+8
+                cols[c] = col+6
                 c += 1
                 rows[c] = row+6
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+13
+                cols[c] = col+7
 
-    for i2 in range(1, m2+1):
-        for j2 in range(1, n2+1):
-            row = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
-            for k1 in range(1, m1+1):
-                col = (k1-1)*num1 + num0
+    for i2 in range(init, m2+init):
+        for j2 in range(init, n2+init):
+            row = (i2-init)*num2 + (j2-init)*num2*m2 + num0 + num1*m1
+            for k1 in range(init, m1+init):
+                col = (k1-init)*num1 + num0
 
                 # k0L_21
                 c += 1
                 rows[c] = row+0
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+0
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+0
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+1
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+1
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+1
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+2
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+2
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+2
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+3
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+3
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+3
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+4
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+5
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+6
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+7
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+7
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+7
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+8
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+8
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+8
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+9
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+9
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+9
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+10
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+10
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+10
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+11
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+11
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+11
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+12
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+12
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+12
-                cols[c] = col+6
+                cols[c] = col+3
                 c += 1
                 rows[c] = row+13
-                cols[c] = col+4
-                c += 1
-                rows[c] = row+13
-                cols[c] = col+5
-                c += 1
-                rows[c] = row+13
-                cols[c] = col+6
+                cols[c] = col+3
 
-            for k2 in range(1, m2+1):
-                for l2 in range(1, n2+1):
-                    col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+            for k2 in range(init, m2+init):
+                for l2 in range(init, n2+init):
+                    col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
 
                     # k0L_22
                     c += 1
                     rows[c] = row+0
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+0
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+0
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+0
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+0
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+0
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+1
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+1
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+1
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+1
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+1
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+1
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+2
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+2
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+2
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+2
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+2
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+2
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+3
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+3
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+3
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+3
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+3
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+3
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+4
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+4
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+4
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+4
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+4
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+4
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+5
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+5
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+5
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+5
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+5
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+5
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+6
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+6
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+6
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+6
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+6
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+6
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+7
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+7
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+7
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+7
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+7
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+7
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+8
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+8
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+8
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+8
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+8
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+8
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+9
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+9
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+10
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+10
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+11
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+11
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+12
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+12
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+13
+                    cols[c] = col+7
                     c += 1
                     rows[c] = row+13
-                    cols[c] = col+8
+                    cols[c] = col+6
                     c += 1
                     rows[c] = row+13
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+13
+                    cols[c] = col+7
 
     size = num0 + num1*m1 + num2*m2*n2
 
@@ -979,22 +548,19 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     cdef double p0000, p0001, p0002, p0100, p0101, p0102
     cdef double p0200, p0201, p0202, p0300, p0301, p0302
     cdef double p0400, p0401, p0402, p0500, p0501, p0502
-    cdef double p0600, p0601, p0602
-    cdef double p0700, p0701, p0702, p0800, p0801, p0802,
-    cdef double p0900, p0901, p0902, p1000, p1001, p1002,
-    cdef double p1100, p1101, p1102, p1200, p1201, p1202
-    cdef double p1300, p1301, p1302
+    cdef double p0600, p0601, p0602, p0700, p0701, p0702
+    cdef double p0800, p0801, p0802, p0900, p0901, p0902
+    cdef double p1000, p1001, p1002, p1100, p1101, p1102
+    cdef double p1200, p1201, p1202, p1300, p1301, p1302
 
-    cdef double q0004, q0005, q0106, q0204, q0205, q0206
-    cdef double q0008, q0009, q0010, q0011, q0112, q0113
-    cdef double q0208, q0209, q0210, q0211, q0212, q0213
+    cdef double q0003, q0006, q0007, q0106, q0107, q0206, q0207, q0203
 
     cdef double r, x, t, alpha, beta
 
     cdef double *F, *coeffs
     cdef double  sina, cosa, tLA, r2, L
     cdef int m1, m2, n2, pti
-    cdef double phix, phit
+    cdef double wx, wt
 
     cdef cc_attributes *args_in=<cc_attributes *>args
 
@@ -1022,7 +588,7 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     B26 = F[13]
     B66 = F[21]
 
-    cdef double sini1x, cosi1x, sink1x, cosk1x
+    cdef double sini1x, cosi1x, cosk1x
     cdef double sini2x, cosi2x, sink2x, cosk2x
     cdef double sinl2t, cosl2t, sinj2t, cosj2t
 
@@ -1035,25 +601,16 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     cdef double *vsinj2t = <double *>malloc(n2 * sizeof(double))
     cdef double *vcosj2t = <double *>malloc(n2 * sizeof(double))
 
-    cdef double *k0Lq_1_q0004 = <double *>malloc(m1 * sizeof(double))
-    cdef double *k0Lq_1_q0005 = <double *>malloc(m1 * sizeof(double))
-    cdef double *k0Lq_1_q0106 = <double *>malloc(m1 * sizeof(double))
-    cdef double *k0Lq_1_q0204 = <double *>malloc(m1 * sizeof(double))
-    cdef double *k0Lq_1_q0205 = <double *>malloc(m1 * sizeof(double))
-    cdef double *k0Lq_1_q0206 = <double *>malloc(m1 * sizeof(double))
+    cdef double *k0Lq_1_q0003 = <double *>malloc(m1 * sizeof(double))
+    cdef double *k0Lq_1_q0203 = <double *>malloc(m1 * sizeof(double))
 
-    cdef double *k0Lq_2_q0008 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0009 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0010 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0011 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0112 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0113 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0208 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0209 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0210 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0211 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0212 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *k0Lq_2_q0213 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *k0Lq_2_q0006 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *k0Lq_2_q0007 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *k0Lq_2_q0106 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *k0Lq_2_q0107 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *k0Lq_2_q0206 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *k0Lq_2_q0207 = <double *>malloc(m2*n2 * sizeof(double))
+
 
     for i in range(npts):
         x = xs[i]
@@ -1061,25 +618,26 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
         alpha = alphas[i]
         beta = betas[i]
 
-        for i1 in range(1, m1+1):
-            vsini1x[i1-1] = sin(pi*i1*x/L)
-            vcosi1x[i1-1] = cos(pi*i1*x/L)
+        for i1 in range(init, m1+init):
+            vsini1x[i1-init] = sin(pi*i1*x/L)
+            vcosi1x[i1-init] = cos(pi*i1*x/L)
 
-        for i2 in range(1, m2+1):
-            vsini2x[i2-1] = sin(pi*i2*x/L)
-            vcosi2x[i2-1] = cos(pi*i2*x/L)
+        for i2 in range(init, m2+init):
+            vsini2x[i2-init] = sin(pi*i2*x/L)
+            vcosi2x[i2-init] = cos(pi*i2*x/L)
 
-        for j2 in range(1, n2+1):
-            vsinj2t[j2-1] = sin(j2*t)
-            vcosj2t[j2-1] = cos(j2*t)
+        for j2 in range(init, n2+init):
+            vsinj2t[j2-init] = sin(j2*t)
+            vcosj2t[j2-init] = cos(j2*t)
 
         r = r2 + sina*x
 
-        cfphix(coeffs, m1, m2, n2, L, x, t, &phix)
-        cfphit(coeffs, m1, m2, n2, L, x, t, &phit)
+        cfwx(coeffs, m1, m2, n2, L, x, t, &wx)
+        cfwt(coeffs, m1, m2, n2, L, x, t, &wt)
 
         c = -1
 
+        # p_0
         p0000 = (-A11*r + A12*sina*(L - x))/(L*cosa)
         p0001 = (-A12*r + A22*sina*(L - x))/(L*cosa)
         p0002 = (-A16*r + A26*sina*(L - x))/(L*cosa)
@@ -1090,123 +648,68 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
         p0201 = (A26*(L - x)*sin(t - tLA) + (A12*r + A22*sina*(-L + x))*(cos(t - tLA) - 1))/(L*cosa)
         p0202 = (A66*(L - x)*sin(t - tLA) + (A16*r + A26*sina*(-L + x))*(cos(t - tLA) - 1))/(L*cosa)
 
-        for k1 in range(1, m1+1):
-            sink1x = vsini1x[k1-1]
-            cosk1x = vcosi1x[k1-1]
+        for k1 in range(init, m1+init):
+            cosk1x = vcosi1x[k1-init]
 
-            q0004 = phix*sink1x
-            q0005 = cosk1x*phix
-            q0106 = phit*sink1x
-            q0204 = phit*sink1x
-            q0205 = cosk1x*phit
-            q0206 = phix*sink1x
+            # q_1
+            q0003 = pi*cosk1x*k1*wx/L
+            q0203 = pi*cosk1x*k1*wt/(L*r)
 
             # k0L_01
             c += 1
-            out[c] = beta*out[c] + alpha*(p0000*q0004 + p0002*q0204)
+            out[c] = beta*out[c] + alpha*(p0000*q0003 + p0002*q0203)
             c += 1
-            out[c] = beta*out[c] + alpha*(p0000*q0005 + p0002*q0205)
+            out[c] = beta*out[c] + alpha*(p0100*q0003 + p0102*q0203)
             c += 1
-            out[c] = beta*out[c] + alpha*(p0001*q0106 + p0002*q0206)
-            c += 1
-            out[c] = beta*out[c] + alpha*(p0100*q0004 + p0102*q0204)
-            c += 1
-            out[c] = beta*out[c] + alpha*(p0100*q0005 + p0102*q0205)
-            c += 1
-            out[c] = beta*out[c] + alpha*(p0101*q0106 + p0102*q0206)
-            c += 1
-            out[c] = beta*out[c] + alpha*(p0200*q0004 + p0202*q0204)
-            c += 1
-            out[c] = beta*out[c] + alpha*(p0200*q0005 + p0202*q0205)
-            c += 1
-            out[c] = beta*out[c] + alpha*(p0201*q0106 + p0202*q0206)
+            out[c] = beta*out[c] + alpha*(p0200*q0003 + p0202*q0203)
 
             # create buffer
-            k0Lq_1_q0004[k1-1] = q0004
-            k0Lq_1_q0005[k1-1] = q0005
-            k0Lq_1_q0106[k1-1] = q0106
-            k0Lq_1_q0204[k1-1] = q0204
-            k0Lq_1_q0205[k1-1] = q0205
-            k0Lq_1_q0206[k1-1] = q0206
+            k0Lq_1_q0003[k1-init] = q0003
+            k0Lq_1_q0203[k1-init] = q0203
 
-        for k2 in range(1, m2+1):
-            sink2x = vsini2x[k2-1]
-            cosk2x = vcosi2x[k2-1]
-            for l2 in range(1, n2+1):
-                sinl2t = vsinj2t[l2-1]
-                cosl2t = vcosj2t[l2-1]
+        for k2 in range(init, m2+init):
+            sink2x = vsini2x[k2-init]
+            cosk2x = vcosi2x[k2-init]
+            for l2 in range(init, n2+init):
+                sinl2t = vsinj2t[l2-init]
+                cosl2t = vcosj2t[l2-init]
 
-                q0008 = phix*sink2x*sinl2t
-                q0009 = cosl2t*phix*sink2x
-                q0010 = cosk2x*phix*sinl2t
-                q0011 = cosk2x*cosl2t*phix
-                q0112 = phit*sink2x*sinl2t
-                q0113 = cosl2t*phit*sink2x
-                q0208 = phit*sink2x*sinl2t
-                q0209 = cosl2t*phit*sink2x
-                q0210 = cosk2x*phit*sinl2t
-                q0211 = cosk2x*cosl2t*phit
-                q0212 = phix*sink2x*sinl2t
-                q0213 = cosl2t*phix*sink2x
+                # q_2
+                q0006 = pi*cosk2x*k2*sinl2t*wx/L
+                q0007 = pi*cosk2x*cosl2t*k2*wx/L
+                q0106 = cosl2t*l2*sink2x*wt/r**2
+                q0107 = -l2*sink2x*sinl2t*wt/r**2
+                q0206 = (L*cosl2t*l2*sink2x*wx + pi*cosk2x*k2*sinl2t*wt)/(L*r)
+                q0207 = (-L*l2*sink2x*sinl2t*wx + pi*cosk2x*cosl2t*k2*wt)/(L*r)
 
                 # k0L_02
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0000*q0008 + p0002*q0208)
+                out[c] = beta*out[c] + alpha*(p0000*q0006 + p0001*q0106 + p0002*q0206)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0000*q0009 + p0002*q0209)
+                out[c] = beta*out[c] + alpha*(p0000*q0007 + p0001*q0107 + p0002*q0207)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0000*q0010 + p0002*q0210)
+                out[c] = beta*out[c] + alpha*(p0100*q0006 + p0101*q0106 + p0102*q0206)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0000*q0011 + p0002*q0211)
+                out[c] = beta*out[c] + alpha*(p0100*q0007 + p0101*q0107 + p0102*q0207)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0001*q0112 + p0002*q0212)
+                out[c] = beta*out[c] + alpha*(p0200*q0006 + p0201*q0106 + p0202*q0206)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0001*q0113 + p0002*q0213)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0100*q0008 + p0102*q0208)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0100*q0009 + p0102*q0209)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0100*q0010 + p0102*q0210)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0100*q0011 + p0102*q0211)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0101*q0112 + p0102*q0212)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0101*q0113 + p0102*q0213)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0200*q0008 + p0202*q0208)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0200*q0009 + p0202*q0209)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0200*q0010 + p0202*q0210)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0200*q0011 + p0202*q0211)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0201*q0112 + p0202*q0212)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0201*q0113 + p0202*q0213)
+                out[c] = beta*out[c] + alpha*(p0200*q0007 + p0201*q0107 + p0202*q0207)
 
                 # create buffer
                 pos = (k2-1)*n2 + (l2-1)
-                k0Lq_2_q0008[pos] = q0008
-                k0Lq_2_q0009[pos] = q0009
-                k0Lq_2_q0010[pos] = q0010
-                k0Lq_2_q0011[pos] = q0011
-                k0Lq_2_q0112[pos] = q0112
-                k0Lq_2_q0113[pos] = q0113
-                k0Lq_2_q0208[pos] = q0208
-                k0Lq_2_q0209[pos] = q0209
-                k0Lq_2_q0210[pos] = q0210
-                k0Lq_2_q0211[pos] = q0211
-                k0Lq_2_q0212[pos] = q0212
-                k0Lq_2_q0213[pos] = q0213
+                k0Lq_2_q0006[pos] = q0006
+                k0Lq_2_q0007[pos] = q0007
+                k0Lq_2_q0106[pos] = q0106
+                k0Lq_2_q0107[pos] = q0107
+                k0Lq_2_q0206[pos] = q0206
+                k0Lq_2_q0207[pos] = q0207
 
+        for i1 in range(init, m1+init):
+            sini1x = vsini1x[i1-init]
+            cosi1x = vcosi1x[i1-init]
 
-        for i1 in range(1, m1+1):
-            sini1x = vsini1x[i1-1]
-            cosi1x = vcosi1x[i1-1]
-
+            # p_1
             p0000 = pi*A11*cosi1x*i1*r/L + A12*sina*sini1x
             p0001 = pi*A12*cosi1x*i1*r/L + A22*sina*sini1x
             p0002 = pi*A16*cosi1x*i1*r/L + A26*sina*sini1x
@@ -1229,170 +732,78 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
             p0601 = -B26*sina*sini1x + pi*B26*cosi1x*i1*r/L
             p0602 = -B66*sina*sini1x + pi*B66*cosi1x*i1*r/L
 
-            for k1 in range(1, m1+1):
+            for k1 in range(init, m1+init):
                 # access buffer
-                q0004 = k0Lq_1_q0004[k1-1]
-                q0005 = k0Lq_1_q0005[k1-1]
-                q0106 = k0Lq_1_q0106[k1-1]
-                q0204 = k0Lq_1_q0204[k1-1]
-                q0205 = k0Lq_1_q0205[k1-1]
-                q0206 = k0Lq_1_q0206[k1-1]
+                q0003 = k0Lq_1_q0003[k1-init]
+                q0203 = k0Lq_1_q0203[k1-init]
 
                 # k0L_11
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0000*q0004 + p0002*q0204)
+                out[c] = beta*out[c] + alpha*(p0000*q0003 + p0002*q0203)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0000*q0005 + p0002*q0205)
+                out[c] = beta*out[c] + alpha*(p0100*q0003 + p0102*q0203)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0001*q0106 + p0002*q0206)
+                out[c] = beta*out[c] + alpha*(p0200*q0003 + p0202*q0203)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0100*q0004 + p0102*q0204)
+                out[c] = beta*out[c] + alpha*(p0300*q0003 + p0302*q0203)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0100*q0005 + p0102*q0205)
+                out[c] = beta*out[c] + alpha*(p0400*q0003 + p0402*q0203)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0101*q0106 + p0102*q0206)
+                out[c] = beta*out[c] + alpha*(p0500*q0003 + p0502*q0203)
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0200*q0004 + p0202*q0204)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0200*q0005 + p0202*q0205)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0201*q0106 + p0202*q0206)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0300*q0004 + p0302*q0204)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0300*q0005 + p0302*q0205)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0301*q0106 + p0302*q0206)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0400*q0004 + p0402*q0204)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0400*q0005 + p0402*q0205)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0401*q0106 + p0402*q0206)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0500*q0004 + p0502*q0204)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0500*q0005 + p0502*q0205)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0501*q0106 + p0502*q0206)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0600*q0004 + p0602*q0204)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0600*q0005 + p0602*q0205)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0601*q0106 + p0602*q0206)
+                out[c] = beta*out[c] + alpha*(p0600*q0003 + p0602*q0203)
 
-            for k2 in range(1, m2+1):
-                for l2 in range(1, n2+1):
+            for k2 in range(init, m2+init):
+                for l2 in range(init, n2+init):
                     # access buffer
-                    pos = (k2-1)*n2 + (l2-1)
-                    q0008 = k0Lq_2_q0008[pos]
-                    q0009 = k0Lq_2_q0009[pos]
-                    q0010 = k0Lq_2_q0010[pos]
-                    q0011 = k0Lq_2_q0011[pos]
-                    q0112 = k0Lq_2_q0112[pos]
-                    q0113 = k0Lq_2_q0113[pos]
-                    q0208 = k0Lq_2_q0208[pos]
-                    q0209 = k0Lq_2_q0209[pos]
-                    q0210 = k0Lq_2_q0210[pos]
-                    q0211 = k0Lq_2_q0211[pos]
-                    q0212 = k0Lq_2_q0212[pos]
-                    q0213 = k0Lq_2_q0213[pos]
+                    pos = (k2-init)*n2 + (l2-init)
+                    q0006 = k0Lq_2_q0006[pos]
+                    q0007 = k0Lq_2_q0007[pos]
+                    q0106 = k0Lq_2_q0106[pos]
+                    q0107 = k0Lq_2_q0107[pos]
+                    q0206 = k0Lq_2_q0206[pos]
+                    q0207 = k0Lq_2_q0207[pos]
 
                     # k0L_12
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0000*q0008 + p0002*q0208)
+                    out[c] = beta*out[c] + alpha*(p0000*q0006 + p0001*q0106 + p0002*q0206)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0000*q0009 + p0002*q0209)
+                    out[c] = beta*out[c] + alpha*(p0000*q0007 + p0001*q0107 + p0002*q0207)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0000*q0010 + p0002*q0210)
+                    out[c] = beta*out[c] + alpha*(p0100*q0006 + p0101*q0106 + p0102*q0206)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0000*q0011 + p0002*q0211)
+                    out[c] = beta*out[c] + alpha*(p0100*q0007 + p0101*q0107 + p0102*q0207)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0001*q0112 + p0002*q0212)
+                    out[c] = beta*out[c] + alpha*(p0200*q0006 + p0201*q0106 + p0202*q0206)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0001*q0113 + p0002*q0213)
+                    out[c] = beta*out[c] + alpha*(p0200*q0007 + p0201*q0107 + p0202*q0207)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0100*q0008 + p0102*q0208)
+                    out[c] = beta*out[c] + alpha*(p0300*q0006 + p0301*q0106 + p0302*q0206)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0100*q0009 + p0102*q0209)
+                    out[c] = beta*out[c] + alpha*(p0300*q0007 + p0301*q0107 + p0302*q0207)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0100*q0010 + p0102*q0210)
+                    out[c] = beta*out[c] + alpha*(p0400*q0006 + p0401*q0106 + p0402*q0206)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0100*q0011 + p0102*q0211)
+                    out[c] = beta*out[c] + alpha*(p0400*q0007 + p0401*q0107 + p0402*q0207)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0101*q0112 + p0102*q0212)
+                    out[c] = beta*out[c] + alpha*(p0500*q0006 + p0501*q0106 + p0502*q0206)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0101*q0113 + p0102*q0213)
+                    out[c] = beta*out[c] + alpha*(p0500*q0007 + p0501*q0107 + p0502*q0207)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0200*q0008 + p0202*q0208)
+                    out[c] = beta*out[c] + alpha*(p0600*q0006 + p0601*q0106 + p0602*q0206)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0200*q0009 + p0202*q0209)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0200*q0010 + p0202*q0210)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0200*q0011 + p0202*q0211)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0201*q0112 + p0202*q0212)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0201*q0113 + p0202*q0213)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0300*q0008 + p0302*q0208)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0300*q0009 + p0302*q0209)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0300*q0010 + p0302*q0210)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0300*q0011 + p0302*q0211)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0301*q0112 + p0302*q0212)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0301*q0113 + p0302*q0213)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0008 + p0402*q0208)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0009 + p0402*q0209)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0010 + p0402*q0210)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0011 + p0402*q0211)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0401*q0112 + p0402*q0212)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0401*q0113 + p0402*q0213)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0008 + p0502*q0208)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0009 + p0502*q0209)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0010 + p0502*q0210)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0011 + p0502*q0211)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0501*q0112 + p0502*q0212)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0501*q0113 + p0502*q0213)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0008 + p0602*q0208)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0009 + p0602*q0209)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0010 + p0602*q0210)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0011 + p0602*q0211)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0601*q0112 + p0602*q0212)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0601*q0113 + p0602*q0213)
+                    out[c] = beta*out[c] + alpha*(p0600*q0007 + p0601*q0107 + p0602*q0207)
 
-        for i2 in range(1, m2+1):
-            sini2x = vsini2x[i2-1]
-            cosi2x = vcosi2x[i2-1]
 
-            for j2 in range(1, n2+1):
-                sinj2t = vsinj2t[j2-1]
-                cosj2t = vcosj2t[j2-1]
+        for i2 in range(init, m2+init):
+            sini2x = vsini2x[i2-init]
+            cosi2x = vcosi2x[i2-init]
 
+            for j2 in range(init, n2+init):
+                sinj2t = vsinj2t[j2-init]
+                cosj2t = vcosj2t[j2-init]
+
+                # p_2
                 p0000 = pi*A11*cosi2x*i2*r*sinj2t/L + sini2x*(A12*sina*sinj2t + A16*cosj2t*j2)
                 p0001 = pi*A12*cosi2x*i2*r*sinj2t/L + sini2x*(A22*sina*sinj2t + A26*cosj2t*j2)
                 p0002 = pi*A16*cosi2x*i2*r*sinj2t/L + sini2x*(A26*sina*sinj2t + A66*cosj2t*j2)
@@ -1436,287 +847,109 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
                 p1301 = pi*B26*cosi2x*cosj2t*i2*r/L - sini2x*(B22*j2*sinj2t + B26*cosj2t*sina)
                 p1302 = pi*B66*cosi2x*cosj2t*i2*r/L - sini2x*(B26*j2*sinj2t + B66*cosj2t*sina)
 
-                for k1 in range(1, m1+1):
+                for k1 in range(init, m1+init):
                     # access buffer
-                    q0004 = k0Lq_1_q0004[k1-1]
-                    q0005 = k0Lq_1_q0005[k1-1]
-                    q0106 = k0Lq_1_q0106[k1-1]
-                    q0204 = k0Lq_1_q0204[k1-1]
-                    q0205 = k0Lq_1_q0205[k1-1]
-                    q0206 = k0Lq_1_q0206[k1-1]
+                    q0003 = k0Lq_1_q0003[k1-init]
+                    q0203 = k0Lq_1_q0203[k1-init]
 
                     # k0L_21
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0000*q0004 + p0002*q0204)
+                    out[c] = beta*out[c] + alpha*(p0000*q0003 + p0002*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0000*q0005 + p0002*q0205)
+                    out[c] = beta*out[c] + alpha*(p0100*q0003 + p0102*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0001*q0106 + p0002*q0206)
+                    out[c] = beta*out[c] + alpha*(p0200*q0003 + p0202*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0100*q0004 + p0102*q0204)
+                    out[c] = beta*out[c] + alpha*(p0300*q0003 + p0302*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0100*q0005 + p0102*q0205)
+                    out[c] = beta*out[c] + alpha*(p0400*q0003 + p0402*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0101*q0106 + p0102*q0206)
+                    out[c] = beta*out[c] + alpha*(p0500*q0003 + p0502*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0200*q0004 + p0202*q0204)
+                    out[c] = beta*out[c] + alpha*(p0600*q0003 + p0602*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0200*q0005 + p0202*q0205)
+                    out[c] = beta*out[c] + alpha*(p0700*q0003 + p0702*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0201*q0106 + p0202*q0206)
+                    out[c] = beta*out[c] + alpha*(p0800*q0003 + p0802*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0300*q0004 + p0302*q0204)
+                    out[c] = beta*out[c] + alpha*(p0900*q0003 + p0902*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0300*q0005 + p0302*q0205)
+                    out[c] = beta*out[c] + alpha*(p1000*q0003 + p1002*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0301*q0106 + p0302*q0206)
+                    out[c] = beta*out[c] + alpha*(p1100*q0003 + p1102*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0004 + p0402*q0204)
+                    out[c] = beta*out[c] + alpha*(p1200*q0003 + p1202*q0203)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0005 + p0402*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0401*q0106 + p0402*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0004 + p0502*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0005 + p0502*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0501*q0106 + p0502*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0004 + p0602*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0005 + p0602*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0601*q0106 + p0602*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0700*q0004 + p0702*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0700*q0005 + p0702*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0701*q0106 + p0702*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0800*q0004 + p0802*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0800*q0005 + p0802*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0801*q0106 + p0802*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0900*q0004 + p0902*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0900*q0005 + p0902*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0901*q0106 + p0902*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1000*q0004 + p1002*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1000*q0005 + p1002*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1001*q0106 + p1002*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1100*q0004 + p1102*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1100*q0005 + p1102*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1101*q0106 + p1102*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1200*q0004 + p1202*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1200*q0005 + p1202*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1201*q0106 + p1202*q0206)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1300*q0004 + p1302*q0204)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1300*q0005 + p1302*q0205)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p1301*q0106 + p1302*q0206)
+                    out[c] = beta*out[c] + alpha*(p1300*q0003 + p1302*q0203)
 
-                for k2 in range(1, m2+1):
-                    for l2 in range(1, n2+1):
+                for k2 in range(init, m2+init):
+                    for l2 in range(init, n2+init):
                         # access buffer
-                        pos = (k2-1)*n2 + (l2-1)
-                        q0008 = k0Lq_2_q0008[pos]
-                        q0009 = k0Lq_2_q0009[pos]
-                        q0010 = k0Lq_2_q0010[pos]
-                        q0011 = k0Lq_2_q0011[pos]
-                        q0112 = k0Lq_2_q0112[pos]
-                        q0113 = k0Lq_2_q0113[pos]
-                        q0208 = k0Lq_2_q0208[pos]
-                        q0209 = k0Lq_2_q0209[pos]
-                        q0210 = k0Lq_2_q0210[pos]
-                        q0211 = k0Lq_2_q0211[pos]
-                        q0212 = k0Lq_2_q0212[pos]
-                        q0213 = k0Lq_2_q0213[pos]
+                        pos = (k2-init)*n2 + (l2-init)
+                        q0006 = k0Lq_2_q0006[pos]
+                        q0007 = k0Lq_2_q0007[pos]
+                        q0106 = k0Lq_2_q0106[pos]
+                        q0107 = k0Lq_2_q0107[pos]
+                        q0206 = k0Lq_2_q0206[pos]
+                        q0207 = k0Lq_2_q0207[pos]
 
                         # k0L_22
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0000*q0008 + p0002*q0208)
+                        out[c] = beta*out[c] + alpha*(p0000*q0006 + p0001*q0106 + p0002*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0000*q0009 + p0002*q0209)
+                        out[c] = beta*out[c] + alpha*(p0000*q0007 + p0001*q0107 + p0002*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0000*q0010 + p0002*q0210)
+                        out[c] = beta*out[c] + alpha*(p0100*q0006 + p0101*q0106 + p0102*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0000*q0011 + p0002*q0211)
+                        out[c] = beta*out[c] + alpha*(p0100*q0007 + p0101*q0107 + p0102*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0001*q0112 + p0002*q0212)
+                        out[c] = beta*out[c] + alpha*(p0200*q0006 + p0201*q0106 + p0202*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0001*q0113 + p0002*q0213)
+                        out[c] = beta*out[c] + alpha*(p0200*q0007 + p0201*q0107 + p0202*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0100*q0008 + p0102*q0208)
+                        out[c] = beta*out[c] + alpha*(p0300*q0006 + p0301*q0106 + p0302*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0100*q0009 + p0102*q0209)
+                        out[c] = beta*out[c] + alpha*(p0300*q0007 + p0301*q0107 + p0302*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0100*q0010 + p0102*q0210)
+                        out[c] = beta*out[c] + alpha*(p0400*q0006 + p0401*q0106 + p0402*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0100*q0011 + p0102*q0211)
+                        out[c] = beta*out[c] + alpha*(p0400*q0007 + p0401*q0107 + p0402*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0101*q0112 + p0102*q0212)
+                        out[c] = beta*out[c] + alpha*(p0500*q0006 + p0501*q0106 + p0502*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0101*q0113 + p0102*q0213)
+                        out[c] = beta*out[c] + alpha*(p0500*q0007 + p0501*q0107 + p0502*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0200*q0008 + p0202*q0208)
+                        out[c] = beta*out[c] + alpha*(p0600*q0006 + p0601*q0106 + p0602*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0200*q0009 + p0202*q0209)
+                        out[c] = beta*out[c] + alpha*(p0600*q0007 + p0601*q0107 + p0602*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0200*q0010 + p0202*q0210)
+                        out[c] = beta*out[c] + alpha*(p0700*q0006 + p0701*q0106 + p0702*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0200*q0011 + p0202*q0211)
+                        out[c] = beta*out[c] + alpha*(p0700*q0007 + p0701*q0107 + p0702*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0201*q0112 + p0202*q0212)
+                        out[c] = beta*out[c] + alpha*(p0800*q0006 + p0801*q0106 + p0802*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0201*q0113 + p0202*q0213)
+                        out[c] = beta*out[c] + alpha*(p0800*q0007 + p0801*q0107 + p0802*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0300*q0008 + p0302*q0208)
+                        out[c] = beta*out[c] + alpha*(p0900*q0006 + p0901*q0106 + p0902*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0300*q0009 + p0302*q0209)
+                        out[c] = beta*out[c] + alpha*(p0900*q0007 + p0901*q0107 + p0902*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0300*q0010 + p0302*q0210)
+                        out[c] = beta*out[c] + alpha*(p1000*q0006 + p1001*q0106 + p1002*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0300*q0011 + p0302*q0211)
+                        out[c] = beta*out[c] + alpha*(p1000*q0007 + p1001*q0107 + p1002*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0301*q0112 + p0302*q0212)
+                        out[c] = beta*out[c] + alpha*(p1100*q0006 + p1101*q0106 + p1102*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0301*q0113 + p0302*q0213)
+                        out[c] = beta*out[c] + alpha*(p1100*q0007 + p1101*q0107 + p1102*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0400*q0008 + p0402*q0208)
+                        out[c] = beta*out[c] + alpha*(p1200*q0006 + p1201*q0106 + p1202*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0400*q0009 + p0402*q0209)
+                        out[c] = beta*out[c] + alpha*(p1200*q0007 + p1201*q0107 + p1202*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0400*q0010 + p0402*q0210)
+                        out[c] = beta*out[c] + alpha*(p1300*q0006 + p1301*q0106 + p1302*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0400*q0011 + p0402*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0401*q0112 + p0402*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0401*q0113 + p0402*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0500*q0008 + p0502*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0500*q0009 + p0502*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0500*q0010 + p0502*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0500*q0011 + p0502*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0501*q0112 + p0502*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0501*q0113 + p0502*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0600*q0008 + p0602*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0600*q0009 + p0602*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0600*q0010 + p0602*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0600*q0011 + p0602*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0601*q0112 + p0602*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0601*q0113 + p0602*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0700*q0008 + p0702*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0700*q0009 + p0702*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0700*q0010 + p0702*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0700*q0011 + p0702*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0701*q0112 + p0702*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0701*q0113 + p0702*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0008 + p0802*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0009 + p0802*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0010 + p0802*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0011 + p0802*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0801*q0112 + p0802*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0801*q0113 + p0802*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0008 + p0902*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0009 + p0902*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0010 + p0902*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0011 + p0902*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0901*q0112 + p0902*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0901*q0113 + p0902*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0008 + p1002*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0009 + p1002*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0010 + p1002*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0011 + p1002*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1001*q0112 + p1002*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1001*q0113 + p1002*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0008 + p1102*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0009 + p1102*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0010 + p1102*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0011 + p1102*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1101*q0112 + p1102*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1101*q0113 + p1102*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0008 + p1202*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0009 + p1202*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0010 + p1202*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0011 + p1202*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1201*q0112 + p1202*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1201*q0113 + p1202*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0008 + p1302*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0009 + p1302*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0010 + p1302*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0011 + p1302*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1301*q0112 + p1302*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1301*q0113 + p1302*q0213)
+                        out[c] = beta*out[c] + alpha*(p1300*q0007 + p1301*q0107 + p1302*q0207)
 
     free(vsini1x)
     free(vcosi1x)
@@ -1725,25 +958,15 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     free(vsinj2t)
     free(vcosj2t)
 
-    free(k0Lq_1_q0004)
-    free(k0Lq_1_q0005)
-    free(k0Lq_1_q0106)
-    free(k0Lq_1_q0204)
-    free(k0Lq_1_q0205)
-    free(k0Lq_1_q0206)
+    free(k0Lq_1_q0003)
+    free(k0Lq_1_q0203)
 
-    free(k0Lq_2_q0008)
-    free(k0Lq_2_q0009)
-    free(k0Lq_2_q0010)
-    free(k0Lq_2_q0011)
-    free(k0Lq_2_q0112)
-    free(k0Lq_2_q0113)
-    free(k0Lq_2_q0208)
-    free(k0Lq_2_q0209)
-    free(k0Lq_2_q0210)
-    free(k0Lq_2_q0211)
-    free(k0Lq_2_q0212)
-    free(k0Lq_2_q0213)
+    free(k0Lq_2_q0006)
+    free(k0Lq_2_q0007)
+    free(k0Lq_2_q0106)
+    free(k0Lq_2_q0107)
+    free(k0Lq_2_q0206)
+    free(k0Lq_2_q0207)
 
 
 def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
@@ -1764,7 +987,7 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
     cdef unsigned fdim
     cdef cc_attributes args
 
-    fdim = 9*m1**2/2 + 18*m1*m2*n2 + 36*m2**2*n2**2/2
+    fdim = 1*m1**2 + 2*m1*m2*n2 + 4*m2**2*n2**2
 
     rows = np.zeros((fdim,), dtype=INT)
     cols = np.zeros((fdim,), dtype=INT)
@@ -1799,218 +1022,50 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     c = -1
 
-    for i1 in range(1, m1+1):
-        row = (i1-1)*num1 + num0
+    for i1 in range(init, m1+init):
+        row = (i1-init)*num1 + num0
         #NOTE symmetry
-        for k1 in range(i1, m1+1):
-            col = (k1-1)*num1 + num0
+        for k1 in range(i1, m1+init):
+            col = (k1-init)*num1 + num0
 
             # kG_11
             c += 1
-            rows[c] = row+4
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+4
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+4
-            cols[c] = col+6
-            c += 1
-            rows[c] = row+5
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+5
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+5
-            cols[c] = col+6
-            c += 1
-            rows[c] = row+6
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+6
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+6
-            cols[c] = col+6
+            rows[c] = row+3
+            cols[c] = col+3
 
-        for k2 in range(1, m2+1):
-            for l2 in range(1, n2+1):
-                col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+        for k2 in range(init, m2+init):
+            for l2 in range(init, n2+init):
+                col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
 
                 # kG_12
                 c += 1
-                rows[c] = row+4
-                cols[c] = col+8
+                rows[c] = row+3
+                cols[c] = col+6
                 c += 1
-                rows[c] = row+4
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+13
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+8
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+13
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+8
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+13
+                rows[c] = row+3
+                cols[c] = col+7
 
-    for i2 in range(1, m2+1):
-        for j2 in range(1, n2+1):
-            row = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
+    for i2 in range(init, m2+init):
+        for j2 in range(init, n2+init):
+            row = (i2-init)*num2 + (j2-init)*num2*m2 + num0 + num1*m1
             #NOTE symmetry
-            for k2 in range(i2, m2+1):
-                for l2 in range(j2, n2+1):
-                    col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+            for k2 in range(i2, m2+init):
+                for l2 in range(j2, n2+init):
+                    col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
 
                     # kG_22
                     c += 1
-                    rows[c] = row+8
-                    cols[c] = col+8
+                    rows[c] = row+6
+                    cols[c] = col+6
                     c += 1
-                    rows[c] = row+8
-                    cols[c] = col+9
+                    rows[c] = row+6
+                    cols[c] = col+7
                     c += 1
-                    rows[c] = row+8
-                    cols[c] = col+10
+                    rows[c] = row+7
+                    cols[c] = col+6
                     c += 1
-                    rows[c] = row+8
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+8
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+8
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+13
+                    rows[c] = row+7
+                    cols[c] = col+7
 
     size = num0 + num1*m1 + num2*m2*n2
 
@@ -2029,11 +1084,9 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
                  double *alphas, double *betas, void *args) nogil:
     cdef int i1, k1, i2, j2, k2, l2
 
-    cdef double p0400, p0401, p0500, p0501, p0600, p0601
-    cdef double p0800, p0801, p0900, p0901, p1000, p1001
-    cdef double p1100, p1101, p1200, p1201, p1300, p1301
+    cdef double p0300, p0301, p0600, p0601, p0700, p0701
 
-    cdef double q0004, q0005, q0008, q0009, q0010, q0011, q0112, q0113, q0106
+    cdef double q0003, q0006, q0007, q0106, q0107
 
     cdef double r, x, t, alpha, beta
     cdef int c, i, pos
@@ -2058,11 +1111,10 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
     n2 = args_in.n2[0]
     coeffs = args_in.coeffs
 
-    cdef double sini1x, cosi1x, sink1x, cosk1x
+    cdef double cosi1x, cosk1x
     cdef double sini2x, cosi2x, sink2x, cosk2x
     cdef double sinl2t, cosl2t, sinj2t, cosj2t
 
-    cdef double *vsini1x = <double *>malloc(m1 * sizeof(double))
     cdef double *vcosi1x = <double *>malloc(m1 * sizeof(double))
 
     cdef double *vsini2x = <double *>malloc(m2 * sizeof(double))
@@ -2070,12 +1122,10 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
     cdef double *vsinj2t = <double *>malloc(n2 * sizeof(double))
     cdef double *vcosj2t = <double *>malloc(n2 * sizeof(double))
 
-    cdef double *kGq_2_q0008 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kGq_2_q0009 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kGq_2_q0010 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kGq_2_q0011 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kGq_2_q0112 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kGq_2_q0113 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kGq_2_q0006 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kGq_2_q0007 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kGq_2_q0106 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kGq_2_q0107 = <double *>malloc(m2*n2 * sizeof(double))
 
     for i in range(npts):
         x = xs[i]
@@ -2083,17 +1133,16 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
         alpha = alphas[i]
         beta = betas[i]
 
-        for i1 in range(1, m1+1):
-            vsini1x[i1-1] = sin(pi*i1*x/L)
-            vcosi1x[i1-1] = cos(pi*i1*x/L)
+        for i1 in range(init, m1+init):
+            vcosi1x[i1-init] = cos(pi*i1*x/L)
 
-        for i2 in range(1, m2+1):
-            vsini2x[i2-1] = sin(pi*i2*x/L)
-            vcosi2x[i2-1] = cos(pi*i2*x/L)
+        for i2 in range(init, m2+init):
+            vsini2x[i2-init] = sin(pi*i2*x/L)
+            vcosi2x[i2-init] = cos(pi*i2*x/L)
 
-        for j2 in range(1, n2+1):
-            vsinj2t[j2-1] = sin(j2*t)
-            vcosj2t[j2-1] = cos(j2*t)
+        for j2 in range(init, n2+init):
+            vsinj2t[j2-init] = sin(j2*t)
+            vcosj2t[j2-init] = cos(j2*t)
 
         r = r2 + sina*x
 
@@ -2105,225 +1154,92 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
 
         c = -1
 
-        for k2 in range(1, m2+1):
-            sink2x = vsini2x[k2-1]
-            cosk2x = vcosi2x[k2-1]
-            for l2 in range(1, n2+1):
-                sinl2t = vsinj2t[l2-1]
-                cosl2t = vcosj2t[l2-1]
+        for k2 in range(init, m2+init):
+            sink2x = vsini2x[k2-init]
+            cosk2x = vcosi2x[k2-init]
+            for l2 in range(init, n2+init):
+                sinl2t = vsinj2t[l2-init]
+                cosl2t = vcosj2t[l2-init]
 
-                q0008 = sink2x*sinl2t
-                q0009 = cosl2t*sink2x
-                q0010 = cosk2x*sinl2t
-                q0011 = cosk2x*cosl2t
-                q0112 = sink2x*sinl2t
-                q0113 = cosl2t*sink2x
+                # q_2
+                q0006 = pi*cosk2x*k2*sinl2t/L
+                q0007 = pi*cosk2x*cosl2t*k2/L
+                q0106 = cosl2t*l2*sink2x/r
+                q0107 = -l2*sink2x*sinl2t/r
 
                 # create buffer
-                pos = (k2-1)*n2 + (l2-1)
-                kGq_2_q0008[pos] = q0008
-                kGq_2_q0009[pos] = q0009
-                kGq_2_q0010[pos] = q0010
-                kGq_2_q0011[pos] = q0011
-                kGq_2_q0112[pos] = q0112
-                kGq_2_q0113[pos] = q0113
+                pos = (k2-init)*n2 + (l2-init)
+                kGq_2_q0006[pos] = q0006
+                kGq_2_q0007[pos] = q0007
+                kGq_2_q0106[pos] = q0106
+                kGq_2_q0107[pos] = q0107
 
-        for i1 in range(1, m1+1):
-            sini1x = vsini1x[k2-1]
-            cosi1x = vcosi1x[k2-1]
+        for i1 in range(init, m1+init):
+            cosi1x = vcosi1x[k2-init]
 
-            p0400 = Nxx*r*sini1x
-            p0401 = Nxt*r*sini1x
-            p0500 = Nxx*cosi1x*r
-            p0501 = Nxt*cosi1x*r
-            p0600 = Nxt*r*sini1x
-            p0601 = Ntt*r*sini1x
+            # p_1
+            p0300 = pi*Nxx*cosi1x*i1*r/L
+            p0301 = pi*Nxt*cosi1x*i1*r/L
 
             #NOTE symmetry
-            for k1 in range(i1, m1+1):
-                sink1x = vsini1x[k1-1]
-                cosk1x = vcosi1x[k1-1]
+            for k1 in range(i1, m1+init):
+                cosk1x = vcosi1x[k1-init]
 
-                q0004 = sink1x
-                q0005 = cosk1x
-                q0106 = sink1x
+                # q_1
+                q0003 = pi*cosk1x*k1/L
 
                 # kG_11
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0400*q0004)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0400*q0005)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0401*q0106)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0500*q0004)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0500*q0005)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0501*q0106)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0600*q0004)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0600*q0005)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0601*q0106)
+                out[c] = beta*out[c] + alpha*(p0300*q0003)
 
-            for k2 in range(1, m2+1):
-                for l2 in range(1, n2+1):
+            for k2 in range(init, m2+init):
+                for l2 in range(init, n2+init):
                     # access buffer
-                    pos = (k2-1)*n2 + (l2-1)
-                    q0008 = kGq_2_q0008[pos]
-                    q0009 = kGq_2_q0009[pos]
-                    q0010 = kGq_2_q0010[pos]
-                    q0011 = kGq_2_q0011[pos]
-                    q0112 = kGq_2_q0112[pos]
-                    q0113 = kGq_2_q0113[pos]
+                    pos = (k2-init)*n2 + (l2-init)
+                    q0006 = kGq_2_q0006[pos]
+                    q0007 = kGq_2_q0007[pos]
+                    q0106 = kGq_2_q0106[pos]
+                    q0107 = kGq_2_q0107[pos]
 
                     # kG_12
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0008)
+                    out[c] = beta*out[c] + alpha*(p0300*q0006 + p0301*q0106)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0009)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0010)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0011)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0401*q0112)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0401*q0113)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0008)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0009)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0010)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0011)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0501*q0112)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0501*q0113)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0008)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0009)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0010)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0011)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0601*q0112)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0601*q0113)
+                    out[c] = beta*out[c] + alpha*(p0300*q0007 + p0301*q0107)
 
-        for i2 in range(1, m2+1):
-            sini2x = vsini2x[i2-1]
-            cosi2x = vcosi2x[i2-1]
-            for j2 in range(1, n2+1):
-                sinj2t = vsinj2t[j2-1]
-                cosj2t = vcosj2t[j2-1]
+        for i2 in range(init, m2+init):
+            sini2x = vsini2x[i2-init]
+            cosi2x = vcosi2x[i2-init]
+            for j2 in range(init, n2+init):
+                sinj2t = vsinj2t[j2-init]
+                cosj2t = vcosj2t[j2-init]
 
-                p0800 = Nxx*r*sini2x*sinj2t
-                p0801 = Nxt*r*sini2x*sinj2t
-                p0900 = Nxx*cosj2t*r*sini2x
-                p0901 = Nxt*cosj2t*r*sini2x
-                p1000 = Nxx*cosi2x*r*sinj2t
-                p1001 = Nxt*cosi2x*r*sinj2t
-                p1100 = Nxx*cosi2x*cosj2t*r
-                p1101 = Nxt*cosi2x*cosj2t*r
-                p1200 = Nxt*r*sini2x*sinj2t
-                p1201 = Ntt*r*sini2x*sinj2t
-                p1300 = Nxt*cosj2t*r*sini2x
-                p1301 = Ntt*cosj2t*r*sini2x
+                # p_2
+                p0600 = Nxt*cosj2t*j2*sini2x + pi*Nxx*cosi2x*i2*r*sinj2t/L
+                p0601 = Ntt*cosj2t*j2*sini2x + pi*Nxt*cosi2x*i2*r*sinj2t/L
+                p0700 = -Nxt*j2*sini2x*sinj2t + pi*Nxx*cosi2x*cosj2t*i2*r/L
+                p0701 = -Ntt*j2*sini2x*sinj2t + pi*Nxt*cosi2x*cosj2t*i2*r/L
 
                 #NOTE symmetry
-                for k2 in range(i2, m2+1):
-                    for l2 in range(j2, n2+1):
+                for k2 in range(i2, m2+init):
+                    for l2 in range(j2, n2+init):
                         # access buffer
-                        pos = (k2-1)*n2 + (l2-1)
-                        q0008 = kGq_2_q0008[pos]
-                        q0009 = kGq_2_q0009[pos]
-                        q0010 = kGq_2_q0010[pos]
-                        q0011 = kGq_2_q0011[pos]
-                        q0112 = kGq_2_q0112[pos]
-                        q0113 = kGq_2_q0113[pos]
+                        pos = (k2-init)*n2 + (l2-init)
+                        q0006 = kGq_2_q0006[pos]
+                        q0007 = kGq_2_q0007[pos]
+                        q0106 = kGq_2_q0106[pos]
+                        q0107 = kGq_2_q0107[pos]
 
                         # kG_22
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0008)
+                        out[c] = beta*out[c] + alpha*(p0600*q0006 + p0601*q0106)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0009)
+                        out[c] = beta*out[c] + alpha*(p0600*q0007 + p0601*q0107)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0010)
+                        out[c] = beta*out[c] + alpha*(p0700*q0006 + p0701*q0106)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0011)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0801*q0112)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0801*q0113)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0008)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0009)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0010)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0011)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0901*q0112)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0901*q0113)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0008)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0009)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0010)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0011)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1001*q0112)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1001*q0113)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0008)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0009)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0010)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0011)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1101*q0112)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1101*q0113)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0008)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0009)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0010)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0011)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1201*q0112)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1201*q0113)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0008)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0009)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0010)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0011)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1301*q0112)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1301*q0113)
+                        out[c] = beta*out[c] + alpha*(p0700*q0007 + p0701*q0107)
 
-    free(vsini1x)
     free(vcosi1x)
 
     free(vsini2x)
@@ -2331,12 +1247,10 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
     free(vsinj2t)
     free(vcosj2t)
 
-    free(kGq_2_q0008)
-    free(kGq_2_q0009)
-    free(kGq_2_q0010)
-    free(kGq_2_q0011)
-    free(kGq_2_q0112)
-    free(kGq_2_q0113)
+    free(kGq_2_q0006)
+    free(kGq_2_q0007)
+    free(kGq_2_q0106)
+    free(kGq_2_q0107)
 
 
 def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
@@ -2357,7 +1271,7 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
     cdef int fdim
     cdef cc_attributes args
 
-    fdim = 9*m1**2/2 + 18*m1*m2*n2/2 + 36*m2**2*n2**2/2
+    fdim = 1*m1**2 + 2*m1*m2*n2 + 4*m2**2*n2**2
 
     rows = np.zeros((fdim,), dtype=INT)
     cols = np.zeros((fdim,), dtype=INT)
@@ -2392,218 +1306,51 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     c = -1
 
-    for i1 in range(1, m1+1):
-        row = (i1-1)*num1 + num0
+    for i1 in range(init, m1+init):
+        row = (i1-init)*num1 + num0
         #NOTE symmetry
-        for k1 in range(i1, m1+1):
-            col = (k1-1)*num1 + num0
+        for k1 in range(i1, m1+init):
+            col = (k1-init)*num1 + num0
 
             # kLL_11
             c += 1
-            rows[c] = row+4
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+4
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+4
-            cols[c] = col+6
-            c += 1
-            rows[c] = row+5
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+5
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+5
-            cols[c] = col+6
-            c += 1
-            rows[c] = row+6
-            cols[c] = col+4
-            c += 1
-            rows[c] = row+6
-            cols[c] = col+5
-            c += 1
-            rows[c] = row+6
-            cols[c] = col+6
+            rows[c] = row+3
+            cols[c] = col+3
 
-        for k2 in range(1, m2+1):
-            for l2 in range(1, n2+1):
-                col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+        for k2 in range(init, m2+init):
+            for l2 in range(init, n2+init):
+                col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
 
                 # kLL_12
                 c += 1
-                rows[c] = row+4
-                cols[c] = col+8
+                rows[c] = row+3
+                cols[c] = col+6
                 c += 1
-                rows[c] = row+4
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+4
-                cols[c] = col+13
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+8
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+5
-                cols[c] = col+13
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+8
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+9
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+10
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+11
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+12
-                c += 1
-                rows[c] = row+6
-                cols[c] = col+13
+                rows[c] = row+3
+                cols[c] = col+7
 
-    for i2 in range(1, m2+1):
-        for j2 in range(1, n2+1):
-            row = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
+    for i2 in range(init, m2+init):
+        for j2 in range(init, n2+init):
+            row = (i2-init)*num2 + (j2-init)*num2*m2 + num0 + num1*m1
             #NOTE symmetry
-            for k2 in range(i2, m2+1):
-                for l2 in range(j2, n2+1):
-                    col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+            for k2 in range(i2, m2+init):
+                for l2 in range(j2, n2+init):
+                    col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
 
                     # kLL_22
                     c += 1
-                    rows[c] = row+8
-                    cols[c] = col+8
+                    rows[c] = row+6
+                    cols[c] = col+6
                     c += 1
-                    rows[c] = row+8
-                    cols[c] = col+9
+                    rows[c] = row+6
+                    cols[c] = col+7
                     c += 1
-                    rows[c] = row+8
-                    cols[c] = col+10
+                    rows[c] = row+7
+                    cols[c] = col+6
                     c += 1
-                    rows[c] = row+8
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+8
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+8
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+9
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+10
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+11
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+12
-                    cols[c] = col+13
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+8
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+9
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+10
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+11
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+12
-                    c += 1
-                    rows[c] = row+13
-                    cols[c] = col+13
+                    rows[c] = row+7
+                    cols[c] = col+7
+
 
     size = num0 + num1*m1 + num2*m2*n2
 
@@ -2625,22 +1372,17 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
 
     cdef double A11, A12, A16, A22, A26, A66
 
-    cdef double p0400, p0401, p0402, p0500, p0501, p0502, p0600, p0601, p0602
-    cdef double p0800, p0801, p0802, p0900, p0901, p0902
-    cdef double p1000, p1001, p1002, p1100, p1101, p1102
-    cdef double p1200, p1201, p1202, p1300, p1301, p1302
+    cdef double p0300, p0301, p0302, p0600, p0601, p0602
+    cdef double p0700, p0701, p0702
 
-    cdef double q0004, q0005, q0106, q0204, q0205, q0206
-    cdef double q0008, q0009, q0010, q0011, q0112, q0113
-    cdef double q0208, q0209, q0210, q0211, q0212, q0213
-
+    cdef double q0003, q0006, q0007, q0106, q0107, q0203, q0206, q0207
 
     cdef double r, x, t, alpha, beta
 
     cdef double *F, *coeffs
     cdef double sina, r2, L
     cdef int m1, m2, n2, pti
-    cdef double phix, phit
+    cdef double wx, wt
 
     cdef cc_attributes *args_in=<cc_attributes *>args
     sina = args_in.sina[0]
@@ -2659,11 +1401,10 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
     A26 = F[10] # F[1,2]
     A66 = F[18] # F[2,2]
 
-    cdef double sini1x, cosi1x, sink1x, cosk1x
+    cdef double cosi1x, cosk1x
     cdef double sini2x, cosi2x, sink2x, cosk2x
     cdef double sinl2t, cosl2t, sinj2t, cosj2t
 
-    cdef double *vsini1x = <double *>malloc(m1 * sizeof(double))
     cdef double *vcosi1x = <double *>malloc(m1 * sizeof(double))
 
     cdef double *vsini2x = <double *>malloc(m2 * sizeof(double))
@@ -2671,18 +1412,12 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
     cdef double *vsinj2t = <double *>malloc(n2 * sizeof(double))
     cdef double *vcosj2t = <double *>malloc(n2 * sizeof(double))
 
-    cdef double *kLLq_2_q0008 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0009 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0010 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0011 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0112 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0113 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0208 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0209 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0210 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0211 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0212 = <double *>malloc(m2*n2 * sizeof(double))
-    cdef double *kLLq_2_q0213 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kLLq_2_q0006 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kLLq_2_q0007 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kLLq_2_q0106 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kLLq_2_q0107 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kLLq_2_q0206 = <double *>malloc(m2*n2 * sizeof(double))
+    cdef double *kLLq_2_q0207 = <double *>malloc(m2*n2 * sizeof(double))
 
     for i in range(npts):
         x = xs[i]
@@ -2690,279 +1425,123 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
         alpha = alphas[i]
         beta = betas[i]
 
-        for i1 in range(1, m1+1):
-            vsini1x[i1-1] = sin(pi*i1*x/L)
-            vcosi1x[i1-1] = cos(pi*i1*x/L)
+        for i1 in range(init, m1+init):
+            vcosi1x[i1-init] = cos(pi*i1*x/L)
 
-        for i2 in range(1, m2+1):
-            vsini2x[i2-1] = sin(pi*i2*x/L)
-            vcosi2x[i2-1] = cos(pi*i2*x/L)
+        for i2 in range(init, m2+init):
+            vsini2x[i2-init] = sin(pi*i2*x/L)
+            vcosi2x[i2-init] = cos(pi*i2*x/L)
 
-        for j2 in range(1, n2+1):
-            vsinj2t[j2-1] = sin(j2*t)
-            vcosj2t[j2-1] = cos(j2*t)
+        for j2 in range(init, n2+init):
+            vsinj2t[j2-init] = sin(j2*t)
+            vcosj2t[j2-init] = cos(j2*t)
 
         r = r2 + sina*x
 
-        cfphix(coeffs, m1, m2, n2, L, x, t, &phix)
-        cfphit(coeffs, m1, m2, n2, L, x, t, &phit)
+        cfwx(coeffs, m1, m2, n2, L, x, t, &wx)
+        cfwt(coeffs, m1, m2, n2, L, x, t, &wt)
 
         c = -1
 
-        for k2 in range(1, m2+1):
-            sink2x = vsini2x[k2-1]
-            cosk2x = vcosi2x[k2-1]
-            for l2 in range(1, n2+1):
-                sinl2t = vsinj2t[l2-1]
-                cosl2t = vcosj2t[l2-1]
+        for k2 in range(init, m2+init):
+            sink2x = vsini2x[k2-init]
+            cosk2x = vcosi2x[k2-init]
+            for l2 in range(init, n2+init):
+                sinl2t = vsinj2t[l2-init]
+                cosl2t = vcosj2t[l2-init]
 
-                q0008 = phix*sink2x*sinl2t
-                q0009 = cosl2t*phix*sink2x
-                q0010 = cosk2x*phix*sinl2t
-                q0011 = cosk2x*cosl2t*phix
-                q0112 = phit*sink2x*sinl2t
-                q0113 = cosl2t*phit*sink2x
-                q0208 = phit*sink2x*sinl2t
-                q0209 = cosl2t*phit*sink2x
-                q0210 = cosk2x*phit*sinl2t
-                q0211 = cosk2x*cosl2t*phit
-                q0212 = phix*sink2x*sinl2t
-                q0213 = cosl2t*phix*sink2x
+                # q_2
+                q0006 = pi*cosk2x*k2*sinl2t*wx/L
+                q0007 = pi*cosk2x*cosl2t*k2*wx/L
+                q0106 = cosl2t*l2*sink2x*wt/r**2
+                q0107 = -l2*sink2x*sinl2t*wt/r**2
+                q0206 = (L*cosl2t*l2*sink2x*wx + pi*cosk2x*k2*sinl2t*wt)/(L*r)
+                q0207 = (-L*l2*sink2x*sinl2t*wx + pi*cosk2x*cosl2t*k2*wt)/(L*r)
 
                 # create buffer
-                pos = (k2-1)*n2 + (l2-1)
-                kLLq_2_q0008[pos] = q0008
-                kLLq_2_q0009[pos] = q0009
-                kLLq_2_q0010[pos] = q0010
-                kLLq_2_q0011[pos] = q0011
-                kLLq_2_q0112[pos] = q0112
-                kLLq_2_q0113[pos] = q0113
-                kLLq_2_q0208[pos] = q0208
-                kLLq_2_q0209[pos] = q0209
-                kLLq_2_q0210[pos] = q0210
-                kLLq_2_q0211[pos] = q0211
-                kLLq_2_q0212[pos] = q0212
-                kLLq_2_q0213[pos] = q0213
+                pos = (k2-init)*n2 + (l2-init)
+                kLLq_2_q0006[pos] = q0006
+                kLLq_2_q0007[pos] = q0007
+                kLLq_2_q0106[pos] = q0106
+                kLLq_2_q0107[pos] = q0107
+                kLLq_2_q0206[pos] = q0206
+                kLLq_2_q0207[pos] = q0207
 
-        for i1 in range(1, m1+1):
-            sini1x = vsini1x[i1-1]
-            cosi1x = vcosi1x[i1-1]
+        for i1 in range(init, m1+init):
+            cosi1x = vcosi1x[i1-init]
 
-            p0400 = r*sini1x*(A11*phix + A16*phit)
-            p0401 = r*sini1x*(A12*phix + A26*phit)
-            p0402 = r*sini1x*(A16*phix + A66*phit)
-            p0500 = cosi1x*r*(A11*phix + A16*phit)
-            p0501 = cosi1x*r*(A12*phix + A26*phit)
-            p0502 = cosi1x*r*(A16*phix + A66*phit)
-            p0600 = r*sini1x*(A12*phit + A16*phix)
-            p0601 = r*sini1x*(A22*phit + A26*phix)
-            p0602 = r*sini1x*(A26*phit + A66*phix)
+            # p_1
+            p0300 = pi*cosi1x*i1*(A11*r*wx + A16*wt)/L
+            p0301 = pi*cosi1x*i1*(A12*r*wx + A26*wt)/L
+            p0302 = pi*cosi1x*i1*(A16*r*wx + A66*wt)/L
 
             #NOTE symmetry
-            for k1 in range(i1, m1+1):
-                sink1x = vsini1x[k1-1]
-                cosk1x = vcosi1x[k1-1]
+            for k1 in range(i1, m1+init):
+                cosk1x = vcosi1x[k1-init]
 
-                q0004 = phix*sink1x
-                q0005 = cosk1x*phix
-                q0106 = phit*sink1x
-                q0204 = phit*sink1x
-                q0205 = cosk1x*phit
-                q0206 = phix*sink1x
+                # q_1
+                q0003 = pi*cosk1x*k1*wx/L
+                q0203 = pi*cosk1x*k1*wt/(L*r)
 
                 # kLL_11
                 c += 1
-                out[c] = beta*out[c] + alpha*(p0400*q0004 + p0402*q0204)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0400*q0005 + p0402*q0205)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0401*q0106 + p0402*q0206)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0500*q0004 + p0502*q0204)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0500*q0005 + p0502*q0205)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0501*q0106 + p0502*q0206)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0600*q0004 + p0602*q0204)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0600*q0005 + p0602*q0205)
-                c += 1
-                out[c] = beta*out[c] + alpha*(p0601*q0106 + p0602*q0206)
+                out[c] = beta*out[c] + alpha*(p0300*q0003 + p0302*q0203)
 
-            for k2 in range(1, m2+1):
-                for l2 in range(1, n2+1):
+            for k2 in range(init, m2+init):
+                for l2 in range(init, n2+init):
                     # access buffer
-                    pos = (k2-1)*n2 + (l2-1)
-                    q0008 = kLLq_2_q0008[pos]
-                    q0009 = kLLq_2_q0009[pos]
-                    q0010 = kLLq_2_q0010[pos]
-                    q0011 = kLLq_2_q0011[pos]
-                    q0112 = kLLq_2_q0112[pos]
-                    q0113 = kLLq_2_q0113[pos]
-                    q0208 = kLLq_2_q0208[pos]
-                    q0209 = kLLq_2_q0209[pos]
-                    q0210 = kLLq_2_q0210[pos]
-                    q0211 = kLLq_2_q0211[pos]
-                    q0212 = kLLq_2_q0212[pos]
-                    q0213 = kLLq_2_q0213[pos]
+                    pos = (k2-init)*n2 + (l2-init)
+                    q0006 = kLLq_2_q0006[pos]
+                    q0007 = kLLq_2_q0007[pos]
+                    q0106 = kLLq_2_q0106[pos]
+                    q0107 = kLLq_2_q0107[pos]
+                    q0206 = kLLq_2_q0206[pos]
+                    q0207 = kLLq_2_q0207[pos]
 
                     # kLL_12
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0008 + p0402*q0208)
+                    out[c] = beta*out[c] + alpha*(p0300*q0006 + p0301*q0106 + p0302*q0206)
                     c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0009 + p0402*q0209)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0010 + p0402*q0210)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0400*q0011 + p0402*q0211)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0401*q0112 + p0402*q0212)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0401*q0113 + p0402*q0213)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0008 + p0502*q0208)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0009 + p0502*q0209)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0010 + p0502*q0210)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0500*q0011 + p0502*q0211)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0501*q0112 + p0502*q0212)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0501*q0113 + p0502*q0213)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0008 + p0602*q0208)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0009 + p0602*q0209)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0010 + p0602*q0210)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0600*q0011 + p0602*q0211)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0601*q0112 + p0602*q0212)
-                    c += 1
-                    out[c] = beta*out[c] + alpha*(p0601*q0113 + p0602*q0213)
+                    out[c] = beta*out[c] + alpha*(p0300*q0007 + p0301*q0107 + p0302*q0207)
 
-        for i2 in range(1, m2+1):
-            sini2x = vsini2x[i2-1]
-            cosi2x = vcosi2x[i2-1]
-            for j2 in range(1, n2+1):
-                sinj2t = vsinj2t[j2-1]
-                cosj2t = vcosj2t[j2-1]
+        for i2 in range(init, m2+init):
+            sini2x = vsini2x[i2-init]
+            cosi2x = vcosi2x[i2-init]
+            for j2 in range(init, n2+init):
+                sinj2t = vsinj2t[j2-init]
+                cosj2t = vcosj2t[j2-init]
 
-                p0800 = r*sini2x*sinj2t*(A11*phix + A16*phit)
-                p0801 = r*sini2x*sinj2t*(A12*phix + A26*phit)
-                p0802 = r*sini2x*sinj2t*(A16*phix + A66*phit)
-                p0900 = cosj2t*r*sini2x*(A11*phix + A16*phit)
-                p0901 = cosj2t*r*sini2x*(A12*phix + A26*phit)
-                p0902 = cosj2t*r*sini2x*(A16*phix + A66*phit)
-                p1000 = cosi2x*r*sinj2t*(A11*phix + A16*phit)
-                p1001 = cosi2x*r*sinj2t*(A12*phix + A26*phit)
-                p1002 = cosi2x*r*sinj2t*(A16*phix + A66*phit)
-                p1100 = cosi2x*cosj2t*r*(A11*phix + A16*phit)
-                p1101 = cosi2x*cosj2t*r*(A12*phix + A26*phit)
-                p1102 = cosi2x*cosj2t*r*(A16*phix + A66*phit)
-                p1200 = r*sini2x*sinj2t*(A12*phit + A16*phix)
-                p1201 = r*sini2x*sinj2t*(A22*phit + A26*phix)
-                p1202 = r*sini2x*sinj2t*(A26*phit + A66*phix)
-                p1300 = cosj2t*r*sini2x*(A12*phit + A16*phix)
-                p1301 = cosj2t*r*sini2x*(A22*phit + A26*phix)
-                p1302 = cosj2t*r*sini2x*(A26*phit + A66*phix)
+                # p_2
+                p0600 = cosj2t*j2*sini2x*(A12*wt + A16*r*wx)/r + pi*cosi2x*i2*sinj2t*(A11*r*wx + A16*wt)/L
+                p0601 = cosj2t*j2*sini2x*(A22*wt + A26*r*wx)/r + pi*cosi2x*i2*sinj2t*(A12*r*wx + A26*wt)/L
+                p0602 = cosj2t*j2*sini2x*(A26*wt + A66*r*wx)/r + pi*cosi2x*i2*sinj2t*(A16*r*wx + A66*wt)/L
+                p0700 = -j2*sini2x*sinj2t*(A12*wt + A16*r*wx)/r + pi*cosi2x*cosj2t*i2*(A11*r*wx + A16*wt)/L
+                p0701 = -j2*sini2x*sinj2t*(A22*wt + A26*r*wx)/r + pi*cosi2x*cosj2t*i2*(A12*r*wx + A26*wt)/L
+                p0702 = -j2*sini2x*sinj2t*(A26*wt + A66*r*wx)/r + pi*cosi2x*cosj2t*i2*(A16*r*wx + A66*wt)/L
+
                 #NOTE symmetry
-                for k2 in range(i2, m2+1):
-                    for l2 in range(j2, n2+1):
+                for k2 in range(i2, m2+init):
+                    for l2 in range(j2, n2+init):
                         # access buffer
-                        pos = (k2-1)*n2 + (l2-1)
-                        q0008 = kLLq_2_q0008[pos]
-                        q0009 = kLLq_2_q0009[pos]
-                        q0010 = kLLq_2_q0010[pos]
-                        q0011 = kLLq_2_q0011[pos]
-                        q0112 = kLLq_2_q0112[pos]
-                        q0113 = kLLq_2_q0113[pos]
-                        q0208 = kLLq_2_q0208[pos]
-                        q0209 = kLLq_2_q0209[pos]
-                        q0210 = kLLq_2_q0210[pos]
-                        q0211 = kLLq_2_q0211[pos]
-                        q0212 = kLLq_2_q0212[pos]
-                        q0213 = kLLq_2_q0213[pos]
+                        pos = (k2-init)*n2 + (l2-init)
+                        q0006 = kLLq_2_q0006[pos]
+                        q0007 = kLLq_2_q0007[pos]
+                        q0106 = kLLq_2_q0106[pos]
+                        q0107 = kLLq_2_q0107[pos]
+                        q0206 = kLLq_2_q0206[pos]
+                        q0207 = kLLq_2_q0207[pos]
 
                         # kLL_22
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0008 + p0802*q0208)
+                        out[c] = beta*out[c] + alpha*(p0600*q0006 + p0601*q0106 + p0602*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0009 + p0802*q0209)
+                        out[c] = beta*out[c] + alpha*(p0600*q0007 + p0601*q0107 + p0602*q0207)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0010 + p0802*q0210)
+                        out[c] = beta*out[c] + alpha*(p0700*q0006 + p0701*q0106 + p0702*q0206)
                         c += 1
-                        out[c] = beta*out[c] + alpha*(p0800*q0011 + p0802*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0801*q0112 + p0802*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0801*q0113 + p0802*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0008 + p0902*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0009 + p0902*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0010 + p0902*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0900*q0011 + p0902*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0901*q0112 + p0902*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p0901*q0113 + p0902*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0008 + p1002*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0009 + p1002*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0010 + p1002*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1000*q0011 + p1002*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1001*q0112 + p1002*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1001*q0113 + p1002*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0008 + p1102*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0009 + p1102*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0010 + p1102*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1100*q0011 + p1102*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1101*q0112 + p1102*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1101*q0113 + p1102*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0008 + p1202*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0009 + p1202*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0010 + p1202*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1200*q0011 + p1202*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1201*q0112 + p1202*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1201*q0113 + p1202*q0213)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0008 + p1302*q0208)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0009 + p1302*q0209)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0010 + p1302*q0210)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1300*q0011 + p1302*q0211)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1301*q0112 + p1302*q0212)
-                        c += 1
-                        out[c] = beta*out[c] + alpha*(p1301*q0113 + p1302*q0213)
+                        out[c] = beta*out[c] + alpha*(p0700*q0007 + p0701*q0107 + p0702*q0207)
 
-    free(vsini1x)
+
     free(vcosi1x)
 
     free(vsini2x)
@@ -2970,17 +1549,11 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
     free(vsinj2t)
     free(vcosj2t)
 
-    free(kLLq_2_q0008)
-    free(kLLq_2_q0009)
-    free(kLLq_2_q0010)
-    free(kLLq_2_q0011)
-    free(kLLq_2_q0112)
-    free(kLLq_2_q0113)
-    free(kLLq_2_q0208)
-    free(kLLq_2_q0209)
-    free(kLLq_2_q0210)
-    free(kLLq_2_q0211)
-    free(kLLq_2_q0212)
-    free(kLLq_2_q0213)
+    free(kLLq_2_q0006)
+    free(kLLq_2_q0007)
+    free(kLLq_2_q0106)
+    free(kLLq_2_q0107)
+    free(kLLq_2_q0206)
+    free(kLLq_2_q0207)
 
 

@@ -1,8 +1,10 @@
-List(List(0,0),List(0,0),List(0,0),List(0,0),List(0,0),List(0,0),List(0,0),
-  List(0,0),List(Nxx*r*Sin(j2*t)*Sin((i2*Pi*x)/L),
-   Nxt*r*Sin(j2*t)*Sin((i2*Pi*x)/L)),
-  List(Nxx*r*Cos(j2*t)*Sin((i2*Pi*x)/L),Nxt*r*Cos(j2*t)*Sin((i2*Pi*x)/L)),
-  List(Nxx*r*Cos((i2*Pi*x)/L)*Sin(j2*t),Nxt*r*Cos((i2*Pi*x)/L)*Sin(j2*t)),
-  List(Nxx*r*Cos(j2*t)*Cos((i2*Pi*x)/L),Nxt*r*Cos(j2*t)*Cos((i2*Pi*x)/L)),
-  List(Nxt*r*Sin(j2*t)*Sin((i2*Pi*x)/L),Ntt*r*Sin(j2*t)*Sin((i2*Pi*x)/L)),
-  List(Nxt*r*Cos(j2*t)*Sin((i2*Pi*x)/L),Ntt*r*Cos(j2*t)*Sin((i2*Pi*x)/L)))
+List(List(0,0),List(0,0),List(0,0),List(0,0),List(0,0),List(0,0),
+  List((i2*Nxx*Pi*r*Cos((i2*Pi*x)/L)*Sin(j2*t))/L + 
+    j2*Nxt*Cos(j2*t)*Sin((i2*Pi*x)/L),
+   (i2*Nxt*Pi*r*Cos((i2*Pi*x)/L)*Sin(j2*t))/L + 
+    j2*Ntt*Cos(j2*t)*Sin((i2*Pi*x)/L)),
+  List((i2*Nxx*Pi*r*Cos(j2*t)*Cos((i2*Pi*x)/L))/L - 
+    j2*Nxt*Sin(j2*t)*Sin((i2*Pi*x)/L),
+   (i2*Nxt*Pi*r*Cos(j2*t)*Cos((i2*Pi*x)/L))/L - 
+    j2*Ntt*Sin(j2*t)*Sin((i2*Pi*x)/L)),List(0,0),List(0,0),List(0,0),
+  List(0,0),List(0,0),List(0,0))

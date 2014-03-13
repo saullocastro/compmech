@@ -1,0 +1,86 @@
+subs
+
+sin(j2*t) = sinj2t
+cos(pi*i2*x/L) = cosi2x
+cos(j2*t) = cosj2t
+cos(pi*i1*x/L) = cosi1x
+sin(pi*i1*x/L) = sini1x
+sin(pi*i2*x/L) = sini2x
+
+expressions
+
+e[0] = 
+    pi*c0ij*cosi2x*i2*sinj2t/L
+    -c00/(L*cosa)
+    0.5*pi*c2i*cosi1x*i1*wx/L
+    0.5*pi*c5ij*cosi2x*cosj2t*i2*wx/L
+    pi*c0i*cosi1x*i1/L
+    0.5*pi*c4ij*cosi2x*i2*sinj2t*wx/L
+    pi*c1ij*cosi2x*cosj2t*i2/L
+    c02*(cos(t - tLA) - 1)/(L*cosa)
+e[1] = 
+    -c02*sina*(L - x)*(cos(t - tLA) - 1)/(L*cosa*r)
+    0.5*c5ij*sini2x*(2*cosa*cosj2t*r - j2*sinj2t*wt)/r**2
+    c1ij*cosj2t*sina*sini2x/r
+    -c3ij*j2*sini2x*sinj2t/r
+    c0i*sina*sini1x/r
+    c2i*cosa*sini1x/r
+    c2ij*cosj2t*j2*sini2x/r
+    c0ij*sina*sini2x*sinj2t/r
+    0.5*c4ij*sini2x*(2*cosa*r*sinj2t + cosj2t*j2*wt)/r**2
+    c00*sina*(L - x)/(L*cosa*r)
+e[2] = 
+    c2ij*sinj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
+    c02*(L - x)*sin(t - tLA)/(L*cosa*r)
+    0.5*c5ij*(-L*j2*sini2x*sinj2t*wx + pi*cosi2x*cosj2t*i2*wt)/(L*r)
+    c0ij*cosj2t*j2*sini2x/r
+    c1i*(-sina*sini1x/r + pi*cosi1x*i1/L)
+    0.5*pi*c2i*cosi1x*i1*wt/(L*r)
+    -c01*r2*(r + sina*(L - x))/(L*r)
+    -c1ij*j2*sini2x*sinj2t/r
+    0.5*c4ij*(L*cosj2t*j2*sini2x*wx + pi*cosi2x*i2*sinj2t*wt)/(L*r)
+    c3ij*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
+e[3] = 
+    -pi*c4i*i1*sini1x/L
+    pi*c6ij*cosi2x*i2*sinj2t/L
+    pi*c7ij*cosi2x*cosj2t*i2/L
+    -pi*c9ij*cosj2t*i2*sini2x/L
+    -pi*c8ij*i2*sini2x*sinj2t/L
+    pi*c3i*cosi1x*i1/L
+e[4] = 
+    c3i*sina*sini1x/r
+    c6ij*sina*sini2x*sinj2t/r
+    c7ij*cosj2t*sina*sini2x/r
+    c10ij*cosj2t*j2*sini2x/r
+    c4i*cosi1x*sina/r
+    -c11ij*j2*sini2x*sinj2t/r
+    c9ij*cosi2x*cosj2t*sina/r
+    c8ij*cosi2x*sina*sinj2t/r
+e[5] = 
+    c11ij*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
+    c5i*(-sina*sini1x/r + pi*cosi1x*i1/L)
+    c6ij*cosj2t*j2*sini2x/r
+    -c7ij*j2*sini2x*sinj2t/r
+    c8ij*cosi2x*cosj2t*j2/r
+    -c9ij*cosi2x*j2*sinj2t/r
+    c10ij*sinj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)/(L*r)
+e[6] = 
+    -c1i*cosa*sini1x/r
+    c4ij*cosj2t*j2*sini2x/r
+    -c3ij*cosa*cosj2t*sini2x/r
+    c11ij*cosj2t*sini2x
+    c01*cosa*r2*(-L + x)/(L*r)
+    c10ij*sini2x*sinj2t
+    -c2ij*cosa*sini2x*sinj2t/r
+    -c5ij*j2*sini2x*sinj2t/r
+    c5i*sini1x
+e[7] = 
+    c7ij*cosj2t*sini2x
+    c4i*cosi1x
+    c9ij*cosi2x*cosj2t
+    pi*c2i*cosi1x*i1/L
+    pi*c5ij*cosi2x*cosj2t*i2/L
+    c8ij*cosi2x*sinj2t
+    c3i*sini1x
+    c6ij*sini2x*sinj2t
+    pi*c4ij*cosi2x*i2*sinj2t/L

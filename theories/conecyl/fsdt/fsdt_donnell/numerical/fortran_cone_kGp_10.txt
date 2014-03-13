@@ -1,4 +1,3 @@
-List(List(0,0),List(0,0),List(0,0),List(0,0),
-  List(Nxx*r*Sin((i1*Pi*x)/L),Nxt*r*Sin((i1*Pi*x)/L)),
-  List(Nxx*r*Cos((i1*Pi*x)/L),Nxt*r*Cos((i1*Pi*x)/L)),
-  List(Nxt*r*Sin((i1*Pi*x)/L),Ntt*r*Sin((i1*Pi*x)/L)))
+List(List(0,0),List(0,0),List(0,0),
+  List((i1*Nxx*Pi*r*Cos((i1*Pi*x)/L))/L,(i1*Nxt*Pi*r*Cos((i1*Pi*x)/L))/L),
+  List(0,0),List(0,0),List(0,0))

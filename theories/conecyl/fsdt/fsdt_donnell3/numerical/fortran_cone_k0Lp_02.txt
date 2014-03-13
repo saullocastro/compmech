@@ -1,0 +1,22 @@
+List(List((-(A11*r) + A12*sina*(L - x))/(cosa*L),
+   (-(A12*r) + A22*sina*(L - x))/(cosa*L),
+   (-(A16*r) + A26*sina*(L - x))/(cosa*L),
+   (-(B11*r) + B12*sina*(L - x))/(cosa*L),
+   (-(B12*r) + B22*sina*(L - x))/(cosa*L),
+   (-(B16*r) + B26*sina*(L - x))/(cosa*L),0,0),
+  List(-((A16*r2*(r + sina*(L - x)))/L),-((A26*r2*(r + sina*(L - x)))/L),
+   -((A66*r2*(r + sina*(L - x)))/L),-((B16*r2*(r + sina*(L - x)))/L),
+   -((B26*r2*(r + sina*(L - x)))/L),-((B66*r2*(r + sina*(L - x)))/L),
+   (A44*cosa*r2*(-L + x))/L,(A45*cosa*r2*(-L + x))/L),
+  List(((A11*r + A12*sina*(-L + x))*(-1 + Cos(t - tLA)) + 
+      A16*(L - x)*Sin(t - tLA))/(cosa*L),
+   ((A12*r + A22*sina*(-L + x))*(-1 + Cos(t - tLA)) + 
+      A26*(L - x)*Sin(t - tLA))/(cosa*L),
+   ((A16*r + A26*sina*(-L + x))*(-1 + Cos(t - tLA)) + 
+      A66*(L - x)*Sin(t - tLA))/(cosa*L),
+   ((B11*r + B12*sina*(-L + x))*(-1 + Cos(t - tLA)) + 
+      B16*(L - x)*Sin(t - tLA))/(cosa*L),
+   ((B12*r + B22*sina*(-L + x))*(-1 + Cos(t - tLA)) + 
+      B26*(L - x)*Sin(t - tLA))/(cosa*L),
+   ((B16*r + B26*sina*(-L + x))*(-1 + Cos(t - tLA)) + 
+      B66*(L - x)*Sin(t - tLA))/(cosa*L),0,0))

@@ -4,7 +4,7 @@ from Cython.Distutils import build_ext
 ext_modules = [Extension('fsdt_commons',
                          ['fsdt_commons.pyx'],
                          extra_compile_args=['/openmp',
-                             '/O2', '/favor:INTEL64', '/fp:fast'],
+                             '/O2', '/favor:INTEL64'],
                          )]
 setup(
 name = 'fsdt_commons',

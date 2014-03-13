@@ -21,6 +21,7 @@ cdef extern from "math.h":
     double sin(double t)
     double log(double t)
 
+cdef int init = 1
 cdef int num0 = 3
 cdef int num1 = 7
 cdef int num2 = 14
@@ -126,8 +127,10 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
         k0c[c] = 2
         k0v[c] += -0.333333333333333*pi*(xa - xb)*(9*A11*r**2 + A66*(3*L**2 - 3*L*(xa + xb) + xa**2 + xa*xb + xb**2) + 3*sina*(3*A12*r*(-2*L + xa + xb) + A22*sina*(3*L**2 - 3*L*(xa + xb) + xa**2 + xa*xb + xb**2)))/(L**2*cosa**2*r)
 
-        for i1 in range(1, m1+1):
-            col = (i1-1)*num1 + num0
+        for i1 in range(init, m1+init):
+            col = (i1-init)*num1 + num0
+            row = col
+
             # k0_01
             c += 1
             k0r[c] = 0
@@ -300,10 +303,8 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
             k0c[c] = 2
             k0v[c] += (2*pi*L*i1*sina*(-B16*r - B26*(-L*sina + r + sina*xb))*cos(pi*i1*xb/L) + 2*pi*L*i1*sina*(B16*r + B26*(-L*sina + r + sina*xa))*cos(pi*i1*xa/L) + 2*(-pi**2*B16*i1**2*r**2 + B26*sina*(L**2*sina + pi**2*i1**2*r*(L - xb)))*sin(pi*i1*xb/L) + 2*(pi**2*B16*i1**2*r**2 + B26*sina*(-L**2*sina + pi**2*i1**2*r*(-L + xa)))*sin(pi*i1*xa/L))/(pi*L*cosa*i1**2*r)
 
-        for i1 in range(1, m1+1):
-            row = (i1-1)*num1 + num0
-            for k1 in range(1, m1+1):
-                col = (k1-1)*num1 + num0
+            for k1 in range(init, m1+init):
+                col = (k1-init)*num1 + num0
                 if k1==i1:
                     # k0_11 cond_1
                     c += 1
@@ -702,12 +703,12 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                     k0c[c] = col+6
                     k0v[c] += (-2*k1*(D66*L**2*sina**2 + r**2*(A44*L**2 + pi**2*D66*i1**2))*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) + 2*k1*(D66*L**2*sina**2 + r**2*(A44*L**2 + pi**2*D66*i1**2))*sin(pi*i1*xb/L)*cos(pi*k1*xb/L) + 2*(pi*D66*L*r*sina*(i1 - k1)*(i1 + k1)*sin(pi*i1*xa/L) + i1*(D66*L**2*sina**2 + r**2*(A44*L**2 + pi**2*D66*k1**2))*cos(pi*i1*xa/L))*sin(pi*k1*xa/L) - 2*(pi*D66*L*r*sina*(i1 - k1)*(i1 + k1)*sin(pi*i1*xb/L) + i1*(D66*L**2*sina**2 + r**2*(A44*L**2 + pi**2*D66*k1**2))*cos(pi*i1*xb/L))*sin(pi*k1*xb/L))/(L*r*(i1 - k1)*(i1 + k1))
 
-        for i2 in range(1, m2+1):
-            for j2 in range(1, n2+1):
-                row = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
-                for k2 in range(1, m2+1):
-                    for l2 in range(1, n2+1):
-                        col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+        for i2 in range(init, m2+init):
+            for j2 in range(init, n2+init):
+                row = (i2-init)*num2 + (j2-init)*num2*m2 + num0 + num1*m1
+                for k2 in range(init, m2+init):
+                    for l2 in range(init, n2+init):
+                        col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
                         if k2==i2 and l2==j2:
                             # k0_22 cond_1
                             c += 1
@@ -2277,8 +2278,10 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
     k0c[c] = 2
     k0v[c] += 3*pi*A11*r/L + 0.333333333333333*pi*A66*L/r
 
-    for i1 in range(1, m1+1):
-        col = (i1-1)*num1 + num0
+    for i1 in range(init, m1+init):
+        col = (i1-init)*num1 + num0
+        row = col
+
         # k0_01
         c += 1
         k0r[c] = 0
@@ -2379,10 +2382,8 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
         k0c[c] = 2
         k0v[c] += pi*B11*r*(-2*(-1)**i1 + 2)/L
 
-    for i1 in range(1, m1+1):
-        row = (i1-1)*num1 + num0
-        for k1 in range(1, m1+1):
-            col = (k1-1)*num1 + num0
+        for k1 in range(init, m1+init):
+            col = (k1-init)*num1 + num0
             if k1==i1:
                 # k0_11 cond_1
                 c += 1
@@ -2585,12 +2586,12 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                 k0c[c] = col+5
                 k0v[c] += i1*r*(-2*(-1)**(i1 + k1) + 2)*(A45*L**2 + pi**2*D16*k1**2)/(L*(i1 - k1)*(i1 + k1))
 
-    for i2 in range(1, m2+1):
-        for j2 in range(1, n2+1):
-            row = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
-            for k2 in range(1, m2+1):
-                for l2 in range(1, n2+1):
-                    col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+    for i2 in range(init, m2+init):
+        for j2 in range(init, n2+init):
+            row = (i2-init)*num2 + (j2-init)*num2*m2 + num0 + num1*m1
+            for k2 in range(init, m2+init):
+                for l2 in range(init, n2+init):
+                    col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
                     if k2==i2 and l2==j2:
                         # k0_22 cond_1
                         c += 1
@@ -3413,75 +3414,75 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
 
     c = -1
 
-    for i1 in range(1, m1+1):
-        row = (i1-1)*num1 + num0
-        for k1 in range(1, m1+1):
-            col = (k1-1)*num1 + num0
+    for i1 in range(init, m1+init):
+        row = (i1-init)*num1 + num0
+        for k1 in range(init, m1+init):
+            col = (k1-init)*num1 + num0
             if k1==i1:
                 # k0edges_11 cond_1
                 c += 1
                 k0edgesr[c] = row+1
                 k0edgesc[c] = col+1
-                k0edgesv[c] += 2*pi*(kuBot*r1 - kuTop*r2)
+                k0edgesv[c] += 2*pi*(kuBot*r1 + kuTop*r2)
                 c += 1
                 k0edgesr[c] = row+5
                 k0edgesc[c] = col+5
-                k0edgesv[c] += 2*pi*(kphixBot*r1 - kphixTop*r2)
+                k0edgesv[c] += 2*pi*(kphixBot*r1 + kphixTop*r2)
 
             elif k1!=i1:
                 # k0edges_11 cond_2
                 c += 1
                 k0edgesr[c] = row+1
                 k0edgesc[c] = col+1
-                k0edgesv[c] += 2*pi*((-1)**(i1 + k1)*kuBot*r1 - kuTop*r2)
+                k0edgesv[c] += 2*pi*((-1)**(i1 + k1)*kuBot*r1 + kuTop*r2)
                 c += 1
                 k0edgesr[c] = row+5
                 k0edgesc[c] = col+5
-                k0edgesv[c] += 2*pi*((-1)**(i1 + k1)*kphixBot*r1 - kphixTop*r2)
+                k0edgesv[c] += 2*pi*((-1)**(i1 + k1)*kphixBot*r1 + kphixTop*r2)
 
-    for i2 in range(1, m2+1):
-        for j2 in range(1, n2+1):
-            row = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
-            for k2 in range(1, m2+1):
-                for l2 in range(1, n2+1):
-                    col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+    for i2 in range(init, m2+init):
+        for j2 in range(init, n2+init):
+            row = (i2-init)*num2 + (j2-init)*num2*m2 + num0 + num1*m1
+            for k2 in range(init, m2+init):
+                for l2 in range(init, n2+init):
+                    col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
                     if k2==i2 and l2==j2:
                         # k0edges_22 cond_1
                         c += 1
                         k0edgesr[c] = row+2
                         k0edgesc[c] = col+2
-                        k0edgesv[c] += pi*(kuBot*r1 - kuTop*r2)
+                        k0edgesv[c] += pi*(kuBot*r1 + kuTop*r2)
                         c += 1
                         k0edgesr[c] = row+3
                         k0edgesc[c] = col+3
-                        k0edgesv[c] += pi*(kuBot*r1 - kuTop*r2)
+                        k0edgesv[c] += pi*(kuBot*r1 + kuTop*r2)
                         c += 1
                         k0edgesr[c] = row+10
                         k0edgesc[c] = col+10
-                        k0edgesv[c] += pi*(kphixBot*r1 - kphixTop*r2)
+                        k0edgesv[c] += pi*(kphixBot*r1 + kphixTop*r2)
                         c += 1
                         k0edgesr[c] = row+11
                         k0edgesc[c] = col+11
-                        k0edgesv[c] += pi*(kphixBot*r1 - kphixTop*r2)
+                        k0edgesv[c] += pi*(kphixBot*r1 + kphixTop*r2)
 
                     elif k2!=i2 and l2==j2:
                         # k0edges_22 cond_2
                         c += 1
                         k0edgesr[c] = row+2
                         k0edgesc[c] = col+2
-                        k0edgesv[c] += pi*((-1)**(i2 + k2)*kuBot*r1 - kuTop*r2)
+                        k0edgesv[c] += pi*((-1)**(i2 + k2)*kuBot*r1 + kuTop*r2)
                         c += 1
                         k0edgesr[c] = row+3
                         k0edgesc[c] = col+3
-                        k0edgesv[c] += pi*((-1)**(i2 + k2)*kuBot*r1 - kuTop*r2)
+                        k0edgesv[c] += pi*((-1)**(i2 + k2)*kuBot*r1 + kuTop*r2)
                         c += 1
                         k0edgesr[c] = row+10
                         k0edgesc[c] = col+10
-                        k0edgesv[c] += pi*((-1)**(i2 + k2)*kphixBot*r1 - kphixTop*r2)
+                        k0edgesv[c] += pi*((-1)**(i2 + k2)*kphixBot*r1 + kphixTop*r2)
                         c += 1
                         k0edgesr[c] = row+11
                         k0edgesc[c] = col+11
-                        k0edgesv[c] += pi*((-1)**(i2 + k2)*kphixBot*r1 - kphixTop*r2)
+                        k0edgesv[c] += pi*((-1)**(i2 + k2)*kphixBot*r1 + kphixTop*r2)
 
 
     size = num0 + num1*m1 + num2*m2*n2
@@ -3499,11 +3500,11 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
     cdef np.ndarray[cDOUBLE, ndim=1] kG0v
 
     # sparse parameters
-    k11_cond_1 = 9
-    k11_cond_2 = 9
+    k11_cond_1 = 1
+    k11_cond_2 = 1
     k11_num = k11_cond_1*m1 + k11_cond_2*(m1-1)*m1
-    k22_cond_1 = 18
-    k22_cond_2 = 18
+    k22_cond_1 = 2
+    k22_cond_2 = 4
     k22_cond_3 = 0
     k22_cond_4 = 0
     k22_num = k22_cond_1*m2*n2 + k22_cond_2*(m2-1)*m2*n2 \
@@ -3526,243 +3527,59 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
 
         r = r2 + sina*((xa+xb)/2.)
 
-        for i1 in range(1, m1+1):
-            row = (i1-1)*num1 + num0
-            for k1 in range(1, m1+1):
-                col = (k1-1)*num1 + num0
+        for i1 in range(init, m1+init):
+            row = (i1-init)*num1 + num0
+            for k1 in range(init, m1+init):
+                col = (k1-init)*num1 + num0
                 if k1==i1:
                     # kG0_11 cond_1
                     c += 1
-                    kG0r[c] = row+4
-                    kG0c[c] = col+4
-                    kG0v[c] += 0.25*(Fc - pi*P*r**2)*(-L*sin(2*pi*i1*xa/L) + L*sin(2*pi*i1*xb/L) + 2*pi*i1*(xa - xb))/(pi*cosa*i1)
-                    c += 1
-                    kG0r[c] = row+4
-                    kG0c[c] = col+5
-                    kG0v[c] += 0.25*L*(Fc - pi*P*r**2)*(-cos(2*pi*i1*xa/L) + cos(2*pi*i1*xb/L))/(pi*cosa*i1)
-                    c += 1
-                    kG0r[c] = row+4
-                    kG0c[c] = col+6
-                    kG0v[c] += 0.25*T*(-L*sin(2*pi*i1*xa/L) + L*sin(2*pi*i1*xb/L) + 2*pi*i1*(xa - xb))/(pi*i1*r)
-                    c += 1
-                    kG0r[c] = row+5
-                    kG0c[c] = col+4
-                    kG0v[c] += 0.25*L*(Fc - pi*P*r**2)*(-cos(2*pi*i1*xa/L) + cos(2*pi*i1*xb/L))/(pi*cosa*i1)
-                    c += 1
-                    kG0r[c] = row+5
-                    kG0c[c] = col+5
-                    kG0v[c] += 0.25*(Fc - pi*P*r**2)*(L*sin(2*pi*i1*xa/L) - L*sin(2*pi*i1*xb/L) + 2*pi*i1*(xa - xb))/(pi*cosa*i1)
-                    c += 1
-                    kG0r[c] = row+5
-                    kG0c[c] = col+6
-                    kG0v[c] += 0.25*L*T*(-cos(2*pi*i1*xa/L) + cos(2*pi*i1*xb/L))/(pi*i1*r)
-                    c += 1
-                    kG0r[c] = row+6
-                    kG0c[c] = col+4
-                    kG0v[c] += 0.25*T*(-L*sin(2*pi*i1*xa/L) + L*sin(2*pi*i1*xb/L) + 2*pi*i1*(xa - xb))/(pi*i1*r)
-                    c += 1
-                    kG0r[c] = row+6
-                    kG0c[c] = col+5
-                    kG0v[c] += 0.25*L*T*(-cos(2*pi*i1*xa/L) + cos(2*pi*i1*xb/L))/(pi*i1*r)
-                    c += 1
-                    kG0r[c] = row+6
-                    kG0c[c] = col+6
-                    kG0v[c] += 0.5*P*r**2*(L*sin(2*pi*i1*xa/L) - L*sin(2*pi*i1*xb/L) + 2*pi*i1*(-xa + xb))/(cosa*i1)
+                    kG0r[c] = row+3
+                    kG0c[c] = col+3
+                    kG0v[c] += 0.25*pi*i1*(Fc - pi*P*r**2)*(L*sin(2*pi*i1*xa/L) - L*sin(2*pi*i1*xb/L) + 2*pi*i1*(xa - xb))/(L**2*cosa)
 
                 elif k1!=i1:
                     # kG0_11 cond_2
                     c += 1
-                    kG0r[c] = row+4
-                    kG0c[c] = col+4
-                    kG0v[c] += L*(Fc - pi*P*r**2)*(-i1*sin(pi*k1*xa/L)*cos(pi*i1*xa/L) + i1*sin(pi*k1*xb/L)*cos(pi*i1*xb/L) + k1*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) - k1*sin(pi*i1*xb/L)*cos(pi*k1*xb/L))/(pi*cosa*(i1**2 - k1**2))
-                    c += 1
-                    kG0r[c] = row+4
-                    kG0c[c] = col+5
-                    kG0v[c] += L*(-Fc + pi*P*r**2)*(i1*cos(pi*i1*xa/L)*cos(pi*k1*xa/L) - i1*cos(pi*i1*xb/L)*cos(pi*k1*xb/L) + k1*sin(pi*i1*xa/L)*sin(pi*k1*xa/L) - k1*sin(pi*i1*xb/L)*sin(pi*k1*xb/L))/(pi*cosa*(i1**2 - k1**2))
-                    c += 1
-                    kG0r[c] = row+4
-                    kG0c[c] = col+6
-                    kG0v[c] += L*T*(-i1*sin(pi*k1*xa/L)*cos(pi*i1*xa/L) + i1*sin(pi*k1*xb/L)*cos(pi*i1*xb/L) + k1*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) - k1*sin(pi*i1*xb/L)*cos(pi*k1*xb/L))/(pi*r*(i1**2 - k1**2))
-                    c += 1
-                    kG0r[c] = row+5
-                    kG0c[c] = col+4
-                    kG0v[c] += L*(Fc - pi*P*r**2)*(i1*sin(pi*i1*xa/L)*sin(pi*k1*xa/L) - i1*sin(pi*i1*xb/L)*sin(pi*k1*xb/L) + k1*cos(pi*i1*xa/L)*cos(pi*k1*xa/L) - k1*cos(pi*i1*xb/L)*cos(pi*k1*xb/L))/(pi*cosa*(i1**2 - k1**2))
-                    c += 1
-                    kG0r[c] = row+5
-                    kG0c[c] = col+5
-                    kG0v[c] += L*(Fc - pi*P*r**2)*(i1*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) - i1*sin(pi*i1*xb/L)*cos(pi*k1*xb/L) - k1*sin(pi*k1*xa/L)*cos(pi*i1*xa/L) + k1*sin(pi*k1*xb/L)*cos(pi*i1*xb/L))/(pi*cosa*(i1**2 - k1**2))
-                    c += 1
-                    kG0r[c] = row+5
-                    kG0c[c] = col+6
-                    kG0v[c] += L*T*(i1*sin(pi*i1*xa/L)*sin(pi*k1*xa/L) - i1*sin(pi*i1*xb/L)*sin(pi*k1*xb/L) + k1*cos(pi*i1*xa/L)*cos(pi*k1*xa/L) - k1*cos(pi*i1*xb/L)*cos(pi*k1*xb/L))/(pi*r*(i1**2 - k1**2))
-                    c += 1
-                    kG0r[c] = row+6
-                    kG0c[c] = col+4
-                    kG0v[c] += L*T*(-i1*sin(pi*k1*xa/L)*cos(pi*i1*xa/L) + i1*sin(pi*k1*xb/L)*cos(pi*i1*xb/L) + k1*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) - k1*sin(pi*i1*xb/L)*cos(pi*k1*xb/L))/(pi*r*(i1**2 - k1**2))
-                    c += 1
-                    kG0r[c] = row+6
-                    kG0c[c] = col+5
-                    kG0v[c] += L*T*(-i1*cos(pi*i1*xa/L)*cos(pi*k1*xa/L) + i1*cos(pi*i1*xb/L)*cos(pi*k1*xb/L) - k1*sin(pi*i1*xa/L)*sin(pi*k1*xa/L) + k1*sin(pi*i1*xb/L)*sin(pi*k1*xb/L))/(pi*r*(i1**2 - k1**2))
-                    c += 1
-                    kG0r[c] = row+6
-                    kG0c[c] = col+6
-                    kG0v[c] += 2*L*P*r**2*(i1*sin(pi*k1*xa/L)*cos(pi*i1*xa/L) - i1*sin(pi*k1*xb/L)*cos(pi*i1*xb/L) - k1*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) + k1*sin(pi*i1*xb/L)*cos(pi*k1*xb/L))/(cosa*(i1**2 - k1**2))
+                    kG0r[c] = row+3
+                    kG0c[c] = col+3
+                    kG0v[c] += pi*i1*k1*(Fc - pi*P*r**2)*(i1*sin(pi*i1*xa/L)*cos(pi*k1*xa/L) - i1*sin(pi*i1*xb/L)*cos(pi*k1*xb/L) - k1*sin(pi*k1*xa/L)*cos(pi*i1*xa/L) + k1*sin(pi*k1*xb/L)*cos(pi*i1*xb/L))/(L*cosa*(i1 - k1)*(i1 + k1))
 
-        for i2 in range(1, m2+1):
-            for j2 in range(1, n2+1):
-                row = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
-                for k2 in range(1, m2+1):
-                    for l2 in range(1, n2+1):
-                        col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+        for i2 in range(init, m2+init):
+            for j2 in range(init, n2+init):
+                row = (i2-init)*num2 + (j2-init)*num2*m2 + num0 + num1*m1
+                for k2 in range(init, m2+init):
+                    for l2 in range(init, n2+init):
+                        col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
                         if k2==i2 and l2==j2:
                             # kG0_22 cond_1
                             c += 1
-                            kG0r[c] = row+8
-                            kG0c[c] = col+8
-                            kG0v[c] += 0.125*(Fc - pi*P*r**2)*(-L*sin(2*pi*i2*xa/L) + L*sin(2*pi*i2*xb/L) + 2*pi*i2*(xa - xb))/(pi*cosa*i2)
+                            kG0r[c] = row+6
+                            kG0c[c] = col+6
+                            kG0v[c] += 0.125*(L*(2*L**2*P*j2**2 + pi*i2**2*(Fc - pi*P*r**2))*(sin(2*pi*i2*xa/L) - sin(2*pi*i2*xb/L)) - 2*pi*i2*(xa - xb)*(2*L**2*P*j2**2 + pi*i2**2*(-Fc + pi*P*r**2)))/(L**2*cosa*i2)
                             c += 1
-                            kG0r[c] = row+8
-                            kG0c[c] = col+10
-                            kG0v[c] += 0.125*L*(Fc - pi*P*r**2)*(-cos(2*pi*i2*xa/L) + cos(2*pi*i2*xb/L))/(pi*cosa*i2)
-                            c += 1
-                            kG0r[c] = row+8
-                            kG0c[c] = col+12
-                            kG0v[c] += 0.125*T*(-L*sin(2*pi*i2*xa/L) + L*sin(2*pi*i2*xb/L) + 2*pi*i2*(xa - xb))/(pi*i2*r)
-                            c += 1
-                            kG0r[c] = row+9
-                            kG0c[c] = col+9
-                            kG0v[c] += 0.125*(Fc - pi*P*r**2)*(-L*sin(2*pi*i2*xa/L) + L*sin(2*pi*i2*xb/L) + 2*pi*i2*(xa - xb))/(pi*cosa*i2)
-                            c += 1
-                            kG0r[c] = row+9
-                            kG0c[c] = col+11
-                            kG0v[c] += 0.125*L*(Fc - pi*P*r**2)*(-cos(2*pi*i2*xa/L) + cos(2*pi*i2*xb/L))/(pi*cosa*i2)
-                            c += 1
-                            kG0r[c] = row+9
-                            kG0c[c] = col+13
-                            kG0v[c] += 0.125*T*(-L*sin(2*pi*i2*xa/L) + L*sin(2*pi*i2*xb/L) + 2*pi*i2*(xa - xb))/(pi*i2*r)
-                            c += 1
-                            kG0r[c] = row+10
-                            kG0c[c] = col+8
-                            kG0v[c] += 0.125*L*(Fc - pi*P*r**2)*(-cos(2*pi*i2*xa/L) + cos(2*pi*i2*xb/L))/(pi*cosa*i2)
-                            c += 1
-                            kG0r[c] = row+10
-                            kG0c[c] = col+10
-                            kG0v[c] += 0.125*(Fc - pi*P*r**2)*(L*sin(2*pi*i2*xa/L) - L*sin(2*pi*i2*xb/L) + 2*pi*i2*(xa - xb))/(pi*cosa*i2)
-                            c += 1
-                            kG0r[c] = row+10
-                            kG0c[c] = col+12
-                            kG0v[c] += 0.125*L*T*(-cos(2*pi*i2*xa/L) + cos(2*pi*i2*xb/L))/(pi*i2*r)
-                            c += 1
-                            kG0r[c] = row+11
-                            kG0c[c] = col+9
-                            kG0v[c] += 0.125*L*(Fc - pi*P*r**2)*(-cos(2*pi*i2*xa/L) + cos(2*pi*i2*xb/L))/(pi*cosa*i2)
-                            c += 1
-                            kG0r[c] = row+11
-                            kG0c[c] = col+11
-                            kG0v[c] += 0.125*(Fc - pi*P*r**2)*(L*sin(2*pi*i2*xa/L) - L*sin(2*pi*i2*xb/L) + 2*pi*i2*(xa - xb))/(pi*cosa*i2)
-                            c += 1
-                            kG0r[c] = row+11
-                            kG0c[c] = col+13
-                            kG0v[c] += 0.125*L*T*(-cos(2*pi*i2*xa/L) + cos(2*pi*i2*xb/L))/(pi*i2*r)
-                            c += 1
-                            kG0r[c] = row+12
-                            kG0c[c] = col+8
-                            kG0v[c] += 0.125*T*(-L*sin(2*pi*i2*xa/L) + L*sin(2*pi*i2*xb/L) + 2*pi*i2*(xa - xb))/(pi*i2*r)
-                            c += 1
-                            kG0r[c] = row+12
-                            kG0c[c] = col+10
-                            kG0v[c] += 0.125*L*T*(-cos(2*pi*i2*xa/L) + cos(2*pi*i2*xb/L))/(pi*i2*r)
-                            c += 1
-                            kG0r[c] = row+12
-                            kG0c[c] = col+12
-                            kG0v[c] += 0.25*P*r**2*(L*sin(2*pi*i2*xa/L) - L*sin(2*pi*i2*xb/L) + 2*pi*i2*(-xa + xb))/(cosa*i2)
-                            c += 1
-                            kG0r[c] = row+13
-                            kG0c[c] = col+9
-                            kG0v[c] += 0.125*T*(-L*sin(2*pi*i2*xa/L) + L*sin(2*pi*i2*xb/L) + 2*pi*i2*(xa - xb))/(pi*i2*r)
-                            c += 1
-                            kG0r[c] = row+13
-                            kG0c[c] = col+11
-                            kG0v[c] += 0.125*L*T*(-cos(2*pi*i2*xa/L) + cos(2*pi*i2*xb/L))/(pi*i2*r)
-                            c += 1
-                            kG0r[c] = row+13
-                            kG0c[c] = col+13
-                            kG0v[c] += 0.25*P*r**2*(L*sin(2*pi*i2*xa/L) - L*sin(2*pi*i2*xb/L) + 2*pi*i2*(-xa + xb))/(cosa*i2)
+                            kG0r[c] = row+7
+                            kG0c[c] = col+7
+                            kG0v[c] += 0.125*(L*(2*L**2*P*j2**2 + pi*i2**2*(Fc - pi*P*r**2))*(sin(2*pi*i2*xa/L) - sin(2*pi*i2*xb/L)) - 2*pi*i2*(xa - xb)*(2*L**2*P*j2**2 + pi*i2**2*(-Fc + pi*P*r**2)))/(L**2*cosa*i2)
 
                         elif k2!=i2 and l2==j2:
                             # kG0_22 cond_2
                             c += 1
-                            kG0r[c] = row+8
-                            kG0c[c] = col+8
-                            kG0v[c] += 0.5*L*(Fc - pi*P*r**2)*(-i2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + i2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) + k2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*cosa*(i2**2 - k2**2))
+                            kG0r[c] = row+6
+                            kG0c[c] = col+6
+                            kG0v[c] += 0.5*(i2*(-2*L**2*P*j2**2 + pi*k2**2*(Fc - pi*P*r**2))*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) + i2*(2*L**2*P*j2**2 + pi*k2**2*(-Fc + pi*P*r**2))*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + k2*(-2*L**2*P*j2**2 + pi*i2**2*(Fc - pi*P*r**2))*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) + k2*(2*L**2*P*j2**2 + pi*i2**2*(-Fc + pi*P*r**2))*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(L*cosa*(i2 - k2)*(i2 + k2))
                             c += 1
-                            kG0r[c] = row+8
-                            kG0c[c] = col+10
-                            kG0v[c] += 0.5*L*(-Fc + pi*P*r**2)*(i2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) - i2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L) + k2*sin(pi*i2*xa/L)*sin(pi*k2*xa/L) - k2*sin(pi*i2*xb/L)*sin(pi*k2*xb/L))/(pi*cosa*(i2**2 - k2**2))
+                            kG0r[c] = row+6
+                            kG0c[c] = col+7
+                            kG0v[c] += -T*j2*(2*i2*k2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) - 2*i2*k2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L) + (i2**2 + k2**2)*(sin(pi*i2*xa/L)*sin(pi*k2*xa/L) - sin(pi*i2*xb/L)*sin(pi*k2*xb/L)))/(r**2*(2.0*i2**2 - 2.0*k2**2))
                             c += 1
-                            kG0r[c] = row+8
-                            kG0c[c] = col+12
-                            kG0v[c] += L*T*(-i2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + i2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) + k2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*r*(2.0*i2**2 - 2.0*k2**2))
+                            kG0r[c] = row+7
+                            kG0c[c] = col+6
+                            kG0v[c] += T*j2*(2*i2*k2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) - 2*i2*k2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L) + (i2**2 + k2**2)*(sin(pi*i2*xa/L)*sin(pi*k2*xa/L) - sin(pi*i2*xb/L)*sin(pi*k2*xb/L)))/(r**2*(2.0*i2**2 - 2.0*k2**2))
                             c += 1
-                            kG0r[c] = row+9
-                            kG0c[c] = col+9
-                            kG0v[c] += 0.5*L*(Fc - pi*P*r**2)*(-i2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + i2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) + k2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*cosa*(i2**2 - k2**2))
-                            c += 1
-                            kG0r[c] = row+9
-                            kG0c[c] = col+11
-                            kG0v[c] += 0.5*L*(-Fc + pi*P*r**2)*(i2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) - i2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L) + k2*sin(pi*i2*xa/L)*sin(pi*k2*xa/L) - k2*sin(pi*i2*xb/L)*sin(pi*k2*xb/L))/(pi*cosa*(i2**2 - k2**2))
-                            c += 1
-                            kG0r[c] = row+9
-                            kG0c[c] = col+13
-                            kG0v[c] += L*T*(-i2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + i2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) + k2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*r*(2.0*i2**2 - 2.0*k2**2))
-                            c += 1
-                            kG0r[c] = row+10
-                            kG0c[c] = col+8
-                            kG0v[c] += 0.5*L*(Fc - pi*P*r**2)*(i2*sin(pi*i2*xa/L)*sin(pi*k2*xa/L) - i2*sin(pi*i2*xb/L)*sin(pi*k2*xb/L) + k2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*cosa*(i2**2 - k2**2))
-                            c += 1
-                            kG0r[c] = row+10
-                            kG0c[c] = col+10
-                            kG0v[c] += 0.5*L*(Fc - pi*P*r**2)*(i2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) - i2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L) - k2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + k2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L))/(pi*cosa*(i2**2 - k2**2))
-                            c += 1
-                            kG0r[c] = row+10
-                            kG0c[c] = col+12
-                            kG0v[c] += L*T*(i2*sin(pi*i2*xa/L)*sin(pi*k2*xa/L) - i2*sin(pi*i2*xb/L)*sin(pi*k2*xb/L) + k2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*r*(2.0*i2**2 - 2.0*k2**2))
-                            c += 1
-                            kG0r[c] = row+11
-                            kG0c[c] = col+9
-                            kG0v[c] += 0.5*L*(Fc - pi*P*r**2)*(i2*sin(pi*i2*xa/L)*sin(pi*k2*xa/L) - i2*sin(pi*i2*xb/L)*sin(pi*k2*xb/L) + k2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*cosa*(i2**2 - k2**2))
-                            c += 1
-                            kG0r[c] = row+11
-                            kG0c[c] = col+11
-                            kG0v[c] += 0.5*L*(Fc - pi*P*r**2)*(i2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) - i2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L) - k2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + k2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L))/(pi*cosa*(i2**2 - k2**2))
-                            c += 1
-                            kG0r[c] = row+11
-                            kG0c[c] = col+13
-                            kG0v[c] += L*T*(i2*sin(pi*i2*xa/L)*sin(pi*k2*xa/L) - i2*sin(pi*i2*xb/L)*sin(pi*k2*xb/L) + k2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*r*(2.0*i2**2 - 2.0*k2**2))
-                            c += 1
-                            kG0r[c] = row+12
-                            kG0c[c] = col+8
-                            kG0v[c] += L*T*(-i2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + i2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) + k2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*r*(2.0*i2**2 - 2.0*k2**2))
-                            c += 1
-                            kG0r[c] = row+12
-                            kG0c[c] = col+10
-                            kG0v[c] += L*T*(-i2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) + i2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L) - k2*sin(pi*i2*xa/L)*sin(pi*k2*xa/L) + k2*sin(pi*i2*xb/L)*sin(pi*k2*xb/L))/(pi*r*(2.0*i2**2 - 2.0*k2**2))
-                            c += 1
-                            kG0r[c] = row+12
-                            kG0c[c] = col+12
-                            kG0v[c] += L*P*r**2*(i2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) - i2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) - k2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) + k2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(cosa*(i2**2 - k2**2))
-                            c += 1
-                            kG0r[c] = row+13
-                            kG0c[c] = col+9
-                            kG0v[c] += L*T*(-i2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + i2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) + k2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) - k2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(pi*r*(2.0*i2**2 - 2.0*k2**2))
-                            c += 1
-                            kG0r[c] = row+13
-                            kG0c[c] = col+11
-                            kG0v[c] += L*T*(-i2*cos(pi*i2*xa/L)*cos(pi*k2*xa/L) + i2*cos(pi*i2*xb/L)*cos(pi*k2*xb/L) - k2*sin(pi*i2*xa/L)*sin(pi*k2*xa/L) + k2*sin(pi*i2*xb/L)*sin(pi*k2*xb/L))/(pi*r*(2.0*i2**2 - 2.0*k2**2))
-                            c += 1
-                            kG0r[c] = row+13
-                            kG0c[c] = col+13
-                            kG0v[c] += L*P*r**2*(i2*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) - i2*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) - k2*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) + k2*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(cosa*(i2**2 - k2**2))
+                            kG0r[c] = row+7
+                            kG0c[c] = col+7
+                            kG0v[c] += 0.5*(i2*(-2*L**2*P*j2**2 + pi*k2**2*(Fc - pi*P*r**2))*sin(pi*k2*xb/L)*cos(pi*i2*xb/L) + i2*(2*L**2*P*j2**2 + pi*k2**2*(-Fc + pi*P*r**2))*sin(pi*k2*xa/L)*cos(pi*i2*xa/L) + k2*(-2*L**2*P*j2**2 + pi*i2**2*(Fc - pi*P*r**2))*sin(pi*i2*xa/L)*cos(pi*k2*xa/L) + k2*(2*L**2*P*j2**2 + pi*i2**2*(-Fc + pi*P*r**2))*sin(pi*i2*xb/L)*cos(pi*k2*xb/L))/(L*cosa*(i2 - k2)*(i2 + k2))
 
 
     size = num0 + num1*m1 + num2*m2*n2
@@ -3780,11 +3597,11 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
     cdef np.ndarray[cDOUBLE, ndim=1] kG0v
 
     # sparse parameters
-    k11_cond_1 = 5
-    k11_cond_2 = 4
+    k11_cond_1 = 1
+    k11_cond_2 = 0
     k11_num = k11_cond_1*m1 + k11_cond_2*(m1-1)*m1
-    k22_cond_1 = 10
-    k22_cond_2 = 8
+    k22_cond_1 = 2
+    k22_cond_2 = 2
     k22_cond_3 = 0
     k22_cond_4 = 0
     k22_num = k22_cond_1*m2*n2 + k22_cond_2*(m2-1)*m2*n2 \
@@ -3798,135 +3615,44 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
 
     c = -1
 
-    for i1 in range(1, m1+1):
-        row = (i1-1)*num1 + num0
-        for k1 in range(1, m1+1):
-            col = (k1-1)*num1 + num0
+    for i1 in range(init, m1+init):
+        row = (i1-init)*num1 + num0
+        for k1 in range(init, m1+init):
+            col = (k1-init)*num1 + num0
             if k1==i1:
                 # kG0_11 cond_1
                 c += 1
-                kG0r[c] = row+4
-                kG0c[c] = col+4
-                kG0v[c] += -0.5*L*(Fc - pi*P*r**2)
-                c += 1
-                kG0r[c] = row+4
-                kG0c[c] = col+6
-                kG0v[c] += -0.5*L*T/r
-                c += 1
-                kG0r[c] = row+5
-                kG0c[c] = col+5
-                kG0v[c] += -0.5*L*(Fc - pi*P*r**2)
-                c += 1
-                kG0r[c] = row+6
-                kG0c[c] = col+4
-                kG0v[c] += -0.5*L*T/r
-                c += 1
-                kG0r[c] = row+6
-                kG0c[c] = col+6
-                kG0v[c] += pi*L*P*r**2
+                kG0r[c] = row+3
+                kG0c[c] = col+3
+                kG0v[c] += 0.5*pi**2*i1**2*(-Fc + pi*P*r**2)/L
 
-            elif k1!=i1:
-                # kG0_11 cond_2
-                c += 1
-                kG0r[c] = row+4
-                kG0c[c] = col+5
-                kG0v[c] += L*i1*((-1)**(i1 + k1) - 1)*(Fc - pi*P*r**2)/(pi*(i1**2 - k1**2))
-                c += 1
-                kG0r[c] = row+5
-                kG0c[c] = col+4
-                kG0v[c] += L*k1*((-1)**(i1 + k1) - 1)*(Fc - pi*P*r**2)/(pi*(-i1**2 + k1**2))
-                c += 1
-                kG0r[c] = row+5
-                kG0c[c] = col+6
-                kG0v[c] += L*T*k1*((-1)**(i1 + k1) - 1)/(pi*r*(-i1**2 + k1**2))
-                c += 1
-                kG0r[c] = row+6
-                kG0c[c] = col+5
-                kG0v[c] += L*T*i1*((-1)**(i1 + k1) - 1)/(pi*r*(i1**2 - k1**2))
-
-    for i2 in range(1, m2+1):
-        for j2 in range(1, n2+1):
-            row = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
-            for k2 in range(1, m2+1):
-                for l2 in range(1, n2+1):
-                    col = (k2-1)*num2 + (l2-1)*num2*m2 + num0 + num1*m1
+    for i2 in range(init, m2+init):
+        for j2 in range(init, n2+init):
+            row = (i2-init)*num2 + (j2-init)*num2*m2 + num0 + num1*m1
+            for k2 in range(init, m2+init):
+                for l2 in range(init, n2+init):
+                    col = (k2-init)*num2 + (l2-init)*num2*m2 + num0 + num1*m1
                     if k2==i2 and l2==j2:
                         # kG0_22 cond_1
                         c += 1
-                        kG0r[c] = row+8
-                        kG0c[c] = col+8
-                        kG0v[c] += -0.25*L*(Fc - pi*P*r**2)
+                        kG0r[c] = row+6
+                        kG0c[c] = col+6
+                        kG0v[c] += 0.25*pi*(2*L**2*P*j2**2 + pi*i2**2*(-Fc + pi*P*r**2))/L
                         c += 1
-                        kG0r[c] = row+8
-                        kG0c[c] = col+12
-                        kG0v[c] += -0.25*L*T/r
-                        c += 1
-                        kG0r[c] = row+9
-                        kG0c[c] = col+9
-                        kG0v[c] += -0.25*L*(Fc - pi*P*r**2)
-                        c += 1
-                        kG0r[c] = row+9
-                        kG0c[c] = col+13
-                        kG0v[c] += -0.25*L*T/r
-                        c += 1
-                        kG0r[c] = row+10
-                        kG0c[c] = col+10
-                        kG0v[c] += -0.25*L*(Fc - pi*P*r**2)
-                        c += 1
-                        kG0r[c] = row+11
-                        kG0c[c] = col+11
-                        kG0v[c] += -0.25*L*(Fc - pi*P*r**2)
-                        c += 1
-                        kG0r[c] = row+12
-                        kG0c[c] = col+8
-                        kG0v[c] += -0.25*L*T/r
-                        c += 1
-                        kG0r[c] = row+12
-                        kG0c[c] = col+12
-                        kG0v[c] += 0.5*pi*L*P*r**2
-                        c += 1
-                        kG0r[c] = row+13
-                        kG0c[c] = col+9
-                        kG0v[c] += -0.25*L*T/r
-                        c += 1
-                        kG0r[c] = row+13
-                        kG0c[c] = col+13
-                        kG0v[c] += 0.5*pi*L*P*r**2
+                        kG0r[c] = row+7
+                        kG0c[c] = col+7
+                        kG0v[c] += 0.25*pi*(2*L**2*P*j2**2 + pi*i2**2*(-Fc + pi*P*r**2))/L
 
                     elif k2!=i2 and l2==j2:
                         # kG0_22 cond_2
                         c += 1
-                        kG0r[c] = row+8
-                        kG0c[c] = col+10
-                        kG0v[c] += L*i2*((-1)**(i2 + k2) - 1)*(Fc - pi*P*r**2)/(pi*(2.0*i2**2 - 2.0*k2**2))
+                        kG0r[c] = row+6
+                        kG0c[c] = col+7
+                        kG0v[c] += T*i2*j2*k2*((-1)**(i2 + k2) - 1)/(r**2*(i2**2 - k2**2))
                         c += 1
-                        kG0r[c] = row+9
-                        kG0c[c] = col+11
-                        kG0v[c] += L*i2*((-1)**(i2 + k2) - 1)*(Fc - pi*P*r**2)/(pi*(2.0*i2**2 - 2.0*k2**2))
-                        c += 1
-                        kG0r[c] = row+10
-                        kG0c[c] = col+8
-                        kG0v[c] += L*k2*((-1)**(i2 + k2) - 1)*(Fc - pi*P*r**2)/(pi*(-2.0*i2**2 + 2.0*k2**2))
-                        c += 1
-                        kG0r[c] = row+10
-                        kG0c[c] = col+12
-                        kG0v[c] += (-(-1)**(i2 + k2)*L*T*k2 + L*T*k2)/(2*pi*i2**2*r - 2*pi*k2**2*r)
-                        c += 1
-                        kG0r[c] = row+11
-                        kG0c[c] = col+9
-                        kG0v[c] += L*k2*((-1)**(i2 + k2) - 1)*(Fc - pi*P*r**2)/(pi*(-2.0*i2**2 + 2.0*k2**2))
-                        c += 1
-                        kG0r[c] = row+11
-                        kG0c[c] = col+13
-                        kG0v[c] += (-(-1)**(i2 + k2)*L*T*k2 + L*T*k2)/(2*pi*i2**2*r - 2*pi*k2**2*r)
-                        c += 1
-                        kG0r[c] = row+12
-                        kG0c[c] = col+10
-                        kG0v[c] += L*T*i2*((-1)**(i2 + k2) - 1)/(pi*r*(2.0*i2**2 - 2.0*k2**2))
-                        c += 1
-                        kG0r[c] = row+13
-                        kG0c[c] = col+11
-                        kG0v[c] += L*T*i2*((-1)**(i2 + k2) - 1)/(pi*r*(2.0*i2**2 - 2.0*k2**2))
+                        kG0r[c] = row+7
+                        kG0c[c] = col+6
+                        kG0v[c] += -T*i2*j2*k2*((-1)**(i2 + k2) - 1)/(r**2*(i2**2 - k2**2))
 
 
     size = num0 + num1*m1 + num2*m2*n2

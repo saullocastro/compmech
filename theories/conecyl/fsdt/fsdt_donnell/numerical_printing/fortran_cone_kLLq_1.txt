@@ -1,27 +1,15 @@
 kLLq_1
-q0004 = phix*sink1x
-q0005 = cosk1x*phix
-q0106 = phit*sink1x
-q0204 = phit*sink1x
-q0205 = cosk1x*phit
-q0206 = phix*sink1x
+q0003 = pi*cosk1x*k1*wx/L
+q0203 = pi*cosk1x*k1*wt/(L*r)
 
 # create buffer
 kLLq_1
-kLLq_1_q0004[pos] = q0004
-kLLq_1_q0005[pos] = q0005
-kLLq_1_q0106[pos] = q0106
-kLLq_1_q0204[pos] = q0204
-kLLq_1_q0205[pos] = q0205
-kLLq_1_q0206[pos] = q0206
+kLLq_1_q0003[pos] = q0003
+kLLq_1_q0203[pos] = q0203
 
 # access buffer
-q0004 = kLLq_1_q0004[pos]
-q0005 = kLLq_1_q0005[pos]
-q0106 = kLLq_1_q0106[pos]
-q0204 = kLLq_1_q0204[pos]
-q0205 = kLLq_1_q0205[pos]
-q0206 = kLLq_1_q0206[pos]
+q0003 = kLLq_1_q0003[pos]
+q0203 = kLLq_1_q0203[pos]
 
 subs
 
