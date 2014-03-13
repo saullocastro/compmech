@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Semi-analytical models for conical and cylindrical shells (conecyl) &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../_static/SymPy-Favicon.ico"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Theory related to the implementations" href="../index.html" />
+    <link rel="next" title="Developing the code for the conecyl module" href="dev_of_conecyl.html" />
+    <link rel="prev" title="Theory related to the implementations" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dev_of_conecyl.html" title="Developing the code for the conecyl module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Theory related to the implementations"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Theory related to the implementations</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="semi-analytical-models-for-conical-and-cylindrical-shells-conecyl">
+<span id="theory-conecyl"></span><h1>Semi-analytical models for conical and cylindrical shells (conecyl)<a class="headerlink" href="#semi-analytical-models-for-conical-and-cylindrical-shells-conecyl" title="Permalink to this headline">¶</a></h1>
+<p>A semi-analytical approach for the linear and non-linear buckling analysis of
+imperfect unstiffened laminated composite cylinders and cones under axial,
+torsion and pressure loads.</p>
+<p>The contained in this module were initially developed in the context
+of the European Project DESICOS (<a class="reference external" href="http://www.desicos.eu">http://www.desicos.eu</a>).</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev_of_conecyl.html">Developing the code for the conecyl module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#history-about-the-software-used-to-derive-the-equations">History about the software used to derive the equations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#current-implementations">Current implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#some-definitions">Some definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#integration-of-the-linear-matrices">Integration of the linear matrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#integration-of-the-non-linear-matrices">Integration of the non-linear matrices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#strain-equations">Strain equations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="esl_theories.html">Equivalent Single Layer (ESL) Theories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="esl_theories.html#clpt-classical-laminated-plate-theory">CLPT - Classical Laminated Plate Theory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="esl_theories.html#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="esl_theories.html#implementations">Implementations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#clpt-donnell">clpt_donnell</a></li>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#clpt-donnell2">clpt_donnell2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#clpt-sanders">clpt_sanders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#clpt-sanders2">clpt_sanders2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="esl_theories.html#fsdt-first-order-shear-deformation-theory">FSDT - First-order Shear Deformation Theory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="esl_theories.html#id5">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="esl_theories.html#id6">Implementations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#fsdt-donnell">fsdt_donnell</a></li>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#fsdt-donnell2">fsdt_donnell2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#fsdt-donnell3">fsdt_donnell3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#fsdt-donnell4">fsdt_donnell4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#fsdt-donnell5">fsdt_donnell5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="esl_theories.html#fsdt-donnell6">fsdt_donnell6</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/sympylogo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Theory related to the implementations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dev_of_conecyl.html"
+                        title="next chapter">Developing the code for the conecyl module</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/theory/conecyl/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dev_of_conecyl.html" title="Developing the code for the conecyl module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Theory related to the implementations"
+             >previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 CompMech Development Team.
+      Last updated on Mar 13, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

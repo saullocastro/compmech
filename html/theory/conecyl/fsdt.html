@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FSDT - First-order Shear Deformation Theory &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../_static/SymPy-Favicon.ico"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fsdt-first-order-shear-deformation-theory">
+<span id="theory-conecyl-fsdt"></span><h1>FSDT - First-order Shear Deformation Theory<a class="headerlink" href="#fsdt-first-order-shear-deformation-theory" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Many approximation functions were tested along the development of the
+cylindrical and conical equations using the FSDT. Recalling that for the
+FSDT the displacement field components are:</p>
+<div class="math">
+\[u, v, w, \phi_x, \phi_t\]</div>
+<p>and that the approximations can be separated as:</p>
+<div class="math">
+\[\begin{split}u = u_0 + u_1 + u_2\\\end{split}\]\[\vdots\]\[{{\phi}_\theta} = {{\phi}_\theta}_0 + {{\phi}_\theta}_1 + {{\phi}_\theta}_2\]</div>
+<p>where <span class="math">\(u_0\)</span> contains the approximation functions corresponding to the
+prescribed degrees of freedom, <span class="math">\(u_1\)</span> contains the functions independent
+of <span class="math">\(\theta\)</span> and <span class="math">\(u_2\)</span> the functions that depend on both <span class="math">\(x\)</span>
+and <span class="math">\(\theta\)</span>.</p>
+<p>The aim is to have a model capable to simulate non-rigid supports, and where
+the displacement components <span class="math">\(u, \phi_x\)</span> can habe a non-costant value
+along the edges.</p>
+<p>It is of special importance to allow <span class="math">\(\phi_x\)</span> to be between zero
+(clamped) and another value (up to simply supported),
+by using elastic stiffnesses for the corresponding degrees of freedom.</p>
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<p>Below it follows are listed below (same name as the <tt class="docutils literal"><span class="pre">linear_kinematics</span></tt> parameter of the <span class="math">\(ConeCyl\)</span> object):</p>
+<div class="section" id="fsdt-donnell">
+<span id="id1"></span><h3>fsdt_donnell<a class="headerlink" href="#fsdt-donnell" title="Permalink to this headline">¶</a></h3>
+<p>The approximation functions are:</p>
+<div class="math">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}_a^{u} \sin{{b_x}_1}
+                            +{c_{i_1}}_b^{u} \cos{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_d^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+            \right)
+\\
+\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x}_a\sin{{b_x}_1}
+                                        +{c_{i_1}}^{\phi_x}_b\cos{{b_x}_1}
+    + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
+        +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_d^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+    \right)
+\\
+\phi_{\theta} = {\phi_{\theta}}_0 +
+            \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_{\theta}}_a\sin{{b_x}_1}
+                              +{c_{i_1}}^{\phi_{\theta}}_b\cos{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+     {c_{i_2 j_2}}_a^{\phi_{\theta}} \sin{{b_x}_2} \sin{j_2 \theta}
+    +{c_{i_2 j_2}}_b^{\phi_{\theta}} \sin{{b_x}_2} \cos{j_2 \theta}
+    +{c_{i_2 j_2}}_c^{\phi_{\theta}} \cos{{b_x}_2} \sin{j_2 \theta}
+    +{c_{i_2 j_2}}_d^{\phi_{\theta}} \cos{{b_x}_2} \cos{j_2 \theta}
+        \right)\end{split}\]</div>
+<p>with:</p>
+<div class="math">
+\[\begin{split}{b_x}_1 = i_1 \pi \frac x L \\
+{b_x}_2 = i_2 \pi \frac x L\end{split}\]</div>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\checkmark\)</span> linear static</p>
+<p><span class="math">\(\checkmark\)</span> succcessfuly simulated the linear static loads</p>
+<p><span class="math">\(\checkmark\)</span> the flexible boundary conditions were successfully
+simulated</p>
+<p><span class="math">\(\times\)</span> rigid body translations in <span class="math">\(u\)</span></p>
+<p><span class="math">\(\times\)</span> did not work for linear buckling</p>
+<p><span class="math">\(\times\)</span> did not work for non-linear analysis</p>
+</div></blockquote>
+</div>
+<div class="section" id="fsdt-donnell2">
+<span id="id2"></span><h3>fsdt_donnell2<a class="headerlink" href="#fsdt-donnell2" title="Permalink to this headline">¶</a></h3>
+<p>With the aim to remove the rigid body translation found in <a class="reference internal" href="#fsdt-donnell">fsdt_donnell</a>,
+only the function for <span class="math">\(u\)</span>  has been changed:</p>
+<div class="math">
+\[u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_d^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)\]</div>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\checkmark\)</span> rigid body translation removed</p>
+<p><span class="math">\(\times\)</span> did not work for linear buckling</p>
+<p><span class="math">\(\times\)</span> did not work for non-linear analysis</p>
+</div></blockquote>
+</div>
+<div class="section" id="fsdt-donnell3">
+<span id="id3"></span><h3>fsdt_donnell3<a class="headerlink" href="#fsdt-donnell3" title="Permalink to this headline">¶</a></h3>
+<p>Tried to remove some terms of <a class="reference internal" href="#fsdt-donnell2">fsdt_donnell2</a> in order to make the linear
+buckling analysis work. Only the <span class="math">\(cos\)</span> function of
+<span class="math">\({\phi_x}_1\)</span> has been removed:</p>
+<div class="math">
+\[\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1}
+    + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
+        +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_d^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+    \right)\]</div>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\times\)</span> did not work for linear buckling</p>
+<p><span class="math">\(\times\)</span> did not work for non-linear analysis</p>
+</div></blockquote>
+</div>
+<div class="section" id="fsdt-donnell4">
+<span id="id4"></span><h3>fsdt_donnell4<a class="headerlink" href="#fsdt-donnell4" title="Permalink to this headline">¶</a></h3>
+<p>Tried to remove some terms of <a class="reference internal" href="#fsdt-donnell3">fsdt_donnell3</a>. The <span class="math">\(cos\)</span> functions
+of <span class="math">\(u_2\)</span> was removed, the <span class="math">\(cos\)</span> function of <span class="math">\({\phi_x}_1\)</span> was
+put back:</p>
+<div class="math">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+                          {c_{i_1}}_a^{\phi_x} \sin{{b_x}_1}
+                         +{c_{i_1}}_b^{\phi_x} \sin{{b_x}_1}
+    + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
+        +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_d^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+    \right)\end{split}\]</div>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\times\)</span> removing the <span class="math">\(cos\)</span> for <span class="math">\(u_2\)</span> removed the
+capability to simulate non-rigid boundary conditions in <span class="math">\(u\)</span></p>
+<p><span class="math">\(\times\)</span> did not work for linear buckling</p>
+<p><span class="math">\(\times\)</span> did not work for non-linear analysis</p>
+</div></blockquote>
+</div>
+<div class="section" id="fsdt-donnell5">
+<span id="id5"></span><h3>fsdt_donnell5<a class="headerlink" href="#fsdt-donnell5" title="Permalink to this headline">¶</a></h3>
+<p>From the four previous attempts, the <a class="reference internal" href="#fsdt-donnell2">fsdt_donnell2</a> and <a class="reference internal" href="#fsdt-donnell3">fsdt_donnell3</a>
+give the same results and the <a class="reference internal" href="#fsdt-donnell3">fsdt_donnell3</a> is preferred because it has less
+degrees of freedom (the <span class="math">\(cos\)</span> of <span class="math">\({\phi_x}_1\)</span>). By then it was
+learned how the approximations for non-rigid boundary conditions should be and
+the current attempt add more flexibility in <span class="math">\(v,w,\phi_\theta\)</span> using the
+previous know-how. The resulting approximation functions are:</p>
+<div class="math">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_d^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_c^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_d^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_d^{w} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+             {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
+            +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
+            +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+            +{c_{i_2 j_2}}_d^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+          \right)
+\\
+{\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+                             {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+     {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
+    +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+    +{c_{i_2 j_2}}_c^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
+    +{c_{i_2 j_2}}_d^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
+          \right)\end{split}\]</div>
+</div>
+<div class="section" id="fsdt-donnell6">
+<span id="id6"></span><h3>fsdt_donnell6<a class="headerlink" href="#fsdt-donnell6" title="Permalink to this headline">¶</a></h3>
+<p>With an attempt to make the linear buckling analysis to work for FSDT, this
+uses very simple approximation functions, design to produce results for
+a simply supported cone or cylinder, analogous to the CLPT implementation:</p>
+<div class="math">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+             {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+            +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+          \right)
+\\
+{\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+                             {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+     {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
+    +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+          \right)\end{split}\]</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/sympylogo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FSDT - First-order Shear Deformation Theory</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#implementations">Implementations</a><ul>
+<li><a class="reference internal" href="#fsdt-donnell">fsdt_donnell</a></li>
+<li><a class="reference internal" href="#fsdt-donnell2">fsdt_donnell2</a></li>
+<li><a class="reference internal" href="#fsdt-donnell3">fsdt_donnell3</a></li>
+<li><a class="reference internal" href="#fsdt-donnell4">fsdt_donnell4</a></li>
+<li><a class="reference internal" href="#fsdt-donnell5">fsdt_donnell5</a></li>
+<li><a class="reference internal" href="#fsdt-donnell6">fsdt_donnell6</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/theory/conecyl/fsdt.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 CompMech Development Team.
+      Last updated on Mar 13, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
