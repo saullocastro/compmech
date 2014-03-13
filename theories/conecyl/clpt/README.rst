@@ -86,19 +86,40 @@ to the shell rotation at the edges.
 ----------------
 
 Elastic restrained edges with the Donnell's equations. The `shape functions
-<shape_functions_>`_ are showed above and the elastic restraint is imposed
+<shape_functions_>`_ are showed above and the elastic restraints are imposed
 adding to the strain energy rotational springs at the bottom and top edges.
-The following matrix operation is performed to the the linear stiffness
-matrix :math:`[K_0]`:
+
+Basically the following terms should be added to the strain energy:
+
+.. math::
+
+    U_{springs} = \int_\theta r_1 \left(
+                      K_Bot^u u(x=L, \theta)^2 
+                    + K_Bot^v v(x=L, \theta)^2
+                    + K_Bot^w w(x=L, \theta)^2
+                    + K_Bot^{\phi_x} {\phi_x}(x=L, \theta)^2
+                    + K_Bot^{\phi_\theta} {\phi_\theta}(x=L, \theta)^2
+                  \right)
+                  \\
+                + \int_\theta r_2 \left(
+                      K_Top^u u(x=0, \theta)^2 
+                    + K_Top^v v(x=0, \theta)^2
+                    + K_Top^w w(x=0, \theta)^2
+                    + K_Top^{\phi_x} {\phi_x}(x=0, \theta)^2
+                    + K_Top^{\phi_\theta} {\phi_\theta}(x=0, \theta)^2
+                  \right)
+
+Writting in matrix form the following operation is performed to the 
+linear stiffness matrix :math:`[K_0]`:
 
 .. math::
 
     [K_0]_{new} = [K_0] + [K_0]_{edges}
 
-    [K_0]_{edges} = \iint_{x\theta} { \left(
-                        _1 [g_{new}]_{x=L}^T [K]_{Bot} [g_{new}]_{x=L}^.
+    [K_0]_{edges} = \int_{\theta} { \left(
+                        r_1 [g_{new}]_{x=L}^T [K]_{Bot} [g_{new}]_{x=L}^.
                       + r_2 [g_{new}]_{x=0}^T [K]_{Top} [g_{new}]_{x=0}^.
-                         \right) d\theta dx
+                         \right) d\theta
                         }
 
 
