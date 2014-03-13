@@ -38,9 +38,8 @@ by using elastic stiffnesses for the corresponding degrees of freedom.
  
 .. _fsdt_donnell: 
 
-++++++++++++
 fsdt_donnell
-++++++++++++
+------------
 
 The approximation functions are:
 
