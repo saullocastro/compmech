@@ -1,8 +1,6 @@
 conecyl
 =======
 
-.. section-numbering::
-
 .. contents:: Topics:
 
 Current implementations
