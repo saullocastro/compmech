@@ -2,7 +2,7 @@
 conecyl
 =======
 
-.. sectnum::
+.. section-numbering::
 
 .. contents:: Topics:
 
