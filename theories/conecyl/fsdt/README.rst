@@ -1,7 +1,7 @@
-.. section-numbering::
-
 FSDT - First-order Shear Deformation Theory
 ===========================================
+
+.. section-numbering::
 
 Many approximation functions were tested along the development of the
 cylindrical and conical equations using the FSDT. Recalling that for the 
