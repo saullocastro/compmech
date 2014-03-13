@@ -1,0 +1,265 @@
+List(List((-2*i2*Pi*(A11*i2**2*Pi**2*r**2 + 
+         L**2*(A66*j2**2 + A22*sina**2))*(xa - xb) + 
+      2*L*Sin((i2*Pi*(xa - xb))/L)*
+       ((-(A11*i2**2*Pi**2*r**2) + L**2*(A66*j2**2 + A22*sina**2))*
+          Cos((i2*Pi*(xa + xb))/L) - 
+         2*A12*i2*L*Pi*r*sina*Sin((i2*Pi*(xa + xb))/L)))/(4.*i2*L**2*r),0,
+   (Pi*((i2*Pi*r**2*(B16 + A16*r)*
+           (2*i2*Pi*(-xa + xb) - L*Sin((2*i2*Pi*xa)/L) + 
+             L*Sin((2*i2*Pi*xb)/L)))/2. + 
+        L**2*(((B26 + A26*r)*(j2 - sina)*(j2 + sina)*
+              (i2*Pi*(-xa + xb) + 
+                L*Cos((i2*Pi*(xa + xb))/L)*Sin((i2*Pi*(xa - xb))/L)))/
+            (i2*Pi) + r*(B16 - B26 + (A16 - A26)*r)*sina*
+            Sin((i2*Pi*(xa - xb))/L)*Sin((i2*Pi*(xa + xb))/L))))/
+    (2.*L**2*r**2),-(j2*(i2*Pi*r*(B12 - B66 + A12*r - A66*r)*
+          Cos((2*i2*Pi*xa)/L) + 
+         i2*Pi*r*(-B12 + B66 - A12*r + A66*r)*Cos((2*i2*Pi*xb)/L) - 
+         (B22 + B66 + (A22 + A66)*r)*sina*
+          (2*i2*Pi*(xa - xb) + 
+            L*(-Sin((2*i2*Pi*xa)/L) + Sin((2*i2*Pi*xb)/L)))))/(4.*i2*r**2),
+   (-2*i2*L**2*Pi*((B22 + B66)*j2**2 + A22*cosa*r)*sina*(xa - xb) + 
+      2*Sin((i2*Pi*(xa - xb))/L)*
+       (L*((B22 + B66)*j2**2*L**2 + A22*cosa*L**2*r + 
+            2*B12*i2**2*Pi**2*r**2)*sina*Cos((i2*Pi*(xa + xb))/L) - 
+         i2*Pi*r*(B12*j2**2*L**2 - 2*B66*j2**2*L**2 + A12*cosa*L**2*r + 
+            B11*i2**2*Pi**2*r**2 - B22*L**2*sina**2)*
+          Sin((i2*Pi*(xa + xb))/L)))/(4.*i2*L**2*r**2),
+   (j2*(2*i2*Pi*(r*(A26*cosa*L**2 + 3*B16*i2**2*Pi**2*r) + 
+           B26*L**2*(j2 - sina)*(j2 + sina))*(-xa + xb) + 
+        2*L*Sin((i2*Pi*(xa - xb))/L)*
+         ((r*(A26*cosa*L**2 - B16*i2**2*Pi**2*r) + 
+              B26*L**2*(j2 - sina)*(j2 + sina))*Cos((i2*Pi*(xa + xb))/L) + 
+           (B16 - B26)*i2*L*Pi*r*sina*Sin((i2*Pi*(xa + xb))/L))))/
+    (4.*i2*L**2*r**2)),List(0,(-2*i2*Pi*
+       (A11*i2**2*Pi**2*r**2 + L**2*(A66*j2**2 + A22*sina**2))*(xa - xb) + 
+      2*L*Sin((i2*Pi*(xa - xb))/L)*
+       ((-(A11*i2**2*Pi**2*r**2) + L**2*(A66*j2**2 + A22*sina**2))*
+          Cos((i2*Pi*(xa + xb))/L) - 
+         2*A12*i2*L*Pi*r*sina*Sin((i2*Pi*(xa + xb))/L)))/(4.*i2*L**2*r),
+   (j2*(i2*Pi*r*(B12 - B66 + A12*r - A66*r)*Cos((2*i2*Pi*xa)/L) + 
+        i2*Pi*r*(-B12 + B66 - A12*r + A66*r)*Cos((2*i2*Pi*xb)/L) - 
+        (B22 + B66 + (A22 + A66)*r)*sina*
+         (2*i2*Pi*(xa - xb) + L*
+            (-Sin((2*i2*Pi*xa)/L) + Sin((2*i2*Pi*xb)/L)))))/(4.*i2*r**2),
+   (Pi*((i2*Pi*r**2*(B16 + A16*r)*
+           (2*i2*Pi*(-xa + xb) - L*Sin((2*i2*Pi*xa)/L) + 
+             L*Sin((2*i2*Pi*xb)/L)))/2. + 
+        L**2*(((B26 + A26*r)*(j2 - sina)*(j2 + sina)*
+              (i2*Pi*(-xa + xb) + 
+                L*Cos((i2*Pi*(xa + xb))/L)*Sin((i2*Pi*(xa - xb))/L)))/
+            (i2*Pi) + r*(B16 - B26 + (A16 - A26)*r)*sina*
+            Sin((i2*Pi*(xa - xb))/L)*Sin((i2*Pi*(xa + xb))/L))))/
+    (2.*L**2*r**2),(j2*(2*i2*Pi*
+         (r*(A26*cosa*L**2 + 3*B16*i2**2*Pi**2*r) + 
+           B26*L**2*(j2 - sina)*(j2 + sina))*(xa - xb) + 
+        2*L*Sin((i2*Pi*(xa - xb))/L)*
+         ((r*(-(A26*cosa*L**2) + B16*i2**2*Pi**2*r) + 
+              B26*L**2*(-j2**2 + sina**2))*Cos((i2*Pi*(xa + xb))/L) + 
+           (-B16 + B26)*i2*L*Pi*r*sina*Sin((i2*Pi*(xa + xb))/L))))/
+    (4.*i2*L**2*r**2),(-2*i2*L**2*Pi*((B22 + B66)*j2**2 + A22*cosa*r)*sina*
+       (xa - xb) + 2*Sin((i2*Pi*(xa - xb))/L)*
+       (L*((B22 + B66)*j2**2*L**2 + A22*cosa*L**2*r + 
+            2*B12*i2**2*Pi**2*r**2)*sina*Cos((i2*Pi*(xa + xb))/L) - 
+         i2*Pi*r*(B12*j2**2*L**2 - 2*B66*j2**2*L**2 + A12*cosa*L**2*r + 
+            B11*i2**2*Pi**2*r**2 - B22*L**2*sina**2)*
+          Sin((i2*Pi*(xa + xb))/L)))/(4.*i2*L**2*r**2)),
+  List((Pi*((i2*Pi*r**2*(B16 + A16*r)*
+           (2*i2*Pi*(-xa + xb) - L*Sin((2*i2*Pi*xa)/L) + 
+             L*Sin((2*i2*Pi*xb)/L)))/2. + 
+        L**2*(((B26 + A26*r)*(j2 - sina)*(j2 + sina)*
+              (i2*Pi*(-xa + xb) + 
+                L*Cos((i2*Pi*(xa + xb))/L)*Sin((i2*Pi*(xa - xb))/L)))/
+            (i2*Pi) + r*(B16 - B26 + (A16 - A26)*r)*sina*
+            Sin((i2*Pi*(xa - xb))/L)*Sin((i2*Pi*(xa + xb))/L))))/
+    (2.*L**2*r**2),(j2*(i2*Pi*r*(B12 - B66 + A12*r - A66*r)*
+         Cos((2*i2*Pi*xa)/L) + 
+        i2*Pi*r*(-B12 + B66 - A12*r + A66*r)*Cos((2*i2*Pi*xb)/L) - 
+        (B22 + B66 + (A22 + A66)*r)*sina*
+         (2*i2*Pi*(xa - xb) + L*
+            (-Sin((2*i2*Pi*xa)/L) + Sin((2*i2*Pi*xb)/L)))))/(4.*i2*r**2),
+   (Pi*((i2*Pi*r**2*(D66 + r*(2*B66 + A66*r))*
+           (2*i2*Pi*(-xa + xb) - L*Sin((2*i2*Pi*xa)/L) + 
+             L*Sin((2*i2*Pi*xb)/L)))/4. + 
+        (L**2*(-2*i2*Pi*r*(D66 + r*(2*B66 + A66*r))*sina*
+              Cos((2*i2*Pi*xa)/L) + 
+             2*i2*Pi*r*(D66 + 2*B66*r + A66*r**2)*sina*
+              Cos((2*i2*Pi*xb)/L) - 
+             (j2**2*(D22 + 2*B22*r + A22*r**2) + 
+                (D66 + 2*B66*r + A66*r**2)*sina**2)*
+              (2*i2*Pi*(xa - xb) + 
+                L*(-Sin((2*i2*Pi*xa)/L) + Sin((2*i2*Pi*xb)/L)))))/
+         (4.*i2*Pi)))/(L**2*r**3),0,
+   (2*i2*Pi*(B26*cosa*L**2 + (A26*cosa*L**2 + (D16 + D26)*i2**2*Pi**2)*
+          r + (B16 + B26)*i2**2*Pi**2*r**2)*sina*(xa - xb) + 
+      2*Sin((i2*Pi*(xa - xb))/L)*
+       (-(L*(B26*cosa*L**2 + (A26*cosa*L**2 + (D16 - D26)*i2**2*Pi**2)*
+               r + (B16 - B26)*i2**2*Pi**2*r**2)*sina*
+            Cos((i2*Pi*(xa + xb))/L)) - 
+         i2*Pi*(D26*L**2*(-j2**2 + sina**2) + 
+            r*(r*(A26*cosa*L**2 + i2**2*Pi**2*(D16 + B16*r)) + 
+               B26*L**2*(cosa - j2**2 + sina**2)))*Sin((i2*Pi*(xa + xb))/L)\
+))/(4.*i2*L**2*r**2),(j2*Pi*(-((D22*j2**2*L**2 + 
+             B22*(cosa + j2**2)*L**2*r + 
+             r**2*(A22*cosa*L**2 + 
+                i2**2*Pi**2*(D12 + 2*D66 + B12*r + 2*B66*r)) + 
+             L**2*(D66 + B66*r)*sina**2)*(xa - xb)) + 
+        (L*Sin((i2*Pi*(xa - xb))/L)*
+           ((D22*j2**2*L**2 + 
+                r*(B22*(cosa + j2**2)*L**2 + 
+                   r*(A22*cosa*L**2 + 
+                      i2**2*Pi**2*(D12 - 2*D66 + B12*r - 2*B66*r))) + 
+                L**2*(D66 + B66*r)*sina**2)*Cos((i2*Pi*(xa + xb))/L) + 
+             i2*L*Pi*r*(D22 + 3*D66 + B22*r + 3*B66*r)*sina*
+              Sin((i2*Pi*(xa + xb))/L)))/(i2*Pi)))/(2.*L**2*r**3)),
+  List(-(j2*(i2*Pi*r*(B12 - B66 + A12*r - A66*r)*Cos((2*i2*Pi*xa)/L) + 
+         i2*Pi*r*(-B12 + B66 - A12*r + A66*r)*Cos((2*i2*Pi*xb)/L) - 
+         (B22 + B66 + (A22 + A66)*r)*sina*
+          (2*i2*Pi*(xa - xb) + 
+            L*(-Sin((2*i2*Pi*xa)/L) + Sin((2*i2*Pi*xb)/L)))))/(4.*i2*r**2),
+   (Pi*((i2*Pi*r**2*(B16 + A16*r)*
+           (2*i2*Pi*(-xa + xb) - L*Sin((2*i2*Pi*xa)/L) + 
+             L*Sin((2*i2*Pi*xb)/L)))/2. + 
+        L**2*(((B26 + A26*r)*(j2 - sina)*(j2 + sina)*
+              (i2*Pi*(-xa + xb) + 
+                L*Cos((i2*Pi*(xa + xb))/L)*Sin((i2*Pi*(xa - xb))/L)))/
+            (i2*Pi) + r*(B16 - B26 + (A16 - A26)*r)*sina*
+            Sin((i2*Pi*(xa - xb))/L)*Sin((i2*Pi*(xa + xb))/L))))/
+    (2.*L**2*r**2),0,(Pi*((i2*Pi*r**2*(D66 + r*(2*B66 + A66*r))*
+           (2*i2*Pi*(-xa + xb) - L*Sin((2*i2*Pi*xa)/L) + 
+             L*Sin((2*i2*Pi*xb)/L)))/4. + 
+        (L**2*(-2*i2*Pi*r*(D66 + r*(2*B66 + A66*r))*sina*
+              Cos((2*i2*Pi*xa)/L) + 
+             2*i2*Pi*r*(D66 + 2*B66*r + A66*r**2)*sina*
+              Cos((2*i2*Pi*xb)/L) - 
+             (j2**2*(D22 + 2*B22*r + A22*r**2) + 
+                (D66 + 2*B66*r + A66*r**2)*sina**2)*
+              (2*i2*Pi*(xa - xb) + 
+                L*(-Sin((2*i2*Pi*xa)/L) + Sin((2*i2*Pi*xb)/L)))))/
+         (4.*i2*Pi)))/(L**2*r**3),
+   (j2*(2*i2*Pi*(D22*j2**2*L**2 + B22*(cosa + j2**2)*L**2*r + 
+           r**2*(A22*cosa*L**2 + 
+              i2**2*Pi**2*(D12 + 2*D66 + B12*r + 2*B66*r)) + 
+           L**2*(D66 + B66*r)*sina**2)*(xa - xb) + 
+        2*L*Sin((i2*Pi*(xa - xb))/L)*
+         (-((D22*j2**2*L**2 + 
+                r*(B22*(cosa + j2**2)*L**2 + 
+                   r*(A22*cosa*L**2 + 
+                      i2**2*Pi**2*(D12 - 2*D66 + B12*r - 2*B66*r))) + 
+                L**2*(D66 + B66*r)*sina**2)*Cos((i2*Pi*(xa + xb))/L)) - 
+           i2*L*Pi*r*(D22 + 3*D66 + B22*r + 3*B66*r)*sina*
+            Sin((i2*Pi*(xa + xb))/L))))/(4.*i2*L**2*r**3),
+   (2*i2*Pi*(B26*cosa*L**2 + (A26*cosa*L**2 + (D16 + D26)*i2**2*Pi**2)*
+          r + (B16 + B26)*i2**2*Pi**2*r**2)*sina*(xa - xb) + 
+      2*Sin((i2*Pi*(xa - xb))/L)*
+       (-(L*(B26*cosa*L**2 + (A26*cosa*L**2 + (D16 - D26)*i2**2*Pi**2)*
+               r + (B16 - B26)*i2**2*Pi**2*r**2)*sina*
+            Cos((i2*Pi*(xa + xb))/L)) - 
+         i2*Pi*(D26*L**2*(-j2**2 + sina**2) + 
+            r*(r*(A26*cosa*L**2 + i2**2*Pi**2*(D16 + B16*r)) + 
+               B26*L**2*(cosa - j2**2 + sina**2)))*Sin((i2*Pi*(xa + xb))/L))\
+)/(4.*i2*L**2*r**2)),List((-2*i2*L**2*Pi*((B22 + B66)*j2**2 + A22*cosa*r)*
+       sina*(xa - xb) + 2*Sin((i2*Pi*(xa - xb))/L)*
+       (L*((B22 + B66)*j2**2*L**2 + A22*cosa*L**2*r + 
+            2*B12*i2**2*Pi**2*r**2)*sina*Cos((i2*Pi*(xa + xb))/L) - 
+         i2*Pi*r*(B12*j2**2*L**2 - 2*B66*j2**2*L**2 + A12*cosa*L**2*r + 
+            B11*i2**2*Pi**2*r**2 - B22*L**2*sina**2)*
+          Sin((i2*Pi*(xa + xb))/L)))/(4.*i2*L**2*r**2),
+   (j2*(2*i2*Pi*(r*(A26*cosa*L**2 + 3*B16*i2**2*Pi**2*r) + 
+           B26*L**2*(j2 - sina)*(j2 + sina))*(xa - xb) + 
+        2*L*Sin((i2*Pi*(xa - xb))/L)*
+         ((r*(-(A26*cosa*L**2) + B16*i2**2*Pi**2*r) + 
+              B26*L**2*(-j2**2 + sina**2))*Cos((i2*Pi*(xa + xb))/L) + 
+           (-B16 + B26)*i2*L*Pi*r*sina*Sin((i2*Pi*(xa + xb))/L))))/
+    (4.*i2*L**2*r**2),(2*i2*Pi*
+       (B26*cosa*L**2 + (A26*cosa*L**2 + (D16 + D26)*i2**2*Pi**2)*r + 
+         (B16 + B26)*i2**2*Pi**2*r**2)*sina*(xa - xb) + 
+      2*Sin((i2*Pi*(xa - xb))/L)*
+       (-(L*(B26*cosa*L**2 + (A26*cosa*L**2 + (D16 - D26)*i2**2*Pi**2)*
+               r + (B16 - B26)*i2**2*Pi**2*r**2)*sina*
+            Cos((i2*Pi*(xa + xb))/L)) - 
+         i2*Pi*(D26*L**2*(-j2**2 + sina**2) + 
+            r*(r*(A26*cosa*L**2 + i2**2*Pi**2*(D16 + B16*r)) + 
+               B26*L**2*(cosa - j2**2 + sina**2)))*Sin((i2*Pi*(xa + xb))/L)\
+))/(4.*i2*L**2*r**2),-(j2*Pi*(-((D22*j2**2*L**2 + 
+              B22*(cosa + j2**2)*L**2*r + 
+              r**2*(A22*cosa*L**2 + 
+                 i2**2*Pi**2*(D12 + 2*D66 + B12*r + 2*B66*r)) + 
+              L**2*(D66 + B66*r)*sina**2)*(xa - xb)) + 
+         (L*Sin((i2*Pi*(xa - xb))/L)*
+            ((D22*j2**2*L**2 + 
+                 r*(B22*(cosa + j2**2)*L**2 + 
+                    r*(A22*cosa*L**2 + 
+                       i2**2*Pi**2*(D12 - 2*D66 + B12*r - 2*B66*r))) + 
+                 L**2*(D66 + B66*r)*sina**2)*Cos((i2*Pi*(xa + xb))/L) + 
+              i2*L*Pi*r*(D22 + 3*D66 + B22*r + 3*B66*r)*sina*
+               Sin((i2*Pi*(xa + xb))/L)))/(i2*Pi)))/(2.*L**2*r**3),
+   (-2*i2*Pi*(r*(2*B22*cosa*j2**2*L**4 + 
+            r*(A22*cosa**2*L**4 + 
+               i2**2*Pi**2*(2*(D12 + 2*D66)*j2**2*L**2 + 
+                  2*B12*cosa*L**2*r + D11*i2**2*Pi**2*r**2))) + 
+         D66*j2**2*L**4*sina**2 + 
+         D22*(j2**4*L**4 + i2**2*L**2*Pi**2*r**2*sina**2))*(xa - xb) + 
+      2*L*Sin((i2*Pi*(xa - xb))/L)*
+       ((r*(2*B22*cosa*j2**2*L**4 + 
+               r*(A22*cosa**2*L**4 + 
+                  i2**2*Pi**2*
+                   (2*(D12 - 2*D66)*j2**2*L**2 + 2*B12*cosa*L**2*r + 
+                     D11*i2**2*Pi**2*r**2))) + D66*j2**2*L**4*sina**2 + 
+            D22*(j2**4*L**4 - i2**2*L**2*Pi**2*r**2*sina**2))*
+          Cos((i2*Pi*(xa + xb))/L) + 
+         2*i2*L*Pi*r*((D22 + 2*D66)*j2**2*L**2 + B22*cosa*L**2*r + 
+            D12*i2**2*Pi**2*r**2)*sina*Sin((i2*Pi*(xa + xb))/L)))/
+    (4.*i2*L**4*r**3),0),List((j2*
+      (2*i2*Pi*(r*(A26*cosa*L**2 + 3*B16*i2**2*Pi**2*r) + 
+           B26*L**2*(j2 - sina)*(j2 + sina))*(-xa + xb) + 
+        2*L*Sin((i2*Pi*(xa - xb))/L)*
+         ((r*(A26*cosa*L**2 - B16*i2**2*Pi**2*r) + 
+              B26*L**2*(j2 - sina)*(j2 + sina))*Cos((i2*Pi*(xa + xb))/L) + 
+           (B16 - B26)*i2*L*Pi*r*sina*Sin((i2*Pi*(xa + xb))/L))))/
+    (4.*i2*L**2*r**2),(-2*i2*L**2*Pi*((B22 + B66)*j2**2 + A22*cosa*r)*sina*
+       (xa - xb) + 2*Sin((i2*Pi*(xa - xb))/L)*
+       (L*((B22 + B66)*j2**2*L**2 + A22*cosa*L**2*r + 
+            2*B12*i2**2*Pi**2*r**2)*sina*Cos((i2*Pi*(xa + xb))/L) - 
+         i2*Pi*r*(B12*j2**2*L**2 - 2*B66*j2**2*L**2 + A12*cosa*L**2*r + 
+            B11*i2**2*Pi**2*r**2 - B22*L**2*sina**2)*
+          Sin((i2*Pi*(xa + xb))/L)))/(4.*i2*L**2*r**2),
+   (j2*(-2*i2*Pi*(D22*j2**2*L**2 + B22*(cosa + j2**2)*L**2*r + 
+           r**2*(A22*cosa*L**2 + 
+              i2**2*Pi**2*(D12 + 2*D66 + B12*r + 2*B66*r)) + 
+           L**2*(D66 + B66*r)*sina**2)*(xa - xb) + 
+        2*L*Sin((i2*Pi*(xa - xb))/L)*
+         ((D22*j2**2*L**2 + r*
+               (B22*(cosa + j2**2)*L**2 + 
+                 r*(A22*cosa*L**2 + 
+                    i2**2*Pi**2*(D12 - 2*D66 + B12*r - 2*B66*r))) + 
+              L**2*(D66 + B66*r)*sina**2)*Cos((i2*Pi*(xa + xb))/L) + 
+           i2*L*Pi*r*(D22 + 3*D66 + B22*r + 3*B66*r)*sina*
+            Sin((i2*Pi*(xa + xb))/L))))/(4.*i2*L**2*r**3),
+   (2*i2*Pi*(B26*cosa*L**2 + (A26*cosa*L**2 + (D16 + D26)*i2**2*Pi**2)*
+          r + (B16 + B26)*i2**2*Pi**2*r**2)*sina*(xa - xb) + 
+      2*Sin((i2*Pi*(xa - xb))/L)*
+       (-(L*(B26*cosa*L**2 + (A26*cosa*L**2 + (D16 - D26)*i2**2*Pi**2)*
+               r + (B16 - B26)*i2**2*Pi**2*r**2)*sina*
+            Cos((i2*Pi*(xa + xb))/L)) - 
+         i2*Pi*(D26*L**2*(-j2**2 + sina**2) + 
+            r*(r*(A26*cosa*L**2 + i2**2*Pi**2*(D16 + B16*r)) + 
+               B26*L**2*(cosa - j2**2 + sina**2)))*Sin((i2*Pi*(xa + xb))/L))\
+)/(4.*i2*L**2*r**2),0,(-2*i2*Pi*
+       (r*(2*B22*cosa*j2**2*L**4 + 
+            r*(A22*cosa**2*L**4 + 
+               i2**2*Pi**2*(2*(D12 + 2*D66)*j2**2*L**2 + 
+                  2*B12*cosa*L**2*r + D11*i2**2*Pi**2*r**2))) + 
+         D66*j2**2*L**4*sina**2 + 
+         D22*(j2**4*L**4 + i2**2*L**2*Pi**2*r**2*sina**2))*(xa - xb) + 
+      2*L*Sin((i2*Pi*(xa - xb))/L)*
+       ((r*(2*B22*cosa*j2**2*L**4 + 
+               r*(A22*cosa**2*L**4 + 
+                  i2**2*Pi**2*
+                   (2*(D12 - 2*D66)*j2**2*L**2 + 2*B12*cosa*L**2*r + 
+                     D11*i2**2*Pi**2*r**2))) + D66*j2**2*L**4*sina**2 + 
+            D22*(j2**4*L**4 - i2**2*L**2*Pi**2*r**2*sina**2))*
+          Cos((i2*Pi*(xa + xb))/L) + 
+         2*i2*L*Pi*r*((D22 + 2*D66)*j2**2*L**2 + B22*cosa*L**2*r + 
+            D12*i2**2*Pi**2*r**2)*sina*Sin((i2*Pi*(xa + xb))/L)))/
+    (4.*i2*L**4*r**3)))

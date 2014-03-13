@@ -1,0 +1,9 @@
+List(List(0,(sina*T*(Cos((2*i1*Pi*xa)/L) - Cos((2*i1*Pi*xb)/L)))/(4.*r**2),0),
+  List((sina*T*(Cos((2*i1*Pi*xa)/L) - Cos((2*i1*Pi*xb)/L)))/(4.*r**2),
+   (-2*i1*Pi*(2*L**2*P + i1**2*Pi*(-Fc + P*Pi*r**2))*(xa - xb) + 
+      L*(2*L**2*P + i1**2*Pi*(Fc - P*Pi*r**2))*
+       (Sin((2*i1*Pi*xa)/L) - Sin((2*i1*Pi*xb)/L)))/(4.*cosa*i1*L**2),
+   (cosa*T*(Cos((2*i1*Pi*xa)/L) - Cos((2*i1*Pi*xb)/L)))/(4.*r**2)),
+  List(0,(cosa*T*(Cos((2*i1*Pi*xa)/L) - Cos((2*i1*Pi*xb)/L)))/(4.*r**2),
+   (i1*Pi*(Fc - P*Pi*r**2)*(2*i1*Pi*(xa - xb) + L*Sin((2*i1*Pi*xa)/L) - 
+        L*Sin((2*i1*Pi*xb)/L)))/(4.*cosa*L**2)))
