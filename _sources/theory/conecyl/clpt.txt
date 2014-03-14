@@ -13,7 +13,25 @@ For the CLPT the displacement field components are:
 
     u, v, w
 
-and that the approximations can be separated as:
+And approximated as:
+
+.. math::
+
+    u = u_0(x, \theta) + z \phi_x(x, \theta) \\
+    v = v_0(x, \theta) + z \phi_\theta(x, \theta) \\
+    w = w_0(x, \theta) 
+
+where `u_0, v_0, w_0` are the displacements of the shell mid-surface and
+`\phi_x` and `\phi_\theta` the shell rotations along `x` and `\theta`
+following the right-hand rule. For the CLPT the rotations are defined as:  
+
+.. math::
+
+    \phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
+    \phi_t = \frac{\partial w}{\partial \theta} = w_{,\theta} 
+
+For the ``ConeCyl`` implementations the displacement field is approximated
+and the approximated functions can be separated as:
 
 .. math::
 
@@ -21,10 +39,10 @@ and that the approximations can be separated as:
     v = v_0 + v_1 + v_2\\
     w = w_0 + w_1 + w_2\\
 
-where :math:`u_0` contains the approximation functions corresponding to the
-prescribed degrees of freedom, :math:`u_1` contains the functions independent
-of :math:`\theta` and :math:`u_2` the functions that depend on both :math:`x`
-and :math:`\theta`.
+where `u_0` contains the approximation functions corresponding to the
+prescribed degrees of freedom, `u_1` contains the functions independent
+of `\theta` and `u_2` the functions that depend on both `x`
+and `\theta`.
 
 The aim is to have models capable of simulating the displacement field of
 cones and cylinders. The approximation functions are the same
@@ -61,17 +79,8 @@ with:
     {b_x}_1 = i_1 \pi \frac x L \\
     {b_x}_2 = i_2 \pi \frac x L 
 
-Observations:
-
-    :math:`\checkmark` linear static
-
-    :math:`\checkmark` linear buckling
-
-    :math:`\checkmark` non-linear analysis
-
-
-Implementations
-===============
+Variety of models
+=================
 
 Below it follows a more detailed description of each of the implementations:
 
@@ -94,13 +103,23 @@ Simply supported edges with the Donnell's equations. The :ref:`approximation
 functions <clpt_approx_functions>` are showed above and no elastic 
 restraints are imposed to the shell rotation at the edges.
 
+Observations:
+
+`\checkmark` linear static implemented
+
+`\checkmark` linear buckling implemented
+
+`\checkmark` non-linear analysis implemented
+
+
 
 .. _clpt_donnell2:
 
 clpt_donnell2
 -------------
 
-Elastic restrained edges with the Donnell's equations. The :ref:`approximation
+Elastic restrained edges in `w_{,x}` and `w_{,\theta}`
+with the Donnell's equations. The :ref:`approximation
 functions <clpt_approx_functions>` are showed above and the
 elastic restraints are imposed
 adding to the strain energy rotational springs at the bottom and top edges.
@@ -125,8 +144,16 @@ Basically the following terms should be added to the strain energy:
                     + K_Top^{\phi_\theta} {\phi_\theta}(x=0, \theta)^2
                   \right)
 
-Writting in matrix form the following operation is performed to the 
-linear stiffness matrix :math:`[K_0]`:
+Note that the stiffnesses: `K_Top^u`, `K_Top^v` and `K_Top^w` are not used in
+clpt_donnell2_, but since they are required in other implementations, it is
+convinient already at this point to present the general form using 
+all the elastic terms.
+
+The equation for `U_{springs}` can be written in matrix form, and it will
+result in an additional term to the linear stiffness matrix `[K_0]`. The new
+stiffness matris can be written as:
+
+.. _elastic_constraints:
 
 .. math::
 
@@ -137,7 +164,6 @@ linear stiffness matrix :math:`[K_0]`:
                       + r_2 [g_{new}]_{x=0}^T [K]_{Top} [g_{new}]_{x=0}^.
                          \right) d\theta
                         }
-
 
 with :
 
@@ -164,26 +190,73 @@ and:
                     \end{bmatrix}
 
 
-The shape functions :math:`[g_{new}]` contains two extra rows that are built
+and the shape functions `[g_{new}]` contains two extra rows that are built
 from the relations:
 
 .. math::
 
-    \phi_x = - \frac{\partial w}{\partial x}
-    \\
-    \phi_t = \frac{\partial w}{\partial \theta}
+    \phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
+    \phi_t = \frac{\partial w}{\partial \theta} = w_{,\theta}
 
 and therefore:
 
 .. math::
 
-    [g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x}
-    \\
-    [g^{\phi_\theta}] = \frac {\partial [g^w]} {\partial \theta}
-    \\
+    [g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x} \\
+    [g^{\phi_\theta}] = \frac {\partial [g^w]} {\partial \theta} \\
     [g_{new}]^T = \left[ [g^u], [g^v], [g^w],
                           [g^{\phi_x}], [g^{\phi_\theta}] \right]
 
+
+Observations:
+
+`\checkmark` linear static implemented
+
+`\checkmark` linear buckling implemented
+
+`\times` non-linear analysis not implemented
+
+.. _clpt_donnell3:
+
+clpt_donnell3
+-------------
+
+Elastic restrained edges in `u`, `w_{,x}` and `w_{,\theta}`
+with the Donnell's equations. The approximation function for `u_2` is
+relaxed at the edges by using a `cosine` function istead of a `sine` and the
+resulting functions are obtained:
+
+.. math::
+
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                \right)
+    \\
+
+The linear stiffness matrix `[K_0]` is changed using the same 
+:ref:`elastic contraints used for the clpt_donnell2 <elastic_constraints>`.
+
+Observations:
+
+`\checkmark` linear static implemented
+
+`\checkmark` linear buckling implemented
+
+`\times` non-linear analysis not implemented
 
 .. _clpt_sanders:
 
@@ -192,11 +265,27 @@ clpt_sanders
 
 Simply supported edges with the Sanders's equations. The :ref:`approximation
 functions <clpt_approx_functions>` are showed above and no elastic
-restraints are imposed.  Analogous to the clpt_donnell_.
+restraints are imposed.  Analogous to the :ref:`clpt_donnell`.
+
+Observations:
+
+`\checkmark` linear static implemented
+
+`\checkmark` linear buckling implemented
+
+`\checkmark` non-linear analysis implemented
 
 .. _clpt_sanders2:
 
 clpt_sanders2
 -------------
 
-Analogous to the clpt_donnell2_ using the Sanders non-linear equations.
+Analogous to the :ref:`clpt_donnell2` using the Sanders non-linear equations.
+
+Observations:
+
+`\checkmark` linear static implemented
+
+`\checkmark` linear buckling implemented
+
+`\times` non-linear analysis not implemented

@@ -27,7 +27,10 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" /> 
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
+    <link rel="next" title="FSDT - First-order Shear Deformation Theory" href="fsdt.html" />
+    <link rel="prev" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" /> 
   </head>
   <body>
     <div class="related">
@@ -36,7 +39,16 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="esl_theories.html" title="Equivalent Single Layer (ESL) Theories"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li>
+          <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li>
+          <li><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,7 +64,19 @@
 <p>For the CLPT the displacement field components are:</p>
 <div class="math">
 \[u, v, w\]</div>
-<p>and that the approximations can be separated as:</p>
+<p>And approximated as:</p>
+<div class="math">
+\[\begin{split}u = u_0(x, \theta) + z \phi_x(x, \theta) \\
+v = v_0(x, \theta) + z \phi_\theta(x, \theta) \\
+w = w_0(x, \theta)\end{split}\]</div>
+<p>where <span class="math">\(u_0, v_0, w_0\)</span> are the displacements of the shell mid-surface and
+<span class="math">\(\phi_x\)</span> and <span class="math">\(\phi_\theta\)</span> the shell rotations along <span class="math">\(x\)</span> and <span class="math">\(\theta\)</span>
+following the right-hand rule. For the CLPT the rotations are defined as:</p>
+<div class="math">
+\[\begin{split}\phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
+\phi_t = \frac{\partial w}{\partial \theta} = w_{,\theta}\end{split}\]</div>
+<p>For the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> implementations the displacement field is approximated
+and the approximated functions can be separated as:</p>
 <div class="math">
 \[\begin{split}u = u_0 + u_1 + u_2\\
 v = v_0 + v_1 + v_2\\
@@ -88,15 +112,9 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <div class="math">
 \[\begin{split}{b_x}_1 = i_1 \pi \frac x L \\
 {b_x}_2 = i_2 \pi \frac x L\end{split}\]</div>
-<p>Observations:</p>
-<blockquote>
-<div><p><span class="math">\(\checkmark\)</span> linear static</p>
-<p><span class="math">\(\checkmark\)</span> linear buckling</p>
-<p><span class="math">\(\checkmark\)</span> non-linear analysis</p>
-</div></blockquote>
 </div>
-<div class="section" id="implementations">
-<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="variety-of-models">
+<h2>Variety of models<a class="headerlink" href="#variety-of-models" title="Permalink to this headline">¶</a></h2>
 <p>Below it follows a more detailed description of each of the implementations:</p>
 <ul class="simple">
 <li><a class="reference internal" href="#clpt-donnell">clpt_donnell</a></li>
@@ -108,13 +126,18 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
 <div class="section" id="clpt-donnell">
 <span id="id1"></span><h3>clpt_donnell<a class="headerlink" href="#clpt-donnell" title="Permalink to this headline">¶</a></h3>
-<p>Simply supported edges with the Donnell&#8217;s equations. The <a class="reference internal" href="esl_theories.html#clpt-approx-functions"><em>approximation
+<p>Simply supported edges with the Donnell&#8217;s equations. The <a class="reference internal" href="#clpt-approx-functions"><em>approximation
 functions</em></a> are showed above and no elastic
 restraints are imposed to the shell rotation at the edges.</p>
+<p>Observations:</p>
+<p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math">\(\checkmark\)</span> non-linear analysis implemented</p>
 </div>
 <div class="section" id="clpt-donnell2">
 <span id="id2"></span><h3>clpt_donnell2<a class="headerlink" href="#clpt-donnell2" title="Permalink to this headline">¶</a></h3>
-<p>Elastic restrained edges with the Donnell&#8217;s equations. The <a class="reference internal" href="esl_theories.html#clpt-approx-functions"><em>approximation
+<p>Elastic restrained edges in <span class="math">\(w_{,x}\)</span> and <span class="math">\(w_{,\theta}\)</span>
+with the Donnell&#8217;s equations. The <a class="reference internal" href="#clpt-approx-functions"><em>approximation
 functions</em></a> are showed above and the
 elastic restraints are imposed
 adding to the strain energy rotational springs at the bottom and top edges.</p>
@@ -135,9 +158,14 @@ adding to the strain energy rotational springs at the bottom and top edges.</p>
                 + K_Top^{\phi_x} {\phi_x}(x=0, \theta)^2
                 + K_Top^{\phi_\theta} {\phi_\theta}(x=0, \theta)^2
               \right)\end{split}\]</div>
-<p>Writting in matrix form the following operation is performed to the
-linear stiffness matrix <span class="math">\([K_0]\)</span>:</p>
-<div class="math">
+<p>Note that the stiffnesses: <span class="math">\(K_Top^u\)</span>, <span class="math">\(K_Top^v\)</span> and <span class="math">\(K_Top^w\)</span> are not used in
+<a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a>, but since they are required in other implementations, it is
+convinient already at this point to present the general form using
+all the elastic terms.</p>
+<p>The equation for <span class="math">\(U_{springs}\)</span> can be written in matrix form, and it will
+result in an additional term to the linear stiffness matrix <span class="math">\([K_0]\)</span>. The new
+stiffness matris can be written as:</p>
+<div class="math" id="elastic-constraints">
 \[[K_0]_{new} = [K_0] + [K_0]_{edges}\]\[[K_0]_{edges} = \int_{\theta} { \left(
                     r_1 [g_{new}]_{x=L}^T [K]_{Bot} [g_{new}]_{x=L}^.
                   + r_2 [g_{new}]_{x=0}^T [K]_{Top} [g_{new}]_{x=0}^.
@@ -161,30 +189,71 @@ linear stiffness matrix <span class="math">\([K_0]\)</span>:</p>
             0 &amp;       0 &amp;       0 &amp; K_Top^{\phi_x} &amp;             0 \\
             0 &amp;       0 &amp;       0 &amp;              0 &amp;K_Top^{\phi_\theta}
                 \end{bmatrix}\end{split}\]</div>
-<p>The shape functions <span class="math">\([g_{new}]\)</span> contains two extra rows that are built
+<p>and the shape functions <span class="math">\([g_{new}]\)</span> contains two extra rows that are built
 from the relations:</p>
 <div class="math">
-\[\begin{split}\phi_x = - \frac{\partial w}{\partial x}
-\\
-\phi_t = \frac{\partial w}{\partial \theta}\end{split}\]</div>
+\[\begin{split}\phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
+\phi_t = \frac{\partial w}{\partial \theta} = w_{,\theta}\end{split}\]</div>
 <p>and therefore:</p>
 <div class="math">
-\[\begin{split}[g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x}
-\\
-[g^{\phi_\theta}] = \frac {\partial [g^w]} {\partial \theta}
-\\
+\[\begin{split}[g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x} \\
+[g^{\phi_\theta}] = \frac {\partial [g^w]} {\partial \theta} \\
 [g_{new}]^T = \left[ [g^u], [g^v], [g^w],
                       [g^{\phi_x}], [g^{\phi_\theta}] \right]\end{split}\]</div>
+<p>Observations:</p>
+<p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math">\(\times\)</span> non-linear analysis not implemented</p>
+</div>
+<div class="section" id="clpt-donnell3">
+<span id="id3"></span><h3>clpt_donnell3<a class="headerlink" href="#clpt-donnell3" title="Permalink to this headline">¶</a></h3>
+<p>Elastic restrained edges in <span class="math">\(u\)</span>, <span class="math">\(w_{,x}\)</span> and <span class="math">\(w_{,\theta}\)</span>
+with the Donnell&#8217;s equations. The approximation function for <span class="math">\(u_2\)</span> is
+relaxed at the edges by using a <span class="math">\(cosine\)</span> function istead of a <span class="math">\(sine\)</span> and the
+resulting functions are obtained:</p>
+<div class="math">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+            \right)
+\\\end{split}\]</div>
+<p>The linear stiffness matrix <span class="math">\([K_0]\)</span> is changed using the same
+<a class="reference internal" href="#elastic-constraints"><em>elastic contraints used for the clpt_donnell2</em></a>.</p>
+<p>Observations:</p>
+<p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math">\(\times\)</span> non-linear analysis not implemented</p>
 </div>
 <div class="section" id="clpt-sanders">
-<span id="id3"></span><h3>clpt_sanders<a class="headerlink" href="#clpt-sanders" title="Permalink to this headline">¶</a></h3>
-<p>Simply supported edges with the Sanders&#8217;s equations. The <a class="reference internal" href="esl_theories.html#clpt-approx-functions"><em>approximation
+<span id="id4"></span><h3>clpt_sanders<a class="headerlink" href="#clpt-sanders" title="Permalink to this headline">¶</a></h3>
+<p>Simply supported edges with the Sanders&#8217;s equations. The <a class="reference internal" href="#clpt-approx-functions"><em>approximation
 functions</em></a> are showed above and no elastic
-restraints are imposed.  Analogous to the <a class="reference internal" href="#clpt-donnell">clpt_donnell</a>.</p>
+restraints are imposed.  Analogous to the <a class="reference internal" href="#clpt-donnell"><em>clpt_donnell</em></a>.</p>
+<p>Observations:</p>
+<p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math">\(\checkmark\)</span> non-linear analysis implemented</p>
 </div>
 <div class="section" id="clpt-sanders2">
-<span id="id4"></span><h3>clpt_sanders2<a class="headerlink" href="#clpt-sanders2" title="Permalink to this headline">¶</a></h3>
-<p>Analogous to the <a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a> using the Sanders non-linear equations.</p>
+<span id="id5"></span><h3>clpt_sanders2<a class="headerlink" href="#clpt-sanders2" title="Permalink to this headline">¶</a></h3>
+<p>Analogous to the <a class="reference internal" href="#clpt-donnell2"><em>clpt_donnell2</em></a> using the Sanders non-linear equations.</p>
+<p>Observations:</p>
+<p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math">\(\times\)</span> non-linear analysis not implemented</p>
 </div>
 </div>
 </div>
@@ -202,9 +271,10 @@ restraints are imposed.  Analogous to the <a class="reference internal" href="#c
   <ul>
 <li><a class="reference internal" href="#">CLPT - Classical Laminated Plate Theory</a><ul>
 <li><a class="reference internal" href="#description">Description</a></li>
-<li><a class="reference internal" href="#implementations">Implementations</a><ul>
+<li><a class="reference internal" href="#variety-of-models">Variety of models</a><ul>
 <li><a class="reference internal" href="#clpt-donnell">clpt_donnell</a></li>
 <li><a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a></li>
+<li><a class="reference internal" href="#clpt-donnell3">clpt_donnell3</a></li>
 <li><a class="reference internal" href="#clpt-sanders">clpt_sanders</a></li>
 <li><a class="reference internal" href="#clpt-sanders2">clpt_sanders2</a></li>
 </ul>
@@ -213,6 +283,12 @@ restraints are imposed.  Analogous to the <a class="reference internal" href="#c
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="esl_theories.html"
+                        title="previous chapter">Equivalent Single Layer (ESL) Theories</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fsdt.html"
+                        title="next chapter">FSDT - First-order Shear Deformation Theory</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/theory/conecyl/clpt.txt"
@@ -241,12 +317,21 @@ restraints are imposed.  Analogous to the <a class="reference internal" href="#c
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="esl_theories.html" title="Equivalent Single Layer (ESL) Theories"
+             >previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li>
+          <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li>
+          <li><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 13, 2014.
+      Last updated on Mar 14, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

@@ -27,7 +27,10 @@
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" /> 
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
+    <link rel="next" title="References" href="ref.html" />
+    <link rel="prev" title="CLPT - Classical Laminated Plate Theory" href="clpt.html" /> 
   </head>
   <body>
     <div class="related">
@@ -36,7 +39,16 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="ref.html" title="References"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li>
+          <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li>
+          <li><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,14 +61,17 @@
 <span id="theory-conecyl-fsdt"></span><h1>FSDT - First-order Shear Deformation Theory<a class="headerlink" href="#fsdt-first-order-shear-deformation-theory" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>Many approximation functions were tested along the development of the
-cylindrical and conical equations using the FSDT. Recalling that for the
-FSDT the displacement field components are:</p>
+<p>For the FSDT the displacement field components are:</p>
 <div class="math">
 \[u, v, w, \phi_x, \phi_t\]</div>
-<p>and that the approximations can be separated as:</p>
+<p>The displacement field is approximated similarly to the
+<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><em>CLPT</em></a>, but here <span class="math">\(\phi_x\)</span> and <span class="math">\(\phi_\theta\)</span>
+are independent variables, relaxing the approximation.</p>
+<p>For the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> implementations, the approximation functions are
+separated into three components:</p>
 <div class="math">
-\[\begin{split}u = u_0 + u_1 + u_2\\\end{split}\]\[\vdots\]\[{{\phi}_\theta} = {{\phi}_\theta}_0 + {{\phi}_\theta}_1 + {{\phi}_\theta}_2\]</div>
+\[\begin{split}u = u_0 + u_1 + u_2\\\end{split}\]\[\vdots\]\[{{\phi}_\theta} = {{\phi}_\theta}_0 + {{\phi}_\theta}_1
+                  + {{\phi}_\theta}_2\]</div>
 <p>where <span class="math">\(u_0\)</span> contains the approximation functions corresponding to the
 prescribed degrees of freedom, <span class="math">\(u_1\)</span> contains the functions independent
 of <span class="math">\(\theta\)</span> and <span class="math">\(u_2\)</span> the functions that depend on both <span class="math">\(x\)</span>
@@ -68,9 +83,10 @@ along the edges.</p>
 (clamped) and another value (up to simply supported),
 by using elastic stiffnesses for the corresponding degrees of freedom.</p>
 </div>
-<div class="section" id="implementations">
-<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
-<p>Below it follows are listed below (same name as the <tt class="docutils literal"><span class="pre">linear_kinematics</span></tt> parameter of the <span class="math">\(ConeCyl\)</span> object):</p>
+<div class="section" id="variety-of-models">
+<h2>Variety of models<a class="headerlink" href="#variety-of-models" title="Permalink to this headline">¶</a></h2>
+<p>Below it follows are listed below (same name as the
+<tt class="docutils literal"><span class="pre">linear_kinematics</span></tt> parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object):</p>
 <div class="section" id="fsdt-donnell">
 <span id="id1"></span><h3>fsdt_donnell<a class="headerlink" href="#fsdt-donnell" title="Permalink to this headline">¶</a></h3>
 <p>The approximation functions are:</p>
@@ -299,7 +315,7 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
   <ul>
 <li><a class="reference internal" href="#">FSDT - First-order Shear Deformation Theory</a><ul>
 <li><a class="reference internal" href="#description">Description</a></li>
-<li><a class="reference internal" href="#implementations">Implementations</a><ul>
+<li><a class="reference internal" href="#variety-of-models">Variety of models</a><ul>
 <li><a class="reference internal" href="#fsdt-donnell">fsdt_donnell</a></li>
 <li><a class="reference internal" href="#fsdt-donnell2">fsdt_donnell2</a></li>
 <li><a class="reference internal" href="#fsdt-donnell3">fsdt_donnell3</a></li>
@@ -312,6 +328,12 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="clpt.html"
+                        title="previous chapter">CLPT - Classical Laminated Plate Theory</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ref.html"
+                        title="next chapter">References</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/theory/conecyl/fsdt.txt"
@@ -340,12 +362,21 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="ref.html" title="References"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
+             >previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li>
+          <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li>
+          <li><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 13, 2014.
+      Last updated on Mar 14, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

@@ -7,15 +7,18 @@ FSDT - First-order Shear Deformation Theory
 Description
 ===========
 
-Many approximation functions were tested along the development of the
-cylindrical and conical equations using the FSDT. Recalling that for the 
-FSDT the displacement field components are:
+For the FSDT the displacement field components are:
 
 .. math::
 
     u, v, w, \phi_x, \phi_t
 
-and that the approximations can be separated as:
+The displacement field is approximated similarly to the
+:ref:`CLPT <theory-conecyl-clpt>`, but here `\phi_x` and `\phi_\theta`
+are independent variables, relaxing the approximation.
+
+For the ``ConeCyl`` implementations, the approximation functions are
+separated into three components:
 
 .. math::
 
@@ -23,25 +26,27 @@ and that the approximations can be separated as:
 
     \vdots
 
-    {{\phi}_\theta} = {{\phi}_\theta}_0 + {{\phi}_\theta}_1 + {{\phi}_\theta}_2
+    {{\phi}_\theta} = {{\phi}_\theta}_0 + {{\phi}_\theta}_1 
+                      + {{\phi}_\theta}_2
 
-where :math:`u_0` contains the approximation functions corresponding to the
-prescribed degrees of freedom, :math:`u_1` contains the functions independent
-of :math:`\theta` and :math:`u_2` the functions that depend on both :math:`x`
-and :math:`\theta`.
+where `u_0` contains the approximation functions corresponding to the
+prescribed degrees of freedom, `u_1` contains the functions independent
+of `\theta` and `u_2` the functions that depend on both `x`
+and `\theta`.
 
 The aim is to have a model capable to simulate non-rigid supports, and where
-the displacement components :math:`u, \phi_x` can habe a non-costant value
+the displacement components `u, \phi_x` can habe a non-costant value
 along the edges.
 
-It is of special importance to allow :math:`\phi_x` to be between zero
+It is of special importance to allow `\phi_x` to be between zero
 (clamped) and another value (up to simply supported),
 by using elastic stiffnesses for the corresponding degrees of freedom.
 
-Implementations
-===============
+Variety of models
+=================
 
-Below it follows are listed below (same name as the ``linear_kinematics`` parameter of the `ConeCyl` object):
+Below it follows are listed below (same name as the
+``linear_kinematics`` parameter of the ``ConeCyl`` object):
  
 .. _fsdt_donnell: 
 
@@ -101,19 +106,19 @@ with:
 
 Observations:
 
-    :math:`\checkmark` linear static
+    `\checkmark` linear static
 
 
-    :math:`\checkmark` succcessfuly simulated the linear static loads
+    `\checkmark` succcessfuly simulated the linear static loads
 
-    :math:`\checkmark` the flexible boundary conditions were successfully
+    `\checkmark` the flexible boundary conditions were successfully
     simulated
 
-    :math:`\times` rigid body translations in :math:`u`
+    `\times` rigid body translations in `u`
 
-    :math:`\times` did not work for linear buckling
+    `\times` did not work for linear buckling
 
-    :math:`\times` did not work for non-linear analysis
+    `\times` did not work for non-linear analysis
 
 
 .. _fsdt_donnell2:
@@ -122,7 +127,7 @@ fsdt_donnell2
 -------------
 
 With the aim to remove the rigid body translation found in fsdt_donnell_,
-only the function for :math:`u`  has been changed:
+only the function for `u`  has been changed:
 
 .. math::
 
@@ -138,11 +143,11 @@ only the function for :math:`u`  has been changed:
 
 Observations:
 
-    :math:`\checkmark` rigid body translation removed
+    `\checkmark` rigid body translation removed
 
-    :math:`\times` did not work for linear buckling
+    `\times` did not work for linear buckling
 
-    :math:`\times` did not work for non-linear analysis
+    `\times` did not work for non-linear analysis
 
 .. _fsdt_donnell3:
 
@@ -150,8 +155,8 @@ fsdt_donnell3
 -------------
 
 Tried to remove some terms of fsdt_donnell2_ in order to make the linear
-buckling analysis work. Only the :math:`cos` function of
-:math:`{\phi_x}_1` has been removed:
+buckling analysis work. Only the `cos` function of
+`{\phi_x}_1` has been removed:
 
 .. math::
 
@@ -166,17 +171,17 @@ buckling analysis work. Only the :math:`cos` function of
 
 Observations:
 
-    :math:`\times` did not work for linear buckling
+    `\times` did not work for linear buckling
 
-    :math:`\times` did not work for non-linear analysis
+    `\times` did not work for non-linear analysis
 
 .. _fsdt_donnell4:
 
 fsdt_donnell4
 -------------
 
-Tried to remove some terms of fsdt_donnell3_. The :math:`cos` functions
-of :math:`u_2` was removed, the :math:`cos` function of :math:`{\phi_x}_1` was
+Tried to remove some terms of fsdt_donnell3_. The `cos` functions
+of `u_2` was removed, the `cos` function of `{\phi_x}_1` was
 put back:
 
 .. math::
@@ -199,12 +204,12 @@ put back:
 
 Observations:
 
-    :math:`\times` removing the :math:`cos` for :math:`u_2` removed the
-    capability to simulate non-rigid boundary conditions in :math:`u`
+    `\times` removing the `cos` for `u_2` removed the
+    capability to simulate non-rigid boundary conditions in `u`
 
-    :math:`\times` did not work for linear buckling
+    `\times` did not work for linear buckling
 
-    :math:`\times` did not work for non-linear analysis
+    `\times` did not work for non-linear analysis
 
 .. _fsdt_donnell5:
 
@@ -213,9 +218,9 @@ fsdt_donnell5
 
 From the four previous attempts, the fsdt_donnell2_ and fsdt_donnell3_ 
 give the same results and the fsdt_donnell3_ is preferred because it has less
-degrees of freedom (the :math:`cos` of :math:`{\phi_x}_1`). By then it was
+degrees of freedom (the `cos` of `{\phi_x}_1`). By then it was
 learned how the approximations for non-rigid boundary conditions should be and
-the current attempt add more flexibility in :math:`v,w,\phi_\theta` using the
+the current attempt add more flexibility in `v,w,\phi_\theta` using the
 previous know-how. The resulting approximation functions are:
 
 .. math::
