@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Python modules &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../index.html" />
+    <link rel="next" title="Theory related to the implementations" href="../theory/index.html" />
+    <link rel="prev" title="Computational Mechanics (compmech)" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../theory/index.html" title="Theory related to the implementations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Computational Mechanics (compmech)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-compmech.conecyl">
+<span id="python-modules"></span><span id="modules"></span><h1>Python modules<a class="headerlink" href="#module-compmech.conecyl" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">
+<h2>Semi-analytical models for cones and cylinder (<a class="reference internal" href="#module-compmech.conecyl" title="compmech.conecyl"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></tt></a>)<a class="headerlink" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> class embodies all the methods and functions necessary to
+perform:</p>
+<ul class="simple">
+<li>linear static analysis</li>
+<li>linear buckling analysis</li>
+<li>non-linear static analysis</li>
+</ul>
+<p>in conical and cylindrical structures.</p>
+<p>The implementation focused on laminate composite shells with a constant
+laminate constitutive relation. This means that the semi-analtical
+models were derived doing an integration using a constant <span class="math">\([F]\)</span> for the whole
+domain. Recalling that <span class="math">\([F]\)</span> correlates the strains and the distributed
+stresses by the relation:</p>
+<div class="math">
+\[\{N\} = [F] \{\varepsilon\}\]</div>
+<div class="section" id="defining-the-geometry">
+<h3>Defining the geometry<a class="headerlink" href="#defining-the-geometry" title="Permalink to this headline">¶</a></h3>
+<p>Based on the figure:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/conecyl.png"><img alt="../_images/conecyl.png" src="../_images/conecyl.png" style="width: 430.8px; height: 282.0px;" /></a>
+</div>
+<p>The geometry can be defined using <span class="math">\(H\)</span>, <span class="math">\(R_1\)</span> and <span class="math">\(\alpha\)</span>, for example, or
+any other combination (like <span class="math">\(L\)</span>, <span class="math">\(H\)</span>, <span class="math">\(R_1\)</span>) of the geometric parameters
+that will allow the complete definition of the cone / cylinder geometry.</p>
+<p>This can be done through:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="kn">import</span> <span class="n">ConeCyl</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">r1</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">r2</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-the-laminate-and-the-material-properties">
+<h3>Defining the laminate and the material properties<a class="headerlink" href="#defining-the-laminate-and-the-material-properties" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/saullocastro/mapy/blob/master/README.rst">mapy</a>
+module is used to calculate the laminate properties given the stacking
+sequence, the thicknesses of each ply and the material properties of
+each ply.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Python modules</a><ul>
+<li><a class="reference internal" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">Semi-analytical models for cones and cylinder (<tt class="docutils literal"><span class="pre">compmech.conecyl</span></tt>)</a><ul>
+<li><a class="reference internal" href="#defining-the-geometry">Defining the geometry</a></li>
+<li><a class="reference internal" href="#defining-the-laminate-and-the-material-properties">Defining the laminate and the material properties</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Computational Mechanics (compmech)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../theory/index.html"
+                        title="next chapter">Theory related to the implementations</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../theory/index.html" title="Theory related to the implementations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Computational Mechanics (compmech)"
+             >previous</a> |</li>
+        <li><a href="../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Mar 14, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

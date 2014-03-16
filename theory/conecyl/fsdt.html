@@ -40,6 +40,12 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="ref.html" title="References"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -161,7 +167,7 @@ only the function for <span class="math">\(u\)</span>  has been changed:</p>
 <blockquote>
 <div><p><span class="math">\(\checkmark\)</span> rigid body translation removed</p>
 <p><span class="math">\(\times\)</span> did not work for linear buckling</p>
-<p><span class="math">\(\times\)</span> did not work for non-linear analysis</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-donnell3">
@@ -181,6 +187,7 @@ buckling analysis work. Only the <span class="math">\(cos\)</span> function of
 <blockquote>
 <div><p><span class="math">\(\times\)</span> did not work for linear buckling</p>
 <p><span class="math">\(\times\)</span> did not work for non-linear analysis</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-donnell4">
@@ -209,7 +216,7 @@ put back:</p>
 <div><p><span class="math">\(\times\)</span> removing the <span class="math">\(cos\)</span> for <span class="math">\(u_2\)</span> removed the
 capability to simulate non-rigid boundary conditions in <span class="math">\(u\)</span></p>
 <p><span class="math">\(\times\)</span> did not work for linear buckling</p>
-<p><span class="math">\(\times\)</span> did not work for non-linear analysis</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-donnell5">
@@ -223,43 +230,33 @@ previous know-how. The resulting approximation functions are:</p>
 <div class="math">
 \[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
-                +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_d^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1}
         + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
-                +{c_{i_2 j_2}}_c^{v} \cos{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_d^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
-                +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_d^{w} \cos{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1}
         + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-             {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
-            +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
-            +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
-            +{c_{i_2 j_2}}_d^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+            +{c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+            +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
           \right)
 \\
 {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
                              {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1}
         + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-     {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
-    +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-    +{c_{i_2 j_2}}_c^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
-    +{c_{i_2 j_2}}_d^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
+    +{c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
+    +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
           \right)\end{split}\]</div>
 </div>
 <div class="section" id="fsdt-donnell6">
@@ -363,6 +360,12 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="ref.html" title="References"
              >next</a> |</li>
         <li class="right" >
@@ -376,7 +379,7 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 14, 2014.
+      Last updated on Mar 16, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

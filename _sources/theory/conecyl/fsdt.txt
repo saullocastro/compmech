@@ -10,7 +10,6 @@ Description
 For the FSDT the displacement field components are:
 
 .. math::
-
     u, v, w, \phi_x, \phi_t
 
 The displacement field is approximated similarly to the
@@ -21,7 +20,6 @@ For the ``ConeCyl`` implementations, the approximation functions are
 separated into three components:
 
 .. math::
-
     u = u_0 + u_1 + u_2\\
 
     \vdots
@@ -56,7 +54,6 @@ fsdt_donnell
 The approximation functions are:
 
 .. math::
-
     u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}_a^{u} \sin{{b_x}_1}
                                 +{c_{i_1}}_b^{u} \cos{{b_x}_1} 
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
@@ -100,7 +97,6 @@ The approximation functions are:
 with:
 
 .. math::
-
     {b_x}_1 = i_1 \pi \frac x L \\
     {b_x}_2 = i_2 \pi \frac x L 
 
@@ -130,8 +126,6 @@ With the aim to remove the rigid body translation found in fsdt_donnell_,
 only the function for `u`  has been changed:
 
 .. math::
-
-
     u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
@@ -147,7 +141,7 @@ Observations:
 
     `\times` did not work for linear buckling
 
-    `\times` did not work for non-linear analysis
+    `\rightarrow` non-linear analysis not implemented
 
 .. _fsdt_donnell3:
 
@@ -159,8 +153,6 @@ buckling analysis work. Only the `cos` function of
 `{\phi_x}_1` has been removed:
 
 .. math::
-
-
     \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1} 
         + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
              {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
@@ -175,6 +167,8 @@ Observations:
 
     `\times` did not work for non-linear analysis
 
+    `\rightarrow` non-linear analysis not implemented
+
 .. _fsdt_donnell4:
 
 fsdt_donnell4
@@ -185,7 +179,6 @@ of `u_2` was removed, the `cos` function of `{\phi_x}_1` was
 put back:
 
 .. math::
-
     u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
@@ -209,7 +202,7 @@ Observations:
 
     `\times` did not work for linear buckling
 
-    `\times` did not work for non-linear analysis
+    `\rightarrow` non-linear analysis not implemented
 
 .. _fsdt_donnell5:
 
@@ -224,46 +217,35 @@ the current attempt add more flexibility in `v,w,\phi_\theta` using the
 previous know-how. The resulting approximation functions are:
 
 .. math::
-
     u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
-                    +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_d^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                    +{c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
     v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
-                    +{c_{i_2 j_2}}_c^{v} \cos{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_d^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+                    +{c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
     w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
-                    +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_d^{w} \cos{{b_x}_2} \cos{j_2 \theta}
+                    +{c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
     \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1} 
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
-                +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_d^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
     \\
     {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
                                  {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-         {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
-        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-        +{c_{i_2 j_2}}_c^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
-        +{c_{i_2 j_2}}_d^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
+        +{c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 
 .. _fsdt_donnell6:
@@ -276,7 +258,6 @@ uses very simple approximation functions, design to produce results for
 a simply supported cone or cylinder, analogous to the CLPT implementation:
 
 .. math::
-
     u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}

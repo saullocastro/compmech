@@ -40,6 +40,12 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -119,6 +125,8 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <ul class="simple">
 <li><a class="reference internal" href="#clpt-donnell">clpt_donnell</a></li>
 <li><a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a></li>
+<li><a class="reference internal" href="#clpt-donnell3">clpt_donnell3</a></li>
+<li><a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a></li>
 <li><a class="reference internal" href="#clpt-sanders">clpt_sanders</a></li>
 <li><a class="reference internal" href="#clpt-sanders2">clpt_sanders2</a></li>
 </ul>
@@ -203,14 +211,14 @@ from the relations:</p>
 <p>Observations:</p>
 <p><span class="math">\(\checkmark\)</span> linear static implemented</p>
 <p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
-<p><span class="math">\(\times\)</span> non-linear analysis not implemented</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div>
 <div class="section" id="clpt-donnell3">
 <span id="id3"></span><h3>clpt_donnell3<a class="headerlink" href="#clpt-donnell3" title="Permalink to this headline">¶</a></h3>
 <p>Elastic restrained edges in <span class="math">\(u\)</span>, <span class="math">\(w_{,x}\)</span> and <span class="math">\(w_{,\theta}\)</span>
-with the Donnell&#8217;s equations. The approximation function for <span class="math">\(u_2\)</span> is
-relaxed at the edges by using a <span class="math">\(cosine\)</span> function istead of a <span class="math">\(sine\)</span> and the
-resulting functions are obtained:</p>
+with the Donnell&#8217;s equations. Comparing to <a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a>, the approximation
+function for <span class="math">\(u_2\)</span> is relaxed at the edges by using a <span class="math">\(cos({b_x}_2)\)</span>
+istead of a <span class="math">\(sin({b_x}_2)\)</span> and the resulting functions are:</p>
 <div class="math">
 \[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
@@ -235,10 +243,48 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Observations:</p>
 <p><span class="math">\(\checkmark\)</span> linear static implemented</p>
 <p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
-<p><span class="math">\(\times\)</span> non-linear analysis not implemented</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
+</div>
+<div class="section" id="clpt-donnell4">
+<span id="id4"></span><h3>clpt_donnell4<a class="headerlink" href="#clpt-donnell4" title="Permalink to this headline">¶</a></h3>
+<p>Elastic restrained edges in <span class="math">\(u\)</span>, <span class="math">\(v\)</span>, <span class="math">\(w\)</span>, <span class="math">\(w_{,x}\)</span> and <span class="math">\(w_{,\theta}\)</span>
+with the Donnell&#8217;s equations. Comparing to <a class="reference internal" href="#clpt-donnell3">clpt_donnell3</a>, the approximation
+function for <span class="math">\(v_2\)</span> is relaxed at the edges by using <span class="math">\(cos({b_x}_2)\)</span>
+istead of a <span class="math">\(sin({b_x}_2)\)</span>.  For <span class="math">\(w\)</span>, in <span class="math">\(w_2\)</span> one
+could use <span class="math">\(cos({b_x}_2)\)</span> in order to relax <span class="math">\(w\)</span> at the edges, but this
+would cause <span class="math">\(w_{,x}\)</span> to be zero at the edges and all the solutions would
+be for a clamped shell. Therefore, we had to use <span class="math">\(sin({b_x}_2)\)</span> and
+<span class="math">\(cos({b_x}_2)\)</span> for <span class="math">\(w_2\)</span>. The final approximation functions are:</p>
+<div class="math">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_d^{w} \cos{{b_x}_2} \cos{j_2 \theta}
+            \right)
+\\\end{split}\]</div>
+<p>The linear stiffness matrix <span class="math">\([K_0]\)</span> is changed using the same
+<a class="reference internal" href="#elastic-constraints"><em>elastic contraints used for the clpt_donnell2</em></a>.</p>
+<p>Observations:</p>
+<p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math">\(\times\)</span> did not work for linear buckling</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div>
 <div class="section" id="clpt-sanders">
-<span id="id4"></span><h3>clpt_sanders<a class="headerlink" href="#clpt-sanders" title="Permalink to this headline">¶</a></h3>
+<span id="id5"></span><h3>clpt_sanders<a class="headerlink" href="#clpt-sanders" title="Permalink to this headline">¶</a></h3>
 <p>Simply supported edges with the Sanders&#8217;s equations. The <a class="reference internal" href="#clpt-approx-functions"><em>approximation
 functions</em></a> are showed above and no elastic
 restraints are imposed.  Analogous to the <a class="reference internal" href="#clpt-donnell"><em>clpt_donnell</em></a>.</p>
@@ -248,12 +294,12 @@ restraints are imposed.  Analogous to the <a class="reference internal" href="#c
 <p><span class="math">\(\checkmark\)</span> non-linear analysis implemented</p>
 </div>
 <div class="section" id="clpt-sanders2">
-<span id="id5"></span><h3>clpt_sanders2<a class="headerlink" href="#clpt-sanders2" title="Permalink to this headline">¶</a></h3>
+<span id="id6"></span><h3>clpt_sanders2<a class="headerlink" href="#clpt-sanders2" title="Permalink to this headline">¶</a></h3>
 <p>Analogous to the <a class="reference internal" href="#clpt-donnell2"><em>clpt_donnell2</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <p><span class="math">\(\checkmark\)</span> linear static implemented</p>
 <p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
-<p><span class="math">\(\times\)</span> non-linear analysis not implemented</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div>
 </div>
 </div>
@@ -275,6 +321,7 @@ restraints are imposed.  Analogous to the <a class="reference internal" href="#c
 <li><a class="reference internal" href="#clpt-donnell">clpt_donnell</a></li>
 <li><a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a></li>
 <li><a class="reference internal" href="#clpt-donnell3">clpt_donnell3</a></li>
+<li><a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a></li>
 <li><a class="reference internal" href="#clpt-sanders">clpt_sanders</a></li>
 <li><a class="reference internal" href="#clpt-sanders2">clpt_sanders2</a></li>
 </ul>
@@ -318,6 +365,12 @@ restraints are imposed.  Analogous to the <a class="reference internal" href="#c
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
              >next</a> |</li>
         <li class="right" >
@@ -331,7 +384,7 @@ restraints are imposed.  Analogous to the <a class="reference internal" href="#c
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 14, 2014.
+      Last updated on Mar 16, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
