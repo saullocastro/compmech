@@ -91,36 +91,41 @@ by using elastic stiffnesses for the corresponding degrees of freedom.</p>
 </div>
 <div class="section" id="variety-of-models">
 <h2>Variety of models<a class="headerlink" href="#variety-of-models" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>recommended model</strong> is the <a class="reference internal" href="#fsdt-donnell5">fsdt_donnell5</a> which has the broader
+simulation capabilities and showed to be stable for linear buckling analysis
+too.  Moreover, this was achieved using an approximation function which
+requires less Ritz constants to predict the same behavior.
+The other models are kept here for future reference.</p>
 <p>Below it follows are listed below (same name as the
 <tt class="docutils literal"><span class="pre">linear_kinematics</span></tt> parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object):</p>
 <div class="section" id="fsdt-donnell">
 <span id="id1"></span><h3>fsdt_donnell<a class="headerlink" href="#fsdt-donnell" title="Permalink to this headline">¶</a></h3>
 <p>The approximation functions are:</p>
 <div class="math">
-\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}_a^{u} \sin{{b_x}_1}
+\[\begin{split}u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}_a^{u} \sin{{b_x}_1}
                             +{c_{i_1}}_b^{u} \cos{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                 +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_d^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)
 \\
-\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x}_a\sin{{b_x}_1}
+\phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_x}_a\sin{{b_x}_1}
                                         +{c_{i_1}}^{\phi_x}_b\cos{{b_x}_1}
-    + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
          {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
         +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -128,9 +133,9 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
     \right)
 \\
 \phi_{\theta} = {\phi_{\theta}}_0 +
-            \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_{\theta}}_a\sin{{b_x}_1}
+            \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_{\theta}}_a\sin{{b_x}_1}
                               +{c_{i_1}}^{\phi_{\theta}}_b\cos{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
      {c_{i_2 j_2}}_a^{\phi_{\theta}} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{\phi_{\theta}} \sin{{b_x}_2} \cos{j_2 \theta}
     +{c_{i_2 j_2}}_c^{\phi_{\theta}} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -156,8 +161,8 @@ simulated</p>
 <p>With the aim to remove the rigid body translation found in <a class="reference internal" href="#fsdt-donnell">fsdt_donnell</a>,
 only the function for <span class="math">\(u\)</span>  has been changed:</p>
 <div class="math">
-\[u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+\[u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                 +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -176,8 +181,8 @@ only the function for <span class="math">\(u\)</span>  has been changed:</p>
 buckling analysis work. Only the <span class="math">\(cos\)</span> function of
 <span class="math">\({\phi_x}_1\)</span> has been removed:</p>
 <div class="math">
-\[\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1}
-    + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+\[\phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1}
+    + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
          {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
         +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -186,7 +191,6 @@ buckling analysis work. Only the <span class="math">\(cos\)</span> function of
 <p>Observations:</p>
 <blockquote>
 <div><p><span class="math">\(\times\)</span> did not work for linear buckling</p>
-<p><span class="math">\(\times\)</span> did not work for non-linear analysis</p>
 <p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
@@ -196,16 +200,16 @@ buckling analysis work. Only the <span class="math">\(cos\)</span> function of
 of <span class="math">\(u_2\)</span> was removed, the <span class="math">\(cos\)</span> function of <span class="math">\({\phi_x}_1\)</span> was
 put back:</p>
 <div class="math">
-\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+\[\begin{split}u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+\phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1}
                           {c_{i_1}}_a^{\phi_x} \sin{{b_x}_1}
                          +{c_{i_1}}_b^{\phi_x} \sin{{b_x}_1}
-    + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
          {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
         +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -228,36 +232,42 @@ learned how the approximations for non-rigid boundary conditions should be and
 the current attempt add more flexibility in <span class="math">\(v,w,\phi_\theta\)</span> using the
 previous know-how. The resulting approximation functions are:</p>
 <div class="math">
-\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                +{c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+\[\begin{split}u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                +{c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                +{c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
+w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-            +{c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+\phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+             {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
             +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
           \right)
 \\
-{\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+{\phi}_\theta = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1}
                              {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-    +{c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+     {c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
           \right)\end{split}\]</div>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
+</div></blockquote>
 </div>
 <div class="section" id="fsdt-donnell6">
 <span id="id6"></span><h3>fsdt_donnell6<a class="headerlink" href="#fsdt-donnell6" title="Permalink to this headline">¶</a></h3>
@@ -265,33 +275,33 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 uses very simple approximation functions, design to produce results for
 a simply supported cone or cylinder, analogous to the CLPT implementation:</p>
 <div class="math">
-\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+\[\begin{split}u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-\phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+\phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1}
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
              {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
             +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
           \right)
 \\
-{\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+{\phi}_\theta = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1}
                              {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1}
-        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
           \right)\end{split}\]</div>
@@ -379,7 +389,7 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 16, 2014.
+      Last updated on Mar 17, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

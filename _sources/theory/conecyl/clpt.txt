@@ -25,7 +25,7 @@ following the right-hand rule. For the CLPT the rotations are defined as:
 
 .. math::
     \phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
-    \phi_t = \frac{\partial w}{\partial \theta} = w_{,\theta} 
+    \phi_t = - \frac{\partial w}{\partial \theta} = -w_{,\theta} 
 
 For the ``ConeCyl`` implementations the displacement field is approximated
 and the approximated functions can be separated as:
@@ -48,20 +48,20 @@ The approximation functions are:
 .. _clpt_approx_functions:
 
 .. math::
-    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
@@ -89,8 +89,8 @@ Below it follows a more detailed description of each of the implementations:
 Each model can be accessed using the ``linear_kinematics`` parameter of the
 ``ConeCyl`` object.
 
-.. _clpt_donnell:
 
+.. _clpt_donnell:
 
 clpt_donnell
 ------------
@@ -101,12 +101,11 @@ restraints are imposed to the shell rotation at the edges.
 
 Observations:
 
-`\checkmark` linear static implemented
+    `\checkmark` linear static implemented
 
-`\checkmark` linear buckling implemented
+    `\checkmark` linear buckling implemented
 
-`\checkmark` non-linear analysis implemented
-
+    `\checkmark` non-linear analysis implemented
 
 
 .. _clpt_donnell2:
@@ -187,7 +186,7 @@ from the relations:
 
 .. math::
     \phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
-    \phi_t = \frac{\partial w}{\partial \theta} = w_{,\theta}
+    \phi_t = - \frac{\partial w}{\partial \theta} = -w_{,\theta}
 
 and therefore:
 
@@ -200,11 +199,12 @@ and therefore:
 
 Observations:
 
-`\checkmark` linear static implemented
+    `\checkmark` linear static implemented
 
-`\checkmark` linear buckling implemented
+    `\checkmark` linear buckling implemented
 
-`\rightarrow` non-linear analysis not implemented
+    `\rightarrow` non-linear analysis not implemented
+
 
 .. _clpt_donnell3:
 
@@ -217,20 +217,20 @@ function for `u_2` is relaxed at the edges by using a `cos({b_x}_2)`
 istead of a `sin({b_x}_2)` and the resulting functions are:
 
 .. math::
-    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
@@ -241,11 +241,12 @@ The linear stiffness matrix `[K_0]` is changed using the same
 
 Observations:
 
-`\checkmark` linear static implemented
+    `\checkmark` linear static implemented
 
-`\checkmark` linear buckling implemented
+    `\checkmark` linear buckling implemented
 
-`\rightarrow` non-linear analysis not implemented
+    `\rightarrow` non-linear analysis not implemented
+
 
 .. _clpt_donnell4:
 
@@ -262,20 +263,20 @@ be for a clamped shell. Therefore, we had to use `sin({b_x}_2)` and
 `cos({b_x}_2)` for `w_2`. The final approximation functions are:
 
 .. math::
-    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                     +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -288,11 +289,12 @@ The linear stiffness matrix `[K_0]` is changed using the same
 
 Observations:
 
-`\checkmark` linear static implemented
+    `\checkmark` linear static implemented
 
-`\times` did not work for linear buckling
+    `\times` did not work for linear buckling
 
-`\rightarrow` non-linear analysis not implemented
+    `\rightarrow` non-linear analysis not implemented
+
 
 .. _clpt_sanders:
 
@@ -305,11 +307,12 @@ restraints are imposed.  Analogous to the :ref:`clpt_donnell`.
 
 Observations:
 
-`\checkmark` linear static implemented
+    `\checkmark` linear static implemented
 
-`\checkmark` linear buckling implemented
+    `\checkmark` linear buckling implemented
 
-`\checkmark` non-linear analysis implemented
+    `\checkmark` non-linear analysis implemented
+
 
 .. _clpt_sanders2:
 
@@ -320,8 +323,8 @@ Analogous to the :ref:`clpt_donnell2` using the Sanders non-linear equations.
 
 Observations:
 
-`\checkmark` linear static implemented
+    `\checkmark` linear static implemented
 
-`\checkmark` linear buckling implemented
+    `\checkmark` linear buckling implemented
 
-`\rightarrow` non-linear analysis not implemented
+    `\rightarrow` non-linear analysis not implemented
