@@ -73,8 +73,8 @@ with:
     {b_x}_1 = i_1 \pi \frac x L \\
     {b_x}_2 = i_2 \pi \frac x L 
 
-Variety of models
-=================
+Models
+======
 
 Below it follows a more detailed description of each of the implementations:
 
@@ -82,8 +82,10 @@ Below it follows a more detailed description of each of the implementations:
 - clpt_donnell2_
 - clpt_donnell3_
 - clpt_donnell4_
+- clpt_donnell5_
 - clpt_sanders_
 - clpt_sanders2_
+- clpt_sanders5_
 
  
 Each model can be accessed using the ``linear_kinematics`` parameter of the
@@ -211,10 +213,10 @@ Observations:
 clpt_donnell3
 -------------
 
-Elastic restrained edges in `u`, `w_{,x}` and `w_{,\theta}`
+Elastic edges in `u`, `v`, `w`, `w_{,x}` and `w_{,\theta}`
 with the Donnell's equations. Comparing to clpt_donnell2_, the approximation
-function for `u_2` is relaxed at the edges by using a `cos({b_x}_2)`
-istead of a `sin({b_x}_2)` and the resulting functions are:
+functions for `u_2`, `v_2` and `w_2` are relaxed at the edges by
+using a `cos({b_x}_2)` instead of a `sin({b_x}_2)`, obtaining:
 
 .. math::
     u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
@@ -225,16 +227,20 @@ istead of a `sin({b_x}_2)` and the resulting functions are:
     \\    
     v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
             + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+                     {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
     w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
             + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                     {c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
                 \right)
     \\
+
+From these functions it is expected of `w_{,x}` to assume a constant value
+at the edges, and this may be a limitation since it does not allow the
+simulation of a variable `w_{,x}` along `\theta` at the edges.
 
 The linear stiffness matrix `[K_0]` is changed using the same 
 :ref:`elastic contraints used for the clpt_donnell2 <elastic_constraints>`.
@@ -253,14 +259,8 @@ Observations:
 clpt_donnell4
 -------------
 
-Elastic restrained edges in `u`, `v`, `w`, `w_{,x}` and `w_{,\theta}`
-with the Donnell's equations. Comparing to clpt_donnell3_, the approximation
-function for `v_2` is relaxed at the edges by using `cos({b_x}_2)` 
-istead of a `sin({b_x}_2)`.  For `w`, in `w_2` one
-could use `cos({b_x}_2)` in order to relax `w` at the edges, but this
-would cause `w_{,x}` to be zero at the edges and all the solutions would
-be for a clamped shell. Therefore, we had to use `sin({b_x}_2)` and 
-`cos({b_x}_2)` for `w_2`. The final approximation functions are:
+Based on clpt_donnell3_ with the limiation of a constant `w_{,x}` removed
+by adding new `sin({b_x}_2)` terms to `w_2`, obtaining:
 
 .. math::
     u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
@@ -291,7 +291,50 @@ Observations:
 
     `\checkmark` linear static implemented
 
-    `\times` did not work for linear buckling
+    `\times` not working for linear buckling
+
+    `\rightarrow` non-linear analysis not implemented
+
+.. _clpt_donnell5:
+
+clpt_donnell5
+-------------
+
+Since the clpt_donnell4_ is not working for linear buckling and the
+clpt_donnell3_ is not considering properly the flexibilty of `w_{,x}` at the
+edges, this new model removes the flexibility of `w` at the edges (and
+consequently of `w_{,\theta}`), allowing a better representation
+of the flexibility along `w_{,x}`. Giving:
+
+.. math::
+    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                \right)
+    \\
+
+The linear stiffness matrix `[K_0]` is changed using the same 
+:ref:`elastic contraints used for the clpt_donnell2 <elastic_constraints>`.
+
+Observations:
+
+    `\checkmark` linear buckling implemented
+
+    `\times` not working for linear static (would work for `i_0=0`, but then
+    the linear buckling does not work...)
 
     `\rightarrow` non-linear analysis not implemented
 
@@ -303,7 +346,7 @@ clpt_sanders
 
 Simply supported edges with the Sanders's equations. The :ref:`approximation
 functions <clpt_approx_functions>` are showed above and no elastic
-restraints are imposed.  Analogous to the :ref:`clpt_donnell`.
+restraints are imposed.  Counterpart of :ref:`clpt_donnell`.
 
 Observations:
 
@@ -319,12 +362,28 @@ Observations:
 clpt_sanders2
 -------------
 
-Analogous to the :ref:`clpt_donnell2` using the Sanders non-linear equations.
+Counterpart of :ref:`clpt_donnell2` using the Sanders non-linear equations.
 
 Observations:
 
     `\checkmark` linear static implemented
 
     `\checkmark` linear buckling implemented
+
+    `\rightarrow` non-linear analysis not implemented
+
+.. _clpt_sanders5:
+
+clpt_sanders5
+-------------
+
+Counterpart of :ref:`clpt_donnell5` using the Sanders non-linear equations.
+
+Observations:
+
+    `\checkmark` linear static implemented
+
+    `\times` not working for linear static (would work for `i_0=0`, but then
+    the linear buckling does not work...)
 
     `\rightarrow` non-linear analysis not implemented

@@ -87,7 +87,7 @@ stresses by the relation:</p>
 <p>The geometry can be defined using <span class="math">\(H\)</span>, <span class="math">\(R_1\)</span> and <span class="math">\(\alpha\)</span>, for example, or
 any other combination (like <span class="math">\(L\)</span>, <span class="math">\(H\)</span>, <span class="math">\(R_1\)</span>) of the geometric parameters
 that will allow the complete definition of the cone / cylinder geometry.</p>
-<p>This can be done through:</p>
+<p><strong>Example:</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="kn">import</span> <span class="n">ConeCyl</span>
 </pre></div>
 </div>
@@ -100,10 +100,81 @@ that will allow the complete definition of the cone / cylinder geometry.</p>
 </div>
 <div class="section" id="defining-the-laminate-and-the-material-properties">
 <h3>Defining the laminate and the material properties<a class="headerlink" href="#defining-the-laminate-and-the-material-properties" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference external" href="https://github.com/saullocastro/mapy/blob/master/README.rst">mapy</a>
-module is used to calculate the laminate properties given the stacking
-sequence, the thicknesses of each ply and the material properties of
-each ply.</p>
+<p>The <a class="reference external" href="https://github.com/saullocastro/mapy">mapy</a>
+module is internally used to calculate the laminate properties given
+the stacking sequence, the thicknesses the material properties.</p>
+<p>The <strong>stacking sequence</strong> is passed using a container (<tt class="docutils literal"><span class="pre">list</span></tt> or <tt class="docutils literal"><span class="pre">tuple</span></tt>)
+with the orientations of each ply, <strong>from inwards to outwards</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="o">+</span><span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">+</span><span class="mi">30</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The ply thickness is passed using a single value when all the plies have the
+same thickness or using a container with the thickness of each ply:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
+</pre></div>
+</div>
+<p><strong>or</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The material properties are given using a tuple:</p>
+<div class="math">
+\[(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})\]</div>
+<p>where <span class="math">\(E_{11}\)</span> is the elastic modulus along the direction 1 of the ply,
+<span class="math">\(E_{22}\)</span> the modulus along the direction 2, <span class="math">\(\nu_{12}\)</span> the Poisson&#8217;s ratio
+and <span class="math">\(G_{12}\)</span>, <span class="math">\(G_{13}\)</span>, <span class="math">\(G_{23}\)</span> the shear modules.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will assume the same material properties for each ply. When different
+properties must be used the user must supply the <tt class="docutils literal"><span class="pre">laminaprops</span></tt> container.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">prop1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prop2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prop3</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprops</span> <span class="o">=</span> <span class="p">[</span><span class="n">prop1</span><span class="p">,</span> <span class="n">prop1</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop3</span><span class="p">,</span> <span class="n">prop3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="static-analysis">
+<h3>Static analysis<a class="headerlink" href="#static-analysis" title="Permalink to this headline">¶</a></h3>
+<p>The static analysis is performed with the method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">NLgeom</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">NLgeom</span></tt> is a flag telling whether or not a geometric non-linear
+analysis is to be performed.</p>
+<p>The solution is stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> attribute, which consists of a <tt class="docutils literal"><span class="pre">list</span></tt>
+of 1-D <tt class="docutils literal"><span class="pre">np.ndarray</span></tt> objects. For a linear analysis this list will contain
+only one entry while for a non-linear analysis it will contain one entry
+for each iteration needed up to the convergence or up to the termination
+criterion. To access the last result:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The displacement field can be plotted, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;my_output.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="non-linear-analysis">
+<h3>Non-linear analysis<a class="headerlink" href="#non-linear-analysis" title="Permalink to this headline">¶</a></h3>
+<p>Using <tt class="docutils literal"><span class="pre">NLgeom=True</span></tt> in a static analysis will run a geometrically
+non-linear analysis. Many attributes of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object
+are used to control the non-linear analysis (see
+<tt class="xref py py-func docutils literal"><span class="pre">ConeCyl.static()</span></tt>).</p>
+<p>The converged increments used along the non-linear analysis are stored
+in the <tt class="docutils literal"><span class="pre">increments</span></tt> attribute and the corresponding solutions
+stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> attribute (a <tt class="docutils literal"><span class="pre">list</span></tt> of 1-D <tt class="docutils literal"><span class="pre">np.ndarray</span></tt> objects).
+One could plot the reaction load along</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The displacement field can be plotted, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;my_output.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -123,6 +194,8 @@ each ply.</p>
 <li><a class="reference internal" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">Semi-analytical models for cones and cylinder (<tt class="docutils literal"><span class="pre">compmech.conecyl</span></tt>)</a><ul>
 <li><a class="reference internal" href="#defining-the-geometry">Defining the geometry</a></li>
 <li><a class="reference internal" href="#defining-the-laminate-and-the-material-properties">Defining the laminate and the material properties</a></li>
+<li><a class="reference internal" href="#static-analysis">Static analysis</a></li>
+<li><a class="reference internal" href="#non-linear-analysis">Non-linear analysis</a></li>
 </ul>
 </li>
 </ul>
