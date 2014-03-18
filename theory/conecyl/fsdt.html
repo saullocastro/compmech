@@ -91,13 +91,24 @@ by using elastic stiffnesses for the corresponding degrees of freedom.</p>
 </div>
 <div class="section" id="models">
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>recommended model</strong> is the <a class="reference internal" href="#fsdt-donnell5">fsdt_donnell5</a> which has the broader
-simulation capabilities and showed to be stable for linear buckling analysis
-too.  Moreover, this was achieved using an approximation function which
+<p>The <strong>recommended model</strong> is the <a class="reference internal" href="#fsdt-donnell5">fsdt_donnell5</a> (or the counterpart
+<a class="reference internal" href="#fsdt-sanders5">fsdt_sanders5</a>) which has the largest
+simulation capabilities among the models and showed to be stable
+for linear buckling analysis too.
+Moreover, this was achieved using an approximation function which
 requires less Ritz constants to predict the same behavior.
 The other models are kept here for future reference.</p>
 <p>Below it follows are listed below (same name as the
 <tt class="docutils literal"><span class="pre">linear_kinematics</span></tt> parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object):</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fsdt-donnell">fsdt_donnell</a></li>
+<li><a class="reference internal" href="#fsdt-donnell2">fsdt_donnell2</a></li>
+<li><a class="reference internal" href="#fsdt-donnell3">fsdt_donnell3</a></li>
+<li><a class="reference internal" href="#fsdt-donnell4">fsdt_donnell4</a></li>
+<li><a class="reference internal" href="#fsdt-donnell5">fsdt_donnell5</a></li>
+<li><a class="reference internal" href="#fsdt-donnell6">fsdt_donnell6</a></li>
+<li><a class="reference internal" href="#fsdt-sanders5">fsdt_sanders5</a></li>
+</ul>
 <div class="section" id="fsdt-donnell">
 <span id="id1"></span><h3>fsdt_donnell<a class="headerlink" href="#fsdt-donnell" title="Permalink to this headline">¶</a></h3>
 <p>The approximation functions are:</p>
@@ -306,6 +317,16 @@ w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
           \right)\end{split}\]</div>
 </div>
+<div class="section" id="fsdt-sanders5">
+<span id="id7"></span><h3>fsdt_sanders5<a class="headerlink" href="#fsdt-sanders5" title="Permalink to this headline">¶</a></h3>
+<p>Counterpart of <a class="reference internal" href="#fsdt-donnell5"><em>fsdt_donnell5</em></a> using the Sanders non-linear equations.</p>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
+</div></blockquote>
+</div>
 </div>
 </div>
 
@@ -329,6 +350,7 @@ w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 <li><a class="reference internal" href="#fsdt-donnell4">fsdt_donnell4</a></li>
 <li><a class="reference internal" href="#fsdt-donnell5">fsdt_donnell5</a></li>
 <li><a class="reference internal" href="#fsdt-donnell6">fsdt_donnell6</a></li>
+<li><a class="reference internal" href="#fsdt-sanders5">fsdt_sanders5</a></li>
 </ul>
 </li>
 </ul>
@@ -389,7 +411,7 @@ w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 17, 2014.
+      Last updated on Mar 18, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

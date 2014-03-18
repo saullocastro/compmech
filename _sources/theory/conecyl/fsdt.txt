@@ -43,14 +43,24 @@ by using elastic stiffnesses for the corresponding degrees of freedom.
 Models
 ======
 
-The **recommended model** is the fsdt_donnell5_ which has the broader 
-simulation capabilities and showed to be stable for linear buckling analysis
-too.  Moreover, this was achieved using an approximation function which 
+The **recommended model** is the fsdt_donnell5_ (or the counterpart 
+fsdt_sanders5_) which has the largest 
+simulation capabilities among the models and showed to be stable
+for linear buckling analysis too. 
+Moreover, this was achieved using an approximation function which 
 requires less Ritz constants to predict the same behavior.
 The other models are kept here for future reference.
 
 Below it follows are listed below (same name as the
 ``linear_kinematics`` parameter of the ``ConeCyl`` object):
+
+- fsdt_donnell_
+- fsdt_donnell2_
+- fsdt_donnell3_
+- fsdt_donnell4_
+- fsdt_donnell5_
+- fsdt_donnell6_
+- fsdt_sanders5_
  
 .. _fsdt_donnell: 
 
@@ -303,3 +313,18 @@ a simply supported cone or cylinder, analogous to the CLPT implementation:
          {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
+
+.. _fsdt_sanders5:
+
+fsdt_sanders5
+-------------
+
+Counterpart of :ref:`fsdt_donnell5` using the Sanders non-linear equations.
+
+Observations:
+
+    `\checkmark` linear static implemented
+
+    `\checkmark` linear buckling implemented
+
+    `\rightarrow` non-linear analysis not implemented
