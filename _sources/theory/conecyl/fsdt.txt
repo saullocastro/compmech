@@ -61,6 +61,7 @@ Below it follows are listed below (same name as the
 - fsdt_donnell5_
 - fsdt_donnell6_
 - fsdt_sanders5_
+- fsdt_shadmehri2012_
  
 .. _fsdt_donnell: 
 
@@ -326,5 +327,43 @@ Observations:
     `\checkmark` linear static implemented
 
     `\checkmark` linear buckling implemented
+
+    `\rightarrow` non-linear analysis not implemented
+
+.. _fsdt_shadmehri2012:
+
+fsdt_shadmehri2012
+------------------
+
+Published by Shadmehri (2012) (see [shadmehri2012]_ or [shadmehri2012thesis]_
+for more details). It has been implemented for comparative purposes
+and the approximation functions are:
+
+.. math::
+    u = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                  \right)
+    \\
+    w = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                  \right)
+    \\
+    \phi_x = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+              \right)
+    \\
+    {\phi}_\theta =  \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+
+Observations:
+
+    `\checkmark` linear buckling implemented
+
+    `\rightarrow` linear static not implemented
 
     `\rightarrow` non-linear analysis not implemented

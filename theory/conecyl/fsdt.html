@@ -108,6 +108,7 @@ The other models are kept here for future reference.</p>
 <li><a class="reference internal" href="#fsdt-donnell5">fsdt_donnell5</a></li>
 <li><a class="reference internal" href="#fsdt-donnell6">fsdt_donnell6</a></li>
 <li><a class="reference internal" href="#fsdt-sanders5">fsdt_sanders5</a></li>
+<li><a class="reference internal" href="#fsdt-shadmehri2012">fsdt_shadmehri2012</a></li>
 </ul>
 <div class="section" id="fsdt-donnell">
 <span id="id1"></span><h3>fsdt_donnell<a class="headerlink" href="#fsdt-donnell" title="Permalink to this headline">¶</a></h3>
@@ -327,6 +328,38 @@ w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 <p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
+<div class="section" id="fsdt-shadmehri2012">
+<span id="id8"></span><h3>fsdt_shadmehri2012<a class="headerlink" href="#fsdt-shadmehri2012" title="Permalink to this headline">¶</a></h3>
+<p>Published by Shadmehri (2012) (see <a class="reference internal" href="ref.html#shadmehri2012" id="id9">[shadmehri2012]</a> or <a class="reference internal" href="ref.html#shadmehri2012thesis" id="id10">[shadmehri2012thesis]</a>
+for more details). It has been implemented for comparative purposes
+and the approximation functions are:</p>
+<div class="math">
+\[\begin{split}u = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+              \right)
+\\
+w = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+              \right)
+\\
+\phi_x = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+             {c_{i_2 j_2}}^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+          \right)
+\\
+{\phi}_\theta =  \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+     {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+          \right)\end{split}\]</div>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math">\(\rightarrow\)</span> linear static not implemented</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
+</div></blockquote>
+</div>
 </div>
 </div>
 
@@ -351,6 +384,7 @@ w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 <li><a class="reference internal" href="#fsdt-donnell5">fsdt_donnell5</a></li>
 <li><a class="reference internal" href="#fsdt-donnell6">fsdt_donnell6</a></li>
 <li><a class="reference internal" href="#fsdt-sanders5">fsdt_sanders5</a></li>
+<li><a class="reference internal" href="#fsdt-shadmehri2012">fsdt_shadmehri2012</a></li>
 </ul>
 </li>
 </ul>
