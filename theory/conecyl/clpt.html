@@ -93,31 +93,7 @@ of <span class="math">\(\theta\)</span> and <span class="math">\(u_2\)</span> th
 and <span class="math">\(\theta\)</span>.</p>
 <p>The aim is to have models capable of simulating the displacement field of
 cones and cylinders. The approximation functions are the same
-for both the Donnell&#8217;s and the Sanders&#8217; models.
-The approximation functions are:</p>
-<div class="math" id="clpt-approx-functions">
-\[\begin{split}u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
-              \right)
-\\
-v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
-              \right)
-\\
-w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
-            \right)
-\\\end{split}\]</div>
-<p>with:</p>
-<div class="math">
-\[\begin{split}{b_x}_1 = i_1 \pi \frac x L \\
-{b_x}_2 = i_2 \pi \frac x L\end{split}\]</div>
+for both the Donnell&#8217;s and the Sanders&#8217; models.</p>
 </div>
 <div class="section" id="models">
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
@@ -136,9 +112,32 @@ w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
 <div class="section" id="clpt-donnell">
 <span id="id1"></span><h3>clpt_donnell<a class="headerlink" href="#clpt-donnell" title="Permalink to this headline">¶</a></h3>
-<p>Simply supported edges with the Donnell&#8217;s equations. The <a class="reference internal" href="#clpt-approx-functions"><em>approximation
-functions</em></a> are showed above and no elastic
-restraints are imposed to the shell rotation at the edges.</p>
+<p>Simply supported edges with the Donnell&#8217;s equations. No elastic
+restraints are imposed to the shell rotation at the edges.
+The approximation functions are:</p>
+<div class="math" id="clpt-approx-functions">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+            \right)
+\\\end{split}\]</div>
+<p>with:</p>
+<div class="math">
+\[\begin{split}{b_x}_1 = i_1 \pi \frac x L \\
+{b_x}_2 = i_2 \pi \frac x L\end{split}\]</div>
 <p>Observations:</p>
 <blockquote>
 <div><p><span class="math">\(\checkmark\)</span> linear static implemented</p>
@@ -226,20 +225,20 @@ with the Donnell&#8217;s equations. Comparing to <a class="reference internal" h
 functions for <span class="math">\(u_2\)</span>, <span class="math">\(v_2\)</span> and <span class="math">\(w_2\)</span> are relaxed at the edges by
 using a <span class="math">\(cos({b_x}_2)\)</span> instead of a <span class="math">\(sin({b_x}_2)\)</span>, obtaining:</p>
 <div class="math">
-\[\begin{split}u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+\[\begin{split}u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
             \right)
@@ -261,20 +260,20 @@ simulation of a variable <span class="math">\(w_{,x}\)</span> along <span class=
 <p>Based on <a class="reference internal" href="#clpt-donnell3">clpt_donnell3</a> with the limiation of a constant <span class="math">\(w_{,x}\)</span> removed
 by adding new <span class="math">\(sin({b_x}_2)\)</span> terms to <span class="math">\(w_2\)</span>, obtaining:</p>
 <div class="math">
-\[\begin{split}u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+\[\begin{split}u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -298,20 +297,20 @@ edges, this new model removes the flexibility of <span class="math">\(w\)</span>
 consequently of <span class="math">\(w_{,\theta}\)</span>), allowing a better representation
 of the flexibility along <span class="math">\(w_{,x}\)</span>. Giving:</p>
 <div class="math">
-\[\begin{split}u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
-w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)
@@ -321,8 +320,8 @@ w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Observations:</p>
 <blockquote>
 <div><p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
-<p><span class="math">\(\times\)</span> not working for linear static (would work for <span class="math">\(i_0=0\)</span>, but then
-the linear buckling does not work...)</p>
+<p><span class="math">\(\times\)</span> not working for linear static (would work if <span class="math">\(i_2\)</span> and <span class="math">\(j_2\)</span>
+started at <span class="math">\(0\)</span>, but then the linear buckling did not work...)</p>
 <p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
@@ -444,7 +443,7 @@ the linear buckling does not work...)</p>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 17, 2014.
+      Last updated on Mar 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

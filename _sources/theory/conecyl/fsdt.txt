@@ -71,30 +71,30 @@ fsdt_donnell
 The approximation functions are:
 
 .. math::
-    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}_a^{u} \sin{{b_x}_1}
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}_a^{u} \sin{{b_x}_1}
                                 +{c_{i_1}}_b^{u} \cos{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                     +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_d^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
     \\
-    \phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_x}_a\sin{{b_x}_1} 
+    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x}_a\sin{{b_x}_1} 
                                             +{c_{i_1}}^{\phi_x}_b\cos{{b_x}_1} 
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
              {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
             +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
             +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -102,9 +102,9 @@ The approximation functions are:
         \right)
     \\
     \phi_{\theta} = {\phi_{\theta}}_0 +
-                \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_{\theta}}_a\sin{{b_x}_1} 
+                \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_{\theta}}_a\sin{{b_x}_1} 
                                   +{c_{i_1}}^{\phi_{\theta}}_b\cos{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
          {c_{i_2 j_2}}_a^{\phi_{\theta}} \sin{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{\phi_{\theta}} \sin{{b_x}_2} \cos{j_2 \theta}
         +{c_{i_2 j_2}}_c^{\phi_{\theta}} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -142,8 +142,8 @@ With the aim to remove the rigid body translation found in fsdt_donnell_,
 only the function for `u`  has been changed:
 
 .. math::
-    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                     +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -170,8 +170,8 @@ buckling analysis work. Only the `cos` function of
 `{\phi_x}_1` has been removed:
 
 .. math::
-    \phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1} 
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1} 
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
              {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
             +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
             +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -195,16 +195,16 @@ of `u_2` was removed, the `cos` function of `{\phi_x}_1` was
 put back:
 
 .. math::
-    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    \phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1}
+    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
                               {c_{i_1}}_a^{\phi_x} \sin{{b_x}_1} 
                              +{c_{i_1}}_b^{\phi_x} \sin{{b_x}_1} 
-        + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
              {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
             +{c_{i_2 j_2}}_b^{\phi_x} \sin{{b_x}_2} \cos{j_2 \theta}
             +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -234,33 +234,33 @@ the current attempt add more flexibility in `v,w,\phi_\theta` using the
 previous know-how. The resulting approximation functions are:
 
 .. math::
-    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    \phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    \phi_x = {\phi_x}_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
     \\
-    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1}
+    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=0}^{m_1}
                                  {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
          {c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
@@ -284,33 +284,33 @@ uses very simple approximation functions, design to produce results for
 a simply supported cone or cylinder, analogous to the CLPT implementation:
 
 .. math::
-    u = u_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    \phi_x = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
     \\
-    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=i_0}^{m_1}
+    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
                                  {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
-            + \sum_{i_2=i_0}^{m_2} \sum_{j_2=i_0}^{n_2} \left(
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
          {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
