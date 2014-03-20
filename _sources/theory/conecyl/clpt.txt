@@ -55,13 +55,29 @@ Below it follows a more detailed description of each of the implementations:
 - clpt_donnell3_
 - clpt_donnell4_
 - clpt_donnell5_
+- clpt_donnell6_
 - clpt_sanders_
 - clpt_sanders2_
 - clpt_sanders5_
+- clpt_sanders6_
 
  
 Each model can be accessed using the ``linear_kinematics`` parameter of the
-``ConeCyl`` object.
+``ConeCyl`` object. For linear static analysis the most general model is the
+clpt_donnell4_.
+
+For linear buckling analysis the following models should be used for
+each type of boundary conditions:
+
+- SS1- or CC1-type: clpt_donnell2_ or clpt_sanders2_
+
+- SS2- or CC2-type: clpt_donnell6_ or clpt_sanders6_
+
+- SS3- or CC3-type: use the :ref:`fsdt_donnell5` (CLPT not implemented)
+
+- SS4- or CC4-type: clpt_donnell5_ or clpt_sanders5_
+
+- Free edges: use the :ref:`fsdt_donnell5` (CLPT not implemented)
 
 
 .. _clpt_donnell:
@@ -69,7 +85,7 @@ Each model can be accessed using the ``linear_kinematics`` parameter of the
 clpt_donnell
 ------------
 
-Simply supported edges with the Donnell's equations. No elastic 
+Simply supported (SS1-type) edges with the Donnell's equations. No elastic 
 restraints are imposed to the shell rotation at the edges.
 The approximation functions are:
 
@@ -116,7 +132,9 @@ clpt_donnell2
 -------------
 
 Elastic restrained edges in `w_{,x}` and `w_{,\theta}`
-with the Donnell's equations. The :ref:`approximation
+with the Donnell's equations. Allows SS1- and CC1-type (or anything
+in between) of boundary conditions.
+The :ref:`approximation
 functions <clpt_approx_functions>` are showed above and the
 elastic restraints are imposed
 adding to the strain energy rotational springs at the bottom and top edges.
@@ -128,6 +146,7 @@ Basically the following terms should be added to the strain energy:
                       K_{Bot}^u u(x=L, \theta)^2 
                     + K_{Bot}^v v(x=L, \theta)^2
                     + K_{Bot}^w w(x=L, \theta)^2
+                      \\
                     + K_{Bot}^{\phi_x} {\phi_x}(x=L, \theta)^2
                     + K_{Bot}^{\phi_\theta} {\phi_\theta}(x=L, \theta)^2
                   \right)
@@ -136,6 +155,7 @@ Basically the following terms should be added to the strain energy:
                       K_{Top}^u u(x=0, \theta)^2 
                     + K_{Top}^v v(x=0, \theta)^2
                     + K_{Top}^w w(x=0, \theta)^2
+                      \\
                     + K_{Top}^{\phi_x} {\phi_x}(x=0, \theta)^2
                     + K_{Top}^{\phi_\theta} {\phi_\theta}(x=0, \theta)^2
                   \right)
@@ -215,6 +235,11 @@ Observations:
 clpt_donnell3
 -------------
 
+.. NOTE:: NOT RECOMMENDED since the approximation functions will
+    lead to a constant `w_{,x}` at each edge, which is a limitation
+    since it does not allow the simulation of a variable `w_{,x}`
+    along `\theta`, required to produce correct results.
+
 Elastic edges in `u`, `v`, `w`, `w_{,x}` and `w_{,\theta}`
 with the Donnell's equations. Comparing to clpt_donnell2_, the approximation
 functions for `u_2`, `v_2` and `w_2` are relaxed at the edges by
@@ -239,10 +264,6 @@ using a `cos({b_x}_2)` instead of a `sin({b_x}_2)`, obtaining:
                     +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
                 \right)
     \\
-
-From these functions it is expected of `w_{,x}` to assume a constant value
-at the edges, and this may be a limitation since it does not allow the
-simulation of a variable `w_{,x}` along `\theta` at the edges.
 
 The linear stiffness matrix `[K_0]` is changed using the same 
 :ref:`elastic contraints used for the clpt_donnell2 <elastic_constraints>`.
@@ -281,6 +302,7 @@ by adding new `sin({b_x}_2)` terms to `w_2`, obtaining:
             + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                    \\
                     +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_d^{w} \cos{{b_x}_2} \cos{j_2 \theta}
                 \right)
@@ -302,6 +324,7 @@ Observations:
 clpt_donnell5
 -------------
 
+SS4- or CC4-type of boundary conditions (or anything in between).
 Since the clpt_donnell4_ is not working for linear buckling and the
 clpt_donnell3_ is not considering properly the flexibilty of `w_{,x}` at the
 edges, this new model removes the flexibility of `w` at the edges (and
@@ -319,6 +342,47 @@ of the flexibility along `w_{,x}`. Giving:
             + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                \right)
+    \\
+
+The linear stiffness matrix `[K_0]` is changed using the same 
+:ref:`elastic contraints used for the clpt_donnell2 <elastic_constraints>`.
+
+Observations:
+
+    `\times` not working for linear buckling implemented
+
+    `\checkmark` linear static analysis implemented
+
+    `\rightarrow` non-linear analysis not implemented
+
+
+.. _clpt_donnell6:
+
+clpt_donnell6
+-------------
+
+Planned to simulate the SS2- and CC2-type of boundary conditions (or anything
+in between). The flexibily in `v` is removed if compared to the 
+clpt_donnell5_. Giving:
+
+.. math::
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
     w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
@@ -374,6 +438,7 @@ Observations:
 
     `\rightarrow` non-linear analysis not implemented
 
+
 .. _clpt_sanders5:
 
 clpt_sanders5
@@ -383,7 +448,23 @@ Counterpart of :ref:`clpt_donnell5` using the Sanders non-linear equations.
 
 Observations:
 
-    `\checkmark` linear static implemented
+    `\times` not working for linear buckling implemented
+
+    `\checkmark` linear static analysis implemented
+
+    `\rightarrow` non-linear analysis not implemented
+
+
+.. _clpt_sanders6:
+
+clpt_sanders6
+-------------
+
+Counterpart of :ref:`clpt_donnell6` using the Sanders non-linear equations.
+
+Observations:
+
+    `\checkmark` linear buckling implemented
 
     `\times` not working for linear static (would work if `i_2` and `j_2`
     started at `0`, but then the linear buckling did not work...)

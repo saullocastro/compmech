@@ -105,15 +105,27 @@ for both the Donnell&#8217;s and the Sanders&#8217; models.</p>
 <li><a class="reference internal" href="#clpt-donnell3">clpt_donnell3</a></li>
 <li><a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a></li>
 <li><a class="reference internal" href="#clpt-donnell5">clpt_donnell5</a></li>
+<li><a class="reference internal" href="#clpt-donnell6">clpt_donnell6</a></li>
 <li><a class="reference internal" href="#clpt-sanders">clpt_sanders</a></li>
 <li><a class="reference internal" href="#clpt-sanders2">clpt_sanders2</a></li>
 <li><a class="reference internal" href="#clpt-sanders5">clpt_sanders5</a></li>
+<li><a class="reference internal" href="#clpt-sanders6">clpt_sanders6</a></li>
 </ul>
 <p>Each model can be accessed using the <tt class="docutils literal"><span class="pre">linear_kinematics</span></tt> parameter of the
-<tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+<tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object. For linear static analysis the most general model is the
+<a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a>.</p>
+<p>For linear buckling analysis the following models should be used for
+each type of boundary conditions:</p>
+<ul class="simple">
+<li>SS1- or CC1-type: <a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a> or <a class="reference internal" href="#clpt-sanders2">clpt_sanders2</a></li>
+<li>SS2- or CC2-type: <a class="reference internal" href="#clpt-donnell6">clpt_donnell6</a> or <a class="reference internal" href="#clpt-sanders6">clpt_sanders6</a></li>
+<li>SS3- or CC3-type: use the <a class="reference internal" href="fsdt.html#fsdt-donnell5"><em>fsdt_donnell5</em></a> (CLPT not implemented)</li>
+<li>SS4- or CC4-type: <a class="reference internal" href="#clpt-donnell5">clpt_donnell5</a> or <a class="reference internal" href="#clpt-sanders5">clpt_sanders5</a></li>
+<li>Free edges: use the <a class="reference internal" href="fsdt.html#fsdt-donnell5"><em>fsdt_donnell5</em></a> (CLPT not implemented)</li>
+</ul>
 <div class="section" id="clpt-donnell">
 <span id="id1"></span><h3>clpt_donnell<a class="headerlink" href="#clpt-donnell" title="Permalink to this headline">¶</a></h3>
-<p>Simply supported edges with the Donnell&#8217;s equations. No elastic
+<p>Simply supported (SS1-type) edges with the Donnell&#8217;s equations. No elastic
 restraints are imposed to the shell rotation at the edges.
 The approximation functions are:</p>
 <div class="math" id="clpt-approx-functions">
@@ -149,7 +161,9 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <div class="section" id="clpt-donnell2">
 <span id="id2"></span><h3>clpt_donnell2<a class="headerlink" href="#clpt-donnell2" title="Permalink to this headline">¶</a></h3>
 <p>Elastic restrained edges in <span class="math">\(w_{,x}\)</span> and <span class="math">\(w_{,\theta}\)</span>
-with the Donnell&#8217;s equations. The <a class="reference internal" href="#clpt-approx-functions"><em>approximation
+with the Donnell&#8217;s equations. Allows SS1- and CC1-type (or anything
+in between) of boundary conditions.
+The <a class="reference internal" href="#clpt-approx-functions"><em>approximation
 functions</em></a> are showed above and the
 elastic restraints are imposed
 adding to the strain energy rotational springs at the bottom and top edges.</p>
@@ -159,6 +173,7 @@ adding to the strain energy rotational springs at the bottom and top edges.</p>
                   K_{Bot}^u u(x=L, \theta)^2
                 + K_{Bot}^v v(x=L, \theta)^2
                 + K_{Bot}^w w(x=L, \theta)^2
+                  \\
                 + K_{Bot}^{\phi_x} {\phi_x}(x=L, \theta)^2
                 + K_{Bot}^{\phi_\theta} {\phi_\theta}(x=L, \theta)^2
               \right)
@@ -167,6 +182,7 @@ adding to the strain energy rotational springs at the bottom and top edges.</p>
                   K_{Top}^u u(x=0, \theta)^2
                 + K_{Top}^v v(x=0, \theta)^2
                 + K_{Top}^w w(x=0, \theta)^2
+                  \\
                 + K_{Top}^{\phi_x} {\phi_x}(x=0, \theta)^2
                 + K_{Top}^{\phi_\theta} {\phi_\theta}(x=0, \theta)^2
               \right)\end{split}\]</div>
@@ -223,6 +239,13 @@ from the relations:</p>
 </div>
 <div class="section" id="clpt-donnell3">
 <span id="id3"></span><h3>clpt_donnell3<a class="headerlink" href="#clpt-donnell3" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NOT RECOMMENDED since the approximation functions will
+lead to a constant <span class="math">\(w_{,x}\)</span> at each edge, which is a limitation
+since it does not allow the simulation of a variable <span class="math">\(w_{,x}\)</span>
+along <span class="math">\(\theta\)</span>, required to produce correct results.</p>
+</div>
 <p>Elastic edges in <span class="math">\(u\)</span>, <span class="math">\(v\)</span>, <span class="math">\(w\)</span>, <span class="math">\(w_{,x}\)</span> and <span class="math">\(w_{,\theta}\)</span>
 with the Donnell&#8217;s equations. Comparing to <a class="reference internal" href="#clpt-donnell2">clpt_donnell2</a>, the approximation
 functions for <span class="math">\(u_2\)</span>, <span class="math">\(v_2\)</span> and <span class="math">\(w_2\)</span> are relaxed at the edges by
@@ -246,9 +269,6 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
                 +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
             \right)
 \\\end{split}\]</div>
-<p>From these functions it is expected of <span class="math">\(w_{,x}\)</span> to assume a constant value
-at the edges, and this may be a limitation since it does not allow the
-simulation of a variable <span class="math">\(w_{,x}\)</span> along <span class="math">\(\theta\)</span> at the edges.</p>
 <p>The linear stiffness matrix <span class="math">\([K_0]\)</span> is changed using the same
 <a class="reference internal" href="#elastic-constraints"><em>elastic contraints used for the clpt_donnell2</em></a>.</p>
 <p>Observations:</p>
@@ -279,6 +299,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                \\
                 +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_d^{w} \cos{{b_x}_2} \cos{j_2 \theta}
             \right)
@@ -294,7 +315,8 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div>
 <div class="section" id="clpt-donnell5">
 <span id="id5"></span><h3>clpt_donnell5<a class="headerlink" href="#clpt-donnell5" title="Permalink to this headline">¶</a></h3>
-<p>Since the <a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a> is not working for linear buckling and the
+<p>SS4- or CC4-type of boundary conditions (or anything in between).
+Since the <a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a> is not working for linear buckling and the
 <a class="reference internal" href="#clpt-donnell3">clpt_donnell3</a> is not considering properly the flexibilty of <span class="math">\(w_{,x}\)</span> at the
 edges, this new model removes the flexibility of <span class="math">\(w\)</span> at the edges (and
 consequently of <span class="math">\(w_{,\theta}\)</span>), allowing a better representation
@@ -322,6 +344,39 @@ w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <a class="reference internal" href="#elastic-constraints"><em>elastic contraints used for the clpt_donnell2</em></a>.</p>
 <p>Observations:</p>
 <blockquote>
+<div><p><span class="math">\(\times\)</span> not working for linear buckling implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear static analysis implemented</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
+</div></blockquote>
+</div>
+<div class="section" id="clpt-donnell6">
+<span id="id6"></span><h3>clpt_donnell6<a class="headerlink" href="#clpt-donnell6" title="Permalink to this headline">¶</a></h3>
+<p>Planned to simulate the SS2- and CC2-type of boundary conditions (or anything
+in between). The flexibily in <span class="math">\(v\)</span> is removed if compared to the
+<a class="reference internal" href="#clpt-donnell5">clpt_donnell5</a>. Giving:</p>
+<div class="math">
+\[\begin{split}u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
+        + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+            \right)
+\\\end{split}\]</div>
+<p>The linear stiffness matrix <span class="math">\([K_0]\)</span> is changed using the same
+<a class="reference internal" href="#elastic-constraints"><em>elastic contraints used for the clpt_donnell2</em></a>.</p>
+<p>Observations:</p>
+<blockquote>
 <div><p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
 <p><span class="math">\(\times\)</span> not working for linear static (would work if <span class="math">\(i_2\)</span> and <span class="math">\(j_2\)</span>
 started at <span class="math">\(0\)</span>, but then the linear buckling did not work...)</p>
@@ -329,7 +384,7 @@ started at <span class="math">\(0\)</span>, but then the linear buckling did not
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders">
-<span id="id6"></span><h3>clpt_sanders<a class="headerlink" href="#clpt-sanders" title="Permalink to this headline">¶</a></h3>
+<span id="id7"></span><h3>clpt_sanders<a class="headerlink" href="#clpt-sanders" title="Permalink to this headline">¶</a></h3>
 <p>Simply supported edges with the Sanders&#8217;s equations. The <a class="reference internal" href="#clpt-approx-functions"><em>approximation
 functions</em></a> are showed above and no elastic
 restraints are imposed.  Counterpart of <a class="reference internal" href="#clpt-donnell"><em>clpt_donnell</em></a>.</p>
@@ -341,7 +396,7 @@ restraints are imposed.  Counterpart of <a class="reference internal" href="#clp
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders2">
-<span id="id7"></span><h3>clpt_sanders2<a class="headerlink" href="#clpt-sanders2" title="Permalink to this headline">¶</a></h3>
+<span id="id8"></span><h3>clpt_sanders2<a class="headerlink" href="#clpt-sanders2" title="Permalink to this headline">¶</a></h3>
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell2"><em>clpt_donnell2</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
@@ -351,11 +406,21 @@ restraints are imposed.  Counterpart of <a class="reference internal" href="#clp
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders5">
-<span id="id8"></span><h3>clpt_sanders5<a class="headerlink" href="#clpt-sanders5" title="Permalink to this headline">¶</a></h3>
+<span id="id9"></span><h3>clpt_sanders5<a class="headerlink" href="#clpt-sanders5" title="Permalink to this headline">¶</a></h3>
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell5"><em>clpt_donnell5</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\(\checkmark\)</span> linear static implemented</p>
+<div><p><span class="math">\(\times\)</span> not working for linear buckling implemented</p>
+<p><span class="math">\(\checkmark\)</span> linear static analysis implemented</p>
+<p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
+</div></blockquote>
+</div>
+<div class="section" id="clpt-sanders6">
+<span id="id10"></span><h3>clpt_sanders6<a class="headerlink" href="#clpt-sanders6" title="Permalink to this headline">¶</a></h3>
+<p>Counterpart of <a class="reference internal" href="#clpt-donnell6"><em>clpt_donnell6</em></a> using the Sanders non-linear equations.</p>
+<p>Observations:</p>
+<blockquote>
+<div><p><span class="math">\(\checkmark\)</span> linear buckling implemented</p>
 <p><span class="math">\(\times\)</span> not working for linear static (would work if <span class="math">\(i_2\)</span> and <span class="math">\(j_2\)</span>
 started at <span class="math">\(0\)</span>, but then the linear buckling did not work...)</p>
 <p><span class="math">\(\rightarrow\)</span> non-linear analysis not implemented</p>
@@ -383,9 +448,11 @@ started at <span class="math">\(0\)</span>, but then the linear buckling did not
 <li><a class="reference internal" href="#clpt-donnell3">clpt_donnell3</a></li>
 <li><a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a></li>
 <li><a class="reference internal" href="#clpt-donnell5">clpt_donnell5</a></li>
+<li><a class="reference internal" href="#clpt-donnell6">clpt_donnell6</a></li>
 <li><a class="reference internal" href="#clpt-sanders">clpt_sanders</a></li>
 <li><a class="reference internal" href="#clpt-sanders2">clpt_sanders2</a></li>
 <li><a class="reference internal" href="#clpt-sanders5">clpt_sanders5</a></li>
+<li><a class="reference internal" href="#clpt-sanders6">clpt_sanders6</a></li>
 </ul>
 </li>
 </ul>
