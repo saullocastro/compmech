@@ -25,7 +25,8 @@ following the right-hand rule. For the CLPT the rotations are defined as:
 
 .. math::
     \phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
-    \phi_t = - \frac{\partial w}{\partial \theta} = -w_{,\theta} 
+    \phi_\theta = - \frac 1 r \frac{\partial w}{\partial \theta} 
+           = - \frac 1 r w_{,\theta} 
 
 For the ``ConeCyl`` implementations the displacement field is approximated
 and the approximated functions can be separated as:
@@ -124,61 +125,62 @@ Basically the following terms should be added to the strain energy:
 
 .. math::
     U_{springs} = \int_\theta r_1 \left(
-                      K_Bot^u u(x=L, \theta)^2 
-                    + K_Bot^v v(x=L, \theta)^2
-                    + K_Bot^w w(x=L, \theta)^2
-                    + K_Bot^{\phi_x} {\phi_x}(x=L, \theta)^2
-                    + K_Bot^{\phi_\theta} {\phi_\theta}(x=L, \theta)^2
+                      K_{Bot}^u u(x=L, \theta)^2 
+                    + K_{Bot}^v v(x=L, \theta)^2
+                    + K_{Bot}^w w(x=L, \theta)^2
+                    + K_{Bot}^{\phi_x} {\phi_x}(x=L, \theta)^2
+                    + K_{Bot}^{\phi_\theta} {\phi_\theta}(x=L, \theta)^2
                   \right)
                   \\
                 + \int_\theta r_2 \left(
-                      K_Top^u u(x=0, \theta)^2 
-                    + K_Top^v v(x=0, \theta)^2
-                    + K_Top^w w(x=0, \theta)^2
-                    + K_Top^{\phi_x} {\phi_x}(x=0, \theta)^2
-                    + K_Top^{\phi_\theta} {\phi_\theta}(x=0, \theta)^2
+                      K_{Top}^u u(x=0, \theta)^2 
+                    + K_{Top}^v v(x=0, \theta)^2
+                    + K_{Top}^w w(x=0, \theta)^2
+                    + K_{Top}^{\phi_x} {\phi_x}(x=0, \theta)^2
+                    + K_{Top}^{\phi_\theta} {\phi_\theta}(x=0, \theta)^2
                   \right)
 
-Note that the stiffnesses: `K_Top^u`, `K_Top^v` and `K_Top^w` are not used in
+Note that the stiffnesses: `K_{Top}^u`, `K_{Top}^v` and `K_{Top}^w` are not used in
 clpt_donnell2_, but since they are required in other implementations, it is
 convinient already at this point to present the general form using 
 all the elastic terms.
 
 The equation for `U_{springs}` can be written in matrix form, and it will
 result in an additional term to the linear stiffness matrix `[K_0]`. The new
-stiffness matris can be written as:
+stiffness matrix with the elastic constraints at the edges (`[{K_0}_e]`)
+can be calculated with:
 
 .. _elastic_constraints:
 
 .. math::
-    [K_0]_{new} = [K_0] + [K_0]_{edges}
+    [{K_0}_e] = [K_0] + [K_e]
 
-    [K_0]_{edges} = \int_{\theta} { \left(
-                        r_1 [g_{new}]_{x=L}^T [K]_{Bot} [g_{new}]_{x=L}^.
-                      + r_2 [g_{new}]_{x=0}^T [K]_{Top} [g_{new}]_{x=0}^.
-                         \right) d\theta
-                        }
+    [K_e] = \int_{\theta} { \left(
+                r_1 [g_{new}]_{x=L}^T [K]_{Bot} [g_{new}]_{x=L}^.
+              + r_2 [g_{new}]_{x=0}^T [K]_{Top} [g_{new}]_{x=0}^.
+             \right) d\theta
+            }
 
 with :
 
 .. math::
-    [K]_{Bot} = \begin{bmatrix}
-          K_Bot^u &       0 &       0 &              0 &             0 \\
-                0 & K_Bot^v &       0 &              0 &             0 \\
-                0 &       0 & K_Bot^w &              0 &             0 \\
-                0 &       0 &       0 & K_Bot^{\phi_x} &             0 \\
-                0 &       0 &       0 &              0 &K_Bot^{\phi_\theta} 
+    [K_{Bot}] = \begin{bmatrix}
+          K_{Bot}^u &       0 &       0 &              0 &             0 \\
+                0 & K_{Bot}^v &       0 &              0 &             0 \\
+                0 &       0 & K_{Bot}^w &              0 &             0 \\
+                0 &       0 &       0 & K_{Bot}^{\phi_x} &             0 \\
+                0 &       0 &       0 &              0 &K_{Bot}^{\phi_\theta} 
                     \end{bmatrix}
 
 and:
 
 .. math::
-    [K]_{Top} = \begin{bmatrix}
-          K_Top^u &       0 &       0 &              0 &             0 \\
-                0 & K_Top^v &       0 &              0 &             0 \\
-                0 &       0 & K_Top^w &              0 &             0 \\
-                0 &       0 &       0 & K_Top^{\phi_x} &             0 \\
-                0 &       0 &       0 &              0 &K_Top^{\phi_\theta} 
+    [K_{Top}] = \begin{bmatrix}
+          K_{Top}^u &       0 &       0 &              0 &             0 \\
+                0 & K_{Top}^v &       0 &              0 &             0 \\
+                0 &       0 & K_{Top}^w &              0 &             0 \\
+                0 &       0 &       0 & K_{Top}^{\phi_x} &             0 \\
+                0 &       0 &       0 &              0 &K_{Top}^{\phi_\theta} 
                     \end{bmatrix}
 
 
@@ -187,13 +189,14 @@ from the relations:
 
 .. math::
     \phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
-    \phi_t = - \frac{\partial w}{\partial \theta} = -w_{,\theta}
+    \phi_\theta = - \frac 1 r \frac{\partial w}{\partial \theta} 
+                = - \frac 1 r w_{,\theta}
 
 and therefore:
 
 .. math::
     [g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x} \\
-    [g^{\phi_\theta}] = \frac {\partial [g^w]} {\partial \theta} \\
+    [g^{\phi_\theta}] = - \frac 1 r \frac {\partial [g^w]} {\partial \theta} \\
     [g_{new}]^T = \left[ [g^u], [g^v], [g^w],
                           [g^{\phi_x}], [g^{\phi_\theta}] \right]
 
@@ -382,7 +385,7 @@ Observations:
 
     `\checkmark` linear static implemented
 
-    `\times` not working for linear static (would work for `i_0=0`, but then
-    the linear buckling does not work...)
+    `\times` not working for linear static (would work if `i_2` and `j_2`
+    started at `0`, but then the linear buckling did not work...)
 
     `\rightarrow` non-linear analysis not implemented
