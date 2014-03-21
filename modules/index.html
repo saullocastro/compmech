@@ -23,7 +23,6 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../about.html" />
@@ -73,19 +72,19 @@ perform:</p>
 <p>in conical and cylindrical structures.</p>
 <p>The implementation focused on laminate composite shells with a constant
 laminate constitutive relation. This means that the semi-analtical
-models were derived doing an integration using a constant <span class="math">\([F]\)</span> for the whole
-domain. Recalling that <span class="math">\([F]\)</span> correlates the strains and the distributed
+models were derived doing an integration using a constant <img class="math" src="../_images/math/701ee538464334ab7f699b9029ec7b4da7d3fafd.png" alt="[F]"/> for the whole
+domain. Recalling that <img class="math" src="../_images/math/701ee538464334ab7f699b9029ec7b4da7d3fafd.png" alt="[F]"/> correlates the strains and the distributed
 stresses by the relation:</p>
 <div class="math">
-\[\{N\} = [F] \{\varepsilon\}\]</div>
-<div class="section" id="defining-the-geometry">
+<p><img src="../_images/math/9ac01021a78866179d9f0ca3e9a1fb7143c8a6a3.png" alt="\{N\} = [F] \{\varepsilon\}"/></p>
+</div><div class="section" id="defining-the-geometry">
 <h3>Defining the geometry<a class="headerlink" href="#defining-the-geometry" title="Permalink to this headline">¶</a></h3>
 <p>Based on the figure:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/conecyl.png"><img alt="../_images/conecyl.png" src="../_images/conecyl.png" style="width: 430.8px; height: 282.0px;" /></a>
 </div>
-<p>The geometry can be defined using <span class="math">\(H\)</span>, <span class="math">\(R_1\)</span> and <span class="math">\(\alpha\)</span>, for example, or
-any other combination (like <span class="math">\(L\)</span>, <span class="math">\(H\)</span>, <span class="math">\(R_1\)</span>) of the geometric parameters
+<p>The geometry can be defined using <img class="math" src="../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/> and <img class="math" src="../_images/math/bbfbc8a7251a97f42020bf1fae519f2cd55dbdf7.png" alt="\alpha"/>, for example, or
+any other combination (like <img class="math" src="../_images/math/c0895a46089688784c74d8236df6300ec6631b35.png" alt="L"/>, <img class="math" src="../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/>) of the geometric parameters
 that will allow the complete definition of the cone / cylinder geometry.</p>
 <p><strong>Example:</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="kn">import</span> <span class="n">ConeCyl</span>
@@ -119,10 +118,10 @@ same thickness or using a container with the thickness of each ply:</p>
 </div>
 <p>The material properties are given using a tuple:</p>
 <div class="math">
-\[(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})\]</div>
-<p>where <span class="math">\(E_{11}\)</span> is the elastic modulus along the direction 1 of the ply,
-<span class="math">\(E_{22}\)</span> the modulus along the direction 2, <span class="math">\(\nu_{12}\)</span> the Poisson&#8217;s ratio
-and <span class="math">\(G_{12}\)</span>, <span class="math">\(G_{13}\)</span>, <span class="math">\(G_{23}\)</span> the shear modules.</p>
+<p><img src="../_images/math/828e9fee244cf147f44d3f7654b0c92c55f4186c.png" alt="(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})"/></p>
+</div><p>where <img class="math" src="../_images/math/efbbb4ccf9fc8f30395bdcce59db7517aadad3d8.png" alt="E_{11}"/> is the elastic modulus along the direction 1 of the ply,
+<img class="math" src="../_images/math/b538f243a6ccc8dd0461418d790e2916f6f3d309.png" alt="E_{22}"/> the modulus along the direction 2, <img class="math" src="../_images/math/28d42c5dfa97d18acf412e06eb80951fed23d2f9.png" alt="\nu_{12}"/> the Poisson&#8217;s ratio
+and <img class="math" src="../_images/math/24548d704a44280d1acecbccc9039af213576a34.png" alt="G_{12}"/>, <img class="math" src="../_images/math/7eadf0b06cc013ee81a9a12c752f68fc80f9b4e9.png" alt="G_{13}"/>, <img class="math" src="../_images/math/0e98798c4ea3aa2e0da5139de979e2d3bdef8820.png" alt="G_{23}"/> the shear modules.</p>
 <p><strong>Example:</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
 </pre></div>
@@ -253,7 +252,7 @@ One could plot the reaction load along</p>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 17, 2014.
+      Last updated on Mar 21, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
