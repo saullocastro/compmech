@@ -1,6 +1,49 @@
 About
 =====
 
+Installation
+------------
+
+**1) Downloading**
+
+The source code repository can be downloaded from 
+`GitHub <https://github.com/saullocastro/compmech/archive/master.zip>`_ 
+or cloned using `Git <http://git-scm.com/downloads>`_::
+
+    $ git clone https://github.com/saullocastro/compmech.git
+
+You can also  
+`visit the source code page here <https://github.com/saullocastro/compmech>`_.
+
+**2) Compiling the Cython files**
+
+After you have downloaded the ``compmech-master.zip`` unpack it and go into
+the ``compmech-master`` folder. If you cloned using ``git`` go to the
+``compmech`` folder.
+
+Run the setup::
+
+   >>> python setup.py
+
+.. Note:: You need Cython and a C compiler configured for this step.
+
+**2) Cleaning up and setting the environment**
+
+Delete all the ``build`` folders.
+
+Copy the ``compmech`` module (the folder at the same level as the 
+``README.rst`` file) and paste it to some directory pointed by your 
+``PYTHONPATH`` environment variable (can be inside the ``site-packages``
+directory of your Python installation or any other directory once you add it
+to ``PYTHONPATH``.
+
+**3) Testing**
+
+TODO, you might be able to use the libraries
+`as explained here
+<file:///C:/clones/compmech/doc/build/html/modules/index.html>`_.
+   
+
 Requirements
 ------------
 - numpy

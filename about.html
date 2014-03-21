@@ -56,6 +56,40 @@
             
   <div class="section" id="about">
 <h1>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><strong>1) Downloading</strong></p>
+<p>The source code repository can be downloaded from
+<a class="reference external" href="https://github.com/saullocastro/compmech/archive/master.zip">GitHub</a>
+or cloned using <a class="reference external" href="http://git-scm.com/downloads">Git</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git clone https://github.com/saullocastro/compmech.git
+</pre></div>
+</div>
+<p>You can also
+<a class="reference external" href="https://github.com/saullocastro/compmech">visit the source code page here</a>.</p>
+<p><strong>2) Compiling the Cython files</strong></p>
+<p>After you have downloaded the <tt class="docutils literal"><span class="pre">compmech-master.zip</span></tt> unpack it and go into
+the <tt class="docutils literal"><span class="pre">compmech-master</span></tt> folder. If you cloned using <tt class="docutils literal"><span class="pre">git</span></tt> go to the
+<tt class="docutils literal"><span class="pre">compmech</span></tt> folder.</p>
+<p>Run the setup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You need Cython and a C compiler configured for this step.</p>
+</div>
+<p><strong>2) Cleaning up and setting the environment</strong></p>
+<p>Delete all the <tt class="docutils literal"><span class="pre">build</span></tt> folders.</p>
+<p>Copy the <tt class="docutils literal"><span class="pre">compmech</span></tt> module (the folder at the same level as the
+<tt class="docutils literal"><span class="pre">README.rst</span></tt> file) and paste it to some directory pointed by your
+<tt class="docutils literal"><span class="pre">PYTHONPATH</span></tt> environment variable (can be inside the <tt class="docutils literal"><span class="pre">site-packages</span></tt>
+directory of your Python installation or any other directory once you add it
+to <tt class="docutils literal"><span class="pre">PYTHONPATH</span></tt>.</p>
+<p><strong>3) Testing</strong></p>
+<p>TODO, you might be able to use the libraries
+<a class="reference external" href="file:///C:/clones/compmech/doc/build/html/modules/index.html">as explained here</a>.</p>
+</div>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -115,6 +149,7 @@ DAMAGE.
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">About</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
 <li><a class="reference internal" href="#licensing">Licensing</a></li>
 </ul>
