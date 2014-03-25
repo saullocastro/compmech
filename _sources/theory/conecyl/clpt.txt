@@ -480,3 +480,38 @@ Observations:
     `\checkmark` linear static analysis implemented
 
     `\rightarrow` non-linear analysis not implemented
+
+.. _clpt_geier1997_bc2:
+
+clpt_geier1997_bc2
+------------------
+
+.. note:: NOT RECOMMENDED, implemented for comparative purposes only.
+
+Analogous to the model published by Geier and Singh (1997)
+(see [geier1997]_ for more details) for the SS2- and CC2-types of
+boundary condition. Originally proposed by Khdeir et al. (1989)
+(see [khdeir1989]_). Uses the Donnell's equations and the
+approximation functions are:
+
+.. math::
+    u = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                  \right)
+    \\
+    w = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+
+Observations:
+
+    `\checkmark` linear buckling implemented
+
+    `\rightarrow` linear static not implemented
+
+    `\rightarrow` non-linear analysis not implemented
+

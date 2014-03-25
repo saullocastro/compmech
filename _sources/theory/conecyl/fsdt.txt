@@ -45,8 +45,8 @@ for the :ref:`CLPT <elastic_constraints>`.
 Models
 ======
 
-The **recommended model** is the fsdt_donnell5_ (or the counterpart 
-fsdt_sanders5_) which has the largest 
+The **recommended model** is the fsdt_donnell_bcn_ (or the counterpart 
+fsdt_sanders_bcn_) which has the largest 
 simulation capabilities among the models and showed to be stable
 for linear buckling analysis too. This was achieved using 
 approximation functions with 
@@ -54,7 +54,7 @@ fewer terms, therefore, being computationally cheaper. The other models
 were kept for future reference.
 
 All the :ref:`types of boundary condition <boundary_conditions>` can be 
-simulated using the fsdt_donnell5_.
+simulated using the fsdt_donnell_bcn_.
 
 Below it follows are listed below (same name as the
 ``linear_kinematics`` parameter of the ``ConeCyl`` object):
@@ -63,9 +63,9 @@ Below it follows are listed below (same name as the
 - fsdt_donnell2_
 - fsdt_donnell3_
 - fsdt_donnell4_
-- fsdt_donnell5_
+- fsdt_donnell_bcn_
 - fsdt_donnell6_
-- fsdt_sanders5_
+- fsdt_sanders_bcn_
 - fsdt_shadmehri2012_bc2_
 - fsdt_shadmehri2012_bc3_
  
@@ -227,10 +227,10 @@ Observations:
     `\rightarrow` non-linear analysis not implemented
 
 
-.. _fsdt_donnell5:
+.. _fsdt_donnell_bcn:
 
-fsdt_donnell5
--------------
+fsdt_donnell_bcn
+----------------
 
 From the four previous attempts, the fsdt_donnell2_ and fsdt_donnell3_ 
 give the same results and the fsdt_donnell3_ is preferred because it has less
@@ -239,37 +239,41 @@ learned how the approximations for non-rigid boundary conditions should be and
 the current attempt add more flexibility in `v,w,\phi_\theta` using the
 previous know-how. The resulting approximation functions are:
 
+.. note:: The indices of `\theta` start at `1`, this resulted in a 
+          much higher numerical statibility
+
 .. math::
     u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
     v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
     w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
     \phi_x = {\phi_x}_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
     \\
     {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=0}^{m_1}
                                  {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
          {c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
+
 
 Observations:
 
@@ -321,12 +325,12 @@ a simply supported cone or cylinder, analogous to the CLPT implementation:
         +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 
-.. _fsdt_sanders5:
+.. _fsdt_sanders_bcn:
 
-fsdt_sanders5
--------------
+fsdt_sanders_bcn
+----------------
 
-Counterpart of :ref:`fsdt_donnell5` using the Sanders non-linear equations.
+Counterpart of :ref:`fsdt_donnell_bcn` using the Sanders non-linear equations.
 
 Observations:
 
@@ -345,7 +349,8 @@ fsdt_shadmehri2012_bc2
 
 Adapted from the model published by Shadmehri (2012) 
 ([shadmehri2012]_, [shadmehri2012thesis]_) for the SS2- and CC2-types
-of boundary conditions. The approximation functions are:
+of boundary conditions. Uses the Donnell's equations and 
+the approximation functions are:
 
 .. math::
     u = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
@@ -386,7 +391,8 @@ fsdt_shadmehri2012_bc3
 
 Published by Shadmehri (2012) (see [shadmehri2012]_ or [shadmehri2012thesis]_
 for more details). This model was developed to simulate the SS3- and 
-CC3-types of boundary condition. The approximation functions are:
+CC3-types of boundary condition. Uses the Donnell's 
+equations and the approximation functions are:
 
 .. math::
     u = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
@@ -407,6 +413,49 @@ CC3-types of boundary condition. The approximation functions are:
     \\
     {\phi}_\theta =  \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
          {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+
+Observations:
+
+    `\checkmark` linear buckling implemented
+
+    `\rightarrow` linear static not implemented
+
+    `\rightarrow` non-linear analysis not implemented
+
+
+.. _fsdt_geier1997_bc2:
+
+fsdt_geier1997_bc2
+----------------------
+
+.. note:: NOT RECOMMENDED, implemented for comparative purposes only.
+
+Published by Geier and Singh (1997) (see [geier1997]_ 
+for more details). This model was developed to simulate the SS2- and 
+CC2-types of boundary condition. Such models seem to be originally
+proposed by Khdeir et al. (1989) (see [khdeir1989]_).  
+Uses the Donnell's equations and the approximation functions are:
+
+.. math::
+    u = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                  \right)
+    \\
+    w = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    \phi_x = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+    \\
+    {\phi}_\theta =  \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
               \right)
 
 Observations:

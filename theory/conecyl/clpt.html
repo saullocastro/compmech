@@ -430,6 +430,36 @@ started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3eff
 <p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
+<div class="section" id="clpt-geier1997-bc2">
+<span id="id12"></span><h3>clpt_geier1997_bc2<a class="headerlink" href="#clpt-geier1997-bc2" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">NOT RECOMMENDED, implemented for comparative purposes only.</p>
+</div>
+<p>Analogous to the model published by Geier and Singh (1997)
+(see <a class="reference internal" href="ref.html#geier1997" id="id13">[geier1997]</a> for more details) for the SS2- and CC2-types of
+boundary condition. Originally proposed by Khdeir et al. (1989)
+(see <a class="reference internal" href="ref.html#khdeir1989" id="id14">[khdeir1989]</a>). Uses the Donnell&#8217;s equations and the
+approximation functions are:</p>
+<div class="math">
+<p><img src="../../_images/math/725fad89f0125d8b5e53d65487f14b0f2174189a.png" alt="u = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+\\
+v = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+              \right)
+\\
+w = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)"/></p>
+</div><p>Observations:</p>
+<blockquote>
+<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> linear static not implemented</p>
+<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+</div></blockquote>
+</div>
 </div>
 </div>
 
@@ -457,6 +487,7 @@ started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3eff
 <li><a class="reference internal" href="#clpt-sanders-bc2">clpt_sanders_bc2</a></li>
 <li><a class="reference internal" href="#clpt-sanders-bc3">clpt_sanders_bc3</a></li>
 <li><a class="reference internal" href="#clpt-sanders-bc4">clpt_sanders_bc4</a></li>
+<li><a class="reference internal" href="#clpt-geier1997-bc2">clpt_geier1997_bc2</a></li>
 </ul>
 </li>
 </ul>
@@ -517,7 +548,7 @@ started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3eff
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 21, 2014.
+      Last updated on Mar 22, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
