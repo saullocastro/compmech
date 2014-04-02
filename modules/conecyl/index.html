@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Semi-analytical models for cones and cylinder (compmech.conecyl) &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Python modules" href="../index.html" />
+    <link rel="next" title="Theory related to the implementations" href="../../theory/index.html" />
+    <link rel="prev" title="Python modules" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../theory/index.html" title="Theory related to the implementations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Python modules"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Python modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">
+<h1>Semi-analytical models for cones and cylinder (<tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></tt>)<a class="headerlink" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> class embodies all the methods and functions necessary to
+perform:</p>
+<ul class="simple">
+<li>linear static analysis</li>
+<li>linear buckling analysis</li>
+<li>non-linear static analysis</li>
+</ul>
+<p>in conical and cylindrical structures.</p>
+<p>The implementation focused on laminate composite shells with a constant
+laminate constitutive relation. This means that the semi-analtical
+models were derived doing an integration using a constant <img class="math" src="../../_images/math/701ee538464334ab7f699b9029ec7b4da7d3fafd.png" alt="[F]"/> for the whole
+domain. Recalling that <img class="math" src="../../_images/math/701ee538464334ab7f699b9029ec7b4da7d3fafd.png" alt="[F]"/> correlates the strains and the distributed
+stresses by the relation:</p>
+<div class="math">
+<p><img src="../../_images/math/9ac01021a78866179d9f0ca3e9a1fb7143c8a6a3.png" alt="\{N\} = [F] \{\varepsilon\}"/></p>
+</div><div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="defining-the-geometry">
+<h3>Defining the geometry<a class="headerlink" href="#defining-the-geometry" title="Permalink to this headline">¶</a></h3>
+<p>Based on the figure:</p>
+<div class="figure align-center" id="conecyl-figure">
+<a class="reference internal image-reference" href="../../_images/conecyl.png"><img alt="../../_images/conecyl.png" src="../../_images/conecyl.png" style="width: 430.8px; height: 282.0px;" /></a>
+</div>
+<p>The geometry can be defined using <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/> and <img class="math" src="../../_images/math/bbfbc8a7251a97f42020bf1fae519f2cd55dbdf7.png" alt="\alpha"/>, for example, or
+any other combination (like <img class="math" src="../../_images/math/c0895a46089688784c74d8236df6300ec6631b35.png" alt="L"/>, <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/>) of the geometric parameters
+that will allow the complete definition of the cone / cylinder geometry.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="kn">import</span> <span class="n">ConeCyl</span>
+
+<span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">r1</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">r2</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-the-laminate-and-the-material-properties">
+<h3>Defining the laminate and the material properties<a class="headerlink" href="#defining-the-laminate-and-the-material-properties" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/saullocastro/mapy">mapy</a>
+module is internally used to calculate the laminate properties given
+the stacking sequence, the thicknesses the material properties.</p>
+<p>The <strong>stacking sequence</strong> is passed using a container (<tt class="docutils literal"><span class="pre">list</span></tt> or <tt class="docutils literal"><span class="pre">tuple</span></tt>)
+with the orientations of each ply, <strong>from inwards to outwards</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="o">+</span><span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">+</span><span class="mi">30</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The ply thickness is passed using a single value when all the plies have the
+same thickness or using a container with the thickness of each ply:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
+</pre></div>
+</div>
+<p><strong>or</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The material properties are given using a tuple:</p>
+<div class="math">
+<p><img src="../../_images/math/828e9fee244cf147f44d3f7654b0c92c55f4186c.png" alt="(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})"/></p>
+</div><p>where <img class="math" src="../../_images/math/efbbb4ccf9fc8f30395bdcce59db7517aadad3d8.png" alt="E_{11}"/> is the elastic modulus along the direction 1 of the ply,
+<img class="math" src="../../_images/math/b538f243a6ccc8dd0461418d790e2916f6f3d309.png" alt="E_{22}"/> the modulus along the direction 2, <img class="math" src="../../_images/math/28d42c5dfa97d18acf412e06eb80951fed23d2f9.png" alt="\nu_{12}"/> the Poisson&#8217;s ratio
+and <img class="math" src="../../_images/math/24548d704a44280d1acecbccc9039af213576a34.png" alt="G_{12}"/>, <img class="math" src="../../_images/math/7eadf0b06cc013ee81a9a12c752f68fc80f9b4e9.png" alt="G_{13}"/>, <img class="math" src="../../_images/math/0e98798c4ea3aa2e0da5139de979e2d3bdef8820.png" alt="G_{23}"/> the shear modules.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will assume the same material properties for each ply. When different
+properties must be used the user must supply the <tt class="docutils literal"><span class="pre">laminaprops</span></tt> container.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">prop1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<span class="n">prop2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
+<span class="n">prop3</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">laminaprops</span> <span class="o">=</span> <span class="p">[</span><span class="n">prop1</span><span class="p">,</span> <span class="n">prop1</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop3</span><span class="p">,</span> <span class="n">prop3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="static-analysis">
+<h3>Static analysis<a class="headerlink" href="#static-analysis" title="Permalink to this headline">¶</a></h3>
+<p>The static analysis is performed with the method:</p>
+<blockquote>
+<div>cc.static(NLgeom=False)</div></blockquote>
+<p>where <tt class="docutils literal"><span class="pre">NLgeom</span></tt> is a flag telling whether or not a geometric non-linear
+analysis is to be performed.</p>
+<p>The solution is stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> attribute, which consists of a <tt class="docutils literal"><span class="pre">list</span></tt>
+of 1-D <tt class="docutils literal"><span class="pre">np.ndarray</span></tt> objects. For a linear analysis this list will contain
+only one entry while for a non-linear analysis it will contain one entry
+for each iteration needed up to the convergence or up to the termination
+criterion. To access the last result:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The displacement field can be plotted, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;my_output.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="non-linear-analysis">
+<h3>Non-linear analysis<a class="headerlink" href="#non-linear-analysis" title="Permalink to this headline">¶</a></h3>
+<p>Using <tt class="docutils literal"><span class="pre">NLgeom=True</span></tt> in a static analysis will run a geometrically
+non-linear analysis. Many attributes of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object
+are used to control the non-linear analysis (see
+<tt class="xref py py-func docutils literal"><span class="pre">ConeCyl.static()</span></tt>).</p>
+<p>The converged increments used along the non-linear analysis are stored
+in the <tt class="docutils literal"><span class="pre">increments</span></tt> attribute and the corresponding solutions
+stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> attribute (a <tt class="docutils literal"><span class="pre">list</span></tt> of 1-D <tt class="docutils literal"><span class="pre">np.ndarray</span></tt> objects).</p>
+</div>
+</div>
+<div class="section" id="measured-imperfections">
+<h2>Measured Imperfections<a class="headerlink" href="#measured-imperfections" title="Permalink to this headline">¶</a></h2>
+<p>Convenient routines to transform discrete measured data
+into continuous functions applicable in the semi-analytical analysis are
+provided in the <tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl.imperfections</span></tt> module.</p>
+<p>The implemented geometric imperfection of this module is the one
+representing the normal displacement of the mid-surface and will be
+called <em>Measured Geometric Imperfection (MGI)</em>.</p>
+<p>The non-linear analysis using a MGI require the calculation
+of the initial imperfection field, called <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/>, and the corresponding
+partial derivatives <img class="math" src="../../_images/math/bd9e7a9745595de4eef3ac5ceb2aa09ae044f697.png" alt="{w_0}_{,x}"/> and <img class="math" src="../../_images/math/bc7befe96ac9dde131b6c9f7d6cbfd3d7dd712c7.png" alt="{w_0}_{,\theta}"/>.</p>
+<p>The function <tt class="docutils literal"><span class="pre">calc_c0</span></tt> described below is implemented to find
+the best-fit for a given imperfection data. Three different approximation
+functions can be selected using the <tt class="docutils literal"><span class="pre">funcnum</span></tt> parameter.</p>
+<p>The imperfection file should be in the form:</p>
+<div class="highlight-python"><div class="highlight"><pre>theta1  height1  imp1
+theta2  height2  imp2
+...
+thetan  heightn  impn
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">height</span></tt> is measured from the bottom to the top of the cylinder
+or cone, parallel to the axial axis, and <tt class="docutils literal"><span class="pre">theta</span></tt> is the circumferential
+coordinate <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> measured as shown
+<a class="reference internal" href="#conecyl-figure"><em>in the semi-analytical model</em></a>.</p>
+<dl class="function">
+<dt id="compmech.conecyl.imperfections.calc_c0">
+<tt class="descclassname">compmech.conecyl.imperfections.</tt><tt class="descname">calc_c0</tt><big>(</big><em>path</em>, <em>m=40</em>, <em>n=40</em>, <em>funcnum=2</em>, <em>sample_size=None</em>, <em>maxmem=8</em>, <em>save=True</em><big>)</big><a class="headerlink" href="#compmech.conecyl.imperfections.calc_c0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the coefficients <img class="math" src="../../_images/math/90dfad7e3008bd9296795faa349b4446f5e30197.png" alt="c_0"/> that best fit the <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> function.</p>
+<p>The measured data will be fit using one of the following functions,
+selected using the <tt class="docutils literal"><span class="pre">funcnum</span></tt> parameter:</p>
+<ol class="arabic simple">
+<li></li>
+</ol>
+<div class="math">
+<p><img src="../../_images/math/39dc003d42e9bd83bc956542d2cdeb85763011e1.png" alt="w_0 = \sum_{i=1}^{m}{ \sum_{j=1}^{n}{
+         c_{ij}^a sin{b_z} sin{b_\theta}
+        +c_{ij}^b sin{b_z} cos{b_\theta} }}"/></p>
+</div><ol class="arabic simple" start="2">
+<li>(default)</li>
+</ol>
+<div class="math">
+<p><img src="../../_images/math/ccd8ca2c489dbc3b992a4cc344015b89e82b25c9.png" alt="w_0 = \sum_{i=0}^{m}{ \sum_{j=0}^{n}{
+        c_{ij}^a cos{b_z} sin{b_\theta}
+        +c_{ij}^b cos{b_z} cos{b_\theta} }}"/></p>
+</div><ol class="arabic simple" start="3">
+<li></li>
+</ol>
+<div class="math">
+<p><img src="../../_images/math/3d057cfb0cd25a949488f3feb75b1442aae68190.png" alt="w_0 = \sum_{i=0}^{m}{ \sum_{j=0}^{n}{
+         c_{ij}^a sin{b_z} sin{b_\theta}
+        +c_{ij}^b sin{b_z} cos{b_\theta}
+        +c_{ij}^c cos{b_z} sin{b_\theta}
+        +c_{ij}^d cos{b_z} cos{b_\theta} }}"/></p>
+</div><p>where:</p>
+<div class="math">
+<p><img src="../../_images/math/89401614e2d7e9ab5bada5fbb4d70da74fa49317.png" alt="b_z = i \pi \frac x L_{points}
+
+b_\theta = j \theta"/></p>
+</div><p>where <img class="math" src="../../_images/math/b5cadd3b85c5d3b9a6684f1e21089c61d9198e9a.png" alt="L_{points}"/> represents the difference between the maximum and
+the height values in the imperfection file divided by the cosine
+of the semi-vertex angle:</p>
+<div class="math">
+<p><img src="../../_images/math/849103ee55d94e88409a3a60c5bd1100bd1f217c.png" alt="L_{points} = \frac{H_{max} - H_{min}}{cos(\alpha)}
+           = \frac{H_{points}}{cos(\alpha)}"/></p>
+</div><p>In this form <img class="math" src="../../_images/math/760b8fc48228c614ecf0b936129250ed33b42133.png" alt="{}^x/_{L_{points}}"/> will vary from <img class="math" src="../../_images/math/779575f18dde3069197e30c9ce02f73d765fefe5.png" alt="0."/> (at the top)
+to <img class="math" src="../../_images/math/52f8ce4b0c6bce33f83e8d48a91f088fc6215c6e.png" alt="1."/> (at the bottom).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that if the measured sample does not
+cover all the height, <strong>it will be stretched</strong>.</p>
+</div>
+<p>The approximation can be written in matrix form as:</p>
+<div class="math">
+<p><img src="../../_images/math/d947cffc16ab48694b349b4260deee0668081dc7.png" alt="w_0 = [g] \{c\}"/></p>
+</div><p>where <img class="math" src="../../_images/math/e5c181ab30f23cea7c86c455ea6ebc26edff132c.png" alt="[g]"/> carries the base functions and <img class="math" src="../../_images/math/ba6e4422096979219d12a4b01100f0bd33823c8d.png" alt="{c}"/> the respective
+amplitudes. The solution consists on finding the best <img class="math" src="../../_images/math/ba6e4422096979219d12a4b01100f0bd33823c8d.png" alt="{c}"/> that minimizes
+the least-square error between the measured imperfection pattern and the
+<img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path</strong> : str or numpy.ndarray</p>
+<blockquote>
+<div><p>The path of the file containing the data. Can be a full path using
+<tt class="docutils literal"><span class="pre">r&quot;C:\Temp\inputfile.txt&quot;</span></tt>, for example.
+The input file must have 3 columns &#8220;<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> <img class="math" src="../../_images/math/c537047c627811e4ebbe2e109e282d2307c2dceb.png" alt="height"/> <img class="math" src="../../_images/math/a359fcc67d4efbcaef5bda404120efef7de1ada3.png" alt="imp"/>&#8221; expressed
+in Cartesian coordinates.</p>
+<p>This input can also be a <tt class="docutils literal"><span class="pre">numpy.ndarray</span></tt> object, with
+<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>, <img class="math" src="../../_images/math/c537047c627811e4ebbe2e109e282d2307c2dceb.png" alt="height"/>, <img class="math" src="../../_images/math/a359fcc67d4efbcaef5bda404120efef7de1ada3.png" alt="imp"/> in each corresponding column.</p>
+</div></blockquote>
+<p><strong>m</strong> : int</p>
+<blockquote>
+<div><p>Number of terms along the meridian (<img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>).</p>
+</div></blockquote>
+<p><strong>n</strong> : int</p>
+<blockquote>
+<div><p>Number of terms along the circumference (<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>).</p>
+</div></blockquote>
+<p><strong>funcnum</strong> : int, optional</p>
+<blockquote>
+<div><p>As explained above, selects the base functions used for
+the approximation.</p>
+</div></blockquote>
+<p><strong>sample_size</strong> : int or None, optional</p>
+<blockquote>
+<div><p>An in  specifying how many points of the imperfection file
+should be used. If the default <tt class="docutils literal"><span class="pre">None</span></tt> is used
+all points file will be used in the computations.</p>
+</div></blockquote>
+<p><strong>maxmem</strong> : int, optional</p>
+<blockquote>
+<div><p>Maximum RAM memory in GB allowed to compute the base functions.
+The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsqr</span></tt> will go beyond this limit.</p>
+</div></blockquote>
+<p><strong>save</strong> : bool, optional</p>
+<blockquote>
+<div><p>The default value <tt class="docutils literal"><span class="pre">True</span></tt> saves the calculated coefficients in the
+<tt class="docutils literal"><span class="pre">compmech/conecyl/imperfections/c0</span></tt> folder.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : numpy.ndarray</p>
+<blockquote class="last">
+<div><p>A 1-D array with the best-fit coefficients.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>When implementing a non-linear analysis algorithm, see for example
+<a class="reference external" href="https://github.com/saullocastro/compmech/blob/master/compmech/conecyl/fsdt/fsdt_donnell_bcn_nonlinear.pyx">fsdt_donnell_bcn_nonlinear.pyx</a>
+, the functions to calculate the partial derivatives of the geometric
+imperfection are accessible using Cython</p>
+<div class="highlight-python"><div class="highlight"><pre>from compmech.conecyl.imperfection.mgi cimport cfw0x, cfw0t
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">cfw0x</span></tt> and <tt class="docutils literal"><span class="pre">cfw0t</span></tt> function headers are:</p>
+<div class="highlight-python"><div class="highlight"><pre>cdef void cfw0x(double x, double t, double *c0, double L,
+                int m, int n, double *w0xref, int funcnum) nogil
+
+cdef void cfw0t(double x, double t, double *c0, double L,
+                int m, int n, double *w0xref, int funcnum) nogil
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">c0</span></tt> is the array containing the coefficients of the approximation
+function, <tt class="docutils literal"><span class="pre">L</span></tt> is the meridional length of the cone or cylinder
+(<a class="reference internal" href="#conecyl-figure"><em>as shown here</em></a>), <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">t</span></tt> the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and
+<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinates, <tt class="docutils literal"><span class="pre">m</span></tt> and <tt class="docutils literal"><span class="pre">n</span></tt> the number of terms of the
+approximation series as described above, and finally,
+<tt class="docutils literal"><span class="pre">w0xref</span></tt> and <tt class="docutils literal"><span class="pre">w0tref</span></tt> are pointers to <tt class="docutils literal"><span class="pre">double</span></tt> variables.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Semi-analytical models for cones and cylinder (<tt class="docutils literal"><span class="pre">compmech.conecyl</span></tt>)</a><ul>
+<li><a class="reference internal" href="#basics">Basics</a><ul>
+<li><a class="reference internal" href="#defining-the-geometry">Defining the geometry</a></li>
+<li><a class="reference internal" href="#defining-the-laminate-and-the-material-properties">Defining the laminate and the material properties</a></li>
+<li><a class="reference internal" href="#static-analysis">Static analysis</a></li>
+<li><a class="reference internal" href="#non-linear-analysis">Non-linear analysis</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#measured-imperfections">Measured Imperfections</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Python modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../theory/index.html"
+                        title="next chapter">Theory related to the implementations</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/conecyl/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../theory/index.html" title="Theory related to the implementations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Python modules"
+             >previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Python modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Apr 02, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
