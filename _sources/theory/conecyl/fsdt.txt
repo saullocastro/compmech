@@ -45,30 +45,285 @@ for the :ref:`CLPT <elastic_constraints>`.
 Models
 ======
 
-The **recommended model** is the fsdt_donnell_bcn_ (or the counterpart 
-fsdt_sanders_bcn_) which has the largest 
-simulation capabilities among the models and showed to be stable
-for linear buckling analysis too. This was achieved using 
-approximation functions with 
-fewer terms, therefore, being computationally cheaper. The other models
-were kept for future reference.
+The **recommended models**, according to the
+:ref:`desired boundary condition <boundary_conditions>` , are:
 
-All the :ref:`types of boundary condition <boundary_conditions>` can be 
-simulated using the fsdt_donnell_bcn_.
+- SS1- or CC1-type: fsdt_donnell_bc1_
 
-Below it follows are listed below (same name as the
-``linear_kinematics`` parameter of the ``ConeCyl`` object):
+- SS2- or CC2-type: fsdt_donnell_bc2_
+
+- SS3- or CC3-type: fsdt_donnell_bc3_
+
+- SS4- or CC4-type: fsdt_donnell_bc4_
+
+Note that the fsdt_donnell_bc4_ model can be used to simulate all the other
+types of boundary condition, which is allowed by the use of :ref:`elastic
+constraints <elastic_constraints>`.
+
+A more general model, the fsdt_donnell_bcn_ (or the counterpart
+fsdt_sanders_bcn_) has been proposed and despite it has the largest 
+simulation capabilities, it can be unstable for high stiffeness applied
+to the elastic constraints. Moreover, this model cannot simulate the linear
+buckling analysis of the `4^{th}` type of boundary conditions.
+
+The models below were kept for future reference only and have
+been used in comparative studies:
 
 - fsdt_donnell_
-- fsdt_donnell2_
 - fsdt_donnell3_
 - fsdt_donnell4_
-- fsdt_donnell_bcn_
-- fsdt_donnell6_
-- fsdt_sanders_bcn_
+- fsdt_geier1997_bc2_
 - fsdt_shadmehri2012_bc2_
 - fsdt_shadmehri2012_bc3_
- 
+
+.. _fsdt_donnell_bc1:
+
+fsdt_donnell_bc1
+----------------
+
+SS1- and CC1-types of boundary conditions.
+
+.. math::
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+    \\
+    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+                                 {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+
+Observations:
+
+    `\checkmark` linear static implemented
+
+    `\checkmark` linear buckling implemented
+
+    `\checkmark` non-linear analysis implemented
+
+      
+.. _fsdt_donnell_bc2:
+
+fsdt_donnell_bc2
+----------------
+
+SS2- and CC2-types of boundary conditions.
+
+.. math::
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+    \\
+    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+                                 {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+
+Observations:
+
+    `\checkmark` linear static implemented
+
+    `\checkmark` linear buckling implemented
+
+    `\checkmark` non-linear analysis implemented
+
+
+.. _fsdt_donnell_bc3:
+
+fsdt_donnell_bc3
+----------------
+
+SS3- and CC3-types of boundary conditions.
+
+.. math::
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+    \\
+    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+                                 {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+
+Observations:
+
+    `\checkmark` linear static implemented
+
+    `\checkmark` linear buckling implemented
+
+    `\checkmark` non-linear analysis implemented
+
+
+.. _fsdt_donnell_bc4:
+
+fsdt_donnell_bc4
+----------------
+
+SS4- and CC4-types of boundary conditions.
+
+.. math::
+    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+    \\
+    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
+                                 {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
+              \right)
+
+Observations:
+
+    `\checkmark` linear static implemented
+
+    `\checkmark` linear buckling implemented
+
+    `\checkmark` non-linear analysis implemented
+
+
+.. _fsdt_donnell_bcn:
+
+fsdt_donnell_bcn
+----------------
+
+From the four previous attempts the fsdt_donnell3_ 
+is preferred model. By then it was
+learned how the approximations for non-rigid boundary conditions should be and
+the current attempt add more flexibility in `v,w,\phi_\theta` using the
+previous know-how. The resulting approximation functions are:
+
+.. note:: The indices of `\theta` starting at `1`, this resulted in a 
+          much higher numerical statibility
+
+.. math::
+    u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\    
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    \phi_x = {\phi_x}_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                 {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
+                +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+    \\
+    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=0}^{m_1}
+                                 {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
+              \right)
+
+
+Observations:
+
+    `\checkmark` linear static implemented
+
+    `\checkmark` linear buckling implemented
+
+    `\checkmark` non-linear analysis implemented
+
+
 .. _fsdt_donnell: 
 
 fsdt_donnell
@@ -139,13 +394,14 @@ Observations:
     `\times` did not work for non-linear analysis
 
 
-.. _fsdt_donnell2:
+.. _fsdt_donnell3:
 
-fsdt_donnell2
+fsdt_donnell3
 -------------
 
-With the aim to remove the rigid body translation found in fsdt_donnell_,
-only the function for `u`  has been changed:
+Tried to remove some the rigid body modes of
+terms of fsdt_donnell_ in order to make the linear
+buckling analysis work. The `\phi_x` function has been simplified too:
 
 .. math::
     u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u}\sin{{b_x}_1}
@@ -155,27 +411,19 @@ only the function for `u`  has been changed:
                     +{c_{i_2 j_2}}_c^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_d^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
-
-
-Observations:
-
-    `\checkmark` rigid body translation removed
-
-    `\times` did not work for linear buckling
-
-    `\rightarrow` non-linear analysis not implemented
-
-
-.. _fsdt_donnell3:
-
-fsdt_donnell3
--------------
-
-Tried to remove some terms of fsdt_donnell2_ in order to make the linear
-buckling analysis work. Only the `cos` function of
-`{\phi_x}_1` has been removed:
-
-.. math::
+    \\
+    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
+                  \right)
+    \\
+    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
+                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
+                \right)
+    \\
     \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \sin{{b_x}_1} 
         + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
              {c_{i_2 j_2}}_a^{\phi_x} \sin{{b_x}_2} \sin{j_2 \theta}
@@ -183,8 +431,25 @@ buckling analysis work. Only the `cos` function of
             +{c_{i_2 j_2}}_c^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
             +{c_{i_2 j_2}}_d^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
         \right)
+    \\
+    \phi_{\theta} = {\phi_{\theta}}_0 +
+                \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_{\theta}}_a\sin{{b_x}_1} 
+                                  +{c_{i_1}}^{\phi_{\theta}}_b\cos{{b_x}_1} 
+            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+         {c_{i_2 j_2}}_a^{\phi_{\theta}} \sin{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_b^{\phi_{\theta}} \sin{{b_x}_2} \cos{j_2 \theta}
+        +{c_{i_2 j_2}}_c^{\phi_{\theta}} \cos{{b_x}_2} \sin{j_2 \theta}
+        +{c_{i_2 j_2}}_d^{\phi_{\theta}} \cos{{b_x}_2} \cos{j_2 \theta}
+            \right)
 
 Observations:
+
+    `\checkmark` rigid body translation removed
+
+    `\checkmark` the flexible boundary conditions were successfully
+    simulated
+
+    `\checkmark` linear static implemented
 
     `\times` did not work for linear buckling
 
@@ -226,104 +491,6 @@ Observations:
 
     `\rightarrow` non-linear analysis not implemented
 
-
-.. _fsdt_donnell_bcn:
-
-fsdt_donnell_bcn
-----------------
-
-From the four previous attempts, the fsdt_donnell2_ and fsdt_donnell3_ 
-give the same results and the fsdt_donnell3_ is preferred because it has less
-degrees of freedom (the `cos` of `{\phi_x}_1`). By then it was
-learned how the approximations for non-rigid boundary conditions should be and
-the current attempt add more flexibility in `v,w,\phi_\theta` using the
-previous know-how. The resulting approximation functions are:
-
-.. note:: The indices of `\theta` start at `1`, this resulted in a 
-          much higher numerical statibility
-
-.. math::
-    u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
-                  \right)
-    \\    
-    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
-                  \right)
-    \\
-    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{w} \cos{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{w} \cos{{b_x}_2} \cos{j_2 \theta}
-                  \right)
-    \\
-    \phi_x = {\phi_x}_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
-              \right)
-    \\
-    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=0}^{m_1}
-                                 {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
-         {c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
-        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
-              \right)
-
-
-Observations:
-
-    `\checkmark` linear static implemented
-
-    `\checkmark` linear buckling implemented
-
-    `\checkmark` non-linear analysis implemented
-
-
-.. _fsdt_donnell6:
-
-fsdt_donnell6
--------------
-
-With an attempt to make the linear buckling analysis to work for FSDT, this
-uses very simple approximation functions, design to produce results for
-a simply supported cone or cylinder, analogous to the CLPT implementation:
-
-.. math::
-    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
-                  \right)
-    \\    
-    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
-                  \right)
-    \\
-    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                     {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
-                    +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
-                  \right)
-    \\
-    \phi_x = {\phi_x}_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-                 {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
-                +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
-              \right)
-    \\
-    {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=1}^{m_1}
-                                 {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
-         {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
-        +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-              \right)
 
 .. _fsdt_sanders_bcn:
 
