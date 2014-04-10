@@ -102,7 +102,7 @@ Below it follows a more detailed description of each of the implementations:
 - clpt_donnell_bc2_
 - clpt_donnell_bc3_
 - clpt_donnell_bc4_
-- clpt_donnell4_
+- clpt_donnell_bcn_
 
 - clpt_sanders_bc1_
 - clpt_sanders_bc4_
@@ -111,7 +111,7 @@ Below it follows a more detailed description of each of the implementations:
  
 Each model can be accessed using the ``linear_kinematics`` parameter of the
 ``ConeCyl`` object. For linear static analysis the most general model is the
-clpt_donnell4_.
+clpt_donnell_bcn_.
 
 For linear buckling analysis the following models should be used for
 each type of boundary conditions:
@@ -245,9 +245,9 @@ and therefore:
 
 Observations:
 
-    `\checkmark` linear static implemented
-
     `\checkmark` linear buckling implemented
+
+    `\checkmark` linear static implemented
 
     `\rightarrow` non-linear analysis not implemented
 
@@ -288,8 +288,7 @@ Observations:
 
     `\checkmark` linear buckling implemented
 
-    `\times` not working for linear static (would work if `i_2` and `j_2`
-    started at `0`, but then the linear buckling did not work...)
+    `\checkmark` linear static implemented
 
     `\rightarrow` non-linear analysis not implemented
 
@@ -329,8 +328,7 @@ Observations:
 
     `\checkmark` linear buckling implemented
 
-    `\times` not working for linear static (would work if `i_2` and `j_2`
-    started at `0`)
+    `\checkmark` linear static implemented
 
     `\rightarrow` non-linear analysis not implemented
 
@@ -367,17 +365,17 @@ The linear stiffness matrix `[K_0]` is changed using the same
 
 Observations:
 
-    `\times` not working for linear buckling implemented
+    `\checkmark` linear buckling implemented
 
-    `\checkmark` linear static analysis implemented
+    `\checkmark` linear static implemented
 
     `\rightarrow` non-linear analysis not implemented
 
 
-.. _clpt_donnell4:
+.. _clpt_donnell_bcn:
 
-clpt_donnell4
--------------
+clpt_donnell_bcn
+----------------
 
 General approximation function for the CLPT. It allows any type of
 boundary condition by setting the proper values for the elastic
@@ -441,10 +439,9 @@ Counterpart of :ref:`clpt_donnell_bc2` using the Sanders non-linear equations.
 
 Observations:
 
-    `\checkmark` linear buckling implemented
+    `\checkmark` linear static implemented
 
-    `\times` not working for linear static (would work if `i_2` and `j_2`
-    started at `0`, but then the linear buckling did not work...)
+    `\checkmark` linear buckling implemented
 
     `\rightarrow` non-linear analysis not implemented
 
@@ -458,10 +455,9 @@ Counterpart of :ref:`clpt_donnell_bc3` using the Sanders non-linear equations.
 
 Observations:
 
-    `\checkmark` linear buckling implemented
+    `\checkmark` linear static implemented
 
-    `\times` not working for linear static (would work if `i_2` and `j_2`
-    started at `0`)
+    `\checkmark` linear buckling implemented
 
     `\rightarrow` non-linear analysis not implemented
 
@@ -475,9 +471,9 @@ Counterpart of :ref:`clpt_donnell_bc4` using the Sanders non-linear equations.
 
 Observations:
 
-    `\times` not working for linear buckling implemented
+    `\checkmark` linear static implemented
 
-    `\checkmark` linear static analysis implemented
+    `\checkmark` linear buckling implemented
 
     `\rightarrow` non-linear analysis not implemented
 

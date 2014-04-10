@@ -142,14 +142,14 @@ boundary conditions.</p>
 <li><a class="reference internal" href="#clpt-donnell-bc2">clpt_donnell_bc2</a></li>
 <li><a class="reference internal" href="#clpt-donnell-bc3">clpt_donnell_bc3</a></li>
 <li><a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a></li>
-<li><a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a></li>
+<li><a class="reference internal" href="#clpt-donnell-bcn">clpt_donnell_bcn</a></li>
 <li><a class="reference internal" href="#clpt-sanders-bc1">clpt_sanders_bc1</a></li>
 <li><a class="reference internal" href="#clpt-sanders-bc4">clpt_sanders_bc4</a></li>
 <li><a class="reference internal" href="#clpt-sanders-bc2">clpt_sanders_bc2</a></li>
 </ul>
 <p>Each model can be accessed using the <tt class="docutils literal"><span class="pre">linear_kinematics</span></tt> parameter of the
 <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object. For linear static analysis the most general model is the
-<a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a>.</p>
+<a class="reference internal" href="#clpt-donnell-bcn">clpt_donnell_bcn</a>.</p>
 <p>For linear buckling analysis the following models should be used for
 each type of boundary conditions:</p>
 <ul class="simple">
@@ -251,8 +251,8 @@ from the relations:</p>
                       [g^{\phi_x}], [g^{\phi_\theta}] \right]"/></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
+<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
 <p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
@@ -285,8 +285,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Observations:</p>
 <blockquote>
 <div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/1f577636fd48e3d1e1c7f25ca7535cb24a2b3d44.png" alt="\times"/> not working for linear static (would work if <img class="math" src="../../_images/math/0b2d658695d404a5c577727f87efcf08363ac305.png" alt="i_2"/> and <img class="math" src="../../_images/math/a064212ef771c2049db3c15a010454c6fbcc768d.png" alt="j_2"/>
-started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3efffe2ac1d0b1b34.png" alt="0"/>, but then the linear buckling did not work...)</p>
+<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
 <p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
@@ -318,8 +317,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Observations:</p>
 <blockquote>
 <div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/1f577636fd48e3d1e1c7f25ca7535cb24a2b3d44.png" alt="\times"/> not working for linear static (would work if <img class="math" src="../../_images/math/0b2d658695d404a5c577727f87efcf08363ac305.png" alt="i_2"/> and <img class="math" src="../../_images/math/a064212ef771c2049db3c15a010454c6fbcc768d.png" alt="j_2"/>
-started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3efffe2ac1d0b1b34.png" alt="0"/>)</p>
+<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
 <p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
@@ -349,13 +347,13 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <a class="reference internal" href="#elastic-constraints"><em>elastic contraints used for the clpt_donnell_bc1</em></a>.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/1f577636fd48e3d1e1c7f25ca7535cb24a2b3d44.png" alt="\times"/> not working for linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static analysis implemented</p>
+<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
 <p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
-<div class="section" id="clpt-donnell4">
-<span id="id7"></span><h3>clpt_donnell4<a class="headerlink" href="#clpt-donnell4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="clpt-donnell-bcn">
+<span id="id7"></span><h3>clpt_donnell_bcn<a class="headerlink" href="#clpt-donnell-bcn" title="Permalink to this headline">¶</a></h3>
 <p>General approximation function for the CLPT. It allows any type of
 boundary condition by setting the proper values for the elastic
 constants.</p>
@@ -403,9 +401,8 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc2"><em>clpt_donnell_bc2</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/1f577636fd48e3d1e1c7f25ca7535cb24a2b3d44.png" alt="\times"/> not working for linear static (would work if <img class="math" src="../../_images/math/0b2d658695d404a5c577727f87efcf08363ac305.png" alt="i_2"/> and <img class="math" src="../../_images/math/a064212ef771c2049db3c15a010454c6fbcc768d.png" alt="j_2"/>
-started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3efffe2ac1d0b1b34.png" alt="0"/>, but then the linear buckling did not work...)</p>
+<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
 <p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
@@ -414,9 +411,8 @@ started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3eff
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc3"><em>clpt_donnell_bc3</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/1f577636fd48e3d1e1c7f25ca7535cb24a2b3d44.png" alt="\times"/> not working for linear static (would work if <img class="math" src="../../_images/math/0b2d658695d404a5c577727f87efcf08363ac305.png" alt="i_2"/> and <img class="math" src="../../_images/math/a064212ef771c2049db3c15a010454c6fbcc768d.png" alt="j_2"/>
-started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3efffe2ac1d0b1b34.png" alt="0"/>)</p>
+<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
 <p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
@@ -425,8 +421,8 @@ started at <img class="math" src="../../_images/math/83cd3ec39fc197dde43da3e3eff
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc4"><em>clpt_donnell_bc4</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/1f577636fd48e3d1e1c7f25ca7535cb24a2b3d44.png" alt="\times"/> not working for linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static analysis implemented</p>
+<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
 <p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
@@ -482,7 +478,7 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 <li><a class="reference internal" href="#clpt-donnell-bc2">clpt_donnell_bc2</a></li>
 <li><a class="reference internal" href="#clpt-donnell-bc3">clpt_donnell_bc3</a></li>
 <li><a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a></li>
-<li><a class="reference internal" href="#clpt-donnell4">clpt_donnell4</a></li>
+<li><a class="reference internal" href="#clpt-donnell-bcn">clpt_donnell_bcn</a></li>
 <li><a class="reference internal" href="#clpt-sanders-bc1">clpt_sanders_bc1</a></li>
 <li><a class="reference internal" href="#clpt-sanders-bc2">clpt_sanders_bc2</a></li>
 <li><a class="reference internal" href="#clpt-sanders-bc3">clpt_sanders_bc3</a></li>
