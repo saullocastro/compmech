@@ -124,7 +124,7 @@ each type of boundary conditions:
 
 - SS4- or CC4-type: clpt_donnell_bc4_ or clpt_sanders_bc4_
 
-- Free edges: use the :ref:`fsdt_donnell5` (CLPT not implemented)
+- Free edges: use the :ref:`fsdt_donnell_bcn` (CLPT not implemented)
 
 
 .. _clpt_donnell_bc1:
@@ -139,20 +139,20 @@ The approximation functions are:
 .. _clpt_approx_functions:
 
 .. math::
-    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
@@ -262,20 +262,20 @@ in between). The flexibily in `v` is removed if compared to the
 clpt_donnell_bc4_. Giving:
 
 .. math::
-    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
@@ -303,20 +303,20 @@ Planned for SS3- and CC3-types of boundary conditions (or anything
 in between). The approximation functions are:
 
 .. math::
-    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
@@ -343,20 +343,20 @@ clpt_donnell_bc4
 SS4- or CC4-types of boundary conditions (or anything in between).
 
 .. math::
-    u = u_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = v_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=1}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
-            + \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
@@ -495,15 +495,15 @@ boundary condition. Originally proposed by Khdeir et al. (1989)
 approximation functions are:
 
 .. math::
-    u = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
-    v = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    v = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                   \right)
     \\
-    w = \sum_{i_2=1}^{m_2} \sum_{j_2=1}^{n_2} \left(
+    w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
 
