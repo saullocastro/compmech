@@ -51,7 +51,7 @@
           <a href="index.html" title="Semi-analytical models for conical and cylindrical shells (conecyl)"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li>
+          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>  
@@ -88,18 +88,20 @@ matrices in a ready-to-paste-into-Cython form.</p>
 surface loads, concentraded or not</li>
 </ul>
 </div>
-<div class="section" id="some-definitions">
-<h2>Some definitions<a class="headerlink" href="#some-definitions" title="Permalink to this headline">¶</a></h2>
-<p>In the following sections <tt class="docutils literal"><span class="pre">ESL</span> <span class="pre">theory</span></tt> can be either the
-<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><em>CLPT - Classical Laminated Plate Theory</em></a> or the <a class="reference internal" href="fsdt.html#theory-conecyl-fsdt"><em>FSDT - First-order Shear Deformation Theory</em></a> , and
-the <tt class="docutils literal"><span class="pre">equation</span> <span class="pre">type</span></tt> can be either the <tt class="docutils literal"><span class="pre">Donnell</span></tt>&#8216;s or <tt class="docutils literal"><span class="pre">Sanders</span></tt>&#8216;
+<div class="section" id="definitions">
+<h2>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
+<p>In the <a class="reference internal" href="esl_theories.html#esl-theories"><em>ESL theories section</em></a> it is explained
+the types of kinematic equation implemented, defining the <tt class="docutils literal"><span class="pre">ESL</span> <span class="pre">theory</span></tt>
+prefix mentioned below (currently <tt class="docutils literal"><span class="pre">clpt</span></tt> or <tt class="docutils literal"><span class="pre">fsdt</span></tt>).</p>
+<p>The <tt class="docutils literal"><span class="pre">equation</span> <span class="pre">type</span></tt> prefix will be <tt class="docutils literal"><span class="pre">donnell</span></tt> or <tt class="docutils literal"><span class="pre">sanders</span></tt>, defining
+if the model is built using the Donnell&#8217;s or the Sanders&#8217; non-linear
 equations.</p>
 </div>
 <div class="section" id="integration-of-the-linear-matrices">
 <h2>Integration of the linear matrices<a class="headerlink" href="#integration-of-the-linear-matrices" title="Permalink to this headline">¶</a></h2>
 <p>The linear matrices K0 and KG0 are integrated analytically, and the
 Mathematica routines necessary for this task are named as:</p>
-<div class="highlight-python"><div class="highlight"><pre>{ESL theory}_{equation type}_linear.nb
+<div class="highlight-python"><div class="highlight"><pre>{ESL theory}_{equation type}_{boundary condition}_linear.nb
 </pre></div>
 </div>
 <p>Each integrated smallest repeatable sub-matrix:</p>
@@ -110,15 +112,18 @@ Mathematica routines necessary for this task are named as:</p>
 Mathematica format and another in Fortran format, identified with a prefix
 <tt class="docutils literal"><span class="pre">fortran_</span></tt>. Since the integrated matrices are greatly simplified for the
 cylinder case, there are files for both cones and cylinders.</p>
-<p>The routines <tt class="docutils literal"><span class="pre">print_sparse.py</span></tt> are used to convert the Fortran format to a
+<p>The routine <tt class="docutils literal"><span class="pre">print_sparse.py</span></tt> is used to convert the Fortran format to a
 ready-to-past-in-Cython format, separating in <tt class="docutils literal"><span class="pre">row</span></tt>, <tt class="docutils literal"><span class="pre">col</span></tt> and <tt class="docutils literal"><span class="pre">value</span></tt>,
 which is convenient for the implementation using sparse matrices. The
-generated files are stored in <tt class="docutils literal"><span class="pre">./sparse_printing</span></tt>.</p>
+generated files are stored in <tt class="docutils literal"><span class="pre">./sparse_printing</span></tt>. Note that the power
+functions <tt class="docutils literal"><span class="pre">var**3</span></tt> are transformed in <tt class="docutils literal"><span class="pre">(var*var*var)</span></tt>, by default,
+which can be modified by changing the parameters in the
+<tt class="docutils literal"><span class="pre">mprint_as_sparse()</span></tt> function.</p>
 <p>The integrated sparse matrices are pasted in the corresponding Cython codes,
 currently:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_linear_donnell</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">clpt_linear_sanders</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">fsdt_linear_donnell</span><span class="o">.</span><span class="n">pyx</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_donnell_bc_linear</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">clpt_sanders_bc_linear</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">fsdt_donnell_bc_linear</span><span class="o">.</span><span class="n">pyx</span>
 </pre></div>
 </div>
 </div>
@@ -128,7 +133,7 @@ currently:</p>
 analytically and their integrands are built for the numerical integration
 algorithms. Mathematica is used to build the integrands, in the routines
 named as:</p>
-<div class="highlight-python"><div class="highlight"><pre>{ESL theory}_{equation type}_non_linear_numerical.nb
+<div class="highlight-python"><div class="highlight"><pre>{ESL theory}_{equation type}_{boundary condition}_nonlinear.nb
 </pre></div>
 </div>
 <p>The output is printed inside <tt class="docutils literal"><span class="pre">./numerical</span></tt> and the routine
@@ -177,9 +182,9 @@ fortran_{cone or cylinder}_{matrix name}q_{right digit}.txt
 </pre></div>
 </div>
 <p>These are implemented in:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_NL_donnell_numerical</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">clpt_NL_sanders_numerical</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">fsdt_NL_donnell_numerical</span><span class="o">.</span><span class="n">pyx</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_donnell_bc_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">clpt_sanders_bc_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">fsdt_donnell_bc_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
 </pre></div>
 </div>
 </div>
@@ -221,7 +226,7 @@ strain equations is written:</p>
 <li><a class="reference internal" href="#">Developing the code for the conecyl module</a><ul>
 <li><a class="reference internal" href="#history-about-the-software-used-to-derive-the-equations">History about the software used to derive the equations</a></li>
 <li><a class="reference internal" href="#current-implementations">Current implementations</a></li>
-<li><a class="reference internal" href="#some-definitions">Some definitions</a></li>
+<li><a class="reference internal" href="#definitions">Definitions</a></li>
 <li><a class="reference internal" href="#integration-of-the-linear-matrices">Integration of the linear matrices</a></li>
 <li><a class="reference internal" href="#integration-of-the-non-linear-matrices">Integration of the non-linear matrices</a></li>
 <li><a class="reference internal" href="#strain-equations">Strain equations</a></li>
@@ -276,13 +281,13 @@ strain equations is written:</p>
           <a href="index.html" title="Semi-analytical models for conical and cylindrical shells (conecyl)"
              >previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li>
+          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li>
           <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 21, 2014.
+      Last updated on Apr 11, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

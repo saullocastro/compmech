@@ -45,54 +45,6 @@ The aim is to have models capable of simulating the displacement field of
 cones and cylinders. The approximation functions are the same
 for both the Donnell's and the Sanders' models.
 
-.. _boundary_conditions:
-
-Boundary conditions
-===================
-
-The classification of Som and Deb (2014) [som2014]_ has been used for the
-boundary conditions.
-
-The simply-supported boundary conditions are:
-
-.. math::
-
-    \begin{tabular}{l c r}
-        Name & Displ. Vector & Elastic Constants \\
-        \hline
-        SS1  & $u=v=w=0$        & $K^u=K^v=K^w=\infty$ \\
-             &                  & $K^{\phi_x}=K^{\phi_\theta}=0$ \\
-        \hline
-        SS2  & $v=w=0$          & $K^v=K^w=\infty$ \\
-             &                  & $K^u=K^{\phi_x}=K^{\phi_\theta}=0$ \\
-        \hline
-        SS3  & $u=w=0$          & $K^u=K^w=\infty$ \\
-             &                  & $K^v=K^{\phi_x}=K^{\phi_\theta}=0$ \\
-        \hline
-        SS4  & $w=0$            & $K^w=\infty$ \\
-             &                  & $K^u=K^v=K^{\phi_x}=K^{\phi_\theta}=0$
-    \end{tabular}
-
-and the clamped are:
-
-.. math::
-    \begin{tabular}{l c r}
-        Name & Displ. Vector & Elastic Constants \\
-        \hline
-        CC1  & $u=v=w=w_{,x}=0$ & $K^u=K^v=K^w=K^{\phi_x}=\infty$ \\
-             &                  & $K^{\phi_\theta}=0$ \\
-        \hline
-        CC2  & $v=w=w_{,x}=0$   & $K^v=K^w=K^{\phi_x}=\infty$ \\
-             &                  & $K^u=K^{\phi_\theta}=0$ \\
-        \hline
-        CC3  & $u=w=w_{,x}=0$   & $K^u=K^w=K^{\phi_x}=\infty$ \\
-             &                  & $K^v=K^{\phi_\theta}=0$ \\
-        \hline
-        CC4  & $w=w_{,x}=0$     & $K^w=K^{\phi_x}=\infty$ \\
-             &                  & $K^u=K^v=K^{\phi_\theta}=0$ 
-    \end{tabular}
-
-
 Models
 ======
 

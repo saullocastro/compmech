@@ -1,0 +1,535 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compmech.conecyl.modelDB &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="compmech.conecyl" href="../conecyl.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../conecyl.html" accesskey="U">compmech.conecyl</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for compmech.conecyl.modelDB</h1><div class="highlight"><pre>
+<span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">Used to configure the main parameters for each implemented model.</span>
+
+<span class="sd">.. currentmodule:: compmech.conecyl.modelDB</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">coo_matrix</span>
+
+<span class="kn">from</span> <span class="nn">clpt</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">fsdt</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;clpt_donnell_bc1&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc1</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc1_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc1_nonlinear</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_donnell_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc2_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_donnell_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc3</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc3_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_donnell_bc4&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc4</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc4_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_donnell_bcn&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bcn</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bcn_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_sanders_bc1&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc1</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc1_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_sanders_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc2_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_sanders_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc3</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc3_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_sanders_bc4&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc4</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc4_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;clpt_geier1997_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_geier1997_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_geier1997_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_donnell_bcn&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bcn</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bcn_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bcn_nonlinear</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_donnell_bc1&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bc1</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc1_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc1_nonlinear</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_donnell_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc2_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc2_nonlinear</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_donnell_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bc3</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc3_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc3_nonlinear</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_donnell_bc4&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bc4</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc4_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc4_nonlinear</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_sanders_bcn&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bcn</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_sanders_bcn_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_shadmehri2012_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_shadmehri2012_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_shadmehri2012_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_shadmehri2012_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_shadmehri2012_bc3</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_shadmehri2012_bc3</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;fsdt_geier1997_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_geier1997_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_geier1997_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="p">}</span>
+
+<div class="viewcode-block" id="get_linear_matrices"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.modelDB.get_linear_matrices">[docs]</a><span class="k">def</span> <span class="nf">get_linear_matrices</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="n">combined_load_case</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Obtain the right functions to calculate hte linear matrices</span>
+<span class="sd">    for a given model.</span>
+
+<span class="sd">    The ``model`` parameter of the ``ConeCyl`` object is used to search</span>
+<span class="sd">    for the functions ``fG0``, ``fG0_cyl``, ``fkG0``, ``fkG0_cyl``,</span>
+<span class="sd">    and the matrix ``k0edges`` is calculated, when applicable.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cc : compmech.conecyl.ConeCyl</span>
+<span class="sd">        The ``ConeCyl`` object.</span>
+<span class="sd">    combined_load_case : int, optional</span>
+<span class="sd">        As explained in the :meth:`ConeCyl.lb() &lt;compmech.conecyl.ConeCyl.lb&gt;`</span>
+<span class="sd">        method, the integer indicating</span>
+<span class="sd">        which combined load case should be used. Default is ``None``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : tuple</span>
+<span class="sd">        A tuple containing ``(fk0, fk0_cyl, fkG0, fkG0_cyl, k0edges)``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">r1</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">r2</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">L</span>
+    <span class="n">m1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">m1</span>
+    <span class="n">m2</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">m2</span>
+    <span class="n">n2</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">n2</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">model</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fk0edges</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0edges</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc1&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc2&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc3&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc4&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bcn&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kwBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kwTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphitBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphitTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_sanders_bc1&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_sanders_bc2&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_sanders_bc3&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_sanders_bc4&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_geier1997_bc2&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bc1&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bc2&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bc3&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bc4&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bcn&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kwBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kwTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphitBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphitTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_sanders_bcn&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kwBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kwTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphitBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphitTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_shadmehri2012_bc2&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_shadmehri2012_bc3&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_geier1997_bc2&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                    <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="n">fk0</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0</span>
+    <span class="n">fk0_cyl</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0_cyl</span>
+    <span class="n">fkG0</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fkG0</span>
+    <span class="n">fkG0_cyl</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fkG0_cyl</span>
+
+    <span class="k">return</span> <span class="n">fk0</span><span class="p">,</span> <span class="n">fk0_cyl</span><span class="p">,</span> <span class="n">fkG0</span><span class="p">,</span> <span class="n">fkG0_cyl</span><span class="p">,</span> <span class="n">k0edges</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../conecyl.html" >compmech.conecyl</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Apr 11, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

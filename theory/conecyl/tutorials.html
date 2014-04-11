@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorials &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Semi-analytical models for conical and cylindrical shells (conecyl)" href="index.html" />
+    <link rel="next" title="References" href="ref.html" />
+    <link rel="prev" title="Boundary conditions" href="bcs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ref.html" title="References"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bcs.html" title="Boundary conditions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorials">
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="defining-the-geometry">
+<h2>Defining the geometry<a class="headerlink" href="#defining-the-geometry" title="Permalink to this headline">¶</a></h2>
+<p>Based on the figure:</p>
+<div class="figure align-center" id="conecyl-figure">
+<a class="reference internal image-reference" href="../../_images/conecyl.png"><img alt="../../_images/conecyl.png" src="../../_images/conecyl.png" style="width: 430.8px; height: 282.0px;" /></a>
+</div>
+<p>The geometry can be defined using <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/> and <img class="math" src="../../_images/math/bbfbc8a7251a97f42020bf1fae519f2cd55dbdf7.png" alt="\alpha"/>, for example, or
+any other combination (like <img class="math" src="../../_images/math/c0895a46089688784c74d8236df6300ec6631b35.png" alt="L"/>, <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/>) of the geometric parameters
+that will allow the complete definition of the cone / cylinder geometry.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="kn">import</span> <span class="n">ConeCyl</span>
+
+<span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">r1</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">r2</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-the-laminate-and-material-properties">
+<h2>Defining the laminate and material properties<a class="headerlink" href="#defining-the-laminate-and-material-properties" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../../modules/composite/index.html#module-compmech.composite" title="compmech.composite"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.composite</span></tt></a> module is used to calculate the laminate
+properties given the stacking sequence, the thicknesses  and
+the material properties.</p>
+<p>The <strong>stacking sequence</strong> is passed using a container (<tt class="docutils literal"><span class="pre">list</span></tt> or <tt class="docutils literal"><span class="pre">tuple</span></tt>)
+with the orientations of each ply, <strong>from inwards to outwards</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="o">+</span><span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">+</span><span class="mi">30</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The ply thickness is passed using a single value when all the plies have the
+same thickness or using a container with the thickness of each ply:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
+</pre></div>
+</div>
+<p><strong>or</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The material properties are given using a tuple:</p>
+<div class="math">
+<p><img src="../../_images/math/828e9fee244cf147f44d3f7654b0c92c55f4186c.png" alt="(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})"/></p>
+</div><p>where <img class="math" src="../../_images/math/efbbb4ccf9fc8f30395bdcce59db7517aadad3d8.png" alt="E_{11}"/> is the elastic modulus along the direction 1 of the ply,
+<img class="math" src="../../_images/math/b538f243a6ccc8dd0461418d790e2916f6f3d309.png" alt="E_{22}"/> the modulus along the direction 2, <img class="math" src="../../_images/math/28d42c5dfa97d18acf412e06eb80951fed23d2f9.png" alt="\nu_{12}"/> the Poisson&#8217;s ratio
+and <img class="math" src="../../_images/math/24548d704a44280d1acecbccc9039af213576a34.png" alt="G_{12}"/>, <img class="math" src="../../_images/math/7eadf0b06cc013ee81a9a12c752f68fc80f9b4e9.png" alt="G_{13}"/>, <img class="math" src="../../_images/math/0e98798c4ea3aa2e0da5139de979e2d3bdef8820.png" alt="G_{23}"/> the shear modules.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will assume the same material properties for each ply. When different
+properties must be used the user must supply the <tt class="docutils literal"><span class="pre">laminaprops</span></tt> container.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">prop1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<span class="n">prop2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
+<span class="n">prop3</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">laminaprops</span> <span class="o">=</span> <span class="p">[</span><span class="n">prop1</span><span class="p">,</span> <span class="n">prop1</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop3</span><span class="p">,</span> <span class="n">prop3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="linear-static-analysis">
+<h2>Linear static analysis<a class="headerlink" href="#linear-static-analysis" title="Permalink to this headline">¶</a></h2>
+<p>The static analysis is executed using the
+<a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.static()</span></tt></a> method. The following example will
+give an overview of the main steps needed for a linear static analysis.</p>
+<p>Defining the geometry:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="o">-</span><span class="mi">19</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="o">-</span><span class="mi">37</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="o">-</span><span class="mi">51</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">r2</span> <span class="o">=</span> <span class="mf">250.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="mf">510.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">alphadeg</span> <span class="o">=</span> <span class="mf">30.</span>
+</pre></div>
+</div>
+<p>Defining the model and boundary conditions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s">&#39;fsdt_donnell_bc1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s">&#39;cc1&#39;</span>
+</pre></div>
+</div>
+<p>Defining if the analysis is displacement or load controlled by changing
+the boolean parameters <tt class="docutils literal"><span class="pre">pd</span></tt> (prescribed displacement):</p>
+<blockquote>
+<div><ul class="simple">
+<li>prescribed displacement for compression: <tt class="docutils literal"><span class="pre">cc.pdC</span></tt></li>
+<li>prescribed displacement for torsion: <tt class="docutils literal"><span class="pre">cc.pdT</span></tt></li>
+<li>prescribed load asymmetry <tt class="docutils literal"><span class="pre">cc.pdLA</span></tt></li>
+</ul>
+</div></blockquote>
+<p>Applying the axial compression, pressure, torsion and the single-perturbation
+loads:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">Fc</span> <span class="o">=</span> <span class="mf">10000.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="mf">100000.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.01</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">add_SPL</span><span class="p">(</span><span class="mf">10.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">add_SPL</span><span class="p">(</span><span class="mf">4.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Defining the number of terms in the approximation functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">m1</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">m2</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">n2</span> <span class="o">=</span> <span class="mi">40</span>
+</pre></div>
+</div>
+<p>Running the analysis:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">static</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The results are stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> list, and for a linear static analysis
+only one entry exists. Plotting the results:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="static-analysis">
+<h3>Static analysis<a class="headerlink" href="#static-analysis" title="Permalink to this headline">¶</a></h3>
+<p>where <tt class="docutils literal"><span class="pre">NLgeom</span></tt> is a flag telling whether or not a geometric non-linear
+analysis is to be performed.</p>
+<p>The solution is stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> attribute, which consists of a <tt class="docutils literal"><span class="pre">list</span></tt>
+of 1-D <tt class="docutils literal"><span class="pre">np.ndarray</span></tt> objects. For a linear analysis this list will contain
+only one entry while for a non-linear analysis it will contain one entry
+for each iteration needed up to the convergence or up to the termination
+criterion. To access the last result:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The displacement field can be plotted, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;my_output.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="non-linear-analysis">
+<h2>Non-linear analysis<a class="headerlink" href="#non-linear-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Using <tt class="docutils literal"><span class="pre">NLgeom=True</span></tt> in a static analysis will run a geometrically
+non-linear analysis. Many attributes of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object
+are used to control the non-linear analysis (see
+<tt class="xref py py-func docutils literal"><span class="pre">ConeCyl.static()</span></tt>).</p>
+<p>The converged increments used along the non-linear analysis are stored
+in the <tt class="docutils literal"><span class="pre">increments</span></tt> attribute and the corresponding solutions
+stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> attribute (a <tt class="docutils literal"><span class="pre">list</span></tt> of 1-D <tt class="docutils literal"><span class="pre">np.ndarray</span></tt> objects).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorials</a><ul>
+<li><a class="reference internal" href="#defining-the-geometry">Defining the geometry</a></li>
+<li><a class="reference internal" href="#defining-the-laminate-and-material-properties">Defining the laminate and material properties</a></li>
+<li><a class="reference internal" href="#linear-static-analysis">Linear static analysis</a><ul>
+<li><a class="reference internal" href="#static-analysis">Static analysis</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#non-linear-analysis">Non-linear analysis</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bcs.html"
+                        title="previous chapter">Boundary conditions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ref.html"
+                        title="next chapter">References</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/theory/conecyl/tutorials.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ref.html" title="References"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bcs.html" title="Boundary conditions"
+             >previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li>
+          <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Apr 11, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

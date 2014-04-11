@@ -27,9 +27,9 @@
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Theory related to the implementations" href="../index.html" />
+    <link rel="up" title="Theory, implementation and tutorials" href="../index.html" />
     <link rel="next" title="Developing the code for the conecyl module" href="dev_of_conecyl.html" />
-    <link rel="prev" title="Theory related to the implementations" href="../index.html" /> 
+    <link rel="prev" title="Theory, implementation and tutorials" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,10 +48,10 @@
           <a href="dev_of_conecyl.html" title="Developing the code for the conecyl module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Theory related to the implementations"
+          <a href="../index.html" title="Theory, implementation and tutorials"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Theory related to the implementations</a> &raquo;</li> 
+          <li><a href="../index.html" accesskey="U">Theory, implementation and tutorials</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -72,7 +72,7 @@ torsion and pressure loads.</p>
 <li class="toctree-l1"><a class="reference internal" href="dev_of_conecyl.html">Developing the code for the conecyl module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#history-about-the-software-used-to-derive-the-equations">History about the software used to derive the equations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#current-implementations">Current implementations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#some-definitions">Some definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#definitions">Definitions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#integration-of-the-linear-matrices">Integration of the linear matrices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#integration-of-the-non-linear-matrices">Integration of the non-linear matrices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html#strain-equations">Strain equations</a></li>
@@ -81,7 +81,6 @@ torsion and pressure loads.</p>
 <li class="toctree-l1"><a class="reference internal" href="esl_theories.html">Equivalent Single Layer (ESL) Theories</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="clpt.html">CLPT - Classical Laminated Plate Theory</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="clpt.html#description">Description</a></li>
-<li class="toctree-l3"><a class="reference internal" href="clpt.html#boundary-conditions">Boundary conditions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="clpt.html#models">Models</a></li>
 </ul>
 </li>
@@ -90,6 +89,21 @@ torsion and pressure loads.</p>
 <li class="toctree-l3"><a class="reference internal" href="fsdt.html#models">Models</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bcs.html">Boundary conditions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bcs.html#using-the-default-boundary-conditions">Using the default boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bcs.html#using-arbitrary-boundary-conditions">Using arbitrary boundary conditions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#defining-the-geometry">Defining the geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#defining-the-laminate-and-material-properties">Defining the laminate and material properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#linear-static-analysis">Linear static analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorials.html#static-analysis">Static analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html#non-linear-analysis">Non-linear analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ref.html">References</a></li>
@@ -125,7 +139,7 @@ torsion and pressure loads.</p>
             </a></p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
-                        title="previous chapter">Theory related to the implementations</a></p>
+                        title="previous chapter">Theory, implementation and tutorials</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="dev_of_conecyl.html"
                         title="next chapter">Developing the code for the conecyl module</a></p>
@@ -167,15 +181,15 @@ torsion and pressure loads.</p>
           <a href="dev_of_conecyl.html" title="Developing the code for the conecyl module"
              >next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Theory related to the implementations"
+          <a href="../index.html" title="Theory, implementation and tutorials"
              >previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li> 
+          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Mar 22, 2014.
+      Last updated on Apr 11, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

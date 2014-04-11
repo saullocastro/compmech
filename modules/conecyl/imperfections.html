@@ -35,6 +35,12 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -68,7 +74,7 @@ thetan  heightn  impn
 <p>where <tt class="docutils literal"><span class="pre">height</span></tt> is measured from the bottom to the top of the cylinder
 or cone, parallel to the axial axis, and <tt class="docutils literal"><span class="pre">theta</span></tt> is the circumferential
 coordinate <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> measured as shown
-<a class="reference internal" href="index.html#conecyl-figure"><em>in the semi-analytical model</em></a>.</p>
+<a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><em>in the semi-analytical model</em></a>.</p>
 <dl class="function">
 <dt id="compmech.conecyl.imperfections.calc_c0">
 <tt class="descclassname">compmech.conecyl.imperfections.</tt><tt class="descname">calc_c0</tt><big>(</big><em>path</em>, <em>m=40</em>, <em>n=40</em>, <em>funcnum=2</em>, <em>sample_size=None</em>, <em>maxmem=8</em>, <em>save=True</em><big>)</big><a class="headerlink" href="#compmech.conecyl.imperfections.calc_c0" title="Permalink to this definition">¶</a></dt>
@@ -194,7 +200,7 @@ cdef void cfw0t(double x, double t, double *c0, double L,
 </div>
 <p>where <tt class="docutils literal"><span class="pre">c0</span></tt> is the array containing the coefficients of the approximation
 function, <tt class="docutils literal"><span class="pre">L</span></tt> is the meridional length of the cone or cylinder
-(<a class="reference internal" href="index.html#conecyl-figure"><em>as shown here</em></a>), <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">t</span></tt> the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and
+(<a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><em>as shown here</em></a>), <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">t</span></tt> the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and
 <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinates, <tt class="docutils literal"><span class="pre">m</span></tt> and <tt class="docutils literal"><span class="pre">n</span></tt> the number of terms of the
 approximation series as described above, and finally,
 <tt class="docutils literal"><span class="pre">w0xref</span></tt> and <tt class="docutils literal"><span class="pre">w0tref</span></tt> are pointers to <tt class="docutils literal"><span class="pre">double</span></tt> variables.</p>
@@ -237,12 +243,18 @@ approximation series as described above, and finally,
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 03, 2014.
+      Last updated on Apr 11, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

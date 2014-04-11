@@ -51,7 +51,7 @@
           <a href="esl_theories.html" title="Equivalent Single Layer (ESL) Theories"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li>
+          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li>
           <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li>
           <li><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
       </ul>
@@ -95,45 +95,6 @@ and <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb926
 cones and cylinders. The approximation functions are the same
 for both the Donnell&#8217;s and the Sanders&#8217; models.</p>
 </div>
-<div class="section" id="boundary-conditions">
-<span id="id1"></span><h2>Boundary conditions<a class="headerlink" href="#boundary-conditions" title="Permalink to this headline">¶</a></h2>
-<p>The classification of Som and Deb (2014) <a class="reference internal" href="ref.html#som2014" id="id2">[som2014]</a> has been used for the
-boundary conditions.</p>
-<p>The simply-supported boundary conditions are:</p>
-<div class="math">
-<p><img src="../../_images/math/ae031790a780d59b50f90bced4e61cc7427e5c1d.png" alt="\begin{tabular}{l c r}
-    Name &amp; Displ. Vector &amp; Elastic Constants \\
-    \hline
-    SS1  &amp; $u=v=w=0$        &amp; $K^u=K^v=K^w=\infty$ \\
-         &amp;                  &amp; $K^{\phi_x}=K^{\phi_\theta}=0$ \\
-    \hline
-    SS2  &amp; $v=w=0$          &amp; $K^v=K^w=\infty$ \\
-         &amp;                  &amp; $K^u=K^{\phi_x}=K^{\phi_\theta}=0$ \\
-    \hline
-    SS3  &amp; $u=w=0$          &amp; $K^u=K^w=\infty$ \\
-         &amp;                  &amp; $K^v=K^{\phi_x}=K^{\phi_\theta}=0$ \\
-    \hline
-    SS4  &amp; $w=0$            &amp; $K^w=\infty$ \\
-         &amp;                  &amp; $K^u=K^v=K^{\phi_x}=K^{\phi_\theta}=0$
-\end{tabular}"/></p>
-</div><p>and the clamped are:</p>
-<div class="math">
-<p><img src="../../_images/math/2775a3c34dc055164a77f924982c54a5ce30cf4f.png" alt="\begin{tabular}{l c r}
-    Name &amp; Displ. Vector &amp; Elastic Constants \\
-    \hline
-    CC1  &amp; $u=v=w=w_{,x}=0$ &amp; $K^u=K^v=K^w=K^{\phi_x}=\infty$ \\
-         &amp;                  &amp; $K^{\phi_\theta}=0$ \\
-    \hline
-    CC2  &amp; $v=w=w_{,x}=0$   &amp; $K^v=K^w=K^{\phi_x}=\infty$ \\
-         &amp;                  &amp; $K^u=K^{\phi_\theta}=0$ \\
-    \hline
-    CC3  &amp; $u=w=w_{,x}=0$   &amp; $K^u=K^w=K^{\phi_x}=\infty$ \\
-         &amp;                  &amp; $K^v=K^{\phi_\theta}=0$ \\
-    \hline
-    CC4  &amp; $w=w_{,x}=0$     &amp; $K^w=K^{\phi_x}=\infty$ \\
-         &amp;                  &amp; $K^u=K^v=K^{\phi_\theta}=0$
-\end{tabular}"/></p>
-</div></div>
 <div class="section" id="models">
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
 <p>Below it follows a more detailed description of each of the implementations:</p>
@@ -160,7 +121,7 @@ each type of boundary conditions:</p>
 <li>Free edges: use the <a class="reference internal" href="fsdt.html#fsdt-donnell-bcn"><em>fsdt_donnell_bcn</em></a> (CLPT not implemented)</li>
 </ul>
 <div class="section" id="clpt-donnell-bc1">
-<span id="id3"></span><h3>clpt_donnell_bc1<a class="headerlink" href="#clpt-donnell-bc1" title="Permalink to this headline">¶</a></h3>
+<span id="id1"></span><h3>clpt_donnell_bc1<a class="headerlink" href="#clpt-donnell-bc1" title="Permalink to this headline">¶</a></h3>
 <p>SS1- and CC1-types of boundary conditions, or anything
 in between by using elastic restrained edges in <img class="math" src="../../_images/math/3462177f1cb991bf9d795d3dc22ae2e966a0d4ba.png" alt="w_{,x}"/> and <img class="math" src="../../_images/math/ebddb40334be9daaff572b01971023173d5b9d4f.png" alt="w_{,\theta}"/>.
 The approximation functions are:</p>
@@ -257,7 +218,7 @@ from the relations:</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-donnell-bc2">
-<span id="id4"></span><h3>clpt_donnell_bc2<a class="headerlink" href="#clpt-donnell-bc2" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h3>clpt_donnell_bc2<a class="headerlink" href="#clpt-donnell-bc2" title="Permalink to this headline">¶</a></h3>
 <p>Planned to simulate the SS2- and CC2-types of boundary conditions (or anything
 in between). The flexibily in <img class="math" src="../../_images/math/285ea4ce424ca59373b740d721f3b288c454e3a3.png" alt="v"/> is removed if compared to the
 <a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a>. Giving:</p>
@@ -290,7 +251,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div></blockquote>
 </div>
 <div class="section" id="clpt-donnell-bc3">
-<span id="id5"></span><h3>clpt_donnell_bc3<a class="headerlink" href="#clpt-donnell-bc3" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h3>clpt_donnell_bc3<a class="headerlink" href="#clpt-donnell-bc3" title="Permalink to this headline">¶</a></h3>
 <p>Planned for SS3- and CC3-types of boundary conditions (or anything
 in between). The approximation functions are:</p>
 <div class="math">
@@ -322,7 +283,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div></blockquote>
 </div>
 <div class="section" id="clpt-donnell-bc4">
-<span id="id6"></span><h3>clpt_donnell_bc4<a class="headerlink" href="#clpt-donnell-bc4" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3>clpt_donnell_bc4<a class="headerlink" href="#clpt-donnell-bc4" title="Permalink to this headline">¶</a></h3>
 <p>SS4- or CC4-types of boundary conditions (or anything in between).</p>
 <div class="math">
 <p><img src="../../_images/math/3d24d63f4c61ab222400450f7a4738f1a141b048.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
@@ -353,7 +314,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div></blockquote>
 </div>
 <div class="section" id="clpt-donnell-bcn">
-<span id="id7"></span><h3>clpt_donnell_bcn<a class="headerlink" href="#clpt-donnell-bcn" title="Permalink to this headline">¶</a></h3>
+<span id="id5"></span><h3>clpt_donnell_bcn<a class="headerlink" href="#clpt-donnell-bcn" title="Permalink to this headline">¶</a></h3>
 <p>General approximation function for the CLPT. It allows any type of
 boundary condition by setting the proper values for the elastic
 constants.</p>
@@ -387,7 +348,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders-bc1">
-<span id="id8"></span><h3>clpt_sanders_bc1<a class="headerlink" href="#clpt-sanders-bc1" title="Permalink to this headline">¶</a></h3>
+<span id="id6"></span><h3>clpt_sanders_bc1<a class="headerlink" href="#clpt-sanders-bc1" title="Permalink to this headline">¶</a></h3>
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc1"><em>clpt_donnell_bc1</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
@@ -397,7 +358,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders-bc2">
-<span id="id9"></span><h3>clpt_sanders_bc2<a class="headerlink" href="#clpt-sanders-bc2" title="Permalink to this headline">¶</a></h3>
+<span id="id7"></span><h3>clpt_sanders_bc2<a class="headerlink" href="#clpt-sanders-bc2" title="Permalink to this headline">¶</a></h3>
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc2"><em>clpt_donnell_bc2</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
@@ -407,7 +368,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders-bc3">
-<span id="id10"></span><h3>clpt_sanders_bc3<a class="headerlink" href="#clpt-sanders-bc3" title="Permalink to this headline">¶</a></h3>
+<span id="id8"></span><h3>clpt_sanders_bc3<a class="headerlink" href="#clpt-sanders-bc3" title="Permalink to this headline">¶</a></h3>
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc3"><em>clpt_donnell_bc3</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
@@ -417,7 +378,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders-bc4">
-<span id="id11"></span><h3>clpt_sanders_bc4<a class="headerlink" href="#clpt-sanders-bc4" title="Permalink to this headline">¶</a></h3>
+<span id="id9"></span><h3>clpt_sanders_bc4<a class="headerlink" href="#clpt-sanders-bc4" title="Permalink to this headline">¶</a></h3>
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc4"><em>clpt_donnell_bc4</em></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
@@ -427,15 +388,15 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 </div></blockquote>
 </div>
 <div class="section" id="clpt-geier1997-bc2">
-<span id="id12"></span><h3>clpt_geier1997_bc2<a class="headerlink" href="#clpt-geier1997-bc2" title="Permalink to this headline">¶</a></h3>
+<span id="id10"></span><h3>clpt_geier1997_bc2<a class="headerlink" href="#clpt-geier1997-bc2" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">NOT RECOMMENDED, implemented for comparative purposes only.</p>
 </div>
 <p>Analogous to the model published by Geier and Singh (1997)
-(see <a class="reference internal" href="ref.html#geier1997" id="id13">[geier1997]</a> for more details) for the SS2- and CC2-types of
+(see <a class="reference internal" href="ref.html#geier1997" id="id11">[geier1997]</a> for more details) for the SS2- and CC2-types of
 boundary condition. Originally proposed by Khdeir et al. (1989)
-(see <a class="reference internal" href="ref.html#khdeir1989" id="id14">[khdeir1989]</a>). Uses the Donnell&#8217;s equations and the
+(see <a class="reference internal" href="ref.html#khdeir1989" id="id12">[khdeir1989]</a>). Uses the Donnell&#8217;s equations and the
 approximation functions are:</p>
 <div class="math">
 <p><img src="../../_images/math/07ed734207e89dab651cec0a6b2081a36d6b8383.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
@@ -472,7 +433,6 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
   <ul>
 <li><a class="reference internal" href="#">CLPT - Classical Laminated Plate Theory</a><ul>
 <li><a class="reference internal" href="#description">Description</a></li>
-<li><a class="reference internal" href="#boundary-conditions">Boundary conditions</a></li>
 <li><a class="reference internal" href="#models">Models</a><ul>
 <li><a class="reference internal" href="#clpt-donnell-bc1">clpt_donnell_bc1</a></li>
 <li><a class="reference internal" href="#clpt-donnell-bc2">clpt_donnell_bc2</a></li>
@@ -537,14 +497,14 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
           <a href="esl_theories.html" title="Equivalent Single Layer (ESL) Theories"
              >previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory related to the implementations</a> &raquo;</li>
+          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li>
           <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li>
           <li><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 10, 2014.
+      Last updated on Apr 11, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

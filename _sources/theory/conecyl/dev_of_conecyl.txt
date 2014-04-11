@@ -27,12 +27,15 @@ Current implementations
 - load conditions: axial compression, torsion, pressure and any set of
   surface loads, concentraded or not
 
-Some definitions
-----------------
+Definitions
+-----------
 
-In the following sections ``ESL theory`` can be either the
-:ref:`theory-conecyl-clpt` or the :ref:`theory-conecyl-fsdt` , and
-the ``equation type`` can be either the ``Donnell``'s or ``Sanders``'
+In the :ref:`ESL theories section <esl_theories>` it is explained
+the types of kinematic equation implemented, defining the ``ESL theory``
+prefix mentioned below (currently ``clpt`` or ``fsdt``).
+
+The ``equation type`` prefix will be ``donnell`` or ``sanders``, defining
+if the model is built using the Donnell's or the Sanders' non-linear 
 equations.
 
 Integration of the linear matrices
@@ -41,7 +44,7 @@ Integration of the linear matrices
 The linear matrices K0 and KG0 are integrated analytically, and the
 Mathematica routines necessary for this task are named as::
 
-    {ESL theory}_{equation type}_linear.nb
+    {ESL theory}_{equation type}_{boundary condition}_linear.nb
 
 Each integrated smallest repeatable sub-matrix::
 
@@ -52,17 +55,20 @@ Mathematica format and another in Fortran format, identified with a prefix
 ``fortran_``. Since the integrated matrices are greatly simplified for the
 cylinder case, there are files for both cones and cylinders.
 
-The routines ``print_sparse.py`` are used to convert the Fortran format to a
+The routine ``print_sparse.py`` is used to convert the Fortran format to a
 ready-to-past-in-Cython format, separating in ``row``, ``col`` and ``value``,
 which is convenient for the implementation using sparse matrices. The
-generated files are stored in ``./sparse_printing``.
+generated files are stored in ``./sparse_printing``. Note that the power
+functions ``var**3`` are transformed in ``(var*var*var)``, by default,
+which can be modified by changing the parameters in the
+``mprint_as_sparse()`` function.
 
 The integrated sparse matrices are pasted in the corresponding Cython codes,
 currently::
 
-    clpt_linear_donnell.pyx
-    clpt_linear_sanders.pyx
-    fsdt_linear_donnell.pyx
+    clpt_donnell_bc_linear.pyx
+    clpt_sanders_bc_linear.pyx
+    fsdt_donnell_bc_linear.pyx
 
 Integration of the non-linear matrices
 --------------------------------------
@@ -72,7 +78,7 @@ analytically and their integrands are built for the numerical integration
 algorithms. Mathematica is used to build the integrands, in the routines
 named as::
 
-    {ESL theory}_{equation type}_non_linear_numerical.nb
+    {ESL theory}_{equation type}_{boundary condition}_nonlinear.nb
 
 The output is printed inside ``./numerical`` and the routine
 ``print_numerical.py`` is used to parse these results into something
@@ -124,9 +130,9 @@ and the definitions for ``qij`` are found in::
 
 These are implemented in::
 
-    clpt_NL_donnell_numerical.pyx
-    clpt_NL_sanders_numerical.pyx
-    fsdt_NL_donnell_numerical.pyx
+    clpt_donnell_bc_nonlinear.pyx
+    clpt_sanders_bc_nonlinear.pyx
+    fsdt_donnell_bc_nonlinear.pyx
     
 Strain equations
 ----------------

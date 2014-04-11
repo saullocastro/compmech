@@ -28,8 +28,7 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
     <link rel="up" title="Python modules" href="../index.html" />
-    <link rel="next" title="Theory related to the implementations" href="../../theory/index.html" />
-    <link rel="prev" title="Python modules" href="../index.html" /> 
+    <link rel="prev" title="Composite Module (compmech.composite)" href="../composite/index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,10 +38,13 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../theory/index.html" title="Theory related to the implementations"
-             accesskey="N">next</a> |</li>
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Python modules"
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../composite/index.html" title="Composite Module (compmech.composite)"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Python modules</a> &raquo;</li> 
@@ -54,8 +56,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">
-<h1>Semi-analytical models for cones and cylinder (<tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></tt>)<a class="headerlink" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl" title="Permalink to this headline">¶</a></h1>
+  <span class="target" id="module-compmech.conecyl"></span><div class="section" id="semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">
+<h1>Semi-analytical models for cones and cylinder (<a class="reference internal" href="#module-compmech.conecyl" title="compmech.conecyl"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></tt></a>)<a class="headerlink" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl" title="Permalink to this headline">¶</a></h1>
 <p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> class embodies all the methods and functions necessary to
 perform:</p>
 <ul class="simple">
@@ -71,223 +73,196 @@ domain. Recalling that <img class="math" src="../../_images/math/701ee538464334a
 stresses by the relation:</p>
 <div class="math">
 <p><img src="../../_images/math/9ac01021a78866179d9f0ca3e9a1fb7143c8a6a3.png" alt="\{N\} = [F] \{\varepsilon\}"/></p>
-</div><div class="section" id="basics">
-<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="defining-the-geometry">
-<h3>Defining the geometry<a class="headerlink" href="#defining-the-geometry" title="Permalink to this headline">¶</a></h3>
-<p>Based on the figure:</p>
-<div class="figure align-center" id="conecyl-figure">
-<a class="reference internal image-reference" href="../../_images/conecyl.png"><img alt="../../_images/conecyl.png" src="../../_images/conecyl.png" style="width: 430.8px; height: 282.0px;" /></a>
-</div>
-<p>The geometry can be defined using <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/> and <img class="math" src="../../_images/math/bbfbc8a7251a97f42020bf1fae519f2cd55dbdf7.png" alt="\alpha"/>, for example, or
-any other combination (like <img class="math" src="../../_images/math/c0895a46089688784c74d8236df6300ec6631b35.png" alt="L"/>, <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/>) of the geometric parameters
-that will allow the complete definition of the cone / cylinder geometry.</p>
-<p><strong>Example</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="kn">import</span> <span class="n">ConeCyl</span>
-
-<span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
-<span class="n">cc</span><span class="o">.</span><span class="n">r1</span> <span class="o">=</span> <span class="mi">400</span>
-<span class="n">cc</span><span class="o">.</span><span class="n">r2</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="n">cc</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="mi">200</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="defining-the-laminate-and-the-material-properties">
-<h3>Defining the laminate and the material properties<a class="headerlink" href="#defining-the-laminate-and-the-material-properties" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference external" href="https://github.com/saullocastro/mapy">mapy</a>
-module is internally used to calculate the laminate properties given
-the stacking sequence, the thicknesses the material properties.</p>
-<p>The <strong>stacking sequence</strong> is passed using a container (<tt class="docutils literal"><span class="pre">list</span></tt> or <tt class="docutils literal"><span class="pre">tuple</span></tt>)
-with the orientations of each ply, <strong>from inwards to outwards</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="o">+</span><span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">+</span><span class="mi">30</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>The ply thickness is passed using a single value when all the plies have the
-same thickness or using a container with the thickness of each ply:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
-</pre></div>
-</div>
-<p><strong>or</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>The material properties are given using a tuple:</p>
-<div class="math">
-<p><img src="../../_images/math/828e9fee244cf147f44d3f7654b0c92c55f4186c.png" alt="(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})"/></p>
-</div><p>where <img class="math" src="../../_images/math/efbbb4ccf9fc8f30395bdcce59db7517aadad3d8.png" alt="E_{11}"/> is the elastic modulus along the direction 1 of the ply,
-<img class="math" src="../../_images/math/b538f243a6ccc8dd0461418d790e2916f6f3d309.png" alt="E_{22}"/> the modulus along the direction 2, <img class="math" src="../../_images/math/28d42c5dfa97d18acf412e06eb80951fed23d2f9.png" alt="\nu_{12}"/> the Poisson&#8217;s ratio
-and <img class="math" src="../../_images/math/24548d704a44280d1acecbccc9039af213576a34.png" alt="G_{12}"/>, <img class="math" src="../../_images/math/7eadf0b06cc013ee81a9a12c752f68fc80f9b4e9.png" alt="G_{13}"/>, <img class="math" src="../../_images/math/0e98798c4ea3aa2e0da5139de979e2d3bdef8820.png" alt="G_{23}"/> the shear modules.</p>
-<p><strong>Example</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This will assume the same material properties for each ply. When different
-properties must be used the user must supply the <tt class="docutils literal"><span class="pre">laminaprops</span></tt> container.</p>
-<p><strong>Example</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">prop1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
-<span class="n">prop2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
-<span class="n">prop3</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
-<span class="n">cc</span><span class="o">.</span><span class="n">laminaprops</span> <span class="o">=</span> <span class="p">[</span><span class="n">prop1</span><span class="p">,</span> <span class="n">prop1</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop3</span><span class="p">,</span> <span class="n">prop3</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="static-analysis">
-<h3>Static analysis<a class="headerlink" href="#static-analysis" title="Permalink to this headline">¶</a></h3>
-<p>The static analysis is performed with the method:</p>
-<blockquote>
-<div>cc.static(NLgeom=False)</div></blockquote>
-<p>where <tt class="docutils literal"><span class="pre">NLgeom</span></tt> is a flag telling whether or not a geometric non-linear
-analysis is to be performed.</p>
-<p>The solution is stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> attribute, which consists of a <tt class="docutils literal"><span class="pre">list</span></tt>
-of 1-D <tt class="docutils literal"><span class="pre">np.ndarray</span></tt> objects. For a linear analysis this list will contain
-only one entry while for a non-linear analysis it will contain one entry
-for each iteration needed up to the convergence or up to the termination
-criterion. To access the last result:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>The displacement field can be plotted, for example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;my_output.png&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="non-linear-analysis">
-<h3>Non-linear analysis<a class="headerlink" href="#non-linear-analysis" title="Permalink to this headline">¶</a></h3>
-<p>Using <tt class="docutils literal"><span class="pre">NLgeom=True</span></tt> in a static analysis will run a geometrically
-non-linear analysis. Many attributes of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object
-are used to control the non-linear analysis (see
-<tt class="xref py py-func docutils literal"><span class="pre">ConeCyl.static()</span></tt>).</p>
-<p>The converged increments used along the non-linear analysis are stored
-in the <tt class="docutils literal"><span class="pre">increments</span></tt> attribute and the corresponding solutions
-stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> attribute (a <tt class="docutils literal"><span class="pre">list</span></tt> of 1-D <tt class="docutils literal"><span class="pre">np.ndarray</span></tt> objects).</p>
-</div>
-</div>
-<div class="section" id="measured-imperfections">
-<h2>Measured Imperfections<a class="headerlink" href="#measured-imperfections" title="Permalink to this headline">¶</a></h2>
-<p>Convenient routines to transform discrete measured data
-into continuous functions applicable in the semi-analytical analysis are
-provided in the <tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl.imperfections</span></tt> module.</p>
-<p>The implemented geometric imperfection of this module is the one
-representing the normal displacement of the mid-surface and will be
-called <em>Measured Geometric Imperfection (MGI)</em>.</p>
-<p>The non-linear analysis using a MGI require the calculation
-of the initial imperfection field, called <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/>, and the corresponding
-partial derivatives <img class="math" src="../../_images/math/bd9e7a9745595de4eef3ac5ceb2aa09ae044f697.png" alt="{w_0}_{,x}"/> and <img class="math" src="../../_images/math/bc7befe96ac9dde131b6c9f7d6cbfd3d7dd712c7.png" alt="{w_0}_{,\theta}"/>.</p>
-<p>The function <tt class="docutils literal"><span class="pre">calc_c0</span></tt> described below is implemented to find
-the best-fit for a given imperfection data. Three different approximation
-functions can be selected using the <tt class="docutils literal"><span class="pre">funcnum</span></tt> parameter.</p>
-<p>The imperfection file should be in the form:</p>
-<div class="highlight-python"><div class="highlight"><pre>theta1  height1  imp1
-theta2  height2  imp2
-...
-thetan  heightn  impn
-</pre></div>
-</div>
-<p>where <tt class="docutils literal"><span class="pre">height</span></tt> is measured from the bottom to the top of the cylinder
-or cone, parallel to the axial axis, and <tt class="docutils literal"><span class="pre">theta</span></tt> is the circumferential
-coordinate <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> measured as shown
-<a class="reference internal" href="#conecyl-figure"><em>in the semi-analytical model</em></a>.</p>
-<dl class="function">
-<dt id="compmech.conecyl.imperfections.calc_c0">
-<tt class="descclassname">compmech.conecyl.imperfections.</tt><tt class="descname">calc_c0</tt><big>(</big><em>path</em>, <em>m=40</em>, <em>n=40</em>, <em>funcnum=2</em>, <em>sample_size=None</em>, <em>maxmem=8</em>, <em>save=True</em><big>)</big><a class="headerlink" href="#compmech.conecyl.imperfections.calc_c0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the coefficients <img class="math" src="../../_images/math/90dfad7e3008bd9296795faa349b4446f5e30197.png" alt="c_0"/> that best fit the <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> function.</p>
-<p>The measured data will be fit using one of the following functions,
-selected using the <tt class="docutils literal"><span class="pre">funcnum</span></tt> parameter:</p>
-<ol class="arabic simple">
-<li></li>
-</ol>
-<div class="math">
-<p><img src="../../_images/math/39dc003d42e9bd83bc956542d2cdeb85763011e1.png" alt="w_0 = \sum_{i=1}^{m}{ \sum_{j=1}^{n}{
-         c_{ij}^a sin{b_z} sin{b_\theta}
-        +c_{ij}^b sin{b_z} cos{b_\theta} }}"/></p>
-</div><ol class="arabic simple" start="2">
-<li>(default)</li>
-</ol>
-<div class="math">
-<p><img src="../../_images/math/ccd8ca2c489dbc3b992a4cc344015b89e82b25c9.png" alt="w_0 = \sum_{i=0}^{m}{ \sum_{j=0}^{n}{
-        c_{ij}^a cos{b_z} sin{b_\theta}
-        +c_{ij}^b cos{b_z} cos{b_\theta} }}"/></p>
-</div><ol class="arabic simple" start="3">
-<li></li>
-</ol>
-<div class="math">
-<p><img src="../../_images/math/3d057cfb0cd25a949488f3feb75b1442aae68190.png" alt="w_0 = \sum_{i=0}^{m}{ \sum_{j=0}^{n}{
-         c_{ij}^a sin{b_z} sin{b_\theta}
-        +c_{ij}^b sin{b_z} cos{b_\theta}
-        +c_{ij}^c cos{b_z} sin{b_\theta}
-        +c_{ij}^d cos{b_z} cos{b_\theta} }}"/></p>
-</div><p>where:</p>
-<div class="math">
-<p><img src="../../_images/math/89401614e2d7e9ab5bada5fbb4d70da74fa49317.png" alt="b_z = i \pi \frac x L_{points}
-
-b_\theta = j \theta"/></p>
-</div><p>where <img class="math" src="../../_images/math/b5cadd3b85c5d3b9a6684f1e21089c61d9198e9a.png" alt="L_{points}"/> represents the difference between the maximum and
-the height values in the imperfection file divided by the cosine
-of the semi-vertex angle:</p>
-<div class="math">
-<p><img src="../../_images/math/849103ee55d94e88409a3a60c5bd1100bd1f217c.png" alt="L_{points} = \frac{H_{max} - H_{min}}{cos(\alpha)}
-           = \frac{H_{points}}{cos(\alpha)}"/></p>
-</div><p>In this form <img class="math" src="../../_images/math/760b8fc48228c614ecf0b936129250ed33b42133.png" alt="{}^x/_{L_{points}}"/> will vary from <img class="math" src="../../_images/math/779575f18dde3069197e30c9ce02f73d765fefe5.png" alt="0."/> (at the top)
-to <img class="math" src="../../_images/math/52f8ce4b0c6bce33f83e8d48a91f088fc6215c6e.png" alt="1."/> (at the bottom).</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Note that if the measured sample does not
-cover all the height, <strong>it will be stretched</strong>.</p>
-</div>
-<p>The approximation can be written in matrix form as:</p>
-<div class="math">
-<p><img src="../../_images/math/d947cffc16ab48694b349b4260deee0668081dc7.png" alt="w_0 = [g] \{c\}"/></p>
-</div><p>where <img class="math" src="../../_images/math/e5c181ab30f23cea7c86c455ea6ebc26edff132c.png" alt="[g]"/> carries the base functions and <img class="math" src="../../_images/math/ba6e4422096979219d12a4b01100f0bd33823c8d.png" alt="{c}"/> the respective
-amplitudes. The solution consists on finding the best <img class="math" src="../../_images/math/ba6e4422096979219d12a4b01100f0bd33823c8d.png" alt="{c}"/> that minimizes
-the least-square error between the measured imperfection pattern and the
-<img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> function.</p>
+</div><div class="section" id="the-conecyl-object">
+<h2>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object<a class="headerlink" href="#the-conecyl-object" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="compmech.conecyl.ConeCyl">
+<em class="property">class </em><tt class="descclassname">compmech.conecyl.</tt><tt class="descname">ConeCyl</tt><a class="headerlink" href="#compmech.conecyl.ConeCyl" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.SPLA" title="compmech.conecyl.ConeCyl.SPLA"><tt class="xref py py-obj docutils literal"><span class="pre">SPLA</span></tt></a>(PLs[,&nbsp;NLgeom])</td>
+<td>Runs the Single Perturbation Load Approach (SPLA).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_SPL" title="compmech.conecyl.ConeCyl.add_SPL"><tt class="xref py py-obj docutils literal"><span class="pre">add_SPL</span></tt></a>(PL[,&nbsp;pt,&nbsp;theta])</td>
+<td>Add a Single Perturbation Load (SPL).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><tt class="xref py py-obj docutils literal"><span class="pre">calc_full_c</span></tt></a>(cu[,&nbsp;inc])</td>
+<td>Returns the full set of Ritz constants.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_dofs_matrix</span></tt></a>(k[,&nbsp;return_kkk,&nbsp;...])</td>
+<td>Makes the partition of the dofs for prescribed displacements.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><tt class="xref py py-obj docutils literal"><span class="pre">lb</span></tt></a>([c,&nbsp;tol,&nbsp;combined_load_case])</td>
+<td>Linear Buckling analysis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(c[,&nbsp;invert_x,&nbsp;plot_type,&nbsp;vec,&nbsp;...])</td>
+<td>Contour plot for a Ritz constants vector.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>()</td>
+<td>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom])</td>
+<td>Static analysis for cones and cylinders.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><tt class="xref py py-obj docutils literal"><span class="pre">strain</span></tt></a>(c[,&nbsp;x,&nbsp;t,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
+<td>Calculates the strain field for a given Ritz constants vector.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><tt class="xref py py-obj docutils literal"><span class="pre">uvw</span></tt></a>(c[,&nbsp;x,&nbsp;t,&nbsp;gridx,&nbsp;gridt])</td>
+<td>Displacement field for a given set of Ritz constants.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.SPLA">
+<tt class="descname">SPLA</tt><big>(</big><em>PLs</em>, <em>NLgeom=True</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.SPLA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the Single Perturbation Load Approach (SPLA).</p>
+<p>A set of non-linear results will be</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path</strong> : str or numpy.ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>PLs: list</strong> :</p>
 <blockquote>
-<div><p>The path of the file containing the data. Can be a full path using
-<tt class="docutils literal"><span class="pre">r&quot;C:\Temp\inputfile.txt&quot;</span></tt>, for example.
-The input file must have 3 columns &#8220;<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> <img class="math" src="../../_images/math/c537047c627811e4ebbe2e109e282d2307c2dceb.png" alt="height"/> <img class="math" src="../../_images/math/a359fcc67d4efbcaef5bda404120efef7de1ada3.png" alt="imp"/>&#8221; expressed
-in Cartesian coordinates.</p>
-<p>This input can also be a <tt class="docutils literal"><span class="pre">numpy.ndarray</span></tt> object, with
-<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>, <img class="math" src="../../_images/math/c537047c627811e4ebbe2e109e282d2307c2dceb.png" alt="height"/>, <img class="math" src="../../_images/math/a359fcc67d4efbcaef5bda404120efef7de1ada3.png" alt="imp"/> in each corresponding column.</p>
+<div><p>The perturbation loads used to build the knock-down curve. It must
+be a list of float values.</p>
 </div></blockquote>
-<p><strong>m</strong> : int</p>
+<p><strong>NLgeom</strong> : bool, optional</p>
 <blockquote>
-<div><p>Number of terms along the meridian (<img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>).</p>
-</div></blockquote>
-<p><strong>n</strong> : int</p>
-<blockquote>
-<div><p>Number of terms along the circumference (<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>).</p>
-</div></blockquote>
-<p><strong>funcnum</strong> : int, optional</p>
-<blockquote>
-<div><p>As explained above, selects the base functions used for
-the approximation.</p>
-</div></blockquote>
-<p><strong>sample_size</strong> : int or None, optional</p>
-<blockquote>
-<div><p>An in  specifying how many points of the imperfection file
-should be used. If the default <tt class="docutils literal"><span class="pre">None</span></tt> is used
-all points file will be used in the computations.</p>
-</div></blockquote>
-<p><strong>maxmem</strong> : int, optional</p>
-<blockquote>
-<div><p>Maximum RAM memory in GB allowed to compute the base functions.
-The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span></tt> will go beyond this limit.</p>
-</div></blockquote>
-<p><strong>save</strong> : bool, optional</p>
-<blockquote>
-<div><p>The default value <tt class="docutils literal"><span class="pre">True</span></tt> saves the calculated coefficients in the
-<tt class="docutils literal"><span class="pre">compmech/conecyl/imperfections/c0</span></tt> folder.</p>
+<div><p>Flag passed to the <tt class="docutils literal"><span class="pre">static()</span></tt> method that tells whether a
+geometrically non-linear analysis is to be performed.
+The Default is <tt class="docutils literal"><span class="pre">True</span></tt>.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : numpy.ndarray</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>curves</strong> : list</p>
 <blockquote class="last">
-<div><p>A 1-D array with the best-fit coefficients.</p>
+<div><p>The sequence of curves, one curve for each perturbation load given
+in the input parameter <tt class="docutils literal"><span class="pre">PLs</span></tt>.
+Each curve in the list is a <tt class="docutils literal"><span class="pre">dict</span></tt> object with the keys:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">key</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">'wall_time_s'</span></tt></td>
+<td>The wall time for the non-linear analysis</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">'name'</span></tt></td>
+<td>The name of the curve. Ex: <tt class="docutils literal"><span class="pre">'PL</span> <span class="pre">=</span> <span class="pre">1.</span> <span class="pre">N'</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">'cs'</span></tt></td>
+<td>A list with a vector of Ritz constants for
+each load increment needed</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">'increments'</span></tt></td>
+<td>A list with the values of increments needed</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">'wPLs'</span></tt></td>
+<td>A list with the normal displacement at the
+perturbation load application point for each
+load increment</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">'uTMs'</span></tt></td>
+<td>A list containing the axial displacement for
+each load increment</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">'Fcs'</span></tt></td>
+<td>A list containing the axial reaction force
+for each load increment</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The curves are stores in the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> parameter
+<tt class="docutils literal"><span class="pre">outputs['SPLA_curves']</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.add_SPL">
+<tt class="descname">add_SPL</tt><big>(</big><em>PL</em>, <em>pt=0.5</em>, <em>theta=0.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_SPL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Single Perturbation Load (SPL).</p>
+<p>Adds a perturbation load to the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>PL</strong> : float</p>
+<blockquote>
+<div><p>The perturbation load value.</p>
+</div></blockquote>
+<p><strong>pt</strong> : float</p>
+<blockquote>
+<div><p>The normalized position along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis in which the new SPL
+will be included.
+Default is <tt class="docutils literal"><span class="pre">0.5</span></tt>.</p>
+</div></blockquote>
+<p><strong>theta</strong> : float</p>
+<blockquote class="last">
+<div><p>The angular position in radians of the new SPL.
+Default is <tt class="docutils literal"><span class="pre">0.</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object has three parameters which must be changed when
+a SPL is included: <tt class="docutils literal"><span class="pre">PLvalues</span></tt>, <tt class="docutils literal"><span class="pre">PLxs</span></tt> and <tt class="docutils literal"><span class="pre">PLthetas</span></tt>.
+These three parameters are <tt class="docutils literal"><span class="pre">list</span></tt> objects that can be changed
+elsewhere by the analyst.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.calc_full_c">
+<tt class="descname">calc_full_c</tt><big>(</big><em>cu</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_full_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the full set of Ritz constants.</p>
+<p>When prescribed displacements take place the matrices and the Ritz
+constants are partitioned like:</p>
+<div class="highlight-python"><div class="highlight"><pre>k = | kkk    kku |
+    | kuk    kuu |
+</pre></div>
+</div>
+<p>and the corresponding Ritz constants:</p>
+<div class="highlight-python"><div class="highlight"><pre>c = | ck |
+    | cu |
+</pre></div>
+</div>
+<p>This function adds the set of known Ritz constants (<tt class="docutils literal"><span class="pre">ck</span></tt>)
+to the set of unknown (<tt class="docutils literal"><span class="pre">cu</span></tt>) based on the prescribed displacements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cu</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>The set of unknown Ritz constants</p>
+</div></blockquote>
+<p><strong>inc</strong> : float</p>
+<blockquote>
+<div><p>The increment for which <img class="math" src="../../_images/math/7ec420d609f448b82d25f38cef356914463d5522.png" alt="c"/> should be calculated.
+Default is <img class="math" src="../../_images/math/52f8ce4b0c6bce33f83e8d48a91f088fc6215c6e.png" alt="1."/>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>c</strong> : numpy.ndarray</p>
+<blockquote class="last">
+<div><p>The full set of Ritz constants.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -295,27 +270,486 @@ The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span
 </table>
 </dd></dl>
 
-<p>When implementing a non-linear analysis algorithm, see for example
-<a class="reference external" href="https://github.com/saullocastro/compmech/blob/master/compmech/conecyl/fsdt/fsdt_donnell_bcn_nonlinear.pyx">fsdt_donnell_bcn_nonlinear.pyx</a>
-, the functions to calculate the partial derivatives of the geometric
-imperfection are accessible using Cython</p>
-<div class="highlight-python"><div class="highlight"><pre>from compmech.conecyl.imperfection.mgi cimport cfw0x, cfw0t
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.exclude_dofs_matrix">
+<tt class="descname">exclude_dofs_matrix</tt><big>(</big><em>k</em>, <em>return_kkk=False</em>, <em>return_kku=False</em>, <em>return_kuk=False</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes the partition of the dofs for prescribed displacements.</p>
+<p>Makes the following partition of a given matrix:</p>
+<div class="highlight-python"><div class="highlight"><pre>k = | kkk    kku |
+    | kuk    kuu |
 </pre></div>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">cfw0x</span></tt> and <tt class="docutils literal"><span class="pre">cfw0t</span></tt> function headers are:</p>
-<div class="highlight-python"><div class="highlight"><pre>cdef void cfw0x(double x, double t, double *c0, double L,
-                int m, int n, double *w0xref, int funcnum) nogil
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>k</strong> : scipy.sparse.coo_matrix</p>
+<blockquote>
+<div><p>Matrix to be partitioned.</p>
+</div></blockquote>
+<p><strong>return_kkk</strong> : bool, optional</p>
+<blockquote>
+<div><p>If the region <img class="math" src="../../_images/math/84d316f35c291c9877df2943021a269bf92b7865.png" alt="kkk"/> must be returned.</p>
+</div></blockquote>
+<p><strong>return_kku</strong> : bool, optional</p>
+<blockquote>
+<div><p>If the region <img class="math" src="../../_images/math/2ab7d918c74450985624bf7888b276d0074efeee.png" alt="kku"/> must be returned.</p>
+</div></blockquote>
+<p><strong>return_kuk</strong> : bool, optional</p>
+<blockquote>
+<div><p>If the region <img class="math" src="../../_images/math/ccfc1f37c7547cbb336a0bde36a87f3176027abc.png" alt="kuk"/> must be returned.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : dict</p>
+<blockquote class="last">
+<div><p>A <img class="math" src="../../_images/math/f5f6968b9cd9a57900870d1016d04272671f6525.png" alt="dict"/> object containing the keys for the
+corresponding sub-matrices <tt class="docutils literal"><span class="pre">kkk</span></tt>, <tt class="docutils literal"><span class="pre">kku</span></tt>, <tt class="docutils literal"><span class="pre">kuk</span></tt>, <tt class="docutils literal"><span class="pre">kuu</span></tt>.
+The sub-matrix <tt class="docutils literal"><span class="pre">out['kuu']</span></tt> is a <tt class="docutils literal"><span class="pre">scipy.sparse.csr_matrix</span></tt>,
+while the others are 2-D <tt class="docutils literal"><span class="pre">numpy.ndarray</span></tt> objects.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-cdef void cfw0t(double x, double t, double *c0, double L,
-                int m, int n, double *w0xref, int funcnum) nogil
-</pre></div>
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.lb">
+<tt class="descname">lb</tt><big>(</big><em>c=None</em>, <em>tol=0</em>, <em>combined_load_case=None</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.lb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear Buckling analysis.</p>
+<p>The following parameters of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object will affect the
+linear buckling analysis:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">parameter</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">num_eigenvalues</span></tt></td>
+<td>Number of eigenvalues to be extracted</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">num_eigvalues_print</span></tt></td>
+<td>Number of eigenvalues to print after
+the analysis is completed</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>combined_load_case</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>It tells whether the linear buckling analysis must be computed
+considering combined load cases, each value will tell
+the algorithm to rearrange the linear matrices in a different
+way. The valid values are <tt class="docutils literal"><span class="pre">1</span></tt>, or <tt class="docutils literal"><span class="pre">2</span></tt>, where:</p>
+<p><tt class="docutils literal"><span class="pre">1</span></tt> : find the critical axial load for a fixed torsion load</p>
+<p><tt class="docutils literal"><span class="pre">2</span></tt> : find the critical axial load for a fixed pressure load</p>
+<p><tt class="docutils literal"><span class="pre">3</span></tt> : find the critical torsion load for a fixed axial load</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The extracted eigenvalues are stored in the <tt class="docutils literal"><span class="pre">eigvals</span></tt> parameter
+of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object and the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the
+<tt class="docutils literal"><span class="pre">eigvecs[i-1,</span> <span class="pre">:]</span></tt> parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.plot">
+<tt class="descname">plot</tt><big>(</big><em>c</em>, <em>invert_x=False</em>, <em>plot_type=1</em>, <em>vec='w'</em>, <em>filename=''</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>add_title=True</em>, <em>title=''</em>, <em>colorbar=False</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=300</em>, <em>texts=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contour plot for a Ritz constants vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>The Ritz constants that will be used to compute the field contour.</p>
+</div></blockquote>
+<p><strong>vec</strong> : str, optional</p>
+<blockquote>
+<div><p>Can be <tt class="docutils literal"><span class="pre">'u'</span></tt>, <tt class="docutils literal"><span class="pre">'v'</span></tt>, <tt class="docutils literal"><span class="pre">'w'</span></tt>, <tt class="docutils literal"><span class="pre">'phix'</span></tt> or <tt class="docutils literal"><span class="pre">'phit'</span></tt>,
+which indicates which element of the displacement vector
+should be plotted.  The default value is <tt class="docutils literal"><span class="pre">'w'</span></tt>
+(the normal displacement).</p>
+</div></blockquote>
+<p><strong>invert_x</strong> : bool, optional</p>
+<blockquote>
+<div><p>Inverts the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis of the plot. It may be used to match
+the coordinate system of the finite element models created
+using the <tt class="docutils literal"><span class="pre">desicos.abaqus</span></tt> module.</p>
+</div></blockquote>
+<p><strong>plot_type</strong> : int, optional</p>
+<blockquote>
+<div><p>For cylinders only <tt class="docutils literal"><span class="pre">4</span></tt> and <tt class="docutils literal"><span class="pre">5</span></tt> are valid.
+For cones all the types can be used:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">1</span></tt> concave up (with <tt class="docutils literal"><span class="pre">invert_x=False</span></tt>) (default)</li>
+<li><tt class="docutils literal"><span class="pre">2</span></tt> concave down (with <tt class="docutils literal"><span class="pre">invert_x=False</span></tt>)</li>
+<li><tt class="docutils literal"><span class="pre">3</span></tt> stretched closed</li>
+<li><tt class="docutils literal"><span class="pre">4</span></tt> stretched opened (<img class="math" src="../../_images/math/2c74807b30799c600a7ef0ec01bff0025a2c4690.png" alt="r \times \theta"/> vs. <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>)</li>
+<li><tt class="docutils literal"><span class="pre">5</span></tt> stretched opened (<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> vs. <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>)</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p><strong>save</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag telling whether the contour should be saved to an image file.
+The default value is <tt class="docutils literal"><span class="pre">True</span></tt>.</p>
+</div></blockquote>
+<p><strong>dpi</strong> : int, optional</p>
+<blockquote>
+<div><p>Resolution of the saved file in dots per inch. The default is
+<tt class="docutils literal"><span class="pre">300</span></tt>.</p>
+</div></blockquote>
+<p><strong>filename</strong> : str, optional</p>
+<blockquote>
+<div><p>The file name for the generated image file. If no value is given,
+the <img class="math" src="../../_images/math/86ce084fee7aaac111b4c85576e5c0b49483efe0.png" alt="name"/> parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object will be used.</p>
+</div></blockquote>
+<p><strong>figsize</strong> : tuple, optional</p>
+<blockquote>
+<div><p>The figure size given by <tt class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></tt>.
+The default is <tt class="docutils literal"><span class="pre">(3.5,</span> <span class="pre">2.)</span></tt>.</p>
+</div></blockquote>
+<p><strong>add_title</strong> : bool, optional</p>
+<blockquote>
+<div><p>If a title should be added to the figure. Default is <tt class="docutils literal"><span class="pre">True</span></tt>.</p>
+</div></blockquote>
+<p><strong>title</strong> : str, optional</p>
+<blockquote>
+<div><p>Default is an empty string <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt>. If any string is given
+<tt class="docutils literal"><span class="pre">add_title</span></tt> will be ignored and the given title added to the
+contour plot.</p>
+</div></blockquote>
+<p><strong>colorbar</strong> : bool, optional</p>
+<blockquote>
+<div><p>If a colorbar should be added to the contour plot.
+Default is <tt class="docutils literal"><span class="pre">False</span></tt>.</p>
+</div></blockquote>
+<p><strong>aspect</strong> : str, optional</p>
+<blockquote>
+<div><p>String that will be passed to the <tt class="docutils literal"><span class="pre">AxesSubplot.set_aspect()</span></tt>
+method. The default value is <tt class="docutils literal"><span class="pre">'equal'</span></tt>.</p>
+</div></blockquote>
+<p><strong>clean</strong> : bool, optional</p>
+<blockquote>
+<div><p>Clean axes ticks, grids, spines etc. Default is <tt class="docutils literal"><span class="pre">True</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ax</strong> : matplotlib.axes.AxesSubplot</p>
+<blockquote class="last">
+<div><p>The Matplotlib object that can be used to modify the current plot
+if needed.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.save">
+<tt class="descname">save</tt><big>(</big><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt>.</p>
+<p class="rubric">Notes</p>
+<p>The pickled file will have the name stored in <tt class="docutils literal"><span class="pre">ConeCyl.name</span></tt>
+followed by a <tt class="docutils literal"><span class="pre">.ConeCyl</span></tt> extension.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.static">
+<tt class="descname">static</tt><big>(</big><em>NLgeom=False</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.static" title="Permalink to this definition">¶</a></dt>
+<dd><p>Static analysis for cones and cylinders.</p>
+<p>The analysis can be linear or non-linear. In case of a non-linear
+analysis the following parameters of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object will
+affect the non-linear analysis:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">non-linear algorithm</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">NL_method</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">'NR'</span></tt> for the Newton-Raphson
+<tt class="docutils literal"><span class="pre">'arc_length'</span></tt> for the Arc-Length method</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">modified_NR</span></tt></td>
+<td>activate the modified Newton-Raphson</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">compute_every_n</span></tt></td>
+<td>if <tt class="docutils literal"><span class="pre">modified_NR=True</span></tt>, the non-linear
+matrices will be updated at every <img class="math" src="../../_images/math/9b3557d5c9bbf3c7041215fdae28c97ac580789a.png" alt="n"/>
+iterations</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">incrementation</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">initialInc</span></tt></td>
+<td>initial load increment size</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">minInc</span></tt></td>
+<td>minimum increment size; if achieved the analysis
+is terminated</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">maxInc</span></tt></td>
+<td>maximum increment size</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">convergence criteria</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">absTOL</span></tt></td>
+<td>the convergence is achieved when the maximum
+residual force is smaller than this value</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">maxNumIter</span></tt></td>
+<td>maximum number of iteration; if achieved the
+load increment is bisected</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">numerical integration</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">ni_num_cores</span></tt></td>
+<td>number of cores used for the numerical
+integration</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">ni_method</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">'trapz2d'</span></tt> for 2-D Trapezoidal&#8217;s
+<tt class="docutils literal"><span class="pre">'simps2d'</span></tt> for 2-D Simpsons&#8217; integration</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>NLgeom</strong> : bool</p>
+<blockquote>
+<div><p>Flag to indicate whether a linear or a non-linear analysis is to
+be performed.
+The default is <tt class="docutils literal"><span class="pre">True</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>cs</strong> : list</p>
+<blockquote class="last">
+<div><p>A list containing the Ritz constants for each load increment of
+the static analysis. The list will have only one entry in case
+of a linear analysis.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The returned <tt class="docutils literal"><span class="pre">cs</span></tt> is stored in the <tt class="docutils literal"><span class="pre">cs</span></tt> parameter of the
+<tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object. The actual increments used in the non-linear
+analysis are stored in the <tt class="docutils literal"><span class="pre">increments</span></tt> parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.strain">
+<tt class="descname">strain</tt><big>(</big><em>c</em>, <em>x=None</em>, <em>t=None</em>, <em>gridx=100</em>, <em>gridt=200</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.strain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the strain field for a given Ritz constants vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>The Ritz constants vector to be used for the strain field
+calculation.</p>
+</div></blockquote>
+<p><strong>x</strong> : numpy.ndarray, optional</p>
+<blockquote>
+<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinates where to calculate the strains.</p>
+</div></blockquote>
+<p><strong>t</strong> : numpy.ndarray, optional</p>
+<blockquote>
+<div><p>The <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinates where to calculate the strains, must
+have the same shape as <tt class="docutils literal"><span class="pre">x</span></tt>.</p>
+</div></blockquote>
+<p><strong>gridx</strong> : int, optional</p>
+<blockquote>
+<div><p>When <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">t</span></tt> are not supplied, <tt class="docutils literal"><span class="pre">gridx</span></tt> and <tt class="docutils literal"><span class="pre">gridt</span></tt>
+are used.</p>
+</div></blockquote>
+<p><strong>gridt</strong> : int, optional</p>
+<blockquote>
+<div><p>When <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">t</span></tt> are not supplied, <tt class="docutils literal"><span class="pre">gridx</span></tt> and <tt class="docutils literal"><span class="pre">gridt</span></tt>
+are used.</p>
+</div></blockquote>
+<p><strong>inc</strong> : float, optional</p>
+<blockquote class="last">
+<div><p>Load increment, necessary to calculate the full set of Ritz
+constants using <a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><tt class="xref py py-meth docutils literal"><span class="pre">calc_full_c()</span></tt></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.uvw">
+<tt class="descname">uvw</tt><big>(</big><em>c</em>, <em>x=None</em>, <em>t=None</em>, <em>gridx=100</em>, <em>gridt=200</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.uvw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displacement field for a given set of Ritz constants.</p>
+<p>For a given full set of Ritz constants <tt class="docutils literal"><span class="pre">c</span></tt>, the displacement
+field is calculated and stored in the parameters
+<tt class="docutils literal"><span class="pre">u</span></tt>, <tt class="docutils literal"><span class="pre">v</span></tt>, <tt class="docutils literal"><span class="pre">w</span></tt>, <tt class="docutils literal"><span class="pre">phix</span></tt>, <tt class="docutils literal"><span class="pre">phit</span></tt> of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : float</p>
+<blockquote>
+<div><p>The full set of Ritz constants</p>
+</div></blockquote>
+<p><strong>x</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+Default is <tt class="docutils literal"><span class="pre">None</span></tt> and the method <tt class="docutils literal"><span class="pre">_default_field</span></tt> is used.</p>
+</div></blockquote>
+<p><strong>t</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>The <tt class="docutils literal"><span class="pre">theta</span></tt> positions where to calculate the displacement field.
+Default is <tt class="docutils literal"><span class="pre">None</span></tt> and the method <tt class="docutils literal"><span class="pre">_default_field</span></tt> is used.</p>
+</div></blockquote>
+<p><strong>gridx</strong> : int</p>
+<blockquote>
+<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+displacement field. Default is <tt class="docutils literal"><span class="pre">100</span></tt>.</p>
+</div></blockquote>
+<p><strong>gridx</strong> : int</p>
+<blockquote>
+<div><p>Number of points along the <img class="math" src="../../_images/math/b0279a44fa37816ca2b838f34c3b065979cee610.png" alt="theta"/> where to calculate the
+displacement field. Default is <tt class="docutils literal"><span class="pre">200</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : tuple</p>
+<blockquote class="last">
+<div><p>A tuple of <tt class="docutils literal"><span class="pre">numpy.ndarrays</span></tt> containing
+<tt class="docutils literal"><span class="pre">(u,</span> <span class="pre">v,</span> <span class="pre">w,</span> <span class="pre">phix,</span> <span class="pre">phit)</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The returned values <tt class="docutils literal"><span class="pre">u`</span></tt>, <tt class="docutils literal"><span class="pre">v</span></tt>, <tt class="docutils literal"><span class="pre">w</span></tt>, <tt class="docutils literal"><span class="pre">phix</span></tt>, <tt class="docutils literal"><span class="pre">phit</span></tt> are
+stored as parameters with the same name in the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<p>where <tt class="docutils literal"><span class="pre">c0</span></tt> is the array containing the coefficients of the approximation
-function, <tt class="docutils literal"><span class="pre">L</span></tt> is the meridional length of the cone or cylinder
-(<a class="reference internal" href="#conecyl-figure"><em>as shown here</em></a>), <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">t</span></tt> the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and
-<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinates, <tt class="docutils literal"><span class="pre">m</span></tt> and <tt class="docutils literal"><span class="pre">n</span></tt> the number of terms of the
-approximation series as described above, and finally,
-<tt class="docutils literal"><span class="pre">w0xref</span></tt> and <tt class="docutils literal"><span class="pre">w0tref</span></tt> are pointers to <tt class="docutils literal"><span class="pre">double</span></tt> variables.</p>
+<div class="section" id="module-compmech.conecyl.non_linear">
+<span id="non-linear-analysis"></span><h2>Non-linear analysis<a class="headerlink" href="#module-compmech.conecyl.non_linear" title="Permalink to this headline">¶</a></h2>
+<p>Non-linear algorithms used with the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+<dl class="function">
+<dt id="compmech.conecyl.non_linear.NR">
+<tt class="descclassname">compmech.conecyl.non_linear.</tt><tt class="descname">NR</tt><big>(</big><em>cc</em>, <em>break_when_diverge=True</em><big>)</big><a class="reference internal" href="../../_modules/compmech/conecyl/non_linear.html#NR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.non_linear.NR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Newton-Raphson algorithm for non-linear analysis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cc</strong> : compmech.conecyl.ConeCyl</p>
+<blockquote class="last">
+<div><p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compmech.conecyl.modelDB">
+<span id="models-database"></span><h2>Models&#8217; Database<a class="headerlink" href="#module-compmech.conecyl.modelDB" title="Permalink to this headline">¶</a></h2>
+<p>Used to configure the main parameters for each implemented model.</p>
+<dl class="function">
+<dt id="compmech.conecyl.modelDB.get_linear_matrices">
+<tt class="descclassname">compmech.conecyl.modelDB.</tt><tt class="descname">get_linear_matrices</tt><big>(</big><em>cc</em>, <em>combined_load_case=None</em><big>)</big><a class="reference internal" href="../../_modules/compmech/conecyl/modelDB.html#get_linear_matrices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.modelDB.get_linear_matrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain the right functions to calculate hte linear matrices
+for a given model.</p>
+<p>The <tt class="docutils literal"><span class="pre">model</span></tt> parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object is used to search
+for the functions <tt class="docutils literal"><span class="pre">fG0</span></tt>, <tt class="docutils literal"><span class="pre">fG0_cyl</span></tt>, <tt class="docutils literal"><span class="pre">fkG0</span></tt>, <tt class="docutils literal"><span class="pre">fkG0_cyl</span></tt>,
+and the matrix <tt class="docutils literal"><span class="pre">k0edges</span></tt> is calculated, when applicable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cc</strong> : compmech.conecyl.ConeCyl</p>
+<blockquote>
+<div><p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+</div></blockquote>
+<p><strong>combined_load_case</strong> : int, optional</p>
+<blockquote>
+<div><p>As explained in the <a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><tt class="xref py py-meth docutils literal"><span class="pre">ConeCyl.lb()</span></tt></a>
+method, the integer indicating
+which combined load case should be used. Default is <tt class="docutils literal"><span class="pre">None</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : tuple</p>
+<blockquote class="last">
+<div><p>A tuple containing <tt class="docutils literal"><span class="pre">(fk0,</span> <span class="pre">fk0_cyl,</span> <span class="pre">fkG0,</span> <span class="pre">fkG0_cyl,</span> <span class="pre">k0edges)</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
@@ -331,24 +765,16 @@ approximation series as described above, and finally,
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Semi-analytical models for cones and cylinder (<tt class="docutils literal"><span class="pre">compmech.conecyl</span></tt>)</a><ul>
-<li><a class="reference internal" href="#basics">Basics</a><ul>
-<li><a class="reference internal" href="#defining-the-geometry">Defining the geometry</a></li>
-<li><a class="reference internal" href="#defining-the-laminate-and-the-material-properties">Defining the laminate and the material properties</a></li>
-<li><a class="reference internal" href="#static-analysis">Static analysis</a></li>
-<li><a class="reference internal" href="#non-linear-analysis">Non-linear analysis</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#measured-imperfections">Measured Imperfections</a></li>
+<li><a class="reference internal" href="#the-conecyl-object">The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object</a></li>
+<li><a class="reference internal" href="#module-compmech.conecyl.non_linear">Non-linear analysis</a></li>
+<li><a class="reference internal" href="#module-compmech.conecyl.modelDB">Models&#8217; Database</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter">Python modules</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../../theory/index.html"
-                        title="next chapter">Theory related to the implementations</a></p>
+  <p class="topless"><a href="../composite/index.html"
+                        title="previous chapter">Composite Module (<tt class="docutils literal"><span class="pre">compmech.composite</span></tt>)</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/conecyl/index.txt"
@@ -378,10 +804,13 @@ approximation series as described above, and finally,
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../theory/index.html" title="Theory related to the implementations"
-             >next</a> |</li>
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Python modules"
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../composite/index.html" title="Composite Module (compmech.composite)"
              >previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Python modules</a> &raquo;</li> 
@@ -389,7 +818,7 @@ approximation series as described above, and finally,
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 03, 2014.
+      Last updated on Apr 11, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
