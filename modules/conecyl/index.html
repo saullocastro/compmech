@@ -23,7 +23,6 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
@@ -91,28 +90,31 @@ stresses by the relation:</p>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_SPL" title="compmech.conecyl.ConeCyl.add_SPL"><tt class="xref py py-obj docutils literal"><span class="pre">add_SPL</span></tt></a>(PL[,&nbsp;pt,&nbsp;theta])</td>
 <td>Add a Single Perturbation Load (SPL).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><tt class="xref py py-obj docutils literal"><span class="pre">calc_full_c</span></tt></a>(cu[,&nbsp;inc])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_force" title="compmech.conecyl.ConeCyl.add_force"><tt class="xref py py-obj docutils literal"><span class="pre">add_force</span></tt></a>(x,&nbsp;theta,&nbsp;fx,&nbsp;ftheta,&nbsp;fz)</td>
+<td>Add a punctual force.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><tt class="xref py py-obj docutils literal"><span class="pre">calc_full_c</span></tt></a>(cu[,&nbsp;inc])</td>
 <td>Returns the full set of Ritz constants.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_dofs_matrix</span></tt></a>(k[,&nbsp;return_kkk,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_dofs_matrix</span></tt></a>(k[,&nbsp;return_kkk,&nbsp;...])</td>
 <td>Makes the partition of the dofs for prescribed displacements.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><tt class="xref py py-obj docutils literal"><span class="pre">lb</span></tt></a>([c,&nbsp;tol,&nbsp;combined_load_case])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><tt class="xref py py-obj docutils literal"><span class="pre">lb</span></tt></a>([c,&nbsp;tol,&nbsp;combined_load_case])</td>
 <td>Linear Buckling analysis.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(c[,&nbsp;invert_x,&nbsp;plot_type,&nbsp;vec,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(c[,&nbsp;invert_x,&nbsp;plot_type,&nbsp;vec,&nbsp;...])</td>
 <td>Contour plot for a Ritz constants vector.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>()</td>
 <td>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom])</td>
 <td>Static analysis for cones and cylinders.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><tt class="xref py py-obj docutils literal"><span class="pre">strain</span></tt></a>(c[,&nbsp;x,&nbsp;t,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><tt class="xref py py-obj docutils literal"><span class="pre">strain</span></tt></a>(c[,&nbsp;x,&nbsp;t,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
 <td>Calculates the strain field for a given Ritz constants vector.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><tt class="xref py py-obj docutils literal"><span class="pre">uvw</span></tt></a>(c[,&nbsp;x,&nbsp;t,&nbsp;gridx,&nbsp;gridt])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><tt class="xref py py-obj docutils literal"><span class="pre">uvw</span></tt></a>(c[,&nbsp;x,&nbsp;t,&nbsp;gridx,&nbsp;gridt])</td>
 <td>Displacement field for a given set of Ritz constants.</td>
 </tr>
 </tbody>
@@ -222,10 +224,45 @@ Default is <tt class="docutils literal"><span class="pre">0.</span></tt>.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object has three parameters which must be changed when
-a SPL is included: <tt class="docutils literal"><span class="pre">PLvalues</span></tt>, <tt class="docutils literal"><span class="pre">PLxs</span></tt> and <tt class="docutils literal"><span class="pre">PLthetas</span></tt>.
-These three parameters are <tt class="docutils literal"><span class="pre">list</span></tt> objects that can be changed
-elsewhere by the analyst.</p>
+<p>Each single perturbation load is added to the <tt class="docutils literal"><span class="pre">forces</span></tt> parameter
+of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object, which may be changed by the analyst at
+any time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.add_force">
+<tt class="descname">add_force</tt><big>(</big><em>x</em>, <em>theta</em>, <em>fx</em>, <em>ftheta</em>, <em>fz</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_force" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a punctual force.</p>
+<p>Adds a force vector <img class="math" src="../../_images/math/556bef07eeeb6f6d8499dc8ab628abcf2ff16991.png" alt="\{f_x, f_\theta, f_z\}^T"/> to the <tt class="docutils literal"><span class="pre">forces</span></tt>
+parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : float</p>
+<blockquote>
+<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> position.</p>
+</div></blockquote>
+<p><strong>theta</strong> : float</p>
+<blockquote>
+<div><p>The <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> position in radians.</p>
+</div></blockquote>
+<p><strong>fx</strong> : float</p>
+<blockquote>
+<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> component of the force vector.</p>
+</div></blockquote>
+<p><strong>ftheta</strong> : float</p>
+<blockquote>
+<div><p>The <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> component of the force vector.</p>
+</div></blockquote>
+<p><strong>fz</strong> : float</p>
+<blockquote class="last">
+<div><p>The <img class="math" src="../../_images/math/eb4fcf2ea15c365948abb172ed3693fbc10b3b4a.png" alt="z"/> component of the force vector.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -303,7 +340,7 @@ Default is <img class="math" src="../../_images/math/52f8ce4b0c6bce33f83e8d48a91
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : dict</p>
 <blockquote class="last">
-<div><p>A <img class="math" src="../../_images/math/f5f6968b9cd9a57900870d1016d04272671f6525.png" alt="dict"/> object containing the keys for the
+<div><p>A <tt class="docutils literal"><span class="pre">dict</span></tt> object containing the keys for the
 corresponding sub-matrices <tt class="docutils literal"><span class="pre">kkk</span></tt>, <tt class="docutils literal"><span class="pre">kku</span></tt>, <tt class="docutils literal"><span class="pre">kuk</span></tt>, <tt class="docutils literal"><span class="pre">kuu</span></tt>.
 The sub-matrix <tt class="docutils literal"><span class="pre">out['kuu']</span></tt> is a <tt class="docutils literal"><span class="pre">scipy.sparse.csr_matrix</span></tt>,
 while the others are 2-D <tt class="docutils literal"><span class="pre">numpy.ndarray</span></tt> objects.</p>
@@ -350,9 +387,11 @@ the analysis is completed</td>
 considering combined load cases, each value will tell
 the algorithm to rearrange the linear matrices in a different
 way. The valid values are <tt class="docutils literal"><span class="pre">1</span></tt>, or <tt class="docutils literal"><span class="pre">2</span></tt>, where:</p>
-<p><tt class="docutils literal"><span class="pre">1</span></tt> : find the critical axial load for a fixed torsion load</p>
-<p><tt class="docutils literal"><span class="pre">2</span></tt> : find the critical axial load for a fixed pressure load</p>
-<p><tt class="docutils literal"><span class="pre">3</span></tt> : find the critical torsion load for a fixed axial load</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">1</span></tt> : find the critical axial load for a fixed torsion load</li>
+<li><tt class="docutils literal"><span class="pre">2</span></tt> : find the critical axial load for a fixed pressure load</li>
+<li><tt class="docutils literal"><span class="pre">3</span></tt> : find the critical torsion load for a fixed axial load</li>
+</ul>
 </div></blockquote>
 </td>
 </tr>
@@ -393,15 +432,13 @@ using the <tt class="docutils literal"><span class="pre">desicos.abaqus</span></
 <blockquote>
 <div><p>For cylinders only <tt class="docutils literal"><span class="pre">4</span></tt> and <tt class="docutils literal"><span class="pre">5</span></tt> are valid.
 For cones all the types can be used:</p>
-<blockquote>
-<div><ul class="simple">
-<li><tt class="docutils literal"><span class="pre">1</span></tt> concave up (with <tt class="docutils literal"><span class="pre">invert_x=False</span></tt>) (default)</li>
-<li><tt class="docutils literal"><span class="pre">2</span></tt> concave down (with <tt class="docutils literal"><span class="pre">invert_x=False</span></tt>)</li>
-<li><tt class="docutils literal"><span class="pre">3</span></tt> stretched closed</li>
-<li><tt class="docutils literal"><span class="pre">4</span></tt> stretched opened (<img class="math" src="../../_images/math/2c74807b30799c600a7ef0ec01bff0025a2c4690.png" alt="r \times \theta"/> vs. <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>)</li>
-<li><tt class="docutils literal"><span class="pre">5</span></tt> stretched opened (<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> vs. <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>)</li>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">1</span></tt>: concave up (with <tt class="docutils literal"><span class="pre">invert_x=False</span></tt>) (default)</li>
+<li><tt class="docutils literal"><span class="pre">2</span></tt>: concave down (with <tt class="docutils literal"><span class="pre">invert_x=False</span></tt>)</li>
+<li><tt class="docutils literal"><span class="pre">3</span></tt>: stretched closed</li>
+<li><tt class="docutils literal"><span class="pre">4</span></tt>: stretched opened (<img class="math" src="../../_images/math/2c74807b30799c600a7ef0ec01bff0025a2c4690.png" alt="r \times \theta"/> vs. <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>)</li>
+<li><tt class="docutils literal"><span class="pre">5</span></tt>: stretched opened (<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> vs. <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>)</li>
 </ul>
-</div></blockquote>
 </div></blockquote>
 <p><strong>save</strong> : bool, optional</p>
 <blockquote>
@@ -791,7 +828,7 @@ imperfection are accessible using Cython</p>
                 int m, int n, double *w0xref, int funcnum) nogil
 
 cdef void cfw0t(double x, double t, double *c0, double L,
-                int m, int n, double *w0xref, int funcnum) nogil
+                int m, int n, double *w0tref, int funcnum) nogil
 </pre></div>
 </div>
 <p>where <tt class="docutils literal"><span class="pre">c0</span></tt> is the array containing the coefficients of the approximation
