@@ -68,6 +68,10 @@
 <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csc_matrix</span>
 <span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">spsolve</span>
 
+<span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">FLOAT</span>
+<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="n">remove_cols</span><span class="p">,</span> <span class="n">solve</span>
+
 <span class="k">def</span> <span class="nf">NR_Broyden</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
     <span class="n">increment_PL</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">increment_PL</span>
     <span class="n">cen</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">compute_every_n</span>
@@ -77,7 +81,7 @@
     <span class="c">#</span>
     <span class="n">k0</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0</span>
     <span class="n">kT</span> <span class="o">=</span> <span class="n">k0</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">cc</span><span class="o">.</span><span class="n">pdoff</span> <span class="o">+</span> <span class="mi">6</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">m2</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">n2</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">m1</span><span class="p">),</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">cc</span><span class="o">.</span><span class="n">pdoff</span> <span class="o">+</span> <span class="mi">6</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">m2</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">n2</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">m1</span><span class="p">),</span> <span class="n">FLOAT</span><span class="p">)</span>
     <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
     <span class="n">delta</span> <span class="o">+=</span> <span class="mf">0.001</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">delta</span>
@@ -105,7 +109,7 @@
 
             <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Rmax</span><span class="o">-</span><span class="n">Rmax_old</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">cc</span><span class="o">.</span><span class="n">absTOL</span><span class="p">:</span>
                 <span class="n">converged</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&#39;Converged!&#39;</span><span class="p">)</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Converged!&#39;</span><span class="p">)</span>
                 <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">Rmax_old</span> <span class="o">=</span> <span class="n">Rmax</span>
@@ -131,8 +135,8 @@
     <span class="c">#</span>
     <span class="n">step_num</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Finished Non-Linear Static Analysis&#39;</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">at time {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">))</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished Non-Linear Static Analysis&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;at time {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="NR"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.non_linear.NR">[docs]</a><span class="k">def</span> <span class="nf">NR</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="n">break_when_diverge</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Newton-Raphson algorithm for non-linear analysis.</span>
@@ -141,8 +145,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    cc : compmech.conecyl.ConeCyl</span>
 <span class="sd">        The ``ConeCyl`` object.</span>
+<span class="sd">    break_when_diverge : bool, optional</span>
+<span class="sd">        If ``True`` it will stop the analysis in the case of divergence.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Initialization...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">increment_PL</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">increment_PL</span>
     <span class="n">cen</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">compute_every_n</span>
 
@@ -157,14 +164,15 @@
         <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">increment_PL</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">kT</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kT</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span>
 
     <span class="n">kSuk</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="n">step_num</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">Started Load Step {} - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step_num</span><span class="p">)</span>
-             <span class="o">+</span> <span class="s">&#39;Attempting time = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">))</span>
+        <span class="n">log</span><span class="p">(</span><span class="s">&#39;Started Load Step {} - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step_num</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s">&#39;Attempting time = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="n">modified_NR</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span>
 
@@ -192,7 +200,7 @@
                 <span class="c">#f_ext = cc._calc_f_ext(inc=total, kuk=kSuk)</span>
 
             <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">    Iteration: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">))</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Iteration: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">check_divergence</span> <span class="o">=</span> <span class="bp">True</span>
 
             <span class="c">#TODO is this really an advantage?</span>
@@ -211,7 +219,7 @@
             <span class="k">if</span> <span class="n">compute_NL_matrices</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">min_Rmax</span> <span class="o">&gt;</span> <span class="n">last_min_Rmax</span><span class="p">:</span>
-                        <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t\t</span><span class="s">WARNING - Diverged!&#39;</span><span class="p">)</span>
+                        <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">break_when_diverge</span><span class="p">:</span>
                             <span class="k">break</span>
                     <span class="n">check_divergence</span> <span class="o">=</span> <span class="bp">False</span>
@@ -238,7 +246,7 @@
             <span class="c"># convergence criteria:</span>
             <span class="c"># - maximum residual force Rmax</span>
             <span class="n">Rmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">R</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\t\t\t</span><span class="s">Rmax = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Rmax</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Rmax = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Rmax</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
                 <span class="n">cc</span><span class="o">.</span><span class="n">uvw</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">cc</span><span class="o">.</span><span class="n">L</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
@@ -250,26 +258,26 @@
                 <span class="k">break</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="n">check_divergence</span> <span class="ow">and</span> <span class="n">Rmax</span><span class="o">&gt;</span><span class="n">min_Rmax</span> <span class="ow">and</span> <span class="n">iteration</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t\t</span><span class="s">WARNING - Diverged!&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">break_when_diverge</span><span class="p">:</span>
                     <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">min_Rmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_Rmax</span><span class="p">,</span> <span class="n">Rmax</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxNumIter</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t\t</span><span class="s">WARNING - Maximum number of iterations achieved!&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Maximum number of iterations achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">break</span>
 
-            <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t\t</span><span class="s">Solving... &#39;</span><span class="p">),</span>
-            <span class="n">delta_c</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">kTuu</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Solving... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">delta_c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kTuu</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
             <span class="n">c</span> <span class="o">+=</span> <span class="n">delta_c</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">&#39;finished!&#39;</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 
         <span class="k">if</span> <span class="n">converged</span><span class="p">:</span>
             <span class="n">finished</span> <span class="o">=</span> <span class="bp">False</span>
-            <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">Finished Load Step {} at&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step_num</span><span class="p">)</span>
-                  <span class="o">+</span> <span class="s">&#39; time = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">))</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished Load Step {} at&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step_num</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s">&#39; time = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">cc</span><span class="o">.</span><span class="n">increments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">:</span>
                 <span class="n">finished</span> <span class="o">=</span> <span class="bp">True</span>
@@ -278,8 +286,8 @@
                     <span class="n">inc_new</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.1</span><span class="o">*</span><span class="n">inc</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxInc</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">total</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">inc_new</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.1</span><span class="o">*</span><span class="n">inc</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxInc</span><span class="p">,</span> <span class="mf">1.</span><span class="o">-</span><span class="n">total</span><span class="p">)</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">Changing time increment from {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                      <span class="n">inc</span><span class="p">,</span> <span class="n">inc_new</span><span class="p">))</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Changing time increment from {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">inc</span><span class="p">,</span> <span class="n">inc_new</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">inc</span> <span class="o">=</span> <span class="n">inc_new</span>
                 <span class="n">total</span> <span class="o">+=</span> <span class="n">inc</span>
                 <span class="n">total</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
@@ -290,14 +298,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">max_total</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_total</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
             <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">Bisecting time increment from {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                      <span class="n">inc</span><span class="p">,</span> <span class="n">inc</span><span class="o">/</span><span class="mi">4</span><span class="p">))</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Bisecting time increment from {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">inc</span><span class="p">,</span> <span class="n">inc</span><span class="o">/</span><span class="mi">4</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">total</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">:</span>
                     <span class="n">once_at_total</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="n">total</span> <span class="o">-=</span> <span class="n">inc</span>
                 <span class="n">inc</span> <span class="o">/=</span> <span class="mi">4</span>
                 <span class="k">if</span> <span class="n">inc</span> <span class="o">&lt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">minInc</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Minimum step size achieved!&#39;</span><span class="p">)</span>
+                    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Minimum step size achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                     <span class="k">break</span>
                 <span class="n">total</span> <span class="o">+=</span> <span class="n">inc</span>
                 <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;=</span> <span class="n">max_total</span><span class="p">:</span>
@@ -313,12 +321,13 @@
                 <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">increment_PL</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span>
+
             <span class="c">#cc.cs = [c.copy()]</span>
             <span class="c">#cc.increments = [inc]</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Finished Non-Linear Static Analysis&#39;</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">at time {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">))</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished Non-Linear Static Analysis&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;at time {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </div>
 <span class="k">def</span> <span class="nf">arc_length</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
     <span class="n">lbd</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -389,7 +398,7 @@
                 <span class="n">converged</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">break</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">Rmax</span><span class="o">&gt;</span><span class="n">min_Rmax</span> <span class="ow">and</span> <span class="n">iteration</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t\t</span><span class="s">WARNING - Diverged!&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">break</span>
             <span class="n">min_Rmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_Rmax</span><span class="p">,</span> <span class="n">Rmax</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">converged</span><span class="p">:</span>
@@ -401,7 +410,7 @@
             <span class="n">c</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">length</span> <span class="o">*=</span> <span class="mf">0.9</span>
 
-    <span class="k">print</span> <span class="s">&#39;lambda&#39;</span><span class="p">,</span> <span class="n">lbd</span>
+    <span class="k">print</span> <span class="s">&#39;DEBUG lambda&#39;</span><span class="p">,</span> <span class="n">lbd</span>
 </pre></div>
 
           </div>
@@ -448,7 +457,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 12, 2014.
+      Last updated on Apr 14, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

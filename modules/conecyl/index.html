@@ -466,7 +466,7 @@ if needed.</p>
 <dd><p>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt>.</p>
 <p class="rubric">Notes</p>
 <p>The pickled file will have the name stored in <tt class="docutils literal"><span class="pre">ConeCyl.name</span></tt>
-followed by a <tt class="docutils literal"><span class="pre">.ConeCyl</span></tt> extension.</p>
+followed by a <tt class="docutils literal"><span class="pre">'.ConeCyl'</span></tt> extension.</p>
 </dd></dl>
 
 <dl class="method">
@@ -692,7 +692,7 @@ stored as parameters with the same name in the <tt class="docutils literal"><spa
 
 </div>
 <div class="section" id="module-compmech.conecyl.non_linear">
-<span id="non-linear-analysis"></span><h2>Non-linear analysis<a class="headerlink" href="#module-compmech.conecyl.non_linear" title="Permalink to this headline">¶</a></h2>
+<span id="non-linear-analysis-compmech-conecyl-non-linear"></span><h2>Non-linear analysis (<a class="reference internal" href="#module-compmech.conecyl.non_linear" title="compmech.conecyl.non_linear"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl.non_linear</span></tt></a>)<a class="headerlink" href="#module-compmech.conecyl.non_linear" title="Permalink to this headline">¶</a></h2>
 <p>Non-linear algorithms used with the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
 <dl class="function">
 <dt id="compmech.conecyl.non_linear.NR">
@@ -703,8 +703,12 @@ stored as parameters with the same name in the <tt class="docutils literal"><spa
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cc</strong> : compmech.conecyl.ConeCyl</p>
-<blockquote class="last">
+<blockquote>
 <div><p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+</div></blockquote>
+<p><strong>break_when_diverge</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>If <tt class="docutils literal"><span class="pre">True</span></tt> it will stop the analysis in the case of divergence.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -714,7 +718,7 @@ stored as parameters with the same name in the <tt class="docutils literal"><spa
 
 </div>
 <div class="section" id="module-compmech.conecyl.modelDB">
-<span id="models-database"></span><h2>Models&#8217; Database<a class="headerlink" href="#module-compmech.conecyl.modelDB" title="Permalink to this headline">¶</a></h2>
+<span id="models-database-compmech-conecyl-modeldb"></span><h2>Models&#8217; Database (<a class="reference internal" href="#module-compmech.conecyl.modelDB" title="compmech.conecyl.modelDB"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl.modelDB</span></tt></a>)<a class="headerlink" href="#module-compmech.conecyl.modelDB" title="Permalink to this headline">¶</a></h2>
 <p>Used to configure the main parameters for each implemented model.</p>
 <dl class="function">
 <dt id="compmech.conecyl.modelDB.get_linear_matrices">
@@ -751,6 +755,195 @@ which combined load case should be used. Default is <tt class="docutils literal"
 </dd></dl>
 
 </div>
+<div class="section" id="module-compmech.conecyl.imperfections">
+<span id="imperfections-compmech-conecyl-imperfections"></span><h2>Imperfections (<a class="reference internal" href="#module-compmech.conecyl.imperfections" title="compmech.conecyl.imperfections"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl.imperfections</span></tt></a>)<a class="headerlink" href="#module-compmech.conecyl.imperfections" title="Permalink to this headline">¶</a></h2>
+<p>Convenient routines to transform discrete measured data
+into continuous functions applicable in semi-analytical analyses.</p>
+<p>The implemented geometric imperfection of this module is the one
+representing the normal displacement of the mid-surface and will be
+called <em>Measured Geometric Imperfection (MGI)</em>.</p>
+<p>The non-linear analysis using a MGI require the calculation
+of the initial imperfection field, called <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/>, and the corresponding
+partial derivatives <img class="math" src="../../_images/math/bd9e7a9745595de4eef3ac5ceb2aa09ae044f697.png" alt="{w_0}_{,x}"/> and <img class="math" src="../../_images/math/bc7befe96ac9dde131b6c9f7d6cbfd3d7dd712c7.png" alt="{w_0}_{,\theta}"/>.</p>
+<p>The function <tt class="docutils literal"><span class="pre">calc_c0</span></tt> described below is implemented to find
+the best-fit for a given imperfection data. Three different approximation
+functions can be selected using the <tt class="docutils literal"><span class="pre">funcnum</span></tt> parameter.</p>
+<p>The imperfection file should be in the form:</p>
+<div class="highlight-python"><div class="highlight"><pre>theta1  height1  imp1
+theta2  height2  imp2
+...
+thetan  heightn  impn
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">height</span></tt> is measured from the bottom to the top of the cylinder
+or cone, parallel to the axial axis, and <tt class="docutils literal"><span class="pre">theta</span></tt> is the circumferential
+coordinate <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> measured as shown
+<a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><em>in the semi-analytical model</em></a>.</p>
+<p>When implementing a non-linear analysis algorithm, see for example
+<a class="reference external" href="https://github.com/compmech/compmech/blob/master/compmech/conecyl/fsdt/fsdt_donnell_bc1_nonlinear.pyx">fsdt_donnell_bc1_nonlinear.pyx</a>
+, the functions to calculate the partial derivatives of the geometric
+imperfection are accessible using Cython</p>
+<div class="highlight-python"><div class="highlight"><pre>from compmech.conecyl.imperfection.mgi cimport cfw0x, cfw0t
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">cfw0x</span></tt> and <tt class="docutils literal"><span class="pre">cfw0t</span></tt> function headers are:</p>
+<div class="highlight-python"><div class="highlight"><pre>cdef void cfw0x(double x, double t, double *c0, double L,
+                int m, int n, double *w0xref, int funcnum) nogil
+
+cdef void cfw0t(double x, double t, double *c0, double L,
+                int m, int n, double *w0xref, int funcnum) nogil
+</pre></div>
+</div>
+<p>where <tt class="docutils literal"><span class="pre">c0</span></tt> is the array containing the coefficients of the approximation
+function, <tt class="docutils literal"><span class="pre">L</span></tt> is the meridional length of the cone or cylinder
+(<a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><em>as shown here</em></a>), <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">t</span></tt> the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and
+<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinates, <tt class="docutils literal"><span class="pre">m</span></tt> and <tt class="docutils literal"><span class="pre">n</span></tt> the number of terms of the
+approximation series as described above, and finally,
+<tt class="docutils literal"><span class="pre">w0xref</span></tt> and <tt class="docutils literal"><span class="pre">w0tref</span></tt> are pointers to <tt class="docutils literal"><span class="pre">double</span></tt> variables.</p>
+<span class="target" id="module-compmech.conecyl.imperfections.imperfections"></span><dl class="function">
+<dt id="compmech.conecyl.imperfections.imperfections.calc_c0">
+<tt class="descclassname">compmech.conecyl.imperfections.imperfections.</tt><tt class="descname">calc_c0</tt><big>(</big><em>path</em>, <em>m=40</em>, <em>n=40</em>, <em>funcnum=2</em>, <em>sample_size=None</em>, <em>maxmem=8</em>, <em>save=True</em><big>)</big><a class="reference internal" href="../../_modules/compmech/conecyl/imperfections/imperfections.html#calc_c0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.imperfections.imperfections.calc_c0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the coefficients <img class="math" src="../../_images/math/90dfad7e3008bd9296795faa349b4446f5e30197.png" alt="c_0"/> that best fit the <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> function.</p>
+<p>The measured data will be fit using one of the following functions,
+selected using the <tt class="docutils literal"><span class="pre">funcnum</span></tt> parameter:</p>
+<p><tt class="docutils literal"><span class="pre">funcnum=1</span></tt></p>
+<div class="math">
+<p><img src="../../_images/math/b2b52bda7fd3c6ebbe51993edbe7d9254c51e7aa.png" alt="w_0 = \sum_{i=1}^{m}{ \sum_{j=1}^{n}{
+         c_{ij}^a sin{b_x} sin{b_\theta}
+        +c_{ij}^b sin{b_x} cos{b_\theta}}}"/></p>
+</div><p><tt class="docutils literal"><span class="pre">funcnum=2</span></tt> (default)</p>
+<div class="math">
+<p><img src="../../_images/math/8d3cec9809e2538065c6086466917359557138b2.png" alt="w_0 = \sum_{i=0}^{m}{ \sum_{j=0}^{n}{
+        c_{ij}^a cos{b_x} sin{b_\theta}
+        +c_{ij}^b cos{b_x} cos{b_\theta}}}"/></p>
+</div><p><tt class="docutils literal"><span class="pre">funcnum=3</span></tt></p>
+<div class="math">
+<p><img src="../../_images/math/b3ec59e02657bbca32074be1857910705b48892c.png" alt="w_0 = \sum_{i=0}^{m}{ \sum_{j=0}^{n}{
+         c_{ij}^a sin{b_x} sin{b_\theta}
+        +c_{ij}^b sin{b_x} cos{b_\theta}
+        +c_{ij}^c cos{b_x} sin{b_\theta}
+        +c_{ij}^d cos{b_x} cos{b_\theta}}}"/></p>
+</div><p>where:</p>
+<div class="math">
+<p><img src="../../_images/math/e0eb969dff6e89e70957a2c43968def746659c7a.png" alt="b_x = i \pi \frac x L_{points}
+
+b_\theta = j \theta"/></p>
+</div><p>where <img class="math" src="../../_images/math/b5cadd3b85c5d3b9a6684f1e21089c61d9198e9a.png" alt="L_{points}"/> represents the difference between the maximum and
+the height values in the imperfection file divided by the cosine
+of the semi-vertex angle:</p>
+<div class="math">
+<p><img src="../../_images/math/849103ee55d94e88409a3a60c5bd1100bd1f217c.png" alt="L_{points} = \frac{H_{max} - H_{min}}{cos(\alpha)}
+           = \frac{H_{points}}{cos(\alpha)}"/></p>
+</div><p>In this form <img class="math" src="../../_images/math/760b8fc48228c614ecf0b936129250ed33b42133.png" alt="{}^x/_{L_{points}}"/> will vary from <img class="math" src="../../_images/math/779575f18dde3069197e30c9ce02f73d765fefe5.png" alt="0."/> (at the top)
+to <img class="math" src="../../_images/math/52f8ce4b0c6bce33f83e8d48a91f088fc6215c6e.png" alt="1."/> (at the bottom).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that if the measured sample does not
+cover all the height, <strong>it will be stretched</strong>.</p>
+</div>
+<p>The approximation can be written in matrix form as:</p>
+<div class="math">
+<p><img src="../../_images/math/d947cffc16ab48694b349b4260deee0668081dc7.png" alt="w_0 = [g] \{c\}"/></p>
+</div><p>where <img class="math" src="../../_images/math/e5c181ab30f23cea7c86c455ea6ebc26edff132c.png" alt="[g]"/> carries the base functions and <img class="math" src="../../_images/math/ba6e4422096979219d12a4b01100f0bd33823c8d.png" alt="{c}"/> the respective
+amplitudes. The solution consists on finding the best <img class="math" src="../../_images/math/4fb833c3c0e0a5bde813b48df6b2ae96af9302aa.png" alt="\{c\}"/> that minimizes
+the least-square error between the measured imperfection pattern and the
+<img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>path</strong> : str or numpy.ndarray</p>
+<blockquote>
+<div><p>The path of the file containing the data. Can be a full path using
+<tt class="docutils literal"><span class="pre">r&quot;C:\Temp\inputfile.txt&quot;</span></tt>, for example.
+The input file must have 3 columns: <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>, <img class="math" src="../../_images/math/c537047c627811e4ebbe2e109e282d2307c2dceb.png" alt="height"/>, <img class="math" src="../../_images/math/a359fcc67d4efbcaef5bda404120efef7de1ada3.png" alt="imp"/>;
+expressed in Cartesian coordinates.</p>
+<p>This input can also be a <tt class="docutils literal"><span class="pre">numpy.ndarray</span></tt> object, with
+<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>, <img class="math" src="../../_images/math/c537047c627811e4ebbe2e109e282d2307c2dceb.png" alt="height"/>, <img class="math" src="../../_images/math/a359fcc67d4efbcaef5bda404120efef7de1ada3.png" alt="imp"/> in each corresponding column.</p>
+</div></blockquote>
+<p><strong>m</strong> : int</p>
+<blockquote>
+<div><p>Number of terms along the meridian (<img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>).</p>
+</div></blockquote>
+<p><strong>n</strong> : int</p>
+<blockquote>
+<div><p>Number of terms along the circumference (<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>).</p>
+</div></blockquote>
+<p><strong>funcnum</strong> : int, optional</p>
+<blockquote>
+<div><p>As explained above, selects the base functions used for
+the approximation.</p>
+</div></blockquote>
+<p><strong>sample_size</strong> : int or None, optional</p>
+<blockquote>
+<div><p>An in  specifying how many points of the imperfection file
+should be used. If the default <tt class="docutils literal"><span class="pre">None</span></tt> is used
+all points file will be used in the computations.</p>
+</div></blockquote>
+<p><strong>maxmem</strong> : int, optional</p>
+<blockquote>
+<div><p>Maximum RAM memory in GB allowed to compute the base functions.
+The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span></tt> will go beyond this limit.</p>
+</div></blockquote>
+<p><strong>save</strong> : bool, optional</p>
+<blockquote>
+<div><p>The default value <tt class="docutils literal"><span class="pre">True</span></tt> saves the calculated coefficients in the
+<tt class="docutils literal"><span class="pre">compmech/conecyl/imperfections/c0</span></tt> folder.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : numpy.ndarray</p>
+<blockquote class="last">
+<div><p>A 1-D array with the best-fit coefficients.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="compmech.conecyl.imperfections.imperfections.fa">
+<tt class="descclassname">compmech.conecyl.imperfections.imperfections.</tt><tt class="descname">fa</tt><big>(</big><em>m</em>, <em>n</em>, <em>xs_norm</em>, <em>thetas</em>, <em>funcnum=2</em><big>)</big><a class="reference internal" href="../../_modules/compmech/conecyl/imperfections/imperfections.html#fa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.imperfections.imperfections.fa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the matrix with the base functions for <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/>.</p>
+<p>The calculated matrix is directly used to calculate the <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> displacement
+field, when the corresponding coefficients <img class="math" src="../../_images/math/90dfad7e3008bd9296795faa349b4446f5e30197.png" alt="c_0"/> are known, through:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">fa</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">xs_norm</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w0</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">c0</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>m</strong> : int</p>
+<blockquote>
+<div><p>The number of terms along the meridian.</p>
+</div></blockquote>
+<p><strong>n</strong> : int</p>
+<blockquote>
+<div><p>The number of terms along the circumference.</p>
+</div></blockquote>
+<p><strong>xs_norm</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>The normalized <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinates (from 0. to 1.) used to compute
+the base functions.</p>
+</div></blockquote>
+<p><strong>thetas</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>The angles in radians representing the circumferential positions.</p>
+</div></blockquote>
+<p><strong>funcnum</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>The function used for the approximation (see the <tt class="docutils literal"><span class="pre">calc_c0</span></tt> function)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -766,8 +959,9 @@ which combined load case should be used. Default is <tt class="docutils literal"
   <ul>
 <li><a class="reference internal" href="#">Semi-analytical models for cones and cylinder (<tt class="docutils literal"><span class="pre">compmech.conecyl</span></tt>)</a><ul>
 <li><a class="reference internal" href="#the-conecyl-object">The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object</a></li>
-<li><a class="reference internal" href="#module-compmech.conecyl.non_linear">Non-linear analysis</a></li>
-<li><a class="reference internal" href="#module-compmech.conecyl.modelDB">Models&#8217; Database</a></li>
+<li><a class="reference internal" href="#module-compmech.conecyl.non_linear">Non-linear analysis (<tt class="docutils literal"><span class="pre">compmech.conecyl.non_linear</span></tt>)</a></li>
+<li><a class="reference internal" href="#module-compmech.conecyl.modelDB">Models&#8217; Database (<tt class="docutils literal"><span class="pre">compmech.conecyl.modelDB</span></tt>)</a></li>
+<li><a class="reference internal" href="#module-compmech.conecyl.imperfections">Imperfections (<tt class="docutils literal"><span class="pre">compmech.conecyl.imperfections</span></tt>)</a></li>
 </ul>
 </li>
 </ul>
@@ -818,7 +1012,7 @@ which combined load case should be used. Default is <tt class="docutils literal"
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 11, 2014.
+      Last updated on Apr 14, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
