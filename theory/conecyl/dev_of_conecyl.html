@@ -107,22 +107,24 @@ Mathematica routines necessary for this task are named as:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="mo">00</span><span class="p">,</span> <span class="mo">01</span><span class="p">,</span> <span class="mo">02</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span> <span class="ow">and</span> <span class="mi">22</span>
 </pre></div>
 </div>
-<p>are stored in two text files inside the folder <tt class="docutils literal"><span class="pre">./outputs</span></tt>, one with a
-Mathematica format and another in Fortran format, identified with a prefix
+<p>are stored in two text files inside the folder <tt class="docutils literal"><span class="pre">./linear_mathematica</span></tt>,
+one with a Mathematica format and another in Fortran format,
+identified with a prefix
 <tt class="docutils literal"><span class="pre">fortran_</span></tt>. Since the integrated matrices are greatly simplified for the
 cylinder case, there are files for both cones and cylinders.</p>
-<p>The routine <tt class="docutils literal"><span class="pre">print_sparse.py</span></tt> is used to convert the Fortran format to a
+<p>The routine <tt class="docutils literal"><span class="pre">print_linear_sparse.py</span></tt> is used to convert the Fortran
+format to a
 ready-to-past-in-Cython format, separating in <tt class="docutils literal"><span class="pre">row</span></tt>, <tt class="docutils literal"><span class="pre">col</span></tt> and <tt class="docutils literal"><span class="pre">value</span></tt>,
 which is convenient for the implementation using sparse matrices. The
-generated files are stored in <tt class="docutils literal"><span class="pre">./sparse_printing</span></tt>. Note that the power
+generated files are stored in <tt class="docutils literal"><span class="pre">./linear_sparse</span></tt>. Note that the power
 functions <tt class="docutils literal"><span class="pre">var**3</span></tt> are transformed in <tt class="docutils literal"><span class="pre">(var*var*var)</span></tt>, by default,
 which can be modified by changing the parameters in the
 <tt class="docutils literal"><span class="pre">mprint_as_sparse()</span></tt> function.</p>
 <p>The integrated sparse matrices are pasted in the corresponding Cython codes,
 currently:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_donnell_bc_linear</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">clpt_sanders_bc_linear</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">fsdt_donnell_bc_linear</span><span class="o">.</span><span class="n">pyx</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_donnell_bcX_linear</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">clpt_sanders_bcX_linear</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">fsdt_donnell_bcX_linear</span><span class="o">.</span><span class="n">pyx</span>
 </pre></div>
 </div>
 </div>
@@ -135,10 +137,10 @@ named as:</p>
 <div class="highlight-python"><div class="highlight"><pre>{ESL theory}_{equation type}_{boundary condition}_nonlinear.nb
 </pre></div>
 </div>
-<p>The output is printed inside <tt class="docutils literal"><span class="pre">./numerical</span></tt> and the routine
-<tt class="docutils literal"><span class="pre">print_numerical.py</span></tt> is used to parse these results into something
+<p>The output is printed inside <tt class="docutils literal"><span class="pre">./nonlinear_mathematica</span></tt> and the routine
+<tt class="docutils literal"><span class="pre">print_nonlinear_sparse.py</span></tt> is used to parse these results into something
 that can be directly implemented into Cython, and the new outputs are
-stored in <tt class="docutils literal"><span class="pre">./numerical_printing</span></tt>.</p>
+stored in <tt class="docutils literal"><span class="pre">./nonlinear_sparse</span></tt>.</p>
 <p>For each sub-matrix:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="mo">00</span><span class="p">,</span> <span class="mo">01</span><span class="p">,</span> <span class="mo">02</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span>
 </pre></div>
@@ -181,14 +183,14 @@ fortran_{cone or cylinder}_{matrix name}q_{right digit}.txt
 </pre></div>
 </div>
 <p>These are implemented in:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_donnell_bc_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">clpt_sanders_bc_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">fsdt_donnell_bc_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_donnell_bcX_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">clpt_sanders_bcX_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">fsdt_donnell_bcX_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="strain-equations">
-<h2>Strain equations<a class="headerlink" href="#strain-equations" title="Permalink to this headline">¶</a></h2>
+<h2>Strain Equations<a class="headerlink" href="#strain-equations" title="Permalink to this headline">¶</a></h2>
 <p>When the non-linear integrands are built another file containing the
 strain equations is written:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fortran_strainFunc</span><span class="o">.</span><span class="n">txt</span>
@@ -198,16 +200,54 @@ strain equations is written:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">print_strainFunc</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>And another file, the:</p>
+<p>which creates the output files:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">output_strainFunc</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">output_e0</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">output_eL</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
-<p>which is easy to implement in the Cython codes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_commons</span><span class="o">.</span><span class="n">pyx</span>
-<span class="n">fsdt_commons</span><span class="o">.</span><span class="n">pyx</span>
+<p>the first with the full strain relations, the second with the linear
+and the third with the non-linear strain relations. The format saved
+is easy to implement in the Cython codes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_commons_bcX</span><span class="o">.</span><span class="n">pyx</span>
+<span class="n">fsdt_commons_bcX</span><span class="o">.</span><span class="n">pyx</span>
 </pre></div>
 </div>
-<p>depending on each case.</p>
+</div>
+<div class="section" id="internal-forces">
+<h2>Internal Forces<a class="headerlink" href="#internal-forces" title="Permalink to this headline">¶</a></h2>
+<p>The internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> is separated in four parts:
+.. math:</p>
+<div class="highlight-python"><div class="highlight"><pre>\{F_{int}\} = \{F_{int}\}_{00} + \{F_{int}\}_{0L} +
+              \{F_{int}\}_{L0} + \{F_{int}\}_{LL}
+</pre></div>
+</div>
+<p>As can be seen in the function <a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><tt class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.calc_fint()</span></tt></a>,
+the linear component <img class="math" src="../../_images/math/72cc35d5e606f688c08945806109882e3e8d948b.png" alt="\{F_{int}\}_{00}"/> is calculated using:
+.. math:</p>
+<div class="highlight-python"><div class="highlight"><pre>\{F_{int}\}_{00} = [K_0]\{c\}
+</pre></div>
+</div>
+<p>because <img class="math" src="../../_images/math/ca28b2833c10991ea042899048cb950e3b10a235.png" alt="[K_0]"/> is calculated analytically and the numerical integration
+errors are avoided in this way. For the other three terms <img class="math" src="../../_images/math/d3fa4303d2d74cef548cb767ad5b2807a322f6a5.png" alt="0L"/>, <img class="math" src="../../_images/math/11fbcada63a169dd423d9f473d56fc0e0ca61ac3.png" alt="L0"/> and
+<img class="math" src="../../_images/math/48adb3ef59398490da97df22e078758e96813935.png" alt="LL"/>, a numerical integration is performed. It is important
+to say that computational cost associated
+with the numerical integration of <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> is approximately
+<img class="math" src="../../_images/math/fe02a797055ce3bc794a574b37da80b191be5b59.png" alt="m_2 \times n_2"/> smaller than the integraion of <img class="math" src="../../_images/math/6de489b578ca938805144e2400be7e2773da19ab.png" alt="[K_T]"/>.</p>
+<p>The Mathematica routine:</p>
+<div class="highlight-python"><div class="highlight"><pre>{ESL theory}_{equation type}_{boundary condition}_nonlinear.nb
+</pre></div>
+</div>
+<p>produces a file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fortran_fint_L0_0L_LL</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>which is post-processed by the routine:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">print_fint_L0_0L_LL</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>that prints into <tt class="docutils literal"><span class="pre">./nonlinear_sparse</span></tt> in a ready-to-paste format, that
+is copy-pasted in Cython.</p>
 </div>
 </div>
 
@@ -228,7 +268,8 @@ strain equations is written:</p>
 <li><a class="reference internal" href="#definitions">Definitions</a></li>
 <li><a class="reference internal" href="#integration-of-the-linear-matrices">Integration of the linear matrices</a></li>
 <li><a class="reference internal" href="#integration-of-the-non-linear-matrices">Integration of the non-linear matrices</a></li>
-<li><a class="reference internal" href="#strain-equations">Strain equations</a></li>
+<li><a class="reference internal" href="#strain-equations">Strain Equations</a></li>
+<li><a class="reference internal" href="#internal-forces">Internal Forces</a></li>
 </ul>
 </li>
 </ul>
@@ -286,7 +327,7 @@ strain equations is written:</p>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 14, 2014.
+      Last updated on May 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

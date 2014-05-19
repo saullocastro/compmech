@@ -63,18 +63,18 @@
 <span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">CMHOME</span>
 <span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="k">def</span> <span class="nf">load_c0</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_c0</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">):</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMHOME</span><span class="p">,</span> <span class="s">&#39;conecyl&#39;</span><span class="p">,</span> <span class="s">&#39;imperfections&#39;</span><span class="p">,</span> <span class="s">&#39;c0&#39;</span><span class="p">,</span>
             <span class="s">&#39;c0_{0}_f{1}_m{2:03d}_n{3:03d}.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Coefficient file not found!&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="calc_c0"><a class="viewcode-back" href="../../../../modules/conecyl/index.html#compmech.conecyl.imperfections.imperfections.calc_c0">[docs]</a><span class="k">def</span> <span class="nf">calc_c0</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="calc_c0"><a class="viewcode-back" href="../../../../modules/conecyl/index.html#compmech.conecyl.imperfections.imperfections.calc_c0">[docs]</a><span class="k">def</span> <span class="nf">calc_c0</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">m0</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
             <span class="n">maxmem</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-    <span class="sd">r&#39;&#39;&#39;Find the coefficients `c_0` that best fit the `w_0` function.</span>
+    <span class="sd">r&quot;&quot;&quot;Find the coefficients `c_0` that best fit the `w_0` function.</span>
 
 <span class="sd">    The measured data will be fit using one of the following functions,</span>
 <span class="sd">    selected using the ``funcnum`` parameter:</span>
@@ -82,21 +82,21 @@
 <span class="sd">    ``funcnum=1``</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        w_0 = \sum_{i=1}^{m}{ \sum_{j=1}^{n}{</span>
+<span class="sd">        w_0 = \sum_{i=1}^{m_0}{ \sum_{j=1}^{n_0}{</span>
 <span class="sd">                 c_{ij}^a sin{b_x} sin{b_\theta}</span>
 <span class="sd">                +c_{ij}^b sin{b_x} cos{b_\theta}}}</span>
 
 <span class="sd">    ``funcnum=2`` (default)</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        w_0 = \sum_{i=0}^{m}{ \sum_{j=0}^{n}{</span>
+<span class="sd">        w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{</span>
 <span class="sd">                c_{ij}^a cos{b_x} sin{b_\theta}</span>
 <span class="sd">                +c_{ij}^b cos{b_x} cos{b_\theta}}}</span>
 
 <span class="sd">    ``funcnum=3``</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        w_0 = \sum_{i=0}^{m}{ \sum_{j=0}^{n}{</span>
+<span class="sd">        w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{</span>
 <span class="sd">                 c_{ij}^a sin{b_x} sin{b_\theta}</span>
 <span class="sd">                +c_{ij}^b sin{b_x} cos{b_\theta}</span>
 <span class="sd">                +c_{ij}^c cos{b_x} sin{b_\theta}</span>
@@ -143,9 +143,9 @@
 
 <span class="sd">        This input can also be a ``numpy.ndarray`` object, with</span>
 <span class="sd">        `\theta`, `height`, `imp` in each corresponding column.</span>
-<span class="sd">    m : int</span>
+<span class="sd">    m0 : int</span>
 <span class="sd">        Number of terms along the meridian (`x`).</span>
-<span class="sd">    n : int</span>
+<span class="sd">    n0 : int</span>
 <span class="sd">        Number of terms along the circumference (`\theta`).</span>
 <span class="sd">    funcnum : int, optional</span>
 <span class="sd">        As explained above, selects the base functions used for</span>
@@ -166,7 +166,7 @@
 <span class="sd">    out : numpy.ndarray</span>
 <span class="sd">        A 1-D array with the best-fit coefficients.</span>
 
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">mgi</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
@@ -195,7 +195,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Valid values for &quot;funcnum&quot; are 1, 2 or 3&#39;</span><span class="p">)</span>
 
-    <span class="n">maxnum</span> <span class="o">=</span> <span class="n">maxmem</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">8</span><span class="o">/</span><span class="p">(</span><span class="mi">64</span><span class="o">*</span><span class="n">size</span><span class="o">*</span><span class="n">m</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">maxnum</span> <span class="o">=</span> <span class="n">maxmem</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">8</span><span class="o">/</span><span class="p">(</span><span class="mi">64</span><span class="o">*</span><span class="n">size</span><span class="o">*</span><span class="n">m0</span><span class="o">*</span><span class="n">n0</span><span class="p">)</span>
     <span class="n">num</span> <span class="o">=</span> <span class="n">input_pts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;=</span> <span class="n">maxnum</span><span class="p">:</span>
         <span class="n">input_pts</span> <span class="o">=</span> <span class="n">input_pts</span><span class="p">[</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">maxnum</span><span class="p">))]</span>
@@ -212,7 +212,7 @@
     <span class="c"># inverting x to cope with the coordsys of the semi-analytical model</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">xs</span>
 
-    <span class="n">a</span> <span class="o">=</span> <span class="n">mgi</span><span class="o">.</span><span class="n">fa</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="n">funcnum</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">mgi</span><span class="o">.</span><span class="n">fa</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="n">funcnum</span><span class="p">)</span>
     <span class="n">log</span><span class="p">(</span><span class="s">&#39;Base functions calculated&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">c0</span><span class="p">,</span> <span class="n">residues</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lstsq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">w0pts</span><span class="p">)</span>
     <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished scipy.linalg.lstsq&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -221,37 +221,52 @@
         <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMHOME</span><span class="p">,</span> <span class="s">&#39;conecyl&#39;</span><span class="p">,</span> <span class="s">&#39;imperfections&#39;</span><span class="p">,</span> <span class="s">&#39;c0&#39;</span><span class="p">,</span>
                 <span class="s">&#39;c0_{0}_f{1}_m{2:03d}_n{3:03d}.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">))</span>
         <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="n">c0</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">c0</span><span class="p">,</span> <span class="n">residues</span>
 </div>
-<div class="viewcode-block" id="fa"><a class="viewcode-back" href="../../../../modules/conecyl/index.html#compmech.conecyl.imperfections.imperfections.fa">[docs]</a><span class="k">def</span> <span class="nf">fa</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">xs_norm</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calculates the matrix with the base functions for `w_0`.</span>
-
-<span class="sd">    The calculated matrix is directly used to calculate the `w_0` displacement</span>
-<span class="sd">    field, when the corresponding coefficients `c_0` are known, through:</span>
-
-<span class="sd">        &gt;&gt;&gt; a = fa(m, n, xs_norm, thetas, funcnum)</span>
-<span class="sd">        &gt;&gt;&gt; w0 = a.dot(c0)</span>
+<div class="viewcode-block" id="fw0"><a class="viewcode-back" href="../../../../modules/conecyl/index.html#compmech.conecyl.imperfections.imperfections.fw0">[docs]</a><span class="k">def</span> <span class="nf">fw0</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">xs_norm</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Calculates the imperfection field `w_0` for a given input.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    m : int</span>
+<span class="sd">    m0 : int</span>
 <span class="sd">        The number of terms along the meridian.</span>
-<span class="sd">    n : int</span>
+<span class="sd">    n0 : int</span>
 <span class="sd">        The number of terms along the circumference.</span>
+<span class="sd">    c0 : numpy.ndarray</span>
+<span class="sd">        The coefficients of the imperfection pattern.</span>
 <span class="sd">    xs_norm : numpy.ndarray</span>
-<span class="sd">        The normalized `x` coordinates (from 0. to 1.) used to compute</span>
-<span class="sd">        the base functions.</span>
-<span class="sd">    thetas : numpy.ndarray</span>
-<span class="sd">        The angles in radians representing the circumferential positions.</span>
+<span class="sd">        The meridian coordinate (`x`) normalized to be between ``0.`` and</span>
+<span class="sd">        ``1.``.</span>
+<span class="sd">    ts : numpy.ndarray</span>
+<span class="sd">        The angles in radians representing the circumferential coordinate</span>
+<span class="sd">        (`\theta`).</span>
 <span class="sd">    funcnum : int, optional</span>
 <span class="sd">        The function used for the approximation (see the ``calc_c0`` function)</span>
 
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The inputs ``xs_norm`` and ``ts`` must be of the same size.</span>
+
+<span class="sd">    If ``funcnum==1 or funcnum==2`` then ``size=2``, if ``funcnum==3`` then</span>
+<span class="sd">    ``size=4`` and the inputs must satisfy ``c0.shape[0] == size*m0*n0``.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xs_norm</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">ts</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;xs_norm and ts must have the same shape&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">funcnum</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">funcnum</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">funcnum</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="k">if</span> <span class="n">c0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">size</span><span class="o">*</span><span class="n">m0</span><span class="o">*</span><span class="n">n0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid c0 for the given m0 and n0!&#39;</span><span class="p">)</span>
     <span class="kn">import</span> <span class="nn">mgi</span>
-    <span class="k">return</span> <span class="n">mgi</span><span class="o">.</span><span class="n">fa</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">xs_norm</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">)</span></div>
+    <span class="n">w0s</span> <span class="o">=</span> <span class="n">mgi</span><span class="o">.</span><span class="n">fw0</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">xs_norm</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">ts</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">funcnum</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">w0s</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xs_norm</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -298,7 +313,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 14, 2014.
+      Last updated on May 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

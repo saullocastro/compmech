@@ -122,33 +122,33 @@ been used in comparative studies:</p>
 <span id="id1"></span><h3>fsdt_donnell_bc1<a class="headerlink" href="#fsdt-donnell-bc1" title="Permalink to this headline">¶</a></h3>
 <p>SS1- and CC1-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/3cb2266d58120b5a095c208a3785cb4e71e0da07.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/f096864e03a718983003230ddf26c26ecc308d6b.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 \phi_x = {\phi_x}_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
              {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
             +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
           \right)
 \\
 {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=0}^{m_1}
                              {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
           \right)"/></p>
@@ -532,7 +532,7 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 14, 2014.
+      Last updated on May 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

@@ -69,11 +69,11 @@
 
 <span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">FLOAT</span>
 <span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="n">remove_cols</span><span class="p">,</span> <span class="n">solve</span>
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="n">solve</span>
+
+<span class="n">TOO_SLOW</span> <span class="o">=</span> <span class="mf">0.01</span>
 
 <span class="k">def</span> <span class="nf">NR_Broyden</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
-    <span class="n">increment_PL</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">increment_PL</span>
-    <span class="n">cen</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">compute_every_n</span>
     <span class="c">#</span>
     <span class="n">inc</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">initialInc</span>
     <span class="n">total</span> <span class="o">=</span> <span class="n">inc</span>
@@ -89,22 +89,13 @@
         <span class="n">converged</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">Rmax_old</span> <span class="o">=</span> <span class="mf">1e6</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">increment_PL</span><span class="p">:</span>
-                <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">increment_PL</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+            <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">True</span><span class="p">:</span><span class="c">#iteration==0:</span>
-                <span class="n">R</span> <span class="o">=</span> <span class="n">f_ext</span> <span class="o">-</span> <span class="n">k0</span><span class="o">*</span><span class="n">c</span>
+                <span class="n">R</span> <span class="o">=</span> <span class="n">fext</span> <span class="o">-</span> <span class="n">k0</span><span class="o">*</span><span class="n">c</span>
             <span class="c">#else:</span>
                 <span class="c">#cc._calc_NL_matrices(c)</span>
-                <span class="c">#R = f_ext - (cc.k0 + cc.k0L/2 + cc.kL0 + cc.kLL/2)*c</span>
+                <span class="c">#R = fext - (cc.k0 + cc.k0L/2 + cc.kL0 + cc.kLL/2)*c</span>
             <span class="n">Rmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">R</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-
-            <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                <span class="n">cc</span><span class="o">.</span><span class="n">uvw</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">cc</span><span class="o">.</span><span class="n">L</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
-                <span class="n">w1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">print</span> <span class="s">&#39;</span><span class="se">\t\t</span><span class="s">DEBUG w1 = {0} mm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w1</span><span class="p">)</span>
-                <span class="k">print</span> <span class="s">&#39;</span><span class="se">\t\t</span><span class="s">DEBUG Rmax = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">R</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 
             <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Rmax</span><span class="o">-</span><span class="n">Rmax_old</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">cc</span><span class="o">.</span><span class="n">absTOL</span><span class="p">:</span>
                 <span class="n">converged</span> <span class="o">=</span> <span class="bp">True</span>
@@ -113,18 +104,16 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">Rmax_old</span> <span class="o">=</span> <span class="n">Rmax</span>
             <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">check_divergence</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="n">update_kT</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span><span class="p">:</span>
-                <span class="n">test</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">%</span> <span class="n">cen</span>
-                <span class="k">if</span> <span class="n">iteration</span><span class="o">&lt;=</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">test</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">iteration</span><span class="o">&lt;=</span><span class="mi">5</span> <span class="ow">or</span> <span class="n">test</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
                     <span class="n">update_kT</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">update_kT</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="k">if</span> <span class="n">update_kT</span><span class="p">:</span>
                 <span class="k">print</span><span class="p">(</span><span class="s">&#39;Updating kT...&#39;</span><span class="p">)</span>
                 <span class="n">kT</span> <span class="o">=</span> <span class="n">kT</span> <span class="o">-</span> <span class="n">csc_matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>
-                <span class="n">delta</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">kT</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">kT</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
             <span class="n">c</span> <span class="o">+=</span> <span class="n">delta</span>
         <span class="k">if</span> <span class="n">converged</span><span class="p">:</span>
             <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
@@ -132,25 +121,407 @@
             <span class="n">total</span> <span class="o">+=</span> <span class="n">inc</span>
 
     <span class="c">#</span>
-    <span class="n">step_num</span> <span class="o">=</span> <span class="mi">1</span>
-
     <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished Non-Linear Static Analysis&#39;</span><span class="p">)</span>
     <span class="n">log</span><span class="p">(</span><span class="s">&#39;at time {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<div class="viewcode-block" id="NR"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.non_linear.NR">[docs]</a><span class="k">def</span> <span class="nf">NR</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="n">break_when_diverge</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="NR"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.non_linear.NR">[docs]</a><span class="k">def</span> <span class="nf">NR</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Newton-Raphson algorithm for non-linear analysis.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    cc : compmech.conecyl.ConeCyl</span>
 <span class="sd">        The ``ConeCyl`` object.</span>
-<span class="sd">    break_when_diverge : bool, optional</span>
-<span class="sd">        If ``True`` it will stop the analysis in the case of divergence.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">log</span><span class="p">(</span><span class="s">&#39;Initialization...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">increment_PL</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">increment_PL</span>
-    <span class="n">cen</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">compute_every_n</span>
+
+    <span class="n">modified_NR</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span>
+    <span class="n">inc</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">initialInc</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">inc</span>
+    <span class="n">once_at_total</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">max_total</span> <span class="o">=</span> <span class="mf">0.</span>
+
+    <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">c0</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Updating kT for initial imperfections...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="mi">0</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;kT updated!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
+            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
+            <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
+            <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+        <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+        <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
+        <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+
+    <span class="n">step_num</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="s">&#39;Started Load Step {} - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step_num</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s">&#39;Attempting time = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c"># TODO maybe for pdC=True, pdT the fext must be calculated with the</span>
+        <span class="c">#      last kT available...</span>
+
+        <span class="n">absERR</span> <span class="o">=</span> <span class="mf">1.e6</span>
+        <span class="n">relERR</span> <span class="o">=</span> <span class="mf">1.e6</span>
+        <span class="n">min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
+        <span class="n">prev_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
+        <span class="n">last_min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
+        <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">converged</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="n">kSuu</span> <span class="o">=</span> <span class="n">kSuu_last</span>
+        <span class="n">kSuk</span> <span class="o">=</span> <span class="n">kSuk_last</span>
+        <span class="n">kTuu</span> <span class="o">=</span> <span class="n">kTuu_last</span>
+
+        <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">kuk</span><span class="o">=</span><span class="n">kSuk</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Iteration: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxNumIter</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Maximum number of iterations achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">compute_NL_matrices</span><span class="p">:</span>
+                <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
+                <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
+                <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
+                <span class="c">#fint = kSuu*c</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">modified_NR</span><span class="p">:</span>
+                    <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="c">#fint = kSuu*c</span>
+
+            <span class="n">fint</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs</span><span class="p">):</span>
+                <span class="n">kSuk_col</span> <span class="o">=</span> <span class="n">kSuk</span><span class="p">[:,</span> <span class="n">dof</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+                <span class="n">fint</span> <span class="o">+=</span> <span class="n">total</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs_ck</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">kSuk_col</span>
+
+            <span class="n">R</span> <span class="o">=</span> <span class="n">fext</span> <span class="o">-</span> <span class="n">fint</span>
+
+            <span class="c"># convergence criteria:</span>
+            <span class="c"># - maximum residual force Rmax</span>
+            <span class="n">Rmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">R</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Rmax = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Rmax</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">Rmax</span> <span class="o">&lt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">absTOL</span><span class="p">:</span>
+                <span class="n">converged</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Rmax</span> <span class="o">&gt;</span> <span class="n">prev_Rmax</span> <span class="ow">and</span> <span class="n">Rmax</span> <span class="o">&gt;</span> <span class="n">min_Rmax</span> <span class="ow">and</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">min_Rmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_Rmax</span><span class="p">,</span> <span class="n">Rmax</span><span class="p">)</span>
+            <span class="n">change_rate_Rmax</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">prev_Rmax</span><span class="o">-</span><span class="n">Rmax</span><span class="p">)</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">prev_Rmax</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">iteration</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">change_rate_Rmax</span> <span class="o">&lt;</span> <span class="n">TOO_SLOW</span><span class="p">):</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged! (convergence too slow)&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="n">prev_Rmax</span> <span class="o">=</span> <span class="n">Rmax</span>
+
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Solving... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">delta_c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kTuu</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">eta1</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="n">eta2</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="c">#TODO how to implement the line-search?</span>
+            <span class="c">#     - using the modified NR method</span>
+            <span class="c">#       -- where kT is constant for a given load step</span>
+            <span class="k">if</span> <span class="bp">True</span> <span class="ow">and</span> <span class="n">modified_NR</span><span class="p">:</span>
+                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">eta1</span><span class="o">*</span><span class="n">delta_c</span>
+                    <span class="n">c2</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">eta2</span><span class="o">*</span><span class="n">delta_c</span>
+                    <span class="n">fint1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">fint2</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">R1</span> <span class="o">=</span> <span class="n">fext</span> <span class="o">-</span> <span class="n">fint1</span>
+                    <span class="n">R2</span> <span class="o">=</span> <span class="n">fext</span> <span class="o">-</span> <span class="n">fint2</span>
+                    <span class="n">s1</span> <span class="o">=</span> <span class="n">delta_c</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">R1</span><span class="p">)</span>
+                    <span class="n">s2</span> <span class="o">=</span> <span class="n">delta_c</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">R2</span><span class="p">)</span>
+                    <span class="n">eta_new</span> <span class="o">=</span> <span class="p">(</span><span class="n">eta2</span><span class="o">-</span><span class="n">eta1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="n">s1</span><span class="o">/</span><span class="p">(</span><span class="n">s2</span><span class="o">-</span><span class="n">s1</span><span class="p">))</span> <span class="o">+</span> <span class="n">eta1</span>
+                    <span class="n">eta1</span> <span class="o">=</span> <span class="n">eta2</span>
+                    <span class="n">eta2</span> <span class="o">=</span> <span class="n">eta_new</span>
+                    <span class="n">eta2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">eta2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="mf">10.</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">eta2</span><span class="o">-</span><span class="n">eta1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                        <span class="k">break</span>
+            <span class="c">#</span>
+            <span class="c">#</span>
+            <span class="c">#</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">eta2</span><span class="o">*</span><span class="n">delta_c</span>
+
+
+        <span class="k">if</span> <span class="n">converged</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished Load Step {} at&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step_num</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s">&#39; time = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">increments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span> <span class="c">#NOTE copy required</span>
+            <span class="n">finished</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">:</span>
+                <span class="n">finished</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="mf">1.1</span>
+                <span class="k">if</span> <span class="n">once_at_total</span><span class="p">:</span>
+                    <span class="n">inc_new</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">factor</span><span class="o">*</span><span class="n">inc</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxInc</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">total</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">inc_new</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">factor</span><span class="o">*</span><span class="n">inc</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxInc</span><span class="p">,</span> <span class="mf">1.</span><span class="o">-</span><span class="n">total</span><span class="p">)</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Changing time increment from {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">inc</span><span class="p">,</span> <span class="n">inc_new</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">inc</span> <span class="o">=</span> <span class="n">inc_new</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="n">inc</span>
+                <span class="n">total</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+                <span class="n">step_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">finished</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Updating kT...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;kT updated!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
+                <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
+                <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
+            <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">kSuu</span>
+            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">kSuk</span>
+            <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">kTuu</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">max_total</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_total</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.3</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Bisecting time increment from {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">inc</span><span class="p">,</span> <span class="n">inc</span><span class="o">*</span><span class="n">factor</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">total</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">:</span>
+                    <span class="n">once_at_total</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">total</span> <span class="o">-=</span> <span class="n">inc</span>
+                <span class="n">inc</span> <span class="o">*=</span> <span class="n">factor</span>
+                <span class="k">if</span> <span class="n">inc</span> <span class="o">&lt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">minInc</span><span class="p">:</span>
+                    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Minimum step size achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="n">inc</span>
+                <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;=</span> <span class="n">max_total</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">inc</span> <span class="o">&lt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">minInc</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Stopping solver: minimum step size achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c">#NOTE copy required</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># means that a bisection must be done in initialInc</span>
+            <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
+
+            <span class="c">#cc.cs = [c.copy()]</span>
+            <span class="c">#cc.increments = [inc]</span>
+
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished Non-Linear Static Analysis&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;at time {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="arc_length"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.non_linear.arc_length">[docs]</a><span class="k">def</span> <span class="nf">arc_length</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Arc-Length algorithm for non-linear analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cc : compmech.conecyl.ConeCyl</span>
+<span class="sd">        The ``ConeCyl`` object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Initialization...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">lbd_init</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">initialInc</span>
+    <span class="n">lbd</span> <span class="o">=</span> <span class="n">lbd_init</span>
+    <span class="n">last_lbd</span> <span class="o">=</span> <span class="mf">0.</span>
+
+    <span class="n">length_inc</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">length_inc</span>
+    <span class="n">max_length</span> <span class="o">=</span> <span class="n">length</span>
+    <span class="n">modified_NR</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span>
+    <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+    <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kTuu</span><span class="p">,</span> <span class="n">lbd</span><span class="o">*</span><span class="n">fext</span><span class="p">)</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">fint</span> <span class="o">=</span> <span class="n">kTuu</span><span class="o">*</span><span class="n">c</span>
+    <span class="n">last_fint</span> <span class="o">=</span> <span class="n">fint</span>
+    <span class="n">step_num</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">total_length</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">c0</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Updating kT for initial imperfections...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="mi">0</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;kT updated!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
+            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
+            <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
+            <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+        <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+        <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
+        <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+
+    <span class="k">while</span> <span class="n">step_num</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">log</span><span class="p">(</span><span class="s">&#39;Attempting arc-length = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">length</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
+        <span class="n">prev_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
+        <span class="n">converged</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">kSuu</span> <span class="o">=</span> <span class="n">kSuu_last</span>
+        <span class="n">kSuk</span> <span class="o">=</span> <span class="n">kSuk_last</span>
+        <span class="n">kTuu</span> <span class="o">=</span> <span class="n">kTuu_last</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Iteration: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxNumIter</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Maximum number of iterations achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="c"># applying the arc-length constraint to find the new lbd and the</span>
+            <span class="c"># new c</span>
+            <span class="n">dc2</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kTuu</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
+            <span class="n">dc1</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kTuu</span><span class="p">,</span> <span class="p">(</span><span class="n">lbd</span><span class="o">*</span><span class="n">fext</span> <span class="o">-</span> <span class="n">fint</span><span class="p">))</span>
+            <span class="n">a2</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">dc2</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc2</span><span class="p">)</span>
+            <span class="n">a1</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">lbd</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">dc1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc2</span><span class="p">)</span>
+            <span class="n">a0</span> <span class="o">=</span> <span class="p">(</span><span class="n">beta</span><span class="o">*</span><span class="n">lbd</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc1</span><span class="p">)</span>
+                  <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">dc1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc1</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta</span><span class="o">*</span><span class="n">length</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">a1</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a2</span><span class="o">*</span><span class="n">a0</span>
+            <span class="k">if</span> <span class="n">delta</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged! (negative delta)&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="n">eta</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="n">dlbd1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">a1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">delta</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">a2</span><span class="p">)</span>
+            <span class="n">dc_1</span> <span class="o">=</span> <span class="p">(</span><span class="n">dc1</span> <span class="o">+</span> <span class="n">dlbd1</span><span class="o">*</span><span class="n">dc2</span><span class="p">)</span>
+            <span class="n">dlbd2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">a1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">delta</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">a2</span><span class="p">)</span>
+            <span class="n">dc_2</span> <span class="o">=</span> <span class="p">(</span><span class="n">dc1</span> <span class="o">+</span> <span class="n">dlbd2</span><span class="o">*</span><span class="n">dc2</span><span class="p">)</span>
+
+            <span class="k">print</span> <span class="s">&#39;DEBUG dlbd1, dlbd2, dc_1.dot(c), dc_2.dot(c)&#39;</span>
+            <span class="k">print</span> <span class="n">dlbd1</span><span class="p">,</span> <span class="n">dlbd2</span><span class="p">,</span> <span class="n">dc_1</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">dc_2</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+            <span class="n">lbd</span> <span class="o">=</span> <span class="n">lbd</span> <span class="o">+</span> <span class="n">eta</span><span class="o">*</span><span class="n">dlbd1</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">eta</span><span class="o">*</span><span class="n">dc_1</span>
+
+            <span class="k">if</span> <span class="n">lbd</span> <span class="o">&gt;</span> <span class="mf">1.</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged! (lbd &gt; 1.)&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="c"># computing the Non-Linear matrices</span>
+            <span class="k">if</span> <span class="n">compute_NL_matrices</span><span class="p">:</span>
+                <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">lbd</span><span class="p">)</span>
+                <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
+                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
+                <span class="c">#fint = kSuu*c</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">modified_NR</span><span class="p">:</span>
+                    <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="c">#fint = kSuu*c</span>
+                <span class="c">#NOTE attempt to calculate fint more often than kT</span>
+
+            <span class="n">fint</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">lbd</span><span class="p">)</span>
+
+            <span class="c"># calculating the residual</span>
+            <span class="n">Rmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lbd</span><span class="o">*</span><span class="n">fext</span> <span class="o">-</span> <span class="n">fint</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Rmax = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Rmax</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;lbd = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lbd</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">Rmax</span> <span class="o">&lt;=</span> <span class="n">cc</span><span class="o">.</span><span class="n">absTOL</span><span class="p">:</span>
+                <span class="n">converged</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Rmax</span> <span class="o">&gt;</span> <span class="n">min_Rmax</span> <span class="ow">and</span> <span class="n">Rmax</span> <span class="o">&gt;</span> <span class="n">prev_Rmax</span> <span class="ow">and</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">min_Rmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_Rmax</span><span class="p">,</span> <span class="n">Rmax</span><span class="p">)</span>
+            <span class="n">change_rate_Rmax</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">prev_Rmax</span><span class="o">-</span><span class="n">Rmax</span><span class="p">)</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">prev_Rmax</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">iteration</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">change_rate_Rmax</span> <span class="o">&lt;</span> <span class="n">TOO_SLOW</span><span class="p">):</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged! (convergence too slow)&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="n">prev_Rmax</span> <span class="o">=</span> <span class="n">Rmax</span>
+
+        <span class="k">if</span> <span class="n">converged</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished increment with total length = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">length</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">increments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lbd</span><span class="p">)</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">lbd</span> <span class="o">&lt;</span> <span class="n">last_lbd</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Drop of reaction load achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c">#TODO maybe when we need to detect the local snap-through</span>
+                <span class="c">#     this if should be extended...</span>
+                <span class="c">#break</span>
+            <span class="n">last_fint</span> <span class="o">=</span> <span class="n">fint</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">last_lbd</span> <span class="o">=</span> <span class="n">lbd</span>
+            <span class="n">step_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.95</span>
+            <span class="n">new_length</span> <span class="o">=</span> <span class="n">length</span> <span class="o">+</span> <span class="n">length_inc</span><span class="o">*</span><span class="n">factor</span>
+            <span class="c">#TODO</span>
+            <span class="c">#while new_length &gt;= max_length:</span>
+            <span class="c">#    new_length *= 0.9</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;(lambda of this step = {0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lbd</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Changing arc-length from {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">length</span><span class="p">,</span>
+                <span class="n">new_length</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">new_length</span>
+            <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Updating kT...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">lbd</span><span class="p">)</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;kT updated!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
+                <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
+                <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
+            <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">kSuu</span>
+            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">kSuk</span>
+            <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">kTuu</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lbd</span> <span class="o">=</span> <span class="n">lbd_init</span>
+                <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kTuu</span><span class="p">,</span> <span class="n">lbd</span><span class="o">*</span><span class="n">fext</span><span class="p">)</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="c"># keep in the range 0 &lt; factor &lt; 1.</span>
+            <span class="n">fint</span> <span class="o">=</span> <span class="n">last_fint</span>
+            <span class="n">lbd</span> <span class="o">=</span> <span class="n">last_lbd</span>
+            <span class="n">max_length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">max_length</span><span class="p">)</span>
+            <span class="n">old_length</span> <span class="o">=</span> <span class="n">length</span>
+            <span class="n">length</span> <span class="o">-=</span> <span class="n">length_inc</span>
+            <span class="n">length_inc</span> <span class="o">*=</span> <span class="n">factor</span>
+            <span class="n">length</span> <span class="o">+=</span> <span class="n">length_inc</span>
+            <span class="n">log</span><span class="p">(</span><span class="s">&#39;Diverged - reducing arc-length from {0} to {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">old_length</span><span class="p">,</span> <span class="n">length</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">length_inc</span> <span class="o">&lt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">minInc</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Minimum arc-length achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">break</span>
+
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished Non-Linear Static Analysis&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;with a total arc-length {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">length</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="NR_lebofsky"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.non_linear.NR_lebofsky">[docs]</a><span class="k">def</span> <span class="nf">NR_lebofsky</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Newton-Raphson algorithm using the Lebofsky method to</span>
+<span class="sd">    calculate the tangent stiffness matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cc : compmech.conecyl.ConeCyl</span>
+<span class="sd">        The ``ConeCyl`` object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Initialization...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">inc</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">initialInc</span>
     <span class="n">total</span> <span class="o">=</span> <span class="n">inc</span>
@@ -158,13 +529,9 @@
     <span class="n">max_total</span> <span class="o">=</span> <span class="mf">0.</span>
 
     <span class="n">k0</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
-    <span class="n">kT</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
-    <span class="k">if</span> <span class="n">increment_PL</span><span class="p">:</span>
-        <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">increment_PL</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
+    <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
 
-    <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kT</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
 
     <span class="n">kSuk</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -175,97 +542,57 @@
 
         <span class="n">modified_NR</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span>
 
+        <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">kuk</span><span class="o">=</span><span class="n">kSuk</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">increment_PL</span><span class="p">:</span>
-            <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">increment_PL</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">kuk</span><span class="o">=</span><span class="n">kSuk</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">kuk</span><span class="o">=</span><span class="n">kSuk</span><span class="p">)</span>
-
-        <span class="c"># TODO maybe for pdC, pdT the f_ext must be calculated with the</span>
+        <span class="c"># TODO maybe for pdC, pdT the fext must be calculated with the</span>
         <span class="c">#      last kT available...</span>
 
         <span class="n">absERR</span> <span class="o">=</span> <span class="mf">1.e6</span>
         <span class="n">relERR</span> <span class="o">=</span> <span class="mf">1.e6</span>
         <span class="n">min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
+        <span class="n">prev_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
         <span class="n">last_min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
         <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">converged</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-
-            <span class="c">#if increment_PL:</span>
-                <span class="c">#f_ext = cc._calc_f_ext(increment_PL=total, kuk=kSuk)</span>
-            <span class="c">#else:</span>
-                <span class="c">#f_ext = cc._calc_f_ext(inc=total, kuk=kSuk)</span>
-
             <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">log</span><span class="p">(</span><span class="s">&#39;Iteration: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">check_divergence</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxNumIter</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Maximum number of iterations achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span>
 
-            <span class="c">#TODO is this really an advantage?</span>
-            <span class="k">if</span> <span class="bp">False</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">modified_NR</span> <span class="ow">and</span> <span class="n">iteration</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">:</span>
-                    <span class="n">min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
-                    <span class="n">modified_NR</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="c"># secant stiffness matrix</span>
+            <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
+            <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span> <span class="o">=</span> <span class="n">kSuk</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span> <span class="o">=</span> <span class="n">kSuu</span>
 
-            <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
-                <span class="n">test</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">%</span> <span class="n">cen</span>
-                <span class="k">if</span> <span class="n">iteration</span><span class="o">&lt;=</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">test</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-                    <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="c"># tangent stiffness matrix</span>
+            <span class="n">kT</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_kT</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">compute_NL_matrices</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">min_Rmax</span> <span class="o">&gt;</span> <span class="n">last_min_Rmax</span><span class="p">:</span>
-                        <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="n">break_when_diverge</span><span class="p">:</span>
-                            <span class="k">break</span>
-                    <span class="n">check_divergence</span> <span class="o">=</span> <span class="bp">False</span>
-                    <span class="n">last_min_Rmax</span> <span class="o">=</span> <span class="n">min_Rmax</span>
-                    <span class="n">min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
-
-                <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
-
-                <span class="c"># secant stiffness matrix</span>
-                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
-                <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
-
-                <span class="c"># tangent stiffness matrix</span>
-                <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
-
-            <span class="n">f_int</span> <span class="o">=</span> <span class="n">kSuu</span><span class="o">*</span><span class="n">c</span>
+            <span class="n">fint</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs</span><span class="p">):</span>
                 <span class="n">kSuk_col</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span><span class="p">[:,</span> <span class="n">dof</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-                <span class="n">f_int</span> <span class="o">+=</span> <span class="n">total</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs_ck</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">kSuk_col</span>
+                <span class="n">fint</span> <span class="o">+=</span> <span class="n">total</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs_ck</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">kSuk_col</span>
 
-            <span class="n">R</span> <span class="o">=</span> <span class="n">f_ext</span> <span class="o">-</span> <span class="n">f_int</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">fext</span> <span class="o">-</span> <span class="n">fint</span>
 
             <span class="c"># convergence criteria:</span>
             <span class="c"># - maximum residual force Rmax</span>
             <span class="n">Rmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">R</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
             <span class="n">log</span><span class="p">(</span><span class="s">&#39;Rmax = {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Rmax</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                <span class="n">cc</span><span class="o">.</span><span class="n">uvw</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">cc</span><span class="o">.</span><span class="n">L</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
-                <span class="n">w1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">print</span> <span class="s">&#39;</span><span class="se">\t\t</span><span class="s">DEBUG w1 = {0} mm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w1</span><span class="p">)</span>
-
             <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">Rmax</span> <span class="o">&lt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">absTOL</span><span class="p">:</span>
                 <span class="n">converged</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">break</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">check_divergence</span> <span class="ow">and</span> <span class="n">Rmax</span><span class="o">&gt;</span><span class="n">min_Rmax</span> <span class="ow">and</span> <span class="n">iteration</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Rmax</span><span class="o">&gt;</span><span class="n">prev_Rmax</span> <span class="ow">and</span> <span class="n">Rmax</span><span class="o">&gt;</span><span class="n">min_Rmax</span> <span class="ow">and</span> <span class="n">iteration</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">break_when_diverge</span><span class="p">:</span>
-                    <span class="k">break</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">min_Rmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_Rmax</span><span class="p">,</span> <span class="n">Rmax</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">maxNumIter</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Maximum number of iterations achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">break</span>
+            <span class="n">min_Rmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_Rmax</span><span class="p">,</span> <span class="n">Rmax</span><span class="p">)</span>
+            <span class="n">prev_Rmax</span> <span class="o">=</span> <span class="n">Rmax</span>
 
             <span class="n">log</span><span class="p">(</span><span class="s">&#39;Solving... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">delta_c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">kTuu</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
@@ -311,105 +638,23 @@
                     <span class="k">continue</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">break</span>
+            <span class="k">if</span> <span class="n">inc</span> <span class="o">&lt;</span> <span class="n">cc</span><span class="o">.</span><span class="n">minInc</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s">&#39;Stopping solver: minimum step size achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">break</span>
+
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
             <span class="n">c</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c">#NOTE copy required</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c"># means that a bisection must be done in initialInc</span>
-            <span class="k">if</span> <span class="n">increment_PL</span><span class="p">:</span>
-                <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">increment_PL</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span>
+            <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
 
             <span class="c">#cc.cs = [c.copy()]</span>
             <span class="c">#cc.increments = [inc]</span>
 
     <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished Non-Linear Static Analysis&#39;</span><span class="p">)</span>
-    <span class="n">log</span><span class="p">(</span><span class="s">&#39;at time {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</div>
-<span class="k">def</span> <span class="nf">arc_length</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
-    <span class="n">lbd</span> <span class="o">=</span> <span class="mf">0.1</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="mf">0.2</span>
-    <span class="n">cen</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">compute_every_n</span>
-    <span class="n">f_ext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_f_ext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
-    <span class="n">k0</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span><span class="o">*</span><span class="mi">0</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
-        <span class="n">min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
-        <span class="n">converged</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="n">dc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">check_divergence</span> <span class="o">=</span> <span class="bp">True</span>
-            <span class="n">test</span> <span class="o">=</span> <span class="n">iteration</span> <span class="o">%</span> <span class="n">cen</span>
-            <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">iteration</span><span class="o">&lt;=</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">test</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-                    <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
-            <span class="c">#</span>
-            <span class="k">if</span> <span class="n">compute_NL_matrices</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span><span class="p">:</span>
-                    <span class="n">min_Rmax</span> <span class="o">=</span> <span class="mf">1.e6</span>
-                <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-                <span class="n">k0L</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0L</span>
-                <span class="n">kL0</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kL0</span>
-                <span class="n">kGNL</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kGNL</span>
-                <span class="n">kLL</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kLL</span>
-                <span class="n">kpd0L</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kpd0L</span>
-                <span class="c"># secant stiffness matrix</span>
-                <span class="n">kS</span> <span class="o">=</span> <span class="n">k0</span> <span class="o">+</span> <span class="n">k0L</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">kL0</span> <span class="o">+</span> <span class="n">kLL</span><span class="o">/</span><span class="mi">2</span>
-                <span class="c"># tangent stiffness matrix</span>
-                <span class="n">kT</span> <span class="o">=</span> <span class="n">k0</span> <span class="o">+</span> <span class="n">k0L</span> <span class="o">+</span> <span class="n">kL0</span> <span class="o">+</span> <span class="n">kLL</span> <span class="o">+</span> <span class="n">kGNL</span>
-            <span class="c">#</span>
-            <span class="n">df_int</span> <span class="o">=</span> <span class="n">kS</span><span class="o">*</span><span class="n">dc</span>
-            <span class="c">#</span>
-            <span class="n">dc2</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">kT</span><span class="p">,</span> <span class="n">f_ext</span><span class="p">)</span>
-            <span class="n">dc1</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">kT</span><span class="p">,</span> <span class="p">(</span><span class="n">lbd</span><span class="o">*</span><span class="n">f_ext</span> <span class="o">-</span> <span class="n">df_int</span><span class="p">))</span>
-            <span class="n">a2</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">dc2</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc2</span><span class="p">)</span>
-            <span class="n">a1</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">lbd</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">dc1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc2</span><span class="p">)</span>
-            <span class="n">a0</span> <span class="o">=</span> <span class="p">(</span><span class="n">beta</span><span class="o">*</span><span class="n">lbd</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">dot</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc1</span><span class="p">)</span>
-                  <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">dc1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dc1</span><span class="p">)</span> <span class="o">-</span> <span class="n">beta</span><span class="o">*</span><span class="n">length</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">delta</span> <span class="o">=</span> <span class="n">a1</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a2</span><span class="o">*</span><span class="n">a0</span>
-            <span class="n">dlbd1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">a1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">delta</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">a2</span><span class="p">)</span>
-            <span class="n">dlbd2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">a1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">delta</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">a2</span><span class="p">)</span>
-            <span class="n">dlbd</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dlbd1</span><span class="p">,</span> <span class="n">dlbd2</span><span class="p">)</span>
-            <span class="n">lbd</span> <span class="o">+=</span> <span class="n">dlbd</span>
-            <span class="n">c</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dc1</span> <span class="o">+</span> <span class="n">dlbd</span><span class="o">*</span><span class="n">dc2</span><span class="p">)</span>
-            <span class="n">dc</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dc1</span> <span class="o">+</span> <span class="n">dlbd</span><span class="o">*</span><span class="n">dc2</span><span class="p">)</span>
-            <span class="c">#beta = 10*dot(c.T, c)</span>
-
-            <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                <span class="n">cc</span><span class="o">.</span><span class="n">uvw</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">cc</span><span class="o">.</span><span class="n">L</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
-                <span class="n">w1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">print</span> <span class="s">&#39;</span><span class="se">\t\t</span><span class="s">DEBUG w1 = {0} mm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w1</span><span class="p">)</span>
-                <span class="k">print</span> <span class="s">&#39;</span><span class="se">\t\t\t</span><span class="s">DEBUG c00 = {0} mm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-            <span class="n">Rmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lbd</span><span class="o">*</span><span class="n">f_ext</span> <span class="o">-</span> <span class="n">df_int</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-            <span class="c">#print &#39;\tDEBUG Rmax&#39;, Rmax</span>
-            <span class="c">#print &#39;\tDEBUG lbd&#39;, lbd</span>
-            <span class="k">if</span> <span class="n">Rmax</span> <span class="o">&lt;=</span> <span class="n">cc</span><span class="o">.</span><span class="n">absTOL</span><span class="p">:</span>
-                <span class="n">converged</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="k">break</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">Rmax</span><span class="o">&gt;</span><span class="n">min_Rmax</span> <span class="ow">and</span> <span class="n">iteration</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">):</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Diverged!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                <span class="k">break</span>
-            <span class="n">min_Rmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_Rmax</span><span class="p">,</span> <span class="n">Rmax</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">converged</span><span class="p">:</span>
-            <span class="n">length</span> <span class="o">*=</span> <span class="mf">1.2</span>
-            <span class="n">cc</span><span class="o">.</span><span class="n">increments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lbd</span><span class="p">)</span>
-            <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">length</span> <span class="o">*=</span> <span class="mf">0.9</span>
-
-    <span class="k">print</span> <span class="s">&#39;DEBUG lambda&#39;</span><span class="p">,</span> <span class="n">lbd</span>
+    <span class="n">log</span><span class="p">(</span><span class="s">&#39;at time {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -456,7 +701,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 14, 2014.
+      Last updated on May 19, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

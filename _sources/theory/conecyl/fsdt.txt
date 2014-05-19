@@ -82,32 +82,32 @@ SS1- and CC1-types of boundary conditions.
 
 .. math::
     u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\    
     v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
     w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
     \phi_x = {\phi_x}_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{\phi_x} \cos{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{\phi_x} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{\phi_x} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
     \\
     {\phi}_\theta = {\phi_x}_0 + \sum_{i_1=0}^{m_1}
                                  {c_{i_1}}^{{\phi}_\theta} \sin{{b_x}_1} 
-            + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+            + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
          {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
         +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
