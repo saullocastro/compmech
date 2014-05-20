@@ -108,22 +108,25 @@ stresses by the relation:</p>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_dofs_matrix</span></tt></a>(k[,&nbsp;return_kkk,&nbsp;...])</td>
 <td>Makes the partition of the dofs for prescribed displacements.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><tt class="xref py py-obj docutils literal"><span class="pre">lb</span></tt></a>([c,&nbsp;tol,&nbsp;combined_load_case])</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">from_DB</span></tt>(name)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><tt class="xref py py-obj docutils literal"><span class="pre">lb</span></tt></a>([c,&nbsp;tol,&nbsp;combined_load_case])</td>
 <td>Linear Buckling analysis.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(c[,&nbsp;invert_x,&nbsp;plot_type,&nbsp;vec,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(c[,&nbsp;invert_x,&nbsp;plot_type,&nbsp;vec,&nbsp;...])</td>
 <td>Contour plot for a Ritz constants vector.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>()</td>
 <td>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom])</td>
 <td>Static analysis for cones and cylinders.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><tt class="xref py py-obj docutils literal"><span class="pre">strain</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><tt class="xref py py-obj docutils literal"><span class="pre">strain</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
 <td>Calculates the strain field for a given Ritz constants vector.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><tt class="xref py py-obj docutils literal"><span class="pre">uvw</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><tt class="xref py py-obj docutils literal"><span class="pre">uvw</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt])</td>
 <td>Displacement field for a given set of Ritz constants.</td>
 </tr>
 </tbody>
@@ -1138,7 +1141,7 @@ The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on May 19, 2014.
+      Last updated on May 20, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

@@ -125,20 +125,20 @@ each type of boundary conditions:</p>
 in between by using elastic restrained edges in <img class="math" src="../../_images/math/3462177f1cb991bf9d795d3dc22ae2e966a0d4ba.png" alt="w_{,x}"/> and <img class="math" src="../../_images/math/ebddb40334be9daaff572b01971023173d5b9d4f.png" alt="w_{,\theta}"/>.
 The approximation functions are:</p>
 <div class="math" id="clpt-approx-functions">
-<p><img src="../../_images/math/3d07c83573827e2ad89472af684e61c574730f36.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/180d886c798bc86e00485406b6934098618f9530.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)"/></p>
@@ -222,20 +222,20 @@ from the relations:</p>
 in between). The flexibily in <img class="math" src="../../_images/math/285ea4ce424ca59373b740d721f3b288c454e3a3.png" alt="v"/> is removed if compared to the
 <a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a>. Giving:</p>
 <div class="math">
-<p><img src="../../_images/math/95a30db46bc1484776c51e846eb106fbf8196665.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/83dc92e237266bc21beb70e953f87157d03434e1.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)
@@ -254,20 +254,20 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Planned for SS3- and CC3-types of boundary conditions (or anything
 in between). The approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/fa2abffa3de01ab13b7c540618311a2b41392c9d.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/d43484534e6f7452aa3032d48fca0f640c50a85f.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)
@@ -285,20 +285,20 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <span id="id4"></span><h3>clpt_donnell_bc4<a class="headerlink" href="#clpt-donnell-bc4" title="Permalink to this headline">¶</a></h3>
 <p>SS4- or CC4-types of boundary conditions (or anything in between).</p>
 <div class="math">
-<p><img src="../../_images/math/3d24d63f4c61ab222400450f7a4738f1a141b048.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/06d78afe2dc4e7464b4b75d9cbcdb9db3e3c7410.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)
@@ -318,20 +318,20 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 boundary condition by setting the proper values for the elastic
 constants.</p>
 <div class="math">
-<p><img src="../../_images/math/295adc604e5d195e6776ee912d23322fa1a0eac8.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/ee28d27f462ecd7c45cb127dc0bbde1310d49012.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
 w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
-        + \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+        + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
@@ -503,7 +503,7 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Apr 14, 2014.
+      Last updated on May 20, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
