@@ -73,7 +73,7 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Coefficient file not found!&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="calc_c0"><a class="viewcode-back" href="../../../../modules/conecyl/index.html#compmech.conecyl.imperfections.imperfections.calc_c0">[docs]</a><span class="k">def</span> <span class="nf">calc_c0</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">m0</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-            <span class="n">maxmem</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="n">maxmem</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">offset_w0</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Find the coefficients `c_0` that best fit the `w_0` function.</span>
 
 <span class="sd">    The measured data will be fit using one of the following functions,</span>
@@ -82,7 +82,7 @@
 <span class="sd">    ``funcnum=1``</span>
 
 <span class="sd">    .. math::</span>
-<span class="sd">        w_0 = \sum_{i=1}^{m_0}{ \sum_{j=1}^{n_0}{</span>
+<span class="sd">        w_0 = \sum_{i=1}^{m_0}{ \sum_{j=0}^{n_0}{</span>
 <span class="sd">                 c_{ij}^a sin{b_x} sin{b_\theta}</span>
 <span class="sd">                +c_{ij}^b sin{b_x} cos{b_\theta}}}</span>
 
@@ -151,14 +151,13 @@
 <span class="sd">        As explained above, selects the base functions used for</span>
 <span class="sd">        the approximation.</span>
 <span class="sd">    sample_size : int or None, optional</span>
-<span class="sd">        An in  specifying how many points of the imperfection file</span>
-<span class="sd">        should be used. If the default ``None`` is used</span>
-<span class="sd">        all points file will be used in the computations.</span>
+<span class="sd">        Specifies how many points of the imperfection file should be used. If</span>
+<span class="sd">        ``None`` all points will be used in the computations.</span>
 <span class="sd">    maxmem : int, optional</span>
 <span class="sd">        Maximum RAM memory in GB allowed to compute the base functions.</span>
 <span class="sd">        The ``scipy.interpolate.lstsq`` will go beyond this limit.</span>
 <span class="sd">    save : bool, optional</span>
-<span class="sd">        The default value ``True`` saves the calculated coefficients in the</span>
+<span class="sd">        If ``True`` saves the calculated coefficients in the</span>
 <span class="sd">        ``compmech/conecyl/imperfections/c0`` folder.</span>
 
 <span class="sd">    Returns</span>
@@ -199,12 +198,15 @@
     <span class="n">num</span> <span class="o">=</span> <span class="n">input_pts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;=</span> <span class="n">maxnum</span><span class="p">:</span>
         <span class="n">input_pts</span> <span class="o">=</span> <span class="n">input_pts</span><span class="p">[</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">maxnum</span><span class="p">))]</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Using {0} measured points due to the &quot;maxmem&quot; specified&#39;</span><span class="o">.</span>
-                <span class="n">format</span><span class="p">(</span><span class="n">maxnum</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Reducing sample size from {0} to {1} &#39;</span> <span class="o">+</span>
+             <span class="s">&#39;due to the &quot;maxmem&quot; specified&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">thetas</span> <span class="o">=</span> <span class="n">input_pts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="n">input_pts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">w0pts</span> <span class="o">=</span> <span class="n">input_pts</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">offset_w0</span><span class="p">:</span>
+        <span class="n">w0pts</span> <span class="o">+=</span> <span class="n">offset_w0</span>
 
     <span class="c"># normalizing x</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="p">(</span><span class="n">xs</span> <span class="o">-</span> <span class="n">xs</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">xs</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
@@ -214,7 +216,10 @@
 
     <span class="n">a</span> <span class="o">=</span> <span class="n">mgi</span><span class="o">.</span><span class="n">fa</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="n">funcnum</span><span class="p">)</span>
     <span class="n">log</span><span class="p">(</span><span class="s">&#39;Base functions calculated&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">c0</span><span class="p">,</span> <span class="n">residues</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lstsq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">w0pts</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">c0</span><span class="p">,</span> <span class="n">residues</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lstsq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">w0pts</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">MemoryError</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="s">&#39;Reduce the &quot;maxmem&quot; parameter!&#39;</span><span class="p">)</span>
     <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished scipy.linalg.lstsq&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
@@ -313,7 +318,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on May 20, 2014.
+      Last updated on Jul 01, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

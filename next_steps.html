@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Next Steps &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.png"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="index.html" />
+    <link rel="prev" title="About" href="about.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="next-steps">
+<h1>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="use-of-finite-elements">
+<h2>Use of Finite Elements<a class="headerlink" href="#use-of-finite-elements" title="Permalink to this headline">¶</a></h2>
+<p>The studies with the Ritz Method presented in module
+<a class="reference internal" href="modules/conecyl/index.html#module-compmech.conecyl" title="compmech.conecyl"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></tt></a> have shown the main disadvantages regarding
+the numerical integration of the non-linear stiffness matrices:</p>
+<ul class="simple">
+<li>since the approximation functions are complex, the evaluation of each
+integration point is expensive</li>
+<li>there is no quadrature rule available for such complex functions</li>
+</ul>
+<p>Moreover, the use of very especialized models makes it difficult to extend
+their applicability for different cases where different load and boundary
+conditions are desired.</p>
+<p>The use of finite elements will allow the use of simpler approximation
+functions significantly reducing the computational cost to evaluate each
+integration point, and allowing the application of quadrature rules,
+minimizing the number of integration points required.</p>
+<div class="section" id="building-the-spine">
+<h3>Building the Spine<a class="headerlink" href="#building-the-spine" title="Permalink to this headline">¶</a></h3>
+<p>Before implementing the new finite elements a very well defined process
+must be stablished in order to define:</p>
+<ul>
+<li><p class="first">integration with pynastran to read NASTRAN input files</p>
+</li>
+<li><p class="first">define node class</p>
+</li>
+<li><p class="first">define element class</p>
+</li>
+<li><dl class="first docutils">
+<dt>node-element connectivity schemes</dt>
+<dd><ul class="first last simple">
+<li>minimize band-width of the stiffness matrices by working with a proper
+internal node identification. The user will use the conventional node ID,
+but the analysis could use an internal ID that is calculated to minimize
+the band-width of the sparse matrices</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>use of C++, C or Cython?</dt>
+<dd><ul class="first last simple">
+<li>use Cython or Python classes?</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">possible sparse solvers:
+- Intel MKL PARDISO
+- the <tt class="docutils literal"><span class="pre">scipy.sparse</span></tt> solver, at least to build the <tt class="docutils literal"><span class="pre">csr_matrix</span></tt> or</p>
+<blockquote>
+<div><p><tt class="docutils literal"><span class="pre">csc_matrix</span></tt></p>
+</div></blockquote>
+<ul class="simple">
+<li>SuperLU</li>
+<li>ARPACK (used in <tt class="docutils literal"><span class="pre">scipy.sparse.linalg.eigsh</span></tt>)</li>
+<li>Use the rainflow algorithm?</li>
+</ul>
+</li>
+<li><p class="first">Use SIMD programming for common array operations?
+- rely on NumPy, with a group working on these optimizations
+- use Eigen3 wrappers such as minieigen</p>
+</li>
+</ul>
+</div>
+<div class="section" id="developing-new-elements">
+<h3>Developing New Elements<a class="headerlink" href="#developing-new-elements" title="Permalink to this headline">¶</a></h3>
+<p>The element types should include some of those available in NASTRAN plus
+some additional options:</p>
+<ul class="simple">
+<li>The priority order should be:<ul>
+<li>QUAD4 (plate element)</li>
+<li>ZQUAD4 (cylindrical shell element)</li>
+<li>CQUAD4 (conical shell element - certain confusion with NASTRAN CQUAD4)</li>
+<li>1-D elements</li>
+<li>3-D elements</li>
+</ul>
+</li>
+<li>The element&#8217;s formulation should allow:
+- Initial Imperfection (how!)
+- CLPT
+- FSDT
+- TSDT</li>
+</ul>
+</div>
+<div class="section" id="studies">
+<h3>Studies<a class="headerlink" href="#studies" title="Permalink to this headline">¶</a></h3>
+<p>The new tools will create a high potential for new studies concerning
+advanced procedures to calculate shear correction factors, new non-linear
+methods and so on...</p>
+</div>
+</div>
+<div class="section" id="gpu">
+<h2>GPU<a class="headerlink" href="#gpu" title="Permalink to this headline">¶</a></h2>
+<p>How to use GPU-based programming?</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Next Steps</a><ul>
+<li><a class="reference internal" href="#use-of-finite-elements">Use of Finite Elements</a><ul>
+<li><a class="reference internal" href="#building-the-spine">Building the Spine</a></li>
+<li><a class="reference internal" href="#developing-new-elements">Developing New Elements</a></li>
+<li><a class="reference internal" href="#studies">Studies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gpu">GPU</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="about.html"
+                        title="previous chapter">About</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/next_steps.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About"
+             >previous</a> |</li>
+        <li><a href="index.html">CompMech 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Jun 18, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -4,7 +4,8 @@ About
 Installation
 ------------
 
-**1) Downloading**
+1) Downloading
+..............
 
 The source code repository can be downloaded from 
 `GitHub <https://github.com/compmech/compmech/archive/master.zip>`_ 
@@ -12,10 +13,16 @@ or cloned using `Git <http://git-scm.com/downloads>`_::
 
     $ git clone https://github.com/compmech/compmech.git
 
-You can also  
-`visit the source code page here <https://github.com/compmech/compmech>`_.
+You can also:
 
-**2) Compiling the Cython files**
+`- visit the source code page here <https://github.com/compmech/compmech>`_.
+
+`- download the latest version of the source code <https://github.com/compmech/compmech/archive/master.zip>`_.
+
+
+
+2) Compiling the Cython files
+.............................
 
 After you have downloaded the ``compmech-master.zip`` unpack it and go into
 the ``compmech-master`` folder. If you cloned using ``git`` go to the
@@ -27,7 +34,12 @@ Run the setup::
 
 .. Note:: You need Cython and a C compiler for this step.
 
-**2) Setting the environment**
+On Windows 64 bit you should use the free Microsoft SDK compiler,
+as explained `in this Cython Github thread <https://github.com/cython/cython/wiki/64BitCythonExtensionsOnWindows>`_.
+
+
+3) Setting the environment
+..........................
 
 Copy the ``compmech`` module (the folder at the same level as the 
 ``README.rst`` file) and paste it to some directory pointed by your 
@@ -35,7 +47,8 @@ Copy the ``compmech`` module (the folder at the same level as the
 directory of your Python installation or any other directory, once you add it
 to ``PYTHONPATH``).
 
-**3) Testing**
+3) Testing
+..........
 
 TODO, you might be able to use the libraries
 `as explained here
@@ -44,9 +57,9 @@ TODO, you might be able to use the libraries
 
 Requirements
 ------------
-- numpy
-- scipy
-- cython and a C compiler
+- NumPy
+- SciPy
+- Cython and a C compiler
 
 Licensing
 ---------
