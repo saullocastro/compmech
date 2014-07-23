@@ -17,16 +17,16 @@ And approximated as:
 .. math::
     u = u_0(x, \theta) + z \phi_x(x, \theta) \\
     v = v_0(x, \theta) + z \phi_\theta(x, \theta) \\
-    w = w_0(x, \theta) 
+    w = w_0(x, \theta)
 
 where `u_0, v_0, w_0` are the displacements of the shell mid-surface and
 `\phi_x` and `\phi_\theta` the shell rotations along `x` and `\theta`
-following the right-hand rule. For the CLPT the rotations are defined as:  
+following the right-hand rule. For the CLPT the rotations are defined as:
 
 .. math::
     \phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
-    \phi_\theta = - \frac 1 r \frac{\partial w}{\partial \theta} 
-           = - \frac 1 r w_{,\theta} 
+    \phi_\theta = - \frac 1 r \frac{\partial w}{\partial \theta}
+           = - \frac 1 r w_{,\theta}
 
 For the ``ConeCyl`` implementations the displacement field is approximated
 and the approximated functions can be separated as:
@@ -60,7 +60,7 @@ Below it follows a more detailed description of each of the implementations:
 - clpt_sanders_bc4_
 - clpt_sanders_bc2_
 
- 
+
 Each model can be accessed using the ``linear_kinematics`` parameter of the
 ``ConeCyl`` object. For linear static analysis the most general model is the
 clpt_donnell_bcn_.
@@ -96,14 +96,14 @@ The approximation functions are:
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
-    \\    
-    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+    \\
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -113,13 +113,13 @@ with:
 
 .. math::
     {b_x}_1 = i_1 \pi \frac x L \\
-    {b_x}_2 = i_2 \pi \frac x L 
+    {b_x}_2 = i_2 \pi \frac x L
 
 The following general form of elastic constraints at the edges is used:
 
 .. math::
     U_{springs} = \int_\theta r_1 \left(
-                      K_{Bot}^u u_{x=L}^2 
+                      K_{Bot}^u u_{x=L}^2
                     + K_{Bot}^v v_{x=L}^2
                     + K_{Bot}^w w_{x=L}^2
                     + K_{Bot}^{\phi_x} {\phi_x}_{x=L}^2
@@ -127,7 +127,7 @@ The following general form of elastic constraints at the edges is used:
                   \right)
                   \\
                 + \int_\theta r_2 \left(
-                      K_{Top}^u u_{x=0}^2 
+                      K_{Top}^u u_{x=0}^2
                     + K_{Top}^v v_{x=0}^2
                     + K_{Top}^w w_{x=0}^2
                     + K_{Top}^{\phi_x} {\phi_x}_{x=0}^2
@@ -135,8 +135,8 @@ The following general form of elastic constraints at the edges is used:
                   \right)
 
 Note that the stiffnesses: `K_{Top}^u`, `K_{Top}^v` and `K_{Top}^w` are not
-used in clpt_donnell_bc1_, but since they are required in other 
-implementations, it is convenient to present the general form using 
+used in clpt_donnell_bc1_, but since they are required in other
+implementations, it is convenient to present the general form using
 all the elastic terms.
 
 The equation for `U_{springs}` can be written in matrix form, and it will
@@ -163,7 +163,7 @@ with :
                 0 & K_{Bot}^v &       0 &              0 &             0 \\
                 0 &       0 & K_{Bot}^w &              0 &             0 \\
                 0 &       0 &       0 & K_{Bot}^{\phi_x} &             0 \\
-                0 &       0 &       0 &              0 &K_{Bot}^{\phi_\theta} 
+                0 &       0 &       0 &              0 &K_{Bot}^{\phi_\theta}
                     \end{bmatrix}
 
 and:
@@ -174,7 +174,7 @@ and:
                 0 & K_{Top}^v &       0 &              0 &             0 \\
                 0 &       0 & K_{Top}^w &              0 &             0 \\
                 0 &       0 &       0 & K_{Top}^{\phi_x} &             0 \\
-                0 &       0 &       0 &              0 &K_{Top}^{\phi_\theta} 
+                0 &       0 &       0 &              0 &K_{Top}^{\phi_\theta}
                     \end{bmatrix}
 
 
@@ -183,7 +183,7 @@ from the relations:
 
 .. math::
     \phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
-    \phi_\theta = - \frac 1 r \frac{\partial w}{\partial \theta} 
+    \phi_\theta = - \frac 1 r \frac{\partial w}{\partial \theta}
                 = - \frac 1 r w_{,\theta}
 
 and therefore:
@@ -210,7 +210,7 @@ clpt_donnell_bc2
 ----------------
 
 Planned to simulate the SS2- and CC2-types of boundary conditions (or anything
-in between). The flexibily in `v` is removed if compared to the 
+in between). The flexibily in `v` is removed if compared to the
 clpt_donnell_bc4_. Giving:
 
 .. math::
@@ -219,21 +219,21 @@ clpt_donnell_bc4_. Giving:
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
-    \\    
-    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+    \\
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
     \\
 
-The linear stiffness matrix `[K_0]` is changed using the same 
+The linear stiffness matrix `[K_0]` is changed using the same
 :ref:`elastic contraints used for the clpt_donnell_bc1 <elastic_constraints>`.
 
 Observations:
@@ -259,21 +259,21 @@ in between). The approximation functions are:
                      {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
                   \right)
-    \\    
-    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+    \\
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
     \\
 
-The linear stiffness matrix `[K_0]` is changed using the same 
+The linear stiffness matrix `[K_0]` is changed using the same
 :ref:`elastic contraints used for the clpt_donnell_bc1 <elastic_constraints>`.
 
 Observations:
@@ -298,21 +298,21 @@ SS4- or CC4-types of boundary conditions (or anything in between).
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
-    \\    
-    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+    \\
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 \right)
     \\
 
-The linear stiffness matrix `[K_0]` is changed using the same 
+The linear stiffness matrix `[K_0]` is changed using the same
 :ref:`elastic contraints used for the clpt_donnell_bc1 <elastic_constraints>`.
 
 Observations:
@@ -339,14 +339,14 @@ constants.
                      {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
-    \\    
-    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1} 
+    \\
+    v = v_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{v}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{v} \cos{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{v} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
     \\
-    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1} 
+    w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
             + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                      {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                     +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -354,7 +354,7 @@ constants.
                     +{c_{i_2 j_2}}_d^{w} \cos{{b_x}_2} \cos{j_2 \theta}
                 \right)
 
-The linear stiffness matrix `[K_0]` is changed using the same 
+The linear stiffness matrix `[K_0]` is changed using the same
 :ref:`elastic contraints used for the clpt_donnell_bc1 <elastic_constraints>`.
 
 Observations:
@@ -446,7 +446,7 @@ approximation functions are:
     u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
                   \right)
-    \\    
+    \\
     v = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                      {c_{i_2 j_2}}^{v} \sin{{b_x}_2} \sin{j_2 \theta}
                   \right)

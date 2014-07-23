@@ -97,6 +97,21 @@
                     <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
                     <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
+    <span class="s">&#39;iso_clpt_donnell_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc2</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">iso_clpt_donnell_bc2_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">iso_clpt_donnell_bc2_nonlinear</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;j0&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
     <span class="s">&#39;clpt_donnell_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
                     <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
@@ -399,6 +414,11 @@
                            <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
+    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;iso_clpt_donnell_bc2&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
     <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc3&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
@@ -546,7 +566,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jul 01, 2014.
+      Last updated on Jul 23, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

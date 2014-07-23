@@ -734,10 +734,14 @@ affect the non-linear analysis:</p>
 <td><tt class="docutils literal"><span class="pre">'NR'</span></tt> for the Newton-Raphson
 <tt class="docutils literal"><span class="pre">'arc_length'</span></tt> for the Arc-Length method</td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">modified_NR</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">line_search</span></tt></td>
+<td>activate line_search (for Newton-Raphson
+methods only)</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">modified_NR</span></tt></td>
 <td>activate the modified Newton-Raphson</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">compute_every_n</span></tt></td>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">compute_every_n</span></tt></td>
 <td>if <tt class="docutils literal"><span class="pre">modified_NR=True</span></tt>, the non-linear
 matrices will be updated at every <img class="math" src="../../_images/math/9b3557d5c9bbf3c7041215fdae28c97ac580789a.png" alt="n"/>
 iterations</td>
@@ -1341,7 +1345,7 @@ The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jul 01, 2014.
+      Last updated on Jul 23, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
