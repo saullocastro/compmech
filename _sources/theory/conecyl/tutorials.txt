@@ -2,7 +2,7 @@
 Tutorials
 =========
 
-Defining the geometry
+Defining the Geometry
 =====================
 
 Based on the figure:
@@ -26,7 +26,7 @@ that will allow the complete definition of the cone / cylinder geometry.
     cc.r2 = 200
     cc.H = 200
 
-Defining the laminate and material properties
+Defining the Laminate and Material Properties
 =============================================
 
 The :mod:`compmech.composite` module is used to calculate the laminate
@@ -72,7 +72,7 @@ properties must be used the user must supply the ``laminaprops`` container.
     cc.laminaprops = [prop1, prop1, prop2, prop2, prop3, prop3]
 
 
-Linear static analysis
+Linear Static Analysis
 ======================
 
 The static analysis is executed using the
@@ -126,7 +126,7 @@ only one entry exists. Plotting the results::
 
 
 
-Static analysis
+Static Analysis
 ---------------
 
 
@@ -145,7 +145,7 @@ The displacement field can be plotted, for example::
 
     cc.plot(solution, vec='w', filename='my_output.png')
 
-Non-linear analysis
+Non-Linear Analysis
 ===================
 
 Using ``NLgeom=True`` in a static analysis will run a geometrically

@@ -1,0 +1,548 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compmech.composite.laminate &mdash; CompMech 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="top" title="CompMech 0.1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for compmech.composite.laminate</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Composite Laminate Module (:mod:`compmech.composite.laminate`)</span>
+<span class="sd">==============================================================</span>
+
+<span class="sd">.. currentmodule:: compmech.composite.laminate</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lamina</span> <span class="kn">import</span> <span class="n">Lamina</span>
+<span class="kn">from</span> <span class="nn">matlamina</span> <span class="kn">import</span> <span class="n">read_laminaprop</span>
+<span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">DOUBLE</span>
+<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="read_stack"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.read_stack">[docs]</a><span class="k">def</span> <span class="nf">read_stack</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">laminaprop</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="p">[],</span> <span class="n">laminaprops</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;Read a laminate stacking sequence data.</span>
+
+<span class="sd">    An ``Laminate`` object is returned based on the inputs given.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stack : list</span>
+<span class="sd">        Angles of the stacking sequence in degrees.</span>
+<span class="sd">    plyt : float, optional</span>
+<span class="sd">        When all plies have the same thickness, ``plyt`` can be supplied.</span>
+<span class="sd">    laminaprop : tuple, optional</span>
+<span class="sd">        When all plies have the same material properties, ``laminaprop``</span>
+<span class="sd">        can be supplied.</span>
+<span class="sd">    plyts : list, optional</span>
+<span class="sd">        A list of floats with the thickness of each ply.</span>
+<span class="sd">    laminaprops : list, optional</span>
+<span class="sd">        A list of tuples with a laminaprop for each ply.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ``plyt`` or ``plyts`` must be supplied</span>
+<span class="sd">    ``laminaprop`` or ``laminaprops`` must be supplied</span>
+
+<span class="sd">    For orthotropic plies, the ``laminaprop`` should be::</span>
+
+<span class="sd">        laminaprop = (E11, E22, nu12, G12, G13, G23)</span>
+
+<span class="sd">    For isotropic pliey, the ``laminaprop`` should be::</span>
+
+<span class="sd">        laminaprop = (E, E, nu)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lam</span> <span class="o">=</span> <span class="n">Laminate</span><span class="p">()</span>
+    <span class="n">lam</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">plyts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">plyt</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s">&#39;plyt or plyts must be supplied&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="n">plyt</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">stack</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">laminaprops</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">laminaprop</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s">&#39;laminaprop or laminaprops must be supplied&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">laminaprops</span> <span class="o">=</span> <span class="p">[</span><span class="n">laminaprop</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">stack</span><span class="p">]</span>
+
+    <span class="n">lam</span><span class="o">.</span><span class="n">plies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span> <span class="n">theta</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">plyts</span><span class="p">,</span> <span class="n">laminaprops</span><span class="p">,</span> <span class="n">stack</span><span class="p">):</span>
+        <span class="n">laminaprop</span> <span class="o">=</span> <span class="n">laminaprop</span>
+        <span class="n">ply</span> <span class="o">=</span> <span class="n">Lamina</span><span class="p">()</span>
+        <span class="n">ply</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">ply</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">plyt</span>
+        <span class="n">ply</span><span class="o">.</span><span class="n">matobj</span> <span class="o">=</span> <span class="n">read_laminaprop</span><span class="p">(</span><span class="n">laminaprop</span><span class="p">)</span>
+        <span class="n">lam</span><span class="o">.</span><span class="n">plies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ply</span><span class="p">)</span>
+
+    <span class="n">lam</span><span class="o">.</span><span class="n">rebuild</span><span class="p">()</span>
+    <span class="n">lam</span><span class="o">.</span><span class="n">calc_constitutive_matrix</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">lam</span>
+</div>
+<div class="viewcode-block" id="read_lamination_parameters"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.read_lamination_parameters">[docs]</a><span class="k">def</span> <span class="nf">read_lamination_parameters</span><span class="p">(</span><span class="n">thickness</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
+                               <span class="n">xiA1</span><span class="p">,</span> <span class="n">xiA2</span><span class="p">,</span> <span class="n">xiA3</span><span class="p">,</span> <span class="n">xiA4</span><span class="p">,</span>
+                               <span class="n">xiB1</span><span class="p">,</span> <span class="n">xiB2</span><span class="p">,</span> <span class="n">xiB3</span><span class="p">,</span> <span class="n">xiB4</span><span class="p">,</span>
+                               <span class="n">xiD1</span><span class="p">,</span> <span class="n">xiD2</span><span class="p">,</span> <span class="n">xiD3</span><span class="p">,</span> <span class="n">xiD4</span><span class="p">,</span>
+                               <span class="n">xiE1</span><span class="p">,</span> <span class="n">xiE2</span><span class="p">,</span> <span class="n">xiE3</span><span class="p">,</span> <span class="n">xiE4</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Calculates a laminate based on the lamination parameters.</span>
+
+<span class="sd">    The lamination parameters:</span>
+<span class="sd">    `\xi_{A1} \cdots \xi_{A4}`,  `\xi_{B1} \cdots \xi_{B4}`,</span>
+<span class="sd">    `\xi_{C1} \cdots \xi_{C4}`,  `\xi_{D1} \cdots \xi_{D4}`,</span>
+<span class="sd">    `\xi_{E1} \cdots \xi_{E4}`</span>
+
+<span class="sd">    are used to calculate the laminate constitutive matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    thickness : float</span>
+<span class="sd">        The total thickness of the laminate</span>
+<span class="sd">    laminaprop : tuple</span>
+<span class="sd">        The laminaprop tuple used to define the laminate material.</span>
+<span class="sd">    xiA1 to xiD4 : float</span>
+<span class="sd">        The 16 lamination parameters used to define the laminate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lam : Laminate</span>
+<span class="sd">        laminate with the ABD and ABDE matrices already calculated</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lam</span> <span class="o">=</span> <span class="n">Laminate</span><span class="p">()</span>
+    <span class="n">lam</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">thickness</span>
+    <span class="n">lam</span><span class="o">.</span><span class="n">matobj</span> <span class="o">=</span> <span class="n">read_laminaprop</span><span class="p">(</span><span class="n">laminaprop</span><span class="p">)</span>
+    <span class="n">lam</span><span class="o">.</span><span class="n">xiA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">xiA1</span><span class="p">,</span> <span class="n">xiA2</span><span class="p">,</span> <span class="n">xiA3</span><span class="p">,</span> <span class="n">xiA4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+    <span class="n">lam</span><span class="o">.</span><span class="n">xiB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">xiB1</span><span class="p">,</span> <span class="n">xiB2</span><span class="p">,</span> <span class="n">xiB3</span><span class="p">,</span> <span class="n">xiB4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+    <span class="n">lam</span><span class="o">.</span><span class="n">xiD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">xiD1</span><span class="p">,</span> <span class="n">xiD2</span><span class="p">,</span> <span class="n">xiD3</span><span class="p">,</span> <span class="n">xiD4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+    <span class="n">lam</span><span class="o">.</span><span class="n">xiE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">xiE1</span><span class="p">,</span> <span class="n">xiE2</span><span class="p">,</span> <span class="n">xiE3</span><span class="p">,</span> <span class="n">xiE4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+
+    <span class="n">lam</span><span class="o">.</span><span class="n">calc_ABDE_from_lamination_parameters</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">lam</span>
+</div>
+<div class="viewcode-block" id="Laminate"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate">[docs]</a><span class="k">class</span> <span class="nc">Laminate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    =========  ===========================================================</span>
+<span class="sd">    attribute  description</span>
+<span class="sd">    =========  ===========================================================</span>
+<span class="sd">    plies      list of plies</span>
+<span class="sd">    t          total thickness of the laminate</span>
+<span class="sd">    e1         equivalent laminate modulus in 1 direction</span>
+<span class="sd">    e2         equivalent laminate modulus in 2 direction</span>
+<span class="sd">    g12        equivalent laminate shear modulus in 12 direction</span>
+<span class="sd">    nu12       equivalent laminate Poisson ratio in 12 direction</span>
+<span class="sd">    nu21       equivalent laminate Poisson ratio in 21 direction</span>
+<span class="sd">    xiA        laminate parameters for extensional matrix A</span>
+<span class="sd">    xiB        laminate parameters for extension-bending matrix B</span>
+<span class="sd">    xiD        laminate parameters for bending matrix D</span>
+<span class="sd">    A          laminate extension matrix</span>
+<span class="sd">    B          laminate extension-bending matrix</span>
+<span class="sd">    D          laminate bending matrix</span>
+<span class="sd">    E          laminate transferse shear matrix</span>
+<span class="sd">    ABD        laminate ABD matrix</span>
+<span class="sd">    ABDE       laminate ABD matrix with transverse shear terms</span>
+<span class="sd">    =========  ===========================================================</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plies</span>   <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matobj</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span>    <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e1</span>   <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e2</span>   <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e3</span>   <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nu12</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g12</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g13</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g23</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiA</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiB</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiD</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span>    <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span>    <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span>    <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E</span>    <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">rebuild</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lam_thick</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ply</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plies</span><span class="p">:</span>
+            <span class="n">ply</span><span class="o">.</span><span class="n">rebuild</span><span class="p">()</span>
+            <span class="n">lam_thick</span> <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">lam_thick</span>
+
+<div class="viewcode-block" id="Laminate.calc_equivalent_modulus"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_equivalent_modulus">[docs]</a>    <span class="k">def</span> <span class="nf">calc_equivalent_modulus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the equivalent laminate properties.</span>
+
+<span class="sd">        The following attributes are calculated:</span>
+<span class="sd">            e1, e2, g12, nu12, nu21</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span><span class="o">.</span><span class="n">I</span>
+        <span class="n">a11</span><span class="p">,</span> <span class="n">a12</span><span class="p">,</span> <span class="n">a22</span><span class="p">,</span> <span class="n">a33</span> <span class="o">=</span> <span class="n">AI</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">AI</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">AI</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">AI</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e1</span>  <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">*</span><span class="n">a11</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e2</span>  <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">*</span><span class="n">a22</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g12</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">*</span><span class="n">a33</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nu12</span> <span class="o">=</span> <span class="o">-</span> <span class="n">a12</span> <span class="o">/</span> <span class="n">a11</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nu21</span> <span class="o">=</span> <span class="o">-</span> <span class="n">a12</span> <span class="o">/</span> <span class="n">a22</span>
+</div>
+<div class="viewcode-block" id="Laminate.calc_lamination_parameters"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_lamination_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">calc_lamination_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the lamination parameters.</span>
+
+<span class="sd">        The following attributes are calculated:</span>
+<span class="sd">            xiA, xiB, xiD, xiE</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xiA1</span><span class="p">,</span> <span class="n">xiA2</span><span class="p">,</span> <span class="n">xiA3</span><span class="p">,</span> <span class="n">xiA4</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">xiB1</span><span class="p">,</span> <span class="n">xiB2</span><span class="p">,</span> <span class="n">xiB3</span><span class="p">,</span> <span class="n">xiB4</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">xiD1</span><span class="p">,</span> <span class="n">xiD2</span><span class="p">,</span> <span class="n">xiD3</span><span class="p">,</span> <span class="n">xiD4</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">xiE1</span><span class="p">,</span> <span class="n">xiE2</span><span class="p">,</span> <span class="n">xiE3</span><span class="p">,</span> <span class="n">xiE4</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+        <span class="n">lam_thick</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">ply</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plies</span><span class="p">:</span>
+            <span class="n">lam_thick</span> <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">lam_thick</span>
+        <span class="n">h0</span>   <span class="o">=</span> <span class="o">-</span><span class="n">lam_thick</span><span class="o">/</span><span class="mi">2</span>
+        <span class="k">for</span> <span class="n">ply</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plies</span><span class="p">:</span>
+            <span class="n">hk_1</span> <span class="o">=</span>  <span class="n">h0</span>
+            <span class="n">h0</span>   <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">t</span>
+            <span class="n">hk</span>   <span class="o">=</span>  <span class="n">h0</span>
+
+            <span class="n">Afac</span>  <span class="o">=</span> <span class="n">ply</span><span class="o">.</span><span class="n">t</span> <span class="o">/</span> <span class="n">lam_thick</span>
+            <span class="n">Bfac</span>  <span class="o">=</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">/</span> <span class="n">lam_thick</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">hk</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">hk_1</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">Dfac</span>  <span class="o">=</span> <span class="p">(</span><span class="mf">4.</span> <span class="o">/</span> <span class="n">lam_thick</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">hk</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="n">hk_1</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">Efac</span>  <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">lam_thick</span>   <span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">hk</span>    <span class="o">-</span> <span class="n">hk_1</span>   <span class="p">)</span><span class="c"># * (5./6) * (5./6)</span>
+
+            <span class="n">cos2t</span> <span class="o">=</span> <span class="n">ply</span><span class="o">.</span><span class="n">cos2t</span>
+            <span class="n">cos4t</span> <span class="o">=</span> <span class="n">ply</span><span class="o">.</span><span class="n">cos4t</span>
+            <span class="n">sin2t</span> <span class="o">=</span> <span class="n">ply</span><span class="o">.</span><span class="n">sin2t</span>
+            <span class="n">sin4t</span> <span class="o">=</span> <span class="n">ply</span><span class="o">.</span><span class="n">sin4t</span>
+
+            <span class="n">xiA1</span>  <span class="o">+=</span> <span class="n">Afac</span> <span class="o">*</span> <span class="n">cos2t</span>
+            <span class="n">xiA2</span>  <span class="o">+=</span> <span class="n">Afac</span> <span class="o">*</span> <span class="n">sin2t</span>
+            <span class="n">xiA3</span>  <span class="o">+=</span> <span class="n">Afac</span> <span class="o">*</span> <span class="n">cos4t</span>
+            <span class="n">xiA4</span>  <span class="o">+=</span> <span class="n">Afac</span> <span class="o">*</span> <span class="n">sin4t</span>
+
+            <span class="n">xiB1</span>  <span class="o">+=</span> <span class="n">Bfac</span> <span class="o">*</span> <span class="n">cos2t</span>
+            <span class="n">xiB2</span>  <span class="o">+=</span> <span class="n">Bfac</span> <span class="o">*</span> <span class="n">sin2t</span>
+            <span class="n">xiB3</span>  <span class="o">+=</span> <span class="n">Bfac</span> <span class="o">*</span> <span class="n">cos4t</span>
+            <span class="n">xiB4</span>  <span class="o">+=</span> <span class="n">Bfac</span> <span class="o">*</span> <span class="n">sin4t</span>
+
+            <span class="n">xiD1</span>  <span class="o">+=</span> <span class="n">Dfac</span> <span class="o">*</span> <span class="n">cos2t</span>
+            <span class="n">xiD2</span>  <span class="o">+=</span> <span class="n">Dfac</span> <span class="o">*</span> <span class="n">sin2t</span>
+            <span class="n">xiD3</span>  <span class="o">+=</span> <span class="n">Dfac</span> <span class="o">*</span> <span class="n">cos4t</span>
+            <span class="n">xiD4</span>  <span class="o">+=</span> <span class="n">Dfac</span> <span class="o">*</span> <span class="n">sin4t</span>
+
+            <span class="n">xiE1</span>  <span class="o">+=</span> <span class="n">Efac</span> <span class="o">*</span> <span class="n">cos2t</span>
+            <span class="n">xiE2</span>  <span class="o">+=</span> <span class="n">Efac</span> <span class="o">*</span> <span class="n">sin2t</span>
+            <span class="n">xiE3</span>  <span class="o">+=</span> <span class="n">Efac</span> <span class="o">*</span> <span class="n">cos4t</span>
+            <span class="n">xiE4</span>  <span class="o">+=</span> <span class="n">Efac</span> <span class="o">*</span> <span class="n">sin4t</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">xiA1</span><span class="p">,</span> <span class="n">xiA2</span><span class="p">,</span> <span class="n">xiA3</span><span class="p">,</span> <span class="n">xiA4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">xiB1</span><span class="p">,</span> <span class="n">xiB2</span><span class="p">,</span> <span class="n">xiB3</span><span class="p">,</span> <span class="n">xiB4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">xiD1</span><span class="p">,</span> <span class="n">xiD2</span><span class="p">,</span> <span class="n">xiD3</span><span class="p">,</span> <span class="n">xiD4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">xiE1</span><span class="p">,</span> <span class="n">xiE2</span><span class="p">,</span> <span class="n">xiE3</span><span class="p">,</span> <span class="n">xiE4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Laminate.calc_ABDE_from_lamination_parameters"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_ABDE_from_lamination_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">calc_ABDE_from_lamination_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Use the ABDE matrix based on lamination parameters.</span>
+
+<span class="sd">        Given the lamination parameters ``xiA``, ``xiB``, ``xiC`` and ``xiD``,</span>
+<span class="sd">        the ABD matrix is calculated.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># dummies used to unpack vector results</span>
+        <span class="n">du1</span><span class="p">,</span> <span class="n">du2</span><span class="p">,</span> <span class="n">du3</span><span class="p">,</span> <span class="n">du4</span><span class="p">,</span> <span class="n">du5</span><span class="p">,</span> <span class="n">du6</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="c"># A matrix terms</span>
+        <span class="n">A11</span><span class="p">,</span><span class="n">A22</span><span class="p">,</span><span class="n">A12</span><span class="p">,</span> <span class="n">du1</span><span class="p">,</span><span class="n">du2</span><span class="p">,</span><span class="n">du3</span><span class="p">,</span> <span class="n">A66</span><span class="p">,</span><span class="n">A16</span><span class="p">,</span><span class="n">A26</span> <span class="o">=</span>\
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span>       <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xiA</span><span class="p">)</span>
+        <span class="c"># B matrix terms</span>
+        <span class="n">B11</span><span class="p">,</span><span class="n">B22</span><span class="p">,</span><span class="n">B12</span><span class="p">,</span> <span class="n">du1</span><span class="p">,</span><span class="n">du2</span><span class="p">,</span><span class="n">du3</span><span class="p">,</span> <span class="n">B66</span><span class="p">,</span><span class="n">B16</span><span class="p">,</span><span class="n">B26</span> <span class="o">=</span>\
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">4.</span> <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xiB</span><span class="p">)</span>
+        <span class="c"># D matrix terms</span>
+        <span class="n">D11</span><span class="p">,</span><span class="n">D22</span><span class="p">,</span><span class="n">D12</span><span class="p">,</span> <span class="n">du1</span><span class="p">,</span><span class="n">du2</span><span class="p">,</span><span class="n">du3</span><span class="p">,</span> <span class="n">D66</span><span class="p">,</span><span class="n">D16</span><span class="p">,</span><span class="n">D26</span> <span class="o">=</span>\
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="mf">12.</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xiD</span><span class="p">)</span>
+        <span class="c"># E matrix terms</span>
+        <span class="n">du1</span><span class="p">,</span><span class="n">du2</span><span class="p">,</span><span class="n">du3</span><span class="p">,</span> <span class="n">E44</span><span class="p">,</span><span class="n">E55</span><span class="p">,</span><span class="n">E45</span><span class="p">,</span> <span class="n">du4</span><span class="p">,</span><span class="n">du5</span><span class="p">,</span><span class="n">du6</span> <span class="o">=</span>\
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span>       <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xiE</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">A11</span><span class="p">,</span> <span class="n">A12</span><span class="p">,</span> <span class="n">A16</span><span class="p">],</span>
+                           <span class="p">[</span><span class="n">A12</span><span class="p">,</span> <span class="n">A22</span><span class="p">,</span> <span class="n">A26</span><span class="p">],</span>
+                           <span class="p">[</span><span class="n">A16</span><span class="p">,</span> <span class="n">A26</span><span class="p">,</span> <span class="n">A66</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">B11</span><span class="p">,</span> <span class="n">B12</span><span class="p">,</span> <span class="n">B16</span><span class="p">],</span>
+                           <span class="p">[</span><span class="n">B12</span><span class="p">,</span> <span class="n">B22</span><span class="p">,</span> <span class="n">B26</span><span class="p">],</span>
+                           <span class="p">[</span><span class="n">B16</span><span class="p">,</span> <span class="n">B26</span><span class="p">,</span> <span class="n">B66</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">D11</span><span class="p">,</span> <span class="n">D12</span><span class="p">,</span> <span class="n">D16</span><span class="p">],</span>
+                           <span class="p">[</span><span class="n">D12</span><span class="p">,</span> <span class="n">D22</span><span class="p">,</span> <span class="n">D26</span><span class="p">],</span>
+                           <span class="p">[</span><span class="n">D16</span><span class="p">,</span> <span class="n">D26</span><span class="p">,</span> <span class="n">D66</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+
+        <span class="c"># printing E acoordingly to Reddy definition for E44, E45 and E55</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">E55</span><span class="p">,</span> <span class="n">E45</span><span class="p">],</span>
+                           <span class="p">[</span><span class="n">E45</span><span class="p">,</span> <span class="n">E44</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">A11</span><span class="p">,</span> <span class="n">A12</span><span class="p">,</span> <span class="n">A16</span><span class="p">,</span> <span class="n">B11</span><span class="p">,</span> <span class="n">B12</span><span class="p">,</span> <span class="n">B16</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">A12</span><span class="p">,</span> <span class="n">A22</span><span class="p">,</span> <span class="n">A26</span><span class="p">,</span> <span class="n">B12</span><span class="p">,</span> <span class="n">B22</span><span class="p">,</span> <span class="n">B26</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">A16</span><span class="p">,</span> <span class="n">A26</span><span class="p">,</span> <span class="n">A66</span><span class="p">,</span> <span class="n">B16</span><span class="p">,</span> <span class="n">B26</span><span class="p">,</span> <span class="n">B66</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">B11</span><span class="p">,</span> <span class="n">B12</span><span class="p">,</span> <span class="n">B16</span><span class="p">,</span> <span class="n">D11</span><span class="p">,</span> <span class="n">D12</span><span class="p">,</span> <span class="n">D16</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">B12</span><span class="p">,</span> <span class="n">B22</span><span class="p">,</span> <span class="n">B26</span><span class="p">,</span> <span class="n">D12</span><span class="p">,</span> <span class="n">D22</span><span class="p">,</span> <span class="n">D26</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">B16</span><span class="p">,</span> <span class="n">B26</span><span class="p">,</span> <span class="n">B66</span><span class="p">,</span> <span class="n">D16</span><span class="p">,</span> <span class="n">D26</span><span class="p">,</span> <span class="n">D66</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+
+        <span class="c"># printing ABDE acoordingly to Reddy definition for E44, E45 and E55</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">A11</span><span class="p">,</span> <span class="n">A12</span><span class="p">,</span> <span class="n">A16</span><span class="p">,</span> <span class="n">B11</span><span class="p">,</span> <span class="n">B12</span><span class="p">,</span> <span class="n">B16</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">A12</span><span class="p">,</span> <span class="n">A22</span><span class="p">,</span> <span class="n">A26</span><span class="p">,</span> <span class="n">B12</span><span class="p">,</span> <span class="n">B22</span><span class="p">,</span> <span class="n">B26</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">A16</span><span class="p">,</span> <span class="n">A26</span><span class="p">,</span> <span class="n">A66</span><span class="p">,</span> <span class="n">B16</span><span class="p">,</span> <span class="n">B26</span><span class="p">,</span> <span class="n">B66</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">B11</span><span class="p">,</span> <span class="n">B12</span><span class="p">,</span> <span class="n">B16</span><span class="p">,</span> <span class="n">D11</span><span class="p">,</span> <span class="n">D12</span><span class="p">,</span> <span class="n">D16</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">B12</span><span class="p">,</span> <span class="n">B22</span><span class="p">,</span> <span class="n">B26</span><span class="p">,</span> <span class="n">D12</span><span class="p">,</span> <span class="n">D22</span><span class="p">,</span> <span class="n">D26</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="n">B16</span><span class="p">,</span> <span class="n">B26</span><span class="p">,</span> <span class="n">B66</span><span class="p">,</span> <span class="n">D16</span><span class="p">,</span> <span class="n">D26</span><span class="p">,</span> <span class="n">D66</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                              <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">E55</span><span class="p">,</span> <span class="n">E45</span><span class="p">],</span>
+                              <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">E45</span><span class="p">,</span> <span class="n">E44</span><span class="p">]],</span>
+                               <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Laminate.calc_constitutive_matrix"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_constitutive_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">calc_constitutive_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the laminate constitutive matrix</span>
+
+<span class="sd">        This is the commonly called ``ABD`` matrix with ``shape=(6, 6)`` when</span>
+<span class="sd">        the classical laminated plate theory is used, or the ``ABDE`` matrix</span>
+<span class="sd">        when the first-order shear deformation theory is used, containing the</span>
+<span class="sd">        transverse shear terms.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A_general</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B_general</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D_general</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span>         <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span>         <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span>         <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">E</span>         <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="n">lam_thick</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c">#</span>
+        <span class="k">for</span> <span class="n">ply</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plies</span><span class="p">:</span>
+            <span class="n">lam_thick</span> <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">lam_thick</span>
+        <span class="n">h0</span>   <span class="o">=</span> <span class="o">-</span><span class="n">lam_thick</span><span class="o">/</span><span class="mi">2</span>
+        <span class="k">for</span> <span class="n">ply</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">plies</span><span class="p">:</span>
+            <span class="c">#</span>
+            <span class="n">hk_1</span> <span class="o">=</span>  <span class="n">h0</span>
+            <span class="n">h0</span>   <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">t</span>
+            <span class="n">hk</span>   <span class="o">=</span>  <span class="n">h0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">A_general</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span>      <span class="n">ply</span><span class="o">.</span><span class="n">QL</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">hk</span>    <span class="o">-</span> <span class="n">hk_1</span>   <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">B_general</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="n">ply</span><span class="o">.</span><span class="n">QL</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">hk</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">hk_1</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">D_general</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="o">*</span><span class="n">ply</span><span class="o">.</span><span class="n">QL</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">hk</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="n">hk_1</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">QL</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">hk</span> <span class="o">-</span> <span class="n">hk_1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">QL</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">hk</span> <span class="o">-</span> <span class="n">hk_1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">QL</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">hk</span> <span class="o">-</span> <span class="n">hk_1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">QL</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">hk</span> <span class="o">-</span> <span class="n">hk_1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">A_general</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">B_general</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D_general</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">conc1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">conc2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">conc1</span><span class="p">,</span> <span class="n">conc2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E</span>
+</div>
+<div class="viewcode-block" id="Laminate.force_balanced_LP"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_balanced_LP">[docs]</a>    <span class="k">def</span> <span class="nf">force_balanced_LP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Force balanced lamination parameters</span>
+
+<span class="sd">        The lamination parameters `\xi_{A2}` and `\xi_{A4}` are set to null</span>
+<span class="sd">        to force a balanced laminate.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dummy</span><span class="p">,</span> <span class="n">xiA1</span><span class="p">,</span> <span class="n">xiA2</span><span class="p">,</span> <span class="n">xiA3</span><span class="p">,</span> <span class="n">xiA4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xiA</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">xiA1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">xiA3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_ABDE_from_lamination_parameters</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Laminate.force_symmetric_LP"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_symmetric_LP">[docs]</a>    <span class="k">def</span> <span class="nf">force_symmetric_LP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Force symmetric lamination parameters</span>
+
+<span class="sd">        The lamination parameters `\xi_{Bi}` are set to null</span>
+<span class="sd">        to force a symmetric laminate.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xiB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_ABDE_from_lamination_parameters</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Laminate.force_orthotropic"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_orthotropic">[docs]</a>    <span class="k">def</span> <span class="nf">force_orthotropic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Force an orthotropic laminate</span>
+
+<span class="sd">        The terms</span>
+<span class="sd">        `A_{13}`, `A_{23}`, `A_{31}`, `A_{32}`,</span>
+<span class="sd">        `B_{13}`, `B_{23}`, `B_{31}`, `B_{32}`,</span>
+<span class="sd">        `D_{13}`, `D_{23}`, `D_{31}`, `D_{32}` are set to zero to force an</span>
+<span class="sd">        orthotropic laminate.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># A16</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># A26</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># A61</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># A62</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B16</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B61</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B26</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B62</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B16</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B61</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B26</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B62</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># D16</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># D26</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># D61</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># D62</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># A16</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># A26</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># A61</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># A62</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B16</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B61</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B26</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B62</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B16</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B61</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B26</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># B62</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># D16</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># D26</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># D61</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c"># D62</span>
+</div>
+<div class="viewcode-block" id="Laminate.force_symmetric"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_symmetric">[docs]</a>    <span class="k">def</span> <span class="nf">force_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Force a symmetric laminate</span>
+
+<span class="sd">        The `B` terms of the constitutive matrix are set to zero.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Aug 18, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

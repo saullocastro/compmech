@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Semi-analytical models for cones and cylinder (compmech.conecyl) &mdash; CompMech 0.1.0 documentation</title>
+    <title>Semi-analytical Models for Cones and Cylinder (compmech.conecyl) &mdash; CompMech 0.1.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -26,8 +26,7 @@
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Python modules" href="../index.html" />
-    <link rel="prev" title="Composite Module (compmech.composite)" href="../composite/index.html" /> 
+    <link rel="up" title="Modules" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -42,11 +41,8 @@
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../composite/index.html" title="Composite Module (compmech.composite)"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Python modules</a> &raquo;</li> 
+          <li><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,7 +52,7 @@
           <div class="body">
             
   <span class="target" id="module-compmech.conecyl"></span><div class="section" id="semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">
-<h1>Semi-analytical models for cones and cylinder (<a class="reference internal" href="#module-compmech.conecyl" title="compmech.conecyl"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></tt></a>)<a class="headerlink" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl" title="Permalink to this headline">¶</a></h1>
+<h1>Semi-analytical Models for Cones and Cylinder (<a class="reference internal" href="#module-compmech.conecyl" title="compmech.conecyl"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></tt></a>)<a class="headerlink" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl" title="Permalink to this headline">¶</a></h1>
 <p>The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> class embodies all the methods and functions necessary to
 perform:</p>
 <ul class="simple">
@@ -85,65 +81,62 @@ stresses by the relation:</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.SPLA" title="compmech.conecyl.ConeCyl.SPLA"><tt class="xref py py-obj docutils literal"><span class="pre">SPLA</span></tt></a>(PLs[,&nbsp;NLgeom,&nbsp;plot])</td>
-<td>Runs the Single Perturbation Load Approach (SPLA).</td>
+<td>Runs the Single Perturbation Load Approach (SPLA)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_SPL" title="compmech.conecyl.ConeCyl.add_SPL"><tt class="xref py py-obj docutils literal"><span class="pre">add_SPL</span></tt></a>(PL[,&nbsp;pt,&nbsp;theta])</td>
-<td>Add a Single Perturbation Load (SPL).</td>
+<td>Add a Single Perturbation Load <img class="math" src="../../_images/math/a432acccae213a65c34d59f3de9a4121ceecdf0b.png" alt="\{{F_{PL}}_i\}"/></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_force" title="compmech.conecyl.ConeCyl.add_force"><tt class="xref py py-obj docutils literal"><span class="pre">add_force</span></tt></a>(x,&nbsp;theta,&nbsp;fx,&nbsp;ftheta,&nbsp;fz)</td>
-<td>Add a punctual force.</td>
+<td>Add a punctual force</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></tt>([inc,&nbsp;kuk])</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fext" title="compmech.conecyl.ConeCyl.calc_fext"><tt class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></tt></a>([inc,&nbsp;kuk])</td>
+<td>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><tt class="xref py py-obj docutils literal"><span class="pre">calc_fint</span></tt></a>(c[,&nbsp;inc,&nbsp;m,&nbsp;return_u])</td>
-<td>Calculates the internal forces for a given set of Ritz constants</td>
+<td>Calculates the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><tt class="xref py py-obj docutils literal"><span class="pre">calc_full_c</span></tt></a>(cu[,&nbsp;inc])</td>
-<td>Returns the full set of Ritz constants.</td>
+<td>Returns the full set of Ritz constants</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">calc_kT</span></tt>(c)</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_dofs_matrix</span></tt></a>(k[,&nbsp;return_kkk,&nbsp;...])</td>
+<td>Makes the partition of the dofs for prescribed displacements</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_dofs_matrix</span></tt></a>(k[,&nbsp;return_kkk,&nbsp;...])</td>
-<td>Makes the partition of the dofs for prescribed displacements.</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.from_DB" title="compmech.conecyl.ConeCyl.from_DB"><tt class="xref py py-obj docutils literal"><span class="pre">from_DB</span></tt></a>(name)</td>
+<td>Load cone / cylinder data from the local database</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">from_DB</span></tt>(name)</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.get_size" title="compmech.conecyl.ConeCyl.get_size"><tt class="xref py py-obj docutils literal"><span class="pre">get_size</span></tt></a>()</td>
+<td>Calculates the size of the stiffness matrices</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_size</span></tt>()</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><tt class="xref py py-obj docutils literal"><span class="pre">lb</span></tt></a>([c,&nbsp;tol,&nbsp;combined_load_case])</td>
+<td>Performs a linear buckling analysis</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><tt class="xref py py-obj docutils literal"><span class="pre">lb</span></tt></a>([c,&nbsp;tol,&nbsp;combined_load_case])</td>
-<td>Linear Buckling analysis.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(c[,&nbsp;invert_x,&nbsp;plot_type,&nbsp;vec,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(c[,&nbsp;invert_x,&nbsp;plot_type,&nbsp;vec,&nbsp;...])</td>
 <td>Contour plot for a Ritz constants vector.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plotAbaqus" title="compmech.conecyl.ConeCyl.plotAbaqus"><tt class="xref py py-obj docutils literal"><span class="pre">plotAbaqus</span></tt></a>(frame,&nbsp;fieldOutputKey,&nbsp;vec,&nbsp;...)</td>
-<td>Print a field output for a cylinder/cone model from Abaqus.</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.plotAbaqus" title="compmech.conecyl.ConeCyl.plotAbaqus"><tt class="xref py py-obj docutils literal"><span class="pre">plotAbaqus</span></tt></a>(frame,&nbsp;fieldOutputKey,&nbsp;vec,&nbsp;...)</td>
+<td>Print a field output for a cylinder/cone model from Abaqus</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>()</td>
-<td>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt>.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>()</td>
+<td>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom])</td>
-<td>Static analysis for cones and cylinders.</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom])</td>
+<td>Static analysis for cones and cylinders</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><tt class="xref py py-obj docutils literal"><span class="pre">strain</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
-<td>Calculates the strain field for a given Ritz constants vector.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><tt class="xref py py-obj docutils literal"><span class="pre">strain</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
+<td>Calculates the strain field</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.stress" title="compmech.conecyl.ConeCyl.stress"><tt class="xref py py-obj docutils literal"><span class="pre">stress</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
-<td>Calculates the stress field for a given Ritz constants vector.</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.stress" title="compmech.conecyl.ConeCyl.stress"><tt class="xref py py-obj docutils literal"><span class="pre">stress</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
+<td>Calculates the stress field</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><tt class="xref py py-obj docutils literal"><span class="pre">uvw</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
-<td>Displacement field for a given set of Ritz constants.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><tt class="xref py py-obj docutils literal"><span class="pre">uvw</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
+<td>Calculates the displacement field</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.SPLA">
 <tt class="descname">SPLA</tt><big>(</big><em>PLs</em>, <em>NLgeom=True</em>, <em>plot=False</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.SPLA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs the Single Perturbation Load Approach (SPLA).</p>
+<dd><p>Runs the Single Perturbation Load Approach (SPLA)</p>
 <p>A set of non-linear results will be</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -218,8 +211,10 @@ for each load increment</td>
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.add_SPL">
 <tt class="descname">add_SPL</tt><big>(</big><em>PL</em>, <em>pt=0.5</em>, <em>theta=0.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_SPL" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a Single Perturbation Load (SPL).</p>
-<p>Adds a perturbation load to the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
+<dd><p>Add a Single Perturbation Load <img class="math" src="../../_images/math/a432acccae213a65c34d59f3de9a4121ceecdf0b.png" alt="\{{F_{PL}}_i\}"/></p>
+<p>Adds a perturbation load to the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object, the perturbation
+load is a particular case of the punctual load with only a normal
+component.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -250,7 +245,7 @@ any time.</p>
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.add_force">
 <tt class="descname">add_force</tt><big>(</big><em>x</em>, <em>theta</em>, <em>fx</em>, <em>ftheta</em>, <em>fz</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_force" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a punctual force.</p>
+<dd><p>Add a punctual force</p>
 <p>Adds a force vector <img class="math" src="../../_images/math/556bef07eeeb6f6d8499dc8ab628abcf2ff16991.png" alt="\{f_x, f_\theta, f_z\}^T"/> to the <tt class="docutils literal"><span class="pre">forces</span></tt>
 parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -284,9 +279,45 @@ parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></
 </dd></dl>
 
 <dl class="method">
+<dt id="compmech.conecyl.ConeCyl.calc_fext">
+<tt class="descname">calc_fext</tt><big>(</big><em>inc=None</em>, <em>kuk=None</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></p>
+<p>Recall that:</p>
+<div class="math">
+<p><img src="../../_images/math/2843b67a0f45d9e2688d86139b9f4556ed86677b.png" alt="\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}"/></p>
+</div><p>such that the terms in <img class="math" src="../../_images/math/00c6148f94b4180279918d67b1ddfde4310d39f5.png" alt="\{{F_{ext}}_0\}"/> are constant and the terms in
+<img class="math" src="../../_images/math/6efbef4fe3c6f2df3a955d0285e9f7e2483bf3f0.png" alt="\{{F_{ext}}_\lambda\}"/> will be scaled by the parameter <tt class="docutils literal"><span class="pre">inc</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>inc</strong> : float, optional</p>
+<blockquote>
+<div><p>Since this function is called during the non-linear analysis,
+<tt class="docutils literal"><span class="pre">inc</span></tt> will multiply the terms <img class="math" src="../../_images/math/6efbef4fe3c6f2df3a955d0285e9f7e2483bf3f0.png" alt="\{{F_{ext}}_\lambda\}"/>.</p>
+</div></blockquote>
+<p><strong>kuk</strong> : np.ndarray, optional</p>
+<blockquote>
+<div><p>Obsolete, created for displacement controlled analyses, but the
+implementation has not been finished, see
+<a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-meth docutils literal"><span class="pre">exclude_dofs_matrix()</span></tt></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fext</strong> : np.ndarray</p>
+<blockquote class="last">
+<div><p>The external force vector</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="compmech.conecyl.ConeCyl.calc_fint">
 <tt class="descname">calc_fint</tt><big>(</big><em>c</em>, <em>inc=1.0</em>, <em>m=1</em>, <em>return_u=True</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the internal forces for a given set of Ritz constants</p>
+<dd><p>Calculates the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -326,7 +357,7 @@ set of Ritz constants should be returned.</p>
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.calc_full_c">
 <tt class="descname">calc_full_c</tt><big>(</big><em>cu</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_full_c" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the full set of Ritz constants.</p>
+<dd><p>Returns the full set of Ritz constants</p>
 <p>When prescribed displacements take place the matrices and the Ritz
 constants are partitioned like:</p>
 <div class="highlight-python"><div class="highlight"><pre>k = | kkk    kku |
@@ -368,7 +399,7 @@ constants using <a class="reference internal" href="#compmech.conecyl.ConeCyl.ca
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.exclude_dofs_matrix">
 <tt class="descname">exclude_dofs_matrix</tt><big>(</big><em>k</em>, <em>return_kkk=False</em>, <em>return_kku=False</em>, <em>return_kuk=False</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Makes the partition of the dofs for prescribed displacements.</p>
+<dd><p>Makes the partition of the dofs for prescribed displacements</p>
 <p>Makes the following partition of a given matrix:</p>
 <div class="highlight-python"><div class="highlight"><pre>k = | kkk    kku |
     | kuk    kuu |
@@ -410,9 +441,50 @@ while the others are 2-D <tt class="docutils literal"><span class="pre">np.ndarr
 </dd></dl>
 
 <dl class="method">
+<dt id="compmech.conecyl.ConeCyl.from_DB">
+<tt class="descname">from_DB</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.from_DB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load cone / cylinder data from the local database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
+<blockquote class="last">
+<div><p>A key contained in the <tt class="docutils literal"><span class="pre">ccs</span></tt> dictionary of module
+<a class="reference internal" href="#module-compmech.conecyl.conecylDB" title="compmech.conecyl.conecylDB"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl.conecylDB</span></tt></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.conecyl.ConeCyl.get_size">
+<tt class="descname">get_size</tt><big>(</big><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.get_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the size of the stiffness matrices</p>
+<p>The size of the stiffness matrices can be interpreted as the number of
+rows or columns, recalling that this will be the size of the Ritz
+constants&#8217; vector <img class="math" src="../../_images/math/4fb833c3c0e0a5bde813b48df6b2ae96af9302aa.png" alt="\{c\}"/>, the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> and
+the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>size</strong> : int</p>
+<blockquote class="last">
+<div><p>The size of the stiffness matrices.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="compmech.conecyl.ConeCyl.lb">
 <tt class="descname">lb</tt><big>(</big><em>c=None</em>, <em>tol=0</em>, <em>combined_load_case=None</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.lb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Linear Buckling analysis.</p>
+<dd><p>Performs a linear buckling analysis</p>
 <p>The following parameters of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object will affect the
 linear buckling analysis:</p>
 <table border="1" class="docutils">
@@ -463,7 +535,7 @@ of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object
 
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.plot">
-<tt class="descname">plot</tt><big>(</big><em>c</em>, <em>invert_x=False</em>, <em>plot_type=1</em>, <em>vec='w'</em>, <em>filename=''</em>, <em>ax=None</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>add_title=True</em>, <em>title=''</em>, <em>colorbar=False</em>, <em>cbar_nticks=2</em>, <em>cbar_format=None</em>, <em>cbar_title=''</em>, <em>cbar_fontsize=10</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=300</em>, <em>texts=</em>, <span class="optional">[</span><span class="optional">]</span><em>xs=None</em>, <em>ts=None</em>, <em>gridx=300</em>, <em>gridt=300</em>, <em>num_levels=400</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>c</em>, <em>invert_x=False</em>, <em>plot_type=1</em>, <em>vec='w'</em>, <em>filename=''</em>, <em>ax=None</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>add_title=True</em>, <em>title=''</em>, <em>colorbar=False</em>, <em>cbar_nticks=2</em>, <em>cbar_format=None</em>, <em>cbar_title=''</em>, <em>cbar_fontsize=10</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=400</em>, <em>texts=</em>, <span class="optional">[</span><span class="optional">]</span><em>xs=None</em>, <em>ts=None</em>, <em>gridx=300</em>, <em>gridt=300</em>, <em>num_levels=400</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contour plot for a Ritz constants vector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -605,8 +677,8 @@ if needed.</p>
 
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.plotAbaqus">
-<tt class="descname">plotAbaqus</tt><big>(</big><em>frame</em>, <em>fieldOutputKey</em>, <em>vec</em>, <em>nodes</em>, <em>numel_cir</em>, <em>elem_type='S4R'</em>, <em>ignore=</em>, <span class="optional">[</span><span class="optional">]</span><em>figsize=(3.3</em>, <em>3.3)</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>plot_type=1</em>, <em>outpath=''</em>, <em>filename='abaqus_plot.png'</em>, <em>num_levels=400</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.plotAbaqus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print a field output for a cylinder/cone model from Abaqus.</p>
+<tt class="descname">plotAbaqus</tt><big>(</big><em>frame</em>, <em>fieldOutputKey</em>, <em>vec</em>, <em>nodes</em>, <em>numel_cir</em>, <em>elem_type='S4R'</em>, <em>ignore=</em>, <span class="optional">[</span><span class="optional">]</span><em>ax=None</em>, <em>figsize=(3.3</em>, <em>3.3)</em>, <em>save=True</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>plot_type=1</em>, <em>outpath=''</em>, <em>filename=''</em>, <em>npzname=''</em>, <em>pyname=''</em>, <em>num_levels=400</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.plotAbaqus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a field output for a cylinder/cone model from Abaqus</p>
 <p>This function is intended to be used with models created by the
 <a class="reference external" href="http://desicos.github.io/desicos/">DESICOS plug-in for Abaqus</a>,
 where a <strong>mapped mesh</strong> is used and the models comparable to the
@@ -654,9 +726,17 @@ they can be obtained through:</p>
 <div><p>A list with the node ids to be ignored. It must contain any nodes
 outside the mapped mesh included in <tt class="docutils literal"><span class="pre">parts['part_name'].nodes</span></tt>.</p>
 </div></blockquote>
+<p><strong>ax</strong> : AxesSubplot, optional</p>
+<blockquote>
+<div><p>When <tt class="docutils literal"><span class="pre">ax</span></tt> is given, the contour plot will be created inside it.</p>
+</div></blockquote>
 <p><strong>figsize</strong> : tuple, optional</p>
 <blockquote>
 <div><p>The figure size given by <tt class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></tt>.</p>
+</div></blockquote>
+<p><strong>save</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag telling whether the contour should be saved to an image file.</p>
 </div></blockquote>
 <p><strong>aspect</strong> : str, optional</p>
 <blockquote>
@@ -679,6 +759,14 @@ saved (see notes).</p>
 <p><strong>filename</strong> : str, optional</p>
 <blockquote>
 <div><p>The file name for the generated image file.</p>
+</div></blockquote>
+<p><strong>npzname</strong> : str, optional</p>
+<blockquote>
+<div><p>The file name for the generated npz file.</p>
+</div></blockquote>
+<p><strong>pyname</strong> : str, optional</p>
+<blockquote>
+<div><p>The file name for the generated Python file.</p>
 </div></blockquote>
 <p><strong>num_levels</strong> : int, optional</p>
 <blockquote>
@@ -706,7 +794,7 @@ importable from Abaqus.</p>
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.save">
 <tt class="descname">save</tt><big>(</big><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt>.</p>
+<dd><p>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt></p>
 <p class="rubric">Notes</p>
 <p>The pickled file will have the name stored in <tt class="docutils literal"><span class="pre">ConeCyl.name</span></tt>
 followed by a <tt class="docutils literal"><span class="pre">'.ConeCyl'</span></tt> extension.</p>
@@ -715,7 +803,7 @@ followed by a <tt class="docutils literal"><span class="pre">'.ConeCyl'</span></
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.static">
 <tt class="descname">static</tt><big>(</big><em>NLgeom=False</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.static" title="Permalink to this definition">¶</a></dt>
-<dd><p>Static analysis for cones and cylinders.</p>
+<dd><p>Static analysis for cones and cylinders</p>
 <p>The analysis can be linear or non-linear. In case of a non-linear
 analysis the following parameters of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object will
 affect the non-linear analysis:</p>
@@ -762,7 +850,7 @@ iterations</td>
 <tr class="row-even"><td><tt class="docutils literal"><span class="pre">initialInc</span></tt></td>
 <td>initial load increment size. In the arc-length
 method it will be the initial value for
-<img class="math" src="../../_images/math/36c6cfbcb3f2012e7df66272346c724e18d464cc.png" alt="\lambda"/>.</td>
+<img class="math" src="../../_images/math/36c6cfbcb3f2012e7df66272346c724e18d464cc.png" alt="\lambda"/></td>
 </tr>
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">minInc</span></tt></td>
 <td>minimum increment size; if achieved the analysis
@@ -847,7 +935,7 @@ analysis are stored in the <tt class="docutils literal"><span class="pre">increm
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.strain">
 <tt class="descname">strain</tt><big>(</big><em>c</em>, <em>xs=None</em>, <em>ts=None</em>, <em>gridx=300</em>, <em>gridt=300</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.strain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the strain field for a given Ritz constants vector.</p>
+<dd><p>Calculates the strain field</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -890,7 +978,7 @@ constants using <a class="reference internal" href="#compmech.conecyl.ConeCyl.ca
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.stress">
 <tt class="descname">stress</tt><big>(</big><em>c</em>, <em>xs=None</em>, <em>ts=None</em>, <em>gridx=300</em>, <em>gridt=300</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.stress" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the stress field for a given Ritz constants vector.</p>
+<dd><p>Calculates the stress field</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -933,7 +1021,7 @@ constants using <a class="reference internal" href="#compmech.conecyl.ConeCyl.ca
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.uvw">
 <tt class="descname">uvw</tt><big>(</big><em>c</em>, <em>xs=None</em>, <em>ts=None</em>, <em>gridx=300</em>, <em>gridt=300</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.uvw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Displacement field for a given set of Ritz constants.</p>
+<dd><p>Calculates the displacement field</p>
 <p>For a given full set of Ritz constants <tt class="docutils literal"><span class="pre">c</span></tt>, the displacement
 field is calculated and stored in the parameters
 <tt class="docutils literal"><span class="pre">u</span></tt>, <tt class="docutils literal"><span class="pre">v</span></tt>, <tt class="docutils literal"><span class="pre">w</span></tt>, <tt class="docutils literal"><span class="pre">phix</span></tt>, <tt class="docutils literal"><span class="pre">phit</span></tt> of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object.</p>
@@ -1047,6 +1135,20 @@ calculate the tangent stiffness matrix.</p>
 </table>
 </dd></dl>
 
+</div>
+<div class="section" id="module-compmech.conecyl.conecylDB">
+<span id="cone-cylinder-database-compmech-conecyl-conecyldb"></span><h2>Cone / Cylinder Database (<a class="reference internal" href="#module-compmech.conecyl.conecylDB" title="compmech.conecyl.conecylDB"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl.conecylDB</span></tt></a>)<a class="headerlink" href="#module-compmech.conecyl.conecylDB" title="Permalink to this headline">¶</a></h2>
+<p>This database is a group of three dictionaries defines as following:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">laminaprops</span></tt>: the material properties for an orthotropic lamina</li>
+<li><tt class="docutils literal"><span class="pre">allowables</span></tt>: the allowables for an orthotropic lamina</li>
+<li><tt class="docutils literal"><span class="pre">ccs</span></tt>: the geometric, stacking sequence and material data for a conical /
+cylindrical structure</li>
+</ul>
+<p>One could import these dictionaries doing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">compmech.conecyl.conecylDB</span> <span class="kn">import</span> <span class="n">laminaprops</span><span class="p">,</span> <span class="n">allowables</span><span class="p">,</span> <span class="n">ccs</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="module-compmech.conecyl.modelDB">
 <span id="models-database-compmech-conecyl-modeldb"></span><h2>Models&#8217; Database (<a class="reference internal" href="#module-compmech.conecyl.modelDB" title="compmech.conecyl.modelDB"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl.modelDB</span></tt></a>)<a class="headerlink" href="#module-compmech.conecyl.modelDB" title="Permalink to this headline">¶</a></h2>
@@ -1290,18 +1392,16 @@ The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span
             </a></p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Semi-analytical models for cones and cylinder (<tt class="docutils literal"><span class="pre">compmech.conecyl</span></tt>)</a><ul>
+<li><a class="reference internal" href="#">Semi-analytical Models for Cones and Cylinder (<tt class="docutils literal"><span class="pre">compmech.conecyl</span></tt>)</a><ul>
 <li><a class="reference internal" href="#the-conecyl-object">The <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object</a></li>
 <li><a class="reference internal" href="#module-compmech.conecyl.non_linear">Non-linear analysis (<tt class="docutils literal"><span class="pre">compmech.conecyl.non_linear</span></tt>)</a></li>
+<li><a class="reference internal" href="#module-compmech.conecyl.conecylDB">Cone / Cylinder Database (<tt class="docutils literal"><span class="pre">compmech.conecyl.conecylDB</span></tt>)</a></li>
 <li><a class="reference internal" href="#module-compmech.conecyl.modelDB">Models&#8217; Database (<tt class="docutils literal"><span class="pre">compmech.conecyl.modelDB</span></tt>)</a></li>
 <li><a class="reference internal" href="#module-compmech.conecyl.imperfections">Imperfections (<tt class="docutils literal"><span class="pre">compmech.conecyl.imperfections</span></tt>)</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../composite/index.html"
-                        title="previous chapter">Composite Module (<tt class="docutils literal"><span class="pre">compmech.composite</span></tt>)</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/modules/conecyl/index.txt"
@@ -1336,16 +1436,13 @@ The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../composite/index.html" title="Composite Module (compmech.composite)"
-             >previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Python modules</a> &raquo;</li> 
+          <li><a href="../index.html" >Modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jul 23, 2014.
+      Last updated on Aug 18, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

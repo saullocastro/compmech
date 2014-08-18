@@ -76,47 +76,34 @@ minimizing the number of integration points required.</p>
 <h3>Building the Spine<a class="headerlink" href="#building-the-spine" title="Permalink to this headline">¶</a></h3>
 <p>Before implementing the new finite elements a very well defined process
 must be stablished in order to define:</p>
-<ul>
-<li><p class="first">integration with pynastran to read NASTRAN input files</p>
-</li>
-<li><p class="first">define node class</p>
-</li>
-<li><p class="first">define element class</p>
-</li>
-<li><dl class="first docutils">
-<dt>node-element connectivity schemes</dt>
-<dd><ul class="first last simple">
+<ul class="simple">
+<li>integration with pynastran to read NASTRAN input files</li>
+<li>define node class</li>
+<li>define element class</li>
+<li>node-element connectivity schemes:<ul>
 <li>minimize band-width of the stiffness matrices by working with a proper
 internal node identification. The user will use the conventional node ID,
 but the analysis could use an internal ID that is calculated to minimize
 the band-width of the sparse matrices</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><dl class="first docutils">
-<dt>use of C++, C or Cython?</dt>
-<dd><ul class="first last simple">
+<li>use of C++, C or Cython?<ul>
 <li>use Cython or Python classes?</li>
 </ul>
-</dd>
-</dl>
 </li>
-<li><p class="first">possible sparse solvers:
-- Intel MKL PARDISO
-- the <tt class="docutils literal"><span class="pre">scipy.sparse</span></tt> solver, at least to build the <tt class="docutils literal"><span class="pre">csr_matrix</span></tt> or</p>
-<blockquote>
-<div><p><tt class="docutils literal"><span class="pre">csc_matrix</span></tt></p>
-</div></blockquote>
-<ul class="simple">
+<li>possible sparse solvers:<ul>
+<li>Intel MKL PARDISO</li>
+<li>the <tt class="docutils literal"><span class="pre">scipy.sparse</span></tt> solver, at least to build the <tt class="docutils literal"><span class="pre">csr_matrix</span></tt>
+or <tt class="docutils literal"><span class="pre">csc_matrix</span></tt></li>
 <li>SuperLU</li>
 <li>ARPACK (used in <tt class="docutils literal"><span class="pre">scipy.sparse.linalg.eigsh</span></tt>)</li>
 <li>Use the rainflow algorithm?</li>
 </ul>
 </li>
-<li><p class="first">Use SIMD programming for common array operations?
-- rely on NumPy, with a group working on these optimizations
-- use Eigen3 wrappers such as minieigen</p>
+<li>Use SIMD programming for common array operations?<ul>
+<li>rely on NumPy, with a group working on these optimizations</li>
+<li>use Eigen3 wrappers such as minieigen</li>
+</ul>
 </li>
 </ul>
 </div>
@@ -126,15 +113,15 @@ the band-width of the sparse matrices</li>
 some additional options:</p>
 <ul class="simple">
 <li>The priority order should be:<ul>
-<li>QUAD4 (plate element)</li>
-<li>ZQUAD4 (cylindrical shell element)</li>
-<li>CQUAD4 (conical shell element - certain confusion with NASTRAN CQUAD4)</li>
+<li>CQUAD4 - plate element like in NASTRAN</li>
+<li>ZQUAD4 - cylindrical (Zylinder) shell element</li>
+<li>KQUAD4 - conical (Konus) shell element</li>
 <li>1-D elements</li>
 <li>3-D elements</li>
 </ul>
 </li>
 <li>The element&#8217;s formulation should allow:
-- Initial Imperfection (how!)
+- Initial Imperfection (how?!)
 - CLPT
 - FSDT
 - TSDT</li>
@@ -150,6 +137,12 @@ methods and so on...</p>
 <div class="section" id="gpu">
 <h2>GPU<a class="headerlink" href="#gpu" title="Permalink to this headline">¶</a></h2>
 <p>How to use GPU-based programming?</p>
+<p>Some preliminary studies show that it is promising to apply such programming
+strategies to largely parallelize operations like the numerical integration of
+each element&#8217;s stiffness matrix... each thread could be one element being
+integrated for example and this should be benchmarked against a CPU-based
+integration using Shared-Memory Parallel programming through OpenMP, which has
+already been applied in <a class="reference internal" href="modules/conecyl/index.html#module-compmech.conecyl" title="compmech.conecyl"><tt class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></tt></a>.</p>
 </div>
 </div>
 
@@ -221,7 +214,7 @@ methods and so on...</p>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 18, 2014.
+      Last updated on Aug 18, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
