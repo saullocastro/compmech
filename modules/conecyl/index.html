@@ -89,17 +89,23 @@ stresses by the relation:</p>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_force" title="compmech.conecyl.ConeCyl.add_force"><tt class="xref py py-obj docutils literal"><span class="pre">add_force</span></tt></a>(x,&nbsp;theta,&nbsp;fx,&nbsp;ftheta,&nbsp;fz)</td>
 <td>Add a punctual force</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fext" title="compmech.conecyl.ConeCyl.calc_fext"><tt class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></tt></a>([inc,&nbsp;kuk])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.apply_shim" title="compmech.conecyl.ConeCyl.apply_shim"><tt class="xref py py-obj docutils literal"><span class="pre">apply_shim</span></tt></a>(thetadeg,&nbsp;width,&nbsp;thick[,&nbsp;ncpts])</td>
+<td>Distributes the axial load in order to simulate a shim</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fext" title="compmech.conecyl.ConeCyl.calc_fext"><tt class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></tt></a>([inc,&nbsp;kuk,&nbsp;silent])</td>
 <td>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><tt class="xref py py-obj docutils literal"><span class="pre">calc_fint</span></tt></a>(c[,&nbsp;inc,&nbsp;m,&nbsp;return_u])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><tt class="xref py py-obj docutils literal"><span class="pre">calc_fint</span></tt></a>(c[,&nbsp;inc,&nbsp;m,&nbsp;return_u])</td>
 <td>Calculates the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><tt class="xref py py-obj docutils literal"><span class="pre">calc_full_c</span></tt></a>(cu[,&nbsp;inc])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><tt class="xref py py-obj docutils literal"><span class="pre">calc_full_c</span></tt></a>(cu[,&nbsp;inc])</td>
 <td>Returns the full set of Ritz constants</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_dofs_matrix</span></tt></a>(k[,&nbsp;return_kkk,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_dofs_matrix</span></tt></a>(k[,&nbsp;return_kkk,&nbsp;...])</td>
 <td>Makes the partition of the dofs for prescribed displacements</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.fit_Nxxtop" title="compmech.conecyl.ConeCyl.fit_Nxxtop"><tt class="xref py py-obj docutils literal"><span class="pre">fit_Nxxtop</span></tt></a>(ts,&nbsp;us[,&nbsp;update_Nxxtop])</td>
+<td>Adjusts the axial load distribution for a given us</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.from_DB" title="compmech.conecyl.ConeCyl.from_DB"><tt class="xref py py-obj docutils literal"><span class="pre">from_DB</span></tt></a>(name)</td>
 <td>Load cone / cylinder data from the local database</td>
@@ -119,7 +125,7 @@ stresses by the relation:</p>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>()</td>
 <td>Save the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object using <tt class="docutils literal"><span class="pre">cPickle</span></tt></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><tt class="xref py py-obj docutils literal"><span class="pre">static</span></tt></a>([NLgeom,&nbsp;silent])</td>
 <td>Static analysis for cones and cylinders</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><tt class="xref py py-obj docutils literal"><span class="pre">strain</span></tt></a>(c[,&nbsp;xs,&nbsp;ts,&nbsp;gridx,&nbsp;gridt,&nbsp;inc])</td>
@@ -279,8 +285,60 @@ parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></
 </dd></dl>
 
 <dl class="method">
+<dt id="compmech.conecyl.ConeCyl.apply_shim">
+<tt class="descname">apply_shim</tt><big>(</big><em>thetadeg</em>, <em>width</em>, <em>thick</em>, <em>ncpts=10000</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.apply_shim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distributes the axial load in order to simulate a shim</p>
+<p>The axial load distribution <img class="math" src="../../_images/math/0250524582793ba8683e89580709a372a0f804bd.png" alt="\{{N_{xx}}_{top}\}"/> will be adjusted such
+that the resulting displacement <img class="math" src="../../_images/math/12a3ef26788e5c4328d1b988703cc9f0ed1b571d.png" alt="u"/> at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/> (top edge) will look
+similar to a case where a shim is applied, an usual practice to
+simulate load asymmetry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>thetadeg</strong> : float</p>
+<blockquote>
+<div><p>Position in degrees of the center of the shim.</p>
+</div></blockquote>
+<p><strong>width</strong> : float</p>
+<blockquote>
+<div><p>Circumferential width of the shim.</p>
+</div></blockquote>
+<p><strong>thick</strong> : float</p>
+<blockquote>
+<div><p>Thickness of the shim.</p>
+</div></blockquote>
+<p><strong>ncpts</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of control points used in the least-squares routine.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ts</strong> : np.ndarray</p>
+<blockquote>
+<div><p>Positions <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> of the control points.</p>
+</div></blockquote>
+<p><strong>us</strong> : np.ndarray</p>
+<blockquote class="last">
+<div><p>Displacements <img class="math" src="../../_images/math/12a3ef26788e5c4328d1b988703cc9f0ed1b571d.png" alt="u"/> of the control points.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function changes the <tt class="docutils literal"><span class="pre">Nxxtop</span></tt> parameter of the current
+<tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object. Returning <tt class="docutils literal"><span class="pre">ts</span></tt> and <tt class="docutils literal"><span class="pre">us</span></tt> is useful for post
+processing purposes only.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="p">,</span> <span class="n">us</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">apply_shim</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">25.4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="compmech.conecyl.ConeCyl.calc_fext">
-<tt class="descname">calc_fext</tt><big>(</big><em>inc=None</em>, <em>kuk=None</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fext" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">calc_fext</tt><big>(</big><em>inc=None</em>, <em>kuk=None</em>, <em>silent=False</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></p>
 <p>Recall that:</p>
 <div class="math">
@@ -301,6 +359,10 @@ parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></
 <div><p>Obsolete, created for displacement controlled analyses, but the
 implementation has not been finished, see
 <a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><tt class="xref py py-meth docutils literal"><span class="pre">exclude_dofs_matrix()</span></tt></a>.</p>
+</div></blockquote>
+<p><strong>silent</strong> : bool, optional</p>
+<blockquote>
+<div><p>A boolean to tell whether the log messages should be printed.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -441,6 +503,38 @@ while the others are 2-D <tt class="docutils literal"><span class="pre">np.ndarr
 </dd></dl>
 
 <dl class="method">
+<dt id="compmech.conecyl.ConeCyl.fit_Nxxtop">
+<tt class="descname">fit_Nxxtop</tt><big>(</big><em>ts</em>, <em>us</em>, <em>update_Nxxtop=True</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.fit_Nxxtop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjusts the axial load distribution for a given us</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ts</strong> : np.ndarray</p>
+<blockquote>
+<div><p>Corrdinates <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> of each control point.</p>
+</div></blockquote>
+<p><strong>us</strong> : np.ndarray</p>
+<blockquote>
+<div><p>Desired displacement <img class="math" src="../../_images/math/12a3ef26788e5c4328d1b988703cc9f0ed1b571d.png" alt="u"/> for each control point.</p>
+</div></blockquote>
+<p><strong>update_Nxxtop</strong> : bool, optional</p>
+<blockquote>
+<div><p>Tells whether <tt class="docutils literal"><span class="pre">self.Nxxtop</span></tt> should be updated.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Nxxtop</strong> : np.ndarray</p>
+<blockquote class="last">
+<div><p>The coefficients for the <img class="math" src="../../_images/math/0250524582793ba8683e89580709a372a0f804bd.png" alt="\{{N_{xx}}_{top}\}"/> function.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="compmech.conecyl.ConeCyl.from_DB">
 <tt class="descname">from_DB</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.from_DB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load cone / cylinder data from the local database</p>
@@ -535,7 +629,7 @@ of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object
 
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.plot">
-<tt class="descname">plot</tt><big>(</big><em>c</em>, <em>invert_x=False</em>, <em>plot_type=1</em>, <em>vec='w'</em>, <em>filename=''</em>, <em>ax=None</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>add_title=True</em>, <em>title=''</em>, <em>colorbar=False</em>, <em>cbar_nticks=2</em>, <em>cbar_format=None</em>, <em>cbar_title=''</em>, <em>cbar_fontsize=10</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=400</em>, <em>texts=</em>, <span class="optional">[</span><span class="optional">]</span><em>xs=None</em>, <em>ts=None</em>, <em>gridx=300</em>, <em>gridt=300</em>, <em>num_levels=400</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>c</em>, <em>invert_x=False</em>, <em>plot_type=1</em>, <em>vec='w'</em>, <em>deform_u=False</em>, <em>deform_u_sf=100.0</em>, <em>filename=''</em>, <em>ax=None</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>add_title=True</em>, <em>title=''</em>, <em>colorbar=False</em>, <em>cbar_nticks=2</em>, <em>cbar_format=None</em>, <em>cbar_title=''</em>, <em>cbar_fontsize=10</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=400</em>, <em>texts=</em>, <span class="optional">[</span><span class="optional">]</span><em>xs=None</em>, <em>ts=None</em>, <em>gridx=300</em>, <em>gridt=300</em>, <em>num_levels=400</em>, <em>inc=1.0</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contour plot for a Ritz constants vector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -556,6 +650,14 @@ of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object
 <tt class="docutils literal"><span class="pre">'Mxt'</span></tt>, <tt class="docutils literal"><span class="pre">'Qt'</span></tt>, <tt class="docutils literal"><span class="pre">'Qx'</span></tt></li>
 </ul>
 </div></blockquote>
+<p><strong>deform_u</strong> : bool, optional</p>
+<blockquote>
+<div><p>If <tt class="docutils literal"><span class="pre">True</span></tt> the contour plot will look deformed.</p>
+</div></blockquote>
+<p><strong>deform_u_sf</strong> : float, optional</p>
+<blockquote>
+<div><p>The scaling factor used to deform the contour.</p>
+</div></blockquote>
 <p><strong>invert_x</strong> : bool, optional</p>
 <blockquote>
 <div><p>Inverts the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis of the plot. It may be used to match
@@ -565,7 +667,7 @@ using the <tt class="docutils literal"><span class="pre">desicos.abaqus</span></
 <p><strong>plot_type</strong> : int, optional</p>
 <blockquote>
 <div><p>For cylinders only <tt class="docutils literal"><span class="pre">4</span></tt> and <tt class="docutils literal"><span class="pre">5</span></tt> are valid.
-For cones all the types can be used:</p>
+For cones all the following types can be used:</p>
 <ul class="simple">
 <li><tt class="docutils literal"><span class="pre">1</span></tt>: concave up (with <tt class="docutils literal"><span class="pre">invert_x=False</span></tt>) (default)</li>
 <li><tt class="docutils literal"><span class="pre">2</span></tt>: concave down (with <tt class="docutils literal"><span class="pre">invert_x=False</span></tt>)</li>
@@ -802,7 +904,7 @@ followed by a <tt class="docutils literal"><span class="pre">'.ConeCyl'</span></
 
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.static">
-<tt class="descname">static</tt><big>(</big><em>NLgeom=False</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.static" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">static</tt><big>(</big><em>NLgeom=False</em>, <em>silent=False</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.static" title="Permalink to this definition">¶</a></dt>
 <dd><p>Static analysis for cones and cylinders</p>
 <p>The analysis can be linear or non-linear. In case of a non-linear
 analysis the following parameters of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object will
@@ -913,6 +1015,10 @@ integration</td>
 <blockquote>
 <div><p>Flag to indicate whether a linear or a non-linear analysis is to
 be performed.</p>
+</div></blockquote>
+<p><strong>silent</strong> : bool, optional</p>
+<blockquote>
+<div><p>A boolean to tell whether the log messages should be printed.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1442,7 +1548,7 @@ The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Aug 18, 2014.
+      Last updated on Aug 20, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
