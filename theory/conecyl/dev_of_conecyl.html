@@ -26,9 +26,9 @@
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="top" title="CompMech 0.1.0 documentation" href="../../index.html" />
-    <link rel="up" title="Semi-analytical models for conical and cylindrical shells (conecyl)" href="index.html" />
+    <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
     <link rel="next" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
-    <link rel="prev" title="Semi-analytical models for conical and cylindrical shells (conecyl)" href="index.html" /> 
+    <link rel="prev" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -47,11 +47,11 @@
           <a href="esl_theories.html" title="Equivalent Single Layer (ESL) Theories"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Semi-analytical models for conical and cylindrical shells (conecyl)"
+          <a href="index.html" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li> 
+          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -216,19 +216,15 @@ is easy to implement in the Cython codes:</p>
 </div>
 <div class="section" id="internal-forces">
 <h2>Internal Forces<a class="headerlink" href="#internal-forces" title="Permalink to this headline">¶</a></h2>
-<p>The internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> is separated in four parts:
-.. math:</p>
-<div class="highlight-python"><div class="highlight"><pre>\{F_{int}\} = \{F_{int}\}_{00} + \{F_{int}\}_{0L} +
-              \{F_{int}\}_{L0} + \{F_{int}\}_{LL}
-</pre></div>
-</div>
-<p>As can be seen in the function <a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><tt class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.calc_fint()</span></tt></a>,
-the linear component <img class="math" src="../../_images/math/72cc35d5e606f688c08945806109882e3e8d948b.png" alt="\{F_{int}\}_{00}"/> is calculated using:
-.. math:</p>
-<div class="highlight-python"><div class="highlight"><pre>\{F_{int}\}_{00} = [K_0]\{c\}
-</pre></div>
-</div>
-<p>because <img class="math" src="../../_images/math/ca28b2833c10991ea042899048cb950e3b10a235.png" alt="[K_0]"/> is calculated analytically and the numerical integration
+<p>The internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> is separated in four parts:</p>
+<div class="math">
+<p><img src="../../_images/math/a051f32c81112971849a3e49197be49c27520827.png" alt="\{F_{int}\} = \{F_{int}\}_{00} + \{F_{int}\}_{0L} +
+              \{F_{int}\}_{L0} + \{F_{int}\}_{LL}"/></p>
+</div><p>As can be seen in function <a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><tt class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.calc_fint()</span></tt></a>,
+the linear component <img class="math" src="../../_images/math/72cc35d5e606f688c08945806109882e3e8d948b.png" alt="\{F_{int}\}_{00}"/> is calculated using:</p>
+<div class="math">
+<p><img src="../../_images/math/1ef4065758fa7616d0c8ec2aef05d0ec872048a8.png" alt="\{F_{int}\}_{00} = [K_0]\{c\}"/></p>
+</div><p>because <img class="math" src="../../_images/math/ca28b2833c10991ea042899048cb950e3b10a235.png" alt="[K_0]"/> is calculated analytically and the numerical integration
 errors are avoided in this way. For the other three terms <img class="math" src="../../_images/math/d3fa4303d2d74cef548cb767ad5b2807a322f6a5.png" alt="0L"/>, <img class="math" src="../../_images/math/11fbcada63a169dd423d9f473d56fc0e0ca61ac3.png" alt="L0"/> and
 <img class="math" src="../../_images/math/48adb3ef59398490da97df22e078758e96813935.png" alt="LL"/>, a numerical integration is performed. It is important
 to say that computational cost associated
@@ -276,7 +272,7 @@ is copy-pasted in Cython.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Semi-analytical models for conical and cylindrical shells (conecyl)</a></p>
+                        title="previous chapter">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="esl_theories.html"
                         title="next chapter">Equivalent Single Layer (ESL) Theories</a></p>
@@ -318,16 +314,16 @@ is copy-pasted in Cython.</p>
           <a href="esl_theories.html" title="Equivalent Single Layer (ESL) Theories"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Semi-analytical models for conical and cylindrical shells (conecyl)"
+          <a href="index.html" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)"
              >previous</a> |</li>
         <li><a href="../../index.html">CompMech 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory, implementation and tutorials</a> &raquo;</li>
-          <li><a href="index.html" >Semi-analytical models for conical and cylindrical shells (conecyl)</a> &raquo;</li> 
+          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 18, 2014.
+      Last updated on Aug 21, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

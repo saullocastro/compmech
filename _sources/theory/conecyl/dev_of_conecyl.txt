@@ -35,7 +35,7 @@ the types of kinematic equation implemented, defining the ``ESL theory``
 prefix mentioned below (currently ``clpt`` or ``fsdt``).
 
 The ``equation type`` prefix will be ``donnell`` or ``sanders``, defining
-if the model is built using the Donnell's or the Sanders' non-linear 
+if the model is built using the Donnell's or the Sanders' non-linear
 equations.
 
 Integration of the linear matrices
@@ -49,7 +49,7 @@ Mathematica routines necessary for this task are named as::
 Each integrated smallest repeatable sub-matrix::
 
     00, 01, 02, 11, 12 and 22
-    
+
 are stored in two text files inside the folder ``./linear_mathematica``,
 one with a Mathematica format and another in Fortran format,
 identified with a prefix
@@ -108,7 +108,7 @@ using sparse matrices::
     out[c] = beta*out[c] + alpha*(p00*q04 + p01*q14 + p02*q24)
 
 where ``alpha`` and ``beta`` are arguments passed by the numerical integration
-algorithm (they give a pre-calculated weight for the point being integrated), 
+algorithm (they give a pre-calculated weight for the point being integrated),
 ``pij`` are the left ``qij`` the right components of the integrand.
 
 The definitions of ``pij`` and ``qij`` are given in the corresponding files
@@ -116,7 +116,7 @@ with a ``p`` and a ``q`` character after the matrix name::
 
     fortran_{cone or cylinder}_{matrix name}p_{left digit}.txt
     fortran_{cone or cylinder}_{matrix name}q_{right digit}.txt
-    
+
 For example, to calculate the smallest repeatable sub-matrix ``12`` of
 ``KG``, first the file::
 
@@ -135,7 +135,7 @@ These are implemented in::
     clpt_donnell_bcX_nonlinear.pyx
     clpt_sanders_bcX_nonlinear.pyx
     fsdt_donnell_bcX_nonlinear.pyx
-    
+
 Strain Equations
 ----------------
 
@@ -165,25 +165,25 @@ Internal Forces
 ---------------
 
 The internal force vector `\{F_{int}\}` is separated in four parts:
-.. math::
 
+.. math::
     \{F_{int}\} = \{F_{int}\}_{00} + \{F_{int}\}_{0L} +
                   \{F_{int}\}_{L0} + \{F_{int}\}_{LL}
 
-As can be seen in the function :meth:`compmech.conecyl.ConeCyl.calc_fint`,
+As can be seen in function :meth:`compmech.conecyl.ConeCyl.calc_fint`,
 the linear component `\{F_{int}\}_{00}` is calculated using:
-.. math::
 
+.. math::
     \{F_{int}\}_{00} = [K_0]\{c\}
 
 because `[K_0]` is calculated analytically and the numerical integration
-errors are avoided in this way. For the other three terms `0L`, `L0` and 
+errors are avoided in this way. For the other three terms `0L`, `L0` and
 `LL`, a numerical integration is performed. It is important
 to say that computational cost associated
 with the numerical integration of `\{F_{int}\}` is approximately
 `m_2 \times n_2` smaller than the integraion of `[K_T]`.
 
-The Mathematica routine:: 
+The Mathematica routine::
 
     {ESL theory}_{equation type}_{boundary condition}_nonlinear.nb
 
@@ -195,9 +195,9 @@ which is post-processed by the routine::
 
     print_fint_L0_0L_LL.py
 
-that prints into ``./nonlinear_sparse`` in a ready-to-paste format, that 
-is copy-pasted in Cython. 
+that prints into ``./nonlinear_sparse`` in a ready-to-paste format, that
+is copy-pasted in Cython.
 
 
 
-    
+

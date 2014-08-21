@@ -105,7 +105,7 @@ stresses by the relation:</p>
 <td>Makes the partition of the dofs for prescribed displacements</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.fit_Nxxtop" title="compmech.conecyl.ConeCyl.fit_Nxxtop"><tt class="xref py py-obj docutils literal"><span class="pre">fit_Nxxtop</span></tt></a>(ts,&nbsp;us[,&nbsp;update_Nxxtop])</td>
-<td>Adjusts the axial load distribution for a given us</td>
+<td>Adjusts the axial load distribution for a desired top edge</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.from_DB" title="compmech.conecyl.ConeCyl.from_DB"><tt class="xref py py-obj docutils literal"><span class="pre">from_DB</span></tt></a>(name)</td>
 <td>Load cone / cylinder data from the local database</td>
@@ -288,10 +288,9 @@ parameter of the <tt class="docutils literal"><span class="pre">ConeCyl</span></
 <dt id="compmech.conecyl.ConeCyl.apply_shim">
 <tt class="descname">apply_shim</tt><big>(</big><em>thetadeg</em>, <em>width</em>, <em>thick</em>, <em>ncpts=10000</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.apply_shim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distributes the axial load in order to simulate a shim</p>
-<p>The axial load distribution <img class="math" src="../../_images/math/0250524582793ba8683e89580709a372a0f804bd.png" alt="\{{N_{xx}}_{top}\}"/> will be adjusted such
+<p>The axial load distribution <img class="math" src="../../_images/math/14a7d8e44839a209df7324ef10fff2e318cdc0b1.png" alt="{N_{xx}}_{top}"/> will be adjusted such
 that the resulting displacement <img class="math" src="../../_images/math/12a3ef26788e5c4328d1b988703cc9f0ed1b571d.png" alt="u"/> at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/> (top edge) will look
-similar to a case where a shim is applied, an usual practice to
-simulate load asymmetry.</p>
+similar to a case where a shim is applied.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -505,7 +504,8 @@ while the others are 2-D <tt class="docutils literal"><span class="pre">np.ndarr
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.fit_Nxxtop">
 <tt class="descname">fit_Nxxtop</tt><big>(</big><em>ts</em>, <em>us</em>, <em>update_Nxxtop=True</em><big>)</big><a class="headerlink" href="#compmech.conecyl.ConeCyl.fit_Nxxtop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adjusts the axial load distribution for a given us</p>
+<dd><p>Adjusts the axial load distribution for a desired top edge
+displacement</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -526,7 +526,7 @@ while the others are 2-D <tt class="docutils literal"><span class="pre">np.ndarr
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Nxxtop</strong> : np.ndarray</p>
 <blockquote class="last">
-<div><p>The coefficients for the <img class="math" src="../../_images/math/0250524582793ba8683e89580709a372a0f804bd.png" alt="\{{N_{xx}}_{top}\}"/> function.</p>
+<div><p>The coefficients for the <img class="math" src="../../_images/math/14a7d8e44839a209df7324ef10fff2e318cdc0b1.png" alt="{N_{xx}}_{top}"/> function.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1548,7 +1548,7 @@ The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Aug 20, 2014.
+      Last updated on Aug 21, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
