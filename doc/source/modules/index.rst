@@ -1,0 +1,11 @@
+.. _modules:
+
+Modules
+=======
+
+.. toctree::
+   :maxdepth: 3
+
+   composite/index.rst
+   conecyl/index.rst
+   panels/index.rst

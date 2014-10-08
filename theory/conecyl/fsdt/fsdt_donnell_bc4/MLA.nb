@@ -1,0 +1,88 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      2308,         79]
+NotebookOptionsPosition[      1975,         62]
+NotebookOutlinePosition[      2340,         78]
+CellTagsIndexPosition[      2297,         75]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Nxx", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"-", "Fc"}], "/", 
+     RowBox[{"(", 
+      RowBox[{"2", "*", "Pi", "*", "r", "*", "cosa"}], ")"}]}], "*", 
+    RowBox[{"(", 
+     RowBox[{"1", "+", 
+      RowBox[{"2", "*", 
+       RowBox[{"rLA", "/", "r"}], " ", 
+       RowBox[{"Cos", "[", 
+        RowBox[{"t", "-", "tLA"}], "]"}]}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"MLA", " ", "=", " ", 
+   RowBox[{"-", " ", 
+    RowBox[{"Integrate", "[", 
+     RowBox[{
+      RowBox[{"Nxx", "*", "cosa", "*", "r", "*", "r", "*", 
+       RowBox[{"Cos", "[", 
+        RowBox[{"t", "-", "tLA"}], "]"}]}], ",", " ", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", 
+        RowBox[{"-", "Pi"}], ",", "Pi"}], "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", "MLA", "]"}]}], "Input",
+ CellChangeTimes->{{3.605497610834281*^9, 3.605497676260796*^9}, {
+  3.6054977631061487`*^9, 3.605497878936352*^9}, {3.605498052819857*^9, 
+  3.6054980704790883`*^9}, {3.6054981118815613`*^9, 3.605498164322053*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Fc", " ", "rLA"}]], "Print",
+ CellChangeTimes->{{3.6054979262724347`*^9, 3.605497930734043*^9}, {
+  3.605498053225458*^9, 3.6054980707598886`*^9}, {3.605498130024393*^9, 
+  3.6054981646808534`*^9}}]
+}, Open  ]]
+},
+Evaluator->"Local2",
+WindowSize->{707, 817},
+WindowMargins->{{24, Automatic}, {Automatic, 30}},
+FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 1155, 31, 92, "Input"],
+Cell[1737, 55, 222, 4, 23, "Print"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
