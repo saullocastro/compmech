@@ -591,8 +591,7 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     for i1 in range(i0, m1+i0):
         row = (i1-i0)*num1 + num0
-        #NOTE symmetry
-        for k1 in range(i1, m1+i0):
+        for k1 in range(i0, m1+i0):
             col = (k1-i0)*num1 + num0
             # kG_11
             c += 1
@@ -613,9 +612,8 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
     for i2 in range(i0, m2+i0):
         for j2 in range(j0, n2+j0):
             row = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
-            #NOTE symmetry
-            for k2 in range(i2, m2+i0):
-                for l2 in range(j2, n2+j0):
+            for k2 in range(i0, m2+i0):
+                for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
                     # kG_22
                     c += 1
@@ -741,8 +739,7 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
             p20 = pi*Nxx*i1*r*cosi1x/L
             p21 = pi*Nxt*i1*r*cosi1x/L
 
-            #NOTE symmetry
-            for k1 in range(i1, m1+i0):
+            for k1 in range(i0, m1+i0):
                 cosk1x = vcosi1x[k1-i0]
                 # q_1
                 q02 = pi*k1*cosk1x/L
@@ -777,9 +774,8 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
                 p50 = -Nxt*j2*sini2x*sinj2t + pi*Nxx*cosi2x*cosj2t*i2*r/L
                 p51 = -Ntt*j2*sini2x*sinj2t + pi*Nxt*cosi2x*cosj2t*i2*r/L
 
-                #NOTE symmetry
-                for k2 in range(i2, m2+i0):
-                    for l2 in range(j2, n2+j0):
+                for k2 in range(i0, m2+i0):
+                    for l2 in range(j0, n2+j0):
                         # access buffer q_2
                         pos = (k2-i0)*n2 + (l2-j0)
                         q04 = kGq_2_q04[pos]
@@ -866,8 +862,7 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     for i1 in range(i0, m1+i0):
         row = (i1-i0)*num1 + num0
-        #NOTE symmetry
-        for k1 in range(i1, m1+i0):
+        for k1 in range(i0, m1+i0):
             col = (k1-i0)*num1 + num0
             # kLL_11
             c += 1
@@ -888,9 +883,8 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
     for i2 in range(i0, m2+i0):
         for j2 in range(j0, n2+j0):
             row = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
-            #NOTE symmetry
-            for k2 in range(i2, m2+i0):
-                for l2 in range(j2, n2+j0):
+            for k2 in range(i0, m2+i0):
+                for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
                     # kLL_22
                     c += 1
@@ -1036,8 +1030,7 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
             p21 = pi*cosi1x*i1*(A12*r*(w0x + wx) + A26*(w0t + wt))/L
             p22 = pi*cosi1x*i1*(A16*r*(w0x + wx) + A66*(w0t + wt))/L
 
-            #NOTE symmetry
-            for k1 in range(i1, m1+i0):
+            for k1 in range(i0, m1+i0):
                 cosk1x = vcosi1x[k1-i0]
                 # q_1
                 q02 = pi*cosk1x*k1*(w0x + wx)/L
@@ -1075,9 +1068,8 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
                 p50 = (-L*j2*sini2x*sinj2t*(A12*(w0t + wt) + A16*r*(w0x + wx)) + pi*cosi2x*cosj2t*i2*r*(A11*r*(w0x + wx) + A16*(w0t + wt)))/(L*r)
                 p51 = (-L*j2*sini2x*sinj2t*(A22*(w0t + wt) + A26*r*(w0x + wx)) + pi*cosi2x*cosj2t*i2*r*(A12*r*(w0x + wx) + A26*(w0t + wt)))/(L*r)
                 p52 = (-L*j2*sini2x*sinj2t*(A26*(w0t + wt) + A66*r*(w0x + wx)) + pi*cosi2x*cosj2t*i2*r*(A16*r*(w0x + wx) + A66*(w0t + wt)))/(L*r)
-                #NOTE symmetry
-                for k2 in range(i2, m2+i0):
-                    for l2 in range(j2, n2+j0):
+                for k2 in range(i0, m2+i0):
+                    for l2 in range(j0, n2+j0):
                         # access buffer q_2
                         pos = (k2-i0)*n2 + (l2-j0)
                         q04 = kLLq_2_q04[pos]
