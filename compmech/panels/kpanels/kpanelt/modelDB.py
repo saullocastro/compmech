@@ -12,39 +12,45 @@ from clpt import *
 from fsdt import *
 
 db = {
-    'fsdt_donnell_bc1': {
+    'clpt_donnell_bc4': {
                     'linear static': True,
                     'linear buckling': True,
                     'non-linear static': True,
-                    'commons': fsdt_commons_bc1,
-                    'linear': fsdt_donnell_bc1_linear,
-                    'non-linear': None,
+                    'commons': clpt_commons_bc4,
+                    'linear': clpt_donnell_bc4_linear,
+                    'non-linear': clpt_donnell_bc4_nonlinear,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'num0': 0,
+                    'num1': 3,
+                    },
+    'fsdt_donnell_bc4': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': True,
+                    'commons': fsdt_commons_bc4,
+                    'linear': fsdt_donnell_bc4_linear,
+                    'non-linear': fsdt_donnell_bc4_nonlinear,
                     'dofs': 5,
                     'e_num': 8,
-                    'num0': 4,
-                    'num1': 2,
-                    'num2': 2,
-                    'num3': 2,
-                    'num4': 5,
+                    'num0': 0,
+                    'num1': 5,
                     },
     'fsdt_donnell_free': {
                     'linear static': True,
                     'linear buckling': True,
-                    'non-linear static': True,
+                    'non-linear static': False,
                     'commons': fsdt_commons_free,
                     'linear': fsdt_donnell_free_linear,
                     'non-linear': None,
                     'dofs': 5,
                     'e_num': 8,
-                    'num0': 1,
+                    'num0': 0,
                     'num1': 5,
-                    'num2': 5,
-                    'num3': 5,
-                    'num4': 5,
                     },
     }
 
-def get_linear_matrices(cc, combined_load_case=None):
+def get_linear_matrices(kp, combined_load_case=None):
     r"""Obtain the right functions to calculate hte linear matrices
     for a given model.
 
@@ -54,7 +60,7 @@ def get_linear_matrices(cc, combined_load_case=None):
 
     Parameters
     ----------
-    cc : compmech.conecyl.ConeCyl
+    kp : compmech.conecyl.ConeCyl
         The ``ConeCyl`` object.
     combined_load_case : int, optional
         As explained in the :meth:`ConeCyl.lb() <compmech.conecyl.ConeCyl.lb>`
@@ -67,40 +73,58 @@ def get_linear_matrices(cc, combined_load_case=None):
         A tuple containing ``(fk0, fk0_cyl, fkG0, fkG0_cyl, k0edges)``.
 
     """
-    r1 = cc.r1
-    r2 = cc.r2
-    tmin = cc.tminrad
-    tmax = cc.tmaxrad
-    L = cc.L
-    m2 = cc.m2
-    n3 = cc.n3
-    m4 = cc.m4
-    n4 = cc.n4
-    model = cc.model
+    r1 = kp.r1
+    r2 = kp.r2
+    tmin = kp.tminrad
+    tmax = kp.tmaxrad
+    L = kp.L
+    m1 = kp.m1
+    n1 = kp.n1
+    model = kp.model
+    alpharad = kp.alpharad
+    s = kp.s
 
     try:
         fk0edges = db[model]['linear'].fk0edges
     except AttributeError:
         k0edges = None
 
-    if model=='fsdt_donnell_bc1':
-        k0edges = fk0edges(m2, n3, m4, n4, r1, r2, L, tmin, tmax,
-                           cc.kphixBot, cc.kphixTop,
-                           cc.kphitBot, cc.kphitTop,
-                           cc.kphixLeft, cc.kphixRight,
-                           cc.kphitLeft, cc.kphitRight)
+    if 'bc4' in model:
+        if kp.is_cylinder:
+            fk0edges_cyl = db[model]['linear'].fk0edges_cyl
+            k0edges = fk0edges_cyl(m1, n1, r1, L,
+                               tmin, tmax,
+                               kp.kuBot, kp.kuTop,
+                               kp.kvBot, kp.kvTop,
+                               kp.kphixBot, kp.kphixTop,
+                               kp.kphitBot, kp.kphitTop,
+                               kp.kuLeft, kp.kuRight,
+                               kp.kvLeft, kp.kvRight,
+                               kp.kphixLeft, kp.kphixRight,
+                               kp.kphitLeft, kp.kphitRight)
+        else:
+            k0edges = fk0edges(m1, n1, alpharad,
+                               s, r1, r2, L, tmin, tmax,
+                               kp.kuBot, kp.kuTop,
+                               kp.kvBot, kp.kvTop,
+                               kp.kphixBot, kp.kphixTop,
+                               kp.kphitBot, kp.kphitTop,
+                               kp.kuLeft, kp.kuRight,
+                               kp.kvLeft, kp.kvRight,
+                               kp.kphixLeft, kp.kphixRight,
+                               kp.kphitLeft, kp.kphitRight)
     elif model=='fsdt_donnell_free':
-        k0edges = fk0edges(m2, n3, m4, n4, r1, r2, L, tmin, tmax,
-                           cc.kuBot, cc.kuTop,
-                           cc.kvBot, cc.kvTop,
-                           cc.kwBot, cc.kwTop,
-                           cc.kphixBot, cc.kphixTop,
-                           cc.kphitBot, cc.kphitTop,
-                           cc.kuLeft, cc.kuRight,
-                           cc.kvLeft, cc.kvRight,
-                           cc.kwLeft, cc.kwRight,
-                           cc.kphixLeft, cc.kphixRight,
-                           cc.kphitLeft, cc.kphitRight)
+        k0edges = fk0edges(m1, n1, r1, r2, L, tmin, tmax,
+                           kp.kuBot, kp.kuTop,
+                           kp.kvBot, kp.kvTop,
+                           kp.kwBot, kp.kwTop,
+                           kp.kphixBot, kp.kphixTop,
+                           kp.kphitBot, kp.kphitTop,
+                           kp.kuLeft, kp.kuRight,
+                           kp.kvLeft, kp.kvRight,
+                           kp.kwLeft, kp.kwRight,
+                           kp.kphixLeft, kp.kphixRight,
+                           kp.kphitLeft, kp.kphitRight)
 
     fk0 = db[model]['linear'].fk0
     fk0_cyl = db[model]['linear'].fk0_cyl

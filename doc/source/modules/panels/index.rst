@@ -1,1 +1,1 @@
-.. automodule :: compmech.panels
+.. automodule:: compmech.panels

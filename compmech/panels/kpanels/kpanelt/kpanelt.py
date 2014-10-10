@@ -10,13 +10,16 @@ import __main__
 
 import numpy as np
 from scipy.sparse import csr_matrix
-from scipy.sparse.linalg import spsolve, eigsh
+from scipy.sparse.linalg import eigsh
 from scipy.optimize import leastsq
-from numpy import linspace, pi, cos, sin, tan, deg2rad
+from numpy import linspace, cos, sin, deg2rad
 
 import compmech.composite.laminate as laminate
+from compmech.analysis import Analysis
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
+from compmech.sparse import (make_symmetric, solve, remove_null_cols,
+                             is_symmetric)
 import non_linear
 import modelDB
 
@@ -29,16 +32,50 @@ def load(name):
 
 
 class KPanelT(object):
-    """
-    """
+    r"""Conical (Konus) panel using trigonometric series
 
+    The approximation functions for the displacement field are:
+
+        .. math::
+            \begin{tabular}{l c r}
+            CLPT & FSDT \\
+            \hline
+            $u$ & $u$ \\
+            $v$ & $v$ \\
+            $w$ & $w$ \\
+            $NA$ & $\phi_x$ \\
+            $NA$ & $\phi_\theta$ \\
+            \end{tabular}
+
+    with:
+
+        .. math::
+            u = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_a}}
+            \\
+            v = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_a}}
+            \\
+            w = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_b}}
+            \\
+            \phi_x = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_a}}
+            \\
+            \phi_\theta = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_a}}
+            \\
+            f_a = cos(i_1 \pi b_x)cos(j_1 \pi b_\theta)
+            \\
+            f_b = sin(i_1 \pi b_x)sin(j_1 \pi b_\theta)
+            \\
+            b_x = \frac{x + \frac{L}{2}}{L}
+            \\
+            b_\theta = \frac{\theta - \theta_{min}}{\theta_{max}-\theta_{min}}
+
+    """
     def __init__(self):
         self.name = ''
         self.forces = []
+        self.forces_inc = []
         self.alphadeg = 0.
         self.alpharad = 0.
         self.is_cylinder = None
-        self.last_analysis = None
 
         # boundary conditions
         self.inf = 1.e8 # used to define high stiffnesses
@@ -66,31 +103,32 @@ class KPanelT(object):
         self.kphitRight = 0.
 
         # default equations
-        self.model = 'fsdt_donnell_bc1'
+        self.model = 'clpt_donnell_bc4'
 
         # approximation series
-        self.m2 = 100
-        self.n3 = 100
-        self.m4 = 40
-        self.n4 = 40
+        self.m1 = 40
+        self.n1 = 40
 
         # analytical integration for cones
         self.s = 79
 
-        # numerical integration
-        self.nx = 160
-        self.nt = 160
-
-        # internal pressure measured in force/area
-        self.P = 0.
-
         # loads
         self.Fx = None
         self.Ft = None
+        self.Fxt = None
+        self.Ftx = None
         self.NxxTop = None
         self.NxtTop = None
         self.NttLeft = None
         self.NtxLeft = None
+        self.Fx_inc = None
+        self.Ft_inc = None
+        self.Fxt_inc = None
+        self.Ftx_inc = None
+        self.NxxTop_inc = None
+        self.NxtTop_inc = None
+        self.NttLeft_inc = None
+        self.NtxLeft_inc = None
 
         # initial imperfection
         self.c0 = None
@@ -124,36 +162,21 @@ class KPanelT(object):
         self.num_eigvalues = 50
         self.num_eigvalues_print = 5
 
-        # non-linear algorithm
-        self.NL_method = 'NR' # Newton-Raphson
-        self.modified_NR = True # modified Newton-Raphson
-        self.line_search = True
-        self.compute_every_n = 6 # for modified Newton-Raphson
-
-        # incrementation
-        self.initialInc = 0.1
-        self.minInc = 1.e-3
-        self.maxInc = 1.
-
-        # convergence criteria
-        self.absTOL = 1.e-3
-        self.relTOL = 1.e-3
-
-        self.cs = []
-        self.increments = []
-
         #self.maxNumInc = 100
         self.maxNumIter = 30
 
         # output queries
         self.out_num_cores = 4
 
-        # numerical integration
-        self.ni_num_cores = 4 # showed to scale well up to 4
-        self.ni_method = 'trapz2d'
+        # analysis
+        self.analysis = Analysis(self.calc_fext, self.calc_k0, self.calc_fint,
+                self.calc_kT)
 
         # outputs
-        self.outputs = {}
+        self.increments = None
+        self.cs = None
+        self.eigvecs = None
+        self.eigvals = None
 
         self._clear_matrices()
 
@@ -225,25 +248,25 @@ class KPanelT(object):
                     setattr(self, 'kv' + sufix, inf)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphit' + sufix, inf)
+                    setattr(self, 'kphit' + sufix, zero)
                 elif bcs[k] == 'ss2':
                     setattr(self, 'ku' + sufix, zero)
                     setattr(self, 'kv' + sufix, inf)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphit' + sufix, inf)
+                    setattr(self, 'kphit' + sufix, zero)
                 elif bcs[k] == 'ss3':
                     setattr(self, 'ku' + sufix, inf)
                     setattr(self, 'kv' + sufix, zero)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphit' + sufix, inf)
+                    setattr(self, 'kphit' + sufix, zero)
                 elif bcs[k] == 'ss4':
                     setattr(self, 'ku' + sufix, zero)
                     setattr(self, 'kv' + sufix, zero)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphit' + sufix, inf)
+                    setattr(self, 'kphit' + sufix, zero)
 
                 elif bcs[k] == 'cc1':
                     setattr(self, 'ku' + sufix, inf)
@@ -308,62 +331,76 @@ class KPanelT(object):
         else:
             self.is_cylinder = False
 
-        self.maxInc = max(self.initialInc, self.maxInc)
+        def check_load(load, size):
+            if load is not None:
+                check = False
+                if isinstance(load, np.ndarray):
+                    if load.ndim == 1:
+                        assert load.shape[0] == size
+
+                        return load
+                elif type(load) in (int, float):
+                    newload = np.zeros(size, dtype=DOUBLE)
+                    newload[0] = load
+
+                    return newload
+                if not check:
+                    raise ValueError('Invalid NxxTop input')
+            else:
+                return np.zeros(size, dtype=DOUBLE)
+
 
         # axial load
-        size = max(self.n3, self.n4)+1
-        if self.NxxTop is not None:
-            check = False
-            if isinstance(self.NxxTop, np.ndarray):
-                if self.NxxTop.ndim == 1:
-                    assert self.NxxTop.shape[0] == size
-                    check=True
-            if not check:
-                raise ValueError('Invalid NxxTop input')
-        else:
-            self.NxxTop = np.zeros(size, dtype=DOUBLE)
+        size = self.n1+1
+        self.NxxTop = check_load(self.NxxTop, size)
+        self.NxxTop_inc = check_load(self.NxxTop_inc, size)
+        # shear xt
+        self.NxtTop = check_load(self.NxtTop, size)
+        self.NxtTop_inc = check_load(self.NxtTop_inc, size)
+        # circumferential load
+        size = self.m1+1
+        self.NttLeft = check_load(self.NttLeft, size)
+        self.NttLeft_inc = check_load(self.NttLeft_inc, size)
+        # shear tx
+        self.NtxLeft = check_load(self.NtxLeft, size)
+        self.NtxLeft_inc = check_load(self.NtxLeft_inc, size)
 
-        if self.NxtTop is not None:
-            check = False
-            if isinstance(self.NxtTop, np.ndarray):
-                if self.NxtTop.ndim == 1:
-                    assert self.NxtTop.shape[0] == size
-                    check=True
-            if not check:
-                raise ValueError('Invalid NxtTop input')
-        else:
-            self.NxtTop = np.zeros(size, dtype=DOUBLE)
+        # defining load components from force vectors
 
-        size = 2*max(self.m2, self.m4)+1
-        if self.NttLeft is not None:
-            check = False
-            if isinstance(self.NttLeft, np.ndarray):
-                if self.NttLeft.ndim == 1:
-                    assert self.NttLeft.shape[0] == size
-                    check=True
-            if not check:
-                raise ValueError('Invalid NttLeft input')
-        else:
-            self.NttLeft = np.zeros(size, dtype=DOUBLE)
-
-        if self.NtxLeft is not None:
-            check = False
-            if isinstance(self.NtxLeft, np.ndarray):
-                if self.NtxLeft.ndim == 1:
-                    assert self.NtxLeft.shape[0] == size
-                    check=True
-            if not check:
-                raise ValueError('Invalid NtxLeft input')
-        else:
-            self.NtxLeft = np.zeros(size, dtype=DOUBLE)
+        tmin = self.tminrad
+        tmax = self.tmaxrad
 
         if self.Fx is not None:
-            self.NxxTop[0] = self.Fx/((self.tmaxrad-self.tminrad)*self.r2)
+            self.NxxTop[0] = self.Fx/((tmax - tmin)*self.r2)
             msg('NxxTop[0] calculated from Fx', level=2)
+
+        if self.Fx_inc is not None:
+            self.NxxTop_inc[0] = self.Fx_inc/((tmax - tmin)*self.r2)
+            msg('NxxTop_inc[0] calculated from Fx_inc', level=2)
+
+        if self.Fxt is not None:
+            self.NxtTop[0] = self.Fxt/((tmax - tmin)*self.r2)
+            msg('NxtTop[0] calculated from Fxt', level=2)
+
+        if self.Fxt_inc is not None:
+            self.NxtTop_inc[0] = self.Fxt_inc/((tmax - tmin)*self.r2)
+            msg('NxtTop_inc[0] calculated from Fxt_inc', level=2)
 
         if self.Ft is not None:
             self.NttLeft[0] = self.Ft/self.L
             msg('NttLeft[0] calculated from Ft', level=2)
+
+        if self.Ft_inc is not None:
+            self.NttLeft_inc[0] = self.Ft_inc/self.L
+            msg('NttLeft_inc[0] calculated from Ft_inc', level=2)
+
+        if self.Ftx is not None:
+            self.NtxLeft[0] = self.Ftx/self.L
+            msg('NtxLeft[0] calculated from Ftx', level=2)
+
+        if self.Ftx_inc is not None:
+            self.NtxLeft_inc[0] = self.Ftx_inc/self.L
+            msg('NtxLeft_inc[0] calculated from Ftx_inc', level=2)
 
         if self.laminaprop is None:
             raise ValueError('laminaprop must be defined')
@@ -385,11 +422,7 @@ class KPanelT(object):
         """
         num0 = modelDB.db[self.model]['num0']
         num1 = modelDB.db[self.model]['num1']
-        num2 = modelDB.db[self.model]['num2']
-        num3 = modelDB.db[self.model]['num3']
-        num4 = modelDB.db[self.model]['num4']
-        self.size = (num0 + num1 + num2*self.m2 + num3*self.n3 +
-                num4*self.m4*self.n4)
+        self.size = (num0 + num1*self.m1*self.n1)
         return self.size
 
 
@@ -415,7 +448,7 @@ class KPanelT(object):
 
     def _default_field(self, xs, ts, gridx, gridt):
         if xs is None or ts is None:
-            xs = linspace(-self.L/2., +self.L/2, gridx)
+            xs = linspace(-self.L/2., self.L/2, gridx)
             ts = linspace(self.tminrad, self.tmaxrad, gridt)
             xs, ts = np.meshgrid(xs, ts, copy=False)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
@@ -432,7 +465,7 @@ class KPanelT(object):
         return xs, ts, xshape, tshape
 
 
-    def _calc_linear_matrices(self, combined_load_case=None):
+    def calc_linear_matrices(self, combined_load_case=None):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2)
 
@@ -446,10 +479,8 @@ class KPanelT(object):
         L = self.L
         tminrad = self.tminrad
         tmaxrad = self.tmaxrad
-        m2 = self.m2
-        n3 = self.n3
-        m4 = self.m4
-        n4 = self.n4
+        m1 = self.m1
+        n1 = self.n1
         s = self.s
         laminaprops = self.laminaprops
         plyts = self.plyts
@@ -504,46 +535,57 @@ class KPanelT(object):
         self.F = F
 
         if self.is_cylinder:
-            k0 = fk0_cyl(r1, L, tminrad, tmaxrad, F, m2, n3, m4, n4)
+            k0 = fk0_cyl(r1, L, tminrad, tmaxrad, F, m1, n1)
 
             if not combined_load_case:
-                kG0 = fkG0_cyl(Fx, Ft, Fxt, Ftx, r1, L, tminrad, tmaxrad,
-                        m2, n3, m4, n4)
+                kG0 = fkG0_cyl(Fx, Ft, Fxt, Ftx, r1, L, tminrad, tmaxrad, m1,
+                               n1)
             else:
-                kG0_Fx = fkG0_cyl(Fx, 0, 0, 0, r1, L, tminrad, tmaxrad,
-                        m2, n3, m4, n4)
-                kG0_Ft = fkG0_cyl(0, Ft, 0, 0, r1, L, tminrad, tmaxrad,
-                        m2, n3, m4, n4)
+                kG0_Fx = fkG0_cyl(Fx, 0, 0, 0, r1, L, tminrad, tmaxrad, m1, n1)
+                kG0_Ft = fkG0_cyl(0, Ft, 0, 0, r1, L, tminrad, tmaxrad, m1, n1)
                 kG0_Fxt = fkG0_cyl(0, 0, Fxt, 0, r1, L, tminrad, tmaxrad,
-                        m2, n3, m4, n4)
+                                   m1, n1)
                 kG0_Ftx = fkG0_cyl(0, 0, 0, Ftx, r1, L, tminrad, tmaxrad,
-                        m2, n3, m4, n4)
+                                   m1, n1)
         else:
-            k0 = fk0(r1, L, tminrad, tmaxrad, F, m2, n3, m4, n4, alpharad, s)
+            k0 = fk0(r1, L, tminrad, tmaxrad, F, m1, n1, alpharad, s)
 
             if not combined_load_case:
-                kG0 = fkG0(Fx, Ft, Fxt, Ftx, r1, L, tminrad, tmaxrad, m2, n3,
-                        m4, n4, alpharad, s)
+                kG0 = fkG0(Fx, Ft, Fxt, Ftx, r1, L, tminrad, tmaxrad, m1, n1,
+                        alpharad, s)
             else:
-                kG0_Fx = fkG0(Fx, 0, 0, 0, r1, L, tminrad, tmaxrad, m2,
-                        n3, m4, n4, alpharad, s)
-                kG0_Ft = fkG0(0, Ft, 0, 0, r1, L, tminrad, tmaxrad, m2,
-                        n3, m4, n4, alpharad, s)
-                kG0_Fxt = fkG0(0, 0, Fxt, 0, r1, L, tminrad, tmaxrad, m2,
-                        n3, m4, n4, alpharad, s)
-                kG0_Ftx = fkG0(0, 0, 0, Ftx, r1, L, tminrad, tmaxrad, m2,
-                        n3, m4, n4, alpharad, s)
+                kG0_Fx = fkG0(Fx, 0, 0, 0, r1, L, tminrad, tmaxrad, m1, n1,
+                        alpharad, s)
+                kG0_Ft = fkG0(0, Ft, 0, 0, r1, L, tminrad, tmaxrad, m1, n1,
+                        alpharad, s)
+                kG0_Fxt = fkG0(0, 0, Fxt, 0, r1, L, tminrad, tmaxrad, m1, n1,
+                        alpharad, s)
+                kG0_Ftx = fkG0(0, 0, 0, Ftx, r1, L, tminrad, tmaxrad, m1, n1,
+                        alpharad, s)
+
+        # performing checks for the linear stiffness matrices
+
+        assert np.any(np.isnan(k0.data)) == False
+        assert np.any(np.isinf(k0.data)) == False
+
+        k0 = csr_matrix(make_symmetric(k0))
+
+        if k0edges is not None:
+            assert np.any((np.isnan(k0edges.data)
+                           | np.isinf(k0edges.data))) == False
+            k0edges = csr_matrix(make_symmetric(k0edges))
 
         if k0edges is not None:
             msg('Applying elastic constraints!', level=3)
             k0 = k0 + k0edges
 
-        assert np.any((np.isnan(k0.data) | np.isinf(k0.data))) == False
-
         self.k0 = k0
+
         if not combined_load_case:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
+            kG0 = csr_matrix(make_symmetric(kG0))
             self.kG0 = kG0
+
         else:
             assert np.any((np.isnan(kG0_Fx.data)
                            | np.isinf(kG0_Fx.data))) == False
@@ -553,12 +595,16 @@ class KPanelT(object):
                            | np.isinf(kG0_Fxt.data))) == False
             assert np.any((np.isnan(kG0_Ftx.data)
                            | np.isinf(kG0_Ftx.data))) == False
+
+            kG0_Fx = csr_matrix(make_symmetric(kG0_Fx))
+            kG0_Ft = csr_matrix(make_symmetric(kG0_Ft))
+            kG0_Fxt = csr_matrix(make_symmetric(kG0_Fxt))
+            kG0_Ftx = csr_matrix(make_symmetric(kG0_Ftx))
+
             self.kG0_Fx = kG0_Fx
             self.kG0_Ft = kG0_Ft
             self.kG0_Fxt = kG0_Fxt
             self.kG0_Ftx = kG0_Ftx
-
-        self.k0 = k0
 
         #NOTE forcing Python garbage collector to clean the memory
         #     it DOES make a difference! There is a memory leak not
@@ -569,7 +615,8 @@ class KPanelT(object):
         msg('finished!', level=2)
 
 
-    def lb(self, c=None, tol=0, combined_load_case=None):
+    def lb(self, tol=0, combined_load_case=None, remove_null_i1_j1=False,
+            sparse_solver=True):
         """Performs a linear buckling analysis
 
         The following parameters of the ``KPanelT`` object will affect the
@@ -595,6 +642,14 @@ class KPanelT(object):
             - ``2`` : find the critical Fx for a fixed Ft
             - ``3`` : find the critical Ft for a fixed Ftx
             - ``4`` : find the critical Ft for a fixed Fx
+        remove_null_i1_j1 : bool, optional
+            It was observed that the eigenvectors can be described using only
+            the homogeneous part of the approximation functions, which are
+            obtained with `i_1 > 0` and `j_1 > 0`. Therefore, the terms with
+            `i_1 = 0` and `j_1 = 0` can be ignored.
+        sparse_solver : bool, optional
+            Tells if solver :func:`scipy.linalg.eigh` or
+            :func:`scipy.sparse.linalg.eigsh` should be used.
 
         Notes
         -----
@@ -612,60 +667,100 @@ class KPanelT(object):
 
         msg('Running linear buckling analysis...')
 
-        self._calc_linear_matrices(combined_load_case=combined_load_case)
+        self.calc_linear_matrices(combined_load_case=combined_load_case)
 
         msg('Eigenvalue solver... ', level=2)
 
         if not combined_load_case:
-            A = self.k0
-            M = -self.kG0
+            M = self.k0
+            A = self.kG0
         elif combined_load_case == 1:
-            A = self.k0 + self.kG0_Fxt
-            M = -self.kG0_Fx
+            M = self.k0 + self.kG0_Fxt
+            A = self.kG0_Fx
         elif combined_load_case == 2:
-            A = self.k0 + self.kG0_Ft
-            M = -self.kG0_Fx
+            M = self.k0 + self.kG0_Ft
+            A = self.kG0_Fx
         elif combined_load_case == 3:
-            A = self.k0 + self.kG0_Ftx
-            M = -self.kG0_Ft
+            M = self.k0 + self.kG0_Ftx
+            A = self.kG0_Ft
         elif combined_load_case == 4:
-            A = self.k0 + self.kG0_Fx
-            M = -self.kG0_Ft
+            M = self.k0 + self.kG0_Fx
+            A = self.kG0_Ft
 
-        db = modelDB.db
-        num0 = db[self.model]['num0']
-        num1 = db[self.model]['num1']
-        num2 = db[self.model]['num2']
-        num3 = db[self.model]['num3']
-        num4 = db[self.model]['num4']
+        if remove_null_i1_j1:
+            msg('removing rows and columns for i1=0 and j1=0 ...', level=3)
+            db = modelDB.db
+            num0 = db[self.model]['num0']
+            num1 = db[self.model]['num1']
+            dofs = db[self.model]['dofs']
+            valid = []
+            removed = []
+            for i1 in range(self.m1):
+                for j1 in range(self.n1):
+                    col = num0 + num1*((j1)*self.m1 + (i1))
+                    if i1 == 0 or j1 == 0:
+                        for dof in range(dofs):
+                            removed.append(col+dof)
+                    else:
+                        for dof in range(dofs):
+                            valid.append(col+dof)
+            valid.sort()
+            removed.sort()
 
-        print A.data.shape
-        print M.data.shape
-        print self.get_size()
-        if True:
-            A, M = M, A
-            eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues, which='SM',
-                                     M=M, tol=tol, sigma=-1.,
-                                     mode='cayley')
-            eigvals = 1./eigvals
+            A = A[:, valid][valid, :]
+            M = M[:, valid][valid, :]
+            msg('finished!', level=3)
+
+        if sparse_solver:
+            mode = 'cayley'
+            try:
+                msg('eigsh() solver...', level=3)
+                eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues,
+                        which='SM', M=M, tol=tol, sigma=1., mode=mode)
+                msg('finished!', level=3)
+            except Exception, e:
+                warn(str(e), level=4)
+                msg('aborted!', level=3)
+                size22 = A.shape[0]
+                M, A, used_cols = remove_null_cols(M, A)
+                msg('eigsh() solver...', level=3)
+                eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
+                        which='SM', M=M, tol=tol, sigma=1., mode=mode)
+                msg('finished!', level=3)
+                eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
+                eigvecs[used_cols, :] = peigvecs
+
         else:
             from scipy.linalg import eigh
 
-            A = A.toarray()
+            size22 = A.shape[0]
+            M, A, used_cols = remove_null_cols(M, A)
             M = M.toarray()
-            A, M = M, A
-            eigvals, eigvecs = eigh(a=A, b=M, lower=False)
-            eigvals = eigvals
+            A = A.toarray()
+            msg('eigh() solver...', level=3)
+            eigvals, peigvecs = eigh(a=A, b=M)
+            msg('finished!', level=3)
+            eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
+            eigvecs[used_cols, :] = peigvecs[:, :self.num_eigvalues]
+
+        eigvals = -1./eigvals
+
+        if remove_null_i1_j1:
+            eigvecsALL = np.zeros((self.get_size(), self.num_eigvalues),
+                    dtype=DOUBLE)
+            eigvecsALL[valid, :] = eigvecs
+        else:
+            eigvecsALL = eigvecs
 
         self.eigvals = eigvals
-        self.eigvecs = eigvecs
+        self.eigvecs = eigvecsALL
 
         msg('finished!', level=2)
 
         msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
         for eig in eigvals[:self.num_eigvalues_print]:
             msg('{}'.format(eig), level=2)
-        self.last_analysis = 'lb'
+        self.analysis.last_analysis = 'lb'
 
 
     def calc_NL_matrices(self, c, num_cores=None):
@@ -684,21 +779,23 @@ class KPanelT(object):
         Nothing is returned, the calculated matrices
 
         """
-        if not num_cores:
-            num_cores=self.ni_num_cores
+        c = np.ascontiguousarray(c, dtype=DOUBLE)
+
+        if num_cores is None:
+            num_cores = self.analysis.ni_num_cores
 
         if self.k0 is None:
-            self._calc_linear_matrices()
+            self.calc_linear_matrices()
 
         msg('Calculating non-linear matrices...', level=2)
         alpharad = self.alpharad
-        r2 = self.r2
+        r1 = self.r1
         L = self.L
+        tminrad = self.tminrad
+        tmaxrad = self.tmaxrad
         F = self.F
-        m2 = self.m2
-        n3 = self.n3
-        m4 = self.m4
-        n4 = self.n4
+        m1 = self.m1
+        n1 = self.n1
         c0 = self.c0
         m0 = self.m0
         n0 = self.n0
@@ -710,21 +807,18 @@ class KPanelT(object):
             calc_kG = nlmodule.calc_kG
             calc_kLL = nlmodule.calc_kLL
 
-            kG = calc_kG(c, alpharad, r1, L, F, m2, n3, m4, n4,
-                         nx=self.nx, nt=self.nt,
-                         num_cores=num_cores,
-                         method=self.ni_method,
-                         c0=c0, m0=m0, n0=n0)
-            k0L = calc_k0L(c, alpharad, r1, L, F, m2, n3, m4, n4,
-                           nx=self.nx, nt=self.nt,
-                           num_cores=num_cores,
-                           method=self.ni_method,
-                           c0=c0, m0=m0, n0=n0)
-            kLL = calc_kLL(c, alpharad, r1, L, F, m2, n3, m4, n4,
-                           nx=self.nx, nt=self.nt,
-                           num_cores=num_cores,
-                           method=self.ni_method,
-                           c0=c0, m0=m0, n0=n0)
+            ni_method = self.analysis.ni_method
+            nx = self.analysis.nx
+            nt = self.analysis.nt
+            kG = calc_kG(c, alpharad, r1, L, tminrad, tmaxrad, F, m1, n1,
+                    nx=nx, nt=nt, num_cores=num_cores, method=ni_method,
+                    c0=c0, m0=m0, n0=n0)
+            k0L = calc_k0L(c, alpharad, r1, L, tminrad, tmaxrad, F, m1, n1,
+                    nx=nx, nt=nt, num_cores=num_cores, method=ni_method,
+                    c0=c0, m0=m0, n0=n0)
+            kLL = calc_kLL(c, alpharad, r1, L, tminrad, tmaxrad, F, m1, n1,
+                    nx=nx, nt=nt, num_cores=num_cores, method=ni_method,
+                    c0=c0, m0=m0, n0=n0)
 
         else:
             raise ValueError(
@@ -779,21 +873,21 @@ class KPanelT(object):
         stored as parameters with the same name in the ``KPanelT`` object.
 
         """
+        c = np.ascontiguousarray(c, dtype=DOUBLE)
+
         xs, ts, xshape, tshape = self._default_field(xs, ts, gridx, gridt)
         alpharad = self.alpharad
-        m2 = self.m2
-        n3 = self.n3
-        m4 = self.m4
-        n4 = self.n4
-        r2 = self.r2
+        m1 = self.m1
+        n1 = self.n1
+        r1 = self.r1
         L = self.L
         tminrad = self.tminrad
         tmaxrad = self.tmaxrad
         model = self.model
 
         fuvw = modelDB.db[model]['commons'].fuvw
-        us, vs, ws, phixs, phits = fuvw(c, m2, n3, m4, n4, L, tminrad,
-                tmaxrad, xs, ts, alpharad, self.out_num_cores)
+        us, vs, ws, phixs, phits = fuvw(c, m1, n1, L, tminrad,
+                tmaxrad, xs, ts, r1, alpharad, self.out_num_cores)
 
         self.u = us.reshape(xshape)
         self.v = vs.reshape(xshape)
@@ -825,17 +919,19 @@ class KPanelT(object):
             are used.
 
         """
+        c = np.ascontiguousarray(c, dtype=DOUBLE)
+
         xs, ts, xshape, tshape = self._default_field(xs, ts, gridx, gridt)
 
         alpharad = self.alpharad
+        r1 = self.r1
         L = self.L
-        r2 = self.r2
+        tminrad = self.tminrad
+        tmaxrad = self.tmaxrad
         sina = self.sina
         cosa = self.cosa
-        m2 = self.m2
-        n3 = self.n3
-        m4 = self.m4
-        n4 = self.n4
+        m1 = self.m1
+        n1 = self.n1
         c0 = self.c0
         m0 = self.m0
         n0 = self.n0
@@ -853,9 +949,8 @@ class KPanelT(object):
             raise NotImplementedError(
                 '{} is not a valid NL_kinematics option'.format(NL_kinematics))
 
-        es = fstrain(c, sina, cosa, xs, ts, r1, L,
-                     m2, n3, m4, n4, c0, m0, n0, funcnum, int_NL_kinematics,
-                     self.out_num_cores)
+        es = fstrain(c, sina, cosa, xs, ts, r1, L, tminrad, tmaxrad, m1, n1,
+                c0, m0, n0, funcnum, int_NL_kinematics, self.out_num_cores)
 
         return es.reshape((xshape + (e_num,)))
 
@@ -881,18 +976,20 @@ class KPanelT(object):
             are used.
 
         """
+        c = np.ascontiguousarray(c, dtype=DOUBLE)
+
         xs, ts, xshape, tshape = self._default_field(xs, ts, gridx, gridt)
 
         F = self.F
         alpharad = self.alpharad
+        r1 = self.r1
         L = self.L
-        r2 = self.r2
+        tminrad = self.tminrad
+        tmaxrad = self.tmaxrad
         sina = self.sina
         cosa = self.cosa
-        m2 = self.m2
-        n3 = self.n3
-        m4 = self.m4
-        n4 = self.n4
+        m1 = self.m1
+        n1 = self.n1
         c0 = self.c0
         m0 = self.m0
         n0 = self.n0
@@ -911,84 +1008,47 @@ class KPanelT(object):
                     '{} is not a valid NL_kinematics option'.format(
                     NL_kinematics))
 
-        Ns = fstress(c, F, sina, cosa, xs, ts, r1, L,
-                     m2, n3, m4, n4, c0, m0, n0, funcnum, int_NL_kinematics,
-                     self.out_num_cores)
+        Ns = fstress(c, F, sina, cosa, xs, ts, r1, L, tminrad, tmaxrad, m1,
+                n1, c0, m0, n0, funcnum, int_NL_kinematics,
+                self.out_num_cores)
         return Ns.reshape((xshape + (e_num,)))
 
 
-    def calc_fint(self, c, m=1):
-        r"""Calculates the internal force vector `\{F_{int}\}`
-
-        Parameters
-        ----------
-        c : np.ndarray
-            The Ritz constants that will be used to compute the internal
-            forces.
-        m : integer, optional
-            A multiplier to be applied to ``nx`` and ``nt``, if one
-            whishes to use more integration points.
-
-        Returns
-        -------
-        fint : np.ndarray
-            The internal force vector.
-
-        """
-        nlmodule = modelDB.db[self.model]['non-linear']
-        fint = nlmodule.calc_fint_0L_L0_LL(c, self.alpharad, self.r1, self.L,
-                                  self.F,
-                                  self.m2, self.n3, self.m4, self.n4,
-                                  self.nx*m, self.nt*m, self.ni_num_cores,
-                                  self.ni_method, self.c0, self.m0, self.n0)
-        fint += self.k0*c
-
-        return fint
-
-
-    def _calc_kT(self, c):
-        nlmodule = modelDB.db[self.model]['non-linear']
-        kT = nlmodule.calc_kT(c, self.alpharad, self.r1, self.L,
-                                self.F,
-                                self.m2, self.n3, self.m4, self.n4,
-                                self.nx, self.nt, self.ni_num_cores,
-                                self.ni_method, self.c0, self.m0, self.n0)
-        return kT
-
-
-    def add_SPL(self, PL, pt=0.5, theta=0.):
+    def add_SPL(self, PL, pt=0.5, theta=0., cte=True):
         """Add a Single Perturbation Load `\{{F_{PL}}_i\}`
 
-        Adds a perturbation load to the ``KPanelT`` object, the perturbation
-        load is a particular case of the punctual load with only a normal
-        component.
+        The perturbation load is a particular case of the punctual load which
+        as only the normal component (along the `z` axis).
 
         Parameters
         ----------
         PL : float
             The perturbation load value.
-        pt : float
-            The normalized position along the `x` axis in which the new SPL
-            will be included.
-        theta : float
-            The angular position in radians of the new SPL.
+        pt : float, optional
+            The normalized meridional in which the new SPL will be included.
+        theta : float, optional
+            The angular position in radians.
+        cte : bool, optional
+            Constant forces are not incremented during the non-linear
+            analysis.
 
         Notes
         -----
-        Each single perturbation load is added to the ``forces`` parameter
-        of the ``KPanelT`` object, which may be changed by the analyst at
-        any time.
+        Each single perturbation load is added to the ``forces`` parameter of
+        the ``KPanelT`` object if ``cte=True``, or to the ``forces_inc``
+        parameter if ``cte=False``, which may be changed by the analyst at any
+        time.
 
         """
         self._rebuild()
-        self.forces.append([pt*self.L, theta, 0., 0., PL])
+        if cte:
+            self.forces.append([pt*self.L, theta, 0., 0., PL])
+        else:
+            self.forces_inc.append([pt*self.L, theta, 0., 0., PL])
 
 
-    def add_force(self, x, theta, fx, ftheta, fz):
-        r"""Add a punctual force
-
-        Adds a force vector `\{f_x, f_\theta, f_z\}^T` to the ``forces``
-        parameter of the ``KPanelT`` object.
+    def add_force(self, x, theta, fx, ftheta, fz, cte=True):
+        r"""Add a punctual force with three components
 
         Parameters
         ----------
@@ -1002,12 +1062,18 @@ class KPanelT(object):
             The `\theta` component of the force vector.
         fz : float
             The `z` component of the force vector.
+        cte : bool, optional
+            Constant forces are not incremented during the non-linear
+            analysis.
 
         """
-        self.forces.append([x, theta, fx, ftheta, fz])
+        if cte:
+            self.forces.append([x, theta, fx, ftheta, fz])
+        else:
+            self.forces_inc.append([x, theta, fx, ftheta, fz])
 
 
-    def calc_fext(self, inc=None, silent=False):
+    def calc_fext(self, inc=1., silent=False):
         """Calculates the external force vector `\{F_{ext}\}`
 
         Recall that:
@@ -1035,23 +1101,16 @@ class KPanelT(object):
             The external force vector
 
         """
+        self._rebuild()
         msg('Calculating external forces...', level=2, silent=silent)
-        if inc is None:
-            NxxTop = self.NxxTop
-            NttLeft = self.NttLeft
-        else:
-            NxxTop = inc*self.NxxTop
-            NttLeft = inc*self.NttLeft
         sina = self.sina
         cosa = self.cosa
         r2 = self.r2
         L = self.L
         tminrad = self.tminrad
         tmaxrad = self.tmaxrad
-        m2 = self.m2
-        n3 = self.n3
-        m4 = self.m4
-        n4 = self.n4
+        m1 = self.m1
+        n1 = self.n1
         model = self.model
 
         if not model in modelDB.db.keys():
@@ -1061,9 +1120,6 @@ class KPanelT(object):
         db = modelDB.db
         num0 = db[model]['num0']
         num1 = db[model]['num1']
-        num2 = db[model]['num2']
-        num3 = db[model]['num3']
-        num4 = db[model]['num4']
         dofs = db[model]['dofs']
         fg = db[model]['commons'].fg
 
@@ -1072,86 +1128,101 @@ class KPanelT(object):
         g = np.zeros((dofs, size), dtype=DOUBLE)
         fext = np.zeros(size, dtype=DOUBLE)
 
-        # punctual forces
+        # non-incrementable punctual forces
         for i, force in enumerate(self.forces):
             x, theta, fx, ftheta, fz = force
-            fg(g, m2, n3, m4, n4, x, theta, L, tminrad, tmaxrad)
-
+            fg(g, m1, n1, x, theta, L, tminrad, tmaxrad)
             if dofs == 3:
                 fpt = np.array([[fx, ftheta, fz]])
             elif dofs == 5:
                 fpt = np.array([[fx, ftheta, fz, 0, 0]])
             fext += fpt.dot(g).ravel()
 
-        # axial load
-        fext[0] += NxxTop[0]*(tmaxrad-tminrad)*r2
-        #fext[1] += NttLeft[0]*L
-        if 'bc2' in model or 'bc4' in model:
-            for i4 in range(1, m4+1):
-                for j4 in range(1, n4+1):
-                    row = (num0 + num1 + num2*m2 + num3*n3 + (j4-1)*num4*m4 +
-                            (i4-1)*num4)
-                    rowNxx = 1+2*(j4-1)
-                    #FIXME check this
-                    raise
-                    fext[row+0]+=(NxxTop[rowNxx+0]*pi*r2)
-                    fext[row+1]+=(NxxTop[rowNxx+1]*pi*r2)
+        # incrementable punctual forces
+        for i, force in enumerate(self.forces_inc):
+            x, theta, fx, ftheta, fz = force
+            fg(g, m1, n1, x, theta, L, tminrad, tmaxrad)
+            if dofs == 3:
+                fpt = np.array([[fx, ftheta, fz]])*inc
+            elif dofs == 5:
+                fpt = np.array([[fx, ftheta, fz, 0, 0]])*inc
+            fext += fpt.dot(g).ravel()
+
+        # NxxTop
+
+        NxxTop = self.NxxTop
+        NttLeft = self.NttLeft
+        NxxTop += inc*self.NxxTop_inc
+        NttLeft += inc*self.NttLeft_inc
+
+        Nxx0 = NxxTop[0]
+        for j1 in range(n1):
+            if j1 > 0:
+                Nxxj = NxxTop[j1]
+            for i1 in range(m1):
+                col = num1*((j1)*m1 + (i1))
+                if j1 == 0:
+                    fext[col+0] += (-1)**i1*Nxx0*r2*(tmaxrad - tminrad)
+                else:
+                    fext[col+0] += 1/2.*(-1)**i1*Nxxj*r2*(tmaxrad - tminrad)
 
         msg('finished!', level=2, silent=silent)
 
+        if np.all(fext==0):
+            raise ValueError('No load was applied!')
+
         return fext
+
+
+    def calc_k0(self):
+        if self.k0 is None:
+            self.calc_linear_matrices()
+        return self.k0
+
+
+    def calc_fint(self, c, m=1):
+        r"""Calculates the internal force vector `\{F_{int}\}`
+
+        Parameters
+        ----------
+        c : np.ndarray
+            The Ritz constants that will be used to compute the internal
+            forces.
+        m : integer, optional
+            A multiplier to the number of integration points if one wishes to
+            use more integration points to calculate `\{F_{int}\}` than to
+            calculate `[K_T]`.
+
+        Returns
+        -------
+        fint : np.ndarray
+            The internal force vector.
+
+        """
+        ni_num_cores = self.analysis.ni_num_cores
+        ni_method = self.analysis.ni_method
+        nlmodule = modelDB.db[self.model]['non-linear']
+        nx = self.analysis.nx*m
+        nt = self.analysis.nt*m
+        fint = nlmodule.calc_fint_0L_L0_LL(c, self.alpharad, self.r1, self.L,
+                self.tminrad, self.tmaxrad, self.F, self.m1, self.n1, nx, nt,
+                ni_num_cores, ni_method, self.c0, self.m0, self.n0)
+        fint += self.k0*c
+
+        return fint
+
+
+    def calc_kT(self, c):
+        self.calc_NL_matrices(c)
+        return self.kT
 
 
     def static(self, NLgeom=False, silent=False):
         """Static analysis for cones and cylinders
 
-        The analysis can be linear or non-linear. In case of a non-linear
-        analysis the following parameters of the ``KPanelT`` object will
-        affect the non-linear analysis:
-
-        ====================    ==========================================
-        non-linear algorithm    description
-        ====================    ==========================================
-        ``NL_method``           ``'NR'`` for the Newton-Raphson
-                                ``'arc_length'`` for the Arc-Length method
-        ``line_search``         activate line_search (for Newton-Raphson
-                                methods only)
-        ``modified_NR``         activate the modified Newton-Raphson
-        ``compute_every_n``     if ``modified_NR=True``, the non-linear
-                                matrices will be updated at every `n`
-                                iterations
-        ====================    ==========================================
-
-        ==============     =================================================
-        incrementation     description
-        ==============     =================================================
-        ``initialInc``     initial load increment size. In the arc-length
-                           method it will be the initial value for
-                           `\lambda`
-        ``minInc``         minimum increment size; if achieved the analysis
-                           is terminated. The arc-length method will use
-                           this parameter to terminate when the minimum
-                           arc-length increment is smaller than ``minInc``
-        ``maxInc``         maximum increment size
-        ==============     =================================================
-
-        ====================    ============================================
-        convergence criteria    description
-        ====================    ============================================
-        ``absTOL``              the convergence is achieved when the maximum
-                                residual force is smaller than this value
-        ``maxNumIter``          maximum number of iteration; if achieved the
-                                load increment is bisected
-        ====================    ============================================
-
-        =====================    ===========================================
-        numerical integration    description
-        =====================    ===========================================
-        ``ni_num_cores``         number of cores used for the numerical
-                                 integration
-        ``ni_method``            ``'trapz2d'`` for 2-D Trapezoidal's
-                                 ``'simps2d'`` for 2-D Simpsons' integration
-        =====================    ===========================================
+        The analysis can be linear or geometrically non-linear. See
+        :class:`.Analysis` for further details about the parameters
+        controlling the non-linear analysis.
 
         Parameters
         ----------
@@ -1171,67 +1242,51 @@ class KPanelT(object):
 
         Notes
         -----
-        The returned ``cs`` is stored in the ``cs`` parameter of the
-        ``KPanelT`` object. The actual increments used in the non-linear
-        analysis are stored in the ``increments`` parameter.
+        The returned ``cs`` is stored in ``self.analysis.cs``. The actual
+        increments used in the non-linear analysis are stored in the
+        ``self.analysis.increments`` parameter.
 
         """
-        self.cs = []
-        self.increments = []
-        if NLgeom:
-            if not modelDB.db[self.model]['non-linear static']:
-                msg('________________________________________________',
-                    silent=silent)
-                msg('', silent=silent)
-                warn(
-            'Model {} cannot be used in non-linear static analysis!'.
-            format(self.model), silent=silent)
-                msg('________________________________________________',
-                    silent=silent)
-
-            msg('Started Non-Linear Static Analysis', silent=silent)
-            self._calc_linear_matrices()
-            if self.NL_method == 'NR':
-                non_linear.NR(self)
-            if self.NL_method == 'NR_lebofsky':
-                non_linear.NR_lebofsky(self)
-            elif self.NL_method == 'NR_Broyden':
-                non_linear.NR_Broyden(self)
-            elif self.NL_method == 'arc_length':
-                non_linear.arc_length(self)
+        if self.c0 is not None:
+            self.analysis.kT_initial_state = True
         else:
-            if not modelDB.db[self.model]['linear static']:
-                msg('________________________________________________',
-                    level=1, silent=silent)
-                msg('', level=1, silent=silent)
-                warn('Model {} cannot be used in linear static analysis!'.
-                     format(self.model), level=1, silent=silent)
-                lob('________________________________________________',
-                    level=1, silent=silent)
+            self.analysis.kT_initial_state = False
 
-            msg('Started Linear Static Analysis', silent=silent)
-            self._calc_linear_matrices()
-            fext = self.calc_fext()
-            c = spsolve(self.k0, fext)
-            self.cs.append(c)
-            self.increments.append(1.)
-            msg('Finished Linear Static Analysis', silent=silent)
+        if NLgeom and not modelDB.db[self.model]['non-linear static']:
+            msg('________________________________________________',
+                silent=silent)
+            msg('', silent=silent)
+            warn('Model {} cannot be used in non-linear static analysis!'.
+                 format(self.model), silent=silent)
+            msg('________________________________________________',
+                silent=silent)
+            raise
+        elif not NLgeom and not modelDB.db[self.model]['linear static']:
+            msg('________________________________________________',
+                level=1, silent=silent)
+            msg('', level=1, silent=silent)
+            warn('Model {} cannot be used in linear static analysis!'.
+                 format(self.model), level=1, silent=silent)
+            msg('________________________________________________',
+                level=1, silent=silent)
+            raise
+        self.analysis.static(NLgeom=NLgeom, silent=silent)
+        self.cs = self.analysis.cs
+        self.increments = self.analysis.increments
 
-        self.last_analysis = 'static'
-
-        return self.cs
+        return self.analysis.cs
 
 
-    def plot(self, c, invert_x=False, plot_type=1, vec='w',
+    def plot(self, c, invert_theta=False, plot_type=1, vec='w',
              deform_u=False, deform_u_sf=100.,
              filename='',
              ax=None, figsize=(3.5, 2.), save=True,
-             add_title=True, title='',
+             add_title=False, title='',
              colorbar=False, cbar_nticks=2, cbar_format=None,
              cbar_title='', cbar_fontsize=10,
              aspect='equal', clean=True, dpi=400,
              texts=[], xs=None, ts=None, gridx=300, gridt=300,
-             num_levels=400):
+             num_levels=400, vecmin=None, vecmax=None):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1250,16 +1305,16 @@ class KPanelT(object):
             If ``True`` the contour plot will look deformed.
         deform_u_sf : float, optional
             The scaling factor used to deform the contour.
-        invert_x : bool, optional
-            Inverts the `x` axis of the plot. It may be used to match
+        invert_theta : bool, optional
+            Inverts the `\theta` axis of the plot. It may be used to match
             the coordinate system of the finite element models created
             using the ``desicos.abaqus`` module.
         plot_type : int, optional
             For cylinders only ``4`` and ``5`` are valid.
             For cones all the following types can be used:
 
-            - ``1``: concave up (with ``invert_x=False``) (default)
-            - ``2``: concave down (with ``invert_x=False``)
+            - ``1``: concave up (with ``invert_theta=False``) (default)
+            - ``2``: concave down (with ``invert_theta=False``)
             - ``3``: stretched closed
             - ``4``: stretched opened (`r \times \theta` vs. `L`)
             - ``5``: stretched opened (`\theta` vs. `L`)
@@ -1309,6 +1364,12 @@ class KPanelT(object):
             displacement field.
         num_levels : int, optional
             Number of contour levels (higher values make the contour smoother).
+        vecmin : float, optional
+            Minimum value for the contour scale (useful to compare with other
+            results). If not specified it will be taken from the calculated
+            field.
+        vecmax : float, optional
+            Maximum value for the contour scale.
 
         Returns
         -------
@@ -1348,10 +1409,12 @@ class KPanelT(object):
         Xs = self.Xs
         Ts = self.Ts
 
-        vecmin = field.min()
-        vecmax = field.max()
+        if vecmin is None:
+            vecmin = field.min()
+        if vecmax is None:
+            vecmax = field.max()
 
-        levels = np.linspace(vecmin, vecmax, num_levels)
+        levels = linspace(vecmin, vecmax, num_levels)
 
         if ax is None:
             fig = plt.figure(figsize=figsize)
@@ -1395,7 +1458,9 @@ class KPanelT(object):
             else:
                 self.uvw(c, xs=xs, ts=ts, gridx=gridx, gridt=gridt)
             field_u = self.u
+            field_v = self.v
             y -= deform_u_sf*field_u
+            x += deform_u_sf*field_v
         contour = ax.contourf(x, y, field, levels=levels)
 
         if colorbar:
@@ -1404,7 +1469,7 @@ class KPanelT(object):
             fsize = cbar_fontsize
             divider = make_axes_locatable(ax)
             cax = divider.append_axes('right', size='5%', pad=0.05)
-            cbarticks = np.linspace(vecmin, vecmax, cbar_nticks)
+            cbarticks = linspace(vecmin, vecmax, cbar_nticks)
             cbar = plt.colorbar(contour, ticks=cbarticks, format=cbar_format,
                                 cax=cax)
             if cbar_title:
@@ -1413,7 +1478,7 @@ class KPanelT(object):
             cbar.outline.remove()
             cbar.ax.tick_params(labelsize=fsize, pad=0., tick2On=False)
 
-        if invert_x == True:
+        if invert_theta == True:
             ax.invert_yaxis()
         ax.invert_xaxis()
 
@@ -1421,25 +1486,27 @@ class KPanelT(object):
             ax.set_title(str(title))
 
         elif add_title:
-            if self.last_analysis == 'static':
-                ax.set_title('$m_2, n_3, m_4, n_4={0}, {1}, {2}, {3}$'.
-                             format(self.m2, self.n3, self.m4, self.n4))
+            if self.analysis.last_analysis == 'static':
+                ax.set_title('$m_1, n_1={0}, {1}$'.format(self.m1, self.n1))
 
-            elif self.last_analysis == 'lb':
+            elif self.analysis.last_analysis == 'lb':
                 ax.set_title(
-       r'$m_2, n_3, m_4, n_4={0}, {1}, {2}, {3}$, $\lambda_{{CR}}={4:1.3e}$'.
-       format(self.m2, self.n3, self.m4, self.n4, self.eigvals[0]))
+       r'$m_1, n_1={0}, {1}$, $\lambda_{{CR}}={4:1.3e}$'.format(self.m1,
+           self.n1, self.eigvals[0]))
 
         fig.tight_layout()
         ax.set_aspect(aspect)
 
+        ax.grid(False)
+        ax.set_frame_on(False)
         if clean:
-            ax.grid(False)
             ax.xaxis.set_ticks_position('none')
             ax.yaxis.set_ticks_position('none')
             ax.xaxis.set_ticklabels([])
             ax.yaxis.set_ticklabels([])
-            ax.set_frame_on(False)
+        else:
+            ax.xaxis.set_ticks_position('bottom')
+            ax.yaxis.set_ticks_position('left')
 
         for kwargs in texts:
             ax.text(transform=ax.transAxes, **kwargs)

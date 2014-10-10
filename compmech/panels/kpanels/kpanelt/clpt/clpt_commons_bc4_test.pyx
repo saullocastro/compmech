@@ -18,25 +18,22 @@ cdef extern from "math.h":
     double cos(double t) nogil
     double sin(double t) nogil
 
-cdef int num0 = 4
-cdef int num1 = 2
-cdef int num2 = 2
-cdef int num3 = 2
-cdef int num4 = 5
-cdef int e_num = 8
+cdef int num0 = 0
+cdef int num1 = 9
+cdef int e_num = 6
 cdef double pi=3.141592653589793
 
-include 'fsdt_commons_include_fstrain.pyx'
-include 'fsdt_commons_include_fuvw.pyx'
-include 'fsdt_commons_include_cfN.pyx'
+include 'clpt_commons_include_fuvw.pyx'
+#include 'clpt_commons_include_fstrain.pyx'
+#include 'clpt_commons_include_cfN.pyx'
 
-cdef void cfuvw(double *c, int m2, int n3, int m4, int n4,
-        double L, double tmin, double tmax,
-        double *xs, double *ts, int size, double *us, double *vs, double *ws,
-        double *phixs, double *phits) nogil:
-    cdef int i2, j3, i4, j4, col, i
-    cdef double cosi2bx, cosj3bt, sini4bx, sinj4bt, cosi4bx, cosj4bt
-    cdef double x, t, u, v, w, phix, phit, bx, bt
+cdef void cfuvw(double *c, int m1, int n1, double L, double tmin, double tmax,
+        double *xs, double *ts, int size,
+        double *us, double *vs, double *ws) nogil:
+    cdef int i1, j1, col, i
+    cdef double sini1bx, sinj1bt
+    cdef double cosi1bx, cosj1bt
+    cdef double x, t, u, v, w, bx, bt
 
     for i in range(size):
         x = xs[i]
@@ -44,137 +41,112 @@ cdef void cfuvw(double *c, int m2, int n3, int m4, int n4,
         bx = (x + L/2.)/L
         bt = (t - tmin)/(tmax - tmin)
 
-        u = c[0]*bx + c[1]*bt
-        v = c[2]*bx + c[3]*bt
-        w = 0.
-        phix = c[4]
-        phit = c[5]
+        u = 0
+        v = 0
+        w = 0
 
-        for i2 in range(1, m2+1):
-            cosi2bx = cos(i2*pi*bx)
-            col = num0 + num1 + num2*(i2-1)
-            phix += c[col+0]*cosi2bx
-            phit += c[col+1]*cosi2bx
+        for j1 in range(1, n1+1):
+            sinj1bt = sin(j1*pi*bt)
+            cosj1bt = cos(j1*pi*bt)
+            for i1 in range(1, m1+1):
+                col = num0 + num1*((j1-1)*m1 + (i1-1))
+                sini1bx = sin(i1*pi*bx)
+                cosi1bx = cos(i1*pi*bx)
+                u += c[col+0]*sini1bx*sinj1bt
+                u += c[col+1]*sini1bx*cosj1bt
+                u += c[col+2]*cosi1bx*sinj1bt
+                u += c[col+3]*cosi1bx*cosj1bt
 
-        for j3 in range(1, n3+1):
-            cosj3bt = cos(j3*pi*bt)
-            col = num0 + num1 + num2*m2 + num3*(j3-1)
-            phix += c[col+0]*cosj3bt
-            phit += c[col+1]*cosj3bt
+                v += c[col+4]*sini1bx*sinj1bt
+                v += c[col+5]*sini1bx*cosj1bt
+                v += c[col+6]*cosi1bx*sinj1bt
+                v += c[col+7]*cosi1bx*cosj1bt
 
-        for j4 in range(1, n4+1):
-            sinj4bt = sin(j4*pi*bt)
-            cosj4bt = cos(j4*pi*bt)
-            for i4 in range(1, m4+1):
-                col = (num0 + num1 + num2*m2 + num3*n3 + (j4-1)*num4*m4 +
-                        (i4-1)*num4)
-                sini4bx = sin(i4*pi*bx)
-                cosi4bx = cos(i4*pi*bx)
-                u += c[col+0]*sini4bx*sinj4bt
-                v += c[col+1]*sini4bx*sinj4bt
-                w += c[col+2]*sini4bx*sinj4bt
-                phix += c[col+3]*cosi4bx*cosj4bt
-                phit += c[col+4]*cosi4bx*cosj4bt
+                w += c[col+8]*sini1bx*sinj1bt
 
         us[i] = u
         vs[i] = v
         ws[i] = w
-        phixs[i] = phix
-        phits[i] = phit
 
 
-cdef void cfwx(double *c, int m2, int n3, int m4, int n4, double *xs, double
-    *ts, int size, double L, double tmin, double tmax, double *outwx) nogil:
-    cdef double dsini4bx, sinj4bt, wx, x, t, bx, bt
-    cdef int i2, j3, i4, j4, col, i
+cdef void cfwx(double *c, int m1, int n1, double *xs, double *ts, int size,
+        double L, double tmin, double tmax, double *outwx) nogil:
+    cdef double dsini1bx, sinj3bt, sinj1bt, wx, x, t, bx, bt
+    cdef int i1, j1, col, i
 
     for i in range(size):
         x = xs[i]
         t = ts[i]
         bx = (x + L/2.)/L
-        bt = (t - tmin)/(tmax-tmin)
+        bt = (t - tmin)/(tmax - tmin)
 
         wx = 0.
 
-        for j4 in range(1, n4+1):
-            sinj4bt = sin(j4*pi*bt)
-            for i4 in range(1, m4+1):
-                col = (num0 + num1 + num2*m2 + num3*n3 + (j4-1)*num4*m4 +
-                        (i4-1)*num4)
-                dsini4bx = i4*pi/L*cos(i4*pi*bx)
-                wx += dsini4bx*sinj4bt*c[col+2]
+        for j1 in range(1, n1+1):
+            sinj1bt = sin(j1*pi*bt)
+            for i1 in range(1, m1+1):
+                col = num0 + num1*((j1-1)*m1 + (i1-1))
+                dsini1bx = i1*pi/L*cos(i1*pi*bx)
+                wx += c[col+2]*dsini1bx*sinj1bt
 
         outwx[i] = wx
 
 
-cdef void cfwt(double *c, int m2, int n3, int m4, int n4, double *xs, double
-    *ts, int size, double L, double tmin, double tmax, double *outwt) nogil:
-    cdef double sini4bx, dsinj4bt, wt, x, t, bx, bt
-    cdef int i2, j3, i4, j4, col, i
+cdef void cfwt(double *c, int m1, int n1, double *xs, double *ts, int size,
+        double L, double tmin, double tmax, double *outwt) nogil:
+    cdef double sini1bx, dsinj1bt, wt, x, t, bx, bt
+    cdef int i1, j1, col, i
 
     for i in range(size):
         x = xs[i]
         t = ts[i]
         bx = (x + L/2.)/L
-        bt = (t - tmin)/(tmax-tmin)
+        bt = (t - tmin)/(tmax - tmin)
 
         wt = 0.
 
-        for j4 in range(1, n4+1):
-            dsinj4bt = j4*pi/(tmax-tmin)*cos(j4*pi*bt)
-            for i4 in range(1, m4+1):
-                col = (num0 + num1 + num2*m2 + num3*n3 + (j4-1)*num4*m4 +
-                        (i4-1)*num4)
-                sini4bx = sin(i4*pi*bx)
-                wt += sini4bx*dsinj4bt*c[col+2]
+        for j1 in range(1, n1+1):
+            dsinj1bt = j1*pi/(tmax-tmin)*cos(j1*pi*bt)
+            for i1 in range(1, m1+1):
+                col = num0 + num1*((j1-1)*m1 + (i1-1))
+                sini1bx = sin(i1*pi*bx)
+                wt += c[col+2]*sini1bx*dsinj1bt
 
         outwt[i] = wt
 
-def fg(double[:,::1] g, int m2, int n3, int m4, int n4,
-       double x, double t, double L, double tmin, double tmax):
-    cfg(g, m2, n3, m4, n4, x, t, L, tmin, tmax)
 
-cdef void cfg(double[:,::1] g, int m2, int n3, int m4, int n4,
+def fg(double[:,::1] g, int m1, int n1,
+       double x, double t, double L, double tmin, double tmax):
+    cfg(g, m1, n1, x, t, L, tmin, tmax)
+
+cdef void cfg(double[:,::1] g, int m1, int n1,
               double x, double t, double L, double tmin, double tmax) nogil:
-    cdef int i2, j3, i4, j4, col, i
-    cdef double cosi2bx, cosj3bt, sini4bx, sinj4bt, cosi4bx, cosj4bt
-    cdef double u, v, w, phix, phit, bx, bt
+    cdef int i1, j1, col, i
+    cdef double sini1bx, sinj1bt
+    cdef double cosi1bx, cosj1bt
+    cdef double bx, bt
 
     bx = (x + L/2.)/L
     bt = (t - tmin)/(tmax - tmin)
 
-    g[0, 0] = bx
-    g[0, 1] = bt
-    g[1, 2] = bx
-    g[1, 3] = bt
-    g[3, 4] = 1.
-    g[4, 5] = 1.
+    for j1 in range(1, n1+1):
+        sinj1bt = sin(j1*pi*bt)
+        cosj1bt = cos(j1*pi*bt)
+        for i1 in range(1, m1+1):
+            col = num0 + num1*((j1-1)*m1 + (i1-1))
+            sini1bx = sin(i1*pi*bx)
+            cosi1bx = cos(i1*pi*bx)
+            g[0, col+0] = sini1bx*sinj1bt
+            g[0, col+1] = sini1bx*cosj1bt
+            g[0, col+2] = cosi1bx*sinj1bt
+            g[0, col+3] = cosi1bx*cosj1bt
 
-    for i2 in range(1, m2+1):
-        cosi2bx = cos(i2*pi*bx)
-        col = num0 + num1 + num2*(i2-1)
-        g[3, col+0] = cosi2bx
-        g[4, col+1] = cosi2bx
+            g[1, col+4] = sini1bx*sinj1bt
+            g[1, col+5] = sini1bx*cosj1bt
+            g[1, col+6] = cosi1bx*sinj1bt
+            g[1, col+7] = cosi1bx*cosj1bt
 
-    for j3 in range(1, n3+1):
-        cosj3bt = cos(j3*pi*bt)
-        col = num0 + num1 + num2*m2 + num3*(j3-1)
-        g[3, col+0] = cosj3bt
-        g[4, col+1] = cosj3bt
-
-    for j4 in range(1, n4+1):
-        sinj4bt = sin(j4*pi*bt)
-        cosj4bt = cos(j4*pi*bt)
-        for i4 in range(1, m4+1):
-            col = (num0 + num1 + num2*m2 + num3*n3 + (j4-1)*num4*m4 +
-                    (i4-1)*num4)
-            sini4bx = sin(i4*pi*bx)
-            cosi4bx = cos(i4*pi*bx)
-            g[0, col+0] = sini4bx*sinj4bt
-            g[1, col+1] = sini4bx*sinj4bt
-            g[2, col+2] = sini4bx*sinj4bt
-            g[3, col+3] = cosi4bx*cosj4bt
-            g[4, col+4] = cosi4bx*cosj4bt
+            g[2, col+8] = sini1bx*sinj1bt
 
 
 cdef void *cfstrain_donnell(double *c, double sina, double cosa, double tLA,
@@ -206,7 +178,7 @@ cdef void *cfstrain_donnell(double *c, double sina, double cosa, double tLA,
         wt = wts[i]
         w0x = w0xs[i]
         w0t = w0ts[i]
-        r = r1 + sina*(x + L/2.)
+        r = r1 - sina*(x + L/2.)
 
         exx = 0
         ett = 0
@@ -246,10 +218,11 @@ cdef void *cfstrain_donnell(double *c, double sina, double cosa, double tLA,
         for j2 in range(1, n2+1):
             sinj2t = sin(j2*t)
             cosj2t = cos(j2*t)
-            for i2 in range(1, m2+1):
+            for i2 in range(m2):
                 sini2x = sin(pi*i2*x/L)
                 cosi2x = cos(pi*i2*x/L)
-                col = (i2-1)*num2 + (j2-1)*num2*m2 + num0 + num1*m1
+
+                col = 0
 
                 exx += (pi*c[col+0]*cosi2x*i2*sinj2t/L
                         + pi*c[col+1]*cosi2x*cosj2t*i2/L

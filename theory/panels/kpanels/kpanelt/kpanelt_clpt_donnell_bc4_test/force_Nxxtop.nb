@@ -1,0 +1,222 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      6547,        213]
+NotebookOptionsPosition[      6068,        192]
+NotebookOutlinePosition[      6457,        209]
+CellTagsIndexPosition[      6414,        206]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"bx", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"x", "+", 
+      RowBox[{"L", "/", "2"}]}], ")"}], "/", "L"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"bt", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"t", "-", "tmin"}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{"tmax", "-", "tmin"}], ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"u", "=", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"c0", "*", "bx"}], " ", "+", 
+     RowBox[{"c4ij", "*", 
+      RowBox[{"Cos", "[", 
+       RowBox[{"i4", "*", "Pi", "*", "bx"}], "]"}], "*", 
+      RowBox[{"Cos", "[", 
+       RowBox[{"j4", "*", "Pi", "*", "bt"}], "]"}]}]}], ")"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Nxxtop", "=", 
+    RowBox[{"(", 
+     RowBox[{"Nxx0", " ", "+", " ", 
+      RowBox[{"Nxxja", " ", "*", 
+       RowBox[{"Sin", "[", 
+        RowBox[{"j", "*", "Pi", "*", "bt"}], "]"}]}], "+", 
+      RowBox[{"Nxxjb", "*", 
+       RowBox[{"Cos", "[", 
+        RowBox[{"j", "*", "Pi", "*", "bt"}], "]"}]}]}], ")"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"integrand", "=", 
+   RowBox[{"ReplaceAll", "[", 
+    RowBox[{
+     RowBox[{"r", "*", "u", "*", "Nxxtop"}], ",", 
+     RowBox[{"x", "\[Rule]", 
+      RowBox[{"L", "/", "2"}]}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"coeffs", "=", 
+   RowBox[{"{", 
+    RowBox[{"c0", ",", "c4ij"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"indices", "=", 
+    RowBox[{"{", 
+     RowBox[{"i4", ",", "j", ",", "j4"}], "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<cond1 (j!=j4) is:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Assuming", "[", 
+   RowBox[{
+    RowBox[{"Element", "[", 
+     RowBox[{"indices", ",", "Integers"}], "]"}], ",", 
+    RowBox[{"Collect", "[", 
+     RowBox[{
+      RowBox[{"Refine", "[", 
+       RowBox[{"Integrate", "[", 
+        RowBox[{"integrand", ",", 
+         RowBox[{"{", 
+          RowBox[{"t", ",", "tmin", ",", "tmax"}], "}"}]}], "]"}], "]"}], ",",
+       "coeffs", ",", "FullSimplify"}], "]"}]}], "]"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<cond2 (j==j4) is:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Assuming", "[", 
+  RowBox[{
+   RowBox[{"Element", "[", 
+    RowBox[{"indices", ",", "Integers"}], "]"}], ",", 
+   RowBox[{"Collect", "[", 
+    RowBox[{
+     RowBox[{"Refine", "[", 
+      RowBox[{"Integrate", "[", 
+       RowBox[{
+        RowBox[{"ReplaceAll", "[", 
+         RowBox[{"integrand", ",", 
+          RowBox[{"j", "\[Rule]", "j4"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", "tmin", ",", "tmax"}], "}"}]}], "]"}], "]"}], ",", 
+     "coeffs", ",", "FullSimplify"}], "]"}]}], 
+  "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.6158073537296576`*^9, 3.6158073537356577`*^9}, {
+  3.6158073857464886`*^9, 3.6158074240936823`*^9}, {3.6219211784480033`*^9, 
+  3.6219214121561155`*^9}, {3.621921503760188*^9, 3.621921517696904*^9}, {
+  3.62192154909089*^9, 3.621921607843296*^9}}],
+
+Cell[BoxData["\<\"cond1 (j!=j4) is:\"\>"], "Print",
+ CellChangeTimes->{
+  3.615807356247802*^9, 3.615807484702149*^9, {3.6219213882272477`*^9, 
+   3.6219214072322903`*^9}, 3.6219215235132446`*^9, {3.6219215957103586`*^9, 
+   3.6219216193194733`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", 
+   FractionBox[
+    RowBox[{
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"-", "1"}], ")"}], "i4"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "1"}], "+", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"-", "1"}], ")"}], 
+        RowBox[{"j", "+", "j4"}]]}], ")"}], " ", "c4ij", " ", "j", " ", 
+     "Nxxja", " ", "r", " ", 
+     RowBox[{"(", 
+      RowBox[{"tmax", "-", "tmin"}], ")"}]}], 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SuperscriptBox["j", "2"], "-", 
+       SuperscriptBox["j4", "2"]}], ")"}], " ", "\[Pi]"}]]}], "+", 
+  FractionBox[
+   RowBox[{"c0", " ", 
+    RowBox[{"(", 
+     RowBox[{"Nxxja", "-", 
+      RowBox[{
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"-", "1"}], ")"}], "j"], " ", "Nxxja"}], "+", 
+      RowBox[{"j", " ", "Nxx0", " ", "\[Pi]"}]}], ")"}], " ", "r", " ", 
+    RowBox[{"(", 
+     RowBox[{"tmax", "-", "tmin"}], ")"}]}], 
+   RowBox[{"j", " ", "\[Pi]"}]]}]], "Output",
+ CellChangeTimes->{3.6219216329074326`*^9}],
+
+Cell[BoxData["\<\"cond2 (j==j4) is:\"\>"], "Print",
+ CellChangeTimes->{
+  3.615807356247802*^9, 3.615807484702149*^9, {3.6219213882272477`*^9, 
+   3.6219214072322903`*^9}, 3.6219215235132446`*^9, 3.6219215957103586`*^9, 
+   3.621921632908683*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   FractionBox["1", "2"], " ", 
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{"-", "1"}], ")"}], "i4"], " ", "c4ij", " ", "Nxxjb", " ", "r", 
+   " ", 
+   RowBox[{"(", 
+    RowBox[{"tmax", "-", "tmin"}], ")"}]}], "+", 
+  FractionBox[
+   RowBox[{"c0", " ", 
+    RowBox[{"(", 
+     RowBox[{"Nxxja", "-", 
+      RowBox[{
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"-", "1"}], ")"}], "j4"], " ", "Nxxja"}], "+", 
+      RowBox[{"j4", " ", "Nxx0", " ", "\[Pi]"}]}], ")"}], " ", "r", " ", 
+    RowBox[{"(", 
+     RowBox[{"tmax", "-", "tmin"}], ")"}]}], 
+   RowBox[{"j4", " ", "\[Pi]"}]]}]], "Output",
+ CellChangeTimes->{3.6219216472566547`*^9}]
+}, Open  ]]
+},
+Evaluator->"Local3",
+WindowSize->{707, 1002},
+WindowMargins->{{Automatic, 380}, {Automatic, 4}},
+CellContext->Notebook,
+FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 3208, 94, 392, "Input"],
+Cell[3790, 118, 250, 4, 23, "Print"],
+Cell[4043, 124, 1063, 35, 105, "Output"],
+Cell[5109, 161, 246, 4, 23, "Print"],
+Cell[5358, 167, 694, 22, 91, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      8738,        273]
-NotebookOptionsPosition[      8107,        248]
-NotebookOutlinePosition[      8496,        265]
-CellTagsIndexPosition[      8453,        262]
+NotebookDataLength[      9035,        286]
+NotebookOptionsPosition[      8404,        261]
+NotebookOutlinePosition[      8793,        278]
+CellTagsIndexPosition[      8750,        275]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -22,40 +22,38 @@ Notebook[{
 Cell[CellGroupData[{
 Cell[BoxData[{
  RowBox[{
+  RowBox[{"bx", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"x", "+", 
+      RowBox[{"L", "/", "2"}]}], ")"}], "/", "L"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"bt", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"t", "-", "tmin"}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{"tmax", "-", "tmin"}], ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
   RowBox[{"u", "=", 
    RowBox[{"(", 
     RowBox[{
-     RowBox[{"c00", "*", 
-      RowBox[{
-       RowBox[{"(", 
-        RowBox[{"L", "-", "x"}], ")"}], "/", 
-       RowBox[{"(", 
-        RowBox[{"L", "*", "cosa"}], ")"}]}]}], " ", "\[IndentingNewLine]", 
+     RowBox[{"c0", "*", "bx"}], "+", "c1", "+", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"+", "c2i"}], "*", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"i2", "*", "Pi", "*", "bx"}], "]"}]}], "\[IndentingNewLine]", 
      "+", 
-     RowBox[{"c02", "*", 
-      RowBox[{
-       RowBox[{"(", 
-        RowBox[{"L", "-", "x"}], ")"}], "/", 
-       RowBox[{"(", 
-        RowBox[{"L", "*", "cosa"}], ")"}]}], "*", 
-      RowBox[{"Cos", "[", 
-       RowBox[{"t", "-", "tLA"}], "]"}]}], "\[IndentingNewLine]", "+", 
-     RowBox[{"c0i", "*", 
+     RowBox[{"c3j", "*", 
       RowBox[{"Sin", "[", 
-       RowBox[{"i1", "*", "Pi", "*", 
-        RowBox[{"x", "/", "L"}]}], "]"}]}], "\[IndentingNewLine]", "+", 
-     RowBox[{"c0ij", "*", 
+       RowBox[{"j3", "*", "Pi", "*", "bt"}], "]"}]}], "\[IndentingNewLine]", 
+     "+", 
+     RowBox[{"c4ij", "*", 
       RowBox[{"Cos", "[", 
-       RowBox[{"i2", "*", "Pi", "*", 
-        RowBox[{"x", "/", "L"}]}], "]"}], "*", 
-      RowBox[{"Sin", "[", 
-       RowBox[{"j2", "*", "t"}], "]"}]}], "\[IndentingNewLine]", "+", 
-     RowBox[{"c1ij", "*", 
+       RowBox[{"i4", "*", "Pi", "*", "bx"}], "]"}], "*", 
       RowBox[{"Cos", "[", 
-       RowBox[{"i2", "*", "Pi", "*", 
-        RowBox[{"x", "/", "L"}]}], "]"}], "*", 
-      RowBox[{"Cos", "[", 
-       RowBox[{"j2", "*", "t"}], "]"}]}]}], ")"}]}], 
+       RowBox[{"j4", "*", "Pi", "*", "bt"}], "]"}]}]}], ")"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -74,11 +72,29 @@ Cell[BoxData[{
           RowBox[{"t", "-", "tLA"}], ")"}]}], "]"}]}]}], ")"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"integrand", "=", 
-   RowBox[{"ReplaceAll", "[", 
-    RowBox[{
-     RowBox[{"r", "*", "u", "*", "Nxxtop"}], ",", 
-     RowBox[{"x", "\[Rule]", "0"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"indices", "=", 
+   RowBox[{"{", 
+    RowBox[{"j", ",", "i2", ",", "j3", ",", "i4", ",", "j4"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"coeffs", "=", 
+    RowBox[{"{", 
+     RowBox[{"c0", ",", 
+      RowBox[{"c1", "+", "c2i"}], ",", "c3j", ",", "c4ij"}], "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"integrand", "=", 
+    RowBox[{"ReplaceAll", "[", 
+     RowBox[{
+      RowBox[{"r2", "*", "u", "*", "Nxxtop"}], ",", 
+      RowBox[{"x", "\[Rule]", 
+       RowBox[{"L", "/", "2"}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<cond1 (j!=j2) is:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"cond1", "=", 
    RowBox[{"Integrate", "[", 
@@ -87,6 +103,16 @@ Cell[BoxData[{
       RowBox[{"t", ",", "0", ",", 
        RowBox[{"2", "*", "Pi"}]}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Assuming", "[", 
+   RowBox[{
+    RowBox[{"Element", "[", 
+     RowBox[{"indices", ",", "Integers"}], "]"}], ",", 
+    RowBox[{"Collect", "[", 
+     RowBox[{
+      RowBox[{"Refine", "[", "cond1", "]"}], ",", "coeffs", ",", 
+      "FullSimplify"}], "]"}]}], "]"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"cond2", "=", 
    RowBox[{"Integrate", "[", 
@@ -111,34 +137,20 @@ Cell[BoxData[{
        RowBox[{"2", "*", "Pi"}]}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"cond4", "=", 
-   RowBox[{"Integrate", "[", 
-    RowBox[{
-     RowBox[{"ReplaceAll", "[", 
-      RowBox[{"integrand", ",", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"j", "\[Rule]", "1"}], ",", 
-         RowBox[{"j2", "\[Rule]", "10"}]}], "}"}]}], "]"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"t", ",", "0", ",", 
-       RowBox[{"2", "*", "Pi"}]}], "}"}]}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"Print", "[", "\"\<cond1 (j!=j2) is:\>\"", "]"}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{"Assuming", "[", 
   RowBox[{
-   RowBox[{"Element", "[", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"j", ",", "j2"}], "}"}], ",", "Integers"}], "]"}], ",", 
-   RowBox[{"Collect", "[", 
-    RowBox[{
-     RowBox[{"Refine", "[", "cond1", "]"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"c00", ",", "c02", ",", "c0i", ",", "c0ij", ",", "c1ij"}], 
-      "}"}], ",", "FullSimplify"}], "]"}]}], "]"}], "\[IndentingNewLine]", 
+   RowBox[{"cond4", "=", 
+    RowBox[{"Integrate", "[", 
+     RowBox[{
+      RowBox[{"ReplaceAll", "[", 
+       RowBox[{"integrand", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"j", "\[Rule]", "1"}], ",", 
+          RowBox[{"j2", "\[Rule]", "10"}]}], "}"}]}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "0", ",", 
+        RowBox[{"2", "*", "Pi"}]}], "}"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Print", "[", "\"\<cond2 (j==j2) is:\>\"", "]"}], 
   ";"}], "\[IndentingNewLine]", 
@@ -185,7 +197,8 @@ Cell[BoxData[{
       RowBox[{"c00", ",", "c02", ",", "c0i", ",", "c0ij", ",", "c1ij"}], 
       "}"}], ",", "FullSimplify"}], "]"}]}], "]"}]}], "Input",
  CellChangeTimes->{{3.6158073537296576`*^9, 3.6158073537356577`*^9}, {
-  3.6158073857464886`*^9, 3.6158074240936823`*^9}}],
+  3.6158073857464886`*^9, 3.6158074240936823`*^9}, {3.6218369812029*^9, 
+  3.62183723161454*^9}}],
 
 Cell[BoxData["\<\"cond1 (j!=j2) is:\"\>"], "Print",
  CellChangeTimes->{3.615807356247802*^9, 3.615807484702149*^9}],
@@ -265,15 +278,15 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 5570, 165, 492, "Input"],
-Cell[6152, 189, 115, 1, 23, "Print"],
-Cell[6270, 192, 184, 4, 46, "Output"],
-Cell[6457, 198, 117, 1, 23, "Print"],
-Cell[6577, 201, 794, 23, 68, "Output"],
-Cell[7374, 226, 117, 1, 23, "Print"],
-Cell[7494, 229, 184, 4, 46, "Output"],
-Cell[7681, 235, 123, 1, 23, "Print"],
-Cell[7807, 238, 284, 7, 46, "Output"]
+Cell[579, 22, 5867, 178, 632, "Input"],
+Cell[6449, 202, 115, 1, 23, "Print"],
+Cell[6567, 205, 184, 4, 46, "Output"],
+Cell[6754, 211, 117, 1, 23, "Print"],
+Cell[6874, 214, 794, 23, 68, "Output"],
+Cell[7671, 239, 117, 1, 23, "Print"],
+Cell[7791, 242, 184, 4, 46, "Output"],
+Cell[7978, 248, 123, 1, 23, "Print"],
+Cell[8104, 251, 284, 7, 46, "Output"]
 }, Open  ]]
 }
 ]

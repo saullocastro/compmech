@@ -12,11 +12,13 @@ assumption.
 
 """
 modules = [
-          'fsdt_commons_bc1',
           'fsdt_commons_free',
+          'fsdt_commons_bc4',
 
-          'fsdt_donnell_bc1_linear',
           'fsdt_donnell_free_linear',
+          'fsdt_donnell_bc4_linear',
+
+          'fsdt_donnell_bc4_nonlinear',
           ]
 
 for module in modules:
