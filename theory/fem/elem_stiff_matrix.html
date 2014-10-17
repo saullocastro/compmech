@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Element Stiffness Matrix &mdash; CompMech 0.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.3.0 documentation" href="../../index.html" />
+    <link rel="up" title="Finite Element Method" href="index.html" />
+    <link rel="next" title="Meshfree Methods" href="../meshfree/index.html" />
+    <link rel="prev" title="Finite Element Method" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../meshfree/index.html" title="Meshfree Methods"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Finite Element Method"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.3.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Finite Element Method</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="element-stiffness-matrix">
+<h1>Element Stiffness Matrix<a class="headerlink" href="#element-stiffness-matrix" title="Permalink to this headline">¶</a></h1>
+<p>The stiffness matrices are integrated numerically where the number of
+integration points is fixed for each element type by the parameter <tt class="docutils literal"><span class="pre">npts</span></tt>.
+The element has a number of dimensions defined by <tt class="docutils literal"><span class="pre">ndim</span></tt>. Suppose we have
+<tt class="docutils literal"><span class="pre">nel</span></tt> 2-D elements (<tt class="docutils literal"><span class="pre">ndim=2</span></tt>) for which the stiffness matrix has to be
+calculated, the following should be defined:</p>
+<div class="math">
+<p><img src="../../_images/math/fb75612ad8058beb02931b757439d73f7597a49c.png" alt="j = [{j11}_1, {j12}_1, {j21}_1, {j22}_1, ...,
+     {j11}_{nel}, {j12}_{nel}, {j21}_{nel}, {j22}_{nel}]"/></p>
+</div></div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Finite Element Method</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../meshfree/index.html"
+                        title="next chapter">Meshfree Methods</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/theory/fem/elem_stiff_matrix.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../meshfree/index.html" title="Meshfree Methods"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Finite Element Method"
+             >previous</a> |</li>
+        <li><a href="../../index.html">CompMech 0.3.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li><a href="index.html" >Finite Element Method</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Oct 17, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

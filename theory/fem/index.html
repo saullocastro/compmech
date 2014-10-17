@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Finite Element Method &mdash; CompMech 0.2.0 documentation</title>
+    <title>Finite Element Method &mdash; CompMech 0.3.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.2.0 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.3.0 documentation" href="../../index.html" />
     <link rel="up" title="Theory, Implementation and Tutorials" href="../index.html" />
-    <link rel="next" title="Meshfree Methods" href="../meshfree/index.html" />
+    <link rel="next" title="Element Stiffness Matrix" href="elem_stiff_matrix.html" />
     <link rel="prev" title="References" href="../conecyl/ref.html" /> 
   </head>
   <body>
@@ -44,12 +44,12 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../meshfree/index.html" title="Meshfree Methods"
+          <a href="elem_stiff_matrix.html" title="Element Stiffness Matrix"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../conecyl/ref.html" title="References"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">CompMech 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">CompMech 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Theory, Implementation and Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -63,34 +63,10 @@
 <span id="theory-fem"></span><h1>Finite Element Method<a class="headerlink" href="#finite-element-method" title="Permalink to this headline">¶</a></h1>
 <p>This module includes all the theory related to finite elements implemented in
 <tt class="docutils literal"><span class="pre">compmech</span></tt>.</p>
-<div class="section" id="elements">
-<h2>Elements<a class="headerlink" href="#elements" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="cubic-element-of-the-serendipity-family">
-<h3>Cubic element of the Serendipity family<a class="headerlink" href="#cubic-element-of-the-serendipity-family" title="Permalink to this headline">¶</a></h3>
-<p>Zienkiewicz and Taylor (2000) <a class="reference internal" href="../conecyl/ref.html#zienkiewicz2000v1" id="id1">[zienkiewicz2000v1]</a> present a rectangular
-cubic element of the Serendipity family (in Chapter 8) which will be described
-here, focusing on its implementation using an isoparametric approach, i.e.
-the same approximation used for the geometry will be used to approximate
-the displacement field vector <img class="math" src="../../_images/math/9604ceff8959a2a9aed9cda1716554358510c677.png" alt="\{u\}"/>.</p>
-<p>The element and the 12 nodes are shown in the figure below.</p>
-<p id="figure-quadcubics">(<a class="reference external" href="../../../pyplots/theory/fem/quadcubics.py">Source code</a>, <a class="reference external" href="../../../pyplots/theory/fem/quadcubics.png">png</a>, <a class="reference external" href="../../../pyplots/theory/fem/quadcubics.hires.png">hires.png</a>, <a class="reference external" href="../../../pyplots/theory/fem/quadcubics.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../../_images/quadcubics.png" src="../../_images/quadcubics.png" />
-</div>
-<p>The variables of <img class="math" src="../../_images/math/9604ceff8959a2a9aed9cda1716554358510c677.png" alt="\{u\}"/> are interpolated using:</p>
-<div class="math">
-<p><img src="../../_images/math/fff38e56e4bb56934caec3c93d4fa808a6d6e73a.png" alt="\{u\} = \sum_{i=1}^{i=12}{h_i \{u_i\}}"/></p>
-</div><p>where <img class="math" src="../../_images/math/a7aa752c1b5cb22c33d8977f1086239d6ece9a10.png" alt="h_i"/> and <img class="math" src="../../_images/math/cc22b8bb1ba2a96586088d6954e1f59b49bb7ef7.png" alt="\{u_i\}"/> represent the interpolation and the displacement
-vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c2dadadbbd299ea5de.png" alt="n_i"/>. The interpolation function for the corner nodes are:</p>
-<div class="math">
-<p><img src="../../_images/math/42201093252e53aea38bbca0dcd0174165812706.png" alt="h_{1,\cdots,4} = \frac{1}{32}(1 + \xi\cdot\xi_{1,\cdots,4})
-         (1 + \eta\cdot\eta_{1,\cdots,4})[-10 + 9\cdot(\xi^2 + \eta^2)]"/></p>
-</div><p>and for the middle nodes are:</p>
-<div class="math">
-<p><img src="../../_images/math/19cbe9efdd756dd3acf39aaebcf9d9b440752d54.png" alt="h_{5,\cdots,12}  = \frac{9}{32}(1 + \xi\cdot\xi_{5,\cdots,12})
-                       (1-\eta^2)(1+9\cdot\eta\cdot\eta_{5,\cdots,12})"/></p>
-</div><p>The coordinates for each node</p>
-</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="elem_stiff_matrix.html">Element Stiffness Matrix</a></li>
+</ul>
 </div>
 </div>
 
@@ -103,23 +79,12 @@ vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Finite Element Method</a><ul>
-<li><a class="reference internal" href="#elements">Elements</a><ul>
-<li><a class="reference internal" href="#cubic-element-of-the-serendipity-family">Cubic element of the Serendipity family</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="../conecyl/ref.html"
                         title="previous chapter">References</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../meshfree/index.html"
-                        title="next chapter">Meshfree Methods</a></p>
+  <p class="topless"><a href="elem_stiff_matrix.html"
+                        title="next chapter">Element Stiffness Matrix</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/theory/fem/index.txt"
@@ -155,18 +120,18 @@ vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../meshfree/index.html" title="Meshfree Methods"
+          <a href="elem_stiff_matrix.html" title="Element Stiffness Matrix"
              >next</a> |</li>
         <li class="right" >
           <a href="../conecyl/ref.html" title="References"
              >previous</a> |</li>
-        <li><a href="../../index.html">CompMech 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">CompMech 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Sep 16, 2014.
+      Last updated on Oct 17, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
