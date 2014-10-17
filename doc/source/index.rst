@@ -17,12 +17,17 @@ in :ref:`theory`.
    theory/index.rst
    about.rst
    next_steps.rst
+   dev/index.rst
 
 Released Versions
 -----------------
 
 `All released versions available here
-<https://github.com/compmech/compmech/releases>`_.
+<https://github.com/compmech/compmech/releases>`_
 
-`Released version used for the PhD Thesis of Saullo G. P. Castro
-<https://github.com/compmech/compmech/releases/tag/0.2.0>`_.
+`Version 0.3.0
+<https://github.com/compmech/compmech/releases/tag/0.3.0>`_
+
+`Version 0.2.0 used in the PhD Thesis of Saullo G. P. Castro
+<https://github.com/compmech/compmech/releases/tag/0.2.0>`_
+
