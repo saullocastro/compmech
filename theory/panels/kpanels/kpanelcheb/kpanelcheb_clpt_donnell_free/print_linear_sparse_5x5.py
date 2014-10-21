@@ -22,7 +22,7 @@ subs = {
        }
 
 for i, filepath in enumerate(
-        glob.glob(r'.\linear_mathematica\c*.txt')):
+        glob.glob(r'.\linear_mathematica_5x5\c*.txt')):
     print(filepath)
     with open(filepath) as f:
         filename = os.path.basename(filepath)
@@ -40,12 +40,13 @@ for i, filepath in enumerate(
         string = string.replace('\\','')
         tmp = map(eval, string.split(','))
         size = len(tmp)**0.5
+        print size
         assert size % 1 == 0
         size = int(size)
         print('Estimated size: {0}'.format(size))
         matrix = sympy.Matrix(np.atleast_2d(tmp).reshape(size, size))
         printstr = mprint_as_sparse(matrix, names[1], names[2],
                                     print_file=False, collect_for=None,
-                                    subs=subs)
-    with open('.\\linear_sparse\\' + filename, 'w') as f:
+                                    subs=subs, triu_only=True)
+    with open('.\\linear_sparse_5x5\\' + filename, 'w') as f:
         f.write(printstr)
