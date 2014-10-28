@@ -8,7 +8,9 @@ include 'clpt_nonlinear_header.pyx'
 
 from compmech.conecyl.clpt.clpt_commons_bc2 cimport cfwx, cfwt, cfN
 
+
 cdef int NL_kinematics=0 # to use cfstrain_donnell in cfN
+
 
 def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
              double alpharad, double r2, double L, double tLA,
@@ -533,6 +535,7 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     free(k0Lq_2_q24)
     free(k0Lq_2_q25)
 
+
 def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
             double alpharad, double r2, double L, double tLA,
             np.ndarray[cDOUBLE, ndim=2] F,
@@ -546,7 +549,6 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     cdef np.ndarray[cINT, ndim=1] rows, cols
     cdef np.ndarray[cDOUBLE, ndim=1] kGv
-    cdef np.ndarray[cDOUBLE, ndim=2] tmp
 
     cdef unsigned fdim
     cdef cc_attributes args
@@ -593,6 +595,11 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
         row = (i1-i0)*num1 + num0
         for k1 in range(i0, m1+i0):
             col = (k1-i0)*num1 + num0
+
+            #NOTE symmetry
+            if row > col:
+                continue
+
             # kG_11
             c += 1
             rows[c] = row+2
@@ -615,6 +622,11 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     # kG_22
                     c += 1
                     rows[c] = row+4
@@ -631,16 +643,10 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     size = num0 + num1*m1 + num2*m2*n2
 
-    tmp = coo_matrix((kGv, (rows, cols)), shape=(size, size)).toarray()
-
-    #NOTE symmetry
-    for row in range(size):
-        for col in range(row, size):
-            tmp[col, row] = tmp[row, col]
-
-    kG = coo_matrix(tmp)
+    kG = coo_matrix((kGv, (rows, cols)), shape=(size, size))
 
     return kG
+
 
 cdef void cfkG(int npts, double *xs, double *ts, double *out,
                double *alphas, double *betas, void *args) nogil:
@@ -650,7 +656,7 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
     cdef double p20, p21, p40, p41, p50, p51
 
     cdef double r, x, t, alpha, beta
-    cdef int c, i, pos
+    cdef int c, i, pos, row, col
 
     cdef double *F
     cdef double *coeffs
@@ -734,12 +740,20 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
                 kGq_2_q15[pos] = q15
 
         for i1 in range(i0, m1+i0):
+            row = (i1-i0)*num1 + num0
+
             cosi1x = vcosi1x[i1-i0]
             # p_1
             p20 = pi*Nxx*i1*r*cosi1x/L
             p21 = pi*Nxt*i1*r*cosi1x/L
 
             for k1 in range(i0, m1+i0):
+                col = (k1-i0)*num1 + num0
+
+                #NOTE symmetry
+                if row > col:
+                    continue
+
                 cosk1x = vcosi1x[k1-i0]
                 # q_1
                 q02 = pi*k1*cosk1x/L
@@ -766,6 +780,8 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
             sini2x = vsini2x[i2-i0]
             cosi2x = vcosi2x[i2-i0]
             for j2 in range(j0, n2+j0):
+                row = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
+
                 sinj2t = vsinj2t[j2-j0]
                 cosj2t = vcosj2t[j2-j0]
                 # p_2
@@ -776,6 +792,12 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
 
                 for k2 in range(i0, m2+i0):
                     for l2 in range(j0, n2+j0):
+                        col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                        #NOTE symmetry
+                        if row > col:
+                            continue
+
                         # access buffer q_2
                         pos = (k2-i0)*n2 + (l2-j0)
                         q04 = kGq_2_q04[pos]
@@ -804,6 +826,7 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
     free(kGq_2_q14)
     free(kGq_2_q15)
 
+
 def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
              double alpharad, double r2, double L, double tLA,
              np.ndarray[cDOUBLE, ndim=2] F,
@@ -817,7 +840,6 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     cdef np.ndarray[cINT, ndim=1] rows, cols
     cdef np.ndarray[cDOUBLE, ndim=1] kLLv
-    cdef np.ndarray[cDOUBLE, ndim=2] tmp
 
     cdef int fdim
     cdef cc_attributes args
@@ -864,6 +886,11 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
         row = (i1-i0)*num1 + num0
         for k1 in range(i0, m1+i0):
             col = (k1-i0)*num1 + num0
+
+            #NOTE symmetry
+            if row > col:
+                continue
+
             # kLL_11
             c += 1
             rows[c] = row+2
@@ -886,6 +913,11 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     # kLL_22
                     c += 1
                     rows[c] = row+4
@@ -902,21 +934,15 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
 
     size = num0 + num1*m1 + num2*m2*n2
 
-    tmp = coo_matrix((kLLv, (rows, cols)), shape=(size, size)).toarray()
-
-    #NOTE symmetry
-    for row in range(size):
-        for col in range(row, size):
-            tmp[col, row] = tmp[row, col]
-
-    kLL = coo_matrix(tmp)
+    kLL = coo_matrix((kLLv, (rows, cols)), shape=(size, size))
 
     return kLL
+
 
 cdef void cfkLL(int npts, double *xs, double *ts, double *out,
                 double *alphas, double *betas, void *args) nogil:
     cdef int i1, k1, i2, j2, k2, l2
-    cdef int c, i, pos
+    cdef int c, i, pos, row, col
 
     cdef double A11, A12, A16, A22, A26, A66
 
@@ -1024,6 +1050,8 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
                 kLLq_2_q25[pos] = q25
 
         for i1 in range(i0, m1+i0):
+            row = (i1-i0)*num1 + num0
+
             cosi1x = vcosi1x[i1-i0]
             # p_1
             p20 = pi*cosi1x*i1*(A11*r*(w0x + wx) + A16*(w0t + wt))/L
@@ -1031,6 +1059,12 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
             p22 = pi*cosi1x*i1*(A16*r*(w0x + wx) + A66*(w0t + wt))/L
 
             for k1 in range(i0, m1+i0):
+                col = (k1-i0)*num1 + num0
+
+                #NOTE symmetry
+                if row > col:
+                    continue
+
                 cosk1x = vcosi1x[k1-i0]
                 # q_1
                 q02 = pi*cosk1x*k1*(w0x + wx)/L
@@ -1059,6 +1093,8 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
             sini2x = vsini2x[i2-i0]
             cosi2x = vcosi2x[i2-i0]
             for j2 in range(j0, n2+j0):
+                row = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
+
                 sinj2t = vsinj2t[j2-j0]
                 cosj2t = vcosj2t[j2-j0]
                 # p_2
@@ -1070,6 +1106,12 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
                 p52 = (-L*j2*sini2x*sinj2t*(A26*(w0t + wt) + A66*r*(w0x + wx)) + pi*cosi2x*cosj2t*i2*r*(A16*r*(w0x + wx) + A66*(w0t + wt)))/(L*r)
                 for k2 in range(i0, m2+i0):
                     for l2 in range(j0, n2+j0):
+                        col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                        #NOTE symmetry
+                        if row > col:
+                            continue
+
                         # access buffer q_2
                         pos = (k2-i0)*n2 + (l2-j0)
                         q04 = kLLq_2_q04[pos]
@@ -1104,6 +1146,7 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
     free(kLLq_2_q15)
     free(kLLq_2_q24)
     free(kLLq_2_q25)
+
 
 def calc_fint_0L_L0_LL(np.ndarray[cDOUBLE, ndim=1] coeffs,
               double alpharad, double r2, double L, double tLA,
@@ -1148,6 +1191,7 @@ def calc_fint_0L_L0_LL(np.ndarray[cDOUBLE, ndim=1] coeffs,
                 &args, num_cores)
 
     return fint
+
 
 cdef void cffint(int npts, double *xs, double *ts, double *fint,
                  double *alphas, double *betas, void *args) nogil:

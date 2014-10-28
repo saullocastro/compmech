@@ -11,14 +11,17 @@ import numpy as np
 
 from scipy.sparse import coo_matrix
 
+
 DOUBLE = np.float64
 INT = np.int64
 ctypedef np.double_t cDOUBLE
 ctypedef np.int64_t cINT
 
+
 cdef extern from "math.h":
     double cos(double t) nogil
     double sin(double t) nogil
+
 
 cdef int i0 = 0
 cdef int j0 = 0
@@ -26,6 +29,7 @@ cdef int num0 = 0
 cdef int num1 = 0
 cdef int num2 = 5
 cdef double pi=3.141592653589793
+
 
 cdef void cfuvw(double *c, int m1, int m2, int n2, double r2,
                 double L, double x, double t,
@@ -88,9 +92,11 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
 
     return u, v, w, phix, phit
 
+
 def fg(double[:,::1] g, int m1, int m2, int n2,
        double r2, double x, double t, double L, double cosa, double tLA):
     cfg(g, m1, m2, n2, r2, x, t, L, cosa, tLA)
+
 
 cdef cfg(double[:, ::1] g, int m1, int m2, int n2,
          double r2, double x, double t, double L, double cosa, double tLA):
@@ -109,6 +115,7 @@ cdef cfg(double[:, ::1] g, int m1, int m2, int n2,
             g[2, col+2] = sinbi*sinbj
             g[3, col+3] = cosbi*sinbj
             g[4, col+4] = sinbi*cosbj
+
 
 def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
            int m1, int m2, int n2, int s):
@@ -175,6 +182,11 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                 for k2 in range(i0, m2+i0):
                     for l2 in range(j0, n2+j0):
                         col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                        #NOTE symmetry
+                        if row > col:
+                            continue
+
                         if k2==i2 and l2==j2:
                             if i2!=0:
                                 # k0_22 cond_1
@@ -466,6 +478,11 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     if k2==i2 and l2==j2:
                         # k0_22 cond_1
                         c += 1
@@ -576,6 +593,7 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
 
     return k0
 
+
 def fk0edges(int m1, int m2, int n2, double r1, double r2,
              double kvBot, double kvTop,
              double kphixBot, double kphixTop):
@@ -604,6 +622,11 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     if k2==i2 and l2==j2:
                         # k0edges_22 cond_1
                         c += 1
@@ -632,7 +655,6 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
     k0edges = coo_matrix((k0edgesv, (k0edgesr, k0edgesc)), shape=(size, size))
 
     return k0edges
-
 
 
 def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
@@ -673,6 +695,11 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
                 for k2 in range(i0, m2+i0):
                     for l2 in range(j0, n2+j0):
                         col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                        #NOTE symmetry
+                        if row > col:
+                            continue
+
                         if k2==i2 and l2==j2:
                             if i2!=0:
                                 # kG0_22 cond_1
@@ -725,6 +752,11 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     if k2==i2 and l2==j2:
                         # kG0_22 cond_1
                         c += 1

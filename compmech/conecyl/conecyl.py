@@ -17,7 +17,7 @@ from numpy import linspace, pi, cos, sin, tan, deg2rad
 from conecylDB import ccs, laminaprops
 import compmech.composite.laminate as laminate
 from compmech.logger import *
-from compmech.sparse import remove_null_cols, solve
+from compmech.sparse import remove_null_cols, solve, make_symmetric
 from compmech.constants import DOUBLE
 import non_linear
 import modelDB
@@ -173,10 +173,6 @@ class ConeCyl(object):
         self.k0uu = None
         self.kTuk = None
         self.kTuu = None
-        self.kSkk = None
-        self.kSku = None
-        self.kSuk = None
-        self.kSuu = None
         self.kG0 = None
         self.kG0_Fc = None
         self.kG0_P = None
@@ -235,57 +231,57 @@ class ConeCyl(object):
             bcs = dict(bc_Bot=bc_Bot, bc_Top=bc_Top)
             for k in bcs.keys():
                 sufix = k.split('_')[1] # Bot or Top
-                if bcs[k]=='ss1':
+                if bcs[k] == 'ss1':
                     setattr(self, 'ku' + sufix, inf)
                     setattr(self, 'kv' + sufix, inf)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, zero)
                     setattr(self, 'kphit' + sufix, zero)
-                elif bcs[k]=='ss2':
+                elif bcs[k] == 'ss2':
                     setattr(self, 'ku' + sufix, zero)
                     setattr(self, 'kv' + sufix, inf)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, zero)
                     setattr(self, 'kphit' + sufix, zero)
-                elif bcs[k]=='ss3':
+                elif bcs[k] == 'ss3':
                     setattr(self, 'ku' + sufix, inf)
                     setattr(self, 'kv' + sufix, zero)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, zero)
                     setattr(self, 'kphit' + sufix, zero)
-                elif bcs[k]=='ss4':
+                elif bcs[k] == 'ss4':
                     setattr(self, 'ku' + sufix, zero)
                     setattr(self, 'kv' + sufix, zero)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, zero)
                     setattr(self, 'kphit' + sufix, zero)
 
-                elif bcs[k]=='cc1':
+                elif bcs[k] == 'cc1':
                     setattr(self, 'ku' + sufix, inf)
                     setattr(self, 'kv' + sufix, inf)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, inf)
                     setattr(self, 'kphit' + sufix, zero)
-                elif bcs[k]=='cc2':
+                elif bcs[k] == 'cc2':
                     setattr(self, 'ku' + sufix, zero)
                     setattr(self, 'kv' + sufix, inf)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, inf)
                     setattr(self, 'kphit' + sufix, zero)
-                elif bcs[k]=='cc3':
+                elif bcs[k] == 'cc3':
                     setattr(self, 'ku' + sufix, inf)
                     setattr(self, 'kv' + sufix, zero)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, inf)
                     setattr(self, 'kphit' + sufix, zero)
-                elif bcs[k]=='cc4':
+                elif bcs[k] == 'cc4':
                     setattr(self, 'ku' + sufix, zero)
                     setattr(self, 'kv' + sufix, zero)
                     setattr(self, 'kw' + sufix, inf)
                     setattr(self, 'kphix' + sufix, inf)
                     setattr(self, 'kphit' + sufix, zero)
 
-                elif bcs[k]=='free':
+                elif bcs[k] == 'free':
                     setattr(self, 'ku' + sufix, zero)
                     setattr(self, 'kv' + sufix, zero)
                     setattr(self, 'kw' + sufix, zero)
@@ -324,7 +320,7 @@ class ConeCyl(object):
         if not self.plyts:
             self.plyts = [self.plyt for i in self.stack]
 
-        if self.alpharad==0:
+        if self.alpharad == 0:
             self.is_cylinder = True
         else:
             self.is_cylinder = False
@@ -341,7 +337,7 @@ class ConeCyl(object):
             self.excluded_dofs.append(2)
             self.excluded_dofs_ck.append(self.LA)
         else:
-            raise NotImplementedError('pdLA==False is giving wrong results!')
+            raise NotImplementedError('pdLA == False is giving wrong results!')
 
         self.maxInc = max(self.initialInc, self.maxInc)
 
@@ -356,11 +352,11 @@ class ConeCyl(object):
             self.nt = int(round(self.nx*self.n2/max(self.m1, self.m2)))
 
         # axial load
-        if self.Nxxtop!=None:
+        if self.Nxxtop is not None:
             check = False
             if isinstance(self.Nxxtop, np.ndarray):
-                if self.Nxxtop.ndim==1:
-                    assert self.Nxxtop.shape[0]==(2*self.n2+1)
+                if self.Nxxtop.ndim == 1:
+                    assert self.Nxxtop.shape[0] == (2*self.n2+1)
                     check=True
             if not check:
                 raise ValueError('Invalid Nxxtop input')
@@ -368,22 +364,22 @@ class ConeCyl(object):
         else:
             self.Nxxtop = np.zeros(2*self.n2+1, dtype=DOUBLE)
 
-        if self.Fc!=None:
+        if self.Fc is not None:
             self.Nxxtop[0] = self.Fc/(2*pi*self.r2*self.cosa)
             log('Nxxtop[0] calculated from Fc', level=2)
-            if self.MLA==None:
-                if self.xiLA!=None:
+            if self.MLA is None:
+                if self.xiLA is not None:
                     self.MLA = self.xiLA*self.Fc
                     log('MLA calculated from xiLA', level=2)
-        if self.MLA!=None:
+        if self.MLA is not None:
             self.Nxxtop[2] = self.MLA/(pi*self.r2**2*self.cosa)
             log('Nxxtop[2] calculated from MLA', level=2)
 
-        if self.laminaprop==None:
+        if self.laminaprop is None:
             h = self.h
             E11 = self.E11
             nu = self.nu
-            if h==None or E11==None or nu==None:
+            if h is None or E11 is None or nu is None:
                 raise ValueError(
                         'laminaprop or (E11, nu and h) must be defined')
 
@@ -590,7 +586,7 @@ class ConeCyl(object):
         return c
 
     def _default_field(self, xs, ts, gridx, gridt):
-        if xs==None or ts==None:
+        if xs is None or ts is None:
             xs = linspace(0, self.L, gridx)
             ts = linspace(-pi, pi, gridt)
             xs, ts = np.meshgrid(xs, ts, copy=False)
@@ -634,7 +630,7 @@ class ConeCyl(object):
 
         Fc = self.Nxxtop[0]*(2*pi*r2*cosa)
 
-        if stack != [] and self.F_reuse==None:
+        if stack != [] and self.F_reuse is None:
             lam = laminate.read_stack(stack, plyts=plyts,
                                              laminaprops=laminaprops)
 
@@ -709,25 +705,26 @@ class ConeCyl(object):
                 kG0_P = fkG0(0, P, 0, r2, alpharad, L, m1, m2, n2, s)
                 kG0_T = fkG0(0, 0, T, r2, alpharad, L, m1, m2, n2, s)
 
-        if k0edges!=None:
-            k0 = coo_matrix(k0 + k0edges)
+        if k0edges is not None:
+            k0 = csr_matrix(k0) + csr_matrix(k0edges)
 
-        assert np.any((np.isnan(k0.data) | np.isinf(k0.data)))==False
+        assert np.any((np.isnan(k0.data) | np.isinf(k0.data))) == False
 
-        self.k0 = k0
+        k0 = make_symmetric(k0)
+
         if not combined_load_case:
-            assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data)))==False
-            self.kG0 = kG0
+            assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
+            self.kG0 = make_symmetric(kG0)
         else:
             assert np.any((np.isnan(kG0_Fc.data)
-                           | np.isinf(kG0_Fc.data)))==False
+                           | np.isinf(kG0_Fc.data))) == False
             assert np.any((np.isnan(kG0_P.data)
-                           | np.isinf(kG0_P.data)))==False
+                           | np.isinf(kG0_P.data))) == False
             assert np.any((np.isnan(kG0_T.data)
-                           | np.isinf(kG0_T.data)))==False
-            self.kG0_Fc = kG0_Fc
-            self.kG0_P = kG0_P
-            self.kG0_T = kG0_T
+                           | np.isinf(kG0_T.data))) == False
+            self.kG0_Fc = make_symmetric(kG0_Fc)
+            self.kG0_P = make_symmetric(kG0_P)
+            self.kG0_T = make_symmetric(kG0_T)
 
         k = self.exclude_dofs_matrix(k0, return_kuk=True)
         k0uk = k['kuk']
@@ -787,9 +784,9 @@ class ConeCyl(object):
             log('________________________________________________')
 
         log('Running linear buckling analysis...')
-        if self.Fc==None:
+        if self.Fc is None:
             self.Fc = 1.
-        if self.pdC==None:
+        if self.pdC is None:
             self.pdC = False
         self._calc_linear_matrices(combined_load_case=combined_load_case)
         #TODO maybe a better estimator to sigma would be to run
@@ -808,13 +805,13 @@ class ConeCyl(object):
         if not combined_load_case:
             M = csr_matrix(self.k0)
             A = csr_matrix(self.kG0)
-        elif combined_load_case==1:
+        elif combined_load_case == 1:
             M = csr_matrix(self.k0) + csr_matrix(self.kG0_T)
             A = csr_matrix(self.kG0_Fc)
-        elif combined_load_case==2:
+        elif combined_load_case == 2:
             M = csr_matrix(self.k0) + csr_matrix(self.kG0_P)
             A = csr_matrix(self.kG0_Fc)
-        elif combined_load_case==3:
+        elif combined_load_case == 3:
             M = csr_matrix(self.k0) + csr_matrix(self.kG0_Fc)
             A = csr_matrix(self.kG0_T)
 
@@ -899,9 +896,9 @@ class ConeCyl(object):
             log('________________________________________________')
 
         log('Running linear buckling analysis...')
-        if self.Fc==None:
+        if self.Fc is None:
             self.Fc = 1.
-        if self.pdC==None:
+        if self.pdC is None:
             self.pdC = False
         self._calc_linear_matrices(combined_load_case=combined_load_case)
         #TODO maybe a better estimator to sigma would be to run
@@ -920,13 +917,13 @@ class ConeCyl(object):
         if not combined_load_case:
             M = csr_matrix(self.k0)
             A = csr_matrix(self.kG0)
-        elif combined_load_case==1:
+        elif combined_load_case == 1:
             M = csr_matrix(self.k0) + csr_matrix(self.kG0_T)
             A = csr_matrix(self.kG0_Fc)
-        elif combined_load_case==2:
+        elif combined_load_case == 2:
             M = csr_matrix(self.k0) + csr_matrix(self.kG0_P)
             A = csr_matrix(self.kG0_Fc)
-        elif combined_load_case==3:
+        elif combined_load_case == 3:
             M = csr_matrix(self.k0) + csr_matrix(self.kG0_Fc)
             A = csr_matrix(self.kG0_T)
 
@@ -996,11 +993,11 @@ class ConeCyl(object):
 
         c = self.calc_full_c(c, inc=inc)
 
-        if self.k0==None:
+        if self.k0 is None:
             self._calc_linear_matrices()
-        if with_k0L==None:
+        if with_k0L is None:
             with_k0L = self.with_k0L
-        if with_kLL==None:
+        if with_kLL is None:
             with_kLL = self.with_kLL
 
         log('Calculating non-linear matrices...', level=2)
@@ -1028,6 +1025,7 @@ class ConeCyl(object):
                          num_cores=num_cores,
                          method=self.ni_method,
                          c0=c0, m0=m0, n0=n0)
+            kG = make_symmetric(kG)
 
             if 'iso_' in self.model:
                 E11 = self.E11
@@ -1049,8 +1047,11 @@ class ConeCyl(object):
                                    num_cores=num_cores,
                                    method=self.ni_method,
                                    c0=c0, m0=m0, n0=n0)
+                    kLL = make_symmetric(kLL)
+
                 else:
                     kLL = kG*0
+
             else:
                 if with_k0L:
                     k0L = calc_k0L(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
@@ -1066,6 +1067,8 @@ class ConeCyl(object):
                                    num_cores=num_cores,
                                    method=self.ni_method,
                                    c0=c0, m0=m0, n0=n0)
+                    kLL = make_symmetric(kLL)
+
                 else:
                     kLL = kG*0
 
@@ -1079,7 +1082,7 @@ class ConeCyl(object):
         #TODO maybe slow...
         kT = coo_matrix(self.k0 + k0L + kL0 + kLL + kG)
         # kS was deprecated, now fint is integrated numerically
-        kS = coo_matrix(self.k0 + k0L/2 + kL0 + kLL/2)
+        #kS = coo_matrix(self.k0 + k0L/2 + kL0 + kLL/2)
 
         k = self.exclude_dofs_matrix(kT, return_kuk=True)
         self.kTuk = k['kuk']
@@ -1404,7 +1407,7 @@ class ConeCyl(object):
 
         """
         log('Calculating external forces...', level=2, silent=silent)
-        if inc==None:
+        if inc is None:
             Nxxtop = self.Nxxtop
             uTM = self.uTM
             thetaTrad = self.thetaTrad
@@ -1454,9 +1457,9 @@ class ConeCyl(object):
 
             gu = np.delete(g, self.excluded_dofs, axis=1)
 
-            if dofs==3:
+            if dofs == 3:
                 fpt = np.array([[fx, ftheta, fz]])
-            elif dofs==5:
+            elif dofs == 5:
                 fpt = np.array([[fx, ftheta, fz, 0, 0]])
             fext += -fpt.dot(gu).ravel()
 
@@ -1473,7 +1476,7 @@ class ConeCyl(object):
                         fext_tmp[row+0]+=(Nxxtop[rowNxx+0]*pi*r2)
                         fext_tmp[row+1]+=(Nxxtop[rowNxx+1]*pi*r2)
         else:
-            if kuk==None:
+            if kuk is None:
                 kuk_C = self.k0uk[:, 0].ravel()
             else:
                 kuk_C = kuk[:, 0].ravel()
@@ -1489,15 +1492,15 @@ class ConeCyl(object):
         fg(g, m1, m2, n2, r2, 0, 0, L, cosa, tLArad)
         gu = np.delete(g, self.excluded_dofs, axis=1)
         if pdT:
-            if kuk==None:
+            if kuk is None:
                 kuk_T = self.k0uk[:, 1].ravel()
             else:
                 kuk_T = kuk[:, 1].ravel()
             fext += -thetaTrad*kuk_T
         else:
-            if dofs==3:
+            if dofs == 3:
                 fpt = np.array([[0, self.T/r2, 0]])
-            elif dofs==5:
+            elif dofs == 5:
                 fpt = np.array([[0, self.T/r2, 0, 0, 0]])
             fext += fpt.dot(gu).ravel()
 
@@ -1593,6 +1596,11 @@ class ConeCyl(object):
         """
         self.cs = []
         self.increments = []
+
+        if self.pdC:
+            text ='Non-linear analysis with prescribed displacements'
+            raise NotImplementedError(text)
+
         if NLgeom:
             if not modelDB.db[self.model]['non-linear static']:
                 log('________________________________________________',
@@ -1606,13 +1614,13 @@ class ConeCyl(object):
 
             log('Started Non-Linear Static Analysis', silent=silent)
             self._calc_linear_matrices()
-            if self.NL_method=='NR':
+            if self.NL_method == 'NR':
                 non_linear.NR(self)
-            if self.NL_method=='NR_lebofsky':
+            if self.NL_method == 'NR_lebofsky':
                 non_linear.NR_lebofsky(self)
-            elif self.NL_method=='NR_Broyden':
+            elif self.NL_method == 'NR_Broyden':
                 non_linear.NR_Broyden(self)
-            elif self.NL_method=='arc_length':
+            elif self.NL_method == 'arc_length':
                 non_linear.arc_length(self)
         else:
             if not modelDB.db[self.model]['linear static']:
@@ -1703,7 +1711,7 @@ class ConeCyl(object):
         cbar_fontsize : int, optional
             Fontsize of the colorbar labels.
         cbar_title : str, optional
-            Colorbar title. If ``cbar_title==''`` no title is added.
+            Colorbar title. If ``cbar_title == ''`` no title is added.
         aspect : str, optional
             String that will be passed to the ``AxesSubplot.set_aspect()``
             method.
@@ -1774,7 +1782,7 @@ class ConeCyl(object):
 
         levels = np.linspace(vecmin, vecmax, num_levels)
 
-        if ax==None:
+        if ax is None:
             fig = plt.figure(figsize=figsize)
             ax = fig.add_subplot(111)
         else:
@@ -1790,24 +1798,24 @@ class ConeCyl(object):
 
         if self.is_cylinder:
             plot_type=4
-        if plot_type==1:
+        if plot_type == 1:
             r_plot = self.r2/self.sina + Xs
             r_plot_max = self.r2/self.sina + self.L
             y = r_plot_max - r_plot*cos(Ts*self.sina)
             x = r_plot*sin(Ts*self.sina)
-        elif plot_type==2:
+        elif plot_type == 2:
             r_plot = self.r2/self.sina + Xs
             y = r_plot*cos(Ts*self.sina)
             x = r_plot*sin(Ts*self.sina)
-        elif plot_type==3:
+        elif plot_type == 3:
             r_plot = self.r2/self.sina + Xs
             r_plot_max = self.r2/self.sina + self.L
             y = r_plot_max - r_plot*cos(Ts)
             x = r_plot*sin(Ts)
-        elif plot_type==4:
+        elif plot_type == 4:
             x = r(Xs)*Ts
             y = self.L-Xs
-        elif plot_type==5:
+        elif plot_type == 5:
             x = Ts
             y = Xs
         if deform_u:
@@ -1834,7 +1842,7 @@ class ConeCyl(object):
             cbar.outline.remove()
             cbar.ax.tick_params(labelsize=fsize, pad=0., tick2On=False)
 
-        if invert_x==True:
+        if invert_x:
             ax.invert_yaxis()
 
         if title!='':
@@ -1871,15 +1879,15 @@ class ConeCyl(object):
                         bbox_inches='tight', pad_inches=0.05, dpi=dpi)
             plt.close()
 
-        if ubkp!=None:
+        if ubkp is not None:
             self.u = ubkp
-        if vbkp!=None:
+        if vbkp is not None:
             self.v = vbkp
-        if wbkp!=None:
+        if wbkp is not None:
             self.w = wbkp
-        if phixbkp!=None:
+        if phixbkp is not None:
             self.phix = phixbkp
-        if phitbkp!=None:
+        if phitbkp is not None:
             self.phit = phitbkp
 
         log('finished!')
@@ -1994,7 +2002,7 @@ class ConeCyl(object):
             field = frame.fieldOutputs[fieldOutputKey]
 
             uvw_rec = np.array([val.data for val in field.values
-                if getattr(val.instance, 'name', None)=='INSTANCECYLINDER'])
+                if getattr(val.instance, 'name', None) == 'INSTANCECYLINDER'])
             u_rec = uvw_rec[:,0]
             v_rec = uvw_rec[:,1]
             w_rec = uvw_rec[:,2]
@@ -2044,29 +2052,29 @@ class ConeCyl(object):
             def fr(z):
                 return r1 - z*sina/cosa
 
-            if self.alpharad==0.:
+            if self.alpharad == 0.:
                 plot_type=4
-            if plot_type==1:
+            if plot_type == 1:
                 r_plot = fr(zs)
-                if self.alpharad==0.:
+                if self.alpharad == 0.:
                     r_plot_max = L
                 else:
                     r_plot_max = r2/sina + L
                 y = r_plot_max - r_plot*cos(thetas*sina)
                 x = r_plot*sin(thetas*sina)
-            elif plot_type==2:
+            elif plot_type == 2:
                 r_plot = fr(zs)
                 y = r_plot*cos(thetas*sina)
                 x = r_plot*sin(thetas*sina)
-            elif plot_type==3:
+            elif plot_type == 3:
                 r_plot = fr(zs)
                 r_plot_max = r2/sina + L
                 y = r_plot_max - r_plot*cos(thetas)
                 x = r_plot*sin(thetas)
-            elif plot_type==4:
+            elif plot_type == 4:
                 x = fr(zs)*thetas
                 y = zs
-            elif plot_type==5:
+            elif plot_type == 5:
                 x = thetas
                 y = zs
 
@@ -2076,7 +2084,7 @@ class ConeCyl(object):
 
             if workingplt:
                 levels = np.linspace(field.min(), field.max(), num_levels)
-                if ax==None:
+                if ax is None:
                     fig = plt.figure(figsize=figsize)
                     ax = fig.add_subplot(111)
                 else:
@@ -2309,7 +2317,7 @@ class ConeCyl(object):
         """
         from scipy.sparse.linalg import inv as sparseinv
 
-        assert ts.ndim==1 and us.ndim==1
+        assert ts.ndim == 1 and us.ndim == 1
         assert ts.shape[0] == us.shape[0]
         xs = np.zeros_like(ts)
 

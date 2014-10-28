@@ -12,14 +12,17 @@ cimport numpy as np
 cimport cython
 from cpython cimport bool
 
+
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
 ctypedef np.int64_t cINT
 INT = np.int64
 
+
 cdef extern from "math.h":
     double cos(double t) nogil
     double sin(double t) nogil
+
 
 cdef int i0 = 0
 cdef int j0 = 1
@@ -27,6 +30,7 @@ cdef int num0 = 3
 cdef int num1 = 5
 cdef int num2 = 10
 cdef double pi = 3.141592653589793
+
 
 def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
         int m1, int m2, int n2, int s):
@@ -60,7 +64,7 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
     k22_num = k22_cond_1*m2*n2 + k22_cond_2*(m2-1)*m2*n2 \
             + k22_cond_3*(m2-1)*m2*(n2-1)*n2 + k22_cond_4*m2*(n2-1)*n2
 
-    fdim = 5 + 2*10*m1 + k11_num + k22_num
+    fdim = 5 + 10*m1 + k11_num + k22_num
 
     k0r = np.zeros((fdim,), dtype=INT)
     k0c = np.zeros((fdim,), dtype=INT)
@@ -172,48 +176,6 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                     k0c[c] = col+4
                     k0v[c] += 2*r2*(-pi*L*cosk1xa*k1*(L - xa)*(A44*cosa*r - B66*(sina*sina)) + pi*L*cosk1xb*k1*(L - xb)*(A44*cosa*r - B66*(sina*sina)) + sink1xa*(-A44*(L*L)*cosa*r + B66*((L*L)*(sina*sina) + (pi*pi)*(k1*k1)*r*(L*sina + r - sina*xa))) + sink1xb*(A44*(L*L)*cosa*r - B66*((L*L)*(sina*sina) + (pi*pi)*(k1*k1)*r*(L*sina + r - sina*xb))))/(pi*L*(k1*k1)*r)
 
-                    # k0_10 cond_1 (using symmetry)
-                    c += 1
-                    k0r[c] = col+0
-                    k0c[c] = 0
-                    k0v[c] += (2*pi*A22*L*cosk1xa*k1*(sina*sina)*(L - xa) + 2*pi*A22*L*cosk1xb*k1*(sina*sina)*(-L + xb) + 2*sink1xa*((pi*pi)*A11*(k1*k1)*(r*r) + sina*((pi*pi)*A12*(k1*k1)*r*(-L + xa) + A22*(L*L)*sina)) - 2*sink1xb*((pi*pi)*A11*(k1*k1)*(r*r) + sina*((pi*pi)*A12*(k1*k1)*r*(-L + xb) + A22*(L*L)*sina)))/(pi*L*cosa*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+1
-                    k0c[c] = 0
-                    k0v[c] += (2*pi*L*cosk1xa*k1*sina*(A16*r + A26*(-L*sina + r + sina*xa)) + 2*pi*L*cosk1xb*k1*sina*(-A16*r - A26*(-L*sina + r + sina*xb)) + 2*sink1xa*((pi*pi)*A16*(k1*k1)*(r*r) + A26*sina*(-(L*L)*sina + (pi*pi)*(k1*k1)*r*(-L + xa))) + 2*sink1xb*(-(pi*pi)*A16*(k1*k1)*(r*r) + A26*sina*((L*L)*sina + (pi*pi)*(k1*k1)*r*(L - xb))))/(pi*L*cosa*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+2
-                    k0c[c] = 0
-                    k0v[c] += (2*A22*L*sina*(sink1xa - sink1xb) - 2*pi*cosk1xa*k1*(A12*r + A22*sina*(-L + xa)) + 2*pi*cosk1xb*k1*(A12*r + A22*sina*(-L + xb)))/(pi*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+3
-                    k0c[c] = 0
-                    k0v[c] += (2*pi*B22*L*k1*(sina*sina)*(sink1xa*(-L + xa) + sink1xb*(L - xb)) + 2*cosk1xa*((pi*pi)*B11*(k1*k1)*(r*r) + sina*((pi*pi)*B12*(k1*k1)*r*(-L + xa) + B22*(L*L)*sina)) - 2*cosk1xb*((pi*pi)*B11*(k1*k1)*(r*r) + sina*((pi*pi)*B12*(k1*k1)*r*(-L + xb) + B22*(L*L)*sina)))/(pi*L*cosa*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+4
-                    k0c[c] = 0
-                    k0v[c] += (2*pi*L*cosk1xa*k1*sina*(B16*r + B26*(-L*sina + r + sina*xa)) + 2*pi*L*cosk1xb*k1*sina*(-B16*r - B26*(-L*sina + r + sina*xb)) + 2*sink1xa*((pi*pi)*B16*(k1*k1)*(r*r) + B26*sina*(-(L*L)*sina + (pi*pi)*(k1*k1)*r*(-L + xa))) + 2*sink1xb*(-(pi*pi)*B16*(k1*k1)*(r*r) + B26*sina*((L*L)*sina + (pi*pi)*(k1*k1)*r*(L - xb))))/(pi*L*cosa*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+0
-                    k0c[c] = 1
-                    k0v[c] += 2*r2*(-pi*L*cosk1xa*k1*sina*(A16*r + A26*(L*sina + r - sina*xa)) + pi*L*cosk1xb*k1*sina*(A16*r + A26*(L*sina + r - sina*xb)) + sink1xa*((pi*pi)*A16*(k1*k1)*r*(L*sina + r - sina*xa) - A26*(L*L)*(sina*sina)) + sink1xb*(-(pi*pi)*A16*(k1*k1)*r*(L*sina + r - sina*xb) + A26*(L*L)*(sina*sina)))/(pi*L*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+1
-                    k0c[c] = 1
-                    k0v[c] += 2*r2*(pi*L*cosk1xa*k1*(L - xa)*(A44*(cosa*cosa) + A66*(sina*sina)) - pi*L*cosk1xb*k1*(L - xb)*(A44*(cosa*cosa) + A66*(sina*sina)) + sink1xa*(A44*(L*L)*(cosa*cosa) + A66*((L*L)*(sina*sina) + (pi*pi)*(k1*k1)*r*(L*sina + r - sina*xa))) - sink1xb*(A44*(L*L)*(cosa*cosa) + A66*((L*L)*(sina*sina) + (pi*pi)*(k1*k1)*r*(L*sina + r - sina*xb))))/(pi*L*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+2
-                    k0c[c] = 1
-                    k0v[c] += 2*cosa*r2*(-pi*L*cosk1xa*k1*(A26*(L*sina + r - sina*xa) + A45*r) + pi*L*cosk1xb*k1*(A26*(L*sina + r - sina*xb) + A45*r) + sink1xa*(-A26*(L*L)*sina + (pi*pi)*A45*(k1*k1)*r*(L - xa)) + sink1xb*(A26*(L*L)*sina + (pi*pi)*A45*(k1*k1)*r*(-L + xb)))/(pi*L*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+3
-                    k0c[c] = 1
-                    k0v[c] += 2*r2*(pi*L*k1*(sink1xa*(A45*cosa*r*(L - xa) + sina*(B16*r + B26*(L*sina + r - sina*xa))) - sink1xb*(A45*cosa*r*(L - xb) + sina*(B16*r + B26*(L*sina + r - sina*xb)))) - cosk1xa*(A45*(L*L)*cosa*r - (pi*pi)*B16*(k1*k1)*r*(L*sina + r - sina*xa) + B26*(L*L)*(sina*sina)) + cosk1xb*(A45*(L*L)*cosa*r - (pi*pi)*B16*(k1*k1)*r*(L*sina + r - sina*xb) + B26*(L*L)*(sina*sina)))/(pi*L*(k1*k1)*r)
-                    c += 1
-                    k0r[c] = col+4
-                    k0c[c] = 1
-                    k0v[c] += 2*r2*(-pi*L*cosk1xa*k1*(L - xa)*(A44*cosa*r - B66*(sina*sina)) + pi*L*cosk1xb*k1*(L - xb)*(A44*cosa*r - B66*(sina*sina)) + sink1xa*(-A44*(L*L)*cosa*r + B66*((L*L)*(sina*sina) + (pi*pi)*(k1*k1)*r*(L*sina + r - sina*xa))) + sink1xb*(A44*(L*L)*cosa*r - B66*((L*L)*(sina*sina) + (pi*pi)*(k1*k1)*r*(L*sina + r - sina*xb))))/(pi*L*(k1*k1)*r)
-
                 else:
                     # k0_01 cond_2
                     c += 1
@@ -223,16 +185,6 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                     c += 1
                     k0r[c] = 1
                     k0c[c] = col+3
-                    k0v[c] += -pi*r2*(xa - xb)*(A45*cosa*r*(-2*L + xa + xb) + B26*sina*(-2*r + sina*(-2*L + xa + xb)))/(L*r)
-
-                    # k0_10 cond_2
-                    c += 1
-                    k0r[c] = col+3
-                    k0c[c] = 0
-                    k0v[c] += pi*sina*(xa - xb)*(2*B12*r + B22*sina*(-2*L + xa + xb))/(L*cosa*r)
-                    c += 1
-                    k0r[c] = col+3
-                    k0c[c] = 1
                     k0v[c] += -pi*r2*(xa - xb)*(A45*cosa*r*(-2*L + xa + xb) + B26*sina*(-2*r + sina*(-2*L + xa + xb)))/(L*r)
 
             for i1 in range(i0, m1+i0):
@@ -250,12 +202,17 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
 
                 row = (i1-i0)*num1 + num0
                 for k1 in range(i0, m1+i0):
+                    col = (k1-i0)*num1 + num0
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     cosk1xa = cos(pi*k1*xa/L)
                     cosk1xb = cos(pi*k1*xb/L)
                     sink1xa = sin(pi*k1*xa/L)
                     sink1xb = sin(pi*k1*xb/L)
 
-                    col = (k1-i0)*num1 + num0
                     if k1==i1:
                         if k1!=0:
                             # k0_11 cond_1
@@ -490,6 +447,11 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                         row = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
                         for l2 in range(j0, n2+j0):
                             col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                            #NOTE symmetry
+                            if row > col:
+                                continue
+
                             if k2==i2 and l2==j2:
                                 if i2!=0:
                                     # k0_22 cond_1
@@ -1308,7 +1270,6 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                                 k0c[c] = col+9
                                 k0v[c] += (-cosk2xa*k2*sini2xa*(D22*(L*L)*(j2*j2) + D66*(L*L)*(sina*sina) + (r*r)*(A44*(L*L) + (pi*pi)*D66*(i2*i2))) + cosk2xb*k2*sini2xb*(D22*(L*L)*(j2*j2) + D66*(L*L)*(sina*sina) + (r*r)*(A44*(L*L) + (pi*pi)*D66*(i2*i2))) + sink2xa*(pi*D66*L*r*sina*sini2xa*(i2 - k2)*(i2 + k2) + cosi2xa*i2*(D22*(L*L)*(j2*j2) + D66*(L*L)*(sina*sina) + (r*r)*(A44*(L*L) + (pi*pi)*D66*(k2*k2)))) - sink2xb*(pi*D66*L*r*sina*sini2xb*(i2 - k2)*(i2 + k2) + cosi2xb*i2*(D22*(L*L)*(j2*j2) + D66*(L*L)*(sina*sina) + (r*r)*(A44*(L*L) + (pi*pi)*D66*(k2*k2)))))/(L*r*(i2 - k2)*(i2 + k2))
 
-
     size = num0 + num1*m1 + num2*m2*n2
 
     k0 = coo_matrix((k0v, (k0r, k0c)), shape=(size, size))
@@ -1337,7 +1298,7 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
     k22_num = k22_cond_1*m2*n2 + k22_cond_2*(m2-1)*m2*n2 \
             + k22_cond_3*(m2-1)*m2*(n2-1)*n2 + k22_cond_4*m2*(n2-1)*n2
 
-    fdim = 5 + 2*6*m1 + k11_num + k22_num
+    fdim = 5 + 6*m1 + k11_num + k22_num
 
     k0r = np.zeros((fdim,), dtype=INT)
     k0c = np.zeros((fdim,), dtype=INT)
@@ -1423,32 +1384,6 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
             k0c[c] = col+4
             k0v[c] += -2*A44*L*r2/i1
 
-            # k0_10 (using symmetry)
-            c += 1
-            k0r[c] = col+2
-            k0c[c] = 0
-            k0v[c] += A12*(2*(-1)**i1 - 2)/i1
-            c += 1
-            k0r[c] = col+3
-            k0c[c] = 0
-            k0v[c] += pi*B11*r*(-2*(-1)**i1 + 2)/L
-            c += 1
-            k0r[c] = col+1
-            k0c[c] = 1
-            k0v[c] += 2*A44*L*r2/(i1*r)
-            c += 1
-            k0r[c] = col+2
-            k0c[c] = 1
-            k0v[c] += r2*(2*(-1)**i1 - 2)*(A26 + A45)/i1
-            c += 1
-            k0r[c] = col+3
-            k0c[c] = 1
-            k0v[c] += r2*(2*(-1)**i1 - 2)*(A45*(L*L) - (pi*pi)*B16*(i1*i1)*r)/(pi*L*(i1*i1))
-            c += 1
-            k0r[c] = col+4
-            k0c[c] = 1
-            k0v[c] += -2*A44*L*r2/i1
-
         else:
             # k0_01 cond_5
             c += 1
@@ -1456,14 +1391,13 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
             k0c[c] = col+3
             k0v[c] += -pi*A45*L*r2
 
-            # k0_10 cond_5 (using symmetry)
-            c += 1
-            k0r[c] = col+3
-            k0c[c] = 1
-            k0v[c] += -pi*A45*L*r2
-
         for k1 in range(i0, m1+i0):
             col = (k1-i0)*num1 + num0
+
+            #NOTE symmetry
+            if row > col:
+                continue
+
             if k1==i1:
                 if i1!=0:
                     # k0_11 cond_1
@@ -1584,6 +1518,11 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     if k2==i2 and l2==j2:
                         if i2!=0:
                             # k0_22 cond_1
@@ -2026,7 +1965,6 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+8
                         k0v[c] += pi*D26*i2*j2*k2*(2*(-1)**(i2 + k2) - 2)/((i2*i2) - (k2*k2))
 
-
     size = num0 + num1*m1 + num2*m2*n2
 
     k0 = coo_matrix((k0v, (k0r, k0c)), shape=(size, size))
@@ -2063,6 +2001,11 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
         row = (i1-i0)*num1 + num0
         for k1 in range(i0, m1+i0):
             col = (k1-i0)*num1 + num0
+
+            #NOTE symmetry
+            if row > col:
+                continue
+
             if k1==i1:
                 # k0edges_11 cond_1
                 c += 1
@@ -2083,6 +2026,11 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     if k2==i2 and l2==j2:
                         # k0edges_22 cond_1
                         c += 1
@@ -2120,7 +2068,6 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
                         k0edgesr[c] = row+7
                         k0edgesc[c] = col+7
                         k0edgesv[c] += pi*((-1)**(i2 + k2)*kphixBot*r1 + kphixTop*r2)
-
 
     size = num0 + num1*m1 + num2*m2*n2
 
@@ -2182,12 +2129,17 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
 
                 row = (i1-i0)*num1 + num0
                 for k1 in range(i0, m1+i0):
+                    col = (k1-i0)*num1 + num0
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     cosk1xa = cos(pi*k1*xa/L)
                     cosk1xb = cos(pi*k1*xb/L)
                     sink1xa = sin(pi*k1*xa/L)
                     sink1xb = sin(pi*k1*xb/L)
 
-                    col = (k1-i0)*num1 + num0
                     if k1==i1:
                         if i1!=0:
                             # kG0_11 cond_1
@@ -2219,6 +2171,11 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
                         row = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
                         for l2 in range(j0, n2+j0):
                             col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                            #NOTE symmetry
+                            if row > col:
+                                continue
+
                             if k2==i2 and l2==j2:
                                 if i2!=0:
                                     # kG0_22 cond_1
@@ -2249,7 +2206,6 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
                                 kG0r[c] = row+5
                                 kG0c[c] = col+5
                                 kG0v[c] += 0.5*(cosi2xa*i2*sink2xa*(2*(L*L)*P*(j2*j2) + pi*(k2*k2)*(-Fc + pi*P*(r*r))) + cosi2xb*i2*sink2xb*(-2*(L*L)*P*(j2*j2) + pi*(k2*k2)*(Fc - pi*P*(r*r))) + cosk2xa*k2*sini2xa*(-2*(L*L)*P*(j2*j2) + pi*(i2*i2)*(Fc - pi*P*(r*r))) + cosk2xb*k2*sini2xb*(2*(L*L)*P*(j2*j2) + pi*(i2*i2)*(-Fc + pi*P*(r*r))))/(L*cosa*(i2 - k2)*(i2 + k2))
-
 
     size = num0 + num1*m1 + num2*m2*n2
 
@@ -2288,6 +2244,11 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
         row = (i1-i0)*num1 + num0
         for k1 in range(i0, m1+i0):
             col = (k1-i0)*num1 + num0
+
+            #NOTE symmetry
+            if row > col:
+                continue
+
             if k1==i1:
                 if i1!=0:
                     # kG0_11 cond_1
@@ -2302,6 +2263,11 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
                     if k2==i2 and l2==j2:
                         if i2!=0:
                             # kG0_22 cond_1
@@ -2324,7 +2290,6 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
                         kG0r[c] = row+5
                         kG0c[c] = col+4
                         kG0v[c] += -T*i2*j2*k2*((-1)**(i2 + k2) - 1)/((r*r)*((i2*i2) - (k2*k2)))
-
 
     size = num0 + num1*m1 + num2*m2*n2
 

@@ -20,7 +20,6 @@ from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
 from compmech.sparse import (make_symmetric, solve, remove_null_cols,
                              is_symmetric)
-import non_linear
 import modelDB
 
 

@@ -35,7 +35,7 @@ def NR_Broyden(cc):
         Rmax_old = 1e6
         while True:
             fext = cc.calc_fext(inc=total)
-            if True:#iteration==0:
+            if True:#iteration == 0:
                 R = fext - k0*c
             #else:
                 #cc._calc_NL_matrices(c)
@@ -51,7 +51,7 @@ def NR_Broyden(cc):
             iteration += 1
             update_kT = True
             if cc.modified_NR:
-                if iteration<=5 or test==0:
+                if iteration<=5 or test == 0:
                     update_kT = True
                 else:
                     update_kT = False
@@ -92,22 +92,16 @@ def NR(cc):
     c = solve(cc.k0uu, fext)
 
     if modified_NR:
-        if cc.c0!=None:
+        if cc.c0 is not None:
             log('Updating kT for initial imperfections...', level=1)
             cc._calc_NL_matrices(c*0, inc=0.)
             log('kT updated!', level=1)
-            kSuu_last = cc.kSuu
-            kSuk_last = cc.kSuk
             kTuu_last = cc.kTuu
         else:
-            kSuu_last = cc.k0uu
-            kSuk_last = cc.k0uk
             kTuu_last = cc.k0uu
         compute_NL_matrices = False
     else:
         compute_NL_matrices = True
-        kSuu_last = cc.k0uu
-        kSuk_last = cc.k0uk
         kTuu_last = cc.k0uu
 
     step_num = 1
@@ -126,11 +120,9 @@ def NR(cc):
         iteration = 0
         converged = False
 
-        kSuu = kSuu_last
-        kSuk = kSuk_last
         kTuu = kTuu_last
 
-        fext = cc.calc_fext(inc=total, kuk=kSuk)
+        fext = cc.calc_fext(inc=total, kuk=None)
 
         iter_NR = 0
         while True:
@@ -140,12 +132,10 @@ def NR(cc):
                 warn('Maximum number of iterations achieved!', level=2)
                 break
 
-            if compute_NL_matrices or (cc.c0==None and step_num==1 and
-                    iteration==1) or iter_NR==(compute_every_n-1):
+            if compute_NL_matrices or (cc.c0 is None and step_num == 1 and
+                    iteration == 1) or iter_NR == (compute_every_n-1):
                 iter_NR = 0
                 cc._calc_NL_matrices(c, inc=total)
-                kSuu = cc.kSuu
-                kSuk = cc.kSuk
                 kTuu = cc.kTuu
             else:
                 iter_NR += 1
@@ -153,10 +143,6 @@ def NR(cc):
                     compute_NL_matrices = True
 
             fint = cc.calc_fint(c, inc=total, m=1)
-
-            for i, dof in enumerate(cc.excluded_dofs):
-                kSuk_col = kSuk[:, dof].ravel()
-                fint += total*cc.excluded_dofs_ck[i]*kSuk_col
 
             R = fext - fint
 
@@ -230,12 +216,8 @@ def NR(cc):
                 log('Updating kT...', level=1)
                 cc._calc_NL_matrices(c, inc=total)
                 log('kT updated!', level=1)
-                kSuu = cc.kSuu
-                kSuk = cc.kSuk
                 kTuu = cc.kTuu
             compute_NL_matrices = False
-            kSuu_last = kSuu
-            kSuk_last = kSuk
             kTuu_last = kTuu
         else:
             max_total = max(max_total, total)
@@ -300,22 +282,16 @@ def arc_length(cc):
     total_length = 0
 
     if modified_NR:
-        if cc.c0!=None:
+        if cc.c0 is not None:
             log('Updating kT for initial imperfections...', level=1)
             cc._calc_NL_matrices(c*0, inc=0.)
             log('kT updated!', level=1)
-            kSuu_last = cc.kSuu
-            kSuk_last = cc.kSuk
             kTuu_last = cc.kTuu
         else:
-            kSuu_last = cc.k0uu
-            kSuk_last = cc.k0uk
             kTuu_last = cc.k0uu
         compute_NL_matrices = False
     else:
         compute_NL_matrices = True
-        kSuu_last = cc.k0uu
-        kSuk_last = cc.k0uk
         kTuu_last = cc.k0uu
 
     while step_num < 100:
@@ -325,8 +301,6 @@ def arc_length(cc):
         converged = False
         iteration = 0
 
-        kSuu = kSuu_last
-        kSuk = kSuk_last
         kTuu = kTuu_last
 
         while True:
@@ -366,7 +340,6 @@ def arc_length(cc):
             if compute_NL_matrices:
                 cc._calc_NL_matrices(c, inc=lbd)
                 kTuu = cc.kTuu
-                kSuu = cc.kSuu
             else:
                 if not modified_NR:
                     compute_NL_matrices = True
@@ -422,12 +395,8 @@ def arc_length(cc):
                 log('Updating kT...', level=1)
                 cc._calc_NL_matrices(c, inc=lbd)
                 log('kT updated!', level=1)
-                kSuu = cc.kSuu
-                kSuk = cc.kSuk
                 kTuu = cc.kTuu
             compute_NL_matrices = False
-            kSuu_last = kSuu
-            kSuk_last = kSuk
             kTuu_last = kTuu
         else:
             if len(cc.cs) > 0:
@@ -475,8 +444,6 @@ def NR_lebofsky(cc):
 
     c = solve(k0, fext)
 
-    kSuk = None
-
     step_num = 1
     while True:
         log('Started Load Step {} - '.format(step_num)
@@ -484,7 +451,7 @@ def NR_lebofsky(cc):
 
         modified_NR = cc.modified_NR
 
-        fext = cc.calc_fext(inc=total, kuk=kSuk)
+        fext = cc.calc_fext(inc=total, kuk=None)
 
         # TODO maybe for pdC, pdT the fext must be calculated with the
         #      last kT available...
@@ -504,20 +471,10 @@ def NR_lebofsky(cc):
                 warn('Maximum number of iterations achieved!', level=2)
                 break
 
-            # secant stiffness matrix
-            kSuu = cc.k0uu
-            kSuk = cc.k0uk
-            cc.kSuk = kSuk
-            cc.kSuu = kSuu
-
             # tangent stiffness matrix
             kT = cc._calc_kT(c)
 
             fint = cc.calc_fint(c, inc=total, m=1)
-
-            for i, dof in enumerate(cc.excluded_dofs):
-                kSuk_col = cc.kSuk[:, dof].ravel()
-                fint += total*cc.excluded_dofs_ck[i]*kSuk_col
 
             R = fext - fint
 
