@@ -25,6 +25,9 @@ Released Versions
 `All released versions available here
 <https://github.com/compmech/compmech/releases>`_
 
+`Version 0.3.1
+<https://github.com/compmech/compmech/releases/tag/0.3.1>`_
+
 `Version 0.3.0
 <https://github.com/compmech/compmech/releases/tag/0.3.0>`_
 
