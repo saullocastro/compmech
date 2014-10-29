@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.conecyl.non_linear &mdash; CompMech 0.3.0 documentation</title>
+    <title>compmech.conecyl.non_linear &mdash; CompMech 0.3.1 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.3.0',
+        VERSION:     '0.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.3.0 documentation" href="../../../index.html" />
+    <link rel="top" title="CompMech 0.3.1 documentation" href="../../../index.html" />
     <link rel="up" title="compmech.conecyl" href="../conecyl.html" /> 
   </head>
   <body>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="../../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">CompMech 0.3.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">CompMech 0.3.1 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li>
           <li><a href="../conecyl.html" accesskey="U">compmech.conecyl</a> &raquo;</li> 
       </ul>
@@ -90,7 +90,7 @@
         <span class="n">Rmax_old</span> <span class="o">=</span> <span class="mf">1e6</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
             <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">True</span><span class="p">:</span><span class="c">#iteration==0:</span>
+            <span class="k">if</span> <span class="bp">True</span><span class="p">:</span><span class="c">#iteration == 0:</span>
                 <span class="n">R</span> <span class="o">=</span> <span class="n">fext</span> <span class="o">-</span> <span class="n">k0</span><span class="o">*</span><span class="n">c</span>
             <span class="c">#else:</span>
                 <span class="c">#cc._calc_NL_matrices(c)</span>
@@ -106,7 +106,7 @@
             <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">update_kT</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">iteration</span><span class="o">&lt;=</span><span class="mi">5</span> <span class="ow">or</span> <span class="n">test</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">iteration</span><span class="o">&lt;=</span><span class="mi">5</span> <span class="ow">or</span> <span class="n">test</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">update_kT</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">update_kT</span> <span class="o">=</span> <span class="bp">False</span>
@@ -147,22 +147,16 @@
     <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">c0</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">c0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">log</span><span class="p">(</span><span class="s">&#39;Updating kT for initial imperfections...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="mi">0</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
             <span class="n">log</span><span class="p">(</span><span class="s">&#39;kT updated!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
-            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
             <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
-            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
             <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
         <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
-        <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
         <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
 
     <span class="n">step_num</span> <span class="o">=</span> <span class="mi">1</span>
@@ -181,11 +175,9 @@
         <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">converged</span> <span class="o">=</span> <span class="bp">False</span>
 
-        <span class="n">kSuu</span> <span class="o">=</span> <span class="n">kSuu_last</span>
-        <span class="n">kSuk</span> <span class="o">=</span> <span class="n">kSuk_last</span>
         <span class="n">kTuu</span> <span class="o">=</span> <span class="n">kTuu_last</span>
 
-        <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">kuk</span><span class="o">=</span><span class="n">kSuk</span><span class="p">)</span>
+        <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">kuk</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 
         <span class="n">iter_NR</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
@@ -195,12 +187,10 @@
                 <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Maximum number of iterations achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">break</span>
 
-            <span class="k">if</span> <span class="n">compute_NL_matrices</span> <span class="ow">or</span> <span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">c0</span><span class="o">==</span><span class="bp">None</span> <span class="ow">and</span> <span class="n">step_num</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span>
-                    <span class="n">iteration</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">iter_NR</span><span class="o">==</span><span class="p">(</span><span class="n">compute_every_n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">compute_NL_matrices</span> <span class="ow">or</span> <span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">c0</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">step_num</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+                    <span class="n">iteration</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">iter_NR</span> <span class="o">==</span> <span class="p">(</span><span class="n">compute_every_n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                 <span class="n">iter_NR</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
-                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
-                <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
                 <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">iter_NR</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -208,10 +198,6 @@
                     <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
 
             <span class="n">fint</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs</span><span class="p">):</span>
-                <span class="n">kSuk_col</span> <span class="o">=</span> <span class="n">kSuk</span><span class="p">[:,</span> <span class="n">dof</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-                <span class="n">fint</span> <span class="o">+=</span> <span class="n">total</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs_ck</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">kSuk_col</span>
 
             <span class="n">R</span> <span class="o">=</span> <span class="n">fext</span> <span class="o">-</span> <span class="n">fint</span>
 
@@ -285,12 +271,8 @@
                 <span class="n">log</span><span class="p">(</span><span class="s">&#39;Updating kT...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
                 <span class="n">log</span><span class="p">(</span><span class="s">&#39;kT updated!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
-                <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
                 <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
             <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
-            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">kSuu</span>
-            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">kSuk</span>
             <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">kTuu</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">max_total</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_total</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
@@ -355,22 +337,16 @@
     <span class="n">total_length</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">if</span> <span class="n">modified_NR</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">c0</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cc</span><span class="o">.</span><span class="n">c0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">log</span><span class="p">(</span><span class="s">&#39;Updating kT for initial imperfections...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="mi">0</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
             <span class="n">log</span><span class="p">(</span><span class="s">&#39;kT updated!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
-            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
             <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
-            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
             <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
         <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
-        <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
         <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
 
     <span class="k">while</span> <span class="n">step_num</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
@@ -380,8 +356,6 @@
         <span class="n">converged</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">kSuu</span> <span class="o">=</span> <span class="n">kSuu_last</span>
-        <span class="n">kSuk</span> <span class="o">=</span> <span class="n">kSuk_last</span>
         <span class="n">kTuu</span> <span class="o">=</span> <span class="n">kTuu_last</span>
 
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
@@ -421,7 +395,6 @@
             <span class="k">if</span> <span class="n">compute_NL_matrices</span><span class="p">:</span>
                 <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">lbd</span><span class="p">)</span>
                 <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
-                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">modified_NR</span><span class="p">:</span>
                     <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">True</span>
@@ -477,12 +450,8 @@
                 <span class="n">log</span><span class="p">(</span><span class="s">&#39;Updating kT...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">cc</span><span class="o">.</span><span class="n">_calc_NL_matrices</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">lbd</span><span class="p">)</span>
                 <span class="n">log</span><span class="p">(</span><span class="s">&#39;kT updated!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-                <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span>
-                <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span>
                 <span class="n">kTuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kTuu</span>
             <span class="n">compute_NL_matrices</span> <span class="o">=</span> <span class="bp">False</span>
-            <span class="n">kSuu_last</span> <span class="o">=</span> <span class="n">kSuu</span>
-            <span class="n">kSuk_last</span> <span class="o">=</span> <span class="n">kSuk</span>
             <span class="n">kTuu_last</span> <span class="o">=</span> <span class="n">kTuu</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -530,8 +499,6 @@
 
     <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
 
-    <span class="n">kSuk</span> <span class="o">=</span> <span class="bp">None</span>
-
     <span class="n">step_num</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
         <span class="n">log</span><span class="p">(</span><span class="s">&#39;Started Load Step {} - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step_num</span><span class="p">)</span>
@@ -539,7 +506,7 @@
 
         <span class="n">modified_NR</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">modified_NR</span>
 
-        <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">kuk</span><span class="o">=</span><span class="n">kSuk</span><span class="p">)</span>
+        <span class="n">fext</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">kuk</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 
         <span class="c"># TODO maybe for pdC, pdT the fext must be calculated with the</span>
         <span class="c">#      last kT available...</span>
@@ -559,20 +526,10 @@
                 <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Maximum number of iterations achieved!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
                 <span class="k">break</span>
 
-            <span class="c"># secant stiffness matrix</span>
-            <span class="n">kSuu</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uu</span>
-            <span class="n">kSuk</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">k0uk</span>
-            <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span> <span class="o">=</span> <span class="n">kSuk</span>
-            <span class="n">cc</span><span class="o">.</span><span class="n">kSuu</span> <span class="o">=</span> <span class="n">kSuu</span>
-
             <span class="c"># tangent stiffness matrix</span>
             <span class="n">kT</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">_calc_kT</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 
             <span class="n">fint</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs</span><span class="p">):</span>
-                <span class="n">kSuk_col</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">kSuk</span><span class="p">[:,</span> <span class="n">dof</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-                <span class="n">fint</span> <span class="o">+=</span> <span class="n">total</span><span class="o">*</span><span class="n">cc</span><span class="o">.</span><span class="n">excluded_dofs_ck</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">kSuk_col</span>
 
             <span class="n">R</span> <span class="o">=</span> <span class="n">fext</span> <span class="o">-</span> <span class="n">fint</span>
 
@@ -691,14 +648,14 @@
         <li class="right" >
           <a href="../../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">CompMech 0.3.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">CompMech 0.3.1 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li>
           <li><a href="../conecyl.html" >compmech.conecyl</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Oct 17, 2014.
+      Last updated on Oct 29, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
