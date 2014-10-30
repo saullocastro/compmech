@@ -535,7 +535,7 @@ ccs = {
         'H': 200.,
         'plyt':0.125,
         'laminapropKey': 'degenhardt_2010_IM78552_cocomat',
-        'stack': [30,-30,-60,60,0,60,-60,-30,30],
+        'stack': [30, -30, -60, 60, 0, 60, -60, -30, 30],
         },
     'castro_2014_c14': {
         'elem_type': 'S8R5',
