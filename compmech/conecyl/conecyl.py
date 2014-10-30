@@ -353,6 +353,11 @@ class ConeCyl(object):
 
         # axial load
         if self.Nxxtop is not None:
+            if type(self.Nxxtop) in (int, float):
+                Nxxtop0 = self.Nxxtop
+                self.Nxxtop = np.zeros(2*self.n2+1, dtype=DOUBLE)
+                self.Nxxtop[0] = Nxxtop0
+
             check = False
             if isinstance(self.Nxxtop, np.ndarray):
                 if self.Nxxtop.ndim == 1:
@@ -784,15 +789,19 @@ class ConeCyl(object):
             log('________________________________________________')
 
         log('Running linear buckling analysis...')
-        if self.Fc is None:
+
+        if self.Fc is None and self.Nxxtop is None:
             self.Fc = 1.
         if self.pdC is None:
             self.pdC = False
+
         self._calc_linear_matrices(combined_load_case=combined_load_case)
+
         #TODO maybe a better estimator to sigma would be to run
         #     a preliminary eigsh using a small m2 and n2
         #NOTE runs faster for self.k0 than -self.k0, so that the negative
         #     sign is applied later
+
         log('Eigenvalue solver... ', level=2)
 
         i0 = modelDB.db[self.model]['i0']
@@ -896,11 +905,14 @@ class ConeCyl(object):
             log('________________________________________________')
 
         log('Running linear buckling analysis...')
+
         if self.Fc is None:
             self.Fc = 1.
         if self.pdC is None:
             self.pdC = False
+
         self._calc_linear_matrices(combined_load_case=combined_load_case)
+
         #TODO maybe a better estimator to sigma would be to run
         #     a preliminary eigsh using a small m2 and n2
         #NOTE runs faster for self.k0 than -self.k0, so that the negative
@@ -1663,7 +1675,8 @@ class ConeCyl(object):
         vec : str, optional
             Can be one of the components:
 
-            - Displacement: ``'u'``, ``'v'``, ``'w'``, ``'phix'``, ``'phit'``
+            - Displacement: ``'u'``, ``'v'``, ``'w'``, ``'phix'``, ``'phit'``,
+                            ``'magnitude'``
             - Strain: ``'exx'``, ``'ett'``, ``'gxt'``, ``'kxx'``, ``'ktt'``,
               ``'kxt'``, ``'gtz'``, ``'gxz'``
             - Stress: ``'Nxx'``, ``'Ntt'``, ``'Nxt'``, ``'Mxx'``, ``'Mtt'``,
@@ -1755,12 +1768,23 @@ class ConeCyl(object):
         c = self.calc_full_c(c, inc=inc)
 
         log('Computing field variables...', level=1)
-        displs = ['u', 'v', 'w', 'phix', 'phit']
+        displs = ['u', 'v', 'w', 'phix', 'phit', 'magnitude', 'test']
         strains = ['exx', 'ett', 'gxt', 'kxx', 'ktt', 'kxt', 'gtz', 'gxz']
         stresses = ['Nxx', 'Ntt', 'Nxt', 'Mxx', 'Mtt', 'Mxt', 'Qt', 'Qx']
-        if vec in displs:
+        if vec in displs or 'eq_' in vec:
             self.uvw(c, xs=xs, ts=ts, gridx=gridx, gridt=gridt, inc=inc)
-            field = getattr(self, vec)
+            if vec == 'magnitude':
+                u = self.u
+                v = self.v
+                w = self.w
+                field = (u**2 + v**2 + w**2)**0.5
+            elif 'eq_' in vec:
+                u = self.u
+                v = self.v
+                w = self.w
+                field = eval(vec[3:])
+            else:
+                field = getattr(self, vec)
         elif vec in strains:
             es = self.strain(c, xs=xs, ts=ts,
                              gridx=gridx, gridt=gridt, inc=inc)
