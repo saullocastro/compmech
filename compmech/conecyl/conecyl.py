@@ -136,6 +136,7 @@ class ConeCyl(object):
         self.NL_method = 'NR' # Newton-Raphson
         self.modified_NR = True # modified Newton-Raphson
         self.line_search = True
+        self.max_iter_line_search = 20
         self.compute_every_n = 6 # for modified Newton-Raphson
         self.with_k0L = True
         self.with_kLL = True
@@ -1539,29 +1540,31 @@ class ConeCyl(object):
         analysis the following parameters of the ``ConeCyl`` object will
         affect the non-linear analysis:
 
-        ====================    ==========================================
-        non-linear algorithm    description
-        ====================    ==========================================
-        ``NL_method``           ``'NR'`` for the Newton-Raphson
-                                ``'arc_length'`` for the Arc-Length method
-        ``line_search``         activate line_search (for Newton-Raphson
-                                methods only)
-        ``modified_NR``         activate the modified Newton-Raphson
-        ``compute_every_n``     if ``modified_NR=True``, the non-linear
-                                matrices will be updated at every `n`
-                                iterations
-        ====================    ==========================================
+        ========================   ==========================================
+        non-linear algorithm       description
+        ========================   ==========================================
+        ``NL_method``              ``'NR'`` for the Newton-Raphson
+                                   ``'arc_length'`` for the Arc-Length method
+        ``line_search``            activate line-search (for Newton-Raphson
+                                   methods only)
+        ``max_iter_line_search``   maximum number of iterations for the
+                                   line-search
+        ``modified_NR``            activate the modified Newton-Raphson
+        ``compute_every_n``        if ``modified_NR=True``, the non-linear
+                                   matrices will be updated at every `n`
+                                   iterations
+        ========================   ==========================================
+
 
         ==============     =================================================
         incrementation     description
         ==============     =================================================
         ``initialInc``     initial load increment size. In the arc-length
-                           method it will be the initial value for
-                           `\lambda`
-        ``minInc``         minimum increment size; if achieved the analysis
-                           is terminated. The arc-length method will use
-                           this parameter to terminate when the minimum
-                           arc-length increment is smaller than ``minInc``
+                           method it will be the initial value for `\lambda`
+        ``minInc``         minimum increment size; if achieved the analysis is
+                           terminated. The arc-length method will use this
+                           parameter to terminate when the minimum arc-length
+                           increment is smaller than ``minInc``
         ``maxInc``         maximum increment size
         ==============     =================================================
 

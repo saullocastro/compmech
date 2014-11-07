@@ -81,6 +81,7 @@ def NR(cc):
     log('Initialization...', level=1)
 
     line_search = cc.line_search
+    max_iter_line_search = cc.max_iter_line_search
     compute_every_n = cc.compute_every_n
     modified_NR = cc.modified_NR
     inc = cc.initialInc
@@ -172,6 +173,7 @@ def NR(cc):
             eta1 = 0.
             eta2 = 1.
             if line_search:
+                iter_line_search = 0
                 while True:
                     c1 = c + eta1*delta_c
                     c2 = c + eta2*delta_c
@@ -186,6 +188,10 @@ def NR(cc):
                     eta2 = eta_new
                     eta2 = min(max(eta2, 0.2), 10.)
                     if abs(eta2-eta1) < 0.01:
+                        break
+                    iter_line_search += 1
+                    if iter_line_search == max_iter_line_search:
+                        eta2 = 1.
                         break
             c = c + eta2*delta_c
 

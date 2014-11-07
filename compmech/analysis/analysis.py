@@ -11,21 +11,23 @@ class Analysis(object):
 
     The parameters are described in the following tables:
 
-    ====================    ==================================================
-    non-linear algorithm    description
-    ====================    ==================================================
-    ``NL_method``           ``str``, ``'NR'`` for the Newton-Raphson
-                            ``'arc_length'`` for the Arc-Length method
-    ``line_search``         ``bool``, activate line_search (for Newton-Raphson
-                            methods only)
-    ``modified_NR``         ``bool``, activates the modified Newton-Raphson
-    ``compute_every_n``     ``int``, if ``modified_NR=True``, the non-linear
-                            matrices will be updated at every `n` iterations
-    ``kT_initial_state``    ``bool``, tells if the tangent stiffness matrix
-                            should be calculated already at the initial state,
-                            which is required for example when initial
-                            imperfections take place
-    ====================    ==================================================
+    ========================  ==================================================
+    non-linear algorithm      description
+    ========================  ==================================================
+    ``NL_method``             ``str``, ``'NR'`` for the Newton-Raphson
+                              ``'arc_length'`` for the Arc-Length method
+    ``line_search``           ``bool``, activate line_search (for
+                              Newton-Raphson methods only)
+    ``max_iter_line_search``  ``int``, maximum number of iteration attempts
+                              for the line-search algorithm
+    ``modified_NR``           ``bool``, activates the modified Newton-Raphson
+    ``compute_every_n``       ``int``, if ``modified_NR=True``, the non-linear
+                              matrices will be updated at every `n` iterations
+    ``kT_initial_state``      ``bool``, tells if the tangent stiffness matrix
+                              should be calculated already at the initial
+                              state, which is required for example when
+                              initial imperfections take place
+    ========================  ==================================================
 
     ==============     =================================================
     incrementation     description
@@ -84,7 +86,8 @@ class Analysis(object):
 
     """
 
-    __slots__ = ('NL_method', 'line_search', 'modified_NR', 'compute_every_n',
+    __slots__ = ('NL_method', 'line_search', 'max_iter_line_search',
+            'modified_NR', 'compute_every_n',
             'kT_initial_state', 'initialInc', 'minInc', 'maxInc', 'absTOL',
             'relTOL', 'maxNumIter', 'too_slow_TOL', 'ni_num_cores',
             'ni_method', 'nx', 'nt', 'calc_fext', 'calc_k0', 'calc_fint',
@@ -96,6 +99,7 @@ class Analysis(object):
         # non-linear algorithm
         self.NL_method = 'NR'
         self.line_search = True
+        self.max_iter_line_search = 20
         self.modified_NR = True
         self.compute_every_n = 6
         self.kT_initial_state = False

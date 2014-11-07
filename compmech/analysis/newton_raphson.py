@@ -10,6 +10,7 @@ def _solver_NR(a):
     msg('Initialization...', level=1)
 
     line_search = a.line_search
+    max_iter_line_search = a.max_iter_line_search
     compute_every_n = a.compute_every_n
     modified_NR = a.modified_NR
     inc = a.initialInc
@@ -100,6 +101,7 @@ def _solver_NR(a):
             eta1 = 0.
             eta2 = 1.
             if line_search:
+                iter_line_search = 0
                 while True:
                     c1 = c + eta1*delta_c
                     c2 = c + eta2*delta_c
@@ -114,6 +116,9 @@ def _solver_NR(a):
                     eta2 = eta_new
                     eta2 = min(max(eta2, 0.2), 10.)
                     if abs(eta2-eta1) < 0.01:
+                        break
+                    if iter_line_search == max_iter_line_search:
+                        eta2 = 1.
                         break
             c = c + eta2*delta_c
 
