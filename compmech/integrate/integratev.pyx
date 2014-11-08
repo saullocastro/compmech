@@ -8,7 +8,9 @@ import numpy as np
 cimport numpy as np
 from cython.parallel import prange
 
+
 DOUBLE = np.float64
+
 
 cdef int trapz2d(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
                  double xmin, double xmax, int nx,
@@ -83,6 +85,7 @@ cdef int trapz2d(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
     np.sum(outs, axis=0, out=out)
 
     return 0
+
 
 cdef int simps2d(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
                  double xmin, double xmax, int nx,
@@ -198,3 +201,16 @@ cdef int simps2d(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
 
     return 0
 
+
+cdef int trapz_wp(int npts, double xa, double xb, double *weights,
+                    double *pts) nogil:
+    cdef int i
+    cdef double factor
+    factor = (xb - xa)/(2*npts)
+    for i in range(1, npts-1):
+        weights[i] = 2*factor
+        pts[i] = xa + i*(xb - xa)/(npts-1)
+    weights[0] = factor
+    weights[npts-1] = factor
+    pts[0] = xa
+    pts[npts-1] = xb
