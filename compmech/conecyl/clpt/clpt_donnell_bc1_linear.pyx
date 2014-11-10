@@ -129,7 +129,7 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
 
                 col = (i1-i0)*num1 + num0
                 row = col
-                if i1!=0:
+                if i1 != 0:
                     # k0_01 cond_1
                     c += 1
                     k0r[c] = 0
@@ -168,8 +168,8 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                     sink1xa = sin(pi*k1*xa/L)
                     sink1xb = sin(pi*k1*xb/L)
 
-                    if k1==i1:
-                        if i1!=0:
+                    if k1 == i1:
+                        if i1 != 0:
                             # k0_11 cond_1
                             c += 1
                             k0r[c] = row+0
@@ -273,8 +273,8 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                             if row > col:
                                 continue
 
-                            if k2==i2 and l2==j2:
-                                if i2!=0:
+                            if k2 == i2 and l2 == j2:
+                                if i2 != 0:
                                     # k0_22 cond_1
                                     c += 1
                                     k0r[c] = row+0
@@ -397,7 +397,7 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                                     k0c[c] = col+5
                                     k0v[c] += 0.25*(2*L*sini2xa_xb*(2*pi*L*i2*r*sina*sini2xaxb*(B22*(L*L)*cosa*r + (pi*pi)*D12*(i2*i2)*(r*r) + (L*L)*(j2*j2)*(D22 + 2*D66)) + cosi2xaxb*(D22*((L*L*L*L)*(j2*j2*j2*j2) - (pi*pi)*(L*L)*(i2*i2)*(r*r)*(sina*sina)) + D66*(L*L*L*L)*(j2*j2)*(sina*sina) + r*(2*B22*(L*L*L*L)*cosa*(j2*j2) + r*(A22*(L*L*L*L)*(cosa*cosa) + (pi*pi)*(i2*i2)*(2*B12*(L*L)*cosa*r + (pi*pi)*D11*(i2*i2)*(r*r) + (L*L)*(j2*j2)*(2*D12 - 4*D66)))))) - 2*pi*i2*(xa - xb)*(D22*((L*L*L*L)*(j2*j2*j2*j2) + (pi*pi)*(L*L)*(i2*i2)*(r*r)*(sina*sina)) + D66*(L*L*L*L)*(j2*j2)*(sina*sina) + r*(2*B22*(L*L*L*L)*cosa*(j2*j2) + r*(A22*(L*L*L*L)*(cosa*cosa) + (pi*pi)*(i2*i2)*(2*B12*(L*L)*cosa*r + (pi*pi)*D11*(i2*i2)*(r*r) + (L*L)*(j2*j2)*(2*D12 + 4*D66))))))/((L*L*L*L)*i2*(r*r*r))
 
-                            elif k2!=i2 and l2==j2:
+                            elif k2 != i2 and l2 == j2:
                                 # k0_22 cond_2
                                 c += 1
                                 k0r[c] = row+0
@@ -625,7 +625,7 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
     for i1 in range(i0, m1+i0):
         col = (i1-i0)*num1 + num0
         row = col
-        if i1!=0:
+        if i1 != 0:
             # k0_01 cond_1
             c += 1
             k0r[c] = 0
@@ -643,8 +643,8 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
             if row > col:
                 continue
 
-            if k1==i1:
-                if i1!=0:
+            if k1 == i1:
+                if i1 != 0:
                     # k0_11 cond_1
                     c += 1
                     k0r[c] = row+0
@@ -697,8 +697,8 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                     if row > col:
                         continue
 
-                    if k2==i2 and l2==j2:
-                        if i2!=0:
+                    if k2 == i2 and l2 == j2:
+                        if i2 != 0:
                             # k0_22 cond_1
                             c += 1
                             k0r[c] = row+0
@@ -773,7 +773,7 @@ def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
                             k0c[c] = col+5
                             k0v[c] += 0.5*pi*(D22*(L*L*L*L)*(j2*j2*j2*j2) + r*(2*B22*(L*L*L*L)*(j2*j2) + r*(A22*(L*L*L*L) + (pi*pi)*(i2*i2)*(2*B12*(L*L)*r + (pi*pi)*D11*(i2*i2)*(r*r) + (L*L)*(j2*j2)*(2*D12 + 4*D66)))))/((L*L*L)*(r*r*r))
 
-                    elif k2!=i2 and l2==j2:
+                    elif k2 != i2 and l2 == j2:
                         # k0_22 cond_2
                         c += 1
                         k0r[c] = row+0
@@ -888,7 +888,7 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2, double L,
             if row > col:
                 continue
 
-            if k1==i1:
+            if k1 == i1:
                 # k0edges_11 cond_1
                 c += 1
                 k0edgesr[c] = row+2
@@ -913,7 +913,7 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2, double L,
                     if row > col:
                         continue
 
-                    if k2==i2 and l2==j2:
+                    if k2 == i2 and l2 == j2:
                         # k0edges_22 cond_1
                         c += 1
                         k0edgesr[c] = row+4
@@ -924,7 +924,7 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2, double L,
                         k0edgesc[c] = col+5
                         k0edgesv[c] += pi**3*i2**2*(kphixBot*r1 + kphixTop*r2)/L**2
 
-                    elif k2!=i2 and l2==j2:
+                    elif k2 != i2 and l2 == j2:
                         # k0edges_22 cond_2
                         c += 1
                         k0edgesr[c] = row+4
@@ -1006,8 +1006,8 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
                     sink1xa = sin(pi*k1*xa/L)
                     sink1xb = sin(pi*k1*xb/L)
 
-                    if k1==i1:
-                        if i1!=0:
+                    if k1 == i1:
+                        if i1 != 0:
                             # kG0_11 cond_1
                             c += 1
                             kG0r[c] = row+2
@@ -1042,8 +1042,8 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
                             if row > col:
                                 continue
 
-                            if k2==i2 and l2==j2:
-                                if i2!=0:
+                            if k2 == i2 and l2 == j2:
+                                if i2 != 0:
                                     # kG022 cond_1
                                     c += 1
                                     kG0r[c] = row+4
@@ -1054,7 +1054,7 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
                                     kG0c[c] = col+5
                                     kG0v[c] += 0.125*(L*(sin2i2xa - sin2i2xb)*(2*(L*L)*P*(j2*j2) + pi*(i2*i2)*(Fc - pi*P*(r*r))) - 2*pi*i2*(xa - xb)*(2*(L*L)*P*(j2*j2) + pi*(i2*i2)*(-Fc + pi*P*(r*r))))/((L*L)*cosa*i2)
 
-                            elif k2!=i2 and l2==j2:
+                            elif k2 != i2 and l2 == j2:
                                 # kG0_22 cond_2
                                 c += 1
                                 kG0r[c] = row+4
@@ -1115,8 +1115,8 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
             if row > col:
                 continue
 
-            if k1==i1:
-                if i1!=0:
+            if k1 == i1:
+                if i1 != 0:
                     # kG0_11 cond_1
                     c += 1
                     kG0r[c] = row+2
@@ -1134,8 +1134,8 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
                     if row > col:
                         continue
 
-                    if k2==i2 and l2==j2:
-                        if i2!=0:
+                    if k2 == i2 and l2 == j2:
+                        if i2 != 0:
                             # kG0_22 cond_1
                             c += 1
                             kG0r[c] = row+4
@@ -1146,7 +1146,7 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
                             kG0c[c] = col+5
                             kG0v[c] += 0.25*pi*(2*(L*L)*P*(j2*j2) + pi*(i2*i2)*(-Fc + pi*P*(r*r)))/L
 
-                    elif k2!=i2 and l2==j2:
+                    elif k2 != i2 and l2 == j2:
                         # kG0_22 cond_2
                         c += 1
                         kG0r[c] = row+4
