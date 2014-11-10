@@ -294,8 +294,8 @@ class ConeCyl(object):
                     setattr(self, 'kphix' + sufix, zero)
                     setattr(self, 'kphit' + sufix, zero)
                 else:
-                    msg = '"{}" is not a valid boundary condition!'.format(bc)
-                    raise ValueError(msg)
+                    text = '"{}" is not a valid boundary condition!'.format(bc)
+                    raise ValueError(text)
 
         self.alpharad = deg2rad(self.alphadeg)
         self.sina = sin(self.alpharad)
