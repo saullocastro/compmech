@@ -7,6 +7,7 @@
 include 'clpt_nonlinear_header.pyx'
 
 from compmech.conecyl.clpt.clpt_commons_bc1 cimport cfwx, cfwt, cfN
+from compmech.integrate.integratev cimport trapz_wp
 
 
 cdef extern from "clpt_donnell_bc1_nonlinear_clean.h":
@@ -16,6 +17,519 @@ cdef extern from "clpt_donnell_bc1_nonlinear_clean.h":
 
 
 cdef int NL_kinematics=0 # to use cfstrain_donnell in cfN
+
+
+def calc_k0L_attempt(np.ndarray[cDOUBLE, ndim=1] coeffs,
+             double alpharad, double r2, double L, double tLA,
+             np.ndarray[cDOUBLE, ndim=2] F,
+             int m1, int m2, int n2,
+             int freqx, int freqt, int num_cores, str method,
+             np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0):
+    cdef double sina, cosa, xa, xb, ta, tb
+    cdef int c, row, col
+    cdef int i1, k1, i2, j2, k2, l2
+    cdef np.ndarray[cINT, ndim=1] rows, cols
+    cdef np.ndarray[cDOUBLE, ndim=1] k0Lv
+
+    cdef double sini1x, cosi1x, cosk1x
+    cdef double sini2x, cosi2x, sink2x, cosk2x, sinj2t, cosj2t, sinl2t, cosl2t
+
+    cdef double r, x, t, wx, wt, w0x, w0t
+    cdef double tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6
+    cdef double tmp7, tmp8, tmp9, tmp10, tmp11
+    cdef int i, j, nx, nt
+    cdef double A11, A12, A16, A22, A26, A66
+    cdef double B11, B12, B16, B22, B26, B66
+
+    cdef double **weightx
+    cdef double **weightt
+    cdef double **xs
+    cdef double **ts
+
+    freqx = 8
+    freqt = 8
+
+    fdim = 3*m1 + 3*2*m2*n2 + 3*m1**2 + 2*6*m1*m2*n2 + 12*m2**2*n2**2
+
+    rows = np.zeros((fdim,), dtype=INT)
+    cols = np.zeros((fdim,), dtype=INT)
+    k0Lv = np.zeros((fdim,), dtype=DOUBLE)
+
+    sina = sin(alpharad)
+    cosa = cos(alpharad)
+
+    A11 = F[0, 0]
+    A12 = F[0, 1]
+    A16 = F[0, 2]
+    A22 = F[1, 1]
+    A26 = F[1, 2]
+    A66 = F[2, 2]
+    B11 = F[0, 3]
+    B12 = F[0, 4]
+    B16 = F[0, 5]
+    B22 = F[1, 4]
+    B26 = F[1, 5]
+    B66 = F[2, 5]
+
+    xa = 0.
+    xb = L
+    ta = 0.
+    tb = 2*pi
+
+    nx = max(m1-i0, m2-i0)
+    nt = n2-j0
+
+    with nogil:
+        weightx = <double **>malloc(nx * sizeof(double *))
+        weightt = <double **>malloc(nt * sizeof(double *))
+        xs = <double **>malloc(nx * sizeof(double *))
+        ts = <double **>malloc(nt * sizeof(double *))
+        for i in range(nx):
+            weightx[i] = <double *>malloc(freqx*(i+1) * sizeof(double))
+            xs[i] = <double *>malloc(freqx*(i+1) * sizeof(double))
+            trapz_wp(freqx*(i+1), xa, xb, weightx[i], xs[i])
+
+        for j in range(nt):
+            weightt[j] = <double *>malloc(freqt*(j+1) * sizeof(double))
+            ts[j] = <double *>malloc(freqt*(j+1) * sizeof(double))
+            trapz_wp(freqt*(j+1), ta, tb, weightt[j], ts[j])
+
+        c = -1
+
+        for k1 in range(i0, m1+i0):
+            col = (k1-i0)*num1 + num0
+
+            nx = k1-i0
+            nt = 0
+
+            # k0L_01
+
+            tmp0 = 0
+            tmp1 = 0
+            tmp2 = 0
+
+            for i in range(freqx*(nx+1)):
+                x = xs[nx][i]
+                r = r2 + sina*x
+
+                cosk1x = cos(pi*k1*x/L)
+
+                for j in range(freqt*(nt+1)):
+                    t = ts[nt][j]
+
+                    cfwx(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wx)
+                    cfwt(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wt)
+                    cfw0x(&x, &t, 1, &c0[0], L, m0, n0, &w0x, funcnum)
+                    cfw0t(&x, &t, 1, &c0[0], L, m0, n0, &w0t, funcnum)
+
+                    tmp0 += weightx[nx][i]*weightt[nt][j]*(-pi*cosk1x*k1*(A16*r*(w0t + wt) - A26*sina*(L - x)*(w0t + wt) + r*(w0x + wx)*(A11*r + A12*sina*(-L + x)))/(L**2*cosa*r))
+                    tmp1 += weightx[nx][i]*weightt[nt][j]*(-pi*cosk1x*k1*r2*(r + sina*(L - x))*(A16*r*(w0x + wx) + A66*(w0t + wt))/(L**2*r))
+                    tmp2 += weightx[nx][i]*weightt[nt][j]*(-pi*cosk1x*k1*((L - x)*(A16*r*(w0x + wx) + A66*(w0t + wt))*sin(t - tLA) + (A16*r*(w0t + wt) - A26*sina*(L - x)*(w0t + wt) + r*(w0x + wx)*(A11*r + A12*sina*(-L + x)))*cos(t - tLA))/(L**2*cosa*r))
+            c += 1
+            rows[c] = 0
+            cols[c] = col+2
+            k0Lv[c] = tmp0
+            c += 1
+            rows[c] = 1
+            cols[c] = col+2
+            k0Lv[c] = tmp1
+            c += 1
+            rows[c] = 2
+            cols[c] = col+2
+            k0Lv[c] = tmp2
+
+        for k2 in range(i0, m2+i0):
+            nx = k2-i0
+            for l2 in range(j0, n2+j0):
+                col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                nt = l2-j0
+
+                # k0L_02
+
+                tmp0 = 0
+                tmp1 = 0
+                tmp2 = 0
+                tmp3 = 0
+                tmp4 = 0
+                tmp5 = 0
+
+                for i in range(freqx*(nx+1)):
+                    x = xs[nx][i]
+                    r = r2 + sina*x
+
+                    sink2x = sin(pi*k2*x/L)
+                    cosk2x = cos(pi*k2*x/L)
+
+                    for j in range(freqt*(nt+1)):
+                        t = ts[nt][j]
+
+                        sinl2t = sin(l2*t)
+                        cosl2t = cos(l2*t)
+
+                        cfwx(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wx)
+                        cfwt(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wt)
+                        cfw0x(&x, &t, 1, &c0[0], L, m0, n0, &w0x, funcnum)
+                        cfw0t(&x, &t, 1, &c0[0], L, m0, n0, &w0t, funcnum)
+
+                        tmp0 += weightx[nx][i]*weightt[nt][j]*(-(L*cosl2t*l2*sink2x*(w0t + wt)*(A12*r + A22*sina*(-L + x)) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(A11*r + A12*sina*(-L + x)) + r*(A16*r + A26*sina*(-L + x))*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt)))/(L**2*cosa*r**2))
+                        tmp1 += weightx[nx][i]*weightt[nt][j]*((L*l2*sink2x*sinl2t*(w0t + wt)*(A12*r + A22*sina*(-L + x)) - pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(A11*r + A12*sina*(-L + x)) + r*(A16*r + A26*sina*(-L + x))*(L*l2*sink2x*sinl2t*(w0x + wx) - pi*cosk2x*cosl2t*k2*(w0t + wt)))/(L**2*cosa*r**2))
+                        tmp2 += weightx[nx][i]*weightt[nt][j]*(-r2*(r + sina*(L - x))*(L*cosl2t*l2*sink2x*(A26*(w0t + wt) + A66*r*(w0x + wx)) + pi*cosk2x*k2*r*sinl2t*(A16*r*(w0x + wx) + A66*(w0t + wt)))/(L**2*r**2))
+                        tmp3 += weightx[nx][i]*weightt[nt][j]*(r2*(r + sina*(L - x))*(L*l2*sink2x*sinl2t*(A26*(w0t + wt) + A66*r*(w0x + wx)) - pi*cosk2x*cosl2t*k2*r*(A16*r*(w0x + wx) + A66*(w0t + wt)))/(L**2*r**2))
+                        tmp4 += weightx[nx][i]*weightt[nt][j]*(-(L*cosl2t*l2*sink2x*(w0t + wt)*(A26*(L - x)*sin(t - tLA) + (A12*r + A22*sina*(-L + x))*cos(t - tLA)) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(A16*(L - x)*sin(t - tLA) + (A11*r + A12*sina*(-L + x))*cos(t - tLA)) + r*(A66*(L - x)*sin(t - tLA) + (A16*r + A26*sina*(-L + x))*cos(t - tLA))*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt)))/(L**2*cosa*r**2))
+                        tmp5 += weightx[nx][i]*weightt[nt][j]*((L*l2*sink2x*sinl2t*(w0t + wt)*(A26*(L - x)*sin(t - tLA) + (A12*r + A22*sina*(-L + x))*cos(t - tLA)) - pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(A16*(L - x)*sin(t - tLA) + (A11*r + A12*sina*(-L + x))*cos(t - tLA)) + r*(A66*(L - x)*sin(t - tLA) + (A16*r + A26*sina*(-L + x))*cos(t - tLA))*(L*l2*sink2x*sinl2t*(w0x + wx) - pi*cosk2x*cosl2t*k2*(w0t + wt)))/(L**2*cosa*r**2))
+
+                c += 1
+                rows[c] = 0
+                cols[c] = col+4
+                k0Lv[c] = tmp0
+                c += 1
+                rows[c] = 0
+                cols[c] = col+5
+                k0Lv[c] = tmp1
+                c += 1
+                rows[c] = 1
+                cols[c] = col+4
+                k0Lv[c] = tmp2
+                c += 1
+                rows[c] = 1
+                cols[c] = col+5
+                k0Lv[c] = tmp3
+                c += 1
+                rows[c] = 2
+                cols[c] = col+4
+                k0Lv[c] = tmp4
+                c += 1
+                rows[c] = 2
+                cols[c] = col+5
+                k0Lv[c] = tmp5
+
+        for i1 in range(i0, m1+i0):
+            row = (i1-i0)*num1 + num0
+            for k1 in range(i0, m1+i0):
+                col = (k1-i0)*num1 + num0
+
+                if k1 > i1:
+                    nx = k1-i0
+                else:
+                    nx = i1-i0
+                nt = 0
+
+                # k0L_11
+
+                tmp0 = 0
+                tmp1 = 0
+                tmp2 = 0
+
+                for i in range(freqx*(nx+1)):
+                    x = xs[nx][i]
+                    r = r2 + sina*x
+
+                    sini1x = sin(pi*i1*x/L)
+                    cosi1x = cos(pi*i1*x/L)
+                    cosk1x = cos(pi*k1*x/L)
+
+                    for j in range(freqt*(nt+1)):
+                        t = ts[nt][j]
+
+                        cfwx(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wx)
+                        cfwt(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wt)
+                        cfw0x(&x, &t, 1, &c0[0], L, m0, n0, &w0x, funcnum)
+                        cfw0t(&x, &t, 1, &c0[0], L, m0, n0, &w0t, funcnum)
+
+                        tmp0 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(L*sina*sini1x*(A12*r*(w0x + wx) + A26*(w0t + wt)) + pi*cosi1x*i1*r*(A11*r*(w0x + wx) + A16*(w0t + wt)))/(L**2*r))
+                        tmp1 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(A16*r*(w0x + wx) + A66*(w0t + wt))*(-L*sina*sini1x + pi*cosi1x*i1*r)/(L**2*r))
+                        tmp2 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(-pi*L*cosi1x*i1*sina*(B12*r*(w0x + wx) + B26*(w0t + wt)) + sini1x*(A26*L**2*cosa*(w0t + wt) + r*(pi**2*B16*i1**2*(w0t + wt) + (w0x + wx)*(A12*L**2*cosa + pi**2*B11*i1**2*r))))/(L**3*r))
+
+                c += 1
+                rows[c] = row+0
+                cols[c] = col+2
+                k0Lv[c] = tmp0
+                c += 1
+                rows[c] = row+1
+                cols[c] = col+2
+                k0Lv[c] = tmp1
+                c += 1
+                rows[c] = row+2
+                cols[c] = col+2
+                k0Lv[c] = tmp2
+
+            for k2 in range(i0, m2+i0):
+                for l2 in range(j0, n2+j0):
+                    col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                    if k2 > i1:
+                        nx = k2-i0
+                    else:
+                        nx = i1-i0
+                    nt = l2-j0
+
+                    # k0L_12
+
+                    tmp0 = 0
+                    tmp1 = 0
+                    tmp2 = 0
+                    tmp3 = 0
+                    tmp4 = 0
+                    tmp5 = 0
+
+                    for i in range(freqx*(nx+1)):
+                        x = xs[nx][i]
+                        r = r2 + sina*x
+
+                        sini1x = sin(pi*i1*x/L)
+                        cosi1x = cos(pi*i1*x/L)
+                        sink2x = sin(pi*k2*x/L)
+                        cosk2x = cos(pi*k2*x/L)
+
+                        for j in range(freqt*(nt+1)):
+                            t = ts[nt][j]
+
+                            sinl2t = sin(l2*t)
+                            cosl2t = cos(l2*t)
+
+                            cfwx(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wx)
+                            cfwt(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wt)
+                            cfw0x(&x, &t, 1, &c0[0], L, m0, n0, &w0x, funcnum)
+                            cfw0t(&x, &t, 1, &c0[0], L, m0, n0, &w0t, funcnum)
+
+                            tmp0 += weightx[nx][i]*weightt[nt][j]*((L*cosl2t*l2*sink2x*(w0t + wt)*(pi*A12*cosi1x*i1*r + A22*L*sina*sini1x) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(pi*A11*cosi1x*i1*r + A12*L*sina*sini1x) + r*(pi*A16*cosi1x*i1*r + A26*L*sina*sini1x)*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt)))/(L**2*r**2))
+                            tmp1 += weightx[nx][i]*weightt[nt][j]*((-L*l2*sink2x*sinl2t*(w0t + wt)*(pi*A12*cosi1x*i1*r + A22*L*sina*sini1x) + pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(pi*A11*cosi1x*i1*r + A12*L*sina*sini1x) + r*(pi*A16*cosi1x*i1*r + A26*L*sina*sini1x)*(-L*l2*sink2x*sinl2t*(w0x + wx) + pi*cosk2x*cosl2t*k2*(w0t + wt)))/(L**2*r**2))
+                            tmp2 += weightx[nx][i]*weightt[nt][j]*((-L*sina*sini1x + pi*cosi1x*i1*r)*(L*cosl2t*l2*sink2x*(A26*(w0t + wt) + A66*r*(w0x + wx)) + pi*cosk2x*k2*r*sinl2t*(A16*r*(w0x + wx) + A66*(w0t + wt)))/(L**2*r**2))
+                            tmp3 += weightx[nx][i]*weightt[nt][j]*((-L*sina*sini1x + pi*cosi1x*i1*r)*(-L*l2*sink2x*sinl2t*(A26*(w0t + wt) + A66*r*(w0x + wx)) + pi*cosk2x*cosl2t*k2*r*(A16*r*(w0x + wx) + A66*(w0t + wt)))/(L**2*r**2))
+                            tmp4 += weightx[nx][i]*weightt[nt][j]*((L*cosl2t*l2*sink2x*(w0t + wt)*(-pi*B22*L*cosi1x*i1*sina + sini1x*(A22*L**2*cosa + pi**2*B12*i1**2*r)) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(-pi*B12*L*cosi1x*i1*sina + sini1x*(A12*L**2*cosa + pi**2*B11*i1**2*r)) + r*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt))*(-pi*B26*L*cosi1x*i1*sina + sini1x*(A26*L**2*cosa + pi**2*B16*i1**2*r)))/(L**3*r**2))
+                            tmp5 += weightx[nx][i]*weightt[nt][j]*((-L*l2*sink2x*sinl2t*(w0t + wt)*(-pi*B22*L*cosi1x*i1*sina + sini1x*(A22*L**2*cosa + pi**2*B12*i1**2*r)) + pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(-pi*B12*L*cosi1x*i1*sina + sini1x*(A12*L**2*cosa + pi**2*B11*i1**2*r)) + r*(-L*l2*sink2x*sinl2t*(w0x + wx) + pi*cosk2x*cosl2t*k2*(w0t + wt))*(-pi*B26*L*cosi1x*i1*sina + sini1x*(A26*L**2*cosa + pi**2*B16*i1**2*r)))/(L**3*r**2))
+
+                    c += 1
+                    rows[c] = row+0
+                    cols[c] = col+4
+                    k0Lv[c] = tmp0
+                    c += 1
+                    rows[c] = row+0
+                    cols[c] = col+5
+                    k0Lv[c] = tmp1
+                    c += 1
+                    rows[c] = row+1
+                    cols[c] = col+4
+                    k0Lv[c] = tmp2
+                    c += 1
+                    rows[c] = row+1
+                    cols[c] = col+5
+                    k0Lv[c] = tmp3
+                    c += 1
+                    rows[c] = row+2
+                    cols[c] = col+4
+                    k0Lv[c] = tmp4
+                    c += 1
+                    rows[c] = row+2
+                    cols[c] = col+5
+                    k0Lv[c] = tmp5
+
+        for i2 in range(i0, m2+i0):
+            for j2 in range(j0, n2+j0):
+                row = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
+                for k1 in range(i0, m1+i0):
+                    col = (k1-i0)*num1 + num0
+
+                    if i2 > k1:
+                        nx = i2-i0
+                    else:
+                        nx = k1-i0
+                    nt = j2-j0
+
+                    # k0L_21
+
+                    tmp0 = 0
+                    tmp1 = 0
+                    tmp2 = 0
+                    tmp3 = 0
+                    tmp4 = 0
+                    tmp5 = 0
+
+                    for i in range(freqx*(nx+1)):
+                        x = xs[nx][i]
+                        r = r2 + sina*x
+
+                        sini2x = sin(pi*i2*x/L)
+                        cosi2x = cos(pi*i2*x/L)
+                        cosk1x = cos(pi*k1*x/L)
+
+                        for j in range(freqt*(nt+1)):
+                            t = ts[nt][j]
+
+                            sinj2t = sin(j2*t)
+                            cosj2t = cos(j2*t)
+
+                            cfwx(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wx)
+                            cfwt(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wt)
+                            cfw0x(&x, &t, 1, &c0[0], L, m0, n0, &w0x, funcnum)
+                            cfw0t(&x, &t, 1, &c0[0], L, m0, n0, &w0t, funcnum)
+
+                            tmp0 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(L*sini2x*(cosj2t*j2*(A16*r*(w0x + wx) + A66*(w0t + wt)) + sina*sinj2t*(A12*r*(w0x + wx) + A26*(w0t + wt))) + pi*cosi2x*i2*r*sinj2t*(A11*r*(w0x + wx) + A16*(w0t + wt)))/(L**2*r))
+                            tmp1 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(-L*j2*sini2x*sinj2t*(A16*r*(w0x + wx) + A66*(w0t + wt)) + cosj2t*(L*sina*sini2x*(A12*r*(w0x + wx) + A26*(w0t + wt)) + pi*cosi2x*i2*r*(A11*r*(w0x + wx) + A16*(w0t + wt))))/(L**2*r))
+                            tmp2 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(L*sini2x*(cosj2t*j2*(A12*r*(w0x + wx) + A26*(w0t + wt)) - sina*sinj2t*(A16*r*(w0x + wx) + A66*(w0t + wt))) + pi*cosi2x*i2*r*sinj2t*(A16*r*(w0x + wx) + A66*(w0t + wt)))/(L**2*r))
+                            tmp3 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(-L*j2*sini2x*sinj2t*(A12*r*(w0x + wx) + A26*(w0t + wt)) + cosj2t*(A16*r*(w0x + wx) + A66*(w0t + wt))*(-L*sina*sini2x + pi*cosi2x*i2*r))/(L**2*r))
+                            tmp4 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(L*cosj2t*j2*(B16*r*(w0x + wx) + B66*(w0t + wt))*(L*sina*sini2x - 2*pi*cosi2x*i2*r) + sinj2t*(-pi*L*cosi2x*i2*r*sina*(B12*r*(w0x + wx) + B26*(w0t + wt)) + sini2x*(B26*L**2*j2**2*(w0t + wt) + r*(A26*L**2*cosa*(w0t + wt) + pi**2*B16*i2**2*r*(w0t + wt) + (w0x + wx)*(A12*L**2*cosa*r + pi**2*B11*i2**2*r**2 + B12*L**2*j2**2)))))/(L**3*r**2))
+                            tmp5 += weightx[nx][i]*weightt[nt][j]*(pi*cosk1x*k1*(-L*j2*sinj2t*(B16*r*(w0x + wx) + B66*(w0t + wt))*(L*sina*sini2x - 2*pi*cosi2x*i2*r) + cosj2t*(-pi*L*cosi2x*i2*r*sina*(B12*r*(w0x + wx) + B26*(w0t + wt)) + sini2x*(B26*L**2*j2**2*(w0t + wt) + r*(A26*L**2*cosa*(w0t + wt) + pi**2*B16*i2**2*r*(w0t + wt) + (w0x + wx)*(A12*L**2*cosa*r + pi**2*B11*i2**2*r**2 + B12*L**2*j2**2)))))/(L**3*r**2))
+
+                    c += 1
+                    rows[c] = row+0
+                    cols[c] = col+2
+                    k0Lv[c] = tmp0
+                    c += 1
+                    rows[c] = row+1
+                    cols[c] = col+2
+                    k0Lv[c] = tmp1
+                    c += 1
+                    rows[c] = row+2
+                    cols[c] = col+2
+                    k0Lv[c] = tmp2
+                    c += 1
+                    rows[c] = row+3
+                    cols[c] = col+2
+                    k0Lv[c] = tmp3
+                    c += 1
+                    rows[c] = row+4
+                    cols[c] = col+2
+                    k0Lv[c] = tmp4
+                    c += 1
+                    rows[c] = row+5
+                    cols[c] = col+2
+                    k0Lv[c] = tmp5
+
+                for k2 in range(i0, m2+i0):
+                    for l2 in range(j0, n2+j0):
+                        col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
+                        if i2 > k2:
+                            nx = i2-i0
+                        else:
+                            nx = k2-i0
+
+                        if j2 > l2:
+                            nt = j2-j0
+                        else:
+                            nt = l2-j0
+
+                        # k0L_22
+
+                        tmp0 = 0
+                        tmp1 = 0
+                        tmp2 = 0
+                        tmp3 = 0
+                        tmp4 = 0
+                        tmp5 = 0
+                        tmp6 = 0
+                        tmp7 = 0
+                        tmp8 = 0
+                        tmp9 = 0
+                        tmp10 = 0
+                        tmp11 = 0
+
+                        for i in range(freqx*(nx+1)):
+                            x = xs[nx][i]
+                            r = r2 + sina*x
+
+                            sini2x = sin(pi*i2*x/L)
+                            cosi2x = cos(pi*i2*x/L)
+                            sink2x = sin(pi*k2*x/L)
+                            cosk2x = cos(pi*k2*x/L)
+
+                            for j in range(freqt*(nt+1)):
+                                t = ts[nt][j]
+
+                                sinj2t = sin(j2*t)
+                                cosj2t = cos(j2*t)
+                                sinl2t = sin(l2*t)
+                                cosl2t = cos(l2*t)
+
+                                cfwx(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wx)
+                                cfwt(&coeffs[0], m1, m2, n2, &x, &t, 1, L, &wt)
+                                cfw0x(&x, &t, 1, &c0[0], L, m0, n0, &w0x, funcnum)
+                                cfw0t(&x, &t, 1, &c0[0], L, m0, n0, &w0t, funcnum)
+
+                                tmp0 += weightx[nx][i]*weightt[nt][j]*((L*cosl2t*l2*sink2x*(w0t + wt)*(pi*A12*cosi2x*i2*r*sinj2t + L*sini2x*(A22*sina*sinj2t + A26*cosj2t*j2)) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(pi*A11*cosi2x*i2*r*sinj2t + L*sini2x*(A12*sina*sinj2t + A16*cosj2t*j2)) + r*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt))*(pi*A16*cosi2x*i2*r*sinj2t + L*sini2x*(A26*sina*sinj2t + A66*cosj2t*j2)))/(L**2*r**2))
+                                tmp1 += weightx[nx][i]*weightt[nt][j]*((-L*l2*sink2x*sinl2t*(w0t + wt)*(pi*A12*cosi2x*i2*r*sinj2t + L*sini2x*(A22*sina*sinj2t + A26*cosj2t*j2)) + pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(pi*A11*cosi2x*i2*r*sinj2t + L*sini2x*(A12*sina*sinj2t + A16*cosj2t*j2)) + r*(-L*l2*sink2x*sinl2t*(w0x + wx) + pi*cosk2x*cosl2t*k2*(w0t + wt))*(pi*A16*cosi2x*i2*r*sinj2t + L*sini2x*(A26*sina*sinj2t + A66*cosj2t*j2)))/(L**2*r**2))
+                                tmp2 += weightx[nx][i]*weightt[nt][j]*((L*cosl2t*l2*sink2x*(w0t + wt)*(-A26*L*j2*sini2x*sinj2t + cosj2t*(pi*A12*cosi2x*i2*r + A22*L*sina*sini2x)) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(-A16*L*j2*sini2x*sinj2t + cosj2t*(pi*A11*cosi2x*i2*r + A12*L*sina*sini2x)) + r*(-A66*L*j2*sini2x*sinj2t + cosj2t*(pi*A16*cosi2x*i2*r + A26*L*sina*sini2x))*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt)))/(L**2*r**2))
+                                tmp3 += weightx[nx][i]*weightt[nt][j]*((-L*l2*sink2x*sinl2t*(w0t + wt)*(-A26*L*j2*sini2x*sinj2t + cosj2t*(pi*A12*cosi2x*i2*r + A22*L*sina*sini2x)) + pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(-A16*L*j2*sini2x*sinj2t + cosj2t*(pi*A11*cosi2x*i2*r + A12*L*sina*sini2x)) + r*(-A66*L*j2*sini2x*sinj2t + cosj2t*(pi*A16*cosi2x*i2*r + A26*L*sina*sini2x))*(-L*l2*sink2x*sinl2t*(w0x + wx) + pi*cosk2x*cosl2t*k2*(w0t + wt)))/(L**2*r**2))
+                                tmp4 += weightx[nx][i]*weightt[nt][j]*((L*cosl2t*l2*sink2x*(w0t + wt)*(pi*A26*cosi2x*i2*r*sinj2t + L*sini2x*(A22*cosj2t*j2 - A26*sina*sinj2t)) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(pi*A16*cosi2x*i2*r*sinj2t + L*sini2x*(A12*cosj2t*j2 - A16*sina*sinj2t)) + r*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt))*(pi*A66*cosi2x*i2*r*sinj2t + L*sini2x*(A26*cosj2t*j2 - A66*sina*sinj2t)))/(L**2*r**2))
+                                tmp5 += weightx[nx][i]*weightt[nt][j]*((-L*l2*sink2x*sinl2t*(w0t + wt)*(pi*A26*cosi2x*i2*r*sinj2t + L*sini2x*(A22*cosj2t*j2 - A26*sina*sinj2t)) + pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(pi*A16*cosi2x*i2*r*sinj2t + L*sini2x*(A12*cosj2t*j2 - A16*sina*sinj2t)) + r*(-L*l2*sink2x*sinl2t*(w0x + wx) + pi*cosk2x*cosl2t*k2*(w0t + wt))*(pi*A66*cosi2x*i2*r*sinj2t + L*sini2x*(A26*cosj2t*j2 - A66*sina*sinj2t)))/(L**2*r**2))
+                                tmp6 += weightx[nx][i]*weightt[nt][j]*((L*cosl2t*l2*sink2x*(w0t + wt)*(-A22*L*j2*sini2x*sinj2t + A26*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(-A12*L*j2*sini2x*sinj2t + A16*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)) + r*(-A26*L*j2*sini2x*sinj2t + A66*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r))*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt)))/(L**2*r**2))
+                                tmp7 += weightx[nx][i]*weightt[nt][j]*((L*l2*sink2x*sinl2t*(w0t + wt)*(A22*L*j2*sini2x*sinj2t + cosj2t*(A26*L*sina*sini2x - pi*A26*cosi2x*i2*r)) + pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(-A12*L*j2*sini2x*sinj2t + A16*cosj2t*(-L*sina*sini2x + pi*cosi2x*i2*r)) + r*(A26*L*j2*sini2x*sinj2t + cosj2t*(A66*L*sina*sini2x - pi*A66*cosi2x*i2*r))*(L*l2*sink2x*sinl2t*(w0x + wx) - pi*cosk2x*cosl2t*k2*(w0t + wt)))/(L**2*r**2))
+                                tmp8 += weightx[nx][i]*weightt[nt][j]*((L*cosl2t*l2*sink2x*(w0t + wt)*(B26*L*cosj2t*j2*(L*sina*sini2x - 2*pi*cosi2x*i2*r) + sinj2t*(-pi*B22*L*cosi2x*i2*r*sina + sini2x*(A22*L**2*cosa*r + pi**2*B12*i2**2*r**2 + B22*L**2*j2**2))) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(B16*L*cosj2t*j2*(L*sina*sini2x - 2*pi*cosi2x*i2*r) + sinj2t*(-pi*B12*L*cosi2x*i2*r*sina + sini2x*(A12*L**2*cosa*r + pi**2*B11*i2**2*r**2 + B12*L**2*j2**2))) + r*(B66*L*cosj2t*j2*(L*sina*sini2x - 2*pi*cosi2x*i2*r) + sinj2t*(-pi*B26*L*cosi2x*i2*r*sina + sini2x*(A26*L**2*cosa*r + pi**2*B16*i2**2*r**2 + B26*L**2*j2**2)))*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt)))/(L**3*r**3))
+                                tmp9 += weightx[nx][i]*weightt[nt][j]*((-L*l2*sink2x*sinl2t*(w0t + wt)*(B26*L*cosj2t*j2*(L*sina*sini2x - 2*pi*cosi2x*i2*r) + sinj2t*(-pi*B22*L*cosi2x*i2*r*sina + sini2x*(A22*L**2*cosa*r + pi**2*B12*i2**2*r**2 + B22*L**2*j2**2))) + pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(B16*L*cosj2t*j2*(L*sina*sini2x - 2*pi*cosi2x*i2*r) + sinj2t*(-pi*B12*L*cosi2x*i2*r*sina + sini2x*(A12*L**2*cosa*r + pi**2*B11*i2**2*r**2 + B12*L**2*j2**2))) + r*(B66*L*cosj2t*j2*(L*sina*sini2x - 2*pi*cosi2x*i2*r) + sinj2t*(-pi*B26*L*cosi2x*i2*r*sina + sini2x*(A26*L**2*cosa*r + pi**2*B16*i2**2*r**2 + B26*L**2*j2**2)))*(-L*l2*sink2x*sinl2t*(w0x + wx) + pi*cosk2x*cosl2t*k2*(w0t + wt)))/(L**3*r**3))
+                                tmp10 += weightx[nx][i]*weightt[nt][j]*((L*cosl2t*l2*sink2x*(w0t + wt)*(B26*L*j2*sinj2t*(-L*sina*sini2x + 2*pi*cosi2x*i2*r) + cosj2t*(-pi*B22*L*cosi2x*i2*r*sina + sini2x*(A22*L**2*cosa*r + pi**2*B12*i2**2*r**2 + B22*L**2*j2**2))) + pi*cosk2x*k2*r**2*sinl2t*(w0x + wx)*(B16*L*j2*sinj2t*(-L*sina*sini2x + 2*pi*cosi2x*i2*r) + cosj2t*(-pi*B12*L*cosi2x*i2*r*sina + sini2x*(A12*L**2*cosa*r + pi**2*B11*i2**2*r**2 + B12*L**2*j2**2))) + r*(B66*L*j2*sinj2t*(-L*sina*sini2x + 2*pi*cosi2x*i2*r) + cosj2t*(-pi*B26*L*cosi2x*i2*r*sina + sini2x*(A26*L**2*cosa*r + pi**2*B16*i2**2*r**2 + B26*L**2*j2**2)))*(L*cosl2t*l2*sink2x*(w0x + wx) + pi*cosk2x*k2*sinl2t*(w0t + wt)))/(L**3*r**3))
+                                tmp11 += weightx[nx][i]*weightt[nt][j]*((-L*l2*sink2x*sinl2t*(w0t + wt)*(B26*L*j2*sinj2t*(-L*sina*sini2x + 2*pi*cosi2x*i2*r) + cosj2t*(-pi*B22*L*cosi2x*i2*r*sina + sini2x*(A22*L**2*cosa*r + pi**2*B12*i2**2*r**2 + B22*L**2*j2**2))) + pi*cosk2x*cosl2t*k2*r**2*(w0x + wx)*(B16*L*j2*sinj2t*(-L*sina*sini2x + 2*pi*cosi2x*i2*r) + cosj2t*(-pi*B12*L*cosi2x*i2*r*sina + sini2x*(A12*L**2*cosa*r + pi**2*B11*i2**2*r**2 + B12*L**2*j2**2))) + r*(B66*L*j2*sinj2t*(-L*sina*sini2x + 2*pi*cosi2x*i2*r) + cosj2t*(-pi*B26*L*cosi2x*i2*r*sina + sini2x*(A26*L**2*cosa*r + pi**2*B16*i2**2*r**2 + B26*L**2*j2**2)))*(-L*l2*sink2x*sinl2t*(w0x + wx) + pi*cosk2x*cosl2t*k2*(w0t + wt)))/(L**3*r**3))
+
+                        c += 1
+                        rows[c] = row+0
+                        cols[c] = col+4
+                        k0Lv[c] = tmp0
+                        c += 1
+                        rows[c] = row+0
+                        cols[c] = col+5
+                        k0Lv[c] = tmp1
+                        c += 1
+                        rows[c] = row+1
+                        cols[c] = col+4
+                        k0Lv[c] = tmp2
+                        c += 1
+                        rows[c] = row+1
+                        cols[c] = col+5
+                        k0Lv[c] = tmp3
+                        c += 1
+                        rows[c] = row+2
+                        cols[c] = col+4
+                        k0Lv[c] = tmp4
+                        c += 1
+                        rows[c] = row+2
+                        cols[c] = col+5
+                        k0Lv[c] = tmp5
+                        c += 1
+                        rows[c] = row+3
+                        cols[c] = col+4
+                        k0Lv[c] = tmp6
+                        c += 1
+                        rows[c] = row+3
+                        cols[c] = col+5
+                        k0Lv[c] = tmp7
+                        c += 1
+                        rows[c] = row+4
+                        cols[c] = col+4
+                        k0Lv[c] = tmp8
+                        c += 1
+                        rows[c] = row+4
+                        cols[c] = col+5
+                        k0Lv[c] = tmp9
+                        c += 1
+                        rows[c] = row+5
+                        cols[c] = col+4
+                        k0Lv[c] = tmp10
+                        c += 1
+                        rows[c] = row+5
+                        cols[c] = col+5
+                        k0Lv[c] = tmp11
+
+    nx = max(m1-i0, m2-i0)
+    nt = n2-j0
+
+    with nogil:
+        for i in range(nx):
+            free(weightx[i])
+            free(xs[i])
+        for j in range(nt):
+            free(weightt[j])
+            free(ts[j])
+    free(weightx)
+    free(xs)
+    free(weightt)
+    free(ts)
+
+    size = num0 + num1*m1 + num2*m2*n2
+
+    k0L = coo_matrix((k0Lv, (rows, cols)), shape=(size, size))
+
+    return k0L
 
 
 def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
@@ -172,6 +686,7 @@ def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
             for k2 in range(i0, m2+i0):
                 for l2 in range(j0, n2+j0):
                     col = (k2-i0)*num2 + (l2-j0)*num2*m2 + num0 + num1*m1
+
                     # k0L_22
                     c += 1
                     rows[c] = row+0
