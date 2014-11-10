@@ -16,17 +16,19 @@ from numpy import linspace, pi, cos, sin, tan, deg2rad
 
 from conecylDB import ccs, laminaprops
 import compmech.composite.laminate as laminate
-from compmech.logger import *
+from compmech.logger import msg, warn, error
 from compmech.sparse import remove_null_cols, solve, make_symmetric
 from compmech.constants import DOUBLE
 import non_linear
 import modelDB
+
 
 def load(name):
     if '.ConeCyl' in name:
         return cPickle.load(open(name, 'rb'))
     else:
         return cPickle.load(open(name + '.ConeCyl', 'rb'))
+
 
 class ConeCyl(object):
     """
@@ -72,6 +74,7 @@ class ConeCyl(object):
 
         # internal pressure measured in force/area
         self.P = 0.
+        self.increment_P = False
 
         # axial compression
         self.pdC = False
@@ -168,6 +171,7 @@ class ConeCyl(object):
 
         self._clear_matrices()
 
+
     def _clear_matrices(self):
         self.k0 = None
         self.k0uk = None
@@ -193,6 +197,7 @@ class ConeCyl(object):
 
         gc.collect()
 
+
     def _rebuild(self):
         if not self.name:
             try:
@@ -217,7 +222,7 @@ class ConeCyl(object):
                  'numerical instability for higher values', level=2)
             inf = 1.e8
 
-        if self.bc != None:
+        if self.bc is not None:
             bc = self.bc.lower()
 
             if '_' in bc:
@@ -300,6 +305,8 @@ class ConeCyl(object):
             self.H = (self.r1-self.r2)/tan(self.alpharad)
         if self.H and not self.L:
             self.L = self.H/self.cosa
+        if self.L and not self.H:
+            self.H = self.L*self.cosa
 
         if not self.r2:
             if not self.r1:
@@ -372,14 +379,14 @@ class ConeCyl(object):
 
         if self.Fc is not None:
             self.Nxxtop[0] = self.Fc/(2*pi*self.r2*self.cosa)
-            log('Nxxtop[0] calculated from Fc', level=2)
+            msg('Nxxtop[0] calculated from Fc', level=2)
             if self.MLA is None:
                 if self.xiLA is not None:
                     self.MLA = self.xiLA*self.Fc
-                    log('MLA calculated from xiLA', level=2)
+                    msg('MLA calculated from xiLA', level=2)
         if self.MLA is not None:
             self.Nxxtop[2] = self.MLA/(pi*self.r2**2*self.cosa)
-            log('Nxxtop[2] calculated from MLA', level=2)
+            msg('Nxxtop[2] calculated from MLA', level=2)
 
         if self.laminaprop is None:
             h = self.h
@@ -413,6 +420,7 @@ class ConeCyl(object):
                                [0, 0, 0, D12, D22, D26],
                                [0, 0, 0, D16, D26, D66]])
 
+
     def get_size(self):
         r"""Calculates the size of the stiffness matrices
 
@@ -433,6 +441,7 @@ class ConeCyl(object):
         self.size = num0 + num1*self.m1 + num2*self.m2*self.n2
         return self.size
 
+
     def from_DB(self, name):
         """Load cone / cylinder data from the local database
 
@@ -451,6 +460,7 @@ class ConeCyl(object):
                 setattr(self, attr, cc.get(attr, getattr(self, attr)))
         except:
             raise ValueError('Invalid data-base entry!')
+
 
     def exclude_dofs_matrix(self, k, return_kkk=False,
                                      return_kku=False,
@@ -591,6 +601,7 @@ class ConeCyl(object):
             c = np.insert(c, dof, inc*cai)
         return c
 
+
     def _default_field(self, xs, ts, gridx, gridt):
         if xs is None or ts is None:
             xs = linspace(0, self.L, gridx)
@@ -609,9 +620,10 @@ class ConeCyl(object):
 
         return xs, ts, xshape, tshape
 
+
     def _calc_linear_matrices(self, combined_load_case=None):
         self._rebuild()
-        log('Calculating linear matrices... ', level=2)
+        msg('Calculating linear matrices... ', level=2)
 
         fk0, fk0_cyl, fkG0, fkG0_cyl, k0edges = modelDB.get_linear_matrices(
                                                     self, combined_load_case)
@@ -641,25 +653,25 @@ class ConeCyl(object):
                                              laminaprops=laminaprops)
 
         if 'clpt' in model:
-            if self.F_reuse != None:
-                log('')
-                log('Reusing F matrix...', level=2)
+            if self.F_reuse is not None:
+                msg('')
+                msg('Reusing F matrix...', level=2)
                 F = self.F_reuse
-            elif lam != None:
+            elif lam is not None:
                 F = lam.ABD
 
         elif 'fsdt' in model:
-            if self.F_reuse != None:
-                log('')
-                log('Reusing F matrix...', level=2)
+            if self.F_reuse is not None:
+                msg('')
+                msg('Reusing F matrix...', level=2)
                 F = self.F_reuse
-            elif lam != None:
+            elif lam is not None:
                 F = lam.ABDE
                 F[6:, 6:] *= self.K
 
         if self.force_orthotropic_laminate:
-            log('')
-            log('Forcing orthotropic laminate...', level=2)
+            msg('')
+            msg('Forcing orthotropic laminate...', level=2)
             F[0, 2] = 0. # A16
             F[1, 2] = 0. # A26
             F[2, 0] = 0. # A61
@@ -746,7 +758,7 @@ class ConeCyl(object):
 
         gc.collect()
 
-        log('finished!', level=2)
+        msg('finished!', level=2)
 
 
     def lb(self, c=None, tol=0, combined_load_case=None):
@@ -783,13 +795,13 @@ class ConeCyl(object):
 
         """
         if not modelDB.db[self.model]['linear buckling']:
-            log('________________________________________________')
-            log('')
+            msg('________________________________________________')
+            msg('')
             warn('Model {} cannot be used in linear buckling analysis!'.
                  format(self.model))
-            log('________________________________________________')
+            msg('________________________________________________')
 
-        log('Running linear buckling analysis...')
+        msg('Running linear buckling analysis...')
 
         if self.Fc is None and self.Nxxtop is None:
             self.Fc = 1.
@@ -803,7 +815,7 @@ class ConeCyl(object):
         #NOTE runs faster for self.k0 than -self.k0, so that the negative
         #     sign is applied later
 
-        log('Eigenvalue solver... ', level=2)
+        msg('Eigenvalue solver... ', level=2)
 
         i0 = modelDB.db[self.model]['i0']
         num0 = modelDB.db[self.model]['num0']
@@ -836,7 +848,7 @@ class ConeCyl(object):
             warn(str(e), level=3)
             size22 = M.shape[0]
             M, A, used_cols = remove_null_cols(M, A)
-            log('solver...', level=3)
+            msg('solver...', level=3)
             try:
                 eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
                                           which='SM', M=M, tol=tol, sigma=1.,
@@ -845,7 +857,7 @@ class ConeCyl(object):
                 eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
                                           which='SM', M=M, tol=tol, sigma=1.,
                                           mode='buckling')
-            log('finished!', level=3)
+            msg('finished!', level=3)
             eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
             eigvecs[used_cols, :] = peigvecs
 
@@ -854,12 +866,13 @@ class ConeCyl(object):
         self.eigvecs = np.vstack((np.zeros((pos, self.num_eigvalues)),
                                   eigvecs))
 
-        log('finished!', level=2)
+        msg('finished!', level=2)
 
-        log('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
+        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
         for eig in eigvals[:self.num_eigvalues_print]:
-            log('{}'.format(eig), level=2)
+            msg('{}'.format(eig), level=2)
         self.last_analysis = 'lb'
+
 
     def eigen(self, c=None, tol=0, combined_load_case=None, kL=None, kG=None):
         """Performs a non-linear eigenvalue analysis at a given state
@@ -899,13 +912,13 @@ class ConeCyl(object):
 
         """
         if not modelDB.db[self.model]['linear buckling']:
-            log('________________________________________________')
-            log('')
+            msg('________________________________________________')
+            msg('')
             warn('Model {} cannot be used in linear buckling analysis!'.
                  format(self.model))
-            log('________________________________________________')
+            msg('________________________________________________')
 
-        log('Running linear buckling analysis...')
+        msg('Running linear buckling analysis...')
 
         if self.Fc is None:
             self.Fc = 1.
@@ -918,7 +931,7 @@ class ConeCyl(object):
         #     a preliminary eigsh using a small m2 and n2
         #NOTE runs faster for self.k0 than -self.k0, so that the negative
         #     sign is applied later
-        log('Eigenvalue solver... ', level=2)
+        msg('Eigenvalue solver... ', level=2)
 
         i0 = modelDB.db[self.model]['i0']
         num0 = modelDB.db[self.model]['num0']
@@ -951,7 +964,7 @@ class ConeCyl(object):
             warn(str(e), level=3)
             size22 = M.shape[0]
             M, A, used_cols = remove_null_cols(M, A)
-            log('solver...', level=3)
+            msg('solver...', level=3)
             try:
                 eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
                                           which='SM', M=M, tol=tol, sigma=1.,
@@ -960,7 +973,7 @@ class ConeCyl(object):
                 eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
                                           which='SM', M=M, tol=tol, sigma=1.,
                                           mode='buckling')
-            log('finished!', level=3)
+            msg('finished!', level=3)
             eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
             eigvecs[used_cols, :] = peigvecs
 
@@ -969,11 +982,11 @@ class ConeCyl(object):
         self.eigvecs = np.vstack((np.zeros((pos, self.num_eigvalues)),
                                   eigvecs))
 
-        log('finished!', level=2)
+        msg('finished!', level=2)
 
-        log('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
+        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
         for eig in eigvals[:self.num_eigvalues_print]:
-            log('{}'.format(eig), level=2)
+            msg('{}'.format(eig), level=2)
         self.last_analysis = 'lb'
 
 
@@ -1013,7 +1026,7 @@ class ConeCyl(object):
         if with_kLL is None:
             with_kLL = self.with_kLL
 
-        log('Calculating non-linear matrices...', level=2)
+        msg('Calculating non-linear matrices...', level=2)
         alpharad = self.alpharad
         r2 = self.r2
         L = self.L
@@ -1105,7 +1118,8 @@ class ConeCyl(object):
         self.kL = csr_matrix(self.k0 + k0L + kL0 + kLL)
         self.kG = csr_matrix(kG)
 
-        log('finished!', level=2)
+        msg('finished!', level=2)
+
 
     def uvw(self, c, xs=None, ts=None, gridx=300, gridt=300, inc=1.):
         r"""Calculates the displacement field
@@ -1170,6 +1184,7 @@ class ConeCyl(object):
 
         return self.u, self.v, self.w, self.phix, self.phit
 
+
     def strain(self, c, xs=None, ts=None, gridx=300, gridt=300, inc=1.):
         r"""Calculates the strain field
 
@@ -1230,6 +1245,7 @@ class ConeCyl(object):
                      self.out_num_cores)
 
         return es.reshape((xshape + (e_num,)))
+
 
     def stress(self, c, xs=None, ts=None, gridx=300, gridt=300, inc=1.):
         r"""Calculates the stress field
@@ -1292,6 +1308,7 @@ class ConeCyl(object):
                      self.out_num_cores)
         return Ns.reshape((xshape + (e_num,)))
 
+
     def calc_fint(self, c, inc=1., m=1, return_u=True):
         r"""Calculates the internal force vector `\{F_{int}\}`
 
@@ -1329,14 +1346,16 @@ class ConeCyl(object):
 
         return fint
 
+
     def _calc_kT(self, c):
         nlmodule = modelDB.db[self.model]['non-linear']
         kT = nlmodule.calc_kT(c, self.alpharad, self.r2, self.L,
                                 self.tLArad, self.F,
                                 self.m1, self.m2, self.n2,
-                                self.nx, self.nt, self.ni_num_cores,
+                                self.nx, selif.nt, self.ni_num_cores,
                                 self.ni_method, self.c0, self.m0, self.n0)
         return kT
+
 
     def add_SPL(self, PL, pt=0.5, theta=0.):
         """Add a Single Perturbation Load `\{{F_{PL}}_i\}`
@@ -1365,6 +1384,7 @@ class ConeCyl(object):
         self._rebuild()
         self.forces.append([pt*self.L, theta, 0., 0., PL])
 
+
     def add_force(self, x, theta, fx, ftheta, fz):
         r"""Add a punctual force
 
@@ -1386,6 +1406,7 @@ class ConeCyl(object):
 
         """
         self.forces.append([x, theta, fx, ftheta, fz])
+
 
     def calc_fext(self, inc=None, kuk=None, silent=False):
         """Calculates the external force vector `\{F_{ext}\}`
@@ -1410,7 +1431,7 @@ class ConeCyl(object):
             implementation has not been finished, see
             :meth:`exclude_dofs_matrix`.
         silent : bool, optional
-            A boolean to tell whether the log messages should be printed.
+            A boolean to tell whether the msg messages should be printed.
 
         Returns
         -------
@@ -1419,7 +1440,7 @@ class ConeCyl(object):
             The external force vector
 
         """
-        log('Calculating external forces...', level=2, silent=silent)
+        msg('Calculating external forces...', level=2, silent=silent)
         if inc is None:
             Nxxtop = self.Nxxtop
             uTM = self.uTM
@@ -1498,6 +1519,23 @@ class ConeCyl(object):
         if not 2 in self.excluded_dofs:
             fext_tmp[2] += Nxxtop[2]*(2*pi*r2)/cosa
 
+        # pressure
+        if self.P != 0.:
+            if self.increment_P and inc is not None:
+                P = inc*self.P
+            else:
+                P = self.P
+            if 'clpt' in model:
+                for i1 in range(i0, m1+i0):
+                    if i1 == 0:
+                        continue
+                    col = num0 + (i1-i0)*num1
+                    fext_tmp[col+2] += P*(L*2./i1*(r2 - (-1)**i1*(r2 + L*sina)))
+            elif 'fsdt' in model:
+                #TODO it might be the same as for the CLPT
+                raise NotImplementedError(
+                    'Pressure not implemented for static analysis for FSDT')
+
         fext_tmp = np.delete(fext_tmp, self.excluded_dofs)
         fext += fext_tmp
 
@@ -1517,21 +1555,10 @@ class ConeCyl(object):
                 fpt = np.array([[0, self.T/r2, 0, 0, 0]])
             fext += fpt.dot(gu).ravel()
 
-        # pressure
-        if self.P != 0.:
-            if 'clpt' in model:
-                for i1 in range(i0, m1+i0):
-                    col = num0 + (i1-i0)*num1
-                    fext[col+2] += self.P*(2/i1*(r2 - (-1)**i1*(r2 + L*sina)))
-
-            elif 'fsdt' in model:
-                #TODO it might be the same as for the CLPT
-                raise NotImplementedError(
-                    'Pressure not implemented for static analysis for FSDT')
-
-        log('finished!', level=2, silent=silent)
+        msg('finished!', level=2, silent=silent)
 
         return fext
+
 
     def static(self, NLgeom=False, silent=False):
         """Static analysis for cones and cylinders
@@ -1593,7 +1620,7 @@ class ConeCyl(object):
             be performed.
 
         silent : bool, optional
-            A boolean to tell whether the log messages should be printed.
+            A boolean to tell whether the msg messages should be printed.
 
         Returns
         -------
@@ -1618,16 +1645,16 @@ class ConeCyl(object):
 
         if NLgeom:
             if not modelDB.db[self.model]['non-linear static']:
-                log('________________________________________________',
+                msg('________________________________________________',
                     silent=silent)
-                log('', silent=silent)
+                msg('', silent=silent)
                 warn(
             'Model {} cannot be used in non-linear static analysis!'.
             format(self.model), silent=silent)
-                log('________________________________________________',
+                msg('________________________________________________',
                     silent=silent)
 
-            log('Started Non-Linear Static Analysis', silent=silent)
+            msg('Started Non-Linear Static Analysis', silent=silent)
             self._calc_linear_matrices()
             if self.NL_method == 'NR':
                 non_linear.NR(self)
@@ -1639,25 +1666,26 @@ class ConeCyl(object):
                 non_linear.arc_length(self)
         else:
             if not modelDB.db[self.model]['linear static']:
-                log('________________________________________________',
+                msg('________________________________________________',
                     level=1, silent=silent)
-                log('', level=1, silent=silent)
+                msg('', level=1, silent=silent)
                 warn('Model {} cannot be used in linear static analysis!'.
                      format(self.model), level=1, silent=silent)
                 lob('________________________________________________',
                     level=1, silent=silent)
 
-            log('Started Linear Static Analysis', silent=silent)
+            msg('Started Linear Static Analysis', silent=silent)
             self._calc_linear_matrices()
             fext = self.calc_fext()
             c = solve(self.k0uu, fext)
             self.cs.append(c)
             self.increments.append(1.)
-            log('Finished Linear Static Analysis', silent=silent)
+            msg('Finished Linear Static Analysis', silent=silent)
         #
         self.last_analysis = 'static'
 
         return self.cs
+
 
     def plot(self, c, invert_x=False, plot_type=1, vec='w',
              deform_u=False, deform_u_sf=100.,
@@ -1758,7 +1786,7 @@ class ConeCyl(object):
             if needed.
 
         """
-        log('Plotting contour...')
+        msg('Plotting contour...')
 
         ubkp, vbkp, wbkp, phixbkp, phitbkp = (self.u, self.v, self.w,
                                               self.phix, self.phit)
@@ -1770,7 +1798,7 @@ class ConeCyl(object):
 
         c = self.calc_full_c(c, inc=inc)
 
-        log('Computing field variables...', level=1)
+        msg('Computing field variables...', level=1)
         displs = ['u', 'v', 'w', 'phix', 'phit', 'magnitude', 'test']
         strains = ['exx', 'ett', 'gxt', 'kxx', 'ktt', 'kxt', 'gtz', 'gxz']
         stresses = ['Nxx', 'Ntt', 'Nxt', 'Mxx', 'Mtt', 'Mxt', 'Qt', 'Qx']
@@ -1799,7 +1827,7 @@ class ConeCyl(object):
         else:
             raise ValueError(
                     '{0} is not a valid "vec" parameter value!'.format(vec))
-        log('Finished!', level=1)
+        msg('Finished!', level=1)
 
         Xs = self.Xs
         Ts = self.Ts
@@ -1917,9 +1945,10 @@ class ConeCyl(object):
         if phitbkp is not None:
             self.phit = phitbkp
 
-        log('finished!')
+        msg('finished!')
 
         return ax
+
 
     def plotAbaqus(self, frame, fieldOutputKey, vec, nodes, numel_cir,
                    elem_type='S4R', ignore=[],
@@ -2138,14 +2167,14 @@ class ConeCyl(object):
                     ax.yaxis.set_ticklabels([])
                     ax.set_frame_on(False)
                 if save:
-                    log('Plot saved at: {0}'.format(filename))
+                    msg('Plot saved at: {0}'.format(filename))
                     plt.tight_layout()
                     plt.savefig(filename, transparent=True,
                                 bbox_inches='tight', pad_inches=0.05,
                                 dpi=400)
 
             else:
-                print('Matplotlib cannot be imported from Abaqus')
+                warn('Matplotlib cannot be imported from Abaqus')
             np.savez(npzname, cir=cir, mer=mer, field=field)
             with open(pyname, 'w') as f:
                 f.write("import os\n")
@@ -2181,13 +2210,14 @@ class ConeCyl(object):
                 f.write("plt.savefig(filename, transparent=True,\n")
                 f.write("            bbox_inches='tight', pad_inches=0.05, dpi=400)\n")
                 f.write("plt.show()\n")
-            print('Output exported to "{0}"'.format(npzname))
-            print('Please run the file "{0}" to plot the output'.format(
+            msg('Output exported to "{0}"'.format(npzname))
+            msg('Please run the file "{0}" to plot the output'.format(
                   pyname))
             return cir, mer, field
         except:
             traceback.print_exc()
-            print('Opened plot could not be generated! :(')
+            error('Opened plot could not be generated! :(')
+
 
     def SPLA(self, PLs, NLgeom=True, plot=False):
         """Runs the Single Perturbation Load Approach (SPLA)
@@ -2270,6 +2300,7 @@ class ConeCyl(object):
 
         return curves
 
+
     def apply_shim(self, thetadeg, width, thick, ncpts=10000):
         r"""Distributes the axial load in order to simulate a shim
 
@@ -2323,6 +2354,7 @@ class ConeCyl(object):
 
         return ts, us
 
+
     def fit_Nxxtop(self, ts, us, update_Nxxtop=True):
         r"""Adjusts the axial load distribution for a desired top edge
         displacement
@@ -2371,6 +2403,7 @@ class ConeCyl(object):
 
         return popt
 
+
     def save(self):
         """Save the ``ConeCyl`` object using ``cPickle``
 
@@ -2381,7 +2414,7 @@ class ConeCyl(object):
 
         """
         name = self.name + '.ConeCyl'
-        log('Saving ConeCyl to {}'.format(name))
+        msg('Saving ConeCyl to {}'.format(name))
 
         self._clear_matrices()
 
