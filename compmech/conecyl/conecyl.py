@@ -409,10 +409,12 @@ class ConeCyl(object):
             D22 = E11*h**3/(12*(1 - nu**2))
             D26 = 0
             D66 = G12*h**3/12
+
             # TODO, what if FSDT is used?
             if 'fsdt' in self.model:
                 raise NotImplementedError(
                         'For FSDT laminaprop must be defined!')
+
             self.F = np.array([[A11, A12, A16, 0, 0, 0],
                                [A12, A22, A26, 0, 0, 0],
                                [A16, A26, A66, 0, 0, 0],
@@ -1039,12 +1041,16 @@ class ConeCyl(object):
         m0 = self.m0
         n0 = self.n0
         funcnum = self.funcnum
+        model = self.model
 
-        nlmodule = modelDB.db[self.model]['non-linear']
+        nlmodule = modelDB.db[model]['non-linear']
         if nlmodule:
             calc_k0L = nlmodule.calc_k0L
-            calc_kG = nlmodule.calc_kG
             calc_kLL = nlmodule.calc_kLL
+            if 'iso_' in model:
+                calc_kG = modelDB.db[model[4:]]['non-linear'].calc_kG
+            else:
+                calc_kG = nlmodule.calc_kG
 
             kG = calc_kG(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
                          nx=self.nx, nt=self.nt,
@@ -1053,7 +1059,7 @@ class ConeCyl(object):
                          c0=c0, m0=m0, n0=n0)
             kG = make_symmetric(kG)
 
-            if 'iso_' in self.model:
+            if 'iso_' in model:
                 E11 = self.E11
                 nu = self.nu
                 h = self.h
@@ -1100,8 +1106,7 @@ class ConeCyl(object):
 
         else:
             raise ValueError(
-            'Non-Linear analysis not implemented for model {0}'.format(
-                self.model))
+            'Non-Linear analysis not implemented for model {0}'.format(model))
 
         kL0 = k0L.T
 
@@ -1334,7 +1339,10 @@ class ConeCyl(object):
 
         """
         c = self.calc_full_c(c, inc=inc)
-        nlmodule = modelDB.db[self.model]['non-linear']
+        if 'iso_' in self.model:
+            nlmodule = modelDB.db[self.model[4:]]['non-linear']
+        else:
+            nlmodule = modelDB.db[self.model]['non-linear']
         fint = nlmodule.calc_fint_0L_L0_LL(c, self.alpharad, self.r2, self.L,
                                   self.tLArad, self.F,
                                   self.m1, self.m2, self.n2,
@@ -1345,16 +1353,6 @@ class ConeCyl(object):
             fint = np.delete(fint, self.excluded_dofs)
 
         return fint
-
-
-    def _calc_kT(self, c):
-        nlmodule = modelDB.db[self.model]['non-linear']
-        kT = nlmodule.calc_kT(c, self.alpharad, self.r2, self.L,
-                                self.tLArad, self.F,
-                                self.m1, self.m2, self.n2,
-                                self.nx, selif.nt, self.ni_num_cores,
-                                self.ni_method, self.c0, self.m0, self.n0)
-        return kT
 
 
     def add_SPL(self, PL, pt=0.5, theta=0.):
