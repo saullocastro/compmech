@@ -650,6 +650,8 @@ class ConeCyl(object):
 
         Fc = self.Nxxtop[0]*(2*pi*r2*cosa)
 
+        lam = self.lam
+
         if stack != [] and self.F_reuse is None:
             lam = laminate.read_stack(stack, plyts=plyts,
                                              laminaprops=laminaprops)
@@ -661,6 +663,8 @@ class ConeCyl(object):
                 F = self.F_reuse
             elif lam is not None:
                 F = lam.ABD
+            else:
+                F = self.F
 
         elif 'fsdt' in model:
             if self.F_reuse is not None:
@@ -670,6 +674,8 @@ class ConeCyl(object):
             elif lam is not None:
                 F = lam.ABDE
                 F[6:, 6:] *= self.K
+            else:
+                F = self.F
 
         if self.force_orthotropic_laminate:
             msg('')
@@ -715,7 +721,7 @@ class ConeCyl(object):
                 kG0_T = fkG0_cyl(0, 0, T, r2, L, m1, m2, n2)
         else:
             if 'iso_' in model:
-                k0 = fk0(alpharad, r2, L, E11, nu, h, m2, n2, s)
+                k0 = fk0(alpharad, r2, L, E11, nu, h, m1, m2, n2, s)
             else:
                 k0 = fk0(alpharad, r2, L, F, m1, m2, n2, s)
             if not combined_load_case:
@@ -806,6 +812,7 @@ class ConeCyl(object):
         msg('Running linear buckling analysis...')
 
         if self.Fc is None and self.Nxxtop is None:
+            warn('using Fc = 1.', level=1)
             self.Fc = 1.
         if self.pdC is None:
             self.pdC = False
