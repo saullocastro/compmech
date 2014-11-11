@@ -32,6 +32,7 @@ modules = [
           'clpt_donnell_bcn_linear',
           'clpt_geier1997_bc2',
           'iso_clpt_donnell_bc2_linear',
+          'iso_clpt_donnell_bc3_linear',
 
           'clpt_sanders_bc1_linear',
           'clpt_sanders_bc2_linear',
@@ -47,6 +48,7 @@ modules = [
           'clpt_sanders_bc3_nonlinear',
           'clpt_sanders_bc4_nonlinear',
           'iso_clpt_donnell_bc2_nonlinear',
+          'iso_clpt_donnell_bc3_nonlinear',
           ]
 
 for module in modules:
