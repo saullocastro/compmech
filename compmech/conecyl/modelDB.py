@@ -72,6 +72,21 @@ db = {
                     'num1': 3,
                     'num2': 6,
                     },
+    'iso_clpt_donnell_bc3': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': True,
+                    'commons': clpt_commons_bc3,
+                    'linear': iso_clpt_donnell_bc3_linear,
+                    'non-linear': iso_clpt_donnell_bc3_nonlinear,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'i0': 0,
+                    'j0': 1,
+                    'num0': 3,
+                    'num1': 3,
+                    'num2': 6,
+                    },
     'clpt_donnell_bc4': {
                     'linear static': True,
                     'linear buckling': True,
@@ -346,36 +361,44 @@ def get_linear_matrices(cc, combined_load_case=None):
     model = cc.model
 
     try:
-        fk0edges = db[model]['linear'].fk0edges
+        if 'iso_' in model:
+            fk0edges = db[model[4:]]['linear'].fk0edges
+        else:
+            fk0edges = db[model]['linear'].fk0edges
     except AttributeError:
         k0edges = None
 
-    if model=='clpt_donnell_bc1':
+    if model == 'clpt_donnell_bc1':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kphixBot, cc.kphixTop)
 
-    elif model=='clpt_donnell_bc2':
-        k0edges = fk0edges(m1, m2, n2, r1, r2, L,
-                           cc.kuBot, cc.kuTop,
-                           cc.kphixBot, cc.kphixTop)
-
-    elif model=='iso_clpt_donnell_bc2':
+    elif model == 'clpt_donnell_bc2':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kuBot, cc.kuTop,
                            cc.kphixBot, cc.kphixTop)
 
-    elif model=='clpt_donnell_bc3':
+    elif model == 'iso_clpt_donnell_bc2':
+        k0edges = fk0edges(m1, m2, n2, r1, r2, L,
+                           cc.kuBot, cc.kuTop,
+                           cc.kphixBot, cc.kphixTop)
+
+    elif model == 'clpt_donnell_bc3':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kvBot, cc.kvTop,
                            cc.kphixBot, cc.kphixTop)
 
-    elif model=='clpt_donnell_bc4':
+    elif model == 'iso_clpt_donnell_bc3':
+        k0edges = fk0edges(m1, m2, n2, r1, r2, L,
+                           cc.kvBot, cc.kvTop,
+                           cc.kphixBot, cc.kphixTop)
+
+    elif model == 'clpt_donnell_bc4':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kuBot, cc.kuTop,
                            cc.kvBot, cc.kvTop,
                            cc.kphixBot, cc.kphixTop)
 
-    elif model=='clpt_donnell_bcn':
+    elif model == 'clpt_donnell_bcn':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kuBot, cc.kuTop,
                            cc.kvBot, cc.kvTop,
@@ -383,52 +406,52 @@ def get_linear_matrices(cc, combined_load_case=None):
                            cc.kphixBot, cc.kphixTop,
                            cc.kphitBot, cc.kphitTop)
 
-    elif model=='clpt_sanders_bc1':
+    elif model == 'clpt_sanders_bc1':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kphixBot, cc.kphixTop)
 
-    elif model=='clpt_sanders_bc2':
+    elif model == 'clpt_sanders_bc2':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kuBot, cc.kuTop,
                            cc.kphixBot, cc.kphixTop)
 
-    elif model=='clpt_sanders_bc3':
+    elif model == 'clpt_sanders_bc3':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kvBot, cc.kvTop,
                            cc.kphixBot, cc.kphixTop)
 
-    elif model=='clpt_sanders_bc4':
+    elif model == 'clpt_sanders_bc4':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                            cc.kuBot, cc.kuTop,
                            cc.kvBot, cc.kvTop,
                            cc.kphixBot, cc.kphixTop)
 
-    elif model=='clpt_geier1997_bc2':
+    elif model == 'clpt_geier1997_bc2':
         k0edges = fk0edges(m1, m2, n2, r1, r2, L,
                     cc.kuBot, cc.kuTop,
                     cc.kphixBot, cc.kphixTop)
 
-    elif model=='fsdt_donnell_bc1':
+    elif model == 'fsdt_donnell_bc1':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kphixBot, cc.kphixTop)
 
-    elif model=='fsdt_donnell_bc2':
+    elif model == 'fsdt_donnell_bc2':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kuBot, cc.kuTop,
                     cc.kphixBot, cc.kphixTop)
 
-    elif model=='fsdt_donnell_bc3':
+    elif model == 'fsdt_donnell_bc3':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kvBot, cc.kvTop,
                     cc.kphixBot, cc.kphixTop)
 
-    elif model=='fsdt_donnell_bc4':
+    elif model == 'fsdt_donnell_bc4':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kuBot, cc.kuTop,
                     cc.kvBot, cc.kvTop,
                     cc.kphixBot, cc.kphixTop)
 
-    elif model=='fsdt_donnell_bcn':
+    elif model == 'fsdt_donnell_bcn':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kuBot, cc.kuTop,
                     cc.kvBot, cc.kvTop,
@@ -436,7 +459,7 @@ def get_linear_matrices(cc, combined_load_case=None):
                     cc.kphixBot, cc.kphixTop,
                     cc.kphitBot, cc.kphitTop)
 
-    elif model=='fsdt_sanders_bcn':
+    elif model == 'fsdt_sanders_bcn':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kuBot, cc.kuTop,
                     cc.kvBot, cc.kvTop,
@@ -444,25 +467,29 @@ def get_linear_matrices(cc, combined_load_case=None):
                     cc.kphixBot, cc.kphixTop,
                     cc.kphitBot, cc.kphitTop)
 
-    elif model=='fsdt_shadmehri2012_bc2':
+    elif model == 'fsdt_shadmehri2012_bc2':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kuBot, cc.kuTop,
                     cc.kphixBot, cc.kphixTop)
 
-    elif model=='fsdt_shadmehri2012_bc3':
+    elif model == 'fsdt_shadmehri2012_bc3':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kvBot, cc.kvTop,
                     cc.kphixBot, cc.kphixTop)
 
-    elif model=='fsdt_geier1997_bc2':
+    elif model == 'fsdt_geier1997_bc2':
         k0edges = fk0edges(m1, m2, n2, r1, r2,
                     cc.kuBot, cc.kuTop,
                     cc.kphixBot, cc.kphixTop)
 
     fk0 = db[model]['linear'].fk0
     fk0_cyl = db[model]['linear'].fk0_cyl
-    fkG0 = db[model]['linear'].fkG0
-    fkG0_cyl = db[model]['linear'].fkG0_cyl
+    if 'iso_' in model:
+        fkG0 = db[model[4:]]['linear'].fkG0
+        fkG0_cyl = db[model[4:]]['linear'].fkG0_cyl
+    else:
+        fkG0 = db[model]['linear'].fkG0
+        fkG0_cyl = db[model]['linear'].fkG0_cyl
 
     return fk0, fk0_cyl, fkG0, fkG0_cyl, k0edges
 
