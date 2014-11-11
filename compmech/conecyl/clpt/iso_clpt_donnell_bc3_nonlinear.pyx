@@ -298,19 +298,6 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     m0 = args_in.m0[0]
     n0 = args_in.n0[0]
 
-    A11 = F[0]
-    A12 = F[1]
-    A16 = F[2]
-    A22 = F[7]
-    A26 = F[8]
-    A66 = F[14]
-    B11 = F[3]
-    B12 = F[4]
-    B16 = F[5]
-    B22 = F[10]
-    B26 = F[11]
-    B66 = F[17]
-
     cdef double sini1x, cosi1x, cosk1x, sini2x, cosi2x, sink2x, cosk2x
     cdef double sinl2t, cosl2t, sinj2t, cosj2t
     cdef double *vsini1x = <double *>malloc(m1 * sizeof(double))
@@ -440,8 +427,6 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
             p12 = (-E11*L*h*sina*sini1x + pi*E11*cosi1x*h*i1*r)/(2*L*nu + 2*L)
             p20 = E11*cosa*h*nu*sini1x/(-nu**2 + 1)
             p21 = E11*cosa*h*sini1x/(-nu**2 + 1)
-            p23 = 0.0833333333333333*pi*E11*h**3*i1*(L*cosi1x*nu*sina - pi*i1*r*sini1x)/(L**2*(nu**2 - 1))
-            p24 = 0.0833333333333333*pi*E11*h**3*i1*(L*cosi1x*sina - pi*i1*nu*r*sini1x)/(L**2*(nu**2 - 1))
 
             for k1 in range(i0, m1+i0):
                 # access buffer q_1
@@ -728,13 +713,6 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
     c0 = args_in.c0
     m0 = args_in.m0[0]
     n0 = args_in.n0[0]
-
-    A11 = F[0]
-    A12 = F[1]
-    A16 = F[2]
-    A22 = F[7]
-    A26 = F[8]
-    A66 = F[14]
 
     cdef double sini1x, cosi1x, cosk1x, sini2x, cosi2x, sink2x, cosk2x
     cdef double sinl2t, cosl2t, sinj2t, cosj2t

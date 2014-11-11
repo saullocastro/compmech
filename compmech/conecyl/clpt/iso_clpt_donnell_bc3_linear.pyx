@@ -42,6 +42,7 @@ def fk0(double alpharad, double r2, double L, double E11, double nu, double h,
     cdef double sin2i2xa, sin2i2xb, sini2xa_xb, sini2xaxb, cosi2xaxb
     cdef double cosi2xa, cosi2xb, cos2i2xa, cos2i2xb
     cdef double cosk2xa, cosk2xb, sink2xa, sink2xb
+    cdef double sin2i1xa, sin2i1xb, cos2i1xa, cos2i1xb
 
     cdef np.ndarray[cINT, ndim=1] k0r, k0c
     cdef np.ndarray[cDOUBLE, ndim=1] k0v
@@ -97,6 +98,10 @@ def fk0(double alpharad, double r2, double L, double E11, double nu, double h,
                 cosi1xaxb = cos(pi*i1*(xa + xb)/L)
                 sini1xa_xb = sin(pi*i1*(xa - xb)/L)
                 sini1xaxb = sin(pi*i1*(xa + xb)/L)
+                sin2i1xa = sin(2*pi*i1*xa/L)
+                sin2i1xb = sin(2*pi*i1*xb/L)
+                cos2i1xa = cos(2*pi*i1*xa/L)
+                cos2i1xb = cos(2*pi*i1*xb/L)
 
                 col = (i1-i0)*num1 + num0
                 row = col
