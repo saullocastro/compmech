@@ -12,6 +12,7 @@ from matlamina import read_laminaprop
 from compmech.constants import DOUBLE
 from compmech.logger import *
 
+
 def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[]):
     """Read a laminate stacking sequence data.
 
@@ -76,6 +77,7 @@ def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[]):
 
     return lam
 
+
 def read_lamination_parameters(thickness, laminaprop,
                                xiA1, xiA2, xiA3, xiA4,
                                xiB1, xiB2, xiB3, xiB4,
@@ -115,6 +117,7 @@ def read_lamination_parameters(thickness, laminaprop,
 
     lam.calc_ABDE_from_lamination_parameters()
     return lam
+
 
 class Laminate(object):
     r"""
@@ -161,12 +164,14 @@ class Laminate(object):
         self.ABD  = None
         self.ABDE = None
 
+
     def rebuild(self):
         lam_thick = 0
         for ply in self.plies:
             ply.rebuild()
             lam_thick += ply.t
         self.t = lam_thick
+
 
     def calc_equivalent_modulus(self):
         """Calculates the equivalent laminate properties.
@@ -182,6 +187,7 @@ class Laminate(object):
         self.g12 = 1./(self.t*a33)
         self.nu12 = - a12 / a11
         self.nu21 = - a12 / a22
+
 
     def calc_lamination_parameters(self):
         """Calculate the lamination parameters.
@@ -241,6 +247,7 @@ class Laminate(object):
         self.xiD = np.array([1, xiD1, xiD2, xiD3, xiD4], dtype=DOUBLE)
         self.xiE = np.array([1, xiE1, xiE2, xiE3, xiE4], dtype=DOUBLE)
 
+
     def calc_ABDE_from_lamination_parameters(self):
         """Use the ABDE matrix based on lamination parameters.
 
@@ -297,6 +304,7 @@ class Laminate(object):
                               [0, 0, 0, 0, 0, 0, E45, E44]],
                                dtype=DOUBLE)
 
+
     def calc_constitutive_matrix(self):
         """Calculates the laminate constitutive matrix
 
@@ -309,40 +317,34 @@ class Laminate(object):
         self.A_general = np.zeros([5,5], dtype=DOUBLE)
         self.B_general = np.zeros([5,5], dtype=DOUBLE)
         self.D_general = np.zeros([5,5], dtype=DOUBLE)
-        self.A         = np.zeros([3,3], dtype=DOUBLE)
-        self.B         = np.zeros([3,3], dtype=DOUBLE)
-        self.D         = np.zeros([3,3], dtype=DOUBLE)
-        self.E         = np.zeros([2,2], dtype=DOUBLE)
+
         lam_thick = 0
-        #
         for ply in self.plies:
             lam_thick += ply.t
         self.t = lam_thick
-        h0   = -lam_thick/2
+
+        h0 = -lam_thick/2
         for ply in self.plies:
-            #
-            hk_1 =  h0
-            h0   += ply.t
-            hk   =  h0
-            for i in range(5):
-                for j in range(5):
-                    self.A_general[i, j] +=      ply.QL[i, j]*(hk    - hk_1   )
-                    self.B_general[i, j] += 1/2.*ply.QL[i, j]*(hk**2 - hk_1**2)
-                    self.D_general[i, j] += 1/3.*ply.QL[i, j]*(hk**3 - hk_1**3)
-            self.E[0, 0] += ply.QL[3, 3] * (hk - hk_1)
-            self.E[0, 1] += ply.QL[3, 4] * (hk - hk_1)
-            self.E[1, 0] += ply.QL[4, 3] * (hk - hk_1)
-            self.E[1, 1] += ply.QL[4, 4] * (hk - hk_1)
+            hk_1 = h0
+            h0 += ply.t
+            hk = h0
+            self.A_general +=      ply.QL*(hk    - hk_1   )
+            self.B_general += 1/2.*ply.QL*(hk**2 - hk_1**2)
+            self.D_general += 1/3.*ply.QL*(hk**3 - hk_1**3)
 
         self.A = self.A_general[0:3, 0:3]
         self.B = self.B_general[0:3, 0:3]
         self.D = self.D_general[0:3, 0:3]
+        self.E = self.A_general[3:5, 3:5]
+
         conc1 = np.concatenate([self.A, self.B], axis=1)
         conc2 = np.concatenate([self.B, self.D], axis=1)
+
         self.ABD = np.concatenate([conc1, conc2], axis=0)
         self.ABDE = np.zeros((8, 8), dtype=DOUBLE)
         self.ABDE[0:6, 0:6] = self.ABD
         self.ABDE[6:8, 6:8] = self.E
+
 
     def force_balanced_LP(self):
         r"""Force balanced lamination parameters
@@ -355,6 +357,7 @@ class Laminate(object):
         self.xiA = np.array([1, xiA1, 0, xiA3, 0], dtype=DOUBLE)
         self.calc_ABDE_from_lamination_parameters()
 
+
     def force_symmetric_LP(self):
         r"""Force symmetric lamination parameters
 
@@ -364,6 +367,7 @@ class Laminate(object):
         """
         self.xiB = np.zeros(5)
         self.calc_ABDE_from_lamination_parameters()
+
 
     def force_orthotropic(self):
         r"""Force an orthotropic laminate
@@ -429,6 +433,7 @@ class Laminate(object):
         self.ABDE[4, 5] = 0. # D26
         self.ABDE[5, 3] = 0. # D61
         self.ABDE[5, 4] = 0. # D62
+
 
     def force_symmetric(self):
         """Force a symmetric laminate
