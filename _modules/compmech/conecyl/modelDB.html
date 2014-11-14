@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.conecyl.modelDB &mdash; CompMech 0.3.1 documentation</title>
+    <title>compmech.conecyl.modelDB &mdash; CompMech 0.3.2 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.3.1',
+        VERSION:     '0.3.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.3.1 documentation" href="../../../index.html" />
+    <link rel="top" title="CompMech 0.3.2 documentation" href="../../../index.html" />
     <link rel="up" title="compmech.conecyl" href="../conecyl.html" /> 
   </head>
   <body>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="../../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">CompMech 0.3.1 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li>
           <li><a href="../conecyl.html" accesskey="U">compmech.conecyl</a> &raquo;</li> 
       </ul>
@@ -119,6 +119,21 @@
                     <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc3</span><span class="p">,</span>
                     <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc3_linear</span><span class="p">,</span>
                     <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc3_nonlinear</span><span class="p">,</span>
+                    <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s">&#39;j0&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s">&#39;num0&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num1&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                    <span class="p">},</span>
+    <span class="s">&#39;iso_clpt_donnell_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc3</span><span class="p">,</span>
+                    <span class="s">&#39;linear&#39;</span><span class="p">:</span> <span class="n">iso_clpt_donnell_bc3_linear</span><span class="p">,</span>
+                    <span class="s">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">iso_clpt_donnell_bc3_nonlinear</span><span class="p">,</span>
                     <span class="s">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
                     <span class="s">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="s">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -401,36 +416,44 @@
     <span class="n">model</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">model</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">fk0edges</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0edges</span>
+        <span class="k">if</span> <span class="s">&#39;iso_&#39;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">fk0edges</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">[</span><span class="mi">4</span><span class="p">:]][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0edges</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fk0edges</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0edges</span>
     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">if</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc1&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_donnell_bc1&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc2&#39;</span><span class="p">:</span>
-        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
-                           <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
-                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;iso_clpt_donnell_bc2&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_donnell_bc2&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc3&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;iso_clpt_donnell_bc2&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_donnell_bc3&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bc4&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;iso_clpt_donnell_bc3&#39;</span><span class="p">:</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
+                           <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_donnell_bc4&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_donnell_bcn&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_donnell_bcn&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
@@ -438,52 +461,52 @@
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphitBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphitTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_sanders_bc1&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_sanders_bc1&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_sanders_bc2&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_sanders_bc2&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_sanders_bc3&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_sanders_bc3&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_sanders_bc4&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_sanders_bc4&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
                            <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;clpt_geier1997_bc2&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_geier1997_bc2&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bc1&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_donnell_bc1&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bc2&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_donnell_bc2&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bc3&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_donnell_bc3&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bc4&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_donnell_bc4&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_donnell_bcn&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_donnell_bcn&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
@@ -491,7 +514,7 @@
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphitBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphitTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_sanders_bcn&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_sanders_bcn&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
@@ -499,25 +522,29 @@
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphitBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphitTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_shadmehri2012_bc2&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_shadmehri2012_bc2&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_shadmehri2012_bc3&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_shadmehri2012_bc3&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kvBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kvTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">model</span><span class="o">==</span><span class="s">&#39;fsdt_geier1997_bc2&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_geier1997_bc2&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span><span class="p">,</span>
                     <span class="n">cc</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="n">cc</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">)</span>
 
     <span class="n">fk0</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0</span>
     <span class="n">fk0_cyl</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0_cyl</span>
-    <span class="n">fkG0</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fkG0</span>
-    <span class="n">fkG0_cyl</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fkG0_cyl</span>
+    <span class="k">if</span> <span class="s">&#39;iso_&#39;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+        <span class="n">fkG0</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">[</span><span class="mi">4</span><span class="p">:]][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fkG0</span>
+        <span class="n">fkG0_cyl</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">[</span><span class="mi">4</span><span class="p">:]][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fkG0_cyl</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fkG0</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fkG0</span>
+        <span class="n">fkG0_cyl</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fkG0_cyl</span>
 
     <span class="k">return</span> <span class="n">fk0</span><span class="p">,</span> <span class="n">fk0_cyl</span><span class="p">,</span> <span class="n">fkG0</span><span class="p">,</span> <span class="n">fkG0_cyl</span><span class="p">,</span> <span class="n">k0edges</span>
 </pre></div></div>
@@ -559,14 +586,14 @@
         <li class="right" >
           <a href="../../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">CompMech 0.3.1 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li>
           <li><a href="../conecyl.html" >compmech.conecyl</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Oct 29, 2014.
+      Last updated on Nov 14, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

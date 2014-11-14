@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Semi-analytical Models for Cones and Cylinder (compmech.conecyl) &mdash; CompMech 0.3.1 documentation</title>
+    <title>Semi-analytical Models for Cones and Cylinder (compmech.conecyl) &mdash; CompMech 0.3.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3.1',
+        VERSION:     '0.3.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.3.1 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.3.2 documentation" href="../../index.html" />
     <link rel="up" title="Modules" href="../index.html" /> 
   </head>
   <body>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">CompMech 0.3.1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
       </ul>
     </div>  
@@ -364,7 +364,7 @@ implementation has not been finished, see
 </div></blockquote>
 <p><strong>silent</strong> : bool, optional</p>
 <blockquote>
-<div><p>A boolean to tell whether the log messages should be printed.</p>
+<div><p>A boolean to tell whether the msg messages should be printed.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -700,12 +700,19 @@ of the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object
 <p><strong>vec</strong> : str, optional</p>
 <blockquote>
 <div><p>Can be one of the components:</p>
-<ul class="simple">
-<li>Displacement: <tt class="docutils literal"><span class="pre">'u'</span></tt>, <tt class="docutils literal"><span class="pre">'v'</span></tt>, <tt class="docutils literal"><span class="pre">'w'</span></tt>, <tt class="docutils literal"><span class="pre">'phix'</span></tt>, <tt class="docutils literal"><span class="pre">'phit'</span></tt></li>
-<li>Strain: <tt class="docutils literal"><span class="pre">'exx'</span></tt>, <tt class="docutils literal"><span class="pre">'ett'</span></tt>, <tt class="docutils literal"><span class="pre">'gxt'</span></tt>, <tt class="docutils literal"><span class="pre">'kxx'</span></tt>, <tt class="docutils literal"><span class="pre">'ktt'</span></tt>,
-<tt class="docutils literal"><span class="pre">'kxt'</span></tt>, <tt class="docutils literal"><span class="pre">'gtz'</span></tt>, <tt class="docutils literal"><span class="pre">'gxz'</span></tt></li>
-<li>Stress: <tt class="docutils literal"><span class="pre">'Nxx'</span></tt>, <tt class="docutils literal"><span class="pre">'Ntt'</span></tt>, <tt class="docutils literal"><span class="pre">'Nxt'</span></tt>, <tt class="docutils literal"><span class="pre">'Mxx'</span></tt>, <tt class="docutils literal"><span class="pre">'Mtt'</span></tt>,
-<tt class="docutils literal"><span class="pre">'Mxt'</span></tt>, <tt class="docutils literal"><span class="pre">'Qt'</span></tt>, <tt class="docutils literal"><span class="pre">'Qx'</span></tt></li>
+<ul>
+<li><dl class="first docutils">
+<dt>Displacement: <tt class="docutils literal"><span class="pre">'u'</span></tt>, <tt class="docutils literal"><span class="pre">'v'</span></tt>, <tt class="docutils literal"><span class="pre">'w'</span></tt>, <tt class="docutils literal"><span class="pre">'phix'</span></tt>, <tt class="docutils literal"><span class="pre">'phit'</span></tt>,</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">'magnitude'</span></tt></p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Strain: <tt class="docutils literal"><span class="pre">'exx'</span></tt>, <tt class="docutils literal"><span class="pre">'ett'</span></tt>, <tt class="docutils literal"><span class="pre">'gxt'</span></tt>, <tt class="docutils literal"><span class="pre">'kxx'</span></tt>, <tt class="docutils literal"><span class="pre">'ktt'</span></tt>,
+<tt class="docutils literal"><span class="pre">'kxt'</span></tt>, <tt class="docutils literal"><span class="pre">'gtz'</span></tt>, <tt class="docutils literal"><span class="pre">'gxz'</span></tt></p>
+</li>
+<li><p class="first">Stress: <tt class="docutils literal"><span class="pre">'Nxx'</span></tt>, <tt class="docutils literal"><span class="pre">'Ntt'</span></tt>, <tt class="docutils literal"><span class="pre">'Nxt'</span></tt>, <tt class="docutils literal"><span class="pre">'Mxx'</span></tt>, <tt class="docutils literal"><span class="pre">'Mtt'</span></tt>,
+<tt class="docutils literal"><span class="pre">'Mxt'</span></tt>, <tt class="docutils literal"><span class="pre">'Qt'</span></tt>, <tt class="docutils literal"><span class="pre">'Qx'</span></tt></p>
+</li>
 </ul>
 </div></blockquote>
 <p><strong>deform_u</strong> : bool, optional</p>
@@ -969,8 +976,8 @@ analysis the following parameters of the <tt class="docutils literal"><span clas
 affect the non-linear analysis:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="32%" />
-<col width="68%" />
+<col width="36%" />
+<col width="64%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">non-linear algorithm</th>
@@ -983,43 +990,20 @@ affect the non-linear analysis:</p>
 <tt class="docutils literal"><span class="pre">'arc_length'</span></tt> for the Arc-Length method</td>
 </tr>
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">line_search</span></tt></td>
-<td>activate line_search (for Newton-Raphson
+<td>activate line-search (for Newton-Raphson
 methods only)</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">modified_NR</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">max_iter_line_search</span></tt></td>
+<td>maximum number of iterations for the
+line-search</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">modified_NR</span></tt></td>
 <td>activate the modified Newton-Raphson</td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">compute_every_n</span></tt></td>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">compute_every_n</span></tt></td>
 <td>if <tt class="docutils literal"><span class="pre">modified_NR=True</span></tt>, the non-linear
 matrices will be updated at every <img class="math" src="../../_images/math/9b3557d5c9bbf3c7041215fdae28c97ac580789a.png" alt="n"/>
 iterations</td>
-</tr>
-</tbody>
-</table>
-<table border="1" class="docutils">
-<colgroup>
-<col width="22%" />
-<col width="78%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">incrementation</th>
-<th class="head">description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">initialInc</span></tt></td>
-<td>initial load increment size. In the arc-length
-method it will be the initial value for
-<img class="math" src="../../_images/math/36c6cfbcb3f2012e7df66272346c724e18d464cc.png" alt="\lambda"/></td>
-</tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">minInc</span></tt></td>
-<td>minimum increment size; if achieved the analysis
-is terminated. The arc-length method will use
-this parameter to terminate when the minimum
-arc-length increment is smaller than <tt class="docutils literal"><span class="pre">minInc</span></tt></td>
-</tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">maxInc</span></tt></td>
-<td>maximum increment size</td>
 </tr>
 </tbody>
 </table>
@@ -1076,7 +1060,7 @@ be performed.</p>
 </div></blockquote>
 <p><strong>silent</strong> : bool, optional</p>
 <blockquote>
-<div><p>A boolean to tell whether the log messages should be printed.</p>
+<div><p>A boolean to tell whether the msg messages should be printed.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1600,13 +1584,13 @@ The <tt class="docutils literal"><span class="pre">scipy.interpolate.lstsq</span
         <li class="right" >
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">CompMech 0.3.1 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Oct 29, 2014.
+      Last updated on Nov 14, 2014.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
