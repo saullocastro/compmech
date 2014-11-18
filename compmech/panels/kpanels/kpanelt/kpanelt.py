@@ -70,8 +70,6 @@ class KPanelT(object):
     """
     def __init__(self):
         self.name = ''
-        self.forces = []
-        self.forces_inc = []
         self.alphadeg = 0.
         self.alpharad = 0.
         self.is_cylinder = None
@@ -128,6 +126,8 @@ class KPanelT(object):
         self.NxtTop_inc = None
         self.NttLeft_inc = None
         self.NtxLeft_inc = None
+        self.forces = []
+        self.forces_inc = []
 
         # initial imperfection
         self.c0 = None
