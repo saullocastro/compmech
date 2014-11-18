@@ -90,16 +90,16 @@ class ConeCyl(object):
         self.model = 'clpt_donnell_bc1'
 
         # approximation series
-        self.m1 = 160
-        self.m2 = 40
-        self.n2 = 40
+        self.m1 = 120
+        self.m2 = 25
+        self.n2 = 45
 
         # analytical integration for cones
         self.s = 79
 
         # numerical integration
-        self.nx = 160
-        self.nt = 160
+        self.nx = 120
+        self.nt = 180
 
         # punctual loads
         self.forces = []
@@ -359,15 +359,10 @@ class ConeCyl(object):
         else:
             raise NotImplementedError('pdLA == False is giving wrong results!')
 
-        # estimating number of integration points based on convergence studies
-        # the interpolation is linear but should not be proportional
-        nx_nt_table = {20: 100}
-
-        if not self.nx and self.nt:
-            self.nx = int(round(self.nt*max(self.m1, self.m2)/self.n2))
-        elif not self.nt and self.nx:
-            self.nx = int(round(self.nt*max(self.m1, self.m2)/self.n2))
-            self.nt = int(round(self.nx*self.n2/max(self.m1, self.m2)))
+        if self.nx < 4*self.m2:
+            warn('Number of integration points along x too small')
+        if self.nt < 4*self.n2:
+            warn('Number of integration points along x too small')
 
         if self.laminaprop is None:
             h = self.h
@@ -1082,8 +1077,8 @@ class ConeCyl(object):
         nlmodule = model_mod['non-linear']
         ni_method = self.analysis.ni_method
         num_cores = self.analysis.ni_num_cores
-        nx = self.analysis.nx
-        nt = self.analysis.nt
+        nx = self.nx
+        nt = self.nt
 
         if nlmodule:
             calc_k0L = nlmodule.calc_k0L
@@ -1376,8 +1371,8 @@ class ConeCyl(object):
             nlmodule = modelDB.db[self.model]['non-linear']
         ni_method = self.analysis.ni_method
         ni_num_cores = self.analysis.ni_num_cores
-        nx = self.analysis.nx*m
-        nt = self.analysis.nt*m
+        nx = self.nx*m
+        nt = self.nt*m
         fint = nlmodule.calc_fint_0L_L0_LL(c, self.alpharad, self.r2, self.L,
                                   self.tLArad, self.F, self.m1, self.m2,
                                   self.n2, nx, nt, ni_num_cores, ni_method,
