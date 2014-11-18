@@ -101,6 +101,7 @@ def _solver_NR(a):
             eta1 = 0.
             eta2 = 1.
             if line_search:
+                msg('Performing line-search... ', level=2)
                 iter_line_search = 0
                 while True:
                     c1 = c + eta1*delta_c
@@ -120,6 +121,7 @@ def _solver_NR(a):
                     if iter_line_search == max_iter_line_search:
                         eta2 = 1.
                         break
+                msg('finished!', level=2)
             c = c + eta2*delta_c
 
         if converged:
