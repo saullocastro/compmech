@@ -21,6 +21,7 @@ from compmech.logger import msg, warn, error
 from compmech.sparse import remove_null_cols, make_symmetric
 from compmech.constants import DOUBLE
 import modelDB
+from modelDB import get_model
 
 
 def load(name):
@@ -33,8 +34,8 @@ def load(name):
 class ConeCyl(object):
     """
     """
-    __slots__ = ['name', 'alphadeg', 'alpharad', 'r1', 'r2', 'L', 'H', 'h',
-            'K', 'is_cylinder', 'inf', 'zero',
+    __slots__ = ['_load_rebuilt', 'name', 'alphadeg', 'alpharad', 'r1', 'r2',
+            'L', 'H', 'h', 'K', 'is_cylinder', 'inf', 'zero',
             'bc', 'kuBot', 'kvBot', 'kwBot', 'kphixBot', 'kphitBot', 'kuTop',
             'kvTop', 'kwTop', 'kphixTop', 'kphitTop', 'model', 'm1', 'm2',
             'size', 'n2', 's', 'nx', 'nt', 'forces', 'forces_inc', 'P',
@@ -54,7 +55,7 @@ class ConeCyl(object):
             'kTuk', 'kTuu', 'kG0', 'kG0_Fc', 'kG0_P', 'kG0_T', 'kG', 'kGuu',
             'kL', 'kLuu', 'lam', 'u', 'v', 'w', 'phix', 'phit', 'Xs', 'Ts',
 
-            'out_num_cores', 'ni_num_cores', 'ni_method',
+            'out_num_cores',
         ]
 
     def __init__(self):
@@ -113,6 +114,7 @@ class ConeCyl(object):
         self.Fc = None
         self.Nxxtop = None
         self.uTM = 0.
+        self._load_rebuilt = False
 
         # initial imperfection
         self.c0 = None
@@ -174,10 +176,6 @@ class ConeCyl(object):
         self.with_k0L = True
         self.with_kLL = True
 
-        # numerical integration
-        self.ni_num_cores = 4 # showed to scale well up to 4
-        self.ni_method = 'trapz2d'
-
         # outputs
         self.outputs = {}
 
@@ -206,6 +204,7 @@ class ConeCyl(object):
         self.phit = None
         self.Xs = None
         self.Ts = None
+        self.Nxxtop = None
 
         gc.collect()
 
@@ -217,13 +216,14 @@ class ConeCyl(object):
             except AttributeError:
                 warn('ConeCyl name unchanged')
 
+        if self.k0 is not None:
+            if self.k0.shape[0] != self.get_size():
+                self._clear_matrices()
+                self._load_rebuilt = False
+                self._rebuild()
+
         self.model = self.model.lower()
-
-        valid_models = sorted(modelDB.db.keys())
-
-        if not self.model in valid_models:
-            raise ValueError('ERROR - valid models are:\n    ' +
-                     '\n    '.join(valid_models))
+        model_mod = get_model(self.model)
 
         # boundary conditions
         inf = self.inf
@@ -369,35 +369,6 @@ class ConeCyl(object):
             self.nx = int(round(self.nt*max(self.m1, self.m2)/self.n2))
             self.nt = int(round(self.nx*self.n2/max(self.m1, self.m2)))
 
-        # axial load
-        if self.Nxxtop is not None:
-            if type(self.Nxxtop) in (int, float):
-                Nxxtop0 = self.Nxxtop
-                self.Nxxtop = np.zeros(2*self.n2+1, dtype=DOUBLE)
-                self.Nxxtop[0] = Nxxtop0
-
-            check = False
-            if isinstance(self.Nxxtop, np.ndarray):
-                if self.Nxxtop.ndim == 1:
-                    assert self.Nxxtop.shape[0] == (2*self.n2+1)
-                    check=True
-            if not check:
-                raise ValueError('Invalid Nxxtop input')
-
-        else:
-            self.Nxxtop = np.zeros(2*self.n2+1, dtype=DOUBLE)
-
-        if self.Fc is not None:
-            self.Nxxtop[0] = self.Fc/(2*pi*self.r2*self.cosa)
-            msg('Nxxtop[0] calculated from Fc', level=2)
-            if self.MLA is None:
-                if self.xiLA is not None:
-                    self.MLA = self.xiLA*self.Fc
-                    msg('MLA calculated from xiLA', level=2)
-        if self.MLA is not None:
-            self.Nxxtop[2] = self.MLA/(pi*self.r2**2*self.cosa)
-            msg('Nxxtop[2] calculated from MLA', level=2)
-
         if self.laminaprop is None:
             h = self.h
             E11 = self.E11
@@ -432,6 +403,42 @@ class ConeCyl(object):
                                [0, 0, 0, D12, D22, D26],
                                [0, 0, 0, D16, D26, D66]])
 
+        if self._load_rebuilt:
+            return
+
+        # axial load
+        if self.Nxxtop is not None:
+            if type(self.Nxxtop) in (int, float):
+                Nxxtop0 = self.Nxxtop
+                self.Nxxtop = np.zeros(2*self.n2+1, dtype=DOUBLE)
+                self.Nxxtop[0] = Nxxtop0
+
+            check = False
+            if isinstance(self.Nxxtop, np.ndarray):
+                if self.Nxxtop.ndim == 1:
+                    assert self.Nxxtop.shape[0] == (2*self.n2+1)
+                    check = True
+
+            if not check:
+                raise ValueError('Invalid Nxxtop input')
+
+        else:
+            self.Nxxtop = np.zeros(2*self.n2+1, dtype=DOUBLE)
+
+        if self.Fc is not None:
+            self.Nxxtop[0] = self.Fc/(2*pi*self.r2*self.cosa)
+            msg('Nxxtop[0] calculated from Fc', level=2)
+            if self.MLA is None:
+                if self.xiLA is not None:
+                    self.MLA = self.xiLA*self.Fc
+                    msg('MLA calculated from xiLA', level=2)
+
+        if self.MLA is not None:
+            self.Nxxtop[2] = self.MLA/(pi*self.r2**2*self.cosa)
+            msg('Nxxtop[2] calculated from MLA', level=2)
+
+        self._load_rebuilt = True
+
 
     def get_size(self):
         r"""Calculates the size of the stiffness matrices
@@ -447,9 +454,10 @@ class ConeCyl(object):
             The size of the stiffness matrices.
 
         """
-        num0 = modelDB.db[self.model]['num0']
-        num1 = modelDB.db[self.model]['num1']
-        num2 = modelDB.db[self.model]['num2']
+        model_mod = get_model(self.model)
+        num0 = model_mod['num0']
+        num1 = model_mod['num1']
+        num2 = model_mod['num2']
         self.size = num0 + num1*self.m1 + num2*self.m2*self.n2
         return self.size
 
@@ -823,7 +831,8 @@ class ConeCyl(object):
         ``eigvecs[i-1, :]`` parameter.
 
         """
-        if not modelDB.db[self.model]['linear buckling']:
+        model_mod = get_model(self.model)
+        if not model_mod['linear buckling']:
             msg('________________________________________________')
             msg('')
             warn('Model {} cannot be used in linear buckling analysis!'.
@@ -847,10 +856,11 @@ class ConeCyl(object):
 
         msg('Eigenvalue solver... ', level=2)
 
-        i0 = modelDB.db[self.model]['i0']
-        num0 = modelDB.db[self.model]['num0']
-        num1 = modelDB.db[self.model]['num1']
-        num2 = modelDB.db[self.model]['num2']
+        model_mod = get_model(self.model)
+        i0 = model_mod['i0']
+        num0 = model_mod['num0']
+        num1 = model_mod['num1']
+        num2 = model_mod['num2']
 
         pos = num0
 
@@ -941,7 +951,8 @@ class ConeCyl(object):
         ``eigvecs[i-1, :]`` parameter.
 
         """
-        if not modelDB.db[self.model]['linear buckling']:
+        model_mod = get_model(self.model)
+        if not model_mod['linear buckling']:
             msg('________________________________________________')
             msg('')
             warn('Model {} cannot be used in linear buckling analysis!'.
@@ -963,10 +974,11 @@ class ConeCyl(object):
         #     sign is applied later
         msg('Eigenvalue solver... ', level=2)
 
-        i0 = modelDB.db[self.model]['i0']
-        num0 = modelDB.db[self.model]['num0']
-        num1 = modelDB.db[self.model]['num1']
-        num2 = modelDB.db[self.model]['num2']
+        model_mod = get_model(self.model)
+        i0 = model_mod['i0']
+        num0 = model_mod['num0']
+        num1 = model_mod['num1']
+        num2 = model_mod['num2']
 
         pos = num0
 
@@ -1020,8 +1032,7 @@ class ConeCyl(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def _calc_NL_matrices(self, c, inc=1., num_cores=None, with_kLL=None,
-                          with_k0L=None):
+    def _calc_NL_matrices(self, c, inc=1., with_kLL=None, with_k0L=None):
         r"""Calculates the non-linear stiffness matrices
 
         Parameters
@@ -1032,8 +1043,6 @@ class ConeCyl(object):
         inc : float, optional
             Load increment, necessary to calculate the full set of Ritz
             constants using :meth:`calc_full_c`.
-        num_cores : int, optional
-            Number of CPU cores used by the algorithm.
         with_kLL : bool, optional
             When ``with_kLL=False`` assumes kLL << than k0L and kG.
         with_k0L : bool, optional
@@ -1044,9 +1053,6 @@ class ConeCyl(object):
         Nothing is returned, the calculated matrices
 
         """
-        if not num_cores:
-            num_cores=self.ni_num_cores
-
         c = self.calc_full_c(c, inc=inc)
 
         if self.k0 is None:
@@ -1069,9 +1075,16 @@ class ConeCyl(object):
         m0 = self.m0
         n0 = self.n0
         funcnum = self.funcnum
-        model = self.model
 
-        nlmodule = modelDB.db[model]['non-linear']
+        model = self.model
+        model_mod = get_model(model)
+
+        nlmodule = model_mod['non-linear']
+        ni_method = self.analysis.ni_method
+        num_cores = self.analysis.ni_num_cores
+        nx = self.analysis.nx
+        nt = self.analysis.nt
+
         if nlmodule:
             calc_k0L = nlmodule.calc_k0L
             calc_kLL = nlmodule.calc_kLL
@@ -1080,11 +1093,9 @@ class ConeCyl(object):
             else:
                 calc_kG = nlmodule.calc_kG
 
-            kG = calc_kG(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                         nx=self.nx, nt=self.nt,
-                         num_cores=num_cores,
-                         method=self.ni_method,
-                         c0=c0, m0=m0, n0=n0)
+            kG = calc_kG(c, alpharad, r2, L, tLArad, F, m1, m2, n2, nx=nx,
+                    nt=nt, num_cores=num_cores, method=ni_method, c0=c0,
+                    m0=m0, n0=n0)
             kG = make_symmetric(kG)
 
             if 'iso_' in model:
@@ -1092,21 +1103,15 @@ class ConeCyl(object):
                 nu = self.nu
                 h = self.h
                 if with_k0L:
-                    k0L = calc_k0L(c, alpharad, r2, L, tLArad, E11, nu, h,
-                                   m1, m2, n2,
-                                   nx=self.nx, nt=self.nt,
-                                   num_cores=num_cores,
-                                   method=self.ni_method,
-                                   c0=c0, m0=m0, n0=n0)
+                    k0L = calc_k0L(c, alpharad, r2, L, tLArad, E11, nu, h, m1,
+                            m2, n2, nx=nx, nt=nt, num_cores=num_cores,
+                            method=ni_method, c0=c0, m0=m0, n0=n0)
                 else:
                     k0L = kG*0
                 if with_kLL:
-                    kLL = calc_kLL(c, alpharad, r2, L, tLArad, E11, nu, h,
-                                   m1, m2, n2,
-                                   nx=self.nx, nt=self.nt,
-                                   num_cores=num_cores,
-                                   method=self.ni_method,
-                                   c0=c0, m0=m0, n0=n0)
+                    kLL = calc_kLL(c, alpharad, r2, L, tLArad, E11, nu, h, m1,
+                            m2, n2, nx=nx, nt=nt, num_cores=num_cores,
+                            method=ni_method, c0=c0, m0=m0, n0=n0)
                     kLL = make_symmetric(kLL)
 
                 else:
@@ -1115,18 +1120,14 @@ class ConeCyl(object):
             else:
                 if with_k0L:
                     k0L = calc_k0L(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                                   nx=self.nx, nt=self.nt,
-                                   num_cores=num_cores,
-                                   method=self.ni_method,
-                                   c0=c0, m0=m0, n0=n0)
+                            nx=nx, nt=nt, num_cores=num_cores,
+                            method=ni_method, c0=c0, m0=m0, n0=n0)
                 else:
                     k0L = kG*0
                 if with_kLL:
                     kLL = calc_kLL(c, alpharad, r2, L, tLArad, F, m1, m2, n2,
-                                   nx=self.nx, nt=self.nt,
-                                   num_cores=num_cores,
-                                   method=self.ni_method,
-                                   c0=c0, m0=m0, n0=n0)
+                            nx=nx, nt=nt, num_cores=num_cores,
+                            method=ni_method, c0=c0, m0=m0, n0=n0)
                     kLL = make_symmetric(kLL)
 
                 else:
@@ -1201,11 +1202,11 @@ class ConeCyl(object):
         n2 = self.n2
         r2 = self.r2
         L = self.L
-        model = self.model
 
         c = self.calc_full_c(c, inc=inc)
 
-        fuvw = modelDB.db[model]['commons'].fuvw
+        model_mod = get_model(self.model)
+        fuvw = model_mod['commons'].fuvw
         us, vs, ws, phixs, phits = fuvw(c, m1, m2, n2, alpharad, r2, L,
                                         tLArad, xs, ts, self.out_num_cores)
 
@@ -1258,9 +1259,10 @@ class ConeCyl(object):
         n0 = self.n0
         funcnum = self.funcnum
         model = self.model
+        model_mod = get_model(model)
         NL_kinematics = model.split('_')[1]
-        fstrain = modelDB.db[model]['commons'].fstrain
-        e_num = modelDB.db[model]['e_num']
+        fstrain = model_mod['commons'].fstrain
+        e_num = model_mod['e_num']
 
         if 'donnell' in NL_kinematics:
             int_NL_kinematics = 0
@@ -1321,9 +1323,10 @@ class ConeCyl(object):
         n0 = self.n0
         funcnum = self.funcnum
         model = self.model
+        model_mod = get_model(model)
         NL_kinematics = model.split('_')[1]
-        fstress = modelDB.db[model]['commons'].fstress
-        e_num = modelDB.db[model]['e_num']
+        fstress = model_mod['commons'].fstress
+        e_num = model_mod['e_num']
 
         if 'donnell' in NL_kinematics:
             int_NL_kinematics = 0
@@ -1371,11 +1374,14 @@ class ConeCyl(object):
             nlmodule = modelDB.db[self.model[4:]]['non-linear']
         else:
             nlmodule = modelDB.db[self.model]['non-linear']
+        ni_method = self.analysis.ni_method
+        ni_num_cores = self.analysis.ni_num_cores
+        nx = self.analysis.nx*m
+        nt = self.analysis.nt*m
         fint = nlmodule.calc_fint_0L_L0_LL(c, self.alpharad, self.r2, self.L,
-                                  self.tLArad, self.F,
-                                  self.m1, self.m2, self.n2,
-                                  self.nx*m, self.nt*m, self.ni_num_cores,
-                                  self.ni_method, self.c0, self.m0, self.n0)
+                                  self.tLArad, self.F, self.m1, self.m2,
+                                  self.n2, nx, nt, ni_num_cores, ni_method,
+                                  self.c0, self.m0, self.n0)
         fint += self.k0*c
         if return_u:
             fint = np.delete(fint, self.excluded_dofs)

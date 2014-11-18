@@ -493,3 +493,13 @@ def get_linear_matrices(cc, combined_load_case=None):
 
     return fk0, fk0_cyl, fkG0, fkG0_cyl, k0edges
 
+
+valid_models = sorted(db.keys())
+
+
+def get_model(model_name):
+    if not model_name in valid_models:
+        raise ValueError('ERROR - valid models are:\n    ' +
+                 '\n    '.join(valid_models))
+    else:
+        return db[model_name]
