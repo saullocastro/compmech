@@ -85,12 +85,11 @@ class Analysis(object):
         The solution for each increment.
 
     """
-
     __slots__ = ('NL_method', 'line_search', 'max_iter_line_search',
             'modified_NR', 'compute_every_n',
             'kT_initial_state', 'initialInc', 'minInc', 'maxInc', 'absTOL',
             'relTOL', 'maxNumIter', 'too_slow_TOL', 'ni_num_cores',
-            'ni_method', 'nx', 'nt', 'calc_fext', 'calc_k0', 'calc_fint',
+            'ni_method', 'calc_fext', 'calc_k0', 'calc_fint',
             'calc_kT', 'increments', 'cs', 'last_analysis')
 
 
@@ -115,8 +114,6 @@ class Analysis(object):
         # numerical integration
         self.ni_num_cores = 4
         self.ni_method = 'trapz2d'
-        self.nx = 120
-        self.nt = 120
 
         # required methods
         self.calc_fext = calc_fext
