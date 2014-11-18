@@ -16,10 +16,10 @@ from numpy import linspace, pi, cos, sin, tan, deg2rad
 
 from conecylDB import ccs, laminaprops
 import compmech.composite.laminate as laminate
+from compmech.analysis import Analysis
 from compmech.logger import msg, warn, error
-from compmech.sparse import remove_null_cols, solve, make_symmetric
+from compmech.sparse import remove_null_cols, make_symmetric
 from compmech.constants import DOUBLE
-import non_linear
 import modelDB
 
 
@@ -46,11 +46,9 @@ class ConeCyl(object):
             'F_reuse', 'force_orthotropic_laminate', 'E11', 'nu',
             'num_eigvalues', 'num_eigvalues_print',
 
-            'NL_method',
-            'modified_NR', 'line_search', 'max_iter_line_search',
-            'compute_every_n', 'with_k0L', 'with_kLL', 'initialInc', 'minInc',
-            'maxInc', 'absTOL', 'relTOL', 'last_analysis', 'cs', 'increments',
-            'maxNumInc', 'maxNumIter', 'outputs', 'eigvals', 'eigvecs',
+            'analysis', 'with_k0L', 'with_kLL',
+            'cs', 'increments', 'outputs',
+            'eigvals', 'eigvecs',
 
             'k0', 'k0uk', 'k0uu',
             'kTuk', 'kTuu', 'kG0', 'kG0_Fc', 'kG0_P', 'kG0_T', 'kG', 'kGuu',
@@ -165,33 +163,16 @@ class ConeCyl(object):
         self.num_eigvalues = 50
         self.num_eigvalues_print = 5
 
-        # non-linear algorithm
-        self.NL_method = 'NR' # Newton-Raphson
-        self.modified_NR = True # modified Newton-Raphson
-        self.line_search = True
-        self.max_iter_line_search = 20
-        self.compute_every_n = 6 # for modified Newton-Raphson
-        self.with_k0L = True
-        self.with_kLL = True
-
-        # incrementation
-        self.initialInc = 0.1
-        self.minInc = 1.e-3
-        self.maxInc = 1.
-
-        # convergence criteria
-        self.absTOL = 1.e-3
-        self.relTOL = 1.e-3
-
-        self.last_analysis = None
+        # output queries
+        self.out_num_cores = 4
         self.cs = []
         self.increments = []
 
-        #self.maxNumInc = 100
-        self.maxNumIter = 30
-
-        # output queries
-        self.out_num_cores = 4
+        # analysis
+        self.analysis = Analysis(self.calc_fext, self.calc_k0, self.calc_fint,
+                                 self.calc_kT)
+        self.with_k0L = True
+        self.with_kLL = True
 
         # numerical integration
         self.ni_num_cores = 4 # showed to scale well up to 4
@@ -377,8 +358,6 @@ class ConeCyl(object):
             self.excluded_dofs_ck.append(self.LA)
         else:
             raise NotImplementedError('pdLA == False is giving wrong results!')
-
-        self.maxInc = max(self.initialInc, self.maxInc)
 
         # estimating number of integration points based on convergence studies
         # the interpolation is linear but should not be proportional
@@ -614,7 +593,7 @@ class ConeCyl(object):
             The set of unknown Ritz constants
         inc : float, optional
             Load increment, necessary to calculate the full set of Ritz
-            constants using :meth:`calc_full_c`.
+            constants.
 
         Returns
         -------
@@ -800,6 +779,19 @@ class ConeCyl(object):
         msg('finished!', level=2)
 
 
+    def calc_k0(self):
+        if self.k0uu is None:
+            self._calc_linear_matrices()
+
+        return self.k0uu
+
+
+    def calc_kT(self, c):
+        self._calc_NL_matrices(c, inc=1.)
+
+        return self.kTuu
+
+
     def lb(self, c=None, tol=0, combined_load_case=None):
         """Performs a linear buckling analysis
 
@@ -911,7 +903,7 @@ class ConeCyl(object):
         msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
         for eig in eigvals[:self.num_eigvalues_print]:
             msg('{}'.format(eig), level=2)
-        self.last_analysis = 'lb'
+        self.analysis.last_analysis = 'lb'
 
 
     def eigen(self, c=None, tol=0, kL=None, kG=None):
@@ -1027,7 +1019,7 @@ class ConeCyl(object):
         msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
         for eig in eigvals[:self.num_eigvalues_print]:
             msg('{}'.format(eig), level=2)
-        self.last_analysis = 'lb'
+        self.analysis.last_analysis = 'lb'
 
 
     def _calc_NL_matrices(self, c, inc=1., num_cores=None, with_kLL=None,
@@ -1502,6 +1494,10 @@ class ConeCyl(object):
             The external force vector
 
         """
+        self._rebuild()
+        if self.k0 is None:
+            self._calc_linear_matrices()
+
         msg('Calculating external forces...', level=2, silent=silent)
 
         Nxxtop = inc*self.Nxxtop
@@ -1632,55 +1628,9 @@ class ConeCyl(object):
     def static(self, NLgeom=False, silent=False):
         """Static analysis for cones and cylinders
 
-        The analysis can be linear or non-linear. In case of a non-linear
-        analysis the following parameters of the ``ConeCyl`` object will
-        affect the non-linear analysis:
-
-        ========================   ==========================================
-        non-linear algorithm       description
-        ========================   ==========================================
-        ``NL_method``              ``'NR'`` for the Newton-Raphson
-                                   ``'arc_length'`` for the Arc-Length method
-        ``line_search``            activate line-search (for Newton-Raphson
-                                   methods only)
-        ``max_iter_line_search``   maximum number of iterations for the
-                                   line-search
-        ``modified_NR``            activate the modified Newton-Raphson
-        ``compute_every_n``        if ``modified_NR=True``, the non-linear
-                                   matrices will be updated at every `n`
-                                   iterations
-        ========================   ==========================================
-
-
-        ==============     =================================================
-        incrementation     description
-        ==============     =================================================
-        ``initialInc``     initial load increment size. In the arc-length
-                           method it will be the initial value for `\lambda`
-        ``minInc``         minimum increment size; if achieved the analysis is
-                           terminated. The arc-length method will use this
-                           parameter to terminate when the minimum arc-length
-                           increment is smaller than ``minInc``
-        ``maxInc``         maximum increment size
-        ==============     =================================================
-
-        ====================    ============================================
-        convergence criteria    description
-        ====================    ============================================
-        ``absTOL``              the convergence is achieved when the maximum
-                                residual force is smaller than this value
-        ``maxNumIter``          maximum number of iteration; if achieved the
-                                load increment is bisected
-        ====================    ============================================
-
-        =====================    ===========================================
-        numerical integration    description
-        =====================    ===========================================
-        ``ni_num_cores``         number of cores used for the numerical
-                                 integration
-        ``ni_method``            ``'trapz2d'`` for 2-D Trapezoidal's
-                                 ``'simps2d'`` for 2-D Simpsons' integration
-        =====================    ===========================================
+        The analysis can be linear or geometrically non-linear. See
+        :class:`.Analysis` for further details about the parameters
+        controlling the non-linear analysis.
 
         Parameters
         ----------
@@ -1712,46 +1662,28 @@ class ConeCyl(object):
             text ='Non-linear analysis with prescribed displacements'
             raise NotImplementedError(text)
 
-        if NLgeom:
-            if not modelDB.db[self.model]['non-linear static']:
-                msg('________________________________________________',
-                    silent=silent)
-                msg('', silent=silent)
-                warn(
-            'Model {} cannot be used in non-linear static analysis!'.
-            format(self.model), silent=silent)
-                msg('________________________________________________',
-                    silent=silent)
+        if NLgeom and not modelDB.db[self.model]['non-linear static']:
+            msg('________________________________________________',
+                silent=silent)
+            msg('', silent=silent)
+            warn('Model {} cannot be used in non-linear static analysis!'.
+                 format(self.model), silent=silent)
+            msg('________________________________________________',
+                silent=silent)
+            raise
+        elif not NLgeom and not modelDB.db[self.model]['linear static']:
+            msg('________________________________________________',
+                level=1, silent=silent)
+            msg('', level=1, silent=silent)
+            warn('Model {} cannot be used in linear static analysis!'.
+                 format(self.model), level=1, silent=silent)
+            lob('________________________________________________',
+                level=1, silent=silent)
+            raise
 
-            msg('Started Non-Linear Static Analysis', silent=silent)
-            self._calc_linear_matrices()
-            if self.NL_method == 'NR':
-                non_linear.NR(self)
-            if self.NL_method == 'NR_lebofsky':
-                non_linear.NR_lebofsky(self)
-            elif self.NL_method == 'NR_Broyden':
-                non_linear.NR_Broyden(self)
-            elif self.NL_method == 'arc_length':
-                non_linear.arc_length(self)
-        else:
-            if not modelDB.db[self.model]['linear static']:
-                msg('________________________________________________',
-                    level=1, silent=silent)
-                msg('', level=1, silent=silent)
-                warn('Model {} cannot be used in linear static analysis!'.
-                     format(self.model), level=1, silent=silent)
-                lob('________________________________________________',
-                    level=1, silent=silent)
-
-            msg('Started Linear Static Analysis', silent=silent)
-            self._calc_linear_matrices()
-            fext = self.calc_fext()
-            c = solve(self.k0uu, fext)
-            self.cs.append(c)
-            self.increments.append(1.)
-            msg('Finished Linear Static Analysis', silent=silent)
-        #
-        self.last_analysis = 'static'
+        self.analysis.static(NLgeom=NLgeom, silent=silent)
+        self.cs = self.analysis.cs
+        self.increments = self.analysis.increments
 
         return self.cs
 
@@ -1973,11 +1905,11 @@ class ConeCyl(object):
             ax.set_title(str(title))
 
         elif add_title:
-            if self.last_analysis == 'static':
+            if self.analysis.last_analysis == 'static':
                 ax.set_title(r'$m_1={0}$, $m_2={1}$, $n_2={2}$'.
                              format(self.m1, self.m2, self.n2))
 
-            elif self.last_analysis == 'lb':
+            elif self.analysis.last_analysis == 'lb':
                 ax.set_title(
            r'$m_1={0}$, $m2={1}$, $n2={2}$, $\lambda_{{CR}}={3:1.3e}$'.format(
                 self.m1, self.m2, self.n2, self.eigvals[0]))
