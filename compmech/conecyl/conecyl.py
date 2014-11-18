@@ -33,14 +33,44 @@ def load(name):
 class ConeCyl(object):
     """
     """
+    __slots__ = ['name', 'alphadeg', 'alpharad', 'r1', 'r2', 'L', 'H', 'h',
+            'K', 'is_cylinder', 'inf', 'zero',
+            'bc', 'kuBot', 'kvBot', 'kwBot', 'kphixBot', 'kphitBot', 'kuTop',
+            'kvTop', 'kwTop', 'kphixTop', 'kphitTop', 'model', 'm1', 'm2',
+            'size', 'n2', 's', 'nx', 'nt', 'forces', 'forces_inc', 'P',
+            'P_inc', 'pdC', 'Fc', 'Nxxtop', 'uTM', 'c0', 'm0', 'n0',
+            'funcnum', 'pdT', 'T', 'T_inc', 'thetaTdeg', 'thetaTrad', 'pdLA',
+            'tLAdeg', 'tLArad', 'betadeg', 'betarad', 'xiLA', 'MLA', 'LA',
+            'num0', 'excluded_dofs', 'excluded_dofs_ck', 'sina', 'cosa',
+            'laminaprop', 'plyt', 'laminaprops', 'stack', 'plyts', 'F',
+            'F_reuse', 'force_orthotropic_laminate', 'E11', 'nu',
+            'num_eigvalues', 'num_eigvalues_print',
+
+            'NL_method',
+            'modified_NR', 'line_search', 'max_iter_line_search',
+            'compute_every_n', 'with_k0L', 'with_kLL', 'initialInc', 'minInc',
+            'maxInc', 'absTOL', 'relTOL', 'last_analysis', 'cs', 'increments',
+            'maxNumInc', 'maxNumIter', 'outputs', 'eigvals', 'eigvecs',
+
+            'k0', 'k0uk', 'k0uu',
+            'kTuk', 'kTuu', 'kG0', 'kG0_Fc', 'kG0_P', 'kG0_T', 'kG', 'kGuu',
+            'kL', 'kLuu', 'lam', 'u', 'v', 'w', 'phix', 'phit', 'Xs', 'Ts',
+
+            'out_num_cores', 'ni_num_cores', 'ni_method',
+        ]
 
     def __init__(self):
         self.name = ''
-        self.forces = []
+
+        # geometry
         self.alphadeg = 0.
         self.alpharad = 0.
+        self.r1 = None
+        self.r2 = None
+        self.L = None
+        self.H = None
+        self.h = None # total thickness, required for isotropic shells
         self.is_cylinder = None
-        self.last_analysis = None
 
         # boundary conditions
         self.inf = 1.e8 # used to define high stiffnesses
@@ -72,9 +102,13 @@ class ConeCyl(object):
         self.nx = 160
         self.nt = 160
 
+        # punctual loads
+        self.forces = []
+        self.forces_inc = []
+
         # internal pressure measured in force/area
         self.P = 0.
-        self.increment_P = False
+        self.P_inc = 0.
 
         # axial compression
         self.pdC = False
@@ -91,6 +125,7 @@ class ConeCyl(object):
         # torsion
         self.pdT = True
         self.T = 0.
+        self.T_inc = 0.
         self.thetaTdeg = 0.
         self.thetaTrad = 0.
 
@@ -108,12 +143,6 @@ class ConeCyl(object):
         self.excluded_dofs = []
         self.excluded_dofs_ck = []
 
-        self.r1 = None
-        self.r2 = None
-        self.L = None
-        self.H = None
-        self.h = None # total thickness, required for isotropic shells
-        self.K = 5/6.
         self.sina = None
         self.cosa = None
 
@@ -130,6 +159,7 @@ class ConeCyl(object):
         self.force_orthotropic_laminate = False
         self.E11 = None
         self.nu = None
+        self.K = 5/6.
 
         # eigenvalue analysis
         self.num_eigvalues = 50
@@ -153,6 +183,7 @@ class ConeCyl(object):
         self.absTOL = 1.e-3
         self.relTOL = 1.e-3
 
+        self.last_analysis = None
         self.cs = []
         self.increments = []
 
@@ -883,7 +914,7 @@ class ConeCyl(object):
         self.last_analysis = 'lb'
 
 
-    def eigen(self, c=None, tol=0, combined_load_case=None, kL=None, kG=None):
+    def eigen(self, c=None, tol=0, kL=None, kG=None):
         """Performs a non-linear eigenvalue analysis at a given state
 
         The following parameters of the ``ConeCyl`` object will affect he
@@ -1362,7 +1393,7 @@ class ConeCyl(object):
         return fint
 
 
-    def add_SPL(self, PL, pt=0.5, theta=0.):
+    def add_SPL(self, PL, pt=0.5, theta=0., increment=False):
         """Add a Single Perturbation Load `\{{F_{PL}}_i\}`
 
         Adds a perturbation load to the ``ConeCyl`` object, the perturbation
@@ -1387,11 +1418,14 @@ class ConeCyl(object):
 
         """
         self._rebuild()
-        self.forces.append([pt*self.L, theta, 0., 0., PL])
+        if increment:
+            self.forces_inc.append([pt*self.L, theta, 0., 0., PL])
+        else:
+            self.forces.append([pt*self.L, theta, 0., 0., PL])
 
 
     def add_force(self, x, theta, fx, ftheta, fz):
-        r"""Add a punctual force
+        r"""Add a constant punctual force
 
         Adds a force vector `\{f_x, f_\theta, f_z\}^T` to the ``forces``
         parameter of the ``ConeCyl`` object.
@@ -1413,7 +1447,30 @@ class ConeCyl(object):
         self.forces.append([x, theta, fx, ftheta, fz])
 
 
-    def calc_fext(self, inc=None, kuk=None, silent=False):
+    def add_force_inc(self, x, theta, fx, ftheta, fz):
+        r"""Add an incremented punctual force
+
+        Adds a force vector `\{f_x, f_\theta, f_z\}^T` to the ``forces_inc``
+        parameter of the ``ConeCyl`` object.
+
+        Parameters
+        ----------
+        x : float
+            The `x` position.
+        theta : float
+            The `\theta` position in radians.
+        fx : float
+            The `x` component of the force vector.
+        ftheta : float
+            The `\theta` component of the force vector.
+        fz : float
+            The `z` component of the force vector.
+
+        """
+        self.forces_inc.append([x, theta, fx, ftheta, fz])
+
+
+    def calc_fext(self, inc=1., kuk=None, silent=False):
         """Calculates the external force vector `\{F_{ext}\}`
 
         Recall that:
@@ -1446,16 +1503,11 @@ class ConeCyl(object):
 
         """
         msg('Calculating external forces...', level=2, silent=silent)
-        if inc is None:
-            Nxxtop = self.Nxxtop
-            uTM = self.uTM
-            thetaTrad = self.thetaTrad
-        else:
-            if self.pdC:
-                uTM = inc*self.uTM
-            else:
-                Nxxtop = inc*self.Nxxtop
-            thetaTrad = inc*self.thetaTrad
+
+        Nxxtop = inc*self.Nxxtop
+        uTM = inc*self.uTM
+        thetaTrad = inc*self.thetaTrad
+
         sina = self.sina
         cosa = self.cosa
         r2 = self.r2
@@ -1489,7 +1541,7 @@ class ConeCyl(object):
 
         fext = np.delete(fext, self.excluded_dofs)
 
-        # punctual forces
+        # constant punctual forces
         for i, force in enumerate(self.forces):
             x, theta, fx, ftheta, fz = force
             fg(g, m1, m2, n2, r2, x, theta, L, cosa, tLArad)
@@ -1500,6 +1552,19 @@ class ConeCyl(object):
                 fpt = np.array([[fx, ftheta, fz]])
             elif dofs == 5:
                 fpt = np.array([[fx, ftheta, fz, 0, 0]])
+            fext += -fpt.dot(gu).ravel()
+
+        # incremented punctual forces
+        for i, force in enumerate(self.forces_inc):
+            x, theta, fx, ftheta, fz = force
+            fg(g, m1, m2, n2, r2, x, theta, L, cosa, tLArad)
+
+            gu = np.delete(g, self.excluded_dofs, axis=1)
+
+            if dofs == 3:
+                fpt = inc*np.array([[fx, ftheta, fz]])
+            elif dofs == 5:
+                fpt = inc*np.array([[fx, ftheta, fz, 0, 0]])
             fext += -fpt.dot(gu).ravel()
 
         # axial load
@@ -1525,11 +1590,8 @@ class ConeCyl(object):
             fext_tmp[2] += Nxxtop[2]*(2*pi*r2)/cosa
 
         # pressure
-        if self.P != 0.:
-            if self.increment_P and inc is not None:
-                P = inc*self.P
-            else:
-                P = self.P
+        P = self.P + inc*self.P_inc
+        if P != 0:
             if 'clpt' in model:
                 for i1 in range(i0, m1+i0):
                     if i1 == 0:
@@ -1545,8 +1607,6 @@ class ConeCyl(object):
         fext += fext_tmp
 
         # torsion
-        fg(g, m1, m2, n2, r2, 0, 0, L, cosa, tLArad)
-        gu = np.delete(g, self.excluded_dofs, axis=1)
         if pdT:
             if kuk is None:
                 kuk_T = self.k0uk[:, 1].ravel()
@@ -1554,11 +1614,15 @@ class ConeCyl(object):
                 kuk_T = kuk[:, 1].ravel()
             fext += -thetaTrad*kuk_T
         else:
-            if dofs == 3:
-                fpt = np.array([[0, self.T/r2, 0]])
-            elif dofs == 5:
-                fpt = np.array([[0, self.T/r2, 0, 0, 0]])
-            fext += fpt.dot(gu).ravel()
+            T = self.T + inc*self.T_inc
+            if T != 0:
+                fg(g, m1, m2, n2, r2, 0, 0, L, cosa, tLArad)
+                gu = np.delete(g, self.excluded_dofs, axis=1)
+                if dofs == 3:
+                    fpt = np.array([[0, T/r2, 0]])
+                elif dofs == 5:
+                    fpt = np.array([[0, T/r2, 0, 0, 0]])
+                fext += fpt.dot(gu).ravel()
 
         msg('finished!', level=2, silent=silent)
 
