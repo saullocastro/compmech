@@ -362,7 +362,7 @@ class ConeCyl(object):
         if self.nx < 4*self.m2:
             warn('Number of integration points along x too small')
         if self.nt < 4*self.n2:
-            warn('Number of integration points along x too small')
+            warn('Number of integration points along theta too small')
 
         if self.laminaprop is None:
             h = self.h
