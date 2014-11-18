@@ -106,6 +106,10 @@ class KPanelT(object):
         self.m1 = 40
         self.n1 = 40
 
+        # numerical integration
+        self.nx = 160
+        self.nt = 160
+
         # analytical integration for cones
         self.s = 79
 
@@ -160,9 +164,6 @@ class KPanelT(object):
         # eigenvalue analysis
         self.num_eigvalues = 50
         self.num_eigvalues_print = 5
-
-        #self.maxNumInc = 100
-        self.maxNumIter = 30
 
         # output queries
         self.out_num_cores = 4
@@ -807,8 +808,8 @@ class KPanelT(object):
             calc_kLL = nlmodule.calc_kLL
 
             ni_method = self.analysis.ni_method
-            nx = self.analysis.nx
-            nt = self.analysis.nt
+            nx = self.nx
+            nt = self.nt
             kG = calc_kG(c, alpharad, r1, L, tminrad, tmaxrad, F, m1, n1,
                     nx=nx, nt=nt, num_cores=num_cores, method=ni_method,
                     c0=c0, m0=m0, n0=n0)
@@ -1200,8 +1201,8 @@ class KPanelT(object):
         ni_num_cores = self.analysis.ni_num_cores
         ni_method = self.analysis.ni_method
         nlmodule = modelDB.db[self.model]['non-linear']
-        nx = self.analysis.nx*m
-        nt = self.analysis.nt*m
+        nx = self.nx*m
+        nt = self.nt*m
         fint = nlmodule.calc_fint_0L_L0_LL(c, self.alpharad, self.r1, self.L,
                 self.tminrad, self.tmaxrad, self.F, self.m1, self.n1, nx, nt,
                 ni_num_cores, ni_method, self.c0, self.m0, self.n0)
