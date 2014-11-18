@@ -1174,8 +1174,7 @@ class KPanelT(object):
 
 
     def calc_k0(self):
-        if self.k0 is None:
-            self.calc_linear_matrices()
+        self.calc_linear_matrices()
         return self.k0
 
 

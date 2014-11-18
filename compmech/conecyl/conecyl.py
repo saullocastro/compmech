@@ -780,9 +780,7 @@ class ConeCyl(object):
 
 
     def calc_k0(self):
-        if self.k0uu is None:
-            self._calc_linear_matrices()
-
+        self._calc_linear_matrices()
         return self.k0uu
 
 
