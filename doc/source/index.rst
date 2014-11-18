@@ -4,8 +4,11 @@
 Computational Mechanics (compmech)
 ==================================
 
-This repository was built with the intention to become a collection of
-theory and implementations on the field of Mechanics.
+The compmech package contains semi-analytical routines for linear buckling,
+linear static and non-linear static analysis of unstiffened cylindrical and
+conical shells (:mod:`.compmech.conecyl`), and panels
+(:mod:`.compmech.panels`). The implementation is based on Python and the low
+level routines are programmed in Cython.
 
 The details about the theory of the implementations are given
 in :ref:`theory`.
