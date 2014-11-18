@@ -85,12 +85,12 @@ class Analysis(object):
         The solution for each increment.
 
     """
-    __slots__ = ('NL_method', 'line_search', 'max_iter_line_search',
+    __slots__ = ['NL_method', 'line_search', 'max_iter_line_search',
             'modified_NR', 'compute_every_n',
             'kT_initial_state', 'initialInc', 'minInc', 'maxInc', 'absTOL',
             'relTOL', 'maxNumIter', 'too_slow_TOL', 'ni_num_cores',
-            'ni_method', 'calc_fext', 'calc_k0', 'calc_fint',
-            'calc_kT', 'increments', 'cs', 'last_analysis')
+            'ni_method', 'increments', 'cs', 'last_analysis',
+            'calc_fext', 'calc_k0', 'calc_fint', 'calc_kT']
 
 
     def __init__(self, calc_fext=None, calc_k0=None, calc_fint=None,
