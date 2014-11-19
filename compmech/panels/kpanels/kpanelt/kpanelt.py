@@ -109,6 +109,8 @@ class KPanelT(object):
         # numerical integration
         self.nx = 160
         self.nt = 160
+        self.ni_num_cores = 4
+        self.ni_method = 'trapz2d'
 
         # analytical integration for cones
         self.s = 79
@@ -782,7 +784,7 @@ class KPanelT(object):
         c = np.ascontiguousarray(c, dtype=DOUBLE)
 
         if num_cores is None:
-            num_cores = self.analysis.ni_num_cores
+            num_cores = self.ni_num_cores
 
         if self.k0 is None:
             self.calc_linear_matrices()
@@ -807,7 +809,7 @@ class KPanelT(object):
             calc_kG = nlmodule.calc_kG
             calc_kLL = nlmodule.calc_kLL
 
-            ni_method = self.analysis.ni_method
+            ni_method = self.ni_method
             nx = self.nx
             nt = self.nt
             kG = calc_kG(c, alpharad, r1, L, tminrad, tmaxrad, F, m1, n1,
@@ -1096,7 +1098,6 @@ class KPanelT(object):
 
         Returns
         -------
-
         fext : np.ndarray
             The external force vector
 
@@ -1179,14 +1180,33 @@ class KPanelT(object):
         return self.k0
 
 
-    def calc_fint(self, c, m=1):
+    def calc_fint(self, c, inc=1., m=1):
         r"""Calculates the internal force vector `\{F_{int}\}`
+
+        The following attributes affect the numerical integration:
+
+        =================    ================================================
+        Attribute            Description
+        =================    ================================================
+        ``ni_num_cores``     ``int``, number of cores used for the numerical
+                             integration
+        ``ni_method``        ``str``, integration method:
+                                 - ``'trapz2d'`` for 2-D Trapezoidal's rule
+                                 - ``'simps2d'`` for 2-D Simpsons' rule
+        ``nx``               ``int``, number of integration points along the
+                             `x` coordinate
+        ``nt``               ``int``, number of integration points along the
+                             `\theta` coordinate
+        =================    ================================================
 
         Parameters
         ----------
         c : np.ndarray
             The Ritz constants that will be used to compute the internal
             forces.
+        inc : float, optional
+            A load multiplier only needed to fit the correct function
+            signature.
         m : integer, optional
             A multiplier to the number of integration points if one wishes to
             use more integration points to calculate `\{F_{int}\}` than to
@@ -1198,8 +1218,8 @@ class KPanelT(object):
             The internal force vector.
 
         """
-        ni_num_cores = self.analysis.ni_num_cores
-        ni_method = self.analysis.ni_method
+        ni_num_cores = self.ni_num_cores
+        ni_method = self.ni_method
         nlmodule = modelDB.db[self.model]['non-linear']
         nx = self.nx*m
         nt = self.nt*m
@@ -1211,7 +1231,39 @@ class KPanelT(object):
         return fint
 
 
-    def calc_kT(self, c):
+    def calc_kT(self, c, inc=1.):
+        r"""Calculates the tangent stiffness matrix
+
+        The following attributes affect the numerical integration:
+
+        =================    ================================================
+        Attribute            Description
+        =================    ================================================
+        ``ni_num_cores``     ``int``, number of cores used for the numerical
+                             integration
+        ``ni_method``        ``str``, integration method:
+                                 - ``'trapz2d'`` for 2-D Trapezoidal's rule
+                                 - ``'simps2d'`` for 2-D Simpsons' rule
+        ``nx``               ``int``, number of integration points along the
+                             `x` coordinate
+        ``nt``               ``int``, number of integration points along the
+                             `\theta` coordinate
+        =================    ================================================
+
+        Parameters
+        ----------
+        c : np.ndarray
+            The Ritz constant vector of the current state.
+        inc : float, optional
+            A load multiplier only needed to fit the correct function
+            signature.
+
+        Returns
+        -------
+        kT : sparse matrix
+            The tangent stiffness matrix.
+
+        """
         self.calc_NL_matrices(c)
         return self.kT
 
