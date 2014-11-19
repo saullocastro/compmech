@@ -9,9 +9,6 @@ def _solver_NR(a):
     """
     msg('Initialization...', level=1)
 
-    line_search = a.line_search
-    max_iter_line_search = a.max_iter_line_search
-    compute_every_n = a.compute_every_n
     modified_NR = a.modified_NR
     inc = a.initialInc
     total = inc
@@ -25,7 +22,7 @@ def _solver_NR(a):
     if modified_NR:
         if a.kT_initial_state:
             msg('Initial update of kT ...', level=1)
-            kT_last = a.calc_kT(c*0)
+            kT_last = a.calc_kT(c*0, inc=0.)
             msg('kT updated!', level=1)
         else:
             kT_last = k0
@@ -63,15 +60,15 @@ def _solver_NR(a):
                 break
 
             if compute_NL_matrices or (a.kT_initial_state and step_num==1 and
-                    iteration==1) or iter_NR==(compute_every_n-1):
+                    iteration==1) or iter_NR==(a.compute_every_n-1):
                 iter_NR = 0
-                kT = a.calc_kT(c)
+                kT = a.calc_kT(c, inc=total)
             else:
                 iter_NR += 1
                 if not modified_NR:
                     compute_NL_matrices = True
 
-            fint = a.calc_fint(c)
+            fint = a.calc_fint(c=c, inc=total)
 
             R = fext - fint
 
@@ -100,14 +97,14 @@ def _solver_NR(a):
 
             eta1 = 0.
             eta2 = 1.
-            if line_search:
+            if a.line_search:
                 msg('Performing line-search... ', level=2)
                 iter_line_search = 0
                 while True:
                     c1 = c + eta1*delta_c
                     c2 = c + eta2*delta_c
-                    fint1 = a.calc_fint(c1)
-                    fint2 = a.calc_fint(c2)
+                    fint1 = a.calc_fint(c1, inc=total)
+                    fint2 = a.calc_fint(c2, inc=total)
                     R1 = fext - fint1
                     R2 = fext - fint2
                     s1 = delta_c.dot(R1)
@@ -118,7 +115,8 @@ def _solver_NR(a):
                     eta2 = min(max(eta2, 0.2), 10.)
                     if abs(eta2-eta1) < 0.01:
                         break
-                    if iter_line_search == max_iter_line_search:
+                    iter_line_search += 1
+                    if iter_line_search == a.max_iter_line_search:
                         eta2 = 1.
                         break
                 msg('finished!', level=2)
@@ -148,7 +146,7 @@ def _solver_NR(a):
                 break
             if modified_NR:
                 msg('Updating kT...', level=1)
-                kT = a.calc_kT(c)
+                kT = a.calc_kT(c, inc=total)
                 msg('kT updated!', level=1)
             compute_NL_matrices = False
             kT_last = kT
