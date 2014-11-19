@@ -12,7 +12,7 @@ class Analysis(object):
     The parameters are described in the following tables:
 
     ========================  ==================================================
-    non-linear algorithm      description
+    Non-Linear Algorithm      Description
     ========================  ==================================================
     ``NL_method``             ``str``, ``'NR'`` for the Newton-Raphson
                               ``'arc_length'`` for the Arc-Length method
@@ -30,7 +30,7 @@ class Analysis(object):
     ========================  ==================================================
 
     ==============     =================================================
-    incrementation     description
+    Incrementation     Description
     ==============     =================================================
     ``initialInc``     initial load increment size. In the arc-length
                        method it will be the initial value for
@@ -43,7 +43,7 @@ class Analysis(object):
     ==============     =================================================
 
     ====================    ============================================
-    convergence criteria    description
+    Convergence Criteria    Description
     ====================    ============================================
     ``absTOL``              the convergence is achieved when the maximum
                             residual force is smaller than this value
@@ -52,15 +52,6 @@ class Analysis(object):
     ``too_slow_TOL``        tolerance that tells if the convergence is too
                             slow
     ====================    ============================================
-
-    =====================    ===========================================
-    numerical integration    description
-    =====================    ===========================================
-    ``ni_num_cores``         number of cores used for the numerical
-                             integration
-    ``ni_method``            ``'trapz2d'`` for 2-D Trapezoidal's
-                             ``'simps2d'`` for 2-D Simpsons' integration
-    =====================    ===========================================
 
     Parameters
     ----------
@@ -88,9 +79,8 @@ class Analysis(object):
     __slots__ = ['NL_method', 'line_search', 'max_iter_line_search',
             'modified_NR', 'compute_every_n',
             'kT_initial_state', 'initialInc', 'minInc', 'maxInc', 'absTOL',
-            'relTOL', 'maxNumIter', 'too_slow_TOL', 'ni_num_cores',
-            'ni_method', 'increments', 'cs', 'last_analysis',
-            'calc_fext', 'calc_k0', 'calc_fint', 'calc_kT']
+            'relTOL', 'maxNumIter', 'too_slow_TOL', 'increments', 'cs',
+            'last_analysis', 'calc_fext', 'calc_k0', 'calc_fint', 'calc_kT']
 
 
     def __init__(self, calc_fext=None, calc_k0=None, calc_fint=None,
@@ -111,9 +101,6 @@ class Analysis(object):
         self.relTOL = 1.e-3
         self.maxNumIter = 30
         self.too_slow_TOL = 0.01
-        # numerical integration
-        self.ni_num_cores = 4
-        self.ni_method = 'trapz2d'
 
         # required methods
         self.calc_fext = calc_fext
