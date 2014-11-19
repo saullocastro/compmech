@@ -118,6 +118,7 @@ def _solver_NR(a):
                     iter_line_search += 1
                     if iter_line_search == a.max_iter_line_search:
                         eta2 = 1.
+                        warn('maxinum number of iterations', level=3)
                         break
                 msg('finished!', level=2)
             c = c + eta2*delta_c
