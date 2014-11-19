@@ -26,9 +26,14 @@ from modelDB import get_model
 
 def load(name):
     if '.ConeCyl' in name:
-        return cPickle.load(open(name, 'rb'))
+        cc = cPickle.load(open(name, 'rb'))
     else:
-        return cPickle.load(open(name + '.ConeCyl', 'rb'))
+        cc = cPickle.load(open(name + '.ConeCyl', 'rb'))
+    cc.analysis.calc_fext = cc.calc_fext
+    cc.analysis.calc_k0 = cc.calc_k0
+    cc.analysis.calc_fint = cc.calc_fint
+    cc.analysis.calc_kT = cc.calc_kT
+    return cc
 
 
 class ConeCyl(object):
@@ -38,7 +43,8 @@ class ConeCyl(object):
             'L', 'H', 'h', 'K', 'is_cylinder', 'inf', 'zero',
             'bc', 'kuBot', 'kvBot', 'kwBot', 'kphixBot', 'kphitBot', 'kuTop',
             'kvTop', 'kwTop', 'kphixTop', 'kphitTop', 'model', 'm1', 'm2',
-            'size', 'n2', 's', 'nx', 'nt', 'forces', 'forces_inc', 'P',
+            'size', 'n2', 's', 'nx', 'nt', 'ni_num_cores', 'ni_method',
+            'forces', 'forces_inc', 'P',
             'P_inc', 'pdC', 'Fc', 'Nxxtop', 'uTM', 'c0', 'm0', 'n0',
             'funcnum', 'pdT', 'T', 'T_inc', 'thetaTdeg', 'thetaTrad', 'pdLA',
             'tLAdeg', 'tLArad', 'betadeg', 'betarad', 'xiLA', 'MLA', 'LA',
@@ -100,6 +106,8 @@ class ConeCyl(object):
         # numerical integration
         self.nx = 120
         self.nt = 180
+        self.ni_num_cores = 4
+        self.ni_method = 'trapz2d'
 
         # punctual loads
         self.forces = []
@@ -223,7 +231,7 @@ class ConeCyl(object):
                 self._rebuild()
 
         self.model = self.model.lower()
-        model_mod = get_model(self.model)
+        model_dict = get_model(self.model)
 
         # boundary conditions
         inf = self.inf
@@ -398,6 +406,9 @@ class ConeCyl(object):
                                [0, 0, 0, D12, D22, D26],
                                [0, 0, 0, D16, D26, D66]])
 
+        if self.c0 is not None:
+            self.analysis.kT_initial_state = True
+
         if self._load_rebuilt:
             return
 
@@ -449,10 +460,10 @@ class ConeCyl(object):
             The size of the stiffness matrices.
 
         """
-        model_mod = get_model(self.model)
-        num0 = model_mod['num0']
-        num1 = model_mod['num1']
-        num2 = model_mod['num2']
+        model_dict = get_model(self.model)
+        num0 = model_dict['num0']
+        num1 = model_dict['num1']
+        num2 = model_dict['num2']
         self.size = num0 + num1*self.m1 + num2*self.m2*self.n2
         return self.size
 
@@ -605,8 +616,8 @@ class ConeCyl(object):
 
         """
         c = cu.copy()
-        self.get_size()
-        if c.shape[0] == self.size:
+        size = self.get_size()
+        if c.shape[0] == size:
             for dof in self.excluded_dofs:
                 c[dof] *= inc
             return c
@@ -783,13 +794,46 @@ class ConeCyl(object):
 
 
     def calc_k0(self):
-        self._calc_linear_matrices()
+        if self.k0uu is None:
+            self._calc_linear_matrices()
         return self.k0uu
 
 
-    def calc_kT(self, c):
-        self._calc_NL_matrices(c, inc=1.)
+    def calc_kT(self, c, inc=1.):
+        r"""Calculates the tangent stiffness matrix
 
+        The following attributes will affect the numerical integration:
+
+        =================    ================================================
+        Attribute            Description
+        =================    ================================================
+        ``ni_num_cores``     ``int``, number of cores used for the numerical
+                             integration
+        ``ni_method``        ``str``, integration method:
+                                 - ``'trapz2d'`` for 2-D Trapezoidal's rule
+                                 - ``'simps2d'`` for 2-D Simpsons' rule
+        ``nx``               ``int``, number of integration points along the
+                             `x` coordinate
+        ``nt``               ``int``, number of integration points along the
+                             `\theta` coordinate
+        =================    ================================================
+
+        Parameters
+        ----------
+        c : np.ndarray
+            The Ritz constants vector of the current state.
+        inc : float, optional
+            Load increment, necessary to calculate the full set of Ritz
+            constants using :meth:`calc_full_c`.
+
+        Returns
+        -------
+        kTuu : sparse matrix
+            The tangent stiffness matrix corresponding to the unknown degrees
+            of freedom.
+
+        """
+        self._calc_NL_matrices(c, inc=inc)
         return self.kTuu
 
 
@@ -800,7 +844,7 @@ class ConeCyl(object):
         linear buckling analysis:
 
         =======================    =====================================
-        parameter                  description
+        Attribute                  Description
         =======================    =====================================
         ``num_eigenvalues``        Number of eigenvalues to be extracted
         ``num_eigvalues_print``    Number of eigenvalues to print after
@@ -826,8 +870,8 @@ class ConeCyl(object):
         ``eigvecs[i-1, :]`` parameter.
 
         """
-        model_mod = get_model(self.model)
-        if not model_mod['linear buckling']:
+        model_dict = get_model(self.model)
+        if not model_dict['linear buckling']:
             msg('________________________________________________')
             msg('')
             warn('Model {} cannot be used in linear buckling analysis!'.
@@ -851,11 +895,11 @@ class ConeCyl(object):
 
         msg('Eigenvalue solver... ', level=2)
 
-        model_mod = get_model(self.model)
-        i0 = model_mod['i0']
-        num0 = model_mod['num0']
-        num1 = model_mod['num1']
-        num2 = model_mod['num2']
+        model_dict = get_model(self.model)
+        i0 = model_dict['i0']
+        num0 = model_dict['num0']
+        num1 = model_dict['num1']
+        num2 = model_dict['num2']
 
         pos = num0
 
@@ -912,11 +956,11 @@ class ConeCyl(object):
     def eigen(self, c=None, tol=0, kL=None, kG=None):
         """Performs a non-linear eigenvalue analysis at a given state
 
-        The following parameters of the ``ConeCyl`` object will affect he
+        The following attributes of the ``ConeCyl`` object will affect the
         non-linear eigenvalue analysis:
 
         =======================    =====================================
-        parameter                  description
+        Attribute                  Description
         =======================    =====================================
         ``num_eigenvalues``        Number of eigenvalues to be extracted
         ``num_eigvalues_print``    Number of eigenvalues to print after
@@ -946,8 +990,8 @@ class ConeCyl(object):
         ``eigvecs[i-1, :]`` parameter.
 
         """
-        model_mod = get_model(self.model)
-        if not model_mod['linear buckling']:
+        model_dict = get_model(self.model)
+        if not model_dict['linear buckling']:
             msg('________________________________________________')
             msg('')
             warn('Model {} cannot be used in linear buckling analysis!'.
@@ -969,11 +1013,11 @@ class ConeCyl(object):
         #     sign is applied later
         msg('Eigenvalue solver... ', level=2)
 
-        model_mod = get_model(self.model)
-        i0 = model_mod['i0']
-        num0 = model_mod['num0']
-        num1 = model_mod['num1']
-        num2 = model_mod['num2']
+        model_dict = get_model(self.model)
+        i0 = model_dict['i0']
+        num0 = model_dict['num0']
+        num1 = model_dict['num1']
+        num2 = model_dict['num2']
 
         pos = num0
 
@@ -1072,11 +1116,11 @@ class ConeCyl(object):
         funcnum = self.funcnum
 
         model = self.model
-        model_mod = get_model(model)
+        model_dict = get_model(model)
 
-        nlmodule = model_mod['non-linear']
-        ni_method = self.analysis.ni_method
-        num_cores = self.analysis.ni_num_cores
+        nlmodule = model_dict['non-linear']
+        ni_method = self.ni_method
+        num_cores = self.ni_num_cores
         nx = self.nx
         nt = self.nt
 
@@ -1200,8 +1244,8 @@ class ConeCyl(object):
 
         c = self.calc_full_c(c, inc=inc)
 
-        model_mod = get_model(self.model)
-        fuvw = model_mod['commons'].fuvw
+        model_dict = get_model(self.model)
+        fuvw = model_dict['commons'].fuvw
         us, vs, ws, phixs, phits = fuvw(c, m1, m2, n2, alpharad, r2, L,
                                         tLArad, xs, ts, self.out_num_cores)
 
@@ -1254,10 +1298,10 @@ class ConeCyl(object):
         n0 = self.n0
         funcnum = self.funcnum
         model = self.model
-        model_mod = get_model(model)
+        model_dict = get_model(model)
         NL_kinematics = model.split('_')[1]
-        fstrain = model_mod['commons'].fstrain
-        e_num = model_mod['e_num']
+        fstrain = model_dict['commons'].fstrain
+        e_num = model_dict['e_num']
 
         if 'donnell' in NL_kinematics:
             int_NL_kinematics = 0
@@ -1318,10 +1362,10 @@ class ConeCyl(object):
         n0 = self.n0
         funcnum = self.funcnum
         model = self.model
-        model_mod = get_model(model)
+        model_dict = get_model(model)
         NL_kinematics = model.split('_')[1]
-        fstress = model_mod['commons'].fstress
-        e_num = model_mod['e_num']
+        fstress = model_dict['commons'].fstress
+        e_num = model_dict['e_num']
 
         if 'donnell' in NL_kinematics:
             int_NL_kinematics = 0
@@ -1342,6 +1386,22 @@ class ConeCyl(object):
 
     def calc_fint(self, c, inc=1., m=1, return_u=True):
         r"""Calculates the internal force vector `\{F_{int}\}`
+
+        The following attributes will affect the numerical integration:
+
+        =================    ================================================
+        Attribute            Description
+        =================    ================================================
+        ``ni_num_cores``     ``int``, number of cores used for the numerical
+                             integration
+        ``ni_method``        ``str``, integration method:
+                                 - ``'trapz2d'`` for 2-D Trapezoidal's rule
+                                 - ``'simps2d'`` for 2-D Simpsons' rule
+        ``nx``               ``int``, number of integration points along the
+                             `x` coordinate
+        ``nt``               ``int``, number of integration points along the
+                             `\theta` coordinate
+        =================    ================================================
 
         Parameters
         ----------
@@ -1369,14 +1429,13 @@ class ConeCyl(object):
             nlmodule = modelDB.db[self.model[4:]]['non-linear']
         else:
             nlmodule = modelDB.db[self.model]['non-linear']
-        ni_method = self.analysis.ni_method
-        ni_num_cores = self.analysis.ni_num_cores
+        ni_method = self.ni_method
+        ni_num_cores = self.ni_num_cores
         nx = self.nx*m
         nt = self.nt*m
         fint = nlmodule.calc_fint_0L_L0_LL(c, self.alpharad, self.r2, self.L,
-                                  self.tLArad, self.F, self.m1, self.m2,
-                                  self.n2, nx, nt, ni_num_cores, ni_method,
-                                  self.c0, self.m0, self.n0)
+                self.tLArad, self.F, self.m1, self.m2, self.n2, nx, nt,
+                ni_num_cores, ni_method, self.c0, self.m0, self.n0)
         fint += self.k0*c
         if return_u:
             fint = np.delete(fint, self.excluded_dofs)
@@ -1384,7 +1443,7 @@ class ConeCyl(object):
         return fint
 
 
-    def add_SPL(self, PL, pt=0.5, theta=0., increment=False):
+    def add_SPL(self, PL, pt=0.5, thetadeg=0., increment=False):
         """Add a Single Perturbation Load `\{{F_{PL}}_i\}`
 
         Adds a perturbation load to the ``ConeCyl`` object, the perturbation
@@ -1398,8 +1457,8 @@ class ConeCyl(object):
         pt : float
             The normalized position along the `x` axis in which the new SPL
             will be included.
-        theta : float
-            The angular position in radians of the new SPL.
+        thetadeg : float
+            The angular position of the SPL in degrees.
 
         Notes
         -----
@@ -1409,13 +1468,14 @@ class ConeCyl(object):
 
         """
         self._rebuild()
+        thetarad = deg2rad(thetadeg)
         if increment:
-            self.forces_inc.append([pt*self.L, theta, 0., 0., PL])
+            self.forces_inc.append([pt*self.L, thetarad, 0., 0., PL])
         else:
-            self.forces.append([pt*self.L, theta, 0., 0., PL])
+            self.forces.append([pt*self.L, thetarad, 0., 0., PL])
 
 
-    def add_force(self, x, theta, fx, ftheta, fz):
+    def add_force(self, x, thetadeg, fx, ftheta, fz):
         r"""Add a constant punctual force
 
         Adds a force vector `\{f_x, f_\theta, f_z\}^T` to the ``forces``
@@ -1425,8 +1485,8 @@ class ConeCyl(object):
         ----------
         x : float
             The `x` position.
-        theta : float
-            The `\theta` position in radians.
+        thetadeg : float
+            The `\theta` position in degrees.
         fx : float
             The `x` component of the force vector.
         ftheta : float
@@ -1435,10 +1495,11 @@ class ConeCyl(object):
             The `z` component of the force vector.
 
         """
-        self.forces.append([x, theta, fx, ftheta, fz])
+        thetarad = deg2rad(thetadeg)
+        self.forces.append([x, thetarad, fx, ftheta, fz])
 
 
-    def add_force_inc(self, x, theta, fx, ftheta, fz):
+    def add_force_inc(self, x, thetadeg, fx, ftheta, fz):
         r"""Add an incremented punctual force
 
         Adds a force vector `\{f_x, f_\theta, f_z\}^T` to the ``forces_inc``
@@ -1448,8 +1509,8 @@ class ConeCyl(object):
         ----------
         x : float
             The `x` position.
-        theta : float
-            The `\theta` position in radians.
+        thetadeg : float
+            The `\theta` position in degrees.
         fx : float
             The `x` component of the force vector.
         ftheta : float
@@ -1458,10 +1519,11 @@ class ConeCyl(object):
             The `z` component of the force vector.
 
         """
-        self.forces_inc.append([x, theta, fx, ftheta, fz])
+        thetarad = deg2rad(thetadeg)
+        self.forces_inc.append([x, thetarad, fx, ftheta, fz])
 
 
-    def calc_fext(self, inc=1., kuk=None, silent=False):
+    def calc_fext(self, inc=None, kuk=None, silent=False):
         """Calculates the external force vector `\{F_{ext}\}`
 
         Recall that:
@@ -1488,7 +1550,6 @@ class ConeCyl(object):
 
         Returns
         -------
-
         fext : np.ndarray
             The external force vector
 
@@ -1498,11 +1559,16 @@ class ConeCyl(object):
             self._calc_linear_matrices()
 
         msg('Calculating external forces...', level=2, silent=silent)
-
-        Nxxtop = inc*self.Nxxtop
-        uTM = inc*self.uTM
-        thetaTrad = inc*self.thetaTrad
-
+        if inc is None:
+            Nxxtop = self.Nxxtop
+            uTM = self.uTM
+            thetaTrad = self.thetaTrad
+        else:
+            if self.pdC:
+                uTM = inc*self.uTM
+            else:
+                Nxxtop = inc*self.Nxxtop
+            thetaTrad = inc*self.thetaTrad
         sina = self.sina
         cosa = self.cosa
         r2 = self.r2
@@ -1515,19 +1581,15 @@ class ConeCyl(object):
         pdT = self.pdT
         model = self.model
 
-        if not model in modelDB.db.keys():
-            raise ValueError(
-                    '{} is not a valid "model" option'.format(
-                    model))
+        model_dict = get_model(model)
 
-        db = modelDB.db
-        i0 = db[model]['i0']
-        j0 = db[model]['j0']
-        num0 = db[model]['num0']
-        num1 = db[model]['num1']
-        num2 = db[model]['num2']
-        dofs = db[model]['dofs']
-        fg = db[model]['commons'].fg
+        i0 = model_dict['i0']
+        j0 = model_dict['j0']
+        num0 = model_dict['num0']
+        num1 = model_dict['num1']
+        num2 = model_dict['num2']
+        dofs = model_dict['dofs']
+        fg = model_dict['commons'].fg
 
         size = self.get_size()
 
@@ -2241,7 +2303,7 @@ class ConeCyl(object):
             Each curve in the list is a ``dict`` object with the keys:
 
             =================    ==============================================
-            key                  description
+            Key                  Description
             =================    ==============================================
             ``'wall_time_s'``    The wall time for the non-linear analysis
             ``'name'``           The name of the curve. Ex: ``'PL = 1. N'``
@@ -2415,7 +2477,10 @@ class ConeCyl(object):
         """
         name = self.name + '.ConeCyl'
         msg('Saving ConeCyl to {}'.format(name))
-
+        self.analysis.calc_fext = None
+        self.analysis.calc_k0 = None
+        self.analysis.calc_fint = None
+        self.analysis.calc_kT = None
         self._clear_matrices()
 
         with open(name, 'wb') as f:
