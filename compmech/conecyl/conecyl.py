@@ -409,7 +409,7 @@ class ConeCyl(object):
         if self.c0 is not None:
             self.analysis.kT_initial_state = True
 
-        if self._load_rebuilt:
+        if self.Nxxtop is not None and self._load_rebuilt:
             return
 
         # axial load
