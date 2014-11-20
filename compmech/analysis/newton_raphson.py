@@ -3,6 +3,8 @@ import numpy as np
 from compmech.logger import msg, warn
 from compmech.sparse import solve
 
+
+
 def _solver_NR(a):
     """Newton-Raphson solver
 
@@ -18,18 +20,12 @@ def _solver_NR(a):
     fext = a.calc_fext(inc=inc)
     k0 = a.calc_k0()
     c = solve(k0, fext)
+    kT_last = k0
 
     if modified_NR:
-        if a.kT_initial_state:
-            msg('Initial update of kT ...', level=1)
-            kT_last = a.calc_kT(c*0, inc=0.)
-            msg('kT updated!', level=1)
-        else:
-            kT_last = k0
-        compute_NL_matrices = False
+        compute_kT = False
     else:
-        compute_NL_matrices = True
-        kT_last = k0
+        compute_kT = True
 
     step_num = 1
     while True:
@@ -59,14 +55,14 @@ def _solver_NR(a):
                 warn('Maximum number of iterations achieved!', level=2)
                 break
 
-            if compute_NL_matrices or (a.kT_initial_state and step_num==1 and
+            if compute_kT or (a.kT_initial_state and step_num==1 and
                     iteration==1) or iter_NR==(a.compute_every_n-1):
                 iter_NR = 0
                 kT = a.calc_kT(c, inc=total)
             else:
                 iter_NR += 1
                 if not modified_NR:
-                    compute_NL_matrices = True
+                    compute_kT = True
 
             fint = a.calc_fint(c=c, inc=total)
 
@@ -149,7 +145,7 @@ def _solver_NR(a):
                 msg('Updating kT...', level=1)
                 kT = a.calc_kT(c, inc=total)
                 msg('kT updated!', level=1)
-            compute_NL_matrices = False
+            compute_kT = False
             kT_last = kT
         else:
             max_total = max(max_total, total)
