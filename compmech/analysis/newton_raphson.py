@@ -4,7 +4,6 @@ from compmech.logger import msg, warn
 from compmech.sparse import solve
 
 
-
 def _solver_NR(a):
     """Newton-Raphson solver
 
