@@ -91,7 +91,7 @@ class Analysis(object):
         self.max_iter_line_search = 20
         self.modified_NR = True
         self.compute_every_n = 6
-        self.kT_initial_state = False
+        self.kT_initial_state = True
         # incrementation
         self.initialInc = 0.3
         self.minInc = 1.e-3
