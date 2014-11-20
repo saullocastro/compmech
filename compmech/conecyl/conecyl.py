@@ -57,9 +57,9 @@ class ConeCyl(object):
             'cs', 'increments', 'outputs',
             'eigvals', 'eigvecs',
 
-            'k0', 'k0uk', 'k0uu',
-            'kTuk', 'kTuu', 'kG0', 'kG0_Fc', 'kG0_P', 'kG0_T', 'kG', 'kGuu',
-            'kL', 'kLuu', 'lam', 'u', 'v', 'w', 'phix', 'phit', 'Xs', 'Ts',
+            'k0', 'k0uk', 'k0uu', 'kTuk', 'kTuu', 'kG0', 'kG0_Fc', 'kG0_P',
+            'kG0_T', 'kG', 'kGuu', 'kL', 'kLuu', 'lam', 'u', 'v', 'w', 'phix',
+            'phit', 'Xs', 'Ts',
 
             'out_num_cores',
         ]
