@@ -424,7 +424,6 @@ class ConeCyl(object):
                 if self.Nxxtop.ndim == 1:
                     assert self.Nxxtop.shape[0] == (2*self.n2+1)
                     check = True
-
             if not check:
                 raise ValueError('Invalid Nxxtop input')
 
@@ -1454,11 +1453,14 @@ class ConeCyl(object):
         ----------
         PL : float
             The perturbation load value.
-        pt : float
+        pt : float, optional
             The normalized position along the `x` axis in which the new SPL
             will be included.
-        thetadeg : float
+        thetadeg : float, optional
             The angular position of the SPL in degrees.
+        increment : bool, optional
+            If this perturbation load should be incrementally applied in a
+            non-linear analysis.
 
         Notes
         -----
@@ -1475,8 +1477,8 @@ class ConeCyl(object):
             self.forces.append([pt*self.L, thetarad, 0., 0., PL])
 
 
-    def add_force(self, x, thetadeg, fx, ftheta, fz):
-        r"""Add a constant punctual force
+    def add_force(self, x, thetadeg, fx, ftheta, fz, increment=False):
+        r"""Add a punctual force
 
         Adds a force vector `\{f_x, f_\theta, f_z\}^T` to the ``forces``
         parameter of the ``ConeCyl`` object.
@@ -1493,37 +1495,19 @@ class ConeCyl(object):
             The `\theta` component of the force vector.
         fz : float
             The `z` component of the force vector.
+        increment : bool, optional
+            If this punctual force should be incrementally applied in a
+            non-linear analysis.
 
         """
         thetarad = deg2rad(thetadeg)
-        self.forces.append([x, thetarad, fx, ftheta, fz])
+        if incremented:
+            self.forces_inc.append([x, thetarad, fx, ftheta, fz])
+        else:
+            self.forces.append([x, thetarad, fx, ftheta, fz])
 
 
-    def add_force_inc(self, x, thetadeg, fx, ftheta, fz):
-        r"""Add an incremented punctual force
-
-        Adds a force vector `\{f_x, f_\theta, f_z\}^T` to the ``forces_inc``
-        parameter of the ``ConeCyl`` object.
-
-        Parameters
-        ----------
-        x : float
-            The `x` position.
-        thetadeg : float
-            The `\theta` position in degrees.
-        fx : float
-            The `x` component of the force vector.
-        ftheta : float
-            The `\theta` component of the force vector.
-        fz : float
-            The `z` component of the force vector.
-
-        """
-        thetarad = deg2rad(thetadeg)
-        self.forces_inc.append([x, thetarad, fx, ftheta, fz])
-
-
-    def calc_fext(self, inc=None, kuk=None, silent=False):
+    def calc_fext(self, inc=1., kuk=None, silent=False):
         """Calculates the external force vector `\{F_{ext}\}`
 
         Recall that:
@@ -1559,16 +1543,12 @@ class ConeCyl(object):
             self._calc_linear_matrices()
 
         msg('Calculating external forces...', level=2, silent=silent)
-        if inc is None:
-            Nxxtop = self.Nxxtop
-            uTM = self.uTM
-            thetaTrad = self.thetaTrad
-        else:
-            if self.pdC:
-                uTM = inc*self.uTM
-            else:
-                Nxxtop = inc*self.Nxxtop
-            thetaTrad = inc*self.thetaTrad
+
+
+        uTM = inc*self.uTM
+        Nxxtop = inc*self.Nxxtop
+        thetaTrad = inc*self.thetaTrad
+
         sina = self.sina
         cosa = self.cosa
         r2 = self.r2
