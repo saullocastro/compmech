@@ -484,7 +484,7 @@ ccs = {
     'desicos_2014_z36': {
         'elem_type': 'S8R5',
         'numel_r': 140,
-        'r1': 400.,
+        'r1': 400.376,
         'H': 800.,
         'plyt':0.125,
         'laminapropKey': 'degenhardt_2010_IM78552_isa',
