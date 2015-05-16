@@ -25,5 +25,9 @@ Geometric Attributes   Description
 .. autoclass:: KPanelT
     :members:
 
+.. autoclass:: KPanelCheb
+    :members:
+
 """
 from kpanelt import KPanelT
+from kpanelcheb import KPanelCheb
