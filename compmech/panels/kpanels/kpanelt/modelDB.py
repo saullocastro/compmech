@@ -1,7 +1,7 @@
 r"""
 Used to configure the main parameters for each implemented model.
 
-.. currentmodule:: compmech.conecyl.modelDB
+.. currentmodule:: compmech.panels.kpanels.kpanelt.modelDB
 
 
 """
@@ -60,10 +60,11 @@ def get_linear_matrices(kp, combined_load_case=None):
 
     Parameters
     ----------
-    kp : compmech.conecyl.ConeCyl
-        The ``ConeCyl`` object.
+    kp : compmech.panels.kpanels.kpanelt.KPanelT
+        The ``KPanelT`` object.
     combined_load_case : int, optional
-        As explained in the :meth:`ConeCyl.lb() <compmech.conecyl.ConeCyl.lb>`
+        As explained in the
+        :meth:`KPanelT.lb() <compmech.panels.kpanels.kpanelt.KPanelT.lb>`
         method, the integer indicating
         which combined load case should be used. Default is ``None``.
 
@@ -114,7 +115,7 @@ def get_linear_matrices(kp, combined_load_case=None):
                                kp.kphixLeft, kp.kphixRight,
                                kp.kphitLeft, kp.kphitRight)
     elif model=='fsdt_donnell_free':
-        k0edges = fk0edges(m1, n1, r1, r2, L, tmin, tmax,
+        k0edges = fk0edges(m1, n1, alpharad, s, r1, r2, L, tmin, tmax,
                            kp.kuBot, kp.kuTop,
                            kp.kvBot, kp.kvTop,
                            kp.kwBot, kp.kwTop,
