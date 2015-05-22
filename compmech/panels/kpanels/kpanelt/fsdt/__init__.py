@@ -1,12 +1,12 @@
 r"""
-=========================================
-FSDT (:mod:`compmech.panels.kpanel.fsdt`)
-=========================================
+==================================================
+FSDT (:mod:`compmech.panels.kpanels.kpanelt.fsdt`)
+==================================================
 
-.. currentmodule:: compmech.panels.kpanel.fsdt
+.. currentmodule:: compmech.panels.kpanels.kpanelt.fsdt
 
-The ``compmech.panels.kpanel.fsdt`` module contains all the methods and
-functions to calculate the stiffness matrices, the displacement field, the
+The ``compmech.panels.kpanels.kpanelt.fsdt`` module contains all the methods
+and functions to calculate the stiffness matrices, the displacement field, the
 strain and the stress fields for all models using the FSDT kinematic
 assumption.
 

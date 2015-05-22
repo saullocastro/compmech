@@ -10,10 +10,10 @@ ext_modules = [
               extra_compile_args=args_linear),
     Extension('fsdt_donnell_bc4_nonlinear', ['fsdt_donnell_bc4_nonlinear.pyx'],
               extra_compile_args=args_nonlinear),
-    #Extension('fsdt_commons_free', ['fsdt_commons_free.pyx'],
-              #extra_compile_args=args_linear),
-    #Extension('fsdt_donnell_free_linear', ['fsdt_donnell_free_linear.pyx'],
-              #extra_compile_args=args_linear),
+    Extension('fsdt_commons_free', ['fsdt_commons_free.pyx'],
+              extra_compile_args=args_linear),
+    Extension('fsdt_donnell_free_linear', ['fsdt_donnell_free_linear.pyx'],
+              extra_compile_args=args_linear),
     ]
 setup(
 name = 'fsdt_donnell',

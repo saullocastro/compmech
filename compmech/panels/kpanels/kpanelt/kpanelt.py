@@ -49,19 +49,17 @@ class KPanelT(object):
     with:
 
         .. math::
-            u = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_a}}
+            u = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
             \\
-            v = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_a}}
+            v = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
             \\
-            w = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_b}}
+            w = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
             \\
-            \phi_x = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_a}}
+            \phi_x = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
             \\
-            \phi_\theta = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_a}}
+            \phi_\theta = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
             \\
-            f_a = cos(i_1 \pi b_x)cos(j_1 \pi b_\theta)
-            \\
-            f_b = sin(i_1 \pi b_x)sin(j_1 \pi b_\theta)
+            f = cos(i_1 \pi b_x)cos(j_1 \pi b_\theta)
             \\
             b_x = \frac{x + \frac{L}{2}}{L}
             \\
@@ -424,28 +422,8 @@ class KPanelT(object):
         """
         num0 = modelDB.db[self.model]['num0']
         num1 = modelDB.db[self.model]['num1']
-        self.size = (num0 + num1*self.m1*self.n1)
+        self.size = num0 + num1*self.m1*self.n1
         return self.size
-
-
-    def from_DB(self, name):
-        """Load cone / cylinder data from the local database
-
-        Parameters
-        ----------
-        name : str
-            A key contained in the ``ccs`` dictionary of module
-            :mod:`compmech.conecyl.conecylDB`.
-
-        """
-        try:
-            attrs = ['r1', 'r2', 'L', 'alphadeg', 'plyt', 'stack']
-            cc = ccs[name]
-            self.laminaprop = laminaprops[cc['laminapropKey']]
-            for attr in attrs:
-                setattr(self, attr, cc.get(attr, getattr(self, attr)))
-        except:
-            raise ValueError('Invalid data-base entry!')
 
 
     def _default_field(self, xs, ts, gridx, gridt):

@@ -217,8 +217,8 @@ cdef void cfuvw(double *c, int m1, int n1, double L, double tmin, double tmax,
         bx = (x + L/2.)/L
         bt = (t - tmin)/(tmax - tmin)
 
-        u = 0
-        v = 0
+        u = 0 #c[0]*bx
+        v = 0 #c[1]*bt
         w = 0
         phix = 0
         phit = 0
@@ -300,6 +300,9 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
 
     bx = (x + L/2.)/L
     bt = (t - tmin)/(tmax - tmin)
+
+    g[0, 0] = 0#bx
+    g[1, 1] = 0#bt
 
     for j1 in range(n1):
         cosj1bt = cos(j1*pi*bt)
