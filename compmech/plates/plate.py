@@ -6,6 +6,7 @@ import traceback
 from collections import Iterable
 import time
 import cPickle
+from multiprocessing import cpu_count
 import __main__
 
 import numpy as np
@@ -69,7 +70,13 @@ class Plate(object):
         self.name = ''
 
         # boundary conditions
-        self.inf = 1.e8 # used to define high stiffnesses
+        # "inf" is used to define the high stiffnesses (removed dofs)
+        #       a high value will cause numerical instabilities
+        #TODO use a marker number for self.inf and self.maxinf if the
+        #     normalization of edge stiffenesses is adopted
+        #     now it is already independent of self.inf and more robust
+        self.inf = 1.e8
+        self.maxinf = 1.e8
         self.zero = 0. # used to define zero stiffnesses
         self.bc = None
         self.kuBot = self.inf
@@ -97,13 +104,13 @@ class Plate(object):
         self.model = 'clpt_donnell_free'
 
         # approximation series
-        self.m1 = 10
-        self.n1 = 10
+        self.m1 = 11
+        self.n1 = 11
 
         # numerical integration
         self.nx = 160
         self.ny = 160
-        self.ni_num_cores = 4
+        self.ni_num_cores = cpu_count()//2
         self.ni_method = 'trapz2d'
 
         # loads
@@ -148,11 +155,11 @@ class Plate(object):
         self.force_orthotropic_laminate = False
 
         # eigenvalue analysis
-        self.num_eigvalues = 50
+        self.num_eigvalues = 10
         self.num_eigvalues_print = 5
 
         # output queries
-        self.out_num_cores = 4
+        self.out_num_cores = cpu_count()
 
         # analysis
         self.analysis = Analysis(self.calc_fext, self.calc_k0, self.calc_fint,
@@ -207,10 +214,11 @@ class Plate(object):
         inf = self.inf
         zero = self.zero
 
-        if inf > 1.e8:
-            warn('inf reduced to 1.e8 due to the verified ' +
-                 'numerical instability for higher values', level=2)
-            inf = 1.e8
+        if inf > self.maxinf:
+            warn('inf reduced to {0:1.1e4} due to the verified'.format(
+                 self.maxinf) +
+                 ' numerical instability for higher values', level=2)
+            inf = self.maxinf
 
         if self.bc is not None:
             bc = self.bc.lower()
@@ -464,7 +472,10 @@ class Plate(object):
 
         if k0edges is not None:
             msg('Applying elastic constraints!', level=3)
-            k0 = k0 + k0edges
+            #FIXME improve the way to consider the elastic constraints for the
+            #      case of infinity stiffnesses
+            k0max = np.abs(k0).max()
+            k0 = k0 + k0edges/np.abs(k0edges).max()*100*k0max
 
         self.k0 = k0
 
@@ -536,7 +547,7 @@ class Plate(object):
         -----
         The extracted eigenvalues are stored in the ``eigvals`` parameter
         of the ``Plate`` object and the `i^{th}` eigenvector in the
-        ``eigvecs[i-1, :]`` parameter.
+        ``eigvecs[:, i-1]`` parameter.
 
         """
         if not modelDB.db[self.model]['linear buckling']:
@@ -568,6 +579,13 @@ class Plate(object):
             M = self.k0 + self.kG0_Fx
             A = self.kG0_Fy
 
+        #print M.max()
+        #raise
+
+        Amin = abs(A.min())
+        # Normlizing A to improve numerical stability
+        A /= Amin
+
         if sparse_solver:
             mode = 'cayley'
             try:
@@ -588,6 +606,9 @@ class Plate(object):
                                    dtype=DOUBLE)
                 eigvecs[used_cols, :] = peigvecs
 
+            # Un-normlizing eigvals
+            eigvals *= Amin
+
         else:
             from scipy.linalg import eigh
 
@@ -596,6 +617,7 @@ class Plate(object):
             M = M.toarray()
             A = A.toarray()
             msg('eigh() solver...', level=3)
+            print 'HERE'
             eigvals, peigvecs = eigh(a=A, b=M)
             msg('finished!', level=3)
             eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
@@ -1408,20 +1430,23 @@ if __name__ == '__main__':
     p.a = 400. # mm
     p.b = 200. # mm
 
-    for yi in linspace(-p.b/2., +p.b/2., 100):
-        p.add_force(p.a/2., yi, 0., 1., 0.)
-
     p.laminaprop = (142.5e3, 8.7e3, 0.28, 5.1e3, 5.1e3, 5.1e3, 273.15)
     p.plyt = 0.125 # mm
-    p.stack = [0, 0, 90]
-    p.bc = 'ss1-ss4-ss4-ss4'
-    p.m1 = 20
-    p.n1 = 20
+    p.stack = [0, +45, -45, 90, -45, +45, 0, 90]
+    p.bc = 'cc1-ss2-ss2-free'
+    p.m1 = 25
+    p.n1 = 25
 
     lb = False
     if lb:
-        p.lb()
-        p.plot(p.eigvecs[:, 0])
+        p.Fx = -1
+
+        p.lb(sparse_solver=True)
+        p.plot(p.eigvecs[:, 0], vec='u', colorbar=True)
+
     else:
+        for yi in linspace(-p.b/2., p.b/2., 100):
+            p.add_force(p.a/2., yi, -10.*yi, 0., 0.)
+
         p.static()
-        p.plot(p.analysis.cs[0], vec='v', colorbar=True, cbar_fontsize=6.)
+        p.plot(p.analysis.cs[0], vec='w', colorbar=True, cbar_fontsize=6.)

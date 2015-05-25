@@ -21,7 +21,7 @@ cdef extern from "math.h":
     double sin(double theta) nogil
 
 
-cdef int num0 = 0
+cdef int num0 = 2
 cdef int num1 = 4
 cdef int e_num = 6
 cdef double pi=3.141592653589793
@@ -163,11 +163,12 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
     for i in range(size):
         x = xs[i]
         y = ys[i]
+
         bx = (x + a/2.)/a
         by = (y + b/2.)/b
 
-        u = 0
-        v = 0
+        u = bx*c[0]
+        v = by*c[1]
         w = 0
 
         for j1 in range(1, n1+1):
@@ -179,8 +180,8 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
                 cosi1bx = cos(i1*pi*bx)
                 u += c[col+0]*cosi1bx*cosj1by
                 v += c[col+1]*cosi1bx*cosj1by
-                w += c[col+2]*cosi1bx*cosj1by
-                w += c[col+3]*sini1bx*sinj1by
+                w += c[col+2]*sini1bx*sinj1by
+                w += c[col+3]*cosi1bx*cosj1by
 
         us[i] = u
         vs[i] = v
@@ -207,8 +208,8 @@ cdef void cfwx(double *c, int m1, int n1, double *xs, double *ys, int size,
                 col = num0 + num1*((j1-1)*m1 + (i1-1))
                 dcosi1bx = -i1*pi/a*sin(i1*pi*bx)
                 dsini1bx = i1*pi/a*cos(i1*pi*bx)
-                wx += c[col+2]*dcosi1bx*cosj1by
-                wx += c[col+3]*dsini1bx*sinj1by
+                wx += c[col+2]*dsini1bx*sinj1by
+                wx += c[col+3]*dcosi1bx*cosj1by
 
         outwx[i] = wx
 
@@ -233,8 +234,8 @@ cdef void cfwy(double *c, int m1, int n1, double *xs, double *ys, int size,
                 col = num0 + num1*((j1-1)*m1 + (i1-1))
                 cosi1bx = cos(i1*pi*bx)
                 sini1bx = sin(i1*pi*bx)
-                wy += c[col+2]*cosi1bx*dcosj1by
-                wy += c[col+3]*sini1bx*dsinj1by
+                wy += c[col+2]*sini1bx*dsinj1by
+                wy += c[col+3]*cosi1bx*dcosj1by
 
         outwt[i] = wy
 
@@ -254,6 +255,9 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
     bx = (x + a/2.)/a
     by = (y + b/2.)/b
 
+    g[0, 0] = bx
+    g[1, 1] = by
+
     for j1 in range(1, n1+1):
         sinj1by = sin(j1*pi*by)
         cosj1by = cos(j1*pi*by)
@@ -263,8 +267,8 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
             cosi1bx = cos(i1*pi*bx)
             g[0, col+0] = cosi1bx*cosj1by
             g[1, col+1] = cosi1bx*cosj1by
-            g[2, col+2] = cosi1bx*cosj1by
-            g[2, col+3] = sini1bx*sinj1by
+            g[2, col+2] = sini1bx*sinj1by
+            g[2, col+3] = cosi1bx*cosj1by
 
 
 cdef void cfN(double *c, double *xs, double *ys, int size, double a, double b,
