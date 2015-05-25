@@ -21,7 +21,7 @@ db = {
                     'non-linear': None,
                     'dofs': 3,
                     'e_num': 6,
-                    'num0': 0,
+                    'num0': 2,
                     'num1': 4,
                     },
     }
@@ -30,9 +30,9 @@ def get_linear_matrices(kp):
     r"""Obtain the right functions to calculate hte linear matrices
     for a given model.
 
-    The ``model`` parameter of the ``ConeCyl`` object is used to search
-    for the functions ``fG0``, ``fG0_cyl``, ``fkG0``, ``fkG0_cyl``,
-    and the matrix ``k0edges`` is calculated, when applicable.
+    The ``model`` parameter of the ``ConeCyl`` object is used to search for
+    the functions ``fG0``, ``fkG0``, and the matrix ``k0edges`` is calculated,
+    when applicable.
 
     Parameters
     ----------
@@ -42,7 +42,7 @@ def get_linear_matrices(kp):
     Returns
     -------
     out : tuple
-        A tuple containing ``(fk0, fk0_cyl, fkG0, fkG0_cyl, k0edges)``.
+        A tuple containing ``(fk0, fkG0, k0edges)``.
 
     """
     a = kp.a
@@ -57,8 +57,8 @@ def get_linear_matrices(kp):
         k0edges = None
 
     if 'free' in model:
-        fk0edges_cyl = db[model]['linear'].fk0edges
-        k0edges = fk0edges_cyl(m1, n1, a, b,
+        fk0edges = db[model]['linear'].fk0edges
+        k0edges = fk0edges(m1, n1, a, b,
                            kp.kuBot, kp.kuTop,
                            kp.kvBot, kp.kvTop,
                            kp.kwBot, kp.kwTop,
