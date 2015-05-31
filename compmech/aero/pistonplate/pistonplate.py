@@ -24,13 +24,13 @@ import modelDB
 
 
 def load(name):
-    if '.Plate' in name:
+    if '.AeroPistonPlate' in name:
         return cPickle.load(open(name, 'rb'))
     else:
-        return cPickle.load(open(name + '.Plate', 'rb'))
+        return cPickle.load(open(name + '.AeroPistonPlate', 'rb'))
 
 
-class Plate(object):
+class AeroPistonPlate(object):
     r"""Conical (Konus) panel using trigonometric series
 
     The approximation functions for the displacement field are:
@@ -49,17 +49,19 @@ class Plate(object):
     with:
 
         .. math::
-            u = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
+            u = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
             \\
-            v = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
+            v = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
             \\
-            w = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
+            w = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{sim}}} +
+                \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
             \\
-            \phi_x = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
+            \phi_x = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
             \\
-            \phi_y = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f}}
+            \phi_y = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
             \\
-            f = cos(i_1 \pi b_x)cos(j_1 \pi b_y)
+            f_{sim} = sin(i_1 \pi b_x)cos(j_1 \pi b_y)
+            f_{cos} = cos(i_1 \pi b_x)cos(j_1 \pi b_y)
             \\
             b_x = \frac{x + \frac{a}{2}}{a}
             \\
@@ -139,16 +141,25 @@ class Plate(object):
         self.n0 = 0
         self.funcnum = 2
 
-        self.a = None
-        self.b = None
+        # shear correction factor (FSDT only)
         self.K = 5/6.
 
+        # geometry
+        self.a = None
+        self.b = None
+
         # material
+        self.mu = None # density
         self.laminaprop = None
         self.plyt = None
         self.laminaprops = []
         self.stack = []
         self.plyts = []
+
+        # aerodynamic properties for the Piston theory
+        self.rho = None
+        self.M = None
+        self.V = None
 
         # constitutive law
         self.F = None
@@ -174,13 +185,15 @@ class Plate(object):
 
 
     def _clear_matrices(self):
-        self.k0 = None
+        self.k 0 = None
         self.kT = None
         self.kG0 = None
         self.kG0_Fx = None
         self.kG0_Fy = None
         self.kG0_Fxy = None
         self.kG0_Fyx = None
+        self.kM = None
+        self.kA = None
         self.kG = None
         self.kL = None
         self.lam = None
@@ -200,7 +213,7 @@ class Plate(object):
             try:
                 self.name = os.path.basename(__main__.__file__).split('.py')[0]
             except AttributeError:
-                warn('Plate name unchanged')
+                warn('AeroPistonPlate name unchanged')
 
         self.model = self.model.lower()
 
@@ -390,7 +403,7 @@ class Plate(object):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2)
 
-        fk0, fkG0, k0edges = modelDB.get_linear_matrices(self)
+        fk0, fkG0, fkA, fkM, k0edges = modelDB.get_linear_matrices(self)
         model = self.model
         a = self.a
         b = self.b
@@ -398,7 +411,12 @@ class Plate(object):
         n1 = self.n1
         laminaprops = self.laminaprops
         plyts = self.plyts
+        h = sum(plyts)
         stack = self.stack
+        mu = self.mu
+        rho = self.rho
+        V = self.V
+        M = self.M
 
         if stack != []:
             lam = laminate.read_stack(stack, plyts=plyts,
@@ -444,6 +462,8 @@ class Plate(object):
         self.F = F
 
         k0 = fk0(a, b, F, m1, n1)
+        kA = fkA(rho, V, M, a, b, m1, n1)
+        kM = fkM(mu, h, a, b, m1, n1)
 
         Fx = self.Fx if self.Fx is not None else 0.
         Fy = self.Fy if self.Fy is not None else 0.
@@ -461,9 +481,17 @@ class Plate(object):
         # performing checks for the linear stiffness matrices
 
         assert np.any(np.isnan(k0.data)) == False
-        assert np.any(np.isinf(k0.data)) == False
+        assert np.any(np.isnan(k0.data)) == False
+
+        assert np.any(np.isinf(kA.data)) == False
+        assert np.any(np.isinf(kA.data)) == False
+
+        assert np.any(np.isinf(kM.data)) == False
+        assert np.any(np.isinf(kM.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
+        kA = csr_matrix(make_symmetric(kA))
+        kM = csr_matrix(make_symmetric(kM))
 
         if k0edges is not None:
             assert np.any((np.isnan(k0edges.data)
@@ -478,6 +506,8 @@ class Plate(object):
             k0 = k0 + k0edges/np.abs(k0edges).max()*100*k0max
 
         self.k0 = k0
+        self.kA = kA
+        self.kM = kM
 
         if not combined_load_case:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
@@ -516,8 +546,8 @@ class Plate(object):
     def lb(self, tol=0, combined_load_case=None, sparse_solver=True):
         """Performs a linear buckling analysis
 
-        The following parameters of the ``Plate`` object will affect the
-        linear buckling analysis:
+        The following parameters of the ``AeroPistonPlate`` object will affect
+        the linear buckling analysis:
 
         =======================    =====================================
         parameter                  description
@@ -546,7 +576,7 @@ class Plate(object):
         Notes
         -----
         The extracted eigenvalues are stored in the ``eigvals`` parameter
-        of the ``Plate`` object and the `i^{th}` eigenvector in the
+        of the ``AeroPistonPlate`` object and the `i^{th}` eigenvector in the
         ``eigvecs[:, i-1]`` parameter.
 
         """
@@ -564,19 +594,19 @@ class Plate(object):
         msg('Eigenvalue solver... ', level=2)
 
         if not combined_load_case:
-            M = self.k0
+            M = self.k0 + self.kA
             A = self.kG0
         elif combined_load_case == 1:
-            M = self.k0 + self.kG0_Fxy
+            M = self.k0 + self.kA + self.kG0_Fxy
             A = self.kG0_Fx
         elif combined_load_case == 2:
-            M = self.k0 + self.kG0_Fy
+            M = self.k0 + self.kA + self.kG0_Fy
             A = self.kG0_Fx
         elif combined_load_case == 3:
-            M = self.k0 + self.kG0_Fyx
+            M = self.k0 + self.kA + self.kG0_Fyx
             A = self.kG0_Fy
         elif combined_load_case == 4:
-            M = self.k0 + self.kG0_Fx
+            M = self.k0 + self.kA + self.kG0_Fx
             A = self.kG0_Fy
 
         #print M.max()
@@ -634,6 +664,90 @@ class Plate(object):
         for eig in eigvals[:self.num_eigvalues_print]:
             msg('{}'.format(eig), level=2)
         self.analysis.last_analysis = 'lb'
+
+
+    def freq(self, tol=0):
+        """Performs a linear buckling analysis
+
+        The following parameters of the ``AeroPistonPlate`` object will affect
+        the linear buckling analysis:
+
+        =======================    =====================================
+        parameter                  description
+        =======================    =====================================
+        ``num_eigenvalues``        Number of eigenvalues to be extracted
+        ``num_eigvalues_print``    Number of eigenvalues to print after
+                                   the analysis is completed
+        =======================    =====================================
+
+        Parameters
+        ----------
+        tol : float, optional
+            A tolerance value passed to ``scipy.sparse.linalg.eigsh``.
+
+        Notes
+        -----
+        The extracted eigenvalues are stored in the ``eigvals`` parameter
+        of the ``AeroPistonPlate`` object and the `i^{th}` eigenvector in the
+        ``eigvecs[:, i-1]`` parameter.
+
+        """
+        if not modelDB.db[self.model]['linear buckling']:
+            msg('________________________________________________')
+            msg('')
+            warn('Model {} cannot be used in linear buckling analysis!'.
+                 format(self.model))
+            msg('________________________________________________')
+
+        msg('Running linear buckling analysis...')
+
+        self.calc_linear_matrices(combined_load_case=combined_load_case)
+
+        msg('Eigenvalue solver... ', level=2)
+
+        M = self.k0 + self.kA + self.kG0
+        A = -self.kM
+
+        #print M.max()
+        #raise
+
+        Amin = abs(A.min())
+        # Normlizing A to improve numerical stability
+        A /= Amin
+
+        mode = 'cayley'
+        try:
+            msg('eigsh() solver...', level=3)
+            eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues,
+                    which='SM', M=M, tol=tol, sigma=1., mode=mode)
+            msg('finished!', level=3)
+        except Exception, e:
+            warn(str(e), level=4)
+            msg('aborted!', level=3)
+            sizebkp = A.shape[0]
+            M, A, used_cols = remove_null_cols(M, A)
+            msg('eigsh() solver...', level=3)
+            eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
+                    which='SM', M=M, tol=tol, sigma=1., mode=mode)
+            msg('finished!', level=3)
+            eigvecs = np.zeros((sizebkp, self.num_eigvalues),
+                               dtype=DOUBLE)
+            eigvecs[used_cols, :] = peigvecs
+
+        # Un-normlizing eigvals
+        eigvals *= Amin
+
+        eigvals = -1./eigvals
+
+        self.eigvals = eigvals
+        self.eigvecs = eigvecs
+
+        msg('finished!', level=2)
+
+        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
+        for eig in eigvals[:self.num_eigvalues_print]:
+            msg('{}'.format(eig), level=2)
+        self.analysis.last_analysis = 'freq'
 
 
     def calc_NL_matrices(self, c, num_cores=None):
@@ -712,7 +826,8 @@ class Plate(object):
 
         For a given full set of Ritz constants ``c``, the displacement
         field is calculated and stored in the parameters
-        ``u``, ``v``, ``w``, ``phix``, ``phiy`` of the ``Plate`` object.
+        ``u``, ``v``, ``w``, ``phix``, ``phiy`` of the ``AeroPistonPlate``
+        object.
 
         Parameters
         ----------
@@ -740,7 +855,8 @@ class Plate(object):
         Notes
         -----
         The returned values ``u```, ``v``, ``w``, ``phix``, ``phiy`` are
-        stored as parameters with the same name in the ``Plate`` object.
+        stored as parameters with the same name in the ``AeroPistonPlate``
+        object.
 
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
@@ -891,9 +1007,9 @@ class Plate(object):
         Notes
         -----
         Each single perturbation load is added to the ``forces`` parameter of
-        the ``Plate`` object if ``cte=True``, or to the ``forces_inc``
-        parameter if ``cte=False``, which may be changed by the analyst at any
-        time.
+        the ``AeroPistonPlate`` object if ``cte=True``, or to the
+        ``forces_inc`` parameter if ``cte=False``, which may be changed by the
+        analyst at any time.
 
         """
         self._rebuild()
@@ -1220,7 +1336,8 @@ class Plate(object):
             Resolution of the saved file in dots per inch.
         filename : str, optional
             The file name for the generated image file. If no value is given,
-            the `name` parameter of the ``Plate`` object will be used.
+            the `name` parameter of the ``AeroPistonPlate`` object will be
+            used.
         ax : AxesSubplot, optional
             When ``ax`` is given, the contour plot will be created inside it.
         figsize : tuple, optional
@@ -1408,16 +1525,16 @@ class Plate(object):
 
 
     def save(self):
-        """Save the ``Plate`` object using ``cPickle``
+        """Save the ``AeroPistonPlate`` object using ``cPickle``
 
         Notes
         -----
-        The pickled file will have the name stored in ``Plate.name``
-        followed by a ``'.Plate'`` extension.
+        The pickled file will have the name stored in ``AeroPistonPlate.name``
+        followed by a ``'.AeroPistonPlate'`` extension.
 
         """
-        name = self.name + '.Plate'
-        msg('Saving Plate to {}'.format(name))
+        name = self.name + '.AeroPistonPlate'
+        msg('Saving AeroPistonPlate to {}'.format(name))
 
         self._clear_matrices()
 
@@ -1426,7 +1543,7 @@ class Plate(object):
 
 
 if __name__ == '__main__':
-    p = Plate()
+    p = AeroPistonPlate()
     p.a = 400. # mm
     p.b = 200. # mm
 
