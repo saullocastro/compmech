@@ -12,6 +12,18 @@ from clpt import *
 #from fsdt import *
 
 db = {
+    'clpt_donnell_bc4': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': False,
+                    'commons': clpt_commons_bc4,
+                    'linear': clpt_donnell_bc4_linear,
+                    'non-linear': None,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'num0': 0,
+                    'num1': 3,
+                    },
     'clpt_donnell_free': {
                     'linear static': True,
                     'linear buckling': True,
@@ -56,8 +68,16 @@ def get_linear_matrices(p):
     except AttributeError:
         k0edges = None
 
-    if 'free' in model:
-        fk0edges = db[model]['linear'].fk0edges
+    fk0edges = db[model]['linear'].fk0edges
+    if 'bc4' in model:
+        k0edges = fk0edges(m1, n1, a, b,
+                           p.kuBot, p.kuTop,
+                           p.kvBot, p.kvTop,
+                           p.kphixBot, p.kphixTop,
+                           p.kuLeft, p.kuRight,
+                           p.kvLeft, p.kvRight,
+                           p.kphiyLeft, p.kphiyRight)
+    elif 'free' in model:
         k0edges = fk0edges(m1, n1, a, b,
                            p.kuBot, p.kuTop,
                            p.kvBot, p.kvTop,

@@ -77,8 +77,8 @@ class AeroPistonPlate(object):
         #TODO use a marker number for self.inf and self.maxinf if the
         #     normalization of edge stiffenesses is adopted
         #     now it is already independent of self.inf and more robust
-        self.inf = 1.e8
-        self.maxinf = 1.e8
+        self.inf = 1.e+8
+        self.maxinf = 1.e+8
         self.zero = 0. # used to define zero stiffnesses
         self.bc = None
         self.kuBot = self.inf
@@ -166,7 +166,7 @@ class AeroPistonPlate(object):
         self.force_orthotropic_laminate = False
 
         # eigenvalue analysis
-        self.num_eigvalues = 10
+        self.num_eigvalues = 25
         self.num_eigvalues_print = 5
 
         # output queries
@@ -185,7 +185,7 @@ class AeroPistonPlate(object):
 
 
     def _clear_matrices(self):
-        self.k 0 = None
+        self.k0 = None
         self.kT = None
         self.kG0 = None
         self.kG0_Fx = None
@@ -701,7 +701,7 @@ class AeroPistonPlate(object):
 
         msg('Running linear buckling analysis...')
 
-        self.calc_linear_matrices(combined_load_case=combined_load_case)
+        self.calc_linear_matrices()
 
         msg('Eigenvalue solver... ', level=2)
 
@@ -737,7 +737,7 @@ class AeroPistonPlate(object):
         # Un-normlizing eigvals
         eigvals *= Amin
 
-        eigvals = -1./eigvals
+        eigvals = np.sqrt(-1./eigvals) # omega^2 to omega
 
         self.eigvals = eigvals
         self.eigvecs = eigvecs
@@ -1544,26 +1544,24 @@ class AeroPistonPlate(object):
 
 if __name__ == '__main__':
     p = AeroPistonPlate()
+    p.model = 'clpt_donnell_bc4'
     p.a = 400. # mm
     p.b = 200. # mm
 
     p.laminaprop = (142.5e3, 8.7e3, 0.28, 5.1e3, 5.1e3, 5.1e3, 273.15)
     p.plyt = 0.125 # mm
     p.stack = [0, +45, -45, 90, -45, +45, 0, 90]
-    p.bc = 'ss1-ss2-cc2-ss2'
-    p.m1 = 8
-    p.n1 = 8
+    p.bc = 'ss1-ss1-ss1-free'
+    p.m1 = 30
+    p.n1 = 30
 
-    lb = True
-    if lb:
-        p.Fx = -1
+    p.mu = 1.631e-6
+    p.rho = 1.225e-9
+    sound = 343.
+    p.V = 400
+    p.M = p.V/sound
+    p.freq()
+    p.plot(p.eigvecs[:, 0], vec='w', colorbar=True, filename='contour.png')
 
-        p.lb(sparse_solver=True)
-        p.plot(p.eigvecs[:, 0], vec='w', colorbar=True)
 
-    else:
-        for yi in linspace(-p.b/2., p.b/2., 100):
-            p.add_force(p.a/2., yi, -10.*yi, 0., 0.)
 
-        p.static()
-        p.plot(p.analysis.cs[0], vec='w', colorbar=True, cbar_fontsize=6.)

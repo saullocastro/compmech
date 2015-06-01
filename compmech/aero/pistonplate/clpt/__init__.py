@@ -12,7 +12,10 @@ CLPT kinematic assumption.
 
 """
 modules = [
+          'clpt_commons_bc4',
           'clpt_commons_free',
+
+          'clpt_donnell_bc4_linear',
           'clpt_donnell_free_linear',
           #'clpt_donnell_bc4_nonlinear',
           ]
