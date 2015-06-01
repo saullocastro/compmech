@@ -22,7 +22,7 @@ cdef extern from "math.h":
 
 
 cdef int num0 = 0
-cdef int num1 = 4
+cdef int num1 = 3
 cdef int e_num = 6
 cdef double pi=3.141592653589793
 
@@ -181,7 +181,6 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
                 u += c[col+0]*cosi1bx*cosj1by
                 v += c[col+1]*cosi1bx*cosj1by
                 w += c[col+2]*sini1bx*sinj1by
-                w += c[col+3]*cosi1bx*cosj1by
 
         us[i] = u
         vs[i] = v
@@ -190,7 +189,7 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
 
 cdef void cfwx(double *c, int m1, int n1, double *xs, double *ys, int size,
         double a, double b, double *outwx) nogil:
-    cdef double dcosi1bx, dsini1bx, cosj1by, sinj1by, wx, x, y, bx, by
+    cdef double dsini1bx, sinj1by, wx, x, y, bx, by
     cdef int i1, j1, col, i
 
     for i in range(size):
@@ -202,21 +201,18 @@ cdef void cfwx(double *c, int m1, int n1, double *xs, double *ys, int size,
         wx = 0.
 
         for j1 in range(1, n1+1):
-            cosj1by = cos(j1*pi*by)
             sinj1by = sin(j1*pi*by)
             for i1 in range(1, m1+1):
                 col = num0 + num1*((j1-1)*m1 + (i1-1))
-                dcosi1bx = -i1*pi/a*sin(i1*pi*bx)
                 dsini1bx = i1*pi/a*cos(i1*pi*bx)
                 wx += c[col+2]*dsini1bx*sinj1by
-                wx += c[col+3]*dcosi1bx*cosj1by
 
         outwx[i] = wx
 
 
 cdef void cfwy(double *c, int m1, int n1, double *xs, double *ys, int size,
         double a, double b, double *outwt) nogil:
-    cdef double cosi1bx, sini1bx, dcosj1by, dsinj1by, wy, x, y, bx, by
+    cdef double sini1bx, dsinj1by, wy, x, y, bx, by
     cdef int i1, j1, col, i
 
     for i in range(size):
@@ -228,14 +224,11 @@ cdef void cfwy(double *c, int m1, int n1, double *xs, double *ys, int size,
         wy = 0.
 
         for j1 in range(1, n1+1):
-            dcosj1by = -j1*pi/b*sin(j1*pi*by)
             dsinj1by = j1*pi/b*cos(j1*pi*by)
             for i1 in range(1, m1+1):
                 col = num0 + num1*((j1-1)*m1 + (i1-1))
-                cosi1bx = cos(i1*pi*bx)
                 sini1bx = sin(i1*pi*bx)
                 wy += c[col+2]*sini1bx*dsinj1by
-                wy += c[col+3]*cosi1bx*dcosj1by
 
         outwt[i] = wy
 
@@ -265,7 +258,6 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
             g[0, col+0] = cosi1bx*cosj1by
             g[1, col+1] = cosi1bx*cosj1by
             g[2, col+2] = sini1bx*sinj1by
-            g[2, col+3] = cosi1bx*cosj1by
 
 
 cdef void cfN(double *c, double *xs, double *ys, int size, double a, double b,
