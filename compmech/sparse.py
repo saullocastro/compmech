@@ -84,7 +84,7 @@ def solve(a, b, **kwargs):
 def make_symmetric(m):
     """Returns a new coo_matrix which is symmetric
 
-    Convinient function to populate a sparse matrix symmetricaly. Only the
+    Convenient function to populate a sparse matrix symmetricaly. Only the
     upper triagle of matrix ``m`` has to be defined.
 
     The rows, cols and values are evaluated such that where ``rows > cols``
@@ -121,6 +121,52 @@ def make_symmetric(m):
     r[triu_no_diag + pos] = c[triu_no_diag]
     c[triu_no_diag + pos] = r[triu_no_diag]
     v[triu_no_diag + pos] = v[triu_no_diag]
+
+    return coo_matrix((v, (r, c)), shape=m.shape, dtype=m.dtype)
+
+
+def make_skew_symmetric(m):
+    """Returns a new coo_matrix which is skew-symmetric
+
+    Convenient function to populate a sparse matrix skew-symmetricaly, where
+    the off-diagonal elements below the diagonal are negative when compared to
+    the terms above the diagonal. Only the upper triagle of matrix ``m`` has
+    to be defined.
+
+    The rows, cols and values are evaluated such that where ``rows > cols``
+    the values will be ignored and recreated from the region where ``cols >
+    rows``, in order to obtain a symmetric matrix.
+
+    Parameters
+    ----------
+    m : array or sparse matrix
+        A square matrix with the upper triangle defined.
+
+    Returns
+    -------
+    m_sym : coo_matrix
+        The symmetric sparse matrix.
+
+    """
+    if m.shape[0] != m.shape[1]:
+        raise ValueError('m must be a square matrix')
+
+    if not isinstance(m, coo_matrix):
+        m = coo_matrix(m)
+
+    r, c, v = m.row, m.col, m.data
+    triu = c >= r
+    r = r[triu]
+    c = c[triu]
+    v = v[triu]
+    pos = r.shape[0]
+    r = np.concatenate((r, r*0))
+    c = np.concatenate((c, c*0))
+    v = np.concatenate((v, v*0))
+    triu_no_diag = np.where(c > r)[0]
+    r[triu_no_diag + pos] = c[triu_no_diag]
+    c[triu_no_diag + pos] = r[triu_no_diag]
+    v[triu_no_diag + pos] = -v[triu_no_diag]
 
     return coo_matrix((v, (r, c)), shape=m.shape, dtype=m.dtype)
 
