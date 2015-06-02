@@ -11,14 +11,15 @@ import __main__
 
 import numpy as np
 from scipy.sparse import csr_matrix
-from scipy.sparse.linalg import eigsh
+from scipy.sparse.linalg import eigs
 from numpy import linspace
 
 import compmech.composite.laminate as laminate
 from compmech.analysis import Analysis
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
-from compmech.sparse import make_symmetric, remove_null_cols
+from compmech.sparse import (make_symmetric, make_skew_symmetric,
+                             remove_null_cols)
 
 import modelDB
 
@@ -490,7 +491,8 @@ class AeroPistonPlate(object):
         assert np.any(np.isinf(kM.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
-        kA = csr_matrix(make_symmetric(kA))
+        kA = csr_matrix(make_skew_symmetric(kA))
+        #kA = csr_matrix(kA)
         kM = csr_matrix(make_symmetric(kM))
 
         if k0edges is not None:
@@ -571,7 +573,7 @@ class AeroPistonPlate(object):
             - ``4`` : find the critical Fy for a fixed Fx
         sparse_solver : bool, optional
             Tells if solver :func:`scipy.linalg.eigh` or
-            :func:`scipy.sparse.linalg.eigsh` should be used.
+            :func:`scipy.sparse.linalg.eigs` should be used.
 
         Notes
         -----
@@ -597,16 +599,16 @@ class AeroPistonPlate(object):
             M = self.k0 + self.kA
             A = self.kG0
         elif combined_load_case == 1:
-            M = self.k0 + self.kA + self.kG0_Fxy
+            M = self.k0 - self.kA + self.kG0_Fxy
             A = self.kG0_Fx
         elif combined_load_case == 2:
-            M = self.k0 + self.kA + self.kG0_Fy
+            M = self.k0 - self.kA + self.kG0_Fy
             A = self.kG0_Fx
         elif combined_load_case == 3:
-            M = self.k0 + self.kA + self.kG0_Fyx
+            M = self.k0 - self.kA + self.kG0_Fyx
             A = self.kG0_Fy
         elif combined_load_case == 4:
-            M = self.k0 + self.kA + self.kG0_Fx
+            M = self.k0 - self.kA + self.kG0_Fx
             A = self.kG0_Fy
 
         #print M.max()
@@ -617,20 +619,19 @@ class AeroPistonPlate(object):
         A /= Amin
 
         if sparse_solver:
-            mode = 'cayley'
             try:
-                msg('eigsh() solver...', level=3)
-                eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues,
-                        which='SM', M=M, tol=tol, sigma=1., mode=mode)
+                msg('eigs() solver...', level=3)
+                eigvals, eigvecs = eigs(A=A, k=self.num_eigvalues, which='SM',
+                                        M=M, tol=tol, sigma=1.)
                 msg('finished!', level=3)
             except Exception, e:
                 warn(str(e), level=4)
                 msg('aborted!', level=3)
                 sizebkp = A.shape[0]
                 M, A, used_cols = remove_null_cols(M, A)
-                msg('eigsh() solver...', level=3)
-                eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
-                        which='SM', M=M, tol=tol, sigma=1., mode=mode)
+                msg('eigs() solver...', level=3)
+                eigvals, peigvecs = eigs(A=A, k=self.num_eigvalues,
+                        which='SM', M=M, tol=tol, sigma=1.)
                 msg('finished!', level=3)
                 eigvecs = np.zeros((sizebkp, self.num_eigvalues),
                                    dtype=DOUBLE)
@@ -683,7 +684,7 @@ class AeroPistonPlate(object):
         Parameters
         ----------
         tol : float, optional
-            A tolerance value passed to ``scipy.sparse.linalg.eigsh``.
+            A tolerance value passed to ``scipy.sparse.linalg.eigs``.
 
         Notes
         -----
@@ -705,37 +706,14 @@ class AeroPistonPlate(object):
 
         msg('Eigenvalue solver... ', level=2)
 
-        M = self.k0 + self.kA + self.kG0
+        M = self.k0 - self.kA + self.kG0
         A = -self.kM
 
-        #print M.max()
-        #raise
-
-        Amin = abs(A.min())
-        # Normlizing A to improve numerical stability
-        A /= Amin
-
-        mode = 'cayley'
-        try:
-            msg('eigsh() solver...', level=3)
-            eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues,
-                    which='SM', M=M, tol=tol, sigma=1., mode=mode)
-            msg('finished!', level=3)
-        except Exception, e:
-            warn(str(e), level=4)
-            msg('aborted!', level=3)
-            sizebkp = A.shape[0]
-            M, A, used_cols = remove_null_cols(M, A)
-            msg('eigsh() solver...', level=3)
-            eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
-                    which='SM', M=M, tol=tol, sigma=1., mode=mode)
-            msg('finished!', level=3)
-            eigvecs = np.zeros((sizebkp, self.num_eigvalues),
-                               dtype=DOUBLE)
-            eigvecs[used_cols, :] = peigvecs
-
-        # Un-normlizing eigvals
-        eigvals *= Amin
+        msg('eigs() solver...', level=3)
+        eigvals, eigvecs = eigs(A=A, M=M, k=self.num_eigvalues, tol=tol)
+                                #sigma=-1.+0j, OPpart='r', which='SI')
+                                #sigma=-1.+0j, which='SI')
+        msg('finished!', level=3)
 
         eigvals = np.sqrt(-1./eigvals) # omega^2 to omega
 
@@ -1544,21 +1522,21 @@ class AeroPistonPlate(object):
 
 if __name__ == '__main__':
     p = AeroPistonPlate()
-    p.model = 'clpt_donnell_bc4'
-    p.a = 400. # mm
-    p.b = 200. # mm
+    p.model = 'clpt_donnell_free'
+    p.a = 100. # mm
+    p.b = 100. # mm
 
     p.laminaprop = (142.5e3, 8.7e3, 0.28, 5.1e3, 5.1e3, 5.1e3, 273.15)
     p.plyt = 0.125 # mm
-    p.stack = [0, +45, -45, 90, -45, +45, 0, 90]
-    p.bc = 'ss1-ss1-ss1-free'
-    p.m1 = 30
-    p.n1 = 30
+    p.stack = [0, +45, -45, 90, -45, +45, 0, 90]*4
+    p.bc = 'ss1-ss2-ss2-free'
+    p.m1 = 10
+    p.n1 = 10
 
     p.mu = 1.631e-6
     p.rho = 1.225e-9
-    sound = 343.
-    p.V = 400
+    sound = 343.e3
+    p.V = 10000
     p.M = p.V/sound
     p.freq()
     p.plot(p.eigvecs[:, 0], vec='w', colorbar=True, filename='contour.png')
