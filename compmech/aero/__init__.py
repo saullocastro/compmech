@@ -11,3 +11,4 @@ This module contains semi-analytical models for aeroelastic analyses such as:
   (:mod:`compmech.aero.pistonplate`)
 
 """
+from pistonplate import AeroPistonPlate
