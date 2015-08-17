@@ -12,6 +12,7 @@ import __main__
 import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.sparse.linalg import eigs
+from scipy.linalg import eig, eigh
 from numpy import linspace
 
 import compmech.composite.laminate as laminate
@@ -150,7 +151,7 @@ class AeroPistonPlate(object):
         self.b = None
 
         # material
-        self.mu = None # density
+        self.mu = None # laminate material density
         self.laminaprop = None
         self.plyt = None
         self.laminaprops = []
@@ -383,8 +384,13 @@ class AeroPistonPlate(object):
 
     def _default_field(self, xs, ys, gridx, gridy):
         if xs is None or ys is None:
-            xs = linspace(-self.a/2., self.a/2, gridx)
-            ys = linspace(-self.b/2., self.b/2, gridy)
+            #TODO
+            if 'bc1' in self.model:
+                xs = linspace(0., self.a, gridx)
+                ys = linspace(0., self.b, gridy)
+            else:
+                xs = linspace(-self.a/2., self.a/2., gridx)
+                ys = linspace(-self.b/2., self.b/2., gridy)
             xs, ys = np.meshgrid(xs, ys, copy=False)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
@@ -501,11 +507,7 @@ class AeroPistonPlate(object):
             k0edges = csr_matrix(make_symmetric(k0edges))
 
         if k0edges is not None:
-            msg('Applying elastic constraints!', level=3)
-            #FIXME improve the way to consider the elastic constraints for the
-            #      case of infinity stiffnesses
-            k0max = np.abs(k0).max()
-            k0 = k0 + k0edges/np.abs(k0edges).max()*100*k0max
+            k0 = k0 + k0edges
 
         self.k0 = k0
         self.kA = kA
@@ -615,7 +617,7 @@ class AeroPistonPlate(object):
         #raise
 
         Amin = abs(A.min())
-        # Normlizing A to improve numerical stability
+        # Normalizing A to improve numerical stability
         A /= Amin
 
         if sparse_solver:
@@ -637,7 +639,7 @@ class AeroPistonPlate(object):
                                    dtype=DOUBLE)
                 eigvecs[used_cols, :] = peigvecs
 
-            # Un-normlizing eigvals
+            # Un-normalizing eigvals
             eigvals *= Amin
 
         else:
@@ -648,7 +650,6 @@ class AeroPistonPlate(object):
             M = M.toarray()
             A = A.toarray()
             msg('eigh() solver...', level=3)
-            print 'HERE'
             eigvals, peigvecs = eigh(a=A, b=M)
             msg('finished!', level=3)
             eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
@@ -667,8 +668,8 @@ class AeroPistonPlate(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def freq(self, tol=0):
-        """Performs a linear buckling analysis
+    def freq(self, atype=1, tol=0, sparse_solver=False):
+        """Performs a frequency analysis
 
         The following parameters of the ``AeroPistonPlate`` object will affect
         the linear buckling analysis:
@@ -683,8 +684,20 @@ class AeroPistonPlate(object):
 
         Parameters
         ----------
+        atype : int, optional
+            Tells which analysis type should be performed:
+            - ``1`` : considers k0, kA and kG0
+            - ``2`` : considers k0 and kA
+            - ``3`` : considers k0 and kG0
         tol : float, optional
             A tolerance value passed to ``scipy.sparse.linalg.eigs``.
+        sparse_solver : bool, optional
+            Tells if solver :func:`scipy.linalg.eig` or
+            :func:`scipy.sparse.linalg.eigs` should be used.
+
+            .. note:: It is recommended ``sparse_solver=False``, because it
+                      was verified that the sparse solver becomes unstable
+                      for some cases, though the sparse solver is faster.
 
         Notes
         -----
@@ -706,16 +719,27 @@ class AeroPistonPlate(object):
 
         msg('Eigenvalue solver... ', level=2)
 
-        M = self.k0 - self.kA + self.kG0
-        A = -self.kM
+        if atype == 1:
+            M = self.k0 - self.kA + self.kG0
+        elif atype == 2:
+            M = self.k0 - self.kA
+        elif atype == 3:
+            M = self.k0 + self.kG0
+        A = self.kM
 
         msg('eigs() solver...', level=3)
-        eigvals, eigvecs = eigs(A=A, M=M, k=self.num_eigvalues, tol=tol)
-                                #sigma=-1.+0j, OPpart='r', which='SI')
-                                #sigma=-1.+0j, which='SI')
+        k = min(self.num_eigvalues, A.shape[0]-2)
+        if sparse_solver:
+            eigvals, eigvecs = eigs(A=A, M=M, k=k, tol=tol, which='SM', sigma=-1.)
+        else:
+            eigvals, eigvecs = eig(a=A.toarray(), b=M.toarray())
         msg('finished!', level=3)
 
-        eigvals = np.sqrt(-1./eigvals) # omega^2 to omega
+        eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
+
+        sort_ind = np.argsort(eigvals)
+        eigvals = eigvals[sort_ind]
+        eigvecs = eigvecs[:, sort_ind]
 
         self.eigvals = eigvals
         self.eigvecs = eigvecs
@@ -723,8 +747,8 @@ class AeroPistonPlate(object):
         msg('finished!', level=2)
 
         msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
-        for eig in eigvals[:self.num_eigvalues_print]:
-            msg('{}'.format(eig), level=2)
+        for eigval in eigvals[:self.num_eigvalues_print]:
+            msg('{0} rad/s'.format(eigval), level=2)
         self.analysis.last_analysis = 'freq'
 
 
@@ -1497,6 +1521,7 @@ class AeroPistonPlate(object):
         if phiybkp is not None:
             self.phiy = phiybkp
 
+
         msg('finished!')
 
         return ax
@@ -1518,28 +1543,3 @@ class AeroPistonPlate(object):
 
         with open(name, 'wb') as f:
             cPickle.dump(self, f, protocol=cPickle.HIGHEST_PROTOCOL)
-
-
-if __name__ == '__main__':
-    p = AeroPistonPlate()
-    p.model = 'clpt_donnell_free'
-    p.a = 100. # mm
-    p.b = 100. # mm
-
-    p.laminaprop = (142.5e3, 8.7e3, 0.28, 5.1e3, 5.1e3, 5.1e3, 273.15)
-    p.plyt = 0.125 # mm
-    p.stack = [0, +45, -45, 90, -45, +45, 0, 90]*4
-    p.bc = 'ss1-ss2-ss2-free'
-    p.m1 = 10
-    p.n1 = 10
-
-    p.mu = 1.631e-6
-    p.rho = 1.225e-9
-    sound = 343.e3
-    p.V = 10000
-    p.M = p.V/sound
-    p.freq()
-    p.plot(p.eigvecs[:, 0], vec='w', colorbar=True, filename='contour.png')
-
-
-
