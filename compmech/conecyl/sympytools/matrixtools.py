@@ -7,8 +7,8 @@ from sympy import collect, var, sin, cos, pi
 
 def mprint_as_sparse(m, mname, sufix, subs=None,
         header=None, print_file=True, collect_for=None,
-        pow_by_mul=True):
-    if sufix=='':
+        pow_by_mul=True, full_symmetric=False):
+    if sufix == '':
         left = right = '1'
         namesufix = '{0}'.format(mname)
     else:
@@ -19,26 +19,34 @@ def mprint_as_sparse(m, mname, sufix, subs=None,
     if header:
         ls.append(header)
     ls.append('# {0}'.format(namesufix))
-    num = len([i for i in list(m) if i])
+
+    if full_symmetric:
+        num = len([None for (i, j), v in np.ndenumerate(m) if (v and i <= j)])
+    else:
+        num = len([i for i in list(m) if i])
+
     ls.append('# {0}_num={1}'.format(namesufix, num))
 
     for (i, j), v in np.ndenumerate(m):
         if v:
+            if full_symmetric and i > j:
+                continue
+
             if subs:
                 v = v.subs(subs)
             ls.append('c += 1')
 
-            if left=='0':
+            if left == '0' or full_symmetric:
                 ls.append('{mname}r[c] = {i}'.format(mname=mname, i=i))
             else:
                 ls.append('{mname}r[c] = row+{i}'.format(mname=mname, i=i))
 
-            if right=='0':
+            if right == '0' or full_symmetric:
                 ls.append('{mname}c[c] = {j}'.format(mname=mname, j=j))
             else:
                 ls.append('{mname}c[c] = col+{j}'.format(mname=mname, j=j))
 
-            if collect_for!=None:
+            if collect_for is not None:
                 v = collect(v, collect_for, evaluate=False)
                 ls.append('{mname}v[c] +='.format(mname=mname))
                 for k, expr in v.items():
@@ -95,15 +103,15 @@ def mprint_as_array(m, mname, sufix, use_cse=False,
     ls.append('# {0}'.format(namesufix))
     num = len([i for i in list(m) if i])
     ls.append('# {0}_num={1}'.format(namesufix, num))
-    if order=='C':
+    if order == 'C':
         miter = enumerate(np.ravel(m))
-    elif order=='F':
+    elif order == 'F':
         miter = enumerate(np.ravel(m.T))
     c = -1
     miter = list(miter)
     for i, v in miter:
         if v:
-            if collect_for!=None:
+            if collect_for is not None:
                 v = collect(v, collect_for, evaluate=False)
                 ls.append('{0}[pos+{1}] +='.format(mname, i))
                 for k, expr in v.items():
