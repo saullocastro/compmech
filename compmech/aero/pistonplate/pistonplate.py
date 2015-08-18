@@ -159,6 +159,7 @@ class AeroPistonPlate(object):
         self.plyts = []
 
         # aerodynamic properties for the Piston theory
+        self.lambdap = None
         self.rho = None
         self.M = None
         self.V = None
@@ -363,7 +364,7 @@ class AeroPistonPlate(object):
 
 
     def get_size(self):
-        r"""Calculates the size of the stiffness matrices
+        r"""Calculate the size of the stiffness matrices
 
         The size of the stiffness matrices can be interpreted as the number of
         rows or columns, recalling that this will be the size of the Ritz
@@ -384,13 +385,8 @@ class AeroPistonPlate(object):
 
     def _default_field(self, xs, ys, gridx, gridy):
         if xs is None or ys is None:
-            #TODO
-            if 'bc1' in self.model:
-                xs = linspace(0., self.a, gridx)
-                ys = linspace(0., self.b, gridy)
-            else:
-                xs = linspace(-self.a/2., self.a/2., gridx)
-                ys = linspace(-self.b/2., self.b/2., gridy)
+            xs = linspace(0., self.a, gridx)
+            ys = linspace(0., self.b, gridy)
             xs, ys = np.meshgrid(xs, ys, copy=False)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
@@ -406,9 +402,10 @@ class AeroPistonPlate(object):
         return xs, ys, xshape, tshape
 
 
-    def calc_linear_matrices(self, combined_load_case=None):
+    def calc_linear_matrices(self, combined_load_case=None, silent=False,
+            calc_kG0=True, calc_kA=True, calc_kM=True):
         self._rebuild()
-        msg('Calculating linear matrices... ', level=2)
+        msg('Calculating linear matrices... ', level=2, silent=silent)
 
         fk0, fkG0, fkA, fkM, k0edges = modelDB.get_linear_matrices(self)
         model = self.model
@@ -421,9 +418,13 @@ class AeroPistonPlate(object):
         h = sum(plyts)
         stack = self.stack
         mu = self.mu
-        rho = self.rho
-        V = self.V
-        M = self.M
+        if calc_kA and self.lambdap is None:
+            if self.M < 1:
+                raise ValueError('Mach number must be >= 1')
+            elif self.M == 1:
+                self.M = 1.0001
+            self.lambdap = self.rho * self.V**2 / (self.M**2 - 1)**0.5
+        lambdap = self.lambdap
 
         if stack != []:
             lam = laminate.read_stack(stack, plyts=plyts,
@@ -469,37 +470,43 @@ class AeroPistonPlate(object):
         self.F = F
 
         k0 = fk0(a, b, F, m1, n1)
-        kA = fkA(rho, V, M, a, b, m1, n1)
-        kM = fkM(mu, h, a, b, m1, n1)
+        if calc_kA:
+            kA = fkA(lambdap, a, b, m1, n1)
+        if calc_kM:
+            kM = fkM(mu, h, a, b, m1, n1)
 
-        Fx = self.Fx if self.Fx is not None else 0.
-        Fy = self.Fy if self.Fy is not None else 0.
-        Fxy = self.Fxy if self.Fxy is not None else 0.
-        Fyx = self.Fyx if self.Fyx is not None else 0.
+        if calc_kG0:
+            Fx = self.Fx if self.Fx is not None else 0.
+            Fy = self.Fy if self.Fy is not None else 0.
+            Fxy = self.Fxy if self.Fxy is not None else 0.
+            Fyx = self.Fyx if self.Fyx is not None else 0.
 
-        if not combined_load_case:
-            kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, m1, n1)
-        else:
-            kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, m1, n1)
-            kG0_Fy = fkG0(0, Fy, 0, 0, a, b, m1, n1)
-            kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, m1, n1)
-            kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, m1, n1)
+            if not combined_load_case:
+                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, m1, n1)
+            else:
+                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, m1, n1)
+                kG0_Fy = fkG0(0, Fy, 0, 0, a, b, m1, n1)
+                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, m1, n1)
+                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, m1, n1)
 
         # performing checks for the linear stiffness matrices
 
         assert np.any(np.isnan(k0.data)) == False
         assert np.any(np.isnan(k0.data)) == False
 
-        assert np.any(np.isinf(kA.data)) == False
-        assert np.any(np.isinf(kA.data)) == False
+        if calc_kA:
+            assert np.any(np.isinf(kA.data)) == False
+            assert np.any(np.isinf(kA.data)) == False
 
-        assert np.any(np.isinf(kM.data)) == False
-        assert np.any(np.isinf(kM.data)) == False
+        if calc_kM:
+            assert np.any(np.isinf(kM.data)) == False
+            assert np.any(np.isinf(kM.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
-        kA = csr_matrix(make_skew_symmetric(kA))
-        #kA = csr_matrix(kA)
-        kM = csr_matrix(make_symmetric(kM))
+        if calc_kA:
+            kA = csr_matrix(make_skew_symmetric(kA))
+        if calc_kM:
+            kM = csr_matrix(make_symmetric(kM))
 
         if k0edges is not None:
             assert np.any((np.isnan(k0edges.data)
@@ -510,33 +517,36 @@ class AeroPistonPlate(object):
             k0 = k0 + k0edges
 
         self.k0 = k0
-        self.kA = kA
-        self.kM = kM
+        if calc_kA:
+            self.kA = kA
+        if calc_kM:
+            self.kM = kM
 
-        if not combined_load_case:
-            assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
-            kG0 = csr_matrix(make_symmetric(kG0))
-            self.kG0 = kG0
+        if calc_kG0:
+            if not combined_load_case:
+                assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
+                kG0 = csr_matrix(make_symmetric(kG0))
+                self.kG0 = kG0
 
-        else:
-            assert np.any((np.isnan(kG0_Fx.data)
-                           | np.isinf(kG0_Fx.data))) == False
-            assert np.any((np.isnan(kG0_Fy.data)
-                           | np.isinf(kG0_Fy.data))) == False
-            assert np.any((np.isnan(kG0_Fxy.data)
-                           | np.isinf(kG0_Fxy.data))) == False
-            assert np.any((np.isnan(kG0_Fyx.data)
-                           | np.isinf(kG0_Fyx.data))) == False
+            else:
+                assert np.any((np.isnan(kG0_Fx.data)
+                               | np.isinf(kG0_Fx.data))) == False
+                assert np.any((np.isnan(kG0_Fy.data)
+                               | np.isinf(kG0_Fy.data))) == False
+                assert np.any((np.isnan(kG0_Fxy.data)
+                               | np.isinf(kG0_Fxy.data))) == False
+                assert np.any((np.isnan(kG0_Fyx.data)
+                               | np.isinf(kG0_Fyx.data))) == False
 
-            kG0_Fx = csr_matrix(make_symmetric(kG0_Fx))
-            kG0_Fy = csr_matrix(make_symmetric(kG0_Fy))
-            kG0_Fxy = csr_matrix(make_symmetric(kG0_Fxy))
-            kG0_Fyx = csr_matrix(make_symmetric(kG0_Fyx))
+                kG0_Fx = csr_matrix(make_symmetric(kG0_Fx))
+                kG0_Fy = csr_matrix(make_symmetric(kG0_Fy))
+                kG0_Fxy = csr_matrix(make_symmetric(kG0_Fxy))
+                kG0_Fyx = csr_matrix(make_symmetric(kG0_Fyx))
 
-            self.kG0_Fx = kG0_Fx
-            self.kG0_Fy = kG0_Fy
-            self.kG0_Fxy = kG0_Fxy
-            self.kG0_Fyx = kG0_Fyx
+                self.kG0_Fx = kG0_Fx
+                self.kG0_Fy = kG0_Fy
+                self.kG0_Fxy = kG0_Fxy
+                self.kG0_Fyx = kG0_Fyx
 
         #NOTE forcing Python garbage collector to clean the memory
         #     it DOES make a difference! There is a memory leak not
@@ -544,7 +554,7 @@ class AeroPistonPlate(object):
 
         gc.collect()
 
-        msg('finished!', level=2)
+        msg('finished!', level=2, silent=silent)
 
 
     def lb(self, tol=0, combined_load_case=None, sparse_solver=True):
@@ -668,7 +678,8 @@ class AeroPistonPlate(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def freq(self, atype=1, tol=0, sparse_solver=False):
+    def freq(self, atype=1, tol=0, sparse_solver=False, silent=False,
+            sort=True):
         """Performs a frequency analysis
 
         The following parameters of the ``AeroPistonPlate`` object will affect
@@ -698,6 +709,10 @@ class AeroPistonPlate(object):
             .. note:: It is recommended ``sparse_solver=False``, because it
                       was verified that the sparse solver becomes unstable
                       for some cases, though the sparse solver is faster.
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+        sort : bool, optional
+            Sort the output eigenvalues and eigenmodes.
 
         Notes
         -----
@@ -713,11 +728,16 @@ class AeroPistonPlate(object):
                  format(self.model))
             msg('________________________________________________')
 
-        msg('Running linear buckling analysis...')
+        msg('Running frequency analysis...', silent=silent)
 
-        self.calc_linear_matrices()
+        if atype == 1:
+            self.calc_linear_matrices(silent=silent)
+        elif atype == 2:
+            self.calc_linear_matrices(silent=silent, calc_k0=False)
+        elif atype == 3:
+            self.calc_linear_matrices(silent=silent, calc_kA=False)
 
-        msg('Eigenvalue solver... ', level=2)
+        msg('Eigenvalue solver... ', level=2, silent=silent)
 
         if atype == 1:
             M = self.k0 - self.kA + self.kG0
@@ -727,33 +747,106 @@ class AeroPistonPlate(object):
             M = self.k0 + self.kG0
         A = self.kM
 
-        msg('eigs() solver...', level=3)
+        msg('eigs() solver...', level=3, silent=silent)
         k = min(self.num_eigvalues, A.shape[0]-2)
         if sparse_solver:
             eigvals, eigvecs = eigs(A=A, M=M, k=k, tol=tol, which='SM', sigma=-1.)
         else:
             eigvals, eigvecs = eig(a=A.toarray(), b=M.toarray())
-        msg('finished!', level=3)
+        msg('finished!', level=3, silent=silent)
 
         eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
 
-        sort_ind = np.argsort(eigvals)
-        eigvals = eigvals[sort_ind]
-        eigvecs = eigvecs[:, sort_ind]
+        if sort:
+            sort_ind = np.lexsort((np.round(eigvals.imag, 1),
+                                   np.round(eigvals.real, 1)))
+            eigvals = eigvals[sort_ind]
+            eigvecs = eigvecs[:, sort_ind]
 
         self.eigvals = eigvals
         self.eigvecs = eigvecs
 
-        msg('finished!', level=2)
+        msg('finished!', level=2, silent=silent)
 
-        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
+        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1,
+                silent=silent)
         for eigval in eigvals[:self.num_eigvalues_print]:
-            msg('{0} rad/s'.format(eigval), level=2)
+            msg('{0} rad/s'.format(eigval), level=2, silent=silent)
         self.analysis.last_analysis = 'freq'
 
 
+    def calc_Vf(self, rho=None, M=None, modes=(0, 1, 2, 3, 4, 5), num=10,
+                silent=False):
+        r"""Calculate the flutter speed
+
+        If ``rho`` and ``M`` are not supplied, ``lambdap`` will be returned.
+
+        Parameters
+        ----------
+        rho : float, optional
+            Air density.
+        M : float, optional
+            Mach number.
+        modes : tuple, optional
+            The modes that should be monitored.
+        num : int, optional
+            Number of points to search for each iteration.
+
+        Returns
+        -------
+        lambdacr : float
+            The critical ``lambdap``.
+
+        """
+        #TODO
+        # - use a linear or parabolic interpolation to estimate new_lim1
+        msg('Flutter calculation...', level=1, silent=silent)
+        lim1 = 0.1
+        lim2 = 100.
+        new_lim1 = 1e6
+        new_lim2 = -1e6
+        eigvals_imag = np.zeros((num, len(modes)))
+        if max(modes) > self.num_eigvalues-1:
+            self.num_eigvalues = max(modes)+1
+
+        count = 0
+        while True:
+            count += 1
+            lambdaps = np.linspace(lim1, lim2, num)
+            msg('iteration %d:' % count, level=2, silent=silent)
+            msg('lambda_min: %1.3f' % lim1, level=3, silent=silent)
+            msg('lambda_max: %1.3f' % lim2, level=3, silent=silent)
+
+            for i, lambdap in enumerate(lambdaps):
+                self.lambdap = lambdap
+                self.freq(atype=1, sparse_solver=False, silent=True)
+                for j, mode in enumerate(modes):
+                    eigvals_imag[i, j] = self.eigvals[mode].imag
+
+            check = np.where(eigvals_imag != 0.)
+            if not np.any(check):
+                continue
+            if np.abs(eigvals_imag[check]).min() < 0.01:
+                break
+            if 0 in check[0]:
+                new_lim1 = min(new_lim1, 0.5*lambdaps[check[0][0]])
+                new_lim2 = max(new_lim2, 1.5*lambdaps[check[0][-1]])
+            elif check[0].min() > 0:
+                new_lim1 = lambdaps[check[0][0]-1]
+                new_lim2 = lambdaps[check[0][0]]
+            else:
+                new_lim1 = min(new_lim1, lim1/2.)
+                new_lim2 = max(new_lim2, 2*lim2)
+
+            lim1 = new_lim1
+            lim2 = new_lim2
+        msg('finished!', level=1)
+        msg('Number of analyses = %d' % (count*num), level=1)
+        return lim1
+
+
     def calc_NL_matrices(self, c, num_cores=None):
-        r"""Calculates the non-linear stiffness matrices
+        r"""Calculate the non-linear stiffness matrices
 
         Parameters
         ----------
@@ -824,7 +917,7 @@ class AeroPistonPlate(object):
 
 
     def uvw(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the displacement field
+        r"""Calculate the displacement field
 
         For a given full set of Ritz constants ``c``, the displacement
         field is calculated and stored in the parameters
@@ -884,7 +977,7 @@ class AeroPistonPlate(object):
 
 
     def strain(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the strain field
+        r"""Calculate the strain field
 
         Parameters
         ----------
@@ -936,7 +1029,7 @@ class AeroPistonPlate(object):
 
 
     def stress(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the stress field
+        r"""Calculate the stress field
 
         Parameters
         ----------
@@ -1048,7 +1141,7 @@ class AeroPistonPlate(object):
 
 
     def calc_fext(self, inc=1., silent=False):
-        """Calculates the external force vector `\{F_{ext}\}`
+        """Calculate the external force vector `\{F_{ext}\}`
 
         Recall that:
 
@@ -1144,7 +1237,7 @@ class AeroPistonPlate(object):
 
 
     def calc_fint(self, c, inc=1., m=1):
-        r"""Calculates the internal force vector `\{F_{int}\}`
+        r"""Calculate the internal force vector `\{F_{int}\}`
 
         The following attributes affect the numerical integration:
 
@@ -1195,7 +1288,7 @@ class AeroPistonPlate(object):
 
 
     def calc_kT(self, c, inc=1.):
-        r"""Calculates the tangent stiffness matrix
+        r"""Calculate the tangent stiffness matrix
 
         The following attributes affect the numerical integration:
 

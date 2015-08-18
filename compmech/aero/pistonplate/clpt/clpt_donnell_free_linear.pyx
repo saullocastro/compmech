@@ -447,7 +447,7 @@ def fkG0(double Fx, double Fy, double Fxy, double Fyx,
     return kG0
 
 
-def fkA(double rho, double V, double M, double a, double b, int m1, int n1):
+def fkA(double lambdap, double a, double b, int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kAr, kAc
     cdef np.ndarray[cDOUBLE, ndim=1] kAv
@@ -481,22 +481,22 @@ def fkA(double rho, double V, double M, double a, double b, int m1, int n1):
                         c += 1
                         kAr[c] = row+2
                         kAc[c] = col+3
-                        kAv[c] += -(V*V)*b*i1*j1*rho*((-1)**(j1 + l1) - 1)/(M*(2.0*(j1*j1) - 2.0*(l1*l1)))
+                        kAv[c] += -lambdap*b*i1*j1*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
                         c += 1
                         kAr[c] = row+3
                         kAc[c] = col+2
-                        kAv[c] += (V*V)*b*i1*l1*rho*((-1)**(j1 + l1) - 1)/(M*(-2.0*(j1*j1) + 2.0*(l1*l1)))
+                        kAv[c] += lambdap*b*i1*l1*((-1)**(j1 + l1) - 1)/(-2.0*(j1*j1) + 2.0*(l1*l1))
 
                     elif k1 != i1 and l1 == j1:
                         # kA_11 cond_3
                         c += 1
                         kAr[c] = row+2
                         kAc[c] = col+2
-                        kAv[c] += (V*V)*b*i1*k1*rho*((-1)**(i1 + k1) - 1)/(M*(2.0*(i1*i1) - 2.0*(k1*k1)))
+                        kAv[c] += lambdap*b*i1*k1*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
                         c += 1
                         kAr[c] = row+3
                         kAc[c] = col+3
-                        kAv[c] += (V*V)*b*(i1*i1)*rho*((-1)**(i1 + k1) - 1)/(M*(2.0*(i1*i1) - 2.0*(k1*k1)))
+                        kAv[c] += lambdap*b*(i1*i1)*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
 
                     elif k1 == i1 and l1 == j1:
                         # kA_11 cond_4
