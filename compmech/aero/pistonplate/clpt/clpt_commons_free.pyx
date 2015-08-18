@@ -164,8 +164,8 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
         x = xs[i]
         y = ys[i]
 
-        bx = (x + a/2.)/a
-        by = (y + b/2.)/b
+        bx = x/a
+        by = y/b
 
         u = 0
         v = 0
@@ -196,8 +196,8 @@ cdef void cfwx(double *c, int m1, int n1, double *xs, double *ys, int size,
     for i in range(size):
         x = xs[i]
         y = ys[i]
-        bx = (x + a/2.)/a
-        by = (y + b/2.)/b
+        bx = x/a
+        by = y/b
 
         wx = 0.
 
@@ -222,8 +222,8 @@ cdef void cfwy(double *c, int m1, int n1, double *xs, double *ys, int size,
     for i in range(size):
         x = xs[i]
         y = ys[i]
-        bx = (x + a/2.)/a
-        by = (y + b/2.)/b
+        bx = x/a
+        by = y/b
 
         wy = 0.
 
@@ -252,8 +252,8 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
     cdef double cosi1bx, cosj1by
     cdef double bx, by
 
-    bx = (x + a/2.)/a
-    by = (y + b/2.)/b
+    bx = x/a
+    by = y/b
 
     for j1 in range(1, n1+1):
         sinj1by = sin(j1*pi*by)
