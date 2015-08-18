@@ -3,8 +3,8 @@ import sys
 import os
 from subprocess import Popen
 
-#params = 'build_ext -i -IC:\clones\cubature\cubature ' + ' '.join(sys.argv[1:])
-params = 'build_ext -i ' + ' '.join(sys.argv[1:]) + ' clean'
+#params = 'build_ext -inplace -IC:\clones\cubature\cubature ' + ' '.join(sys.argv[1:])
+params = 'build_ext --inplace ' + ' '.join(sys.argv[1:]) + ' clean'
 
 cwd = os.getcwd()
 
@@ -12,9 +12,11 @@ print('####################')
 print('Compiling modules...')
 print('####################')
 print('')
-basedirs = [r'\compmech\conecyl\clpt', r'\compmech\conecyl\fsdt',
-            r'\compmech\integrate',
-            r'\compmech\conecyl\imperfections']
+basedirs = [os.path.join('compmech', 'conecyl', 'clpt'),
+            os.path.join('compmech', 'conecyl', 'fsdt'),
+            os.path.join('compmech', 'integrate'),
+            os.path.join('compmech', 'conecyl', 'imperfections')]
+
 for basedir in basedirs:
     basedir = os.path.sep.join([cwd, basedir])
     os.chdir(basedir)
