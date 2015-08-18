@@ -21,6 +21,11 @@ cdef extern from "math.h":
     double sin(double theta) nogil
 
 
+ctypedef void *cfstraintype(double *c, double *xs, double *ys, int size, double
+        a, double b, int m1, int n1, double *c0, int m0, int n0, int funcnum,
+        double *es) nogil
+
+
 cdef int num0 = 0
 cdef int num1 = 3
 cdef int e_num = 6
