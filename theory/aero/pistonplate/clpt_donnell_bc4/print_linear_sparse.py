@@ -3,7 +3,7 @@ import glob
 
 import numpy as np
 import sympy
-from sympy import pi, sin, cos, var
+from sympy import pi, sin, cos, var, sqrt
 
 from compmech.conecyl.sympytools import mprint_as_sparse
 
@@ -36,6 +36,7 @@ for i, filepath in enumerate(
         string = string.replace('Pi','pi')
         string = string.replace('Sin','sin')
         string = string.replace('Cos','cos')
+        string = string.replace('Sqrt','sqrt')
         string = string.replace('{','(')
         string = string.replace('}',')')
         string = string.replace('^','**')

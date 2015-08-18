@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     87333,       2117]
-NotebookOptionsPosition[     86258,       2081]
-NotebookOutlinePosition[     86660,       2098]
-CellTagsIndexPosition[     86617,       2095]
+NotebookDataLength[     82987,       1969]
+NotebookOptionsPosition[     82417,       1945]
+NotebookOutlinePosition[     82818,       1962]
+CellTagsIndexPosition[     82775,       1959]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -172,22 +172,14 @@ Cell[BoxData[{
    RowBox[{"isotropic", "=", "False"}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"xa", "=", 
-   RowBox[{
-    RowBox[{"-", "a"}], "/", "2"}]}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"xa", "=", "0"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"xb", "=", 
-   RowBox[{
-    RowBox[{"+", "a"}], "/", "2"}]}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"xb", "=", "a"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"ya", "=", 
-   RowBox[{
-    RowBox[{"-", "b"}], "/", "2"}]}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"ya", "=", "0"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"yb", "=", 
-    RowBox[{
-     RowBox[{"+", "b"}], "/", "2"}]}], ";"}], 
+   RowBox[{"yb", "=", "b"}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -322,18 +314,11 @@ Cell[BoxData[{
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"bx", "=", 
-   RowBox[{
-    RowBox[{"(", 
-     RowBox[{"x", "+", 
-      RowBox[{"a", "/", "2"}]}], ")"}], "/", "a"}]}], 
-  ";"}], "\[IndentingNewLine]", 
+   RowBox[{"x", "/", "a"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"by", "=", 
-    RowBox[{
-     RowBox[{"(", 
-      RowBox[{"y", "+", 
-       RowBox[{"b", "/", "2"}]}], ")"}], "/", "b"}]}], ";"}], 
+    RowBox[{"y", "/", "b"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -989,12 +974,7 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{"kA", "=", 
-    RowBox[{
-     RowBox[{"(", 
-      RowBox[{"rho", "*", 
-       RowBox[{
-        RowBox[{"(", 
-         RowBox[{"V", "^", "2"}], ")"}], "/", "M"}]}], ")"}], "*", 
+    RowBox[{"lambdap", "*", 
      RowBox[{
       RowBox[{"Transpose", "[", 
        RowBox[{"D", "[", 
@@ -1915,12 +1895,15 @@ Cell[BoxData[{
    3.6420156148228965`*^9}, {3.6420156966432223`*^9, 3.64201569853856*^9}, {
    3.6420157608567715`*^9, 3.642015762153658*^9}, {3.6420158123095264`*^9, 
    3.642015847204176*^9}, {3.6420607560036144`*^9, 3.642060799781307*^9}, {
-   3.642084903745249*^9, 3.642084913318552*^9}}],
+   3.642084903745249*^9, 3.642084913318552*^9}, 3.648890356554154*^9, {
+   3.6488904105590663`*^9, 3.648890430231138*^9}, {3.648892623321994*^9, 
+   3.6488926242454615`*^9}}],
 
 Cell[CellGroupData[{
 
 Cell[BoxData["\<\"Integration conditions:\"\>"], "Print",
- CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9}],
+ CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
+  3.6488903660073504`*^9, 3.648890445168954*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1928,7 +1911,8 @@ Cell[BoxData[
    "\[InvisibleSpace]", "\<\" cond \"\>", "\[InvisibleSpace]", "1"}],
   SequenceForm["    numcond ", 4, " cond ", 1],
   Editable->False]], "Print",
- CellChangeTimes->{3.6420608047223577`*^9, 3.642084926231343*^9}],
+ CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
+  3.6488903660073504`*^9, 3.648890445168954*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1936,7 +1920,8 @@ Cell[BoxData[
    "\[InvisibleSpace]", "\<\" cond \"\>", "\[InvisibleSpace]", "2"}],
   SequenceForm["    numcond ", 4, " cond ", 2],
   Editable->False]], "Print",
- CellChangeTimes->{3.6420608047223577`*^9, 3.642084926231343*^9}],
+ CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
+  3.6488903660073504`*^9, 3.648890445168954*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1944,7 +1929,8 @@ Cell[BoxData[
    "\[InvisibleSpace]", "\<\" cond \"\>", "\[InvisibleSpace]", "3"}],
   SequenceForm["    numcond ", 4, " cond ", 3],
   Editable->False]], "Print",
- CellChangeTimes->{3.6420608047223577`*^9, 3.642084926231343*^9}],
+ CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
+  3.6488903660073504`*^9, 3.6488904451845913`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1952,135 +1938,13 @@ Cell[BoxData[
    "\[InvisibleSpace]", "\<\" cond \"\>", "\[InvisibleSpace]", "4"}],
   SequenceForm["    numcond ", 4, " cond ", 4],
   Editable->False]], "Print",
- CellChangeTimes->{3.6420608047223577`*^9, 3.642084926231343*^9}]
-}, Open  ]],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6420850999574556`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6420851000043306`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.642085100035581*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Infinity :: \
-indet\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.642085100051206*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6420852400781717`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.642085240093797*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6420852401250477`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Infinity :: \
-indet\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6420852401406727`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.642085435664469*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6420854356800947`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6420854356957197`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Infinity :: \
-indet\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6420854357269707`*^9}]
+ CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
+  3.6488903660073504`*^9, 3.6488904451845913`*^9}]
+}, Open  ]]
 }, Open  ]]
 },
-WindowSize->{752, 594},
-WindowMargins->{{Automatic, 154}, {Automatic, 8}},
+WindowSize->{1520, 727},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 CellContext->Notebook,
 Magnification->0.8999999761581421,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
@@ -2098,26 +1962,14 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 80509, 1895, 6670, "Input"],
+Cell[579, 22, 80159, 1877, 6610, "Input"],
 Cell[CellGroupData[{
-Cell[81113, 1921, 125, 1, 21, "Print"],
-Cell[81241, 1924, 308, 6, 21, "Print"],
-Cell[81552, 1932, 308, 6, 21, "Print"],
-Cell[81863, 1940, 308, 6, 21, "Print"],
-Cell[82174, 1948, 308, 6, 21, "Print"]
-}, Open  ]],
-Cell[82497, 1957, 298, 8, 19, "Message"],
-Cell[82798, 1967, 298, 8, 19, "Message"],
-Cell[83099, 1977, 296, 8, 19, "Message"],
-Cell[83398, 1987, 344, 9, 19, "Message"],
-Cell[83745, 1998, 298, 8, 19, "Message"],
-Cell[84046, 2008, 296, 8, 19, "Message"],
-Cell[84345, 2018, 298, 8, 19, "Message"],
-Cell[84646, 2028, 346, 9, 19, "Message"],
-Cell[84995, 2039, 296, 8, 19, "Message"],
-Cell[85294, 2049, 298, 8, 19, "Message"],
-Cell[85595, 2059, 298, 8, 19, "Message"],
-Cell[85896, 2069, 346, 9, 19, "Message"]
+Cell[80763, 1903, 174, 2, 21, "Print"],
+Cell[80940, 1907, 359, 7, 21, "Print"],
+Cell[81302, 1916, 359, 7, 21, "Print"],
+Cell[81664, 1925, 361, 7, 21, "Print"],
+Cell[82028, 1934, 361, 7, 21, "Print"]
+}, Open  ]]
 }, Open  ]]
 }
 ]
