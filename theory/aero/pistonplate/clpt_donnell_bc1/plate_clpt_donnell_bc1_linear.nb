@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     83144,       1974]
-NotebookOptionsPosition[     82574,       1950]
-NotebookOutlinePosition[     82975,       1967]
-CellTagsIndexPosition[     82932,       1964]
+NotebookDataLength[     83185,       1970]
+NotebookOptionsPosition[     82616,       1946]
+NotebookOutlinePosition[     83016,       1963]
+CellTagsIndexPosition[     82973,       1960]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -974,12 +974,7 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{"kA", "=", 
-    RowBox[{
-     RowBox[{"(", 
-      RowBox[{"rho", "*", 
-       RowBox[{
-        RowBox[{"(", 
-         RowBox[{"V", "^", "2"}], ")"}], "/", "M"}]}], ")"}], "*", 
+    RowBox[{"lambdap", "*", 
      RowBox[{
       RowBox[{"Transpose", "[", 
        RowBox[{"D", "[", 
@@ -1902,13 +1897,14 @@ Cell[BoxData[{
    3.642015847204176*^9}, {3.6420607560036144`*^9, 3.642060799781307*^9}, {
    3.642084903745249*^9, 3.642084913318552*^9}, {3.6488034087667727`*^9, 
    3.648803429318816*^9}, 3.6488037122677207`*^9, {3.6488039840415754`*^9, 
-   3.6488040340651283`*^9}, {3.6488269201513085`*^9, 3.648826921057568*^9}}],
+   3.6488040340651283`*^9}, {3.6488269201513085`*^9, 3.648826921057568*^9}, 
+   3.648890317922845*^9, {3.6488923322014437`*^9, 3.6488923333577075`*^9}}],
 
 Cell[CellGroupData[{
 
 Cell[BoxData["\<\"Integration conditions:\"\>"], "Print",
  CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
-  3.648803500877116*^9, 3.648804072583972*^9}],
+  3.648803500877116*^9, 3.648804072583972*^9, 3.648891018736472*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1917,7 +1913,7 @@ Cell[BoxData[
   SequenceForm["    numcond ", 4, " cond ", 1],
   Editable->False]], "Print",
  CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
-  3.648803500877116*^9, 3.6488040725996017`*^9}],
+  3.648803500877116*^9, 3.648804072583972*^9, 3.648891018736472*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1926,7 +1922,7 @@ Cell[BoxData[
   SequenceForm["    numcond ", 4, " cond ", 2],
   Editable->False]], "Print",
  CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
-  3.648803500877116*^9, 3.6488040725996017`*^9}],
+  3.648803500877116*^9, 3.648804072583972*^9, 3.648891018736472*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1935,7 +1931,7 @@ Cell[BoxData[
   SequenceForm["    numcond ", 4, " cond ", 3],
   Editable->False]], "Print",
  CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
-  3.648803500877116*^9, 3.6488040726115923`*^9}],
+  3.648803500877116*^9, 3.648804072583972*^9, 3.648891018752082*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1944,12 +1940,12 @@ Cell[BoxData[
   SequenceForm["    numcond ", 4, " cond ", 4],
   Editable->False]], "Print",
  CellChangeTimes->{3.6420608047223577`*^9, 3.6420849262156997`*^9, 
-  3.648803500877116*^9, 3.6488040726120996`*^9}]
+  3.648803500877116*^9, 3.648804072583972*^9, 3.648891018752082*^9}]
 }, Open  ]]
 }, Open  ]]
 },
 WindowSize->{766, 749},
-WindowMargins->{{Automatic, -7}, {Automatic, -7}},
+WindowMargins->{{-6, Automatic}, {Automatic, 0}},
 CellContext->Notebook,
 Magnification->1.100000023841858,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
@@ -1967,13 +1963,13 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 80322, 1882, 6733, "Input"],
+Cell[579, 22, 80262, 1878, 6733, "Input"],
 Cell[CellGroupData[{
-Cell[80926, 1908, 172, 2, 24, "Print"],
-Cell[81101, 1912, 359, 7, 24, "Print"],
-Cell[81463, 1921, 359, 7, 24, "Print"],
-Cell[81825, 1930, 359, 7, 24, "Print"],
-Cell[82187, 1939, 359, 7, 24, "Print"]
+Cell[80866, 1904, 194, 2, 24, "Print"],
+Cell[81063, 1908, 379, 7, 24, "Print"],
+Cell[81445, 1917, 379, 7, 24, "Print"],
+Cell[81827, 1926, 379, 7, 24, "Print"],
+Cell[82209, 1935, 379, 7, 24, "Print"]
 }, Open  ]]
 }, Open  ]]
 }
