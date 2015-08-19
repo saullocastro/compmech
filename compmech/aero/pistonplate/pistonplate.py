@@ -139,7 +139,7 @@ class AeroPistonPlate(object):
         self.plyts = []
 
         # aerodynamic properties for the Piston theory
-        self.lambdap = None
+        self.beta = None
         self.rho = None
         self.M = None
         self.V = None
@@ -362,13 +362,13 @@ class AeroPistonPlate(object):
         h = sum(plyts)
         stack = self.stack
         mu = self.mu
-        if calc_kA and self.lambdap is None:
+        if calc_kA and self.beta is None:
             if self.M < 1:
                 raise ValueError('Mach number must be >= 1')
             elif self.M == 1:
                 self.M = 1.0001
-            self.lambdap = self.rho * self.V**2 / (self.M**2 - 1)**0.5
-        lambdap = self.lambdap
+            self.beta = self.rho * self.V**2 / (self.M**2 - 1)**0.5
+        beta = self.beta
 
         if stack != []:
             lam = laminate.read_stack(stack, plyts=plyts,
@@ -415,7 +415,7 @@ class AeroPistonPlate(object):
 
         k0 = fk0(a, b, F, m1, n1)
         if calc_kA:
-            kA = fkA(lambdap, a, b, m1, n1)
+            kA = fkA(beta, a, b, m1, n1)
         if calc_kM:
             kM = fkM(mu, h, a, b, m1, n1)
 
@@ -723,7 +723,7 @@ class AeroPistonPlate(object):
                 silent=False):
         r"""Calculate the flutter speed
 
-        If ``rho`` and ``M`` are not supplied, ``lambdap`` will be returned.
+        If ``rho`` and ``M`` are not supplied, ``beta`` will be returned.
 
         Parameters
         ----------
@@ -739,7 +739,7 @@ class AeroPistonPlate(object):
         Returns
         -------
         lambdacr : float
-            The critical ``lambdap``.
+            The critical ``beta``.
 
         """
         #TODO
@@ -756,13 +756,13 @@ class AeroPistonPlate(object):
         count = 0
         while True:
             count += 1
-            lambdaps = np.linspace(lim1, lim2, num)
+            betas = np.linspace(lim1, lim2, num)
             msg('iteration %d:' % count, level=2, silent=silent)
             msg('lambda_min: %1.3f' % lim1, level=3, silent=silent)
             msg('lambda_max: %1.3f' % lim2, level=3, silent=silent)
 
-            for i, lambdap in enumerate(lambdaps):
-                self.lambdap = lambdap
+            for i, beta in enumerate(betas):
+                self.beta = beta
                 self.freq(atype=1, sparse_solver=False, silent=True)
                 for j, mode in enumerate(modes):
                     eigvals_imag[i, j] = self.eigvals[mode].imag
@@ -773,11 +773,11 @@ class AeroPistonPlate(object):
             if np.abs(eigvals_imag[check]).min() < 0.01:
                 break
             if 0 in check[0]:
-                new_lim1 = min(new_lim1, 0.5*lambdaps[check[0][0]])
-                new_lim2 = max(new_lim2, 1.5*lambdaps[check[0][-1]])
+                new_lim1 = min(new_lim1, 0.5*betas[check[0][0]])
+                new_lim2 = max(new_lim2, 1.5*betas[check[0][-1]])
             elif check[0].min() > 0:
-                new_lim1 = lambdaps[check[0][0]-1]
-                new_lim2 = lambdaps[check[0][0]]
+                new_lim1 = betas[check[0][0]-1]
+                new_lim2 = betas[check[0][0]]
             else:
                 new_lim1 = min(new_lim1, lim1/2.)
                 new_lim2 = max(new_lim2, 2*lim2)
