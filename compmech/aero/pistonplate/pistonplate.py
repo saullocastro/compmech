@@ -677,7 +677,7 @@ class AeroPistonPlate(object):
         if atype == 1:
             self.calc_linear_matrices(silent=silent)
         elif atype == 2:
-            self.calc_linear_matrices(silent=silent, calc_k0=False)
+            self.calc_linear_matrices(silent=silent, calc_kG0=False)
         elif atype == 3:
             self.calc_linear_matrices(silent=silent, calc_kA=False)
 
