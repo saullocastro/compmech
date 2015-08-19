@@ -15,9 +15,12 @@ print('')
 basedirs = [os.path.join('compmech', 'conecyl', 'clpt'),
             os.path.join('compmech', 'conecyl', 'fsdt'),
             os.path.join('compmech', 'integrate'),
-            os.path.join('compmech', 'conecyl', 'imperfections')]
+            os.path.join('compmech', 'conecyl', 'imperfections'),
+            os.path.join('compmech', 'aero', 'pistonplate', 'clpt'),
+           ]
 
 for basedir in basedirs:
+    print('Compiling setup.py in %s' % basedir)
     basedir = os.path.sep.join([cwd, basedir])
     os.chdir(basedir)
     for fname in glob('setup_*.py'):
