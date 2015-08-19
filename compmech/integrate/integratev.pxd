@@ -2,9 +2,6 @@ cimport numpy as np
 
 ctypedef np.float_t cDOUBLE
 
-ctypedef void (*f_type)(int npts, double *xs, double *ts, double *out,
-                        double *alphas, double *betas, void *args) nogil
-
 cdef int trapz2d(void *f, int fdim, np.ndarray[cDOUBLE, ndim=1] final_out,
                  double xmin, double xmax, int m,
                  double ymin, double ymax, int n,
