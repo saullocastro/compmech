@@ -16,8 +16,14 @@ cdef extern from "math.h":
     double cos(double t) nogil
     double sin(double t) nogil
 
+ctypedef np.double_t cDOUBLE
+
+ctypedef void *cftype(int m, int n, int num,
+                      double *xs, double *thetas, double *a) nogil
+
 cdef double pi = 3.141592653589793
 cdef int num_threads = 4
+
 
 def fa(m0, n0, np.ndarray[cDOUBLE, ndim=1] xs,
                np.ndarray[cDOUBLE, ndim=1] ts, funcnum):
@@ -46,6 +52,7 @@ def fa(m0, n0, np.ndarray[cDOUBLE, ndim=1] xs,
     cf(m0, n0, num, &xs[0], &ts[0], &a[0, 0])
 
     return a
+
 
 cdef void cfw0x(double *xs, double *ts, int size, double *c0, double L,
                 int m0, int n0, double *w0xs, int funcnum) nogil:
@@ -98,6 +105,7 @@ cdef void cfw0x(double *xs, double *ts, int size, double *c0, double L,
                     w0x += c0[col+3]*dcosix*cosjt
 
             w0xs[ix] = w0x
+
 
 cdef void cfw0t(double *xs, double *ts, int size, double *c0, double L,
                  int m0, int n0, double *w0ts, int funcnum) nogil:
@@ -169,6 +177,7 @@ cdef void *cfa01(int m0, int n0, int num,
                 a[l*(2*m0*n0) + (col+0)] = sinix*sinjt
                 a[l*(2*m0*n0) + (col+1)] = sinix*cosjt
 
+
 cdef void *cfa02(int m0, int n0, int num,
                  double *xs, double *ts, double *a) nogil:
     cdef double x, t, cosix, sinjt, cosjt
@@ -186,6 +195,7 @@ cdef void *cfa02(int m0, int n0, int num,
                 col = i*2 + j*m0*2
                 a[l*(2*m0*n0) + (col+0)] = cosix*sinjt
                 a[l*(2*m0*n0) + (col+1)] = cosix*cosjt
+
 
 cdef void *cfa03(int m0, int n0, int num,
                  double *xs, double *ts, double *a) nogil:
@@ -207,6 +217,7 @@ cdef void *cfa03(int m0, int n0, int num,
                 a[l*(4*m0*n0) + (col+1)] = sinix*cosjt
                 a[l*(4*m0*n0) + (col+2)] = cosix*sinjt
                 a[l*(4*m0*n0) + (col+3)] = cosix*cosjt
+
 
 def fw0(int m0, int n0,
         np.ndarray[cDOUBLE, ndim=1] c0,
