@@ -1,10 +1,3 @@
-ctypedef void *cfstraintype(double *c, double sina, double cosa, double tLA,
-                            double *xs, double *ts, int size,
-                            double r2, double L,
-                            int m1, int m2, int n2,
-                            double *c0, int m0, int n0, int funcnum,
-                            double *es) nogil
-
 cdef void cfN(double *c, double sina, double cosa, double tLA,
               double *xs, double *ts, int size,
               double r2, double L, double *F,
