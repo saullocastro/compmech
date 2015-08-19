@@ -122,26 +122,6 @@ class AeroPistonPlate(object):
         self.Fy = None
         self.Fxy = None
         self.Fyx = None
-        self.NxxTop = None
-        self.NxyTop = None
-        self.NyyLeft = None
-        self.NyxLeft = None
-        self.Fx_inc = None
-        self.Fy_inc = None
-        self.Fxy_inc = None
-        self.Fyx_inc = None
-        self.NxxTop_inc = None
-        self.NxyTop_inc = None
-        self.NyyLeft_inc = None
-        self.NyxLeft_inc = None
-        self.forces = []
-        self.forces_inc = []
-
-        # initial imperfection
-        self.c0 = None
-        self.m0 = 0
-        self.n0 = 0
-        self.funcnum = 2
 
         # shear correction factor (FSDT only)
         self.K = 5/6.
@@ -179,7 +159,6 @@ class AeroPistonPlate(object):
         self.analysis = Analysis()
 
         # outputs
-        self.increments = None
         self.eigvecs = None
         self.eigvals = None
 
@@ -322,40 +301,6 @@ class AeroPistonPlate(object):
             self.laminaprops = [self.laminaprop for i in self.stack]
         if not self.plyts:
             self.plyts = [self.plyt for i in self.stack]
-
-        def check_load(load, size):
-            if load is not None:
-                check = False
-                if isinstance(load, np.ndarray):
-                    if load.ndim == 1:
-                        assert load.shape[0] == size
-
-                        return load
-                elif type(load) in (int, float):
-                    newload = np.zeros(size, dtype=DOUBLE)
-                    newload[0] = load
-
-                    return newload
-                if not check:
-                    raise ValueError('Invalid NxxTop input')
-            else:
-                return np.zeros(size, dtype=DOUBLE)
-
-
-        # axial load
-        size = self.n1+1
-        self.NxxTop = check_load(self.NxxTop, size)
-        self.NxxTop_inc = check_load(self.NxxTop_inc, size)
-        # shear xt
-        self.NxyTop = check_load(self.NxyTop, size)
-        self.NxyTop_inc = check_load(self.NxyTop_inc, size)
-        # circumferential load
-        size = self.m1+1
-        self.NyyLeft = check_load(self.NyyLeft, size)
-        self.NyyLeft_inc = check_load(self.NyyLeft_inc, size)
-        # shear tx
-        self.NyxLeft = check_load(self.NyxLeft, size)
-        self.NyxLeft_inc = check_load(self.NyxLeft_inc, size)
 
         # defining load components from force vectors
         if self.laminaprop is None:
