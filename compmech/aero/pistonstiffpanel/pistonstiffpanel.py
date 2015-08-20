@@ -63,7 +63,8 @@ class AeroPistonStiffPanel(object):
     r"""Stiffened Panel for Aeroelastic Studies using the Piston Theory
 
     Main characteristics:
-        - Airflow along the circumferential direction (`y`)
+        - Supports both airflows along x (axis) or y (circumferential).
+          Controlled by the parameter ``flow``
         - Stiffeners along the axial direction (`x`), with a fixed `y` position
 
     """
@@ -76,6 +77,7 @@ class AeroPistonStiffPanel(object):
         #TODO use a marker number for self.inf and self.maxinf if the
         #     normalization of edge stiffnesses is adopted
         #     now it is already independent of self.inf and more robust
+        self.flow = 'x'
         self.inf = 1.e+8
         self.maxinf = 1.e+8
         self.zero = 0. # used to define zero stiffnesses
@@ -141,6 +143,7 @@ class AeroPistonStiffPanel(object):
 
         # aerodynamic properties for the Piston theory
         self.beta = None
+        self.gamma = None
         self.rho = None
         self.M = None
         self.V = None
@@ -351,7 +354,8 @@ class AeroPistonStiffPanel(object):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2, silent=silent)
 
-        fk0, fkG0, fkA, fkM, fk0edges, fk0stiff, fkMstiff = modelDB.get_linear_matrices(self)
+        fk0, fkG0, fkAx, fkAy, fkM, fk0edges, fk0stiff, fkMstiff = \
+                modelDB.get_linear_matrices(self)
         model = self.model
         a = self.a
         b = self.b
@@ -369,7 +373,9 @@ class AeroPistonStiffPanel(object):
             elif self.M == 1:
                 self.M = 1.0001
             self.beta = self.rho * self.V**2 / (self.M**2 - 1)**0.5
+            self.gamma = self.beta*1./(2.*r*(self.M**2 - 1)**0.5)
         beta = self.beta
+        gamma = self.gamma
 
         if stack != []:
             lam = laminate.read_stack(stack, plyts=plyts,
@@ -416,7 +422,8 @@ class AeroPistonStiffPanel(object):
 
         k0 = fk0(a, b, r, F, m1, n1)
 
-        if self.model == 'clpt_donnell_bc1':
+        if (self.model == 'clpt_donnell_bc1'
+        or  self.model == 'clpt_sanders_bc1'):
             k0edges = fk0edges(m1, n1, a, b,
                                self.kphixBot, self.kphixTop,
                                self.kphiyLeft, self.kphiyRight)
@@ -430,7 +437,10 @@ class AeroPistonStiffPanel(object):
             raise
 
         if calc_kA:
-            kA = fkA(beta, gamma, a, b, m1, n1)
+            if self.flow == 'x':
+                kA = fkAx(beta, a, b, m1, n1)
+            elif self.flow == 'y':
+                kA = fkAy(beta, gamma, a, b, m1, n1)
         if calc_kM:
             if self.model == 'fsdt_donnell_bc1':
                 raise NotImplementedError('There is a bug with kM for model %s'
@@ -715,9 +725,9 @@ class AeroPistonStiffPanel(object):
         msg('Eigenvalue solver... ', level=2, silent=silent)
 
         if atype == 1:
-            M = self.k0 - self.kA + self.kG0
+            M = self.k0 + self.kA + self.kG0
         elif atype == 2:
-            M = self.k0 - self.kA
+            M = self.k0 + self.kA
         elif atype == 3:
             M = self.k0 + self.kG0
         elif atype == 4:
@@ -753,8 +763,9 @@ class AeroPistonStiffPanel(object):
         self.analysis.last_analysis = 'freq'
 
 
-    def calc_Vf(self, rho=None, M=None, modes=(0, 1, 2, 3, 4, 5), num=10,
-                silent=False):
+    def calc_betacr(self, beta1=None, beta2=None, rho=None, M=None,
+                    modes=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                    num=5, silent=False):
         r"""Calculate the flutter speed
 
         If ``rho`` and ``M`` are not supplied, ``beta`` will be returned.
@@ -772,17 +783,20 @@ class AeroPistonStiffPanel(object):
 
         Returns
         -------
-        lambdacr : float
+        betacr : float
             The critical ``beta``.
 
         """
         #TODO
-        # - use a linear or parabolic interpolation to estimate new_lim1
+        # - use a linear or parabolic interpolation to estimate new_beta1
+        # - possibility to include gamma
         msg('Flutter calculation...', level=1, silent=silent)
-        lim1 = 0.1
-        lim2 = 100.
-        new_lim1 = 1e6
-        new_lim2 = -1e6
+        if beta1 is None:
+            beta1 = 1.e4
+        if beta2 is None:
+            beta2 = 1.e5
+        new_beta1 = 1e6
+        new_beta2 = -1e6
         eigvals_imag = np.zeros((num, len(modes)))
         if max(modes) > self.num_eigvalues-1:
             self.num_eigvalues = max(modes)+1
@@ -790,37 +804,40 @@ class AeroPistonStiffPanel(object):
         count = 0
         while True:
             count += 1
-            betas = np.linspace(lim1, lim2, num)
+            betas = np.linspace(beta1, beta2, num)
             msg('iteration %d:' % count, level=2, silent=silent)
-            msg('lambda_min: %1.3f' % lim1, level=3, silent=silent)
-            msg('lambda_max: %1.3f' % lim2, level=3, silent=silent)
+            msg('beta_min: %1.3f' % beta1, level=3, silent=silent)
+            msg('beta_max: %1.3f' % beta2, level=3, silent=silent)
 
             for i, beta in enumerate(betas):
                 self.beta = beta
+                self.gamma = 0.
                 self.freq(atype=1, sparse_solver=False, silent=True)
                 for j, mode in enumerate(modes):
                     eigvals_imag[i, j] = self.eigvals[mode].imag
 
             check = np.where(eigvals_imag != 0.)
             if not np.any(check):
+                beta1 = beta1/2
+                beta2 = 2*beta2
                 continue
             if np.abs(eigvals_imag[check]).min() < 0.01:
                 break
             if 0 in check[0]:
-                new_lim1 = min(new_lim1, 0.5*betas[check[0][0]])
-                new_lim2 = max(new_lim2, 1.5*betas[check[0][-1]])
+                new_beta1 = min(new_beta1, 0.5*betas[check[0][0]])
+                new_beta2 = max(new_beta2, 1.5*betas[check[0][-1]])
             elif check[0].min() > 0:
-                new_lim1 = betas[check[0][0]-1]
-                new_lim2 = betas[check[0][0]]
+                new_beta1 = betas[check[0][0]-1]
+                new_beta2 = betas[check[0][0]]
             else:
-                new_lim1 = min(new_lim1, lim1/2.)
-                new_lim2 = max(new_lim2, 2*lim2)
+                new_beta1 = min(new_beta1, beta1/2.)
+                new_beta2 = max(new_beta2, 2*beta2)
 
-            lim1 = new_lim1
-            lim2 = new_lim2
+            beta1 = new_beta1
+            beta2 = new_beta2
         msg('finished!', level=1)
         msg('Number of analyses = %d' % (count*num), level=1)
-        return lim1
+        return beta1
 
 
     def uvw(self, c, xs=None, ys=None, gridx=300, gridy=300):
