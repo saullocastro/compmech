@@ -435,12 +435,12 @@ def fkAy(double beta, double gamma, double a, double b, int m1, int n1):
 
 
 def fkG0(double Fx, double Fy, double Fxy, double Fyx,
-         double a, double b, int m1, int n1):
+         double a, double b, double r, int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
     cdef np.ndarray[cDOUBLE, ndim=1] kG0v
 
-    fdim = 1*m1*n1*m1*n1
+    fdim = 2*m1*n1*m1*n1
 
     kG0r = np.zeros((fdim,), dtype=INT)
     kG0c = np.zeros((fdim,), dtype=INT)
@@ -467,17 +467,34 @@ def fkG0(double Fx, double Fy, double Fxy, double Fyx,
                         kG0c[c] = col+2
                         kG0v[c] += i1*j1*k1*l1*(-2*(-1)**(i1 + k1) + 2)*((-1)**(j1 + l1) - 1)*(Fxy*a + Fyx*b)/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
 
-
                     elif k1 == i1 and l1 != j1:
                         # kG0_11 cond_2
-                        pass
+                        c += 1
+                        kG0r[c] = row+1
+                        kG0c[c] = col+2
+                        kG0v[c] += Fy*j1*l1*((-1)**(j1 + l1) - 1)/(r*(2.0*(j1*j1) - 2.0*(l1*l1)))
+                        c += 1
+                        kG0r[c] = row+2
+                        kG0c[c] = col+1
+                        kG0v[c] += -Fy*j1*l1*((-1)**(j1 + l1) - 1)/(r*(2.0*(j1*j1) - 2.0*(l1*l1)))
 
                     elif k1 != i1 and l1 == j1:
                         # kG0_11 cond_3
-                        pass
+                        c += 1
+                        kG0r[c] = row+1
+                        kG0c[c] = col+2
+                        kG0v[c] += 0.5*i1*k1*((-1)**(i1 + k1) - 1)*(Fxy*a + Fyx*b)/(a*r*((i1*i1) - (k1*k1)))
+                        c += 1
+                        kG0r[c] = row+2
+                        kG0c[c] = col+1
+                        kG0v[c] += -0.5*i1*k1*((-1)**(i1 + k1) - 1)*(Fxy*a + Fyx*b)/(a*r*((i1*i1) - (k1*k1)))
 
                     elif k1 == i1 and l1 == j1:
                         # kG0_11 cond_4
+                        c += 1
+                        kG0r[c] = row+1
+                        kG0c[c] = col+1
+                        kG0v[c] += 0.25*Fy*b/(r*r)
                         c += 1
                         kG0r[c] = row+2
                         kG0c[c] = col+2
