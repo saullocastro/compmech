@@ -435,7 +435,7 @@ def fkAy(double beta, double gamma, double a, double b, int m1, int n1):
 
 
 def fkG0(double Fx, double Fy, double Fxy, double Fyx,
-         double a, double b, int m1, int n1):
+         double a, double b, double r, int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
     cdef np.ndarray[cDOUBLE, ndim=1] kG0v

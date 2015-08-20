@@ -454,12 +454,12 @@ class AeroPistonStiffPanel(object):
             Fyx = self.Fyx if self.Fyx is not None else 0.
 
             if not combined_load_case:
-                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, m1, n1)
+                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, r, m1, n1)
             else:
-                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, m1, n1)
-                kG0_Fy = fkG0(0, Fy, 0, 0, a, b, m1, n1)
-                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, m1, n1)
-                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, m1, n1)
+                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, r, m1, n1)
+                kG0_Fy = fkG0(0, Fy, 0, 0, a, b, r, m1, n1)
+                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, r, m1, n1)
+                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, r, m1, n1)
 
         # contributions from stiffeners
         #TODO summing up coo_matrix objects may be very slow!
