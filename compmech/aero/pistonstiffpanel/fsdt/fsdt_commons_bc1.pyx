@@ -95,8 +95,8 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
                 u += c[col+0]*sini1bx*sinj1by
                 v += c[col+1]*sini1bx*sinj1by
                 w += c[col+2]*sini1bx*sinj1by
-                phix += c[col+3]*cosi1bx*cosj1by
-                phiy += c[col+4]*cosi1bx*cosj1by
+                phix += c[col+3]*cosi1bx*sinj1by
+                phiy += c[col+4]*sini1bx*cosj1by
 
         us[i] = u
         vs[i] = v
@@ -129,5 +129,5 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
             g[0, col+0] = sini1bx*sinj1by
             g[1, col+1] = sini1bx*sinj1by
             g[2, col+2] = sini1bx*sinj1by
-            g[3, col+3] = cosi1bx*cosj1by
-            g[4, col+4] = cosi1bx*cosj1by
+            g[3, col+3] = cosi1bx*sinj1by
+            g[4, col+4] = sini1bx*cosj1by

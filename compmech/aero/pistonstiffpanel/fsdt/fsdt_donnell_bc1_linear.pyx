@@ -35,7 +35,7 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
     cdef np.ndarray[cINT, ndim=1] k0r, k0c
     cdef np.ndarray[cDOUBLE, ndim=1] k0v
 
-    fdim = 17*m1*n1*m1*n1
+    fdim = 13*m1*n1*m1*n1
 
     k0r = np.zeros((fdim,), dtype=INT)
     k0c = np.zeros((fdim,), dtype=INT)
@@ -90,14 +90,6 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+1
                         k0v[c] += -i1*j1*k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(A12 + A66)/(((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
-                        k0r[c] = row+0
-                        k0c[c] = col+3
-                        k0v[c] += i1*j1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(B11*(b*b)*(k1*k1) + B66*(a*a)*(l1*l1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
-                        c += 1
-                        k0r[c] = row+0
-                        k0c[c] = col+4
-                        k0v[c] += i1*j1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(B16*(b*b)*(k1*k1) + B26*(a*a)*(l1*l1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
-                        c += 1
                         k0r[c] = row+1
                         k0c[c] = col+0
                         k0v[c] += -i1*j1*k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(A12 + A66)/(((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
@@ -106,49 +98,41 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+1
                         k0v[c] += A26*i1*j1*k1*l1*(-2*(-1)**(i1 + k1) + 2)*((-1)**(j1 + l1) - 1)/(((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
-                        k0r[c] = row+1
-                        k0c[c] = col+3
-                        k0v[c] += i1*j1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((pi*pi)*B16*(b*b)*(k1*k1)*r + (a*a)*(-A45*(b*b) + (pi*pi)*B26*(l1*l1)*r))/((pi*pi)*a*b*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
-                        c += 1
-                        k0r[c] = row+1
-                        k0c[c] = col+4
-                        k0v[c] += i1*j1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((pi*pi)*B66*(b*b)*(k1*k1)*r + (a*a)*(-A44*(b*b) + (pi*pi)*B22*(l1*l1)*r))/((pi*pi)*a*b*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
-                        c += 1
                         k0r[c] = row+2
                         k0c[c] = col+2
                         k0v[c] += A45*i1*j1*k1*l1*(-2*(-1)**(i1 + k1) + 2)*((-1)**(j1 + l1) - 1)/(((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
-                        k0r[c] = row+3
-                        k0c[c] = col+0
-                        k0v[c] += k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(B11*(b*b)*(i1*i1) + B66*(a*a)*(j1*j1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        k0r[c] = row+2
+                        k0c[c] = col+3
+                        k0v[c] += a*i1*j1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(-A45*r + B26)/(pi*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0r[c] = row+2
+                        k0c[c] = col+4
+                        k0v[c] += b*i1*j1*k1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(-A45*r + B26)/(pi*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
                         k0r[c] = row+3
-                        k0c[c] = col+1
-                        k0v[c] += k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((pi*pi)*B16*(b*b)*(i1*i1)*r + (a*a)*(-A45*(b*b) + (pi*pi)*B26*(j1*j1)*r))/((pi*pi)*a*b*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        k0c[c] = col+2
+                        k0v[c] += a*j1*k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(A45*r - B26)/(pi*r*(-(i1*i1) + (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
                         k0r[c] = row+3
                         k0c[c] = col+3
-                        k0v[c] += -D16*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((i1*i1)*(l1*l1) + (j1*j1)*(k1*k1))/((i1 - k1)*(i1 + k1)*(j1 - l1)*(j1 + l1))
+                        k0v[c] += -D16*j1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((i1*i1) + (k1*k1))/(((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
                         k0r[c] = row+3
                         k0c[c] = col+4
-                        k0v[c] += -((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(D12*(i1*i1)*(l1*l1) + D66*(j1*j1)*(k1*k1))/((i1 - k1)*(i1 + k1)*(j1 - l1)*(j1 + l1))
+                        k0v[c] += j1*k1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((pi*pi)*D16*(b*b)*(i1*i1) + (a*a)*(A45*(b*b) + (pi*pi)*D26*(l1*l1)))/((pi*pi)*a*b*(-(i1*i1) + (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
                         k0r[c] = row+4
-                        k0c[c] = col+0
-                        k0v[c] += k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(B16*(b*b)*(i1*i1) + B26*(a*a)*(j1*j1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
-                        c += 1
-                        k0r[c] = row+4
-                        k0c[c] = col+1
-                        k0v[c] += k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((pi*pi)*B66*(b*b)*(i1*i1)*r + (a*a)*(-A44*(b*b) + (pi*pi)*B22*(j1*j1)*r))/((pi*pi)*a*b*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        k0c[c] = col+2
+                        k0v[c] += b*i1*k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(A45*r - B26)/(pi*r*((i1*i1) - (k1*k1))*(-(j1*j1) + (l1*l1)))
                         c += 1
                         k0r[c] = row+4
                         k0c[c] = col+3
-                        k0v[c] += -((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(D12*(j1*j1)*(k1*k1) + D66*(i1*i1)*(l1*l1))/((i1 - k1)*(i1 + k1)*(j1 - l1)*(j1 + l1))
+                        k0v[c] += i1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((pi*pi)*D16*(b*b)*(k1*k1) + (a*a)*(A45*(b*b) + (pi*pi)*D26*(j1*j1)))/((pi*pi)*a*b*((i1*i1) - (k1*k1))*(-(j1*j1) + (l1*l1)))
                         c += 1
                         k0r[c] = row+4
                         k0c[c] = col+4
-                        k0v[c] += -D26*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((i1*i1)*(l1*l1) + (j1*j1)*(k1*k1))/((i1 - k1)*(i1 + k1)*(j1 - l1)*(j1 + l1))
+                        k0v[c] += -D26*i1*k1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((j1*j1) + (l1*l1))/((i1 - k1)*(i1 + k1)*(j1 - l1)*(j1 + l1))
 
                     elif k1 == i1 and l1 != j1:
                         # k0_11 cond_2
@@ -157,9 +141,25 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+2
                         k0v[c] += A26*a*j1*l1*((-1)**(j1 + l1) - 1)/(r*(2.0*(j1*j1) - 2.0*(l1*l1)))
                         c += 1
+                        k0r[c] = row+0
+                        k0c[c] = col+3
+                        k0v[c] += -pi*B16*i1*j1*l1*((-1)**(j1 + l1) - 1)/((j1*j1) - (l1*l1))
+                        c += 1
+                        k0r[c] = row+0
+                        k0c[c] = col+4
+                        k0v[c] += -0.5*pi*j1*((-1)**(j1 + l1) - 1)*(B16*(b*b)*(i1*i1) + B26*(a*a)*(l1*l1))/(a*b*(j1 - l1)*(j1 + l1))
+                        c += 1
                         k0r[c] = row+1
                         k0c[c] = col+2
                         k0v[c] += a*j1*l1*((-1)**(j1 + l1) - 1)*(A22 + A44)/(r*(2.0*(j1*j1) - 2.0*(l1*l1)))
+                        c += 1
+                        k0r[c] = row+1
+                        k0c[c] = col+3
+                        k0v[c] += -pi*i1*j1*l1*((-1)**(j1 + l1) - 1)*(B12 + B66)/((j1 + l1)*(2.0*j1 - 2.0*l1))
+                        c += 1
+                        k0r[c] = row+1
+                        k0c[c] = col+4
+                        k0v[c] += -0.5*j1*((-1)**(j1 + l1) - 1)*((pi*pi)*B66*(b*b)*(i1*i1)*r + (a*a)*(-A44*(b*b) + (pi*pi)*B22*(l1*l1)*r))/(pi*a*b*r*((j1*j1) - (l1*l1)))
                         c += 1
                         k0r[c] = row+2
                         k0c[c] = col+0
@@ -169,21 +169,21 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+1
                         k0v[c] += -a*j1*l1*((-1)**(j1 + l1) - 1)*(A22 + A44)/(r*(j1 + l1)*(2.0*j1 - 2.0*l1))
                         c += 1
-                        k0r[c] = row+2
-                        k0c[c] = col+3
-                        k0v[c] += b*i1*j1*((-1)**(j1 + l1) - 1)*(-A55*r + B12)/(r*(2.0*(j1*j1) - 2.0*(l1*l1)))
-                        c += 1
-                        k0r[c] = row+2
-                        k0c[c] = col+4
-                        k0v[c] += b*i1*j1*((-1)**(j1 + l1) - 1)*(-A45*r + B26)/(r*(2.0*(j1*j1) - 2.0*(l1*l1)))
+                        k0r[c] = row+3
+                        k0c[c] = col+0
+                        k0v[c] += pi*B16*i1*j1*l1*((-1)**(j1 + l1) - 1)/((j1*j1) - (l1*l1))
                         c += 1
                         k0r[c] = row+3
-                        k0c[c] = col+2
-                        k0v[c] += b*i1*l1*((-1)**(j1 + l1) - 1)*(-A55*r + B12)/(r*(-2.0*(j1*j1) + 2.0*(l1*l1)))
+                        k0c[c] = col+1
+                        k0v[c] += pi*i1*j1*l1*((-1)**(j1 + l1) - 1)*(B12 + B66)/((j1 + l1)*(2.0*j1 - 2.0*l1))
                         c += 1
                         k0r[c] = row+4
-                        k0c[c] = col+2
-                        k0v[c] += b*i1*l1*((-1)**(j1 + l1) - 1)*(-A45*r + B26)/(r*(-2.0*(j1*j1) + 2.0*(l1*l1)))
+                        k0c[c] = col+0
+                        k0v[c] += 0.5*pi*l1*((-1)**(j1 + l1) - 1)*(B16*(b*b)*(i1*i1) + B26*(a*a)*(j1*j1))/(a*b*(j1 - l1)*(j1 + l1))
+                        c += 1
+                        k0r[c] = row+4
+                        k0c[c] = col+1
+                        k0v[c] += 0.5*l1*((-1)**(j1 + l1) - 1)*((pi*pi)*B66*(b*b)*(i1*i1)*r + (a*a)*(-A44*(b*b) + (pi*pi)*B22*(j1*j1)*r))/(pi*a*b*r*((j1*j1) - (l1*l1)))
 
                     elif k1 != i1 and l1 == j1:
                         # k0_11 cond_3
@@ -192,9 +192,25 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+2
                         k0v[c] += A12*b*i1*k1*((-1)**(i1 + k1) - 1)/(r*(2.0*(i1*i1) - 2.0*(k1*k1)))
                         c += 1
+                        k0r[c] = row+0
+                        k0c[c] = col+3
+                        k0v[c] += -0.5*pi*i1*((-1)**(i1 + k1) - 1)*(B11*(b*b)*(k1*k1) + B66*(a*a)*(j1*j1))/(a*b*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0r[c] = row+0
+                        k0c[c] = col+4
+                        k0v[c] += -pi*i1*j1*k1*((-1)**(i1 + k1) - 1)*(B12 + B66)/(2.0*(i1*i1) - 2.0*(k1*k1))
+                        c += 1
                         k0r[c] = row+1
                         k0c[c] = col+2
                         k0v[c] += b*i1*k1*((-1)**(i1 + k1) - 1)*(A26 + A45)/(r*(2.0*(i1*i1) - 2.0*(k1*k1)))
+                        c += 1
+                        k0r[c] = row+1
+                        k0c[c] = col+3
+                        k0v[c] += -0.5*i1*((-1)**(i1 + k1) - 1)*((pi*pi)*B16*(b*b)*(k1*k1)*r + (a*a)*(-A45*(b*b) + (pi*pi)*B26*(j1*j1)*r))/(pi*a*b*r*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0r[c] = row+1
+                        k0c[c] = col+4
+                        k0v[c] += -pi*B26*i1*j1*k1*((-1)**(i1 + k1) - 1)/((i1*i1) - (k1*k1))
                         c += 1
                         k0r[c] = row+2
                         k0c[c] = col+0
@@ -204,21 +220,21 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+1
                         k0v[c] += -b*i1*k1*((-1)**(i1 + k1) - 1)*(A26 + A45)/(r*(2.0*(i1*i1) - 2.0*(k1*k1)))
                         c += 1
-                        k0r[c] = row+2
-                        k0c[c] = col+3
-                        k0v[c] += a*i1*j1*((-1)**(i1 + k1) - 1)*(-A45*r + B26)/(r*(2.0*(i1*i1) - 2.0*(k1*k1)))
-                        c += 1
-                        k0r[c] = row+2
-                        k0c[c] = col+4
-                        k0v[c] += a*i1*j1*((-1)**(i1 + k1) - 1)*(-A44*r + B22)/(r*(2.0*(i1*i1) - 2.0*(k1*k1)))
+                        k0r[c] = row+3
+                        k0c[c] = col+0
+                        k0v[c] += -0.5*pi*k1*((-1)**(i1 + k1) - 1)*(B11*(b*b)*(i1*i1) + B66*(a*a)*(j1*j1))/(a*b*(-(i1*i1) + (k1*k1)))
                         c += 1
                         k0r[c] = row+3
-                        k0c[c] = col+2
-                        k0v[c] += a*j1*k1*((-1)**(i1 + k1) - 1)*(-A45*r + B26)/(r*(-2.0*(i1*i1) + 2.0*(k1*k1)))
+                        k0c[c] = col+1
+                        k0v[c] += -0.5*k1*((-1)**(i1 + k1) - 1)*((pi*pi)*B16*(b*b)*(i1*i1)*r + (a*a)*(-A45*(b*b) + (pi*pi)*B26*(j1*j1)*r))/(pi*a*b*r*(-(i1*i1) + (k1*k1)))
                         c += 1
                         k0r[c] = row+4
-                        k0c[c] = col+2
-                        k0v[c] += a*j1*k1*((-1)**(i1 + k1) - 1)*(-A44*r + B22)/(r*(-2.0*(i1*i1) + 2.0*(k1*k1)))
+                        k0c[c] = col+0
+                        k0v[c] += pi*i1*j1*k1*((-1)**(i1 + k1) - 1)*(B12 + B66)/(2.0*(i1*i1) - 2.0*(k1*k1))
+                        c += 1
+                        k0r[c] = row+4
+                        k0c[c] = col+1
+                        k0v[c] += pi*B26*i1*j1*k1*((-1)**(i1 + k1) - 1)/((i1*i1) - (k1*k1))
 
                     elif k1 == i1 and l1 == j1:
                         # k0_11 cond_4
@@ -231,14 +247,6 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+1
                         k0v[c] += 0.25*(pi*pi)*(A16*(b*b)*(i1*i1) + A26*(a*a)*(j1*j1))/(a*b)
                         c += 1
-                        k0r[c] = row+0
-                        k0c[c] = col+3
-                        k0v[c] += -0.5*(pi*pi)*B16*i1*j1
-                        c += 1
-                        k0r[c] = row+0
-                        k0c[c] = col+4
-                        k0v[c] += -0.25*(pi*pi)*i1*j1*(B12 + B66)
-                        c += 1
                         k0r[c] = row+1
                         k0c[c] = col+0
                         k0v[c] += 0.25*(pi*pi)*(A16*(b*b)*(i1*i1) + A26*(a*a)*(j1*j1))/(a*b)
@@ -247,25 +255,21 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         k0c[c] = col+1
                         k0v[c] += 0.25*(pi*pi)*A22*a*(j1*j1)/b + 0.25*A44*a*b/(r*r) + 0.25*(pi*pi)*A66*b*(i1*i1)/a
                         c += 1
-                        k0r[c] = row+1
-                        k0c[c] = col+3
-                        k0v[c] += -0.25*(pi*pi)*i1*j1*(B12 + B66)
-                        c += 1
-                        k0r[c] = row+1
-                        k0c[c] = col+4
-                        k0v[c] += -0.5*(pi*pi)*B26*i1*j1
-                        c += 1
                         k0r[c] = row+2
                         k0c[c] = col+2
                         k0v[c] += 0.25*A22*a*b/(r*r) + 0.25*(pi*pi)*A44*a*(j1*j1)/b + 0.25*(pi*pi)*A55*b*(i1*i1)/a
                         c += 1
-                        k0r[c] = row+3
-                        k0c[c] = col+0
-                        k0v[c] += -0.5*(pi*pi)*B16*i1*j1
+                        k0r[c] = row+2
+                        k0c[c] = col+3
+                        k0v[c] += 0.25*pi*b*i1*(A55*r - B12)/r
+                        c += 1
+                        k0r[c] = row+2
+                        k0c[c] = col+4
+                        k0v[c] += 0.25*pi*a*j1*(A44*r - B22)/r
                         c += 1
                         k0r[c] = row+3
-                        k0c[c] = col+1
-                        k0v[c] += -0.25*(pi*pi)*i1*j1*(B12 + B66)
+                        k0c[c] = col+2
+                        k0v[c] += 0.25*pi*b*i1*(A55*r - B12)/r
                         c += 1
                         k0r[c] = row+3
                         k0c[c] = col+3
@@ -273,19 +277,15 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
                         c += 1
                         k0r[c] = row+3
                         k0c[c] = col+4
-                        k0v[c] += 0.25*(pi*pi)*D16*b*(i1*i1)/a + 0.25*a*(A45*(b*b) + (pi*pi)*D26*(j1*j1))/b
+                        k0v[c] += 0.25*(pi*pi)*i1*j1*(D12 + D66)
                         c += 1
                         k0r[c] = row+4
-                        k0c[c] = col+0
-                        k0v[c] += -0.25*(pi*pi)*i1*j1*(B12 + B66)
-                        c += 1
-                        k0r[c] = row+4
-                        k0c[c] = col+1
-                        k0v[c] += -0.5*(pi*pi)*B26*i1*j1
+                        k0c[c] = col+2
+                        k0v[c] += 0.25*pi*a*j1*(A44*r - B22)/r
                         c += 1
                         k0r[c] = row+4
                         k0c[c] = col+3
-                        k0v[c] += 0.25*(pi*pi)*D16*b*(i1*i1)/a + 0.25*a*(A45*(b*b) + (pi*pi)*D26*(j1*j1))/b
+                        k0v[c] += 0.25*(pi*pi)*i1*j1*(D12 + D66)
                         c += 1
                         k0r[c] = row+4
                         k0c[c] = col+4
@@ -338,24 +338,17 @@ def fk0edges(int m1, int n1, double a, double b,
                     elif k1 != i1 and l1 == j1:
                         # k0edgesBT_11 cond_3
                         c += 1
-                        k0edgesr[c] = row+3
-                        k0edgesc[c] = col+3
-                        k0edgesv[c] += 0.5*b*((-1)**(i1 + k1)*kphixTop + kphixBot)
-                        c += 1
-                        k0edgesr[c] = row+4
-                        k0edgesc[c] = col+4
-                        k0edgesv[c] += 0.5*b*((-1)**(i1 + k1)*kphiyTop + kphiyBot)
+                        k0edgesr[c] = row+2
+                        k0edgesc[c] = col+2
+                        k0edgesv[c] += 0.5*(pi*pi)*b*i1*k1*((-1)**(i1 + k1)*kphixTop + kphixBot)/(a*a)
+
 
                     elif k1 == i1 and l1 == j1:
                         # k0edgesBT_11 cond_4
                         c += 1
-                        k0edgesr[c] = row+3
-                        k0edgesc[c] = col+3
-                        k0edgesv[c] += 0.5*b*(kphixBot + kphixTop)
-                        c += 1
-                        k0edgesr[c] = row+4
-                        k0edgesc[c] = col+4
-                        k0edgesv[c] += 0.5*b*(kphiyBot + kphiyTop)
+                        k0edgesr[c] = row+2
+                        k0edgesc[c] = col+2
+                        k0edgesv[c] += 0.5*(pi*pi)*b*(i1*i1)*(kphixBot + kphixTop)/(a*a)
 
     # k0edgesLR_11
     for i1 in range(1, m1+1):
@@ -376,13 +369,9 @@ def fk0edges(int m1, int n1, double a, double b,
                     elif k1 == i1 and l1 != j1:
                         # k0edgesLR_11 cond_2
                         c += 1
-                        k0edgesr[c] = row+3
-                        k0edgesc[c] = col+3
-                        k0edgesv[c] += 0.5*a*((-1)**(j1 + l1)*kphixLeft + kphixRight)
-                        c += 1
-                        k0edgesr[c] = row+4
-                        k0edgesc[c] = col+4
-                        k0edgesv[c] += 0.5*a*((-1)**(j1 + l1)*kphiyLeft + kphiyRight)
+                        k0edgesr[c] = row+2
+                        k0edgesc[c] = col+2
+                        k0edgesv[c] += 0.5*(pi*pi)*a*j1*l1*((-1)**(j1 + l1)*kphiyLeft + kphiyRight)/(b*b)
 
                     elif k1 != i1 and l1 == j1:
                         # k0edgesLR_11 cond_3
@@ -391,13 +380,9 @@ def fk0edges(int m1, int n1, double a, double b,
                     elif k1 == i1 and l1 == j1:
                         # k0edgesLR_11 cond_4
                         c += 1
-                        k0edgesr[c] = row+3
-                        k0edgesc[c] = col+3
-                        k0edgesv[c] += 0.5*a*(kphixLeft + kphixRight)
-                        c += 1
-                        k0edgesr[c] = row+4
-                        k0edgesc[c] = col+4
-                        k0edgesv[c] += 0.5*a*(kphiyLeft + kphiyRight)
+                        k0edgesr[c] = row+2
+                        k0edgesc[c] = col+2
+                        k0edgesv[c] += 0.5*(pi*pi)*a*(j1*j1)*(kphiyLeft + kphiyRight)/(b*b)
 
     size = num0 + num1*m1*n1
 
@@ -450,15 +435,7 @@ def fk0stiff(int m1, int n1, double ystiff, double a, double b,
                         c += 1
                         k0stiffr[c] = row+2
                         k0stiffc[c] = col+2
-                        k0stiffv[c] += 0.5*a*kwstiff*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b)
-                        c += 1
-                        k0stiffr[c] = row+3
-                        k0stiffc[c] = col+3
-                        k0stiffv[c] += 0.5*a*kphixstiff*cos(pi*j1*ystiff/b)*cos(pi*l1*ystiff/b)
-                        c += 1
-                        k0stiffr[c] = row+4
-                        k0stiffc[c] = col+4
-                        k0stiffv[c] += 0.5*a*kphiystiff*cos(pi*j1*ystiff/b)*cos(pi*l1*ystiff/b)
+                        k0stiffv[c] += 0.5*((pi*pi)*(a*a)*j1*kphiystiff*l1*cos(pi*j1*ystiff/b)*cos(pi*l1*ystiff/b) + (b*b)*((a*a)*kwstiff + (pi*pi)*(i1*i1)*kphixstiff)*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b))/(a*(b*b))
 
                     elif k1 != i1 and l1 == j1:
                         # k0stiff_11 cond_3
@@ -477,15 +454,7 @@ def fk0stiff(int m1, int n1, double ystiff, double a, double b,
                         c += 1
                         k0stiffr[c] = row+2
                         k0stiffc[c] = col+2
-                        k0stiffv[c] += 0.5*a*kwstiff*sin(pi*j1*ystiff/b)**2
-                        c += 1
-                        k0stiffr[c] = row+3
-                        k0stiffc[c] = col+3
-                        k0stiffv[c] += 0.5*a*kphixstiff*cos(pi*j1*ystiff/b)**2
-                        c += 1
-                        k0stiffr[c] = row+4
-                        k0stiffc[c] = col+4
-                        k0stiffv[c] += 0.5*a*kphiystiff*cos(pi*j1*ystiff/b)**2
+                        k0stiffv[c] += 0.5*((pi*pi)*(a*a)*(j1*j1)*kphiystiff*cos(pi*j1*ystiff/b)**2 + (b*b)*((a*a)*kwstiff + (pi*pi)*(i1*i1)*kphixstiff)*sin(pi*j1*ystiff/b)**2)/(a*(b*b))
 
     size = num0 + num1*m1*n1
 
@@ -716,7 +685,7 @@ def fkMstiff(double mustiff, double ystiff, double Astiff, double a, double b, i
                         c += 1
                         kMstiffr[c] = row+3
                         kMstiffc[c] = col+3
-                        kMstiffv[c] += 0.5*Astiff*a*mustiff*cos(pi*j1*ystiff/b)*cos(pi*l1*ystiff/b)
+                        kMstiffv[c] += 0.5*Astiff*a*mustiff*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b)
                         c += 1
                         kMstiffr[c] = row+4
                         kMstiffc[c] = col+4
@@ -743,7 +712,7 @@ def fkMstiff(double mustiff, double ystiff, double Astiff, double a, double b, i
                         c += 1
                         kMstiffr[c] = row+3
                         kMstiffc[c] = col+3
-                        kMstiffv[c] += 0.5*Astiff*a*mustiff*cos(pi*j1*ystiff/b)**2
+                        kMstiffv[c] += 0.5*Astiff*a*mustiff*sin(pi*j1*ystiff/b)**2
                         c += 1
                         kMstiffr[c] = row+4
                         kMstiffc[c] = col+4
