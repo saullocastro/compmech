@@ -659,7 +659,7 @@ class AeroPistonStiffPanel(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def freq(self, atype=1, tol=0, sparse_solver=False, silent=False,
+    def freq(self, atype=4, tol=0, sparse_solver=False, silent=False,
             sort=True):
         """Performs a frequency analysis
 
@@ -681,7 +681,7 @@ class AeroPistonStiffPanel(object):
             - ``1`` : considers k0, kA and kG0
             - ``2`` : considers k0 and kA
             - ``3`` : considers k0 and kG0
-            - ``4`` : considers only k0
+            - ``4`` : considers k0 only
         tol : float, optional
             A tolerance value passed to ``scipy.sparse.linalg.eigs``.
         sparse_solver : bool, optional
