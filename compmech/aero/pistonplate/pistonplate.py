@@ -501,7 +501,8 @@ class AeroPistonPlate(object):
         msg('finished!', level=2, silent=silent)
 
 
-    def lb(self, tol=0, combined_load_case=None, sparse_solver=True):
+    def lb(self, tol=0, combined_load_case=None, sparse_solver=True,
+            calc_kA=False):
         """Performs a linear buckling analysis
 
         The following parameters of the ``AeroPistonPlate`` object will affect
@@ -547,28 +548,31 @@ class AeroPistonPlate(object):
 
         msg('Running linear buckling analysis...')
 
-        self.calc_linear_matrices(combined_load_case=combined_load_case)
+        self.calc_linear_matrices(combined_load_case=combined_load_case,
+                calc_kM=False, calc_kA=calc_kA)
 
         msg('Eigenvalue solver... ', level=2)
 
-        if not combined_load_case:
-            M = self.k0 + self.kA
+        if calc_kA:
+            kA = self.kA
+        else:
+            kA = self.k0*0
+
+        if combined_load_case is None:
+            M = self.k0 + kA
             A = self.kG0
         elif combined_load_case == 1:
-            M = self.k0 - self.kA + self.kG0_Fxy
+            M = self.k0 - kA + self.kG0_Fxy
             A = self.kG0_Fx
         elif combined_load_case == 2:
-            M = self.k0 - self.kA + self.kG0_Fy
+            M = self.k0 - kA + self.kG0_Fy
             A = self.kG0_Fx
         elif combined_load_case == 3:
-            M = self.k0 - self.kA + self.kG0_Fyx
+            M = self.k0 - kA + self.kG0_Fyx
             A = self.kG0_Fy
         elif combined_load_case == 4:
-            M = self.k0 - self.kA + self.kG0_Fx
+            M = self.k0 - kA + self.kG0_Fx
             A = self.kG0_Fy
-
-        #print M.max()
-        #raise
 
         Amin = abs(A.min())
         # Normalizing A to improve numerical stability

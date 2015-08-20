@@ -170,7 +170,7 @@ def fk0(double a, double b, double r, np.ndarray[cDOUBLE, ndim=2] F,
 def fk0edges(int m1, int n1, double a, double b,
              double kphixBot, double kphixTop,
              double kphiyLeft, double kphiyRight):
-    cdef int i1, j1, k1, l1, row, col, c, cbkp
+    cdef int i1, j1, k1, l1, row, col, c
     cdef np.ndarray[cINT, ndim=1] k0edgesr, k0edgesc
     cdef np.ndarray[cDOUBLE, ndim=1] k0edgesv
 
@@ -260,7 +260,7 @@ def fk0edges(int m1, int n1, double a, double b,
 def fk0stiff(int m1, int n1, double ystiff, double a, double b,
              double kustiff, double kvstiff, double kwstiff,
              double kphixstiff, double kphiystiff):
-    cdef int i1, j1, k1, l1, row, col, c, cbkp
+    cdef int i1, j1, k1, l1, row, col, c
     cdef np.ndarray[cINT, ndim=1] k0stiffr, k0stiffc
     cdef np.ndarray[cDOUBLE, ndim=1] k0stiffv
 

@@ -288,7 +288,7 @@ class AeroPistonStiffPanel(object):
                     setattr(self, 'kphiy' + sufix, zero)
 
                 else:
-                    txt = '"{}" is not a valid boundary condition!'.format(bc)
+                    txt = '"{0}" is not a valid boundary condition!'.format(bc)
                     raise ValueError(txt)
 
         if self.a is None:
@@ -432,6 +432,9 @@ class AeroPistonStiffPanel(object):
         if calc_kA:
             kA = fkA(beta, gamma, a, b, m1, n1)
         if calc_kM:
+            if self.model == 'fsdt_donnell_bc1':
+                raise NotImplementedError('There is a bug with kM for model %s'
+                        % self.model)
             kM = fkM(mu, h, a, b, m1, n1)
 
         if calc_kG0:
@@ -521,7 +524,8 @@ class AeroPistonStiffPanel(object):
         msg('finished!', level=2, silent=silent)
 
 
-    def lb(self, tol=0, combined_load_case=None, sparse_solver=True):
+    def lb(self, tol=0, combined_load_case=None, sparse_solver=True,
+            calc_kA=False):
         """Performs a linear buckling analysis
 
         The following parameters of the ``AeroPistonStiffPanel`` object will
@@ -561,34 +565,37 @@ class AeroPistonStiffPanel(object):
         if not modelDB.db[self.model]['linear buckling']:
             msg('________________________________________________')
             msg('')
-            warn('Model {} cannot be used in linear buckling analysis!'.
+            warn('Model {0} cannot be used in linear buckling analysis!'.
                  format(self.model))
             msg('________________________________________________')
 
         msg('Running linear buckling analysis...')
 
-        self.calc_linear_matrices(combined_load_case=combined_load_case)
+        self.calc_linear_matrices(combined_load_case=combined_load_case,
+                calc_kM=False, calc_kA=calc_kA)
 
         msg('Eigenvalue solver... ', level=2)
 
-        if not combined_load_case:
-            M = self.k0 + self.kA
+        if calc_kA:
+            kA = self.kA
+        else:
+            kA = self.k0*0
+
+        if combined_load_case is None:
+            M = self.k0 + kA
             A = self.kG0
         elif combined_load_case == 1:
-            M = self.k0 - self.kA + self.kG0_Fxy
+            M = self.k0 - kA + self.kG0_Fxy
             A = self.kG0_Fx
         elif combined_load_case == 2:
-            M = self.k0 - self.kA + self.kG0_Fy
+            M = self.k0 - kA + self.kG0_Fy
             A = self.kG0_Fx
         elif combined_load_case == 3:
-            M = self.k0 - self.kA + self.kG0_Fyx
+            M = self.k0 - kA + self.kG0_Fyx
             A = self.kG0_Fy
         elif combined_load_case == 4:
-            M = self.k0 - self.kA + self.kG0_Fx
+            M = self.k0 - kA + self.kG0_Fx
             A = self.kG0_Fy
-
-        #print M.max()
-        #raise
 
         Amin = abs(A.min())
         # Normalizing A to improve numerical stability
@@ -617,14 +624,14 @@ class AeroPistonStiffPanel(object):
             eigvals *= Amin
 
         else:
-            from scipy.linalg import eigh
+            from scipy.linalg import eig
 
             size22 = A.shape[0]
             M, A, used_cols = remove_null_cols(M, A)
             M = M.toarray()
             A = A.toarray()
-            msg('eigh() solver...', level=3)
-            eigvals, peigvecs = eigh(a=A, b=M)
+            msg('eig() solver...', level=3)
+            eigvals, peigvecs = eig(a=A, b=M)
             msg('finished!', level=3)
             eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
             eigvecs[used_cols, :] = peigvecs[:, :self.num_eigvalues]
@@ -636,9 +643,9 @@ class AeroPistonStiffPanel(object):
 
         msg('finished!', level=2)
 
-        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
+        msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1)
         for eig in eigvals[:self.num_eigvalues_print]:
-            msg('{}'.format(eig), level=2)
+            msg('{0}'.format(eig), level=2)
         self.analysis.last_analysis = 'lb'
 
 
@@ -689,7 +696,7 @@ class AeroPistonStiffPanel(object):
         if not modelDB.db[self.model]['linear buckling']:
             msg('________________________________________________')
             msg('')
-            warn('Model {} cannot be used in linear buckling analysis!'.
+            warn('Model {0} cannot be used in linear buckling analysis!'.
                  format(self.model))
             msg('________________________________________________')
 
@@ -720,7 +727,8 @@ class AeroPistonStiffPanel(object):
         msg('eigs() solver...', level=3, silent=silent)
         k = min(self.num_eigvalues, A.shape[0]-2)
         if sparse_solver:
-            eigvals, eigvecs = eigs(A=A, M=M, k=k, tol=tol, which='SM', sigma=-1.)
+            eigvals, eigvecs = eigs(A=A, M=M, k=k, tol=tol, which='SM',
+                                    sigma=-1.)
         else:
             eigvals, eigvecs = eig(a=A.toarray(), b=M.toarray())
         msg('finished!', level=3, silent=silent)
@@ -738,7 +746,7 @@ class AeroPistonStiffPanel(object):
 
         msg('finished!', level=2, silent=silent)
 
-        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1,
+        msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1,
                 silent=silent)
         for eigval in eigvals[:self.num_eigvalues_print]:
             msg('{0} rad/s'.format(eigval), level=2, silent=silent)
@@ -1113,7 +1121,7 @@ class AeroPistonStiffPanel(object):
 
         """
         name = self.name + '.AeroPistonStiffPanel'
-        msg('Saving AeroPistonStiffPanel to {}'.format(name))
+        msg('Saving AeroPistonStiffPanel to {0}'.format(name))
 
         self._clear_matrices()
 
