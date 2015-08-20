@@ -575,7 +575,7 @@ class AeroPistonPlate(object):
             A = self.kG0_Fy
 
         Amin = abs(A.min())
-        # Normalizing A to improve numerical stability
+        # normalizing A to improve numerical stability
         A /= Amin
 
         if sparse_solver:
@@ -626,7 +626,7 @@ class AeroPistonPlate(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def freq(self, atype=1, tol=0, sparse_solver=False, silent=False,
+    def freq(self, atype=4, tol=0, sparse_solver=False, silent=False,
             sort=True):
         """Performs a frequency analysis
 
@@ -648,6 +648,7 @@ class AeroPistonPlate(object):
             - ``1`` : considers k0, kA and kG0
             - ``2`` : considers k0 and kA
             - ``3`` : considers k0 and kG0
+            - ``4`` : considers k0 only
         tol : float, optional
             A tolerance value passed to ``scipy.sparse.linalg.eigs``.
         sparse_solver : bool, optional
@@ -684,6 +685,9 @@ class AeroPistonPlate(object):
             self.calc_linear_matrices(silent=silent, calc_kG0=False)
         elif atype == 3:
             self.calc_linear_matrices(silent=silent, calc_kA=False)
+        elif atype == 4:
+            self.calc_linear_matrices(silent=silent, calc_kA=False,
+                    calc_kG0=False)
 
         msg('Eigenvalue solver... ', level=2, silent=silent)
 
@@ -693,6 +697,8 @@ class AeroPistonPlate(object):
             M = self.k0 - self.kA
         elif atype == 3:
             M = self.k0 + self.kG0
+        elif atype == 4:
+            M = self.k0
         A = self.kM
 
         msg('eigs() solver...', level=3, silent=silent)
