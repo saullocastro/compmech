@@ -329,20 +329,20 @@ def fk0stiff(int m1, int n1, double ystiff, double a, double b,
     return k0stiff
 
 
-def fkA(double beta, double gamma, double a, double b, int m1, int n1):
+def fkAx(double beta, double a, double b, int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
-    cdef np.ndarray[cINT, ndim=1] kAr, kAc
-    cdef np.ndarray[cDOUBLE, ndim=1] kAv
+    cdef np.ndarray[cINT, ndim=1] kAxr, kAxc
+    cdef np.ndarray[cDOUBLE, ndim=1] kAxv
 
     fdim = 1*m1*n1*m1*n1
 
-    kAr = np.zeros((fdim,), dtype=INT)
-    kAc = np.zeros((fdim,), dtype=INT)
-    kAv = np.zeros((fdim,), dtype=DOUBLE)
+    kAxr = np.zeros((fdim,), dtype=INT)
+    kAxc = np.zeros((fdim,), dtype=INT)
+    kAxv = np.zeros((fdim,), dtype=DOUBLE)
 
     c = -1
 
-    # kA_11
+    # kAx_11
     for i1 in range(1, m1+1):
         for j1 in range(1, n1+1):
             row = num0 + num1*((j1-1)*m1 + (i1-1))
@@ -355,32 +355,83 @@ def fkA(double beta, double gamma, double a, double b, int m1, int n1):
                         continue
 
                     if k1 != i1 and l1 != j1:
-                        # kA_11 cond_1
+                        # kAx_11 cond_1
                         pass
 
                     elif k1 == i1 and l1 != j1:
-                        # kA_11 cond_2
-                        c += 1
-                        kAr[c] = row+2
-                        kAc[c] = col+2
-                        kAv[c] += -a*beta*j1*l1*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
-
-                    elif k1 != i1 and l1 == j1:
-                        # kA_11 cond_3
+                        # kAx_11 cond_2
                         pass
 
-                    elif k1 == i1 and l1 == j1:
-                        # kA_11 cond_4
+                    elif k1 != i1 and l1 == j1:
+                        # kAx_11 cond_3
                         c += 1
-                        kAr[c] = row+2
-                        kAc[c] = col+2
-                        kAv[c] += 0.25*a*b*gamma
+                        kAxr[c] = row+2
+                        kAxc[c] = col+2
+                        kAxv[c] += -b*beta*i1*k1*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
+
+                    elif k1 == i1 and l1 == j1:
+                        # kAx_11 cond_4
+                        pass
 
     size = num0 + num1*m1*n1
 
-    kA = coo_matrix((kAv, (kAr, kAc)), shape=(size, size))
+    kAx = coo_matrix((kAxv, (kAxr, kAxc)), shape=(size, size))
 
-    return kA
+    return kAx
+
+
+def fkAy(double beta, double gamma, double a, double b, int m1, int n1):
+    cdef int i1, k1, j1, l1, c, row, col
+    cdef np.ndarray[cINT, ndim=1] kAyr, kAyc
+    cdef np.ndarray[cDOUBLE, ndim=1] kAyv
+
+    fdim = 1*m1*n1*m1*n1
+
+    kAyr = np.zeros((fdim,), dtype=INT)
+    kAyc = np.zeros((fdim,), dtype=INT)
+    kAyv = np.zeros((fdim,), dtype=DOUBLE)
+
+    c = -1
+
+    # kAy_11
+    for i1 in range(1, m1+1):
+        for j1 in range(1, n1+1):
+            row = num0 + num1*((j1-1)*m1 + (i1-1))
+            for k1 in range(1, m1+1):
+                for l1 in range(1, n1+1):
+                    col = num0 + num1*((l1-1)*m1 + (k1-1))
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    if k1 != i1 and l1 != j1:
+                        # kAy_11 cond_1
+                        pass
+
+                    elif k1 == i1 and l1 != j1:
+                        # kAy_11 cond_2
+                        c += 1
+                        kAyr[c] = row+2
+                        kAyc[c] = col+2
+                        kAyv[c] += -a*beta*j1*l1*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
+
+                    elif k1 != i1 and l1 == j1:
+                        # kAy_11 cond_3
+                        pass
+
+                    elif k1 == i1 and l1 == j1:
+                        # kAy_11 cond_4
+                        c += 1
+                        kAyr[c] = row+2
+                        kAyc[c] = col+2
+                        kAyv[c] += 0.25*a*b*gamma
+
+    size = num0 + num1*m1*n1
+
+    kAy = coo_matrix((kAyv, (kAyr, kAyc)), shape=(size, size))
+
+    return kAy
 
 
 def fkG0(double Fx, double Fy, double Fxy, double Fyx,
