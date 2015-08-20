@@ -16,6 +16,9 @@ ext_modules = [
     Extension('clpt_donnell_bc1_linear', ['clpt_donnell_bc1_linear.pyx'],
               extra_compile_args=args_linear),
 
+    Extension('clpt_sanders_bc1_linear', ['clpt_sanders_bc1_linear.pyx'],
+              extra_compile_args=args_linear),
+
     #Extension('clpt_donnell_free_nonlinear', ['clpt_donnell_free_nonlinear.pyx'],
               #extra_compile_args=args_nonlinear),
     ]

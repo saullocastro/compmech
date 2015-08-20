@@ -15,6 +15,7 @@ modules = [
           'clpt_commons_bc1',
 
           'clpt_donnell_bc1_linear',
+          'clpt_sanders_bc1_linear',
           #'clpt_donnell_bc4_nonlinear',
           ]
 
