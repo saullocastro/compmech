@@ -24,6 +24,18 @@ db = {
                     'num0': 0,
                     'num1': 3,
                     },
+    'clpt_sanders_bc1': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': False,
+                    'commons': clpt_commons_bc1,
+                    'linear': clpt_sanders_bc1_linear,
+                    'non-linear': None,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'num0': 0,
+                    'num1': 3,
+                    },
     'fsdt_donnell_bc1': {
                     'linear static': True,
                     'linear buckling': True,
@@ -43,8 +55,8 @@ def get_linear_matrices(p):
     for a given model.
 
     The ``model`` parameter of the ``ConeCyl`` object is used to search for
-    functions ``fG0``, ``fkG0``, ``fkA``, ``fkM``and the matrix ``k0edges`` is
-    calculated, when applicable.
+    functions ``fG0``, ``fkG0``, ``fkAx``, ``fkAy``, ``fkM``and the matrix
+    ``k0edges`` is calculated, when applicable.
 
     Parameters
     ----------
@@ -54,7 +66,7 @@ def get_linear_matrices(p):
     Returns
     -------
     out : tuple
-        A tuple containing ``(fk0, fkG0, fkA, fkM, fk0edges, fk0stiff,
+        A tuple containing ``(fk0, fkG0, fkAx, fkAy, fkM, fk0edges, fk0stiff,
         fkMstiff)``.
 
     """
@@ -62,11 +74,12 @@ def get_linear_matrices(p):
 
     fk0 = db[model]['linear'].fk0
     fkG0 = db[model]['linear'].fkG0
-    fkA = db[model]['linear'].fkA
+    fkAx = db[model]['linear'].fkAx
+    fkAy = db[model]['linear'].fkAy
     fkM = db[model]['linear'].fkM
     fk0edges = db[model]['linear'].fk0edges
     fk0stiff = db[model]['linear'].fk0stiff
     fkMstiff = db[model]['linear'].fkMstiff
 
-    return fk0, fkG0, fkA, fkM, fk0edges, fk0stiff, fkMstiff
+    return fk0, fkG0, fkAx, fkAy, fkM, fk0edges, fk0stiff, fkMstiff
 
