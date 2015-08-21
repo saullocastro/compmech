@@ -329,7 +329,7 @@ def fk0stiff(int m1, int n1, double ystiff, double a, double b,
     return k0stiff
 
 
-def fkAx(double beta, double a, double b, int m1, int n1):
+def fkAx(double beta, double gamma, double a, double b, int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kAxr, kAxc
     cdef np.ndarray[cDOUBLE, ndim=1] kAxv
@@ -371,7 +371,10 @@ def fkAx(double beta, double a, double b, int m1, int n1):
 
                     elif k1 == i1 and l1 == j1:
                         # kAx_11 cond_4
-                        pass
+                        c += 1
+                        kAxr[c] = row+2
+                        kAxc[c] = col+2
+                        kAxv[c] += 0.25*a*b*gamma
 
     size = num0 + num1*m1*n1
 
@@ -380,7 +383,7 @@ def fkAx(double beta, double a, double b, int m1, int n1):
     return kAx
 
 
-def fkAy(double beta, double gamma, double a, double b, int m1, int n1):
+def fkAy(double beta, double a, double b, int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kAyr, kAyc
     cdef np.ndarray[cDOUBLE, ndim=1] kAyv
@@ -422,10 +425,7 @@ def fkAy(double beta, double gamma, double a, double b, int m1, int n1):
 
                     elif k1 == i1 and l1 == j1:
                         # kAy_11 cond_4
-                        c += 1
-                        kAyr[c] = row+2
-                        kAyc[c] = col+2
-                        kAyv[c] += 0.25*a*b*gamma
+                        pass
 
     size = num0 + num1*m1*n1
 
