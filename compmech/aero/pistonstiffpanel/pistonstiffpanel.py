@@ -144,7 +144,7 @@ class AeroPistonStiffPanel(object):
         # aerodynamic properties for the Piston theory
         self.beta = None
         self.gamma = None
-        self.rho = None
+        self.rho_air = None
         self.M = None
         self.V = None
 
@@ -372,10 +372,11 @@ class AeroPistonStiffPanel(object):
                 raise ValueError('Mach number must be >= 1')
             elif self.M == 1:
                 self.M = 1.0001
-            self.beta = self.rho * self.V**2 / (self.M**2 - 1)**0.5
-            self.gamma = self.beta*1./(2.*r*(self.M**2 - 1)**0.5)
-        beta = self.beta
-        gamma = self.gamma
+            beta = self.rho_air * self.V**2 / (self.M**2 - 1)**0.5
+            gamma = beta*1./(2.*r*(self.M**2 - 1)**0.5)
+        elif calc_kA and self.beta is not None:
+            beta = self.beta
+            gamma = self.gamma
 
         if stack != []:
             lam = laminate.read_stack(stack, plyts=plyts,
@@ -438,9 +439,9 @@ class AeroPistonStiffPanel(object):
 
         if calc_kA:
             if self.flow == 'x':
-                kA = fkAx(beta, a, b, m1, n1)
+                kA = fkAx(beta, gamma, a, b, m1, n1)
             elif self.flow == 'y':
-                kA = fkAy(beta, gamma, a, b, m1, n1)
+                kA = fkAy(beta, a, b, m1, n1)
         if calc_kM:
             if self.model == 'fsdt_donnell_bc1':
                 raise NotImplementedError('There is a bug with kM for model %s'
@@ -763,16 +764,16 @@ class AeroPistonStiffPanel(object):
         self.analysis.last_analysis = 'freq'
 
 
-    def calc_betacr(self, beta1=None, beta2=None, rho=None, M=None,
+    def calc_betacr(self, beta1=None, beta2=None, rho_air=None, M=None,
                     modes=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
                     num=5, silent=False):
         r"""Calculate the flutter speed
 
-        If ``rho`` and ``M`` are not supplied, ``beta`` will be returned.
+        If ``rho_air`` and ``M`` are not supplied, ``beta`` will be returned.
 
         Parameters
         ----------
-        rho : float, optional
+        rho_air : float, optional
             Air density.
         M : float, optional
             Mach number.
