@@ -144,8 +144,10 @@ class AeroPistonStiffPanel(object):
         # aerodynamic properties for the Piston theory
         self.beta = None
         self.gamma = None
+        self.aeromu = None
         self.rho_air = None
-        self.M = None
+        self.speed_sound = None
+        self.Mach = None
         self.V = None
 
         # constitutive law
@@ -180,6 +182,7 @@ class AeroPistonStiffPanel(object):
         self.kG0_Fyx = None
         self.kM = None
         self.kA = None
+        self.cA = None
         self.lam = None
         self.u = None
         self.v = None
@@ -354,7 +357,7 @@ class AeroPistonStiffPanel(object):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2, silent=silent)
 
-        fk0, fkG0, fkAx, fkAy, fkM, fk0edges, fk0stiff, fkMstiff = \
+        fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0stiff, fkMstiff = \
                 modelDB.get_linear_matrices(self)
         model = self.model
         a = self.a
@@ -368,15 +371,21 @@ class AeroPistonStiffPanel(object):
         stack = self.stack
         mu = self.mu
         if calc_kA and self.beta is None:
-            if self.M < 1:
+            if self.Mach < 1:
                 raise ValueError('Mach number must be >= 1')
-            elif self.M == 1:
-                self.M = 1.0001
-            beta = self.rho_air * self.V**2 / (self.M**2 - 1)**0.5
-            gamma = beta*1./(2.*r*(self.M**2 - 1)**0.5)
+            elif self.Mach == 1:
+                self.Mach = 1.0001
+            M = self.Mach
+            beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
+            gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
+            ainf = self.speed_sound
+            aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
         elif calc_kA and self.beta is not None:
             beta = self.beta
-            gamma = self.gamma
+            gamma = self.gamma if self.gamma is not None else 0.
+            aeromu = self.aeromu if self.aeromu is not None else 0.
+        else:
+            raise NotImplementedError('check here')
 
         if stack != []:
             lam = laminate.read_stack(stack, plyts=plyts,
@@ -442,6 +451,11 @@ class AeroPistonStiffPanel(object):
                 kA = fkAx(beta, gamma, a, b, m1, n1)
             elif self.flow == 'y':
                 kA = fkAy(beta, a, b, m1, n1)
+            if fcA is None:
+                cA = None
+            else:
+                cA = fcA(aeromu, a, b, m1, n1)
+                cA = cA*(0+1j)
         if calc_kM:
             if self.model == 'fsdt_donnell_bc1':
                 raise NotImplementedError('There is a bug with kM for model %s'
@@ -472,14 +486,17 @@ class AeroPistonStiffPanel(object):
         # performing checks for the linear stiffness matrices
 
         assert np.any(np.isnan(k0.data)) == False
-        assert np.any(np.isnan(k0.data)) == False
+        assert np.any(np.isinf(k0.data)) == False
 
         if calc_kA:
+            assert np.any(np.isnan(kA.data)) == False
             assert np.any(np.isinf(kA.data)) == False
-            assert np.any(np.isinf(kA.data)) == False
+            if cA is not None:
+                assert np.any(np.isnan(cA.data)) == False
+                assert np.any(np.isinf(cA.data)) == False
 
         if calc_kM:
-            assert np.any(np.isinf(kM.data)) == False
+            assert np.any(np.isnan(kM.data)) == False
             assert np.any(np.isinf(kM.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
@@ -497,6 +514,7 @@ class AeroPistonStiffPanel(object):
         self.k0 = k0
         if calc_kA:
             self.kA = kA
+            self.cA = cA
         if calc_kM:
             self.kM = kM
 
@@ -661,7 +679,7 @@ class AeroPistonStiffPanel(object):
 
 
     def freq(self, atype=4, tol=0, sparse_solver=False, silent=False,
-            sort=True):
+            sort=True, damping=False, reduced_dof=False):
         """Performs a frequency analysis
 
         The following parameters of the ``AeroPistonStiffPanel`` object will
@@ -696,6 +714,12 @@ class AeroPistonStiffPanel(object):
             A boolean to tell whether the log messages should be printed.
         sort : bool, optional
             Sort the output eigenvalues and eigenmodes.
+        damping : bool, optinal
+            If aerodynamic damping should be taken into account.
+        reduced_dof : bool, optional
+            Considers only the contributions of `v` and `w` to the stiffness
+            matrix and accelerates the run. Only effective when
+            ``sparse_solver=False``.
 
         Notes
         -----
@@ -721,36 +745,80 @@ class AeroPistonStiffPanel(object):
             self.calc_linear_matrices(silent=silent, calc_kA=False)
         elif atype == 4:
             self.calc_linear_matrices(silent=silent, calc_kA=False,
-                    calc_kG0=False)
+                                      calc_kG0=False)
 
         msg('Eigenvalue solver... ', level=2, silent=silent)
 
         if atype == 1:
-            M = self.k0 + self.kA + self.kG0
+            K = self.k0 + self.kA + self.kG0
         elif atype == 2:
-            M = self.k0 + self.kA
+            K = self.k0 + self.kA
         elif atype == 3:
-            M = self.k0 + self.kG0
+            K = self.k0 + self.kG0
         elif atype == 4:
-            M = self.k0
-        A = self.kM
+            K = self.k0
+        M = self.kM
+
+        if damping and self.cA is None:
+            warn('Aerodynamic damping could not be calculated!', level=3)
+            damping = False
 
         msg('eigs() solver...', level=3, silent=silent)
-        k = min(self.num_eigvalues, A.shape[0]-2)
+        k = min(self.num_eigvalues, M.shape[0]-2)
         if sparse_solver:
-            eigvals, eigvecs = eigs(A=A, M=M, k=k, tol=tol, which='SM',
+            eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
                                     sigma=-1.)
+            eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
         else:
-            eigvals, eigvecs = eig(a=A.toarray(), b=M.toarray())
-        msg('finished!', level=3, silent=silent)
+            M = M.toarray()
+            K = K.toarray()
+            if reduced_dof:
+                i = np.arange(M.shape[0])
+                take = np.column_stack((i[1::3], i[2::3])).flatten()
+                M = M[:, take][take, :]
+                K = K[:, take][take, :]
+            if not damping:
+                M = -M
+            else:
+                size = M.shape[0]
+                cA = self.cA.toarray()
+                if reduced_dof:
+                    cA = cA[:, take][take, :]
+                I = np.identity(M.shape[0])
+                Z = np.zeros_like(M)
+                M = np.row_stack((np.column_stack((I, Z)),
+                                  np.column_stack((Z, -M))))
+                K = np.row_stack((np.column_stack((Z, -I)),
+                                  np.column_stack((K, cA))))
 
-        eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
+            eigvals, eigvecs = eig(a=M, b=K)
+
+            if not damping:
+                eigvals = np.sqrt(-1./eigvals) # -1/omega^2 to omega, in rad/s
+                eigvals = eigvals
+            else:
+                eigvals = -1./eigvals # -1/omega to omega, in rad/s
+                eigvals = eigvals[:eigvals.shape[0]//2]
+                eigvecs = eigvecs[:, :eigvecs.shape[1]//2]
+
+        msg('finished!', level=3, silent=silent)
 
         if sort:
             sort_ind = np.lexsort((np.round(eigvals.imag, 1),
                                    np.round(eigvals.real, 1)))
             eigvals = eigvals[sort_ind]
             eigvecs = eigvecs[:, sort_ind]
+
+            higher_zero = eigvals.real > 1e-6
+
+            eigvals = eigvals[higher_zero]
+            eigvecs = eigvecs[:, higher_zero]
+
+        if not sparse_solver and reduced_dof:
+            #new_eigvecs = np.zeros((3*eigvecs.shape[0]//2, eigvecs.shape[1]))
+            #new_eigvecs[take, :] = eigvecs
+            #eigvecs = new_eigvecs
+            pass
 
         self.eigvals = eigvals
         self.eigvecs = eigvecs
@@ -769,13 +837,14 @@ class AeroPistonStiffPanel(object):
                     num=5, silent=False):
         r"""Calculate the flutter speed
 
-        If ``rho_air`` and ``M`` are not supplied, ``beta`` will be returned.
+        If ``rho_air`` and ``Mach`` are not supplied, ``beta`` will be
+        returned.
 
         Parameters
         ----------
         rho_air : float, optional
             Air density.
-        M : float, optional
+        Mach : float, optional
             Mach number.
         modes : tuple, optional
             The modes that should be monitored.
@@ -803,6 +872,21 @@ class AeroPistonStiffPanel(object):
             self.num_eigvalues = max(modes)+1
 
         count = 0
+
+        # storing original values
+        beta_bkp = self.beta
+        gamma_bkp = self.gamma
+        Mach_bkp = self.Mach
+        V_bkp = self.V
+        rho_air_bkp = self.rho_air
+        Mach = 2.
+        rho_air = 0.3
+
+        self.beta = None
+        self.gamma = None
+        self.Mach = Mach
+        self.rho_air = rho_air
+
         while True:
             count += 1
             betas = np.linspace(beta1, beta2, num)
@@ -811,8 +895,7 @@ class AeroPistonStiffPanel(object):
             msg('beta_max: %1.3f' % beta2, level=3, silent=silent)
 
             for i, beta in enumerate(betas):
-                self.beta = beta
-                self.gamma = 0.
+                self.V = ((Mach**2 - 1)**0.5 * beta / rho_air)**0.5
                 self.freq(atype=1, sparse_solver=False, silent=True)
                 for j, mode in enumerate(modes):
                     eigvals_imag[i, j] = self.eigvals[mode].imag
@@ -836,6 +919,14 @@ class AeroPistonStiffPanel(object):
 
             beta1 = new_beta1
             beta2 = new_beta2
+
+        # recovering original values
+        self.beta = beta_bkp
+        self.gamma = gamma_bkp
+        self.Mach = Mach_bkp
+        self.V = V_bkp
+        self.rho_air = rho_air_bkp
+
         msg('finished!', level=1)
         msg('Number of analyses = %d' % (count*num), level=1)
         return beta1
@@ -1121,7 +1212,6 @@ class AeroPistonStiffPanel(object):
             self.phix = phixbkp
         if phiybkp is not None:
             self.phiy = phiybkp
-
 
         msg('finished!')
 
