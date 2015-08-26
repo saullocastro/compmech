@@ -627,7 +627,7 @@ class AeroPistonPlate(object):
 
 
     def freq(self, atype=4, tol=0, sparse_solver=False, silent=False,
-            sort=True):
+            sort=True, reduced_dof=True):
         """Performs a frequency analysis
 
         The following parameters of the ``AeroPistonPlate`` object will affect
@@ -662,6 +662,10 @@ class AeroPistonPlate(object):
             A boolean to tell whether the log messages should be printed.
         sort : bool, optional
             Sort the output eigenvalues and eigenmodes.
+        reduced_dof : bool, optional
+            Considers only the contributions of `w` to the stiffness matrix
+            and considerably accelerates the run. Only effective when
+            ``sparse_solver=False``.
 
         Notes
         -----
@@ -692,21 +696,29 @@ class AeroPistonPlate(object):
         msg('Eigenvalue solver... ', level=2, silent=silent)
 
         if atype == 1:
-            M = self.k0 - self.kA + self.kG0
+            K = self.k0 - self.kA + self.kG0
         elif atype == 2:
-            M = self.k0 - self.kA
+            K = self.k0 - self.kA
         elif atype == 3:
-            M = self.k0 + self.kG0
+            K = self.k0 + self.kG0
         elif atype == 4:
-            M = self.k0
-        A = self.kM
+            K = self.k0
+        M = self.kM
 
         msg('eigs() solver...', level=3, silent=silent)
-        k = min(self.num_eigvalues, A.shape[0]-2)
+        k = min(self.num_eigvalues, M.shape[0]-2)
         if sparse_solver:
-            eigvals, eigvecs = eigs(A=A, M=M, k=k, tol=tol, which='SM', sigma=-1.)
+            eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM', sigma=-1.)
         else:
-            eigvals, eigvecs = eig(a=A.toarray(), b=M.toarray())
+            M = M.toarray()
+            K = K.toarray()
+            if reduced_dof:
+                i = np.arange(M.shape[0])
+                take = i[2::3]
+                M = M[:, take][take, :]
+                K = K[:, take][take, :]
+            eigvals, eigvecs = eig(a=M, b=K)
+
         msg('finished!', level=3, silent=silent)
 
         eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
@@ -716,6 +728,11 @@ class AeroPistonPlate(object):
                                    np.round(eigvals.real, 1)))
             eigvals = eigvals[sort_ind]
             eigvecs = eigvecs[:, sort_ind]
+
+        if not sparse_solver and reduced_dof:
+            new_eigvecs = np.zeros((3*eigvecs.shape[0], eigvecs.shape[1]))
+            new_eigvecs[2::3, :] = eigvecs
+            eigvecs = new_eigvecs
 
         self.eigvals = eigvals
         self.eigvecs = eigvecs
