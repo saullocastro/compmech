@@ -760,8 +760,12 @@ class AeroPistonStiffPanel(object):
         M = self.kM
 
         if damping and self.cA is None:
-            warn('Aerodynamic damping could not be calculated!', level=3)
+            warn('Aerodynamic damping could not be calculated!', level=3,
+                    silent=silent)
             damping = False
+        elif damping and self.cA is not None:
+            if self.cA.sum() == 0j:
+                damping = False
 
         msg('eigs() solver...', level=3, silent=silent)
         k = min(self.num_eigvalues, M.shape[0]-2)
@@ -798,27 +802,40 @@ class AeroPistonStiffPanel(object):
                 eigvals = eigvals
             else:
                 eigvals = -1./eigvals # -1/omega to omega, in rad/s
-                eigvals = eigvals[:eigvals.shape[0]//2]
-                eigvecs = eigvecs[:, :eigvecs.shape[1]//2]
+                shape = eigvals.shape
+                eigvals = eigvals[:shape[0]//2]
+                eigvecs = eigvecs[:eigvecs.shape[0]//2, :shape[0]//2]
 
         msg('finished!', level=3, silent=silent)
 
         if sort:
-            sort_ind = np.lexsort((np.round(eigvals.imag, 1),
-                                   np.round(eigvals.real, 1)))
-            eigvals = eigvals[sort_ind]
-            eigvecs = eigvecs[:, sort_ind]
+            if damping:
+                higher_zero = eigvals.real > 1e-6
 
-            higher_zero = eigvals.real > 1e-6
+                eigvals = eigvals[higher_zero]
+                eigvecs = eigvecs[:, higher_zero]
 
-            eigvals = eigvals[higher_zero]
-            eigvecs = eigvecs[:, higher_zero]
+                sort_ind = np.lexsort((np.round(eigvals.imag, 1),
+                                       np.round(eigvals.real, 0)))
+                eigvals = eigvals[sort_ind]
+                eigvecs = eigvecs[:, sort_ind]
+
+            else:
+                sort_ind = np.lexsort((np.round(eigvals.imag, 1),
+                                       np.round(eigvals.real, 1)))
+                eigvals = eigvals[sort_ind]
+                eigvecs = eigvecs[:, sort_ind]
+
+                higher_zero = eigvals.real > 1e-6
+
+                eigvals = eigvals[higher_zero]
+                eigvecs = eigvecs[:, higher_zero]
 
         if not sparse_solver and reduced_dof:
-            #new_eigvecs = np.zeros((3*eigvecs.shape[0]//2, eigvecs.shape[1]))
-            #new_eigvecs[take, :] = eigvecs
-            #eigvecs = new_eigvecs
-            pass
+            new_eigvecs = np.zeros((3*eigvecs.shape[0]//2, eigvecs.shape[1]),
+                    dtype=eigvecs.dtype)
+            new_eigvecs[take, :] = eigvecs
+            eigvecs = new_eigvecs
 
         self.eigvals = eigvals
         self.eigvecs = eigvecs
