@@ -9,11 +9,11 @@ from compmech.conecyl.sympytools import mprint_as_sparse
 
 var('i1, j1, k1, l1', integer=True)
 var('Astiff, mustiff')
-var('x, y, xa, xb, ya, yb, a, b, r, beta, gamma')
+var('x, y, xa, xb, ya, yb, a, b, r, beta, gamma, aeromu')
 var('A11, A12, A16, A22, A26, A66')
 var('B11, B12, B16, B22, B26, B66')
 var('D11, D12, D16, D22, D26, D66')
-var('M, mu, rho, V')
+var('mu')
 var('E11, nu, h, Fx, Fy, Fxy, Fyx')
 var('kuBot, kvBot, kwBot, kphixBot, kphiyBot')
 var('kuTop, kvTop, kwTop, kphixTop, kphiyTop')

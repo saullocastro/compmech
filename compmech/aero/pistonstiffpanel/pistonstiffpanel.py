@@ -502,6 +502,8 @@ class AeroPistonStiffPanel(object):
         k0 = csr_matrix(make_symmetric(k0))
         if calc_kA:
             kA = csr_matrix(make_skew_symmetric(kA))
+            if cA is not None:
+                cA = csr_matrix(make_symmetric(cA))
         if calc_kM:
             kM = csr_matrix(make_symmetric(kM))
 

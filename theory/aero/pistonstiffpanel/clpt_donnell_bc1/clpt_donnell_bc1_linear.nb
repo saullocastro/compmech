@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     98286,       2346]
-NotebookOptionsPosition[     97713,       2322]
-NotebookOutlinePosition[     98113,       2339]
-CellTagsIndexPosition[     98070,       2336]
+NotebookDataLength[     98332,       2347]
+NotebookOptionsPosition[     97759,       2323]
+NotebookOutlinePosition[     98159,       2340]
+CellTagsIndexPosition[     98116,       2337]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -42,21 +42,21 @@ Cell[BoxData[{
    RowBox[{"isotropic", "=", "False"}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"calculatek0", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"calculatek0", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"calculatek0edges", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"calculatek0edges", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"calculatekM", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"calculatekM", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"calculatekA", "=", "True"}], ";"}], " "}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"calculatekG0", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"calculatekG0", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"calculatek0stiff", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"calculatek0stiff", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"calculatekMstiff", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"calculatekMstiff", "=", "True"}], ";"}], "\[IndentingNewLine]", 
   "\[IndentingNewLine]", 
   RowBox[{"(*", " ", 
    RowBox[{
@@ -2254,7 +2254,8 @@ Cell[BoxData[{
    3.6491715611738486`*^9}, {3.6491734457373652`*^9, 
    3.6491734880059423`*^9}, {3.649173562449072*^9, 3.649173565950635*^9}, {
    3.6495331203896284`*^9, 3.6495333292727876`*^9}, {3.6495345052187853`*^9, 
-   3.6495345330754185`*^9}, {3.649534651347715*^9, 3.649534658944684*^9}}],
+   3.6495345330754185`*^9}, {3.649534651347715*^9, 3.649534658944684*^9}, {
+   3.6496007231444054`*^9, 3.649600730738228*^9}}],
 
 Cell[CellGroupData[{
 
@@ -2339,13 +2340,13 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 94001, 2234, 7893, "Input"],
+Cell[579, 22, 94047, 2235, 7893, "Input"],
 Cell[CellGroupData[{
-Cell[94605, 2260, 464, 6, 24, "Print"],
-Cell[95072, 2268, 651, 11, 24, "Print"],
-Cell[95726, 2281, 651, 11, 24, "Print"],
-Cell[96380, 2294, 651, 11, 24, "Print"],
-Cell[97034, 2307, 651, 11, 24, "Print"]
+Cell[94651, 2261, 464, 6, 24, "Print"],
+Cell[95118, 2269, 651, 11, 24, "Print"],
+Cell[95772, 2282, 651, 11, 24, "Print"],
+Cell[96426, 2295, 651, 11, 24, "Print"],
+Cell[97080, 2308, 651, 11, 24, "Print"]
 }, Open  ]]
 }, Open  ]]
 }
