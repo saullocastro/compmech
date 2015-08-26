@@ -66,8 +66,8 @@ def get_linear_matrices(p):
     Returns
     -------
     out : tuple
-        A tuple containing ``(fk0, fkG0, fkAx, fkAy, fkM, fk0edges, fk0stiff,
-        fkMstiff)``.
+        A tuple containing ``(fk0, fkG0, fkAx, fcA, fkAy, fkM, fk0edges,
+        fk0stiff, fkMstiff)``.
 
     """
     model = p.model
@@ -76,10 +76,11 @@ def get_linear_matrices(p):
     fkG0 = db[model]['linear'].fkG0
     fkAx = db[model]['linear'].fkAx
     fkAy = db[model]['linear'].fkAy
+    fcA = getattr(db[model]['linear'], 'fcA', None)
     fkM = db[model]['linear'].fkM
     fk0edges = db[model]['linear'].fk0edges
     fk0stiff = db[model]['linear'].fk0stiff
     fkMstiff = db[model]['linear'].fkMstiff
 
-    return fk0, fkG0, fkAx, fkAy, fkM, fk0edges, fk0stiff, fkMstiff
+    return fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0stiff, fkMstiff
 
