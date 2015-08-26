@@ -434,6 +434,56 @@ def fkAy(double beta, double a, double b, int m1, int n1):
     return kAy
 
 
+def fcA(double aeromu, double a, double b, int m1, int n1):
+    cdef int i1, k1, j1, l1, c, row, col
+    cdef np.ndarray[cINT, ndim=1] cAr, cAc
+    cdef np.ndarray[cDOUBLE, ndim=1] cAv
+
+    fdim = 1*m1*n1*m1*n1
+
+    cAr = np.zeros((fdim,), dtype=INT)
+    cAc = np.zeros((fdim,), dtype=INT)
+    cAv = np.zeros((fdim,), dtype=DOUBLE)
+
+    c = -1
+
+    # cA_11
+    for i1 in range(1, m1+1):
+        for j1 in range(1, n1+1):
+            row = num0 + num1*((j1-1)*m1 + (i1-1))
+            for k1 in range(1, m1+1):
+                for l1 in range(1, n1+1):
+                    col = num0 + num1*((l1-1)*m1 + (k1-1))
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    if k1 != i1 and l1 != j1:
+                        # cA_11 cond_1
+                        pass
+
+                    elif k1 == i1 and l1 != j1:
+                        # cA_11 cond_2
+                        pass
+
+                    elif k1 != i1 and l1 == j1:
+                        pass
+
+                    elif k1 == i1 and l1 == j1:
+                        # cA_11 cond_4
+                        c += 1
+                        cAr[c] = row+2
+                        cAc[c] = col+2
+                        cAv[c] += -0.25*a*aeromu*b
+
+    size = num0 + num1*m1*n1
+
+    cA = coo_matrix((cAv, (cAr, cAc)), shape=(size, size))
+
+    return cA
+
+
 def fkG0(double Fx, double Fy, double Fxy, double Fyx,
          double a, double b, double r, int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
