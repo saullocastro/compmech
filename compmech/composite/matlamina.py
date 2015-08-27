@@ -10,6 +10,7 @@ import numpy as np
 from compmech.constants import DOUBLE
 from compmech.logger import *
 
+
 class MatLamina(object):
     r"""
     Orthotropic material lamina
@@ -63,41 +64,42 @@ class MatLamina(object):
     """
     def __init__(self):
         super(MatLamina, self).__init__()
-        self.e1   = None
-        self.e2   = None
-        self.e3   = 0
-        self.g12  = None
-        self.g13  = None
-        self.g23  = None
+        self.e1 = None
+        self.e2 = None
+        self.e3 = 0
+        self.g12 = None
+        self.g13 = None
+        self.g23 = None
         self.nu12 = None
         self.nu13 = 0
         self.nu21 = None
         self.nu23 = 0
         self.nu31 = 0
         self.nu32 = 0
-        self.rho  = None
-        self.a1   = None
-        self.a2   = None
-        self.a3   = None
-        self.st1  = None
-        self.st2  = None
-        self.sc1  = None
-        self.sc2  = None
+        self.rho = None
+        self.a1 = None
+        self.a2 = None
+        self.a3 = None
+        self.st1 = None
+        self.st2 = None
+        self.sc1 = None
+        self.sc2 = None
         self.ss12 = None
         self.strn = None
-        self.q11  = None
-        self.q12  = None
-        self.q13  = None
-        self.q21  = None
-        self.q22  = None
-        self.q23  = None
-        self.q31  = None
-        self.q32  = None
-        self.q33  = None
-        self.q44  = None
-        self.q55  = None
-        self.q66  = None
-        self.u    = None
+        self.q11 = None
+        self.q12 = None
+        self.q13 = None
+        self.q21 = None
+        self.q22 = None
+        self.q23 = None
+        self.q31 = None
+        self.q32 = None
+        self.q33 = None
+        self.q44 = None
+        self.q55 = None
+        self.q66 = None
+        self.u = None
+
 
     def rebuild (self):
         #
@@ -123,13 +125,6 @@ class MatLamina(object):
         c44 = self.g23
         c55 = self.g13
         c66 = self.g12
-        self.c = np.array(
-            [[c11, c12, c13,   0,   0,   0],
-             [c12, c22, c23,   0,   0,   0],
-             [c13, c23, c33,   0,   0,   0],
-             [  0,   0,   0, c44,   0,   0],
-             [  0,   0,   0,   0, c55,   0],
-             [  0,   0,   0,   0,   0, c66]], dtype = DOUBLE)
         self.c = np.array(
             [[c11, c12, c13,   0,   0,   0],
              [c12, c22, c23,   0,   0,   0],
@@ -172,14 +167,14 @@ class MatLamina(object):
         # example 1.2.2 Laminated composite shell: buckling of a
         # cylindrical panel with a circular hole
         #
-        u1 = (3*self.q11 + 3*self.q22 + 2*self.q12 + 4*self.q44) / 8
-        u2 = (self.q11 - self.q22) / 2
-        u3 = (self.q11 + self.q22 - 2*self.q12 - 4*self.q44) / 8
-        u4 = (self.q11 + self.q22 + 6*self.q12 - 4*self.q44) / 8
-        u5 = (u1-u4) / 2
-        u6 = (self.q55 + self.q66) / 2
-        u7 = (self.q55 - self.q66) / 2
-        self.u  = np.array(
+        u1 = (3*self.q11 + 3*self.q22 + 2*self.q12 + 4*self.q44) / 8.
+        u2 = (self.q11 - self.q22) / 2.
+        u3 = (self.q11 + self.q22 - 2*self.q12 - 4*self.q44) / 8.
+        u4 = (self.q11 + self.q22 + 6*self.q12 - 4*self.q44) / 8.
+        u5 = (u1-u4) / 2.
+        u6 = (self.q55 + self.q66) / 2.
+        u7 = (self.q55 - self.q66) / 2.
+        self.u = np.array(
             [[u1,  u2,    0,  u3,   0],                # q11
              [u1, -u2,    0,  u3,   0],                # q22
              [u4,   0,    0, -u3,   0],                # q12
@@ -190,6 +185,7 @@ class MatLamina(object):
              [ 0,   0, u2/2,   0,  u3],                # q14
              [ 0,   0, u2/2,   0, -u3]], dtype=DOUBLE)  # q24
 
+
     def read_inputs(self, inputs={}):
         if len(inputs) > 0:
             self = user_setattr(self, inputs)
@@ -199,6 +195,7 @@ class MatLamina(object):
         if not self.nu12:
             nu12 = np.array(self.nu21*self.e1/self.e2, dtype=DOUBLE)
             self.nu12 = nu12
+
 
 def read_laminaprop(laminaprop=None):
     """Returns a ``MatLamina`` object based on an input ``laminaprop`` tuple
@@ -254,18 +251,18 @@ def read_laminaprop(laminaprop=None):
     if len(laminaprop) < 9:
         e2 = laminaprop[1]
         laminaprop = tuple(list(laminaprop)[:6] + [e2, nu12, nu12])
-    matlam.e1   = laminaprop[0]
-    matlam.e2   = laminaprop[1]
-    matlam.e3   = laminaprop[6]
+    matlam.e1 = laminaprop[0]
+    matlam.e2 = laminaprop[1]
+    matlam.e3 = laminaprop[6]
     matlam.nu12 = laminaprop[2]
     matlam.nu13 = laminaprop[7]
     matlam.nu23 = laminaprop[8]
     matlam.nu21 = matlam.nu12 * matlam.e2 / matlam.e1
     matlam.nu31 = matlam.nu13 * matlam.e3 / matlam.e1
     matlam.nu32 = matlam.nu23 * matlam.e3 / matlam.e2
-    matlam.g12  = laminaprop[3]
-    matlam.g13  = laminaprop[4]
-    matlam.g23  = laminaprop[5]
+    matlam.g12 = laminaprop[3]
+    matlam.g13 = laminaprop[4]
+    matlam.g23 = laminaprop[5]
 
     matlam.rebuild()
 
