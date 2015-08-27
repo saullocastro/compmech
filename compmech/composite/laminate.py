@@ -144,24 +144,24 @@ class Laminate(object):
 
     """
     def __init__(self):
-        self.plies   = []
+        self.plies = []
         self.matobj = None
-        self.t    = None
-        self.e1   = None
-        self.e2   = None
-        self.e3   = None
+        self.t = None
+        self.e1 = None
+        self.e2 = None
+        self.e3 = None
         self.nu12 = None
-        self.g12  = None
-        self.g13  = None
-        self.g23  = None
-        self.xiA  = None
-        self.xiB  = None
-        self.xiD  = None
-        self.A    = None
-        self.B    = None
-        self.D    = None
-        self.E    = None
-        self.ABD  = None
+        self.g12 = None
+        self.g13 = None
+        self.g23 = None
+        self.xiA = None
+        self.xiB = None
+        self.xiD = None
+        self.A = None
+        self.B = None
+        self.D = None
+        self.E = None
+        self.ABD = None
         self.ABDE = None
 
 
@@ -182,8 +182,8 @@ class Laminate(object):
         """
         AI = np.matrix(self.ABD, dtype=DOUBLE).I
         a11, a12, a22, a33 = AI[0,0], AI[0,1], AI[1,1], AI[2,2]
-        self.e1  = 1./(self.t*a11)
-        self.e2  = 1./(self.t*a22)
+        self.e1 = 1./(self.t*a11)
+        self.e2 = 1./(self.t*a22)
         self.g12 = 1./(self.t*a33)
         self.nu12 = - a12 / a11
         self.nu21 = - a12 / a22
@@ -206,16 +206,16 @@ class Laminate(object):
         for ply in self.plies:
             lam_thick += ply.t
         self.t = lam_thick
-        h0   = -lam_thick/2
+        h0 = -lam_thick/2
         for ply in self.plies:
             hk_1 =  h0
-            h0   += ply.t
-            hk   =  h0
+            h0 += ply.t
+            hk =  h0
 
-            Afac  = ply.t / lam_thick
-            Bfac  = (2. / lam_thick**2) * (hk**2 - hk_1**2)
-            Dfac  = (4. / lam_thick**3) * (hk**3 - hk_1**3)
-            Efac  = (1. / lam_thick   ) * (hk    - hk_1   )# * (5./6) * (5./6)
+            Afac = ply.t / lam_thick
+            Bfac = (2. / lam_thick**2) * (hk**2 - hk_1**2)
+            Dfac = (4. / lam_thick**3) * (hk**3 - hk_1**3)
+            Efac = (1. / lam_thick   ) * (hk    - hk_1   )# * (5./6) * (5./6)
 
             cos2t = ply.cos2t
             cos4t = ply.cos4t
@@ -286,12 +286,12 @@ class Laminate(object):
         self.E = np.array([[E55, E45],
                            [E45, E44]], dtype=DOUBLE)
 
-        self.ABD  = np.array([[A11, A12, A16, B11, B12, B16],
-                              [A12, A22, A26, B12, B22, B26],
-                              [A16, A26, A66, B16, B26, B66],
-                              [B11, B12, B16, D11, D12, D16],
-                              [B12, B22, B26, D12, D22, D26],
-                              [B16, B26, B66, D16, D26, D66]], dtype=DOUBLE)
+        self.ABD = np.array([[A11, A12, A16, B11, B12, B16],
+                             [A12, A22, A26, B12, B22, B26],
+                             [A16, A26, A66, B16, B26, B66],
+                             [B11, B12, B16, D11, D12, D16],
+                             [B12, B22, B26, D12, D22, D26],
+                             [B16, B26, B66, D16, D26, D66]], dtype=DOUBLE)
 
         # printing ABDE acoordingly to Reddy definition for E44, E45 and E55
         self.ABDE = np.array([[A11, A12, A16, B11, B12, B16, 0, 0],
