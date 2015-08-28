@@ -8,18 +8,21 @@ from sympy import pi, sin, cos, var, sqrt
 from compmech.conecyl.sympytools import mprint_as_sparse
 
 var('i1, j1, k1, l1', integer=True)
-var('Astiff, mustiff')
+var('db, df, bb, bf, ys, Asf, mus, hb, Exx, Gxy, Iyy, Jxx')
 var('x, y, xa, xb, ya, yb, a, b, r, beta, gamma, aeromu')
 var('A11, A12, A16, A22, A26, A66')
 var('B11, B12, B16, B22, B26, B66')
 var('D11, D12, D16, D22, D26, D66')
-var('M, mu, rho, V')
+var('A11sb, A12sb, A16sb, A22sb, A26sb, A66sb')
+var('B11sb, B12sb, B16sb, B22sb, B26sb, B66sb')
+var('D11sb, D12sb, D16sb, D22sb, D26sb, D66sb')
+var('mu')
 var('E11, nu, h, Fx, Fy, Fxy, Fyx')
 var('kuBot, kvBot, kwBot, kphixBot, kphiyBot')
 var('kuTop, kvTop, kwTop, kphixTop, kphiyTop')
 var('kuLeft, kvLeft, kwLeft, kphixLeft, kphiyLeft')
 var('kuRight, kvRight, kwRight, kphixRight, kphiyRight')
-var('kustiff, kvstiff, kwstiff, kphixstiff, kphiystiff, ystiff')
+var('kf11, kf13, kf14, kf22, kf33, kf34, kf44')
 
 subs = {
        }
