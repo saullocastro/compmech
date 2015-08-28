@@ -257,22 +257,46 @@ def fk0edges(int m1, int n1, double a, double b,
     return k0edges
 
 
-def fk0stiff(int m1, int n1, double ystiff, double a, double b,
-             double kustiff, double kvstiff, double kwstiff,
-             double kphixstiff, double kphiystiff):
+def fk0sb(double ys, double bb, double a, double b, double r,
+          int m1, int n1,
+          np.ndarray[cDOUBLE, ndim=2] Fsb):
     cdef int i1, j1, k1, l1, row, col, c
-    cdef np.ndarray[cINT, ndim=1] k0stiffr, k0stiffc
-    cdef np.ndarray[cDOUBLE, ndim=1] k0stiffv
+    cdef double A11sb, A12sb, A16sb, A22sb, A26sb, A66sb
+    cdef double B11sb, B12sb, B16sb, B22sb, B26sb, B66sb
+    cdef double D11sb, D12sb, D16sb, D22sb, D26sb, D66sb
+    cdef np.ndarray[cINT, ndim=1] k0sbr, k0sbc
+    cdef np.ndarray[cDOUBLE, ndim=1] k0sbv
 
-    fdim = 1*m1*n1*m1*n1 + 1*m1*n1*m1*n1
+    fdim = 9*m1*n1*m1*n1
 
-    k0stiffr = np.zeros((fdim,), dtype=INT)
-    k0stiffc = np.zeros((fdim,), dtype=INT)
-    k0stiffv = np.zeros((fdim,), dtype=DOUBLE)
+    k0sbr = np.zeros((fdim,), dtype=INT)
+    k0sbc = np.zeros((fdim,), dtype=INT)
+    k0sbv = np.zeros((fdim,), dtype=DOUBLE)
+
+    A11sb = Fsb[0,0]
+    A12sb = Fsb[0,1]
+    A16sb = Fsb[0,2]
+    A22sb = Fsb[1,1]
+    A26sb = Fsb[1,2]
+    A66sb = Fsb[2,2]
+
+    B11sb = Fsb[0,3]
+    B12sb = Fsb[0,4]
+    B16sb = Fsb[0,5]
+    B22sb = Fsb[1,4]
+    B26sb = Fsb[1,5]
+    B66sb = Fsb[2,5]
+
+    D11sb = Fsb[3,3]
+    D12sb = Fsb[3,4]
+    D16sb = Fsb[3,5]
+    D22sb = Fsb[4,4]
+    D26sb = Fsb[4,5]
+    D66sb = Fsb[5,5]
 
     c = -1
 
-    # k0stiff_11
+    # k0sb_11
     for i1 in range(1, m1+1):
         for j1 in range(1, n1+1):
             row = num0 + num1*((j1-1)*m1 + (i1-1))
@@ -285,48 +309,315 @@ def fk0stiff(int m1, int n1, double ystiff, double a, double b,
                         continue
 
                     if k1 != i1 and l1 != j1:
-                        # k0stiff_11 cond_1
-                        pass
+                        # k0sb_11 cond_1
+                        c += 1
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+0
+                        k0sbv[c] += A16sb*i1*k1*(-2*(-1)**(i1 + k1) + 2)*((-2*j1*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) + ((j1*j1) + (l1*l1))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (-2*j1*l1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) + ((j1*j1) + (l1*l1))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+1
+                        k0sbv[c] += i1*k1*(2*(-1)**(i1 + k1) - 2)*((-j1*l1*(A12sb + A66sb)*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) + (A12sb*(l1*l1) + A66sb*(j1*j1))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (-j1*l1*(A12sb + A66sb)*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) + (A12sb*(l1*l1) + A66sb*(j1*j1))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(((i1*i1) - (k1*k1))*(-(j1*j1) + (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+2
+                        k0sbv[c] += i1*k1*(2*(-1)**(i1 + k1) - 2)*(2*(pi*pi)*B66sb*(a*a)*j1*l1*r*(-(j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b) + (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b)) + ((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))*((pi*pi)*B11sb*(b*b)*(k1*k1)*r + (a*a)*(A12sb*(b*b) + (pi*pi)*B12sb*(l1*l1)*r)))/(pi*(a*a)*b*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+0
+                        k0sbv[c] += i1*k1*(2*(-1)**(i1 + k1) - 2)*((-j1*l1*(A12sb + A66sb)*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) + (A12sb*(j1*j1) + A66sb*(l1*l1))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (-j1*l1*(A12sb + A66sb)*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) + (A12sb*(j1*j1) + A66sb*(l1*l1))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(((i1*i1) - (k1*k1))*(-(j1*j1) + (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+1
+                        k0sbv[c] += A26sb*i1*k1*(-2*(-1)**(i1 + k1) + 2)*((-2*j1*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) + ((j1*j1) + (l1*l1))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (-2*j1*l1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) + ((j1*j1) + (l1*l1))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+2
+                        k0sbv[c] += i1*k1*(2*(-1)**(i1 + k1) - 2)*(2*(pi*pi)*B26sb*(a*a)*j1*l1*r*(-(j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b) + (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b)) + ((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))*((pi*pi)*B16sb*(b*b)*(k1*k1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(l1*l1)*r)))/(pi*(a*a)*b*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+0
+                        k0sbv[c] += i1*k1*(-2*(-1)**(i1 + k1) + 2)*(2*(pi*pi)*B66sb*(a*a)*j1*l1*r*(-(j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b) + (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b)) + ((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))*((pi*pi)*B11sb*(b*b)*(i1*i1)*r + (a*a)*(A12sb*(b*b) + (pi*pi)*B12sb*(j1*j1)*r)))/(pi*(a*a)*b*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+1
+                        k0sbv[c] += i1*k1*(-2*(-1)**(i1 + k1) + 2)*(2*(pi*pi)*B26sb*(a*a)*j1*l1*r*(-(j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b) + (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b)) + ((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))*((pi*pi)*B16sb*(b*b)*(i1*i1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r)))/(pi*(a*a)*b*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+2
+                        k0sbv[c] += i1*k1*(4*(-1)**(i1 + k1) - 4)*(-j1*((j1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - l1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b) + (j1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) - l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b))*((pi*pi)*D16sb*(b*b)*(k1*k1)*r + (a*a)*(B26sb*(b*b) + (pi*pi)*D26sb*(l1*l1)*r)) + l1*((j1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - l1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (j1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) - l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))*((pi*pi)*D16sb*(b*b)*(i1*i1)*r + (a*a)*(B26sb*(b*b) + (pi*pi)*D26sb*(j1*j1)*r)))/((a*a)*(b*b)*r*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
 
                     elif k1 == i1 and l1 != j1:
-                        # k0stiff_11 cond_2
+                        # k0sb_11 cond_2
                         c += 1
-                        k0stiffr[c] = row+0
-                        k0stiffc[c] = col+0
-                        k0stiffv[c] += 0.5*a*kustiff*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b)
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+0
+                        k0sbv[c] += pi*((j1*(A11sb*(b*b)*(i1*i1) + A66sb*(a*a)*(l1*l1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*(A11sb*(b*b)*(i1*i1) + A66sb*(a*a)*(j1*j1))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*(A11sb*(b*b)*(i1*i1) + A66sb*(a*a)*(l1*l1))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*(A11sb*(b*b)*(i1*i1) + A66sb*(a*a)*(j1*j1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(a*b*((j1*j1) - (l1*l1)))
                         c += 1
-                        k0stiffr[c] = row+1
-                        k0stiffc[c] = col+1
-                        k0stiffv[c] += 0.5*a*kvstiff*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b)
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+1
+                        k0sbv[c] += pi*((j1*(A16sb*(b*b)*(i1*i1) + A26sb*(a*a)*(l1*l1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*(A16sb*(b*b)*(i1*i1) + A26sb*(a*a)*(j1*j1))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*(A16sb*(b*b)*(i1*i1) + A26sb*(a*a)*(l1*l1))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*(A16sb*(b*b)*(i1*i1) + A26sb*(a*a)*(j1*j1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(a*b*((j1*j1) - (l1*l1)))
                         c += 1
-                        k0stiffr[c] = row+2
-                        k0stiffc[c] = col+2
-                        k0stiffv[c] += 0.5*((pi*pi)*(a*a)*j1*kphiystiff*l1*cos(pi*j1*ystiff/b)*cos(pi*l1*ystiff/b) + (b*b)*((a*a)*kwstiff + (pi*pi)*(i1*i1)*kphixstiff)*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b))/(a*(b*b))
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+2
+                        k0sbv[c] += -((-j1*l1*(3*(pi*pi)*B16sb*(b*b)*(i1*i1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(l1*l1)*r))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) + ((pi*pi)*B16sb*(b*b)*(i1*i1)*r*((j1*j1) + 2*(l1*l1)) + (a*a)*(j1*j1)*(A26sb*(b*b) + (pi*pi)*B26sb*(l1*l1)*r))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (-j1*l1*(3*(pi*pi)*B16sb*(b*b)*(i1*i1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(l1*l1)*r))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) + ((pi*pi)*B16sb*(b*b)*(i1*i1)*r*((j1*j1) + 2*(l1*l1)) + (a*a)*(j1*j1)*(A26sb*(b*b) + (pi*pi)*B26sb*(l1*l1)*r))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(a*(b*b)*r*(-(j1*j1) + (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+0
+                        k0sbv[c] += pi*((j1*(A16sb*(b*b)*(i1*i1) + A26sb*(a*a)*(l1*l1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*(A16sb*(b*b)*(i1*i1) + A26sb*(a*a)*(j1*j1))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*(A16sb*(b*b)*(i1*i1) + A26sb*(a*a)*(l1*l1))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*(A16sb*(b*b)*(i1*i1) + A26sb*(a*a)*(j1*j1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(a*b*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+1
+                        k0sbv[c] += pi*((j1*(A22sb*(a*a)*(l1*l1) + A66sb*(b*b)*(i1*i1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*(A22sb*(a*a)*(j1*j1) + A66sb*(b*b)*(i1*i1))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*(A22sb*(a*a)*(l1*l1) + A66sb*(b*b)*(i1*i1))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*(A22sb*(a*a)*(j1*j1) + A66sb*(b*b)*(i1*i1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(a*b*((j1*j1) - (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+2
+                        k0sbv[c] += ((j1*l1*((a*a)*(A22sb*(b*b) + (pi*pi)*B22sb*(l1*l1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb + 2*B66sb))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - ((a*a)*(j1*j1)*(A22sb*(b*b) + (pi*pi)*B22sb*(l1*l1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb*(j1*j1) + 2*B66sb*(l1*l1)))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (j1*l1*((a*a)*(A22sb*(b*b) + (pi*pi)*B22sb*(l1*l1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb + 2*B66sb))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) - ((a*a)*(j1*j1)*(A22sb*(b*b) + (pi*pi)*B22sb*(l1*l1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb*(j1*j1) + 2*B66sb*(l1*l1)))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(a*(b*b)*r*(-(j1*j1) + (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+0
+                        k0sbv[c] += ((-j1*l1*(3*(pi*pi)*B16sb*(b*b)*(i1*i1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) + ((pi*pi)*B16sb*(b*b)*(i1*i1)*r*(2*(j1*j1) + (l1*l1)) + (a*a)*(l1*l1)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (-j1*l1*(3*(pi*pi)*B16sb*(b*b)*(i1*i1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) + ((pi*pi)*B16sb*(b*b)*(i1*i1)*r*(2*(j1*j1) + (l1*l1)) + (a*a)*(l1*l1)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(a*(b*b)*r*(-(j1*j1) + (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+1
+                        k0sbv[c] += ((-j1*l1*((a*a)*(A22sb*(b*b) + (pi*pi)*B22sb*(j1*j1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb + 2*B66sb))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) + ((a*a)*(l1*l1)*(A22sb*(b*b) + (pi*pi)*B22sb*(j1*j1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb*(l1*l1) + 2*B66sb*(j1*j1)))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (-j1*l1*((a*a)*(A22sb*(b*b) + (pi*pi)*B22sb*(j1*j1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb + 2*B66sb))*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) + ((a*a)*(l1*l1)*(A22sb*(b*b) + (pi*pi)*B22sb*(j1*j1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb*(l1*l1) + 2*B66sb*(j1*j1)))*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(a*(b*b)*r*(-(j1*j1) + (l1*l1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+2
+                        k0sbv[c] += (4*(pi*pi*pi*pi)*D66sb*(a*a)*(b*b)*(i1*i1)*j1*l1*(r*r)*(-(j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b) + (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b)) + ((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))*((pi*pi*pi*pi)*D11sb*(b*b*b*b)*(i1*i1*i1*i1)*(r*r) + (a*a*a*a)*(A22sb*(b*b*b*b) + (pi*pi)*r*(B22sb*(b*b)*((j1*j1) + (l1*l1)) + (pi*pi)*D22sb*(j1*j1)*(l1*l1)*r)) + (pi*pi)*(a*a)*(b*b)*(i1*i1)*r*(2*B12sb*(b*b) + (pi*pi)*D12sb*r*((j1*j1) + (l1*l1)))))/(pi*(a*a*a)*(b*b*b)*(r*r)*((j1*j1) - (l1*l1)))
 
                     elif k1 != i1 and l1 == j1:
-                        # k0stiff_11 cond_3
-                        pass
+                        # k0sb_11 cond_3
+                        c += 1
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+1
+                        k0sbv[c] += i1*k1*((-1)**(i1 + k1) - 1)*(A12sb - A66sb)*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)/(2.0*(i1*i1) - 2.0*(k1*k1))
+                        c += 1
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+2
+                        k0sbv[c] += i1*k1*((-1)**(i1 + k1) - 1)*(0.5*pi*B66sb*(a*a)*j1*r*(b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1) + 0.25*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)*((pi*pi)*B11sb*(b*b)*(k1*k1)*r + (a*a)*(A12sb*(b*b) + (pi*pi)*B12sb*(j1*j1)*r))/(pi*j1))/((a*a)*(b*b)*r*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+0
+                        k0sbv[c] += i1*k1*((-1)**(i1 + k1) - 1)*(-A12sb + A66sb)*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)/(2.0*(i1*i1) - 2.0*(k1*k1))
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+2
+                        k0sbv[c] += i1*k1*((-1)**(i1 + k1) - 1)*(0.5*pi*B26sb*(a*a)*j1*r*(b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1) + 0.25*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)*((pi*pi)*B16sb*(b*b)*(k1*k1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r))/(pi*j1))/((a*a)*(b*b)*r*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+0
+                        k0sbv[c] += -i1*k1*((-1)**(i1 + k1) - 1)*(0.5*pi*B66sb*(a*a)*j1*r*(b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1) + 0.25*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)*((pi*pi)*B11sb*(b*b)*(i1*i1)*r + (a*a)*(A12sb*(b*b) + (pi*pi)*B12sb*(j1*j1)*r))/(pi*j1))/((a*a)*(b*b)*r*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+1
+                        k0sbv[c] += -i1*k1*((-1)**(i1 + k1) - 1)*(0.5*pi*B26sb*(a*a)*j1*r*(b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1) + 0.25*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)*((pi*pi)*B16sb*(b*b)*(i1*i1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r))/(pi*j1))/((a*a)*(b*b)*r*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+2
+                        k0sbv[c] += (pi*pi)*D16sb*i1*k1*((-1)**(i1 + k1) - 1)*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)/(a*a)
 
                     elif k1 == i1 and l1 == j1:
-                        # k0stiff_11 cond_4
+                        # k0sb_11 cond_4
                         c += 1
-                        k0stiffr[c] = row+0
-                        k0stiffc[c] = col+0
-                        k0stiffv[c] += 0.5*a*kustiff*sin(pi*j1*ystiff/b)**2
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+0
+                        k0sbv[c] += 0.125*pi*A11sb*(i1*i1)*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(a*j1) + 0.125*pi*A66sb*a*j1*(b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(b*b)
                         c += 1
-                        k0stiffr[c] = row+1
-                        k0stiffc[c] = col+1
-                        k0stiffv[c] += 0.5*a*kvstiff*sin(pi*j1*ystiff/b)**2
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+1
+                        k0sbv[c] += 0.125*pi*A16sb*(i1*i1)*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(a*j1) + 0.125*pi*A26sb*a*j1*(b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(b*b)
                         c += 1
-                        k0stiffr[c] = row+2
-                        k0stiffc[c] = col+2
-                        k0stiffv[c] += 0.5*((pi*pi)*(a*a)*(j1*j1)*kphiystiff*cos(pi*j1*ystiff/b)**2 + (b*b)*((a*a)*kwstiff + (pi*pi)*(i1*i1)*kphixstiff)*sin(pi*j1*ystiff/b)**2)/(a*(b*b))
+                        k0sbr[c] = row+0
+                        k0sbc[c] = col+2
+                        k0sbv[c] += 0.25*(-(pi*pi)*B16sb*(b*b)*(i1*i1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r))*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)/(a*(b*b)*r)
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+0
+                        k0sbv[c] += 0.125*pi*A16sb*(i1*i1)*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(a*j1) + 0.125*pi*A26sb*a*j1*(b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(b*b)
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+1
+                        k0sbv[c] += 0.125*pi*A22sb*a*j1*(b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(b*b) + 0.125*pi*A66sb*(i1*i1)*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(a*j1)
+                        c += 1
+                        k0sbr[c] = row+1
+                        k0sbc[c] = col+2
+                        k0sbv[c] += 0.25*((a*a)*(A22sb*(b*b) + (pi*pi)*B22sb*(j1*j1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb - 2*B66sb))*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)/(a*(b*b)*r)
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+0
+                        k0sbv[c] += 0.25*(-(pi*pi)*B16sb*(b*b)*(i1*i1)*r + (a*a)*(A26sb*(b*b) + (pi*pi)*B26sb*(j1*j1)*r))*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)/(a*(b*b)*r)
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+1
+                        k0sbv[c] += 0.25*((a*a)*(A22sb*(b*b) + (pi*pi)*B22sb*(j1*j1)*r) + (pi*pi)*(b*b)*(i1*i1)*r*(B12sb - 2*B66sb))*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)/(a*(b*b)*r)
+                        c += 1
+                        k0sbr[c] = row+2
+                        k0sbc[c] = col+2
+                        k0sbv[c] += 0.125*(-b*((pi*pi*pi*pi)*D11sb*(b*b*b*b)*(i1*i1*i1*i1)*(r*r) + (a*a*a*a)*(A22sb*(b*b*b*b) + (pi*pi)*(j1*j1)*r*(2*B22sb*(b*b) + (pi*pi)*D22sb*(j1*j1)*r)) + 2*(pi*pi)*(a*a)*(b*b)*(i1*i1)*r*(B12sb*(b*b) + (pi*pi)*(j1*j1)*r*(D12sb - 2*D66sb)))*sin(pi*j1*(bb - 2*ys)/b) - b*((pi*pi*pi*pi)*D11sb*(b*b*b*b)*(i1*i1*i1*i1)*(r*r) + (a*a*a*a)*(A22sb*(b*b*b*b) + (pi*pi)*(j1*j1)*r*(2*B22sb*(b*b) + (pi*pi)*D22sb*(j1*j1)*r)) + 2*(pi*pi)*(a*a)*(b*b)*(i1*i1)*r*(B12sb*(b*b) + (pi*pi)*(j1*j1)*r*(D12sb - 2*D66sb)))*sin(pi*j1*(bb + 2*ys)/b) + 2*pi*bb*j1*((pi*pi*pi*pi)*D11sb*(b*b*b*b)*(i1*i1*i1*i1)*(r*r) + (a*a*a*a)*(A22sb*(b*b*b*b) + (pi*pi)*(j1*j1)*r*(2*B22sb*(b*b) + (pi*pi)*D22sb*(j1*j1)*r)) + 2*(pi*pi)*(a*a)*(b*b)*(i1*i1)*r*(B12sb*(b*b) + (pi*pi)*(j1*j1)*r*(D12sb + 2*D66sb))))/(pi*(a*a*a)*(b*b*b*b)*j1*(r*r))
 
     size = num0 + num1*m1*n1
 
-    k0stiff = coo_matrix((k0stiffv, (k0stiffr, k0stiffc)), shape=(size, size))
+    k0sb = coo_matrix((k0sbv, (k0sbr, k0sbc)), shape=(size, size))
 
-    return k0stiff
+    return k0sb
+
+
+def fk0sf(double ys, double a, double b, double r, int m1, int n1,
+          double Exx, double Gxy, double Jxx, double Iyy):
+    cdef int i1, k1, j1, l1, c, row, col
+    cdef np.ndarray[cINT, ndim=1] k0sfr, k0sfc
+    cdef np.ndarray[cDOUBLE, ndim=1] k0sfv
+
+    fdim = 1*m1*n1*m1*n1
+
+    k0sfr = np.zeros((fdim,), dtype=INT)
+    k0sfc = np.zeros((fdim,), dtype=INT)
+    k0sfv = np.zeros((fdim,), dtype=DOUBLE)
+
+    c = -1
+
+    # k0sf_11
+    for i1 in range(1, m1+1):
+        for j1 in range(1, n1+1):
+            row = num0 + num1*((j1-1)*m1 + (i1-1))
+            for k1 in range(1, m1+1):
+                for l1 in range(1, n1+1):
+                    col = num0 + num1*((l1-1)*m1 + (k1-1))
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    if k1 != i1 and l1 != j1:
+                        # k0sf_11 cond_1
+                        pass
+
+                    elif k1 == i1 and l1 != j1:
+                        # k0sf_11 cond_2
+                        c += 1
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+2
+                        k0sfv[c] += 0.5*(pi*pi*pi*pi)*(Exx*Iyy*(b*b*b*b)*(i1*i1*i1*i1) + Gxy*Jxx*(a*a*a*a)*(j1*j1)*(l1*l1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a*a)*(b*b*b*b))
+
+                    elif k1 != i1 and l1 == j1:
+                        # k0sf_11 cond_3
+                        pass
+
+                    elif k1 == i1 and l1 == j1:
+                        # k0sf_11 cond_4
+                        c += 1
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+2
+                        k0sfv[c] += 0.5*(pi*pi*pi*pi)*(Exx*Iyy*(b*b*b*b)*(i1*i1*i1*i1) + Gxy*Jxx*(a*a*a*a)*(j1*j1*j1*j1))*sin(pi*j1*ys/b)**2/((a*a*a)*(b*b*b*b))
+
+    size = num0 + num1*m1*n1
+
+    k0sf = coo_matrix((k0sfv, (k0sfr, k0sfc)), shape=(size, size))
+
+    return k0sf
+
+
+def fk0sf2(double bf, double ys, double a, double b, double r, int m1, int n1,
+           double kf11, double kf13, double kf14, double kf22, double kf33,
+           double kf34, double kf44):
+    cdef int i1, k1, j1, l1, c, row, col
+    cdef np.ndarray[cINT, ndim=1] k0sf2r, k0sf2c
+    cdef np.ndarray[cDOUBLE, ndim=1] k0sf2v
+
+    fdim = 4*m1*n1*m1*n1
+
+    k0sf2r = np.zeros((fdim,), dtype=INT)
+    k0sf2c = np.zeros((fdim,), dtype=INT)
+    k0sf2v = np.zeros((fdim,), dtype=DOUBLE)
+
+    c = -1
+
+    # k0sf2_11
+    for i1 in range(1, m1+1):
+        for j1 in range(1, n1+1):
+            row = num0 + num1*((j1-1)*m1 + (i1-1))
+            for k1 in range(1, m1+1):
+                for l1 in range(1, n1+1):
+                    col = num0 + num1*((l1-1)*m1 + (k1-1))
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    if k1 != i1 and l1 != j1:
+                        # k0sf2_11 cond_1
+                        c += 1
+                        k0sf2r[c] = row+0
+                        k0sf2c[c] = col+2
+                        k0sf2v[c] += -(pi*pi)*bf*i1*(k1*k1*k1)*kf13*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0sf2r[c] = row+2
+                        k0sf2c[c] = col+0
+                        k0sf2v[c] += (pi*pi)*bf*(i1*i1*i1)*k1*kf13*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0sf2r[c] = row+2
+                        k0sf2c[c] = col+2
+                        k0sf2v[c] += (pi*pi*pi)*bf*i1*k1*kf34*((-1)**(i1 + k1) - 1)*((i1*i1)*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - j1*(k1*k1)*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))/((a*a)*b*((i1*i1) - (k1*k1)))
+
+                    elif k1 == i1 and l1 != j1:
+                        # k0sf2_11 cond_2
+                        c += 1
+                        k0sf2r[c] = row+0
+                        k0sf2c[c] = col+0
+                        k0sf2v[c] += 0.5*(pi*pi)*bf*(i1*i1)*kf11*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/a
+                        c += 1
+                        k0sf2r[c] = row+0
+                        k0sf2c[c] = col+2
+                        k0sf2v[c] += 0.5*(pi*pi*pi)*bf*(i1*i1)*kf14*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/(a*b)
+                        c += 1
+                        k0sf2r[c] = row+2
+                        k0sf2c[c] = col+0
+                        k0sf2v[c] += 0.5*(pi*pi*pi)*bf*(i1*i1)*j1*kf14*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/(a*b)
+                        c += 1
+                        k0sf2r[c] = row+2
+                        k0sf2c[c] = col+2
+                        k0sf2v[c] += 0.5*(pi*pi)*bf*(i1*i1)*((pi*pi)*(a*a)*j1*kf44*l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + (b*b)*((a*a)*kf22 + (pi*pi)*(i1*i1)*kf33)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))/((a*a*a)*(b*b))
+
+                    elif k1 != i1 and l1 == j1:
+                        # k0sf2_11 cond_3
+                        c += 1
+                        k0sf2r[c] = row+0
+                        k0sf2c[c] = col+2
+                        k0sf2v[c] += -(pi*pi)*bf*i1*(k1*k1*k1)*kf13*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0sf2r[c] = row+2
+                        k0sf2c[c] = col+0
+                        k0sf2v[c] += (pi*pi)*bf*(i1*i1*i1)*k1*kf13*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
+                        c += 1
+                        k0sf2r[c] = row+2
+                        k0sf2c[c] = col+2
+                        k0sf2v[c] += 0.5*(pi*pi*pi)*bf*i1*j1*k1*kf34*((-1)**(i1 + k1) - 1)*sin(2*pi*j1*ys/b)/((a*a)*b)
+
+                    elif k1 == i1 and l1 == j1:
+                        # k0sf2_11 cond_4
+                        c += 1
+                        k0sf2r[c] = row+0
+                        k0sf2c[c] = col+0
+                        k0sf2v[c] += 0.5*(pi*pi)*bf*(i1*i1)*kf11*sin(pi*j1*ys/b)**2/a
+                        c += 1
+                        k0sf2r[c] = row+0
+                        k0sf2c[c] = col+2
+                        k0sf2v[c] += 0.25*(pi*pi*pi)*bf*(i1*i1)*j1*kf14*sin(2*pi*j1*ys/b)/(a*b)
+                        c += 1
+                        k0sf2r[c] = row+2
+                        k0sf2c[c] = col+0
+                        k0sf2v[c] += 0.25*(pi*pi*pi)*bf*(i1*i1)*j1*kf14*sin(2*pi*j1*ys/b)/(a*b)
+                        c += 1
+                        k0sf2r[c] = row+2
+                        k0sf2c[c] = col+2
+                        k0sf2v[c] += 0.5*(pi*pi)*bf*(i1*i1)*((pi*pi)*(a*a)*(j1*j1)*kf44*cos(pi*j1*ys/b)**2 + (b*b)*((a*a)*kf22 + (pi*pi)*(i1*i1)*kf33)*sin(pi*j1*ys/b)**2)/((a*a*a)*(b*b))
+
+    size = num0 + num1*m1*n1
+
+    k0sf2 = coo_matrix((k0sf2v, (k0sf2r, k0sf2c)), shape=(size, size))
+
+    return k0sf2
 
 
 def fkAx(double beta, double gamma, double a, double b, int m1, int n1):
@@ -599,20 +890,21 @@ def fkM(double mu, double h, double a, double b, int m1, int n1):
     return kM
 
 
-def fkMstiff(double mustiff, double ystiff, double Astiff, double a, double b, int m1, int n1):
+def fkMsb(double mus, double ys, double db, double hb, double a, double b,
+          int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
-    cdef np.ndarray[cINT, ndim=1] kMstiffr, kMstiffc
-    cdef np.ndarray[cDOUBLE, ndim=1] kMstiffv
+    cdef np.ndarray[cINT, ndim=1] kMsbr, kMsbc
+    cdef np.ndarray[cDOUBLE, ndim=1] kMsbv
 
     fdim = 3*m1*n1*m1*n1
 
-    kMstiffr = np.zeros((fdim,), dtype=INT)
-    kMstiffc = np.zeros((fdim,), dtype=INT)
-    kMstiffv = np.zeros((fdim,), dtype=DOUBLE)
+    kMsbr = np.zeros((fdim,), dtype=INT)
+    kMsbc = np.zeros((fdim,), dtype=INT)
+    kMsbv = np.zeros((fdim,), dtype=DOUBLE)
 
     c = -1
 
-    # kMstiff_11
+    # kMsb_11
     for i1 in range(1, m1+1):
         for j1 in range(1, n1+1):
             row = num0 + num1*((j1-1)*m1 + (i1-1))
@@ -625,45 +917,135 @@ def fkMstiff(double mustiff, double ystiff, double Astiff, double a, double b, i
                         continue
 
                     if k1 != i1 and l1 != j1:
-                        # kMstiff_11 cond_1
+                        # kMsb_11 cond_1
                         pass
 
                     elif k1 == i1 and l1 != j1:
-                        # kMstiff_11 cond_2
-                        c += 1
-                        kMstiffr[c] = row+0
-                        kMstiffc[c] = col+0
-                        kMstiffv[c] += 0.5*Astiff*a*mustiff*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b)
-                        c += 1
-                        kMstiffr[c] = row+1
-                        kMstiffc[c] = col+1
-                        kMstiffv[c] += 0.5*Astiff*a*mustiff*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b)
-                        c += 1
-                        kMstiffr[c] = row+2
-                        kMstiffc[c] = col+2
-                        kMstiffv[c] += 0.5*Astiff*a*mustiff*sin(pi*j1*ystiff/b)*sin(pi*l1*ystiff/b)
+                        # kMsb_11 cond_2
+                        pass
 
                     elif k1 != i1 and l1 == j1:
-                        # kMstiff_11 cond_3
+                        # kMsb_11 cond_3
                         pass
 
                     elif k1 == i1 and l1 == j1:
-                        # kMstiff_11 cond_4
+                        # kMsb_11 cond_4
                         c += 1
-                        kMstiffr[c] = row+0
-                        kMstiffc[c] = col+0
-                        kMstiffv[c] += 0.5*Astiff*a*mustiff*sin(pi*j1*ystiff/b)**2
+                        kMsbr[c] = row+0
+                        kMsbc[c] = col+0
+                        kMsbv[c] += 0.25*a*b*hb*mus
                         c += 1
-                        kMstiffr[c] = row+1
-                        kMstiffc[c] = col+1
-                        kMstiffv[c] += 0.5*Astiff*a*mustiff*sin(pi*j1*ystiff/b)**2
+                        kMsbr[c] = row+1
+                        kMsbc[c] = col+1
+                        kMsbv[c] += 0.25*a*b*hb*mus
                         c += 1
-                        kMstiffr[c] = row+2
-                        kMstiffc[c] = col+2
-                        kMstiffv[c] += 0.5*Astiff*a*mustiff*sin(pi*j1*ystiff/b)**2
+                        kMsbr[c] = row+2
+                        kMsbc[c] = col+2
+                        kMsbv[c] += 0.125*hb*mus*((a*a)*(2*(b*b) + (pi*pi)*(j1*j1)*(2*db - hb)) + (pi*pi)*(b*b)*(i1*i1)*(2*db - hb))/(a*b)
 
     size = num0 + num1*m1*n1
 
-    kMstiff = coo_matrix((kMstiffv, (kMstiffr, kMstiffc)), shape=(size, size))
+    kMsb = coo_matrix((kMsbv, (kMsbr, kMsbc)), shape=(size, size))
 
-    return kMstiff
+    return kMsb
+
+
+def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
+          double Iyy, double Jxx, int m1, int n1):
+    cdef int i1, k1, j1, l1, c, row, col
+    cdef np.ndarray[cINT, ndim=1] kMsfr, kMsfc
+    cdef np.ndarray[cDOUBLE, ndim=1] kMsfv
+
+    fdim = 5*m1*n1*m1*n1
+
+    kMsfr = np.zeros((fdim,), dtype=INT)
+    kMsfc = np.zeros((fdim,), dtype=INT)
+    kMsfv = np.zeros((fdim,), dtype=DOUBLE)
+
+    c = -1
+
+    # kMsf_11
+    for i1 in range(1, m1+1):
+        for j1 in range(1, n1+1):
+            row = num0 + num1*((j1-1)*m1 + (i1-1))
+            for k1 in range(1, m1+1):
+                for l1 in range(1, n1+1):
+                    col = num0 + num1*((l1-1)*m1 + (k1-1))
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    if k1 != i1 and l1 != j1:
+                        # kMsf_11 cond_1
+                        c += 1
+                        kMsfr[c] = row+0
+                        kMsfc[c] = col+2
+                        kMsfv[c] += -Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
+                        c += 1
+                        kMsfr[c] = row+2
+                        kMsfc[c] = col+0
+                        kMsfv[c] += Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
+
+                    elif k1 == i1 and l1 != j1:
+                        # kMsf_11 cond_2
+                        c += 1
+                        kMsfr[c] = row+0
+                        kMsfc[c] = col+0
+                        kMsfv[c] += 0.5*Asf*a*mus*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)
+                        c += 1
+                        kMsfr[c] = row+1
+                        kMsfc[c] = col+1
+                        kMsfv[c] += 0.5*Asf*a*mus*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)
+                        c += 1
+                        kMsfr[c] = row+1
+                        kMsfc[c] = col+2
+                        kMsfv[c] += 0.5*pi*Asf*a*df*l1*mus*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/b
+                        c += 1
+                        kMsfr[c] = row+2
+                        kMsfc[c] = col+1
+                        kMsfv[c] += 0.5*pi*Asf*a*df*j1*mus*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/b
+                        c += 1
+                        kMsfr[c] = row+2
+                        kMsfc[c] = col+2
+                        kMsfv[c] += 0.5*mus*((pi*pi)*(a*a)*j1*l1*(Asf*(df*df) + Jxx)*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + (b*b)*(Asf*(a*a) + (pi*pi)*(i1*i1)*(Asf*(df*df) + Iyy))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))/(a*(b*b))
+
+                    elif k1 != i1 and l1 == j1:
+                        # kMsf_11 cond_3
+                        c += 1
+                        kMsfr[c] = row+0
+                        kMsfc[c] = col+2
+                        kMsfv[c] += -Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
+                        c += 1
+                        kMsfr[c] = row+2
+                        kMsfc[c] = col+0
+                        kMsfv[c] += Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
+
+                    elif k1 == i1 and l1 == j1:
+                        # kMsf_11 cond_4
+                        c += 1
+                        kMsfr[c] = row+0
+                        kMsfc[c] = col+0
+                        kMsfv[c] += 0.5*Asf*a*mus*sin(pi*j1*ys/b)**2
+                        c += 1
+                        kMsfr[c] = row+1
+                        kMsfc[c] = col+1
+                        kMsfv[c] += 0.5*Asf*a*mus*sin(pi*j1*ys/b)**2
+                        c += 1
+                        kMsfr[c] = row+1
+                        kMsfc[c] = col+2
+                        kMsfv[c] += 0.25*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
+                        c += 1
+                        kMsfr[c] = row+2
+                        kMsfc[c] = col+1
+                        kMsfv[c] += 0.25*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
+                        c += 1
+                        kMsfr[c] = row+2
+                        kMsfc[c] = col+2
+                        kMsfv[c] += 0.5*mus*((pi*pi)*(a*a)*(j1*j1)*(Asf*(df*df) + Jxx)*cos(pi*j1*ys/b)**2 + (b*b)*(Asf*(a*a) + (pi*pi)*(i1*i1)*(Asf*(df*df) + Iyy))*sin(pi*j1*ys/b)**2)/(a*(b*b))
+
+    size = num0 + num1*m1*n1
+
+    kMsf = coo_matrix((kMsfv, (kMsfr, kMsfc)), shape=(size, size))
+
+    return kMsf
