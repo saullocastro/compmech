@@ -627,7 +627,7 @@ class AeroPistonPlate(object):
 
 
     def freq(self, atype=4, tol=0, sparse_solver=False, silent=False,
-            sort=True, reduced_dof=True):
+            sort=True, reduced_dof=False):
         """Performs a frequency analysis
 
         The following parameters of the ``AeroPistonPlate`` object will affect
