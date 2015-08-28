@@ -31,32 +31,103 @@ def load(name):
     else:
         return cPickle.load(open(name + '.AeroPistonStiffPanel', 'rb'))
 
+
 class Stiffener(object):
     r"""Stiffener
 
-    This class includes methods to calculate the required stiffnesses:
-        - ku
-        - kv
-        - kw
-        - kphix
-        - kphiy
-
-    based on the inertia properties.
-
     """
-    def __init__(self):
+    def __init__(self, panel, ys, bb, bf, bstack, bplyts, blaminaprops,
+                 fstack, fplyts, flaminaprops):
+        self.panel = panel
         self.mu = None
-        self.y = None
-        self.ku = None
-        self.kv = None
-        self.kw = None
-        self.kphix = None
-        self.kphiy = None
-        self.I1 = None
-        self.I2 = None
-        self.I12 = None
-        self.A = None
-        self.J = None
+        self.ys = ys
+        self.bb = bb
+        self.hb = 0.
+        self.bf = bf
+        self.hf = 0.
+
+        self.bstack = bstack
+        self.bplyts = bplyts
+        self.blaminaprops = blaminaprops
+        self.fstack = fstack
+        self.fplyts = fplyts
+        self.flaminaprops = flaminaprops
+        self.blam = None
+        self.flam = None
+        self.use_flange1 = True
+
+        self.As = None
+        self.Asf = None
+        self.Exx = None
+        self.Gxy = None
+        self.Jxx = None
+        self.Iyy = None
+
+        self.rebuild()
+
+
+    def rebuild(self):
+        if self.fstack != []:
+            self.flam = laminate.read_stack(self.fstack, plyts=self.fplyts,
+                                             laminaprops=self.flaminaprops)
+            self.flam.calc_equivalent_modulus()
+            self.hf = self.flam.t
+            # flange type 1
+            if True:
+                self.Exx = self.flam.e1
+                self.Gxy = self.flam.g12
+            if False:
+                Exx = 0
+                Gxy = 0
+                for ply in self.flam.plies:
+                    Exx += (ply.matobj.e1*np.cos(np.deg2rad(ply.theta)) +
+                            ply.matobj.e2*np.sin(np.deg2rad(ply.theta)))*ply.t/self.flam.t
+                    Gxy += ply.matobj.g12*ply.t/self.flam.t
+                self.Exx = Exx
+                self.Gxy = self.flam.g12
+
+        if self.bstack != []:
+            self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
+                                             laminaprops=self.blaminaprops)
+            self.hb = self.blam.t
+
+        #TODO check offset effect on curved panels
+        self.df = -(self.bf/2. + self.hb + sum(self.panel.plyts)/2.)
+        self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2
+        self.Jxx = self.Iyy + self.bf*self.hf**3/12.
+
+        self.Asb = self.bb*self.hb
+        self.Asf = self.bf*self.hf
+        self.As = self.Asb + self.Asf
+
+        if self.fstack != []:
+            # flange type 2
+            E1 = 0
+            E3 = 0
+            S1 = 0
+            J = 0
+            #TODO check this geometric correction factor
+            s = 1.
+            yply = self.flam.plies[0].t/2.
+            for i, ply in enumerate(self.flam.plies):
+                if i > 0:
+                    yply += self.flam.plies[i].t
+                q = ply.QL
+                E1 += ply.t*(q[0,0] - q[0,1]**2/q[1,1])
+                E3 += ply.t*(q[2,2] - q[1,2]**2/q[1,1])
+                S1 += -yply*ply.t*(q[1,2]-q[0,1]*q[1,2]/q[1,1])
+                J += yply**2*ply.t*(q[2,2] - q[1,2]**2/q[1,1])
+
+            F1 = self.bf**2/12.*E1
+
+            self.kf11 = E1
+            self.kf13 = self.df*E1
+            self.kf14 = -S1
+            self.kf22 = E3
+            self.kf33 = F1 + self.df**2*E1
+            self.kf34 = -self.df*S1
+            self.kf44 = J
+
 
 
 class AeroPistonStiffPanel(object):
@@ -152,7 +223,6 @@ class AeroPistonStiffPanel(object):
 
         # constitutive law
         self.F = None
-        self.force_orthotropic_laminate = False
 
         # eigenvalue analysis
         self.num_eigvalues = 25
@@ -173,7 +243,6 @@ class AeroPistonStiffPanel(object):
 
     def _clear_matrices(self):
         self.k0 = None
-        self.k0stiff = None
         self.kT = None
         self.kG0 = None
         self.kG0_Fx = None
@@ -357,7 +426,7 @@ class AeroPistonStiffPanel(object):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2, silent=silent)
 
-        fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0stiff, fkMstiff = \
+        fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0sb, fk0sf, fk0sf2, fkMsb, fkMsf = \
                 modelDB.get_linear_matrices(self)
         model = self.model
         a = self.a
@@ -384,6 +453,8 @@ class AeroPistonStiffPanel(object):
             beta = self.beta
             gamma = self.gamma if self.gamma is not None else 0.
             aeromu = self.aeromu if self.aeromu is not None else 0.
+        elif not calc_kA:
+            pass
         else:
             raise NotImplementedError('check here')
 
@@ -399,33 +470,6 @@ class AeroPistonStiffPanel(object):
             if lam is not None:
                 F = lam.ABDE
                 F[6:, 6:] *= self.K
-
-        if self.force_orthotropic_laminate:
-            msg('')
-            msg('Forcing orthotropic laminate...', level=2)
-            F[0, 2] = 0. # A16
-            F[1, 2] = 0. # A26
-            F[2, 0] = 0. # A61
-            F[2, 1] = 0. # A62
-
-            F[0, 5] = 0. # B16
-            F[5, 0] = 0. # B61
-            F[1, 5] = 0. # B26
-            F[5, 1] = 0. # B62
-
-            F[3, 2] = 0. # B16
-            F[2, 3] = 0. # B61
-            F[4, 2] = 0. # B26
-            F[2, 4] = 0. # B62
-
-            F[3, 5] = 0. # D16
-            F[4, 5] = 0. # D26
-            F[5, 3] = 0. # D61
-            F[5, 4] = 0. # D62
-
-            if F.shape[0] == 8:
-                F[6, 7] = 0. # A45
-                F[7, 6] = 0. # A54
 
         self.lam = lam
         self.F = F
@@ -479,9 +523,18 @@ class AeroPistonStiffPanel(object):
         # contributions from stiffeners
         #TODO summing up coo_matrix objects may be very slow!
         for s in self.stiffeners:
-            k0 += fk0stiff(m1, n1, s.y, a, b, s.ku, s.kv, s.kw, s.kphix,
-                    s.kphiy)
-            kM += fkMstiff(s.mu, s.y, s.A, a, b, m1, n1)
+            if s.blam is not None:
+                Fsb = s.blam.ABD
+                k0 += fk0sb(s.ys, s.bb, a, b, r, m1, n1, Fsb)
+            if s.use_flange1:
+                k0 += fk0sf(s.ys, a, b, r, m1, n1, s.Exx, s.Gxy, s.Jxx, s.Iyy)
+            else:
+                k0 += fk0sf2(s.bf, s.ys, a, b, r, m1, n1, s.kf11, s.kf13,
+                        s.kf14, s.kf22, s.kf33, s.kf34, s.kf44)
+
+            if s.blam is not None:
+                kM += fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
+            kM += fkMsf(s.mu, s.ys, s.df, s.Asf, a, b, s.Iyy, s.Jxx, m1, n1)
 
         # performing checks for the linear stiffness matrices
 
