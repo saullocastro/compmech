@@ -55,9 +55,16 @@ def mprint_as_sparse(m, mname, sufix, subs=None,
             else:
                 if pow_by_mul:
                     v = str(v)
+                    old_new = []
                     for p in re.findall(r'\w+\*\*\d+', v):
                         var, exp = p.split('**')
-                        v = v.replace(p, '(' + '*'.join([var]*int(exp)) + ')')
+                        new = '(' + '*'.join([var]*int(exp)) + ')'
+                        old_new.append([p, new])
+                    # putting longer patterns first to avoid wrong
+                    # substitutions
+                    old_new = sorted(old_new, key=lambda x: len(x[0]))[::-1]
+                    for old, new in old_new:
+                        v = v.replace(old, new)
                 ls.append('{mname}v[c] += {v}'.format(mname=mname, v=v))
 
     string = '\n'.join(ls)
