@@ -518,9 +518,8 @@ def fk0sf(double ys, double a, double b, double r, int m1, int n1,
     return k0sf
 
 
-def fk0sf2(double bf, double ys, double a, double b, double r, int m1, int n1,
-           double kf11, double kf13, double kf14, double kf22, double kf33,
-           double kf34, double kf44):
+def fk0sf2(double bf, double df, double ys, double a, double b, double r,
+           int m1, int n1, double E1, double F1, double S1, double Jxx):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] k0sf2r, k0sf2c
     cdef np.ndarray[cDOUBLE, ndim=1] k0sf2v
@@ -550,68 +549,68 @@ def fk0sf2(double bf, double ys, double a, double b, double r, int m1, int n1,
                         c += 1
                         k0sf2r[c] = row+0
                         k0sf2c[c] = col+2
-                        k0sf2v[c] += -(pi*pi)*bf*i1*(k1*k1*k1)*kf13*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
+                        k0sf2v[c] += -(pi*pi)*E1*bf*df*i1*(k1*k1*k1)*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
                         c += 1
                         k0sf2r[c] = row+2
                         k0sf2c[c] = col+0
-                        k0sf2v[c] += (pi*pi)*bf*(i1*i1*i1)*k1*kf13*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
+                        k0sf2v[c] += (pi*pi)*E1*bf*df*(i1*i1*i1)*k1*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
                         c += 1
                         k0sf2r[c] = row+2
                         k0sf2c[c] = col+2
-                        k0sf2v[c] += (pi*pi*pi)*bf*i1*k1*kf34*((-1)**(i1 + k1) - 1)*((i1*i1)*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - j1*(k1*k1)*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))/((a*a)*b*((i1*i1) - (k1*k1)))
+                        k0sf2v[c] += -(pi*pi*pi)*S1*bf*df*i1*k1*((-1)**(i1 + k1) - 1)*((i1*i1)*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - j1*(k1*k1)*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))/((a*a)*b*((i1*i1) - (k1*k1)))
 
                     elif k1 == i1 and l1 != j1:
                         # k0sf2_11 cond_2
                         c += 1
                         k0sf2r[c] = row+0
                         k0sf2c[c] = col+0
-                        k0sf2v[c] += 0.5*(pi*pi)*bf*(i1*i1)*kf11*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/a
+                        k0sf2v[c] += 0.5*(pi*pi)*E1*bf*(i1*i1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/a
                         c += 1
                         k0sf2r[c] = row+0
                         k0sf2c[c] = col+2
-                        k0sf2v[c] += 0.5*(pi*pi*pi)*bf*(i1*i1)*kf14*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/(a*b)
+                        k0sf2v[c] += -0.5*(pi*pi*pi)*S1*bf*(i1*i1)*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/(a*b)
                         c += 1
                         k0sf2r[c] = row+2
                         k0sf2c[c] = col+0
-                        k0sf2v[c] += 0.5*(pi*pi*pi)*bf*(i1*i1)*j1*kf14*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/(a*b)
+                        k0sf2v[c] += -0.5*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/(a*b)
                         c += 1
                         k0sf2r[c] = row+2
                         k0sf2c[c] = col+2
-                        k0sf2v[c] += 0.5*(pi*pi)*bf*(i1*i1)*((pi*pi)*(a*a)*j1*kf44*l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + (b*b)*((a*a)*kf22 + (pi*pi)*(i1*i1)*kf33)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))/((a*a*a)*(b*b))
+                        k0sf2v[c] += 0.5*(pi*pi*pi*pi)*bf*(i1*i1)*(Jxx*(a*a)*j1*l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + (b*b)*(i1*i1)*(E1*(df*df) + F1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))/((a*a*a)*(b*b))
 
                     elif k1 != i1 and l1 == j1:
                         # k0sf2_11 cond_3
                         c += 1
                         k0sf2r[c] = row+0
                         k0sf2c[c] = col+2
-                        k0sf2v[c] += -(pi*pi)*bf*i1*(k1*k1*k1)*kf13*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
+                        k0sf2v[c] += -(pi*pi)*E1*bf*df*i1*(k1*k1*k1)*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
                         c += 1
                         k0sf2r[c] = row+2
                         k0sf2c[c] = col+0
-                        k0sf2v[c] += (pi*pi)*bf*(i1*i1*i1)*k1*kf13*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
+                        k0sf2v[c] += (pi*pi)*E1*bf*df*(i1*i1*i1)*k1*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
                         c += 1
                         k0sf2r[c] = row+2
                         k0sf2c[c] = col+2
-                        k0sf2v[c] += 0.5*(pi*pi*pi)*bf*i1*j1*k1*kf34*((-1)**(i1 + k1) - 1)*sin(2*pi*j1*ys/b)/((a*a)*b)
+                        k0sf2v[c] += -0.5*(pi*pi*pi)*S1*bf*df*i1*j1*k1*((-1)**(i1 + k1) - 1)*sin(2*pi*j1*ys/b)/((a*a)*b)
 
                     elif k1 == i1 and l1 == j1:
                         # k0sf2_11 cond_4
                         c += 1
                         k0sf2r[c] = row+0
                         k0sf2c[c] = col+0
-                        k0sf2v[c] += 0.5*(pi*pi)*bf*(i1*i1)*kf11*sin(pi*j1*ys/b)**2/a
+                        k0sf2v[c] += 0.5*(pi*pi)*E1*bf*(i1*i1)*sin(pi*j1*ys/b)**2/a
                         c += 1
                         k0sf2r[c] = row+0
                         k0sf2c[c] = col+2
-                        k0sf2v[c] += 0.25*(pi*pi*pi)*bf*(i1*i1)*j1*kf14*sin(2*pi*j1*ys/b)/(a*b)
+                        k0sf2v[c] += -0.25*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(2*pi*j1*ys/b)/(a*b)
                         c += 1
                         k0sf2r[c] = row+2
                         k0sf2c[c] = col+0
-                        k0sf2v[c] += 0.25*(pi*pi*pi)*bf*(i1*i1)*j1*kf14*sin(2*pi*j1*ys/b)/(a*b)
+                        k0sf2v[c] += -0.25*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(2*pi*j1*ys/b)/(a*b)
                         c += 1
                         k0sf2r[c] = row+2
                         k0sf2c[c] = col+2
-                        k0sf2v[c] += 0.5*(pi*pi)*bf*(i1*i1)*((pi*pi)*(a*a)*(j1*j1)*kf44*cos(pi*j1*ys/b)**2 + (b*b)*((a*a)*kf22 + (pi*pi)*(i1*i1)*kf33)*sin(pi*j1*ys/b)**2)/((a*a*a)*(b*b))
+                        k0sf2v[c] += 0.5*(pi*pi*pi*pi)*bf*(i1*i1)*(Jxx*(a*a)*(j1*j1)*cos(pi*j1*ys/b)**2 + (b*b)*(i1*i1)*(E1*(df*df) + F1)*sin(pi*j1*ys/b)**2)/((a*a*a)*(b*b))
 
     size = num0 + num1*m1*n1
 
@@ -862,25 +861,11 @@ def fkM(double mu, double h, double a, double b, int m1, int n1):
 
                     elif k1 == i1 and l1 != j1:
                         # kM_11 cond_2
-                        c += 1
-                        kMr[c] = row+1
-                        kMc[c] = col+2
-                        kMv[c] += a*(h*h)*j1*l1*mu*((-1)**(j1 + l1) - 1)/(4.0*(j1*j1) - 4.0*(l1*l1))
-                        c += 1
-                        kMr[c] = row+2
-                        kMc[c] = col+1
-                        kMv[c] += a*(h*h)*j1*l1*mu*((-1)**(j1 + l1) - 1)/(4.0*(j1*j1) - 4.0*(l1*l1))
+                        pass
 
                     elif k1 != i1 and l1 == j1:
                         # kM_11 cond_3
-                        c += 1
-                        kMr[c] = row+0
-                        kMc[c] = col+2
-                        kMv[c] += b*(h*h)*i1*k1*mu*((-1)**(i1 + k1) - 1)/(4.0*(i1*i1) - 4.0*(k1*k1))
-                        c += 1
-                        kMr[c] = row+2
-                        kMc[c] = col+0
-                        kMv[c] += b*(h*h)*i1*k1*mu*((-1)**(i1 + k1) - 1)/(4.0*(i1*i1) - 4.0*(k1*k1))
+                        pass
 
                     elif k1 == i1 and l1 == j1:
                         # kM_11 cond_4
@@ -895,7 +880,7 @@ def fkM(double mu, double h, double a, double b, int m1, int n1):
                         c += 1
                         kMr[c] = row+2
                         kMc[c] = col+2
-                        kMv[c] += 0.25*a*b*h*mu - 0.0625*(pi*pi)*a*(h*h*h)*(j1*j1)*mu/b - 0.0625*(pi*pi)*b*(h*h*h)*(i1*i1)*mu/a
+                        kMv[c] += 0.25*a*b*h*mu - 0.0208333333333333*(pi*pi)*a*(h*h*h)*(j1*j1)*mu/b - 0.0208333333333333*(pi*pi)*b*(h*h*h)*(i1*i1)*mu/a
 
     size = num0 + num1*m1*n1
 
@@ -939,22 +924,22 @@ def fkMsb(double mus, double ys, double db, double hb, double a, double b,
                         c += 1
                         kMsbr[c] = row+1
                         kMsbc[c] = col+2
-                        kMsbv[c] += -a*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)*(2*db - hb)/(4.0*(j1*j1) - 4.0*(l1*l1))
+                        kMsbv[c] += -a*db*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
                         c += 1
                         kMsbr[c] = row+2
                         kMsbc[c] = col+1
-                        kMsbv[c] += a*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)*(-2*db + hb)/(4.0*(j1*j1) - 4.0*(l1*l1))
+                        kMsbv[c] += -a*db*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
 
                     elif k1 != i1 and l1 == j1:
                         # kMsb_11 cond_3
                         c += 1
                         kMsbr[c] = row+0
                         kMsbc[c] = col+2
-                        kMsbv[c] += -b*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)*(2*db - hb)/(4.0*(i1*i1) - 4.0*(k1*k1))
+                        kMsbv[c] += -b*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
                         c += 1
                         kMsbr[c] = row+2
                         kMsbc[c] = col+0
-                        kMsbv[c] += b*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)*(-2*db + hb)/(4.0*(i1*i1) - 4.0*(k1*k1))
+                        kMsbv[c] += -b*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
 
                     elif k1 == i1 and l1 == j1:
                         # kMsb_11 cond_4
@@ -969,7 +954,7 @@ def fkMsb(double mus, double ys, double db, double hb, double a, double b,
                         c += 1
                         kMsbr[c] = row+2
                         kMsbc[c] = col+2
-                        kMsbv[c] += hb*mus*(0.25*a*b - 0.0625*(pi*pi)*a*(j1*j1)*(-2*db + hb)**2/b - 0.0625*(pi*pi)*b*(i1*i1)*(-2*db + hb)**2/a)
+                        kMsbv[c] += -0.0208333333333333*hb*mus*((a*a)*(-12*(b*b) + (pi*pi)*(j1*j1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb)))/(a*b)
 
     size = num0 + num1*m1*n1
 
@@ -1009,11 +994,11 @@ def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
                         c += 1
                         kMsfr[c] = row+0
                         kMsfc[c] = col+2
-                        kMsfv[c] += Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
+                        kMsfv[c] += -Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+0
-                        kMsfv[c] += Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
+                        kMsfv[c] += -Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
 
                     elif k1 == i1 and l1 != j1:
                         # kMsf_11 cond_2
@@ -1028,11 +1013,11 @@ def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
                         c += 1
                         kMsfr[c] = row+1
                         kMsfc[c] = col+2
-                        kMsfv[c] += -0.5*pi*Asf*a*df*l1*mus*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/b
+                        kMsfv[c] += 0.5*pi*Asf*a*df*l1*mus*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/b
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+1
-                        kMsfv[c] += 0.5*pi*Asf*a*df*j1*mus*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/b
+                        kMsfv[c] += -0.5*pi*Asf*a*df*j1*mus*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/b
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+2
@@ -1043,11 +1028,11 @@ def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
                         c += 1
                         kMsfr[c] = row+0
                         kMsfc[c] = col+2
-                        kMsfv[c] += Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
+                        kMsfv[c] += -Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+0
-                        kMsfv[c] += Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
+                        kMsfv[c] += -Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
 
                     elif k1 == i1 and l1 == j1:
                         # kMsf_11 cond_4
@@ -1062,11 +1047,11 @@ def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
                         c += 1
                         kMsfr[c] = row+1
                         kMsfc[c] = col+2
-                        kMsfv[c] += -0.25*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
+                        kMsfv[c] += 0.25*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+1
-                        kMsfv[c] += 0.25*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
+                        kMsfv[c] += -0.25*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+2
