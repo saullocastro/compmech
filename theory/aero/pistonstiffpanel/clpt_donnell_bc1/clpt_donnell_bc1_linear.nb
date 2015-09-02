@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    214228,       4370]
-NotebookOptionsPosition[    211832,       4305]
-NotebookOutlinePosition[    212232,       4322]
-CellTagsIndexPosition[    212189,       4319]
+NotebookDataLength[    113984,       2648]
+NotebookOptionsPosition[    113404,       2624]
+NotebookOutlinePosition[    113805,       2641]
+CellTagsIndexPosition[    113762,       2638]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -42,19 +42,19 @@ Cell[BoxData[{
    RowBox[{"isotropic", "=", "False"}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"calculatek0", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"calculatek0", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"calculatek0s", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"calculatek0s", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"calculatek0edges", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"calculatek0edges", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"calculatekM", "=", "True"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"calculatekA", "=", "False"}], ";"}], " "}], "\[IndentingNewLine]", 
+   RowBox[{"calculatekA", "=", "True"}], ";"}], " "}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"calculatekG0", "=", "False"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"calculatekG0", "=", "True"}], ";"}], "\[IndentingNewLine]", 
   "\[IndentingNewLine]", 
   RowBox[{"(*", " ", 
    RowBox[{
@@ -121,40 +121,24 @@ Cell[BoxData[{
        RowBox[{"0", ",", "0", ",", "0", ",", "0", ",", "kphiyLeft"}], "}"}]}],
       "}"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"kRight", "=", " ", 
-   RowBox[{"{", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"kuRight", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}], ",",
-      "\[IndentingNewLine]", "             ", 
-     RowBox[{"{", 
-      RowBox[{"0", ",", "kvRight", ",", "0", ",", "0", ",", "0"}], "}"}], ",",
-      "\[IndentingNewLine]", "             ", 
-     RowBox[{"{", 
-      RowBox[{"0", ",", "0", ",", "kwRight", ",", "0", ",", "0"}], "}"}], ",",
-      "\[IndentingNewLine]", "             ", 
-     RowBox[{"{", 
-      RowBox[{"0", ",", "0", ",", "0", ",", "kphixRight", ",", "0"}], "}"}], 
-     ",", "\[IndentingNewLine]", "             ", 
-     RowBox[{"{", 
-      RowBox[{"0", ",", "0", ",", "0", ",", "0", ",", "kphiyRight"}], "}"}]}],
-     "}"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
   RowBox[{
-   RowBox[{"ksf2", "=", " ", 
+   RowBox[{"kRight", "=", " ", 
     RowBox[{"{", 
      RowBox[{
       RowBox[{"{", 
-       RowBox[{"kf11", ",", "     ", "0", ",", "kf13", ",", "kf14"}], "}"}], 
-      ",", "\[IndentingNewLine]", "         ", 
-      RowBox[{"{", "     ", 
-       RowBox[{"0", ",", "kf22", ",", "      ", "0", ",", "      ", "0"}], 
-       "}"}], ",", "\[IndentingNewLine]", "         ", 
+       RowBox[{"kuRight", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}], 
+      ",", "\[IndentingNewLine]", "             ", 
       RowBox[{"{", 
-       RowBox[{"kf13", ",", "      ", "0", ",", "kf33", ",", "kf34"}], "}"}], 
-      ",", "\[IndentingNewLine]", "         ", 
+       RowBox[{"0", ",", "kvRight", ",", "0", ",", "0", ",", "0"}], "}"}], 
+      ",", "\[IndentingNewLine]", "             ", 
       RowBox[{"{", 
-       RowBox[{"kf14", ",", "      ", "0", ",", "kf34", ",", "kf44"}], 
+       RowBox[{"0", ",", "0", ",", "kwRight", ",", "0", ",", "0"}], "}"}], 
+      ",", "\[IndentingNewLine]", "             ", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0", ",", "0", ",", "kphixRight", ",", "0"}], "}"}], 
+      ",", "\[IndentingNewLine]", "             ", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0", ",", "0", ",", "0", ",", "kphiyRight"}], 
        "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
   RowBox[{"(*", 
    RowBox[{
@@ -758,10 +742,55 @@ Cell[BoxData[{
        "*", "Jxx"}]}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
+  RowBox[{"ksf2", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", "         ", 
+      RowBox[{
+      "E1", ",", "         ", "E2", ",", "          ", "E2", ",", 
+       "          ", 
+       RowBox[{
+        RowBox[{"-", "df"}], "*", "E1"}], ",", "          ", "S1"}], "}"}], 
+     ",", "\[IndentingNewLine]", "         ", 
+     RowBox[{"{", "         ", 
+      RowBox[{
+      "E2", ",", "         ", "E3", ",", "          ", "E3", ",", 
+       "          ", 
+       RowBox[{
+        RowBox[{"-", "df"}], "*", "E2"}], ",", "          ", "S2"}], "}"}], 
+     ",", "\[IndentingNewLine]", "         ", 
+     RowBox[{"{", "         ", 
+      RowBox[{
+      "E2", ",", "         ", "E3", ",", "          ", "E3", ",", 
+       "          ", 
+       RowBox[{
+        RowBox[{"-", "df"}], "*", "E2"}], ",", "          ", "S2"}], "}"}], 
+     ",", "\[IndentingNewLine]", "         ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "df"}], "*", "E1"}], ",", 
+       RowBox[{
+        RowBox[{"-", "df"}], "*", "E2"}], ",", 
+       RowBox[{
+        RowBox[{"-", "df"}], "*", "E2"}], ",", 
+       RowBox[{"F1", "+", 
+        RowBox[{
+         RowBox[{"df", "^", "2"}], "*", "E1"}]}], ",", 
+       RowBox[{
+        RowBox[{"-", "df"}], "*", "S1"}]}], "}"}], ",", "\[IndentingNewLine]",
+      "         ", 
+     RowBox[{"{", "         ", 
+      RowBox[{
+      "S1", ",", "          ", "S2", ",", "       ", "S2", ",", "           ", 
+       RowBox[{
+        RowBox[{"-", "df"}], "*", "S1"}], ",", "       ", "Jxx"}], "}"}]}], 
+    "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
   RowBox[{"gAsf2", "=", 
    RowBox[{"Table", "[", 
     RowBox[{"0", ",", 
-     RowBox[{"{", "4", "}"}], ",", 
+     RowBox[{"{", "5", "}"}], ",", 
      RowBox[{"{", 
       RowBox[{"dimgA", "[", 
        RowBox[{"[", "2", "]"}], "]"}], "}"}]}], "]"}]}], 
@@ -770,17 +799,14 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"gAsf2", "[", 
     RowBox[{"[", 
-     RowBox[{
-      RowBox[{"1", ";;", "1"}], ",", "All"}], "]"}], "]"}], "=", 
+     RowBox[{"1", ",", "All"}], "]"}], "]"}], "=", 
    RowBox[{"ReplaceAll", "[", 
     RowBox[{
      RowBox[{"D", "[", 
       RowBox[{
        RowBox[{"gA", "[", 
         RowBox[{"[", 
-         RowBox[{
-          RowBox[{"1", ";;", "1"}], ",", "All"}], "]"}], "]"}], ",", "x"}], 
-      "]"}], ",", 
+         RowBox[{"1", ",", "All"}], "]"}], "]"}], ",", "x"}], "]"}], ",", 
      RowBox[{"{", 
       RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
@@ -788,17 +814,14 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"gAsf2", "[", 
     RowBox[{"[", 
-     RowBox[{
-      RowBox[{"2", ";;", "2"}], ",", "All"}], "]"}], "]"}], "=", 
+     RowBox[{"2", ",", "All"}], "]"}], "]"}], "=", 
    RowBox[{"ReplaceAll", "[", 
     RowBox[{
      RowBox[{"D", "[", 
       RowBox[{
        RowBox[{"gA", "[", 
         RowBox[{"[", 
-         RowBox[{
-          RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}], ",", "x"}], 
-      "]"}], ",", 
+         RowBox[{"3", ",", "All"}], "]"}], "]"}], ",", "x"}], "]"}], ",", 
      RowBox[{"{", 
       RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
@@ -806,17 +829,32 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"gAsf2", "[", 
     RowBox[{"[", 
-     RowBox[{
-      RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}], "=", 
+     RowBox[{"3", ",", "All"}], "]"}], "]"}], "=", 
    RowBox[{"ReplaceAll", "[", 
     RowBox[{
-     RowBox[{"D", "[", 
-      RowBox[{
-       RowBox[{"gA", "[", 
-        RowBox[{"[", 
-         RowBox[{
-          RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}], ",", "x", ",",
-        "x"}], "]"}], ",", 
+     RowBox[{"-", 
+      RowBox[{"D", "[", 
+       RowBox[{
+        RowBox[{"gA", "[", 
+         RowBox[{"[", 
+          RowBox[{"3", ",", "All"}], "]"}], "]"}], ",", "x"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"gAsf2", "[", 
+    RowBox[{"[", 
+     RowBox[{"4", ",", "All"}], "]"}], "]"}], "=", 
+   RowBox[{"ReplaceAll", "[", 
+    RowBox[{
+     RowBox[{"-", 
+      RowBox[{"D", "[", 
+       RowBox[{
+        RowBox[{"gA", "[", 
+         RowBox[{"[", 
+          RowBox[{"3", ",", "All"}], "]"}], "]"}], ",", "x", ",", "x"}], 
+       "]"}]}], ",", 
      RowBox[{"{", 
       RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
@@ -825,17 +863,16 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"gAsf2", "[", 
      RowBox[{"[", 
-      RowBox[{
-       RowBox[{"4", ";;", "4"}], ",", "All"}], "]"}], "]"}], "=", 
+      RowBox[{"5", ",", "All"}], "]"}], "]"}], "=", 
     RowBox[{"ReplaceAll", "[", 
      RowBox[{
-      RowBox[{"D", "[", 
-       RowBox[{
-        RowBox[{"gA", "[", 
-         RowBox[{"[", 
-          RowBox[{
-           RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}], ",", "x", 
-        ",", "y"}], "]"}], ",", 
+      RowBox[{"-", 
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"gA", "[", 
+          RowBox[{"[", 
+           RowBox[{"3", ",", "All"}], "]"}], "]"}], ",", "x", ",", "y"}], 
+        "]"}]}], ",", 
       RowBox[{"{", 
        RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
@@ -843,7 +880,7 @@ Cell[BoxData[{
   RowBox[{"gBsf2", "=", 
    RowBox[{"Table", "[", 
     RowBox[{"0", ",", 
-     RowBox[{"{", "4", "}"}], ",", 
+     RowBox[{"{", "5", "}"}], ",", 
      RowBox[{"{", 
       RowBox[{"dimgB", "[", 
        RowBox[{"[", "2", "]"}], "]"}], "}"}]}], "]"}]}], 
@@ -852,17 +889,14 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"gBsf2", "[", 
     RowBox[{"[", 
-     RowBox[{
-      RowBox[{"1", ";;", "1"}], ",", "All"}], "]"}], "]"}], "=", 
+     RowBox[{"1", ",", "All"}], "]"}], "]"}], "=", 
    RowBox[{"ReplaceAll", "[", 
     RowBox[{
      RowBox[{"D", "[", 
       RowBox[{
        RowBox[{"gB", "[", 
         RowBox[{"[", 
-         RowBox[{
-          RowBox[{"1", ";;", "1"}], ",", "All"}], "]"}], "]"}], ",", "x"}], 
-      "]"}], ",", 
+         RowBox[{"1", ",", "All"}], "]"}], "]"}], ",", "x"}], "]"}], ",", 
      RowBox[{"{", 
       RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
@@ -870,17 +904,14 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"gBsf2", "[", 
     RowBox[{"[", 
-     RowBox[{
-      RowBox[{"2", ";;", "2"}], ",", "All"}], "]"}], "]"}], "=", 
+     RowBox[{"2", ",", "All"}], "]"}], "]"}], "=", 
    RowBox[{"ReplaceAll", "[", 
     RowBox[{
      RowBox[{"D", "[", 
       RowBox[{
        RowBox[{"gB", "[", 
         RowBox[{"[", 
-         RowBox[{
-          RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}], ",", "x"}], 
-      "]"}], ",", 
+         RowBox[{"3", ",", "All"}], "]"}], "]"}], ",", "x"}], "]"}], ",", 
      RowBox[{"{", 
       RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
@@ -888,17 +919,32 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"gBsf2", "[", 
     RowBox[{"[", 
-     RowBox[{
-      RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}], "=", 
+     RowBox[{"3", ",", "All"}], "]"}], "]"}], "=", 
    RowBox[{"ReplaceAll", "[", 
     RowBox[{
-     RowBox[{"D", "[", 
-      RowBox[{
-       RowBox[{"gB", "[", 
-        RowBox[{"[", 
-         RowBox[{
-          RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}], ",", "x", ",",
-        "x"}], "]"}], ",", 
+     RowBox[{"-", 
+      RowBox[{"D", "[", 
+       RowBox[{
+        RowBox[{"gB", "[", 
+         RowBox[{"[", 
+          RowBox[{"3", ",", "All"}], "]"}], "]"}], ",", "x"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"gBsf2", "[", 
+    RowBox[{"[", 
+     RowBox[{"4", ",", "All"}], "]"}], "]"}], "=", 
+   RowBox[{"ReplaceAll", "[", 
+    RowBox[{
+     RowBox[{"-", 
+      RowBox[{"D", "[", 
+       RowBox[{
+        RowBox[{"gB", "[", 
+         RowBox[{"[", 
+          RowBox[{"3", ",", "All"}], "]"}], "]"}], ",", "x", ",", "x"}], 
+       "]"}]}], ",", 
      RowBox[{"{", 
       RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
@@ -907,17 +953,16 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"gBsf2", "[", 
      RowBox[{"[", 
-      RowBox[{
-       RowBox[{"4", ";;", "4"}], ",", "All"}], "]"}], "]"}], "=", 
+      RowBox[{"5", ",", "All"}], "]"}], "]"}], "=", 
     RowBox[{"ReplaceAll", "[", 
      RowBox[{
-      RowBox[{"D", "[", 
-       RowBox[{
-        RowBox[{"gB", "[", 
-         RowBox[{"[", 
-          RowBox[{
-           RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}], ",", "x", 
-        ",", "y"}], "]"}], ",", 
+      RowBox[{"-", 
+       RowBox[{"D", "[", 
+        RowBox[{
+         RowBox[{"gB", "[", 
+          RowBox[{"[", 
+           RowBox[{"3", ",", "All"}], "]"}], "]"}], ",", "x", ",", "y"}], 
+        "]"}]}], ",", 
       RowBox[{"{", 
        RowBox[{"y", "\[Rule]", "ys"}], "}"}]}], "]"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
@@ -1237,7 +1282,7 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{"kMsf", "=", 
-    RowBox[{"Asf", "*", "mu", "*", 
+    RowBox[{"Asf", "*", "mus", "*", 
      RowBox[{
       RowBox[{"Transpose", "[", "gAmsf", "]"}], ".", "msf", ".", 
       "gBmsf"}]}]}], ";"}], "\[IndentingNewLine]", 
@@ -2491,7 +2536,12 @@ Cell[BoxData[{
    3.650058833570309*^9, 3.650058973812615*^9}, {3.6500590627481527`*^9, 
    3.6500590767790947`*^9}, {3.6500595042182407`*^9, 3.650059520198344*^9}, {
    3.650059675022875*^9, 3.650059679659378*^9}, {3.650060074510356*^9, 
-   3.6500600804968567`*^9}}],
+   3.6500600804968567`*^9}, {3.6501355000675664`*^9, 
+   3.6501355498443527`*^9}, {3.6501376205052137`*^9, 
+   3.6501379093098755`*^9}, {3.6501379463258047`*^9, 3.650137993123067*^9}, {
+   3.6501380296312294`*^9, 3.6501380417406993`*^9}, {3.650138072027849*^9, 
+   3.650138115812213*^9}, {3.6501381694063897`*^9, 3.6501383943473625`*^9}, {
+   3.6501392042273817`*^9, 3.65013924511856*^9}}],
 
 Cell[CellGroupData[{
 
@@ -2503,7 +2553,8 @@ Cell[BoxData["\<\"Integration conditions:\"\>"], "Print",
   3.649688849897475*^9, 3.6496947942499247`*^9, 3.6496949376334257`*^9, 
   3.6497090542191133`*^9, 3.6497110113652067`*^9, 3.6500589781984987`*^9, 
   3.6500590348736877`*^9, 3.6500590852626495`*^9, 3.6500595243061476`*^9, 
-  3.6500596837661905`*^9}],
+  3.6500596837661905`*^9, 3.6500600846122274`*^9, 3.650138046084473*^9, 
+  3.650139217538269*^9, 3.6501392518016214`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2518,155 +2569,8 @@ Cell[BoxData[
   3.649688849897475*^9, 3.6496947942499247`*^9, 3.6496949376334257`*^9, 
   3.6497090542191133`*^9, 3.6497110113652067`*^9, 3.6500589781984987`*^9, 
   3.6500590348736877`*^9, 3.6500590852626495`*^9, 3.6500595243061476`*^9, 
-  3.650059683797442*^9}]
-}, Open  ]],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(\\(\\((h\\\\ mu\\\\ \\(\
-\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \\(i1\\\\ \[Pi]\
-\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\
-\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\
-\\)\\)]\\)\\)]\\)\\)\\)\\/a, \\(j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b}\\)\\)}\\)\\) . m . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(k1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/a\\)\\)\\)\\)}\\)\\), \\(\\({0, 0, \
-\\(\\(-\\(\\(\\(l1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] \
-4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 1\\)\\) \
-\[RightDoubleBracket]\\)\[NoBreak] is longer than depth of object. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/partd\\\", \
-ButtonNote -> \\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.6500596838599463`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(\\(\\((h\\\\ mu\\\\ \\(\
-\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \\(i1\\\\ \[Pi]\
-\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\
-\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\
-\\)\\)]\\)\\)]\\)\\)\\)\\/a, \\(j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b}\\)\\)}\\)\\) . m . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(k1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/a\\)\\)\\)\\)}\\)\\), \\(\\({0, 0, \
-\\(\\(-\\(\\(\\(l1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] \
-4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 1\\)\\) \
-\[RightDoubleBracket]\\)\[NoBreak] is longer than depth of object. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/partd\\\", \
-ButtonNote -> \\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.6500596838911905`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(\\(\\((h\\\\ mu\\\\ \\(\
-\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \\(i1\\\\ \[Pi]\
-\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\
-\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\
-\\)\\)]\\)\\)]\\)\\)\\)\\/a, \\(j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b}\\)\\)}\\)\\) . m . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(k1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/a\\)\\)\\)\\)}\\)\\), \\(\\({0, 0, \
-\\(\\(-\\(\\(\\(l1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] \
-4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 2\\)\\) \
-\[RightDoubleBracket]\\)\[NoBreak] is longer than depth of object. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/partd\\\", \
-ButtonNote -> \\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.6500596839068203`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Part :: \
-partd\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
-calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.6500596839224277`*^9}],
-
-Cell[CellGroupData[{
+  3.6500596837661905`*^9, 3.6500600846122274`*^9, 3.650138046084473*^9, 
+  3.650139217538269*^9, 3.6501392518172445`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2681,7 +2585,8 @@ Cell[BoxData[
   3.649688849897475*^9, 3.6496947942499247`*^9, 3.6496949376334257`*^9, 
   3.6497090542191133`*^9, 3.6497110113652067`*^9, 3.6500589781984987`*^9, 
   3.6500590348736877`*^9, 3.6500590852626495`*^9, 3.6500595243061476`*^9, 
-  3.6500596839224277`*^9}],
+  3.6500596837661905`*^9, 3.6500600846122274`*^9, 3.650138046084473*^9, 
+  3.650139217538269*^9, 3.6501392518172445`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2696,7 +2601,8 @@ Cell[BoxData[
   3.649688849897475*^9, 3.6496947942499247`*^9, 3.6496949376334257`*^9, 
   3.6497090542191133`*^9, 3.6497110113652067`*^9, 3.6500589781984987`*^9, 
   3.6500590348736877`*^9, 3.6500590852626495`*^9, 3.6500595243061476`*^9, 
-  3.650059683938052*^9}],
+  3.6500596837661905`*^9, 3.6500600846122274`*^9, 3.650138046084473*^9, 
+  3.650139217538269*^9, 3.6501392518368387`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2711,1600 +2617,13 @@ Cell[BoxData[
   3.649688849897475*^9, 3.6496947942499247`*^9, 3.6496949376334257`*^9, 
   3.6497090542191133`*^9, 3.6497110113652067`*^9, 3.6500589781984987`*^9, 
   3.6500590348736877`*^9, 3.6500590852626495`*^9, 3.6500595243061476`*^9, 
-  3.6500596839536953`*^9}]
-}, Open  ]],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500596840161786`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059684047429*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500596855720477`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500596855935626`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059699326826*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500596993737*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059704075529*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059704091154*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500597258388815`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059735016384*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500597350383997`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500597612532773`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 1\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059765733073*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 1\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059777583132*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059808056831*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059834929724*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 1\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059845517308*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 1\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059845539323*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059845954418*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.65005984728286*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500598479823523`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059848917014*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 1\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059852478796*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 1\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500598563355155`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: partd\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.65005985635553*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059883581207*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 1\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500598906863194`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 3\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500598953507843`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Part :: partd\\), \
-\\\"MessageName\\\"]\\) will be suppressed during this calculation.\"\>"}]], \
-"Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500598953717995`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 2\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6500598980787077`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \\!\\(\\(\\((Notebook$$17$57980`h\\\\ \
-\\(\\(\[LeftSkeleton] 21 \[RightSkeleton]\\)\\)\\\\ \
-\\(\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \
-\\(Notebook$$17$57980`i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a, \
-\\(Notebook$$17$57980`j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b}\\)\\)}\\)\\) \
-. \\(\\(\[LeftSkeleton] 20 \[RightSkeleton]\\)\\) . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`k1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`a\\)\\)\\)\\)}\\)\
-\\), \\(\\({0, 0, \\(\\(-\\(\\(\\(Notebook$$17$57980`l1\\\\ \[Pi]\\\\ \
-\\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/Notebook$$17$57980`b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 1\\)\\) \
-\[RightDoubleBracket]\\) is longer than depth of object.\"\>"}]], "Message", \
-"MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.650059933885933*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(\\(\\((h\\\\ mu\\\\ \\(\
-\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \\(i1\\\\ \[Pi]\
-\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\
-\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\
-\\)\\)]\\)\\)]\\)\\)\\)\\/a, \\(j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b}\\)\\)}\\)\\) . m . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(k1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/a\\)\\)\\)\\)}\\)\\), \\(\\({0, 0, \
-\\(\\(-\\(\\(\\(l1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] \
-4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 2\\)\\) \
-\[RightDoubleBracket]\\)\[NoBreak] is longer than depth of object. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/partd\\\", \
-ButtonNote -> \\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.650059964401565*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(\\(\\((h\\\\ mu\\\\ \\(\
-\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \\(i1\\\\ \[Pi]\
-\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\
-\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\
-\\)\\)]\\)\\)]\\)\\)\\)\\/a, \\(j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b}\\)\\)}\\)\\) . m . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(i1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/a\\)\\)\\)\\)}\\)\\), \\(\\({0, 0, \
-\\(\\(-\\(\\(\\(l1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] \
-4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(2, 3\\)\\) \
-\[RightDoubleBracket]\\)\[NoBreak] is longer than depth of object. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/partd\\\", \
-ButtonNote -> \\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.650059965085498*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Part", "::", "partd"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Part specification \[NoBreak]\\!\\(\\(\\((h\\\\ mu\\\\ \\(\
-\\(\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0, \
-0}\\)\\), \\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0, 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), \\(i1\\\\ \[Pi]\
-\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\
-\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \[RightSkeleton]\
-\\)\\)]\\)\\)]\\)\\)\\)\\/a, \\(j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b}\\)\\)}\\)\\) . m . \
-\\(\\({\\(\\({\\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0, 0}\\)\\), \
-\\(\\({0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\), 0}\\)\\), \
-\\(\\({0, 0, \\(\\(\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)}\\)\\), \
-\\(\\({0, 0, \\(\\(-\\(\\(\\(k1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \
-\\(\\(Sin[\\(\\(Times[\\(\\(\[LeftSkeleton] 4 \
-\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/a\\)\\)\\)\\)}\\)\\), \\(\\({0, 0, \
-\\(\\(-\\(\\(\\(j1\\\\ \[Pi]\\\\ \\(\\(Cos[\\(\\(Times[\\(\\(\[LeftSkeleton] \
-4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\\\ \\(\\(Sin[\\(\\(Times[\\(\\(\
-\[LeftSkeleton] 4 \[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\/b\\)\\)\\)\\)}\\)\
-\\)}\\)\\)\\)\\))\\)\\) \[LeftDoubleBracket] \\(\\(1, 2\\)\\) \
-\[RightDoubleBracket]\\)\[NoBreak] is longer than depth of object. \
-\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
-ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/General/partd\\\", \
-ButtonNote -> \\\"Part::partd\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.6500599656188774`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Part :: \
-partd\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
-calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
-ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
-ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
-\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
- CellChangeTimes->{3.650059965632887*^9}]
+  3.6500596837661905`*^9, 3.6500600846122274`*^9, 3.650138046084473*^9, 
+  3.650139217538269*^9, 3.650139251845831*^9}]
+}, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1520, 727},
-WindowMargins->{{0, Automatic}, {Automatic, 5}},
+WindowSize->{766, 792},
+WindowMargins->{{Automatic, -7}, {-7, Automatic}},
 CellContext->Notebook,
 Magnification->1.100000023841858,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
@@ -4322,55 +2641,14 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 106780, 2471, 8873, "Input"],
+Cell[579, 22, 108597, 2521, 9193, "Input"],
 Cell[CellGroupData[{
-Cell[107384, 2497, 590, 8, 24, "Print"],
-Cell[107977, 2507, 773, 13, 24, "Print"]
-}, Open  ]],
-Cell[108765, 2523, 2767, 42, 121, "Message"],
-Cell[111535, 2567, 2767, 42, 121, "Message"],
-Cell[114305, 2611, 2767, 42, 121, "Message"],
-Cell[117075, 2655, 530, 11, 23, "Message"],
-Cell[CellGroupData[{
-Cell[117630, 2670, 775, 13, 24, "Print"],
-Cell[118408, 2685, 773, 13, 24, "Print"],
-Cell[119184, 2700, 775, 13, 24, "Print"]
-}, Open  ]],
-Cell[119974, 2716, 2837, 47, 149, "Message"],
-Cell[122814, 2765, 2835, 47, 149, "Message"],
-Cell[125652, 2814, 2837, 47, 149, "Message"],
-Cell[128492, 2863, 2837, 47, 149, "Message"],
-Cell[131332, 2912, 2835, 47, 149, "Message"],
-Cell[134170, 2961, 2833, 47, 149, "Message"],
-Cell[137006, 3010, 2835, 47, 149, "Message"],
-Cell[139844, 3059, 2835, 47, 149, "Message"],
-Cell[142682, 3108, 2837, 47, 149, "Message"],
-Cell[145522, 3157, 2835, 47, 149, "Message"],
-Cell[148360, 3206, 2837, 47, 149, "Message"],
-Cell[151200, 3255, 2837, 47, 149, "Message"],
-Cell[154040, 3304, 2835, 47, 149, "Message"],
-Cell[156878, 3353, 2835, 47, 149, "Message"],
-Cell[159716, 3402, 2835, 47, 149, "Message"],
-Cell[162554, 3451, 2835, 47, 149, "Message"],
-Cell[165392, 3500, 2835, 47, 149, "Message"],
-Cell[168230, 3549, 2835, 47, 149, "Message"],
-Cell[171068, 3598, 2835, 47, 149, "Message"],
-Cell[173906, 3647, 2834, 47, 149, "Message"],
-Cell[176743, 3696, 2837, 47, 149, "Message"],
-Cell[179583, 3745, 2835, 47, 149, "Message"],
-Cell[182421, 3794, 2835, 47, 149, "Message"],
-Cell[185259, 3843, 2837, 47, 149, "Message"],
-Cell[188099, 3892, 339, 9, 23, "Message"],
-Cell[188441, 3903, 2835, 47, 149, "Message"],
-Cell[191279, 3952, 2837, 47, 149, "Message"],
-Cell[194119, 4001, 2837, 47, 149, "Message"],
-Cell[196959, 4050, 342, 9, 23, "Message"],
-Cell[197304, 4061, 2837, 47, 149, "Message"],
-Cell[200144, 4110, 2835, 47, 149, "Message"],
-Cell[202982, 4159, 2765, 42, 121, "Message"],
-Cell[205750, 4203, 2765, 42, 121, "Message"],
-Cell[208518, 4247, 2767, 42, 121, "Message"],
-Cell[211288, 4291, 528, 11, 23, "Message"]
+Cell[109201, 2547, 685, 9, 24, "Print"],
+Cell[109889, 2558, 870, 14, 24, "Print"],
+Cell[110762, 2574, 870, 14, 24, "Print"],
+Cell[111635, 2590, 870, 14, 24, "Print"],
+Cell[112508, 2606, 868, 14, 24, "Print"]
+}, Open  ]]
 }, Open  ]]
 }
 ]

@@ -54,7 +54,7 @@ class Stiffener(object):
         self.flaminaprops = flaminaprops
         self.blam = None
         self.flam = None
-        self.use_flange1 = True
+        self.flange_formulation = 2
 
         self.As = None
         self.Asf = None
@@ -93,8 +93,9 @@ class Stiffener(object):
 
         #TODO check offset effect on curved panels
         self.df = -(self.bf/2. + self.hb + sum(self.panel.plyts)/2.)
-        self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2
-        self.Jxx = self.Iyy + self.bf*self.hf**3/12.
+        self.Iyy = self.hf*self.bf**3/12.
+        #self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2
+        self.Jxx = self.hf*self.bf**3/12. + self.bf*self.hf**3/12.
 
         self.Asb = self.bb*self.hb
         self.Asf = self.bf*self.hf
@@ -102,10 +103,10 @@ class Stiffener(object):
 
         if self.fstack != []:
             # flange type 2
-            E1 = 0
-            E3 = 0
-            S1 = 0
-            J = 0
+            self.E1 = 0
+            #E3 = 0
+            self.S1 = 0
+            self.Je = 0
             #TODO check this geometric correction factor
             s = 1.
             yply = self.flam.plies[0].t/2.
@@ -113,21 +114,12 @@ class Stiffener(object):
                 if i > 0:
                     yply += self.flam.plies[i].t
                 q = ply.QL
-                E1 += ply.t*(q[0,0] - q[0,1]**2/q[1,1])
-                E3 += ply.t*(q[2,2] - q[1,2]**2/q[1,1])
-                S1 += -yply*ply.t*(q[1,2]-q[0,1]*q[1,2]/q[1,1])
-                J += yply**2*ply.t*(q[2,2] - q[1,2]**2/q[1,1])
+                self.E1 += ply.t*(q[0,0] - q[0,1]**2/q[1,1])
+                #E3 += ply.t*(q[2,2] - q[1,2]**2/q[1,1])
+                self.S1 += -yply*ply.t*(q[1,2]-q[0,1]*q[1,2]/q[1,1])
+                self.Je += yply**2*ply.t*(q[2,2] - q[1,2]**2/q[1,1])
 
-            F1 = self.bf**2/12.*E1
-
-            self.kf11 = E1
-            self.kf13 = self.df*E1
-            self.kf14 = -S1
-            self.kf22 = E3
-            self.kf33 = F1 + self.df**2*E1
-            self.kf34 = -self.df*S1
-            self.kf44 = J
-
+            self.F1 = self.bf**2/12.*self.E1
 
 
 class AeroPistonStiffPanel(object):
@@ -526,11 +518,11 @@ class AeroPistonStiffPanel(object):
             if s.blam is not None:
                 Fsb = s.blam.ABD
                 k0 += fk0sb(s.ys, s.bb, a, b, r, m1, n1, Fsb)
-            if s.use_flange1:
+            if s.flange_formulation == 1:
                 k0 += fk0sf(s.ys, a, b, r, m1, n1, s.Exx, s.Gxy, s.Jxx, s.Iyy)
-            else:
-                k0 += fk0sf2(s.bf, s.ys, a, b, r, m1, n1, s.kf11, s.kf13,
-                        s.kf14, s.kf22, s.kf33, s.kf34, s.kf44)
+            elif s.flange_formulation == 2:
+                k0 += fk0sf2(s.bf, s.df, s.ys, a, b, r, m1, n1, s.E1, s.F1,
+                             s.S1, s.Jxx)
 
             if s.blam is not None:
                 kM += fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
