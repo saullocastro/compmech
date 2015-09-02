@@ -13,7 +13,8 @@ from compmech.constants import DOUBLE
 from compmech.logger import *
 
 
-def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[]):
+def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],
+               offset=0.):
     """Read a laminate stacking sequence data.
 
     An ``Laminate`` object is returned based on the inputs given.
@@ -31,6 +32,9 @@ def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[]):
         A list of floats with the thickness of each ply.
     laminaprops : list, optional
         A list of tuples with a laminaprop for each ply.
+    offset : float, optional
+        Offset along the normal axis about the mid-surface, which influences
+        the laminate properties.
 
     Notes
     -----
@@ -47,6 +51,7 @@ def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[]):
 
     """
     lam = Laminate()
+    lam.offset = offset
     lam.stack = stack
 
     if not plyts:
@@ -126,6 +131,7 @@ class Laminate(object):
     =========  ===========================================================
     plies      list of plies
     t          total thickness of the laminate
+    offset     offset at the normal direction
     e1         equivalent laminate modulus in 1 direction
     e2         equivalent laminate modulus in 2 direction
     g12        equivalent laminate shear modulus in 12 direction
@@ -147,6 +153,7 @@ class Laminate(object):
         self.plies = []
         self.matobj = None
         self.t = None
+        self.offset = 0.
         self.e1 = None
         self.e2 = None
         self.e3 = None
@@ -206,16 +213,16 @@ class Laminate(object):
         for ply in self.plies:
             lam_thick += ply.t
         self.t = lam_thick
-        h0 = -lam_thick/2
+        h0 = -lam_thick/2. + self.offset
         for ply in self.plies:
-            hk_1 =  h0
+            hk_1 = h0
             h0 += ply.t
-            hk =  h0
+            hk = h0
 
             Afac = ply.t / lam_thick
             Bfac = (2. / lam_thick**2) * (hk**2 - hk_1**2)
             Dfac = (4. / lam_thick**3) * (hk**3 - hk_1**3)
-            Efac = (1. / lam_thick   ) * (hk    - hk_1   )# * (5./6) * (5./6)
+            Efac = (1. / lam_thick) * (hk - hk_1)# * (5./6) * (5./6)
 
             cos2t = ply.cos2t
             cos4t = ply.cos4t
@@ -323,12 +330,12 @@ class Laminate(object):
             lam_thick += ply.t
         self.t = lam_thick
 
-        h0 = -lam_thick/2
+        h0 = -lam_thick/2 + self.offset
         for ply in self.plies:
             hk_1 = h0
             h0 += ply.t
             hk = h0
-            self.A_general +=      ply.QL*(hk    - hk_1   )
+            self.A_general += ply.QL*(hk - hk_1)
             self.B_general += 1/2.*ply.QL*(hk**2 - hk_1**2)
             self.D_general += 1/3.*ply.QL*(hk**3 - hk_1**3)
 
@@ -379,6 +386,9 @@ class Laminate(object):
         orthotropic laminate.
 
         """
+        if self.offset != 0.:
+            raise RuntimeError(
+                    'Laminates with offset cannot be forced orthotropic!')
         self.A[0, 2] = 0.
         self.A[1, 2] = 0.
         self.A[2, 0] = 0.
@@ -441,6 +451,9 @@ class Laminate(object):
         The `B` terms of the constitutive matrix are set to zero.
 
         """
+        if self.offset != 0.:
+            raise RuntimeError(
+                    'Laminates with offset cannot be forced symmetric!')
         self.B = np.zeros((3,3))
         self.ABD[0:3, 3:6] = 0
         self.ABD[3:6, 0:3] = 0
