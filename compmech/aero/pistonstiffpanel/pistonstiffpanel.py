@@ -86,13 +86,15 @@ class Stiffener(object):
                 self.Exx = Exx
                 self.Gxy = self.flam.g12
 
+        h = sum(self.panel.plyts)
         if self.bstack != []:
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
-                                             laminaprops=self.blaminaprops)
+                                            laminaprops=self.blaminaprops,
+                                            offset=(-h/2.))
             self.hb = self.blam.t
 
         #TODO check offset effect on curved panels
-        self.df = -(self.bf/2. + self.hb + sum(self.panel.plyts)/2.)
+        self.df = self.bf/2. + self.hb + h/2.
         self.Iyy = self.hf*self.bf**3/12.
         #self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2
         self.Jxx = self.hf*self.bf**3/12. + self.bf*self.hf**3/12.
@@ -112,11 +114,11 @@ class Stiffener(object):
             yply = self.flam.plies[0].t/2.
             for i, ply in enumerate(self.flam.plies):
                 if i > 0:
-                    yply += self.flam.plies[i].t
+                    yply += self.flam.plies[i-1].t/2. + self.flam.plies[i].t/2.
                 q = ply.QL
                 self.E1 += ply.t*(q[0,0] - q[0,1]**2/q[1,1])
                 #E3 += ply.t*(q[2,2] - q[1,2]**2/q[1,1])
-                self.S1 += -yply*ply.t*(q[1,2]-q[0,1]*q[1,2]/q[1,1])
+                self.S1 += -yply*ply.t*(q[0,2] - q[0,1]*q[1,2]/q[1,1])
                 self.Je += yply**2*ply.t*(q[2,2] - q[1,2]**2/q[1,1])
 
             self.F1 = self.bf**2/12.*self.E1
