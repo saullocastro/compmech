@@ -9,6 +9,11 @@ params = 'build_ext --inplace -I%s' % numpy.get_include() + ' '.join(sys.argv[1:
 
 cwd = os.getcwd()
 
+if os.name == 'nt':
+    use_sdk = 'DISTUTILS_USE_SDK'
+    if not use_sdk in os.environ.keys():
+        os.environ[use_sdk] = '1'
+
 print('####################')
 print('Compiling modules...')
 print('####################')
