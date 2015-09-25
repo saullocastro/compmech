@@ -38,36 +38,19 @@ class AeroPistonPlate(object):
     The approximation functions for the displacement field are:
 
         .. math::
-            \begin{tabular}{l c r}
-            CLPT & FSDT \\
-            \hline
-            $u$ & $u$ \\
-            $v$ & $v$ \\
-            $w$ & $w$ \\
-            $NA$ & $\phi_x$ \\
-            $NA$ & $\phi_y$ \\
-            \end{tabular}
+
+            {u}^T = \{u, v, w\}
 
     with:
 
         .. math::
-            u = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
+            u = \sum_{i=0}^{m}{\sum_{j=0}^{n}{f_{sin}}}
             \\
-            v = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
+            v = \sum_{i=0}^{m}{\sum_{j=0}^{n}{f_{sin}}}
             \\
-            w = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{sim}}} +
-                \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
+            w = \sum_{i=0}^{m}{\sum_{j=0}^{n}{f_{sin}}}
             \\
-            \phi_x = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
-            \\
-            \phi_y = \sum_{i_1=0}^{m_1}{\sum_{j_1=0}^{n_1}{f_{cos}}}
-            \\
-            f_{sim} = sin(i_1 \pi b_x)cos(j_1 \pi b_y)
-            f_{cos} = cos(i_1 \pi b_x)cos(j_1 \pi b_y)
-            \\
-            b_x = \frac{x + \frac{a}{2}}{a}
-            \\
-            b_y = \frac{y + \frac{b}{2}}{b}
+            f_{sin} = sin(i \pi \frac{x}{a})sin(j \pi \frac{y}{b})
 
     """
     def __init__(self):
@@ -645,10 +628,12 @@ class AeroPistonPlate(object):
         ----------
         atype : int, optional
             Tells which analysis type should be performed:
+
             - ``1`` : considers k0, kA and kG0
             - ``2`` : considers k0 and kA
             - ``3`` : considers k0 and kG0
             - ``4`` : considers k0 only
+
         tol : float, optional
             A tolerance value passed to ``scipy.sparse.linalg.eigs``.
         sparse_solver : bool, optional
@@ -746,9 +731,9 @@ class AeroPistonPlate(object):
         self.analysis.last_analysis = 'freq'
 
 
-    def calc_Vf(self, rho=None, M=None, modes=(0, 1, 2, 3, 4, 5), num=10,
-                silent=False):
-        r"""Calculate the flutter speed
+    def calc_betacr(self, rho=None, M=None, modes=(0, 1, 2, 3, 4, 5), num=10,
+                    silent=False):
+        r"""Calculate the critical aerodynamic pressure coefficient
 
         If ``rho`` and ``M`` are not supplied, ``beta`` will be returned.
 
@@ -765,8 +750,8 @@ class AeroPistonPlate(object):
 
         Returns
         -------
-        lambdacr : float
-            The critical ``beta``.
+        betacr : float
+            The critical aerodynamic pressure coefficient.
 
         """
         #TODO
@@ -1051,12 +1036,12 @@ class AeroPistonPlate(object):
 
         elif add_title:
             if self.analysis.last_analysis == 'static':
-                ax.set_title('$m_1, n_1={0}, {1}$'.format(self.m1, self.n1))
+                ax.set_title('$m, n={0}, {1}$'.format(self.m1, self.n1))
 
             elif self.analysis.last_analysis == 'lb':
                 ax.set_title(
-       r'$m_1, n_1={0}, {1}$, $\lambda_{{CR}}={4:1.3e}$'.format(self.m1,
-           self.n1, self.eigvals[0]))
+                    r'$m, n={0}, {1}$, $\lambda_{{CR}}={4:1.3e}$'.format(
+                        self.m1, self.n1, self.eigvals[0]))
 
         fig.tight_layout()
         ax.set_aspect(aspect)

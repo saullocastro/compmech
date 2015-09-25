@@ -463,63 +463,8 @@ def fk0sb(double ys, double bb, double a, double b, double r,
     return k0sb
 
 
-def fk0sf(double ys, double a, double b, double r, int m1, int n1,
-          double Exx, double Gxy, double Jxx, double Iyy):
-    cdef int i1, k1, j1, l1, c, row, col
-    cdef np.ndarray[cINT, ndim=1] k0sfr, k0sfc
-    cdef np.ndarray[cDOUBLE, ndim=1] k0sfv
-
-    fdim = 1*m1*n1*m1*n1
-
-    k0sfr = np.zeros((fdim,), dtype=INT)
-    k0sfc = np.zeros((fdim,), dtype=INT)
-    k0sfv = np.zeros((fdim,), dtype=DOUBLE)
-
-    c = -1
-
-    # k0sf_11
-    for i1 in range(1, m1+1):
-        for j1 in range(1, n1+1):
-            row = num0 + num1*((j1-1)*m1 + (i1-1))
-            for k1 in range(1, m1+1):
-                for l1 in range(1, n1+1):
-                    col = num0 + num1*((l1-1)*m1 + (k1-1))
-
-                    #NOTE symmetry
-                    if row > col:
-                        continue
-
-                    if k1 != i1 and l1 != j1:
-                        # k0sf_11 cond_1
-                        pass
-
-                    elif k1 == i1 and l1 != j1:
-                        # k0sf_11 cond_2
-                        c += 1
-                        k0sfr[c] = row+2
-                        k0sfc[c] = col+2
-                        k0sfv[c] += 0.5*(pi*pi*pi*pi)*(Exx*Iyy*(b*b*b*b)*(i1*i1*i1*i1) + Gxy*Jxx*(a*a*a*a)*(j1*j1)*(l1*l1))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a*a)*(b*b*b*b))
-
-                    elif k1 != i1 and l1 == j1:
-                        # k0sf_11 cond_3
-                        pass
-
-                    elif k1 == i1 and l1 == j1:
-                        # k0sf_11 cond_4
-                        c += 1
-                        k0sfr[c] = row+2
-                        k0sfc[c] = col+2
-                        k0sfv[c] += 0.5*(pi*pi*pi*pi)*(Exx*Iyy*(b*b*b*b)*(i1*i1*i1*i1) + Gxy*Jxx*(a*a*a*a)*(j1*j1*j1*j1))*sin(pi*j1*ys/b)**2/((a*a*a)*(b*b*b*b))
-
-    size = num0 + num1*m1*n1
-
-    k0sf = coo_matrix((k0sfv, (k0sfr, k0sfc)), shape=(size, size))
-
-    return k0sf
-
-
-def fk0sf2(double bf, double df, double ys, double a, double b, double r,
-           int m1, int n1, double E1, double F1, double S1, double Jxx):
+def fk0sf(double bf, double df, double ys, double a, double b, double r,
+          int m1, int n1, double E1, double F1, double S1, double Jxx):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] k0sf2r, k0sf2c
     cdef np.ndarray[cDOUBLE, ndim=1] k0sf2v

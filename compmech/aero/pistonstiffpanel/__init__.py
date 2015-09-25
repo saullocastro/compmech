@@ -1,12 +1,15 @@
 r"""
-================================================================
-Piston Theory in Plates (:mod:`compmech.aero.pistonstiffpanel`)
-================================================================
+=========================================================================
+Piston Theory in Stiffened Panels (:mod:`compmech.aero.pistonstiffpanel`)
+=========================================================================
 
 .. currentmodule:: compmech.aero.pistonstiffpanel
 
 .. autoclass:: AeroPistonStiffPanel
     :members:
 
+.. autoclass:: Stiffener
+    :members:
+
 """
-from pistonstiffpanel import load, AeroPistonStiffPanel
+from pistonstiffpanel import load, AeroPistonStiffPanel, Stiffener
