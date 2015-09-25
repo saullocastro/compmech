@@ -897,7 +897,7 @@ class AeroPistonStiffPanel(object):
         self.analysis.last_analysis = 'freq'
 
 
-    def calc_betacr(self, beta1=1.e4, beta2=1.e5, rho_air=0.3, Mach=None,
+    def calc_betacr(self, beta1=1.e4, beta2=1.e5, rho_air=0.3, Mach=2.,
                     modes=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
                     num=5, silent=False, TOL=0.001, reduced_dof=False):
         r"""Calculate the critical aerodynamic pressure coefficient
