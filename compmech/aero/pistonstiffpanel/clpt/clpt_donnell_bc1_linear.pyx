@@ -466,18 +466,18 @@ def fk0sb(double ys, double bb, double a, double b, double r,
 def fk0sf(double bf, double df, double ys, double a, double b, double r,
           int m1, int n1, double E1, double F1, double S1, double Jxx):
     cdef int i1, k1, j1, l1, c, row, col
-    cdef np.ndarray[cINT, ndim=1] k0sf2r, k0sf2c
-    cdef np.ndarray[cDOUBLE, ndim=1] k0sf2v
+    cdef np.ndarray[cINT, ndim=1] k0sfr, k0sfc
+    cdef np.ndarray[cDOUBLE, ndim=1] k0sfv
 
     fdim = 4*m1*n1*m1*n1
 
-    k0sf2r = np.zeros((fdim,), dtype=INT)
-    k0sf2c = np.zeros((fdim,), dtype=INT)
-    k0sf2v = np.zeros((fdim,), dtype=DOUBLE)
+    k0sfr = np.zeros((fdim,), dtype=INT)
+    k0sfc = np.zeros((fdim,), dtype=INT)
+    k0sfv = np.zeros((fdim,), dtype=DOUBLE)
 
     c = -1
 
-    # k0sf2_11
+    # k0sf_11
     for i1 in range(1, m1+1):
         for j1 in range(1, n1+1):
             row = num0 + num1*((j1-1)*m1 + (i1-1))
@@ -490,78 +490,78 @@ def fk0sf(double bf, double df, double ys, double a, double b, double r,
                         continue
 
                     if k1 != i1 and l1 != j1:
-                        # k0sf2_11 cond_1
+                        # k0sf_11 cond_1
                         c += 1
-                        k0sf2r[c] = row+0
-                        k0sf2c[c] = col+2
-                        k0sf2v[c] += -(pi*pi)*E1*bf*df*i1*(k1*k1*k1)*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
+                        k0sfr[c] = row+0
+                        k0sfc[c] = col+2
+                        k0sfv[c] += -(pi*pi)*E1*bf*df*i1*(k1*k1*k1)*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
                         c += 1
-                        k0sf2r[c] = row+2
-                        k0sf2c[c] = col+0
-                        k0sf2v[c] += (pi*pi)*E1*bf*df*(i1*i1*i1)*k1*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+0
+                        k0sfv[c] += (pi*pi)*E1*bf*df*(i1*i1*i1)*k1*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((a*a)*((i1*i1) - (k1*k1)))
                         c += 1
-                        k0sf2r[c] = row+2
-                        k0sf2c[c] = col+2
-                        k0sf2v[c] += -(pi*pi*pi)*S1*bf*df*i1*k1*((-1)**(i1 + k1) - 1)*((i1*i1)*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - j1*(k1*k1)*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))/((a*a)*b*((i1*i1) - (k1*k1)))
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+2
+                        k0sfv[c] += -(pi*pi*pi)*S1*bf*df*i1*k1*((-1)**(i1 + k1) - 1)*((i1*i1)*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - j1*(k1*k1)*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))/((a*a)*b*((i1*i1) - (k1*k1)))
 
                     elif k1 == i1 and l1 != j1:
-                        # k0sf2_11 cond_2
+                        # k0sf_11 cond_2
                         c += 1
-                        k0sf2r[c] = row+0
-                        k0sf2c[c] = col+0
-                        k0sf2v[c] += 0.5*(pi*pi)*E1*bf*(i1*i1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/a
+                        k0sfr[c] = row+0
+                        k0sfc[c] = col+0
+                        k0sfv[c] += 0.5*(pi*pi)*E1*bf*(i1*i1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/a
                         c += 1
-                        k0sf2r[c] = row+0
-                        k0sf2c[c] = col+2
-                        k0sf2v[c] += -0.5*(pi*pi*pi)*S1*bf*(i1*i1)*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/(a*b)
+                        k0sfr[c] = row+0
+                        k0sfc[c] = col+2
+                        k0sfv[c] += -0.5*(pi*pi*pi)*S1*bf*(i1*i1)*l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/(a*b)
                         c += 1
-                        k0sf2r[c] = row+2
-                        k0sf2c[c] = col+0
-                        k0sf2v[c] += -0.5*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/(a*b)
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+0
+                        k0sfv[c] += -0.5*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/(a*b)
                         c += 1
-                        k0sf2r[c] = row+2
-                        k0sf2c[c] = col+2
-                        k0sf2v[c] += 0.5*(pi*pi*pi*pi)*bf*(i1*i1)*(Jxx*(a*a)*j1*l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + (b*b)*(i1*i1)*(E1*(df*df) + F1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))/((a*a*a)*(b*b))
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+2
+                        k0sfv[c] += 0.5*(pi*pi*pi*pi)*bf*(i1*i1)*(Jxx*(a*a)*j1*l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + (b*b)*(i1*i1)*(E1*(df*df) + F1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))/((a*a*a)*(b*b))
 
                     elif k1 != i1 and l1 == j1:
-                        # k0sf2_11 cond_3
+                        # k0sf_11 cond_3
                         c += 1
-                        k0sf2r[c] = row+0
-                        k0sf2c[c] = col+2
-                        k0sf2v[c] += -(pi*pi)*E1*bf*df*i1*(k1*k1*k1)*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
+                        k0sfr[c] = row+0
+                        k0sfc[c] = col+2
+                        k0sfv[c] += -(pi*pi)*E1*bf*df*i1*(k1*k1*k1)*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
                         c += 1
-                        k0sf2r[c] = row+2
-                        k0sf2c[c] = col+0
-                        k0sf2v[c] += (pi*pi)*E1*bf*df*(i1*i1*i1)*k1*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+0
+                        k0sfv[c] += (pi*pi)*E1*bf*df*(i1*i1*i1)*k1*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((a*a)*((i1*i1) - (k1*k1)))
                         c += 1
-                        k0sf2r[c] = row+2
-                        k0sf2c[c] = col+2
-                        k0sf2v[c] += -0.5*(pi*pi*pi)*S1*bf*df*i1*j1*k1*((-1)**(i1 + k1) - 1)*sin(2*pi*j1*ys/b)/((a*a)*b)
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+2
+                        k0sfv[c] += -0.5*(pi*pi*pi)*S1*bf*df*i1*j1*k1*((-1)**(i1 + k1) - 1)*sin(2*pi*j1*ys/b)/((a*a)*b)
 
                     elif k1 == i1 and l1 == j1:
-                        # k0sf2_11 cond_4
+                        # k0sf_11 cond_4
                         c += 1
-                        k0sf2r[c] = row+0
-                        k0sf2c[c] = col+0
-                        k0sf2v[c] += 0.5*(pi*pi)*E1*bf*(i1*i1)*sin(pi*j1*ys/b)**2/a
+                        k0sfr[c] = row+0
+                        k0sfc[c] = col+0
+                        k0sfv[c] += 0.5*(pi*pi)*E1*bf*(i1*i1)*sin(pi*j1*ys/b)**2/a
                         c += 1
-                        k0sf2r[c] = row+0
-                        k0sf2c[c] = col+2
-                        k0sf2v[c] += -0.25*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(2*pi*j1*ys/b)/(a*b)
+                        k0sfr[c] = row+0
+                        k0sfc[c] = col+2
+                        k0sfv[c] += -0.25*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(2*pi*j1*ys/b)/(a*b)
                         c += 1
-                        k0sf2r[c] = row+2
-                        k0sf2c[c] = col+0
-                        k0sf2v[c] += -0.25*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(2*pi*j1*ys/b)/(a*b)
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+0
+                        k0sfv[c] += -0.25*(pi*pi*pi)*S1*bf*(i1*i1)*j1*sin(2*pi*j1*ys/b)/(a*b)
                         c += 1
-                        k0sf2r[c] = row+2
-                        k0sf2c[c] = col+2
-                        k0sf2v[c] += 0.5*(pi*pi*pi*pi)*bf*(i1*i1)*(Jxx*(a*a)*(j1*j1)*cos(pi*j1*ys/b)**2 + (b*b)*(i1*i1)*(E1*(df*df) + F1)*sin(pi*j1*ys/b)**2)/((a*a*a)*(b*b))
+                        k0sfr[c] = row+2
+                        k0sfc[c] = col+2
+                        k0sfv[c] += 0.5*(pi*pi*pi*pi)*bf*(i1*i1)*(Jxx*(a*a)*(j1*j1)*cos(pi*j1*ys/b)**2 + (b*b)*(i1*i1)*(E1*(df*df) + F1)*sin(pi*j1*ys/b)**2)/((a*a*a)*(b*b))
 
     size = num0 + num1*m1*n1
 
-    k0sf2 = coo_matrix((k0sf2v, (k0sf2r, k0sf2c)), shape=(size, size))
+    k0sf = coo_matrix((k0sfv, (k0sfr, k0sfc)), shape=(size, size))
 
-    return k0sf2
+    return k0sf
 
 
 def fkAx(double beta, double gamma, double a, double b, int m1, int n1):
