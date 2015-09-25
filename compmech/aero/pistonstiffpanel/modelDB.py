@@ -67,7 +67,7 @@ def get_linear_matrices(p):
     -------
     out : tuple
         A tuple containing ``(fk0, fkG0, fkAx, fcA, fkAy, fkM, fk0edges,
-        fk0sb, fk0sf, fk0sf2, fkMsb, fkMsf)``.
+        fk0sb, fk0sf, fkMsb, fkMsf)``.
 
     """
     model = p.model
@@ -81,10 +81,9 @@ def get_linear_matrices(p):
     fk0edges = db[model]['linear'].fk0edges
     fk0sb = db[model]['linear'].fk0sb
     fk0sf = db[model]['linear'].fk0sf
-    fk0sf2 = db[model]['linear'].fk0sf2
     fkMsb = db[model]['linear'].fkMsb
     fkMsf = db[model]['linear'].fkMsf
 
-    return (fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0sb, fk0sf, fk0sf2,
-            fkMsb, fkMsf)
+    return (fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0sb, fk0sf, fkMsb,
+            fkMsf)
 

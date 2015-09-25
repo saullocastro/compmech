@@ -35,6 +35,21 @@ def load(name):
 class Stiffener(object):
     r"""Stiffener
 
+    Blade-type of stiffener model using a 1D formulation for the flange and a
+    2D formulation for the padup (base)::
+
+
+                 || --> flange       |
+                 ||                  |-> stiffener
+               ======  --> padup     |
+      =========================  --> panel
+
+    Both the flange and the padup are optional. The
+    :class:`.AeroPistonStiffPanel` object may have any number of stiffeners.
+
+    Each stiffener has a constant `y` coordinate.
+
+
     """
     def __init__(self, panel, ys, bb, bf, bstack, bplyts, blaminaprops,
                  fstack, fplyts, flaminaprops):
@@ -54,12 +69,9 @@ class Stiffener(object):
         self.flaminaprops = flaminaprops
         self.blam = None
         self.flam = None
-        self.flange_formulation = 2
 
         self.As = None
         self.Asf = None
-        self.Exx = None
-        self.Gxy = None
         self.Jxx = None
         self.Iyy = None
 
@@ -72,19 +84,6 @@ class Stiffener(object):
                                              laminaprops=self.flaminaprops)
             self.flam.calc_equivalent_modulus()
             self.hf = self.flam.t
-            # flange type 1
-            if True:
-                self.Exx = self.flam.e1
-                self.Gxy = self.flam.g12
-            if False:
-                Exx = 0
-                Gxy = 0
-                for ply in self.flam.plies:
-                    Exx += (ply.matobj.e1*np.cos(np.deg2rad(ply.theta)) +
-                            ply.matobj.e2*np.sin(np.deg2rad(ply.theta)))*ply.t/self.flam.t
-                    Gxy += ply.matobj.g12*ply.t/self.flam.t
-                self.Exx = Exx
-                self.Gxy = self.flam.g12
 
         h = sum(self.panel.plyts)
         if self.bstack != []:
@@ -104,7 +103,6 @@ class Stiffener(object):
         self.As = self.Asb + self.Asf
 
         if self.fstack != []:
-            # flange type 2
             self.E1 = 0
             #E3 = 0
             self.S1 = 0
@@ -130,7 +128,8 @@ class AeroPistonStiffPanel(object):
     Main characteristics:
         - Supports both airflows along x (axis) or y (circumferential).
           Controlled by the parameter ``flow``
-        - Stiffeners along the axial direction (`x`), with a fixed `y` position
+        - Can have any number of :class:`.Stiffener` objects along the axial
+          direction (`x`), with a fixed `y` position
 
     """
     def __init__(self):
@@ -420,7 +419,7 @@ class AeroPistonStiffPanel(object):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2, silent=silent)
 
-        fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0sb, fk0sf, fk0sf2, fkMsb, fkMsf = \
+        fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0sb, fk0sf, fkMsb, fkMsf = \
                 modelDB.get_linear_matrices(self)
         model = self.model
         a = self.a
@@ -520,11 +519,8 @@ class AeroPistonStiffPanel(object):
             if s.blam is not None:
                 Fsb = s.blam.ABD
                 k0 += fk0sb(s.ys, s.bb, a, b, r, m1, n1, Fsb)
-            if s.flange_formulation == 1:
-                k0 += fk0sf(s.ys, a, b, r, m1, n1, s.Exx, s.Gxy, s.Jxx, s.Iyy)
-            elif s.flange_formulation == 2:
-                k0 += fk0sf2(s.bf, s.df, s.ys, a, b, r, m1, n1, s.E1, s.F1,
-                             s.S1, s.Jxx)
+                k0 += fk0sf(s.bf, s.df, s.ys, a, b, r, m1, n1, s.E1, s.F1,
+                            s.S1, s.Jxx)
 
             if s.blam is not None:
                 kM += fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
@@ -746,10 +742,12 @@ class AeroPistonStiffPanel(object):
         ----------
         atype : int, optional
             Tells which analysis type should be performed:
+
             - ``1`` : considers k0, kA and kG0
             - ``2`` : considers k0 and kA
             - ``3`` : considers k0 and kG0
             - ``4`` : considers k0 only
+
         tol : float, optional
             A tolerance value passed to ``scipy.sparse.linalg.eigs``.
         sparse_solver : bool, optional
@@ -814,6 +812,7 @@ class AeroPistonStiffPanel(object):
             damping = False
         elif damping and self.cA is not None:
             if self.cA.sum() == 0j:
+                warn('Aerodynamic damping is null!', level=3, silent=silent)
                 damping = False
 
         msg('eigs() solver...', level=3, silent=silent)
@@ -898,13 +897,10 @@ class AeroPistonStiffPanel(object):
         self.analysis.last_analysis = 'freq'
 
 
-    def calc_betacr(self, beta1=None, beta2=None, rho_air=None, M=None,
+    def calc_betacr(self, beta1=1.e4, beta2=1.e5, rho_air=0.3, Mach=None,
                     modes=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
-                    num=5, silent=False):
-        r"""Calculate the flutter speed
-
-        If ``rho_air`` and ``Mach`` are not supplied, ``beta`` will be
-        returned.
+                    num=5, silent=False, TOL=0.001, reduced_dof=False):
+        r"""Calculate the critical aerodynamic pressure coefficient
 
         Parameters
         ----------
@@ -916,6 +912,12 @@ class AeroPistonStiffPanel(object):
             The modes that should be monitored.
         num : int, optional
             Number of points to search for each iteration.
+        TOL: float, optional
+            Convergence criterion.
+        reduced_dof : bool, optional
+            Considers only the contributions of `v` and `w` to the stiffness
+            matrix and accelerates the run. Only effective when
+            ``sparse_solver=False``.
 
         Returns
         -------
@@ -927,11 +929,9 @@ class AeroPistonStiffPanel(object):
         # - use a linear or parabolic interpolation to estimate new_beta1
         # - possibility to include gamma
         msg('Flutter calculation...', level=1, silent=silent)
-        if beta1 is None:
-            beta1 = 1.e4
-        if beta2 is None:
-            beta2 = 1.e5
-        new_beta1 = 1e6
+        if self.speed_sound is None:
+            self.speed_sound = 1.
+        new_beta1 = 1.e6
         new_beta2 = -1e6
         eigvals_imag = np.zeros((num, len(modes)))
         if max(modes) > self.num_eigvalues-1:
@@ -945,8 +945,6 @@ class AeroPistonStiffPanel(object):
         Mach_bkp = self.Mach
         V_bkp = self.V
         rho_air_bkp = self.rho_air
-        Mach = 2.
-        rho_air = 0.3
 
         self.beta = None
         self.gamma = None
@@ -962,16 +960,17 @@ class AeroPistonStiffPanel(object):
 
             for i, beta in enumerate(betas):
                 self.V = ((Mach**2 - 1)**0.5 * beta / rho_air)**0.5
-                self.freq(atype=1, sparse_solver=False, silent=True)
+                self.freq(atype=1, sparse_solver=False, silent=True,
+                          reduced_dof=reduced_dof)
                 for j, mode in enumerate(modes):
                     eigvals_imag[i, j] = self.eigvals[mode].imag
 
             check = np.where(eigvals_imag != 0.)
             if not np.any(check):
-                beta1 = beta1/2
-                beta2 = 2*beta2
+                beta1 = beta1 / 2.
+                beta2 = 2 * beta2
                 continue
-            if np.abs(eigvals_imag[check]).min() < 0.01:
+            if np.abs(eigvals_imag[check]).min() < TOL:
                 break
             if 0 in check[0]:
                 new_beta1 = min(new_beta1, 0.5*betas[check[0][0]])
@@ -1301,3 +1300,4 @@ class AeroPistonStiffPanel(object):
 
         with open(name, 'wb') as f:
             cPickle.dump(self, f, protocol=cPickle.HIGHEST_PROTOCOL)
+

@@ -7,8 +7,11 @@ Aeroelasticity Module (:mod:`compmech.aero`)
 
 This module contains semi-analytical models for aeroelastic analyses such as:
 
-- Piston Theory applied to Composite Plates
-  (:mod:`compmech.aero.pistonplate`)
+.. automodule:: compmech.aero.pistonplate
+    :members:
+
+.. automodule:: compmech.aero.pistonstiffpanel
+    :members:
 
 """
 from pistonplate import AeroPistonPlate
