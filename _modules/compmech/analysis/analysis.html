@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compmech.analysis.analysis &mdash; CompMech 0.4.0 dev documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0 dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="top" title="CompMech 0.4.0 dev documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for compmech.analysis.analysis</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span>
+
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="n">solve</span>
+<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="n">msg</span>
+<span class="kn">from</span> <span class="nn">newton_raphson</span> <span class="kn">import</span> <span class="n">_solver_NR</span>
+<span class="kn">from</span> <span class="nn">arc_length</span> <span class="kn">import</span> <span class="n">_solver_arc_length</span>
+
+<div class="viewcode-block" id="Analysis"><a class="viewcode-back" href="../../../modules/analysis/index.html#compmech.analysis.Analysis">[docs]</a><span class="k">class</span> <span class="nc">Analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Class that embodies all data required for linear/non-linear analysis</span>
+
+<span class="sd">    The parameters are described in the following tables:</span>
+
+<span class="sd">    ========================  ==================================================</span>
+<span class="sd">    Non-Linear Algorithm      Description</span>
+<span class="sd">    ========================  ==================================================</span>
+<span class="sd">    ``NL_method``             ``str``, ``&#39;NR&#39;`` for the Newton-Raphson</span>
+<span class="sd">                              ``&#39;arc_length&#39;`` for the Arc-Length method</span>
+<span class="sd">    ``line_search``           ``bool``, activate line_search (for</span>
+<span class="sd">                              Newton-Raphson methods only)</span>
+<span class="sd">    ``max_iter_line_search``  ``int``, maximum number of iteration attempts</span>
+<span class="sd">                              for the line-search algorithm</span>
+<span class="sd">    ``modified_NR``           ``bool``, activates the modified Newton-Raphson</span>
+<span class="sd">    ``compute_every_n``       ``int``, if ``modified_NR=True``, the non-linear</span>
+<span class="sd">                              matrices will be updated at every `n` iterations</span>
+<span class="sd">    ``kT_initial_state``      ``bool``, tells if the tangent stiffness matrix</span>
+<span class="sd">                              should be calculated already at the initial</span>
+<span class="sd">                              state, which is required for example when</span>
+<span class="sd">                              initial imperfections take place</span>
+<span class="sd">    ========================  ==================================================</span>
+
+<span class="sd">    ==============     =================================================</span>
+<span class="sd">    Incrementation     Description</span>
+<span class="sd">    ==============     =================================================</span>
+<span class="sd">    ``initialInc``     initial load increment size. In the arc-length</span>
+<span class="sd">                       method it will be the initial value for</span>
+<span class="sd">                       `\lambda`</span>
+<span class="sd">    ``minInc``         minimum increment size; if achieved the analysis</span>
+<span class="sd">                       is terminated. The arc-length method will use</span>
+<span class="sd">                       this parameter to terminate when the minimum</span>
+<span class="sd">                       arc-length increment is smaller than ``minInc``</span>
+<span class="sd">    ``maxInc``         maximum increment size</span>
+<span class="sd">    ==============     =================================================</span>
+
+<span class="sd">    ====================    ============================================</span>
+<span class="sd">    Convergence Criteria    Description</span>
+<span class="sd">    ====================    ============================================</span>
+<span class="sd">    ``absTOL``              the convergence is achieved when the maximum</span>
+<span class="sd">                            residual force is smaller than this value</span>
+<span class="sd">    ``maxNumIter``          maximum number of iteration; if achieved the</span>
+<span class="sd">                            load increment is bisected</span>
+<span class="sd">    ``too_slow_TOL``        tolerance that tells if the convergence is too</span>
+<span class="sd">                            slow</span>
+<span class="sd">    ====================    ============================================</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    calc_fext : callable, optional</span>
+<span class="sd">        Must return a 1-D array containing the external forces. Required for</span>
+<span class="sd">        linear/non-linear static analysis.</span>
+<span class="sd">    calc_k0 : callable, optional</span>
+<span class="sd">        Must return a sparse matrix containing the linear stiffness matrix.</span>
+<span class="sd">        Required for linear/non-linear static analysis.</span>
+<span class="sd">    calc_fint : callable, optional</span>
+<span class="sd">        Must return a 1-D array containing the internal forces. Required for</span>
+<span class="sd">        non-linear analysis.</span>
+<span class="sd">    calc_kT : callable, optional</span>
+<span class="sd">        Must return a sparse matrix containing the tangent stiffness matrix.</span>
+<span class="sd">        Required for non-linear analysis.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    increments : list</span>
+<span class="sd">        Each time increment that achieved convergence.</span>
+<span class="sd">    cs : list</span>
+<span class="sd">        The solution for each increment.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;NL_method&#39;</span><span class="p">,</span> <span class="s">&#39;line_search&#39;</span><span class="p">,</span> <span class="s">&#39;max_iter_line_search&#39;</span><span class="p">,</span>
+            <span class="s">&#39;modified_NR&#39;</span><span class="p">,</span> <span class="s">&#39;compute_every_n&#39;</span><span class="p">,</span>
+            <span class="s">&#39;kT_initial_state&#39;</span><span class="p">,</span> <span class="s">&#39;initialInc&#39;</span><span class="p">,</span> <span class="s">&#39;minInc&#39;</span><span class="p">,</span> <span class="s">&#39;maxInc&#39;</span><span class="p">,</span> <span class="s">&#39;absTOL&#39;</span><span class="p">,</span>
+            <span class="s">&#39;relTOL&#39;</span><span class="p">,</span> <span class="s">&#39;maxNumIter&#39;</span><span class="p">,</span> <span class="s">&#39;too_slow_TOL&#39;</span><span class="p">,</span> <span class="s">&#39;increments&#39;</span><span class="p">,</span> <span class="s">&#39;cs&#39;</span><span class="p">,</span>
+            <span class="s">&#39;last_analysis&#39;</span><span class="p">,</span> <span class="s">&#39;calc_fext&#39;</span><span class="p">,</span> <span class="s">&#39;calc_k0&#39;</span><span class="p">,</span> <span class="s">&#39;calc_fint&#39;</span><span class="p">,</span> <span class="s">&#39;calc_kT&#39;</span><span class="p">,</span>
+            <span class="s">&#39;calc_k0_bc&#39;</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calc_fext</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">calc_k0</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">calc_fint</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">calc_kT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">calc_k0_bc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c"># non-linear algorithm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NL_method</span> <span class="o">=</span> <span class="s">&#39;NR&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_search</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_iter_line_search</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modified_NR</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_every_n</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kT_initial_state</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># incrementation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialInc</span> <span class="o">=</span> <span class="mf">0.3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minInc</span> <span class="o">=</span> <span class="mf">1.e-3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxInc</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="c"># convergence criteria</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">absTOL</span> <span class="o">=</span> <span class="mf">1.e-3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relTOL</span> <span class="o">=</span> <span class="mf">1.e-3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxNumIter</span> <span class="o">=</span> <span class="mi">30</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">too_slow_TOL</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+        <span class="c"># required methods</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fext</span> <span class="o">=</span> <span class="n">calc_fext</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0</span> <span class="o">=</span> <span class="n">calc_k0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_fint</span> <span class="o">=</span> <span class="n">calc_fint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_kT</span> <span class="o">=</span> <span class="n">calc_kT</span>
+
+        <span class="c"># optional methods</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0_bc</span> <span class="o">=</span> <span class="n">calc_k0_bc</span>
+
+        <span class="c"># outputs to be filled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">increments</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cs</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c"># flag telling the last analysis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_analysis</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="Analysis.static"><a class="viewcode-back" href="../../../modules/analysis/index.html#compmech.analysis.Analysis.static">[docs]</a>    <span class="k">def</span> <span class="nf">static</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;General solver for static analyses</span>
+
+<span class="sd">        Selects the specific solver based on the ``NL_method`` parameter.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">increments</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cs</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">NLgeom</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">maxInc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initialInc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxInc</span><span class="p">)</span>
+            <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Started Non-Linear Static Analysis&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">NL_method</span> <span class="ow">is</span> <span class="s">&#39;NR&#39;</span><span class="p">:</span>
+                <span class="n">_solver_NR</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">NL_method</span> <span class="ow">is</span> <span class="s">&#39;arc_length&#39;</span><span class="p">:</span>
+                <span class="n">_solver_arc_length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;{0} is an invalid NL_method&#39;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Started Linear Static Analysis&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+            <span class="n">fext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">()</span>
+            <span class="n">k0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0_bc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">k0_bc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0_bc</span><span class="p">()</span>
+                <span class="n">k0max</span> <span class="o">=</span> <span class="n">k0</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                <span class="n">k0</span> <span class="o">/=</span> <span class="n">k0max</span>
+
+                <span class="n">fextmax</span> <span class="o">=</span> <span class="n">fext</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                <span class="n">fext</span> <span class="o">/=</span> <span class="n">fextmax</span>
+
+                <span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span> <span class="o">+</span> <span class="n">k0_bc</span>
+
+            <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0_bc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">k0</span> <span class="o">*=</span> <span class="n">k0max</span>
+                <span class="n">fext</span> <span class="o">*=</span> <span class="n">fextmax</span>
+
+                <span class="n">c</span> <span class="o">/=</span> <span class="n">k0max</span>
+                <span class="n">c</span> <span class="o">*=</span> <span class="n">fextmax</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">increments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
+            <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Finished Linear Static Analysis&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_analysis</span> <span class="o">=</span> <span class="s">&#39;static&#39;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">increments</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Sep 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

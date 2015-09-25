@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.composite.matlamina &mdash; CompMech 0.3.2 documentation</title>
+    <title>compmech.composite.matlamina &mdash; CompMech 0.4.0 dev documentation</title>
     
-    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.3.2',
+        VERSION:     '0.4.0 dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,31 +25,31 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.3.2 documentation" href="../../../index.html" />
+    <link rel="top" title="CompMech 0.4.0 dev documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for compmech.composite.matlamina</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -63,6 +63,7 @@
 
 <span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">DOUBLE</span>
 <span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="o">*</span>
+
 
 <div class="viewcode-block" id="MatLamina"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.matlamina.MatLamina">[docs]</a><span class="k">class</span> <span class="nc">MatLamina</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;</span>
@@ -117,41 +118,42 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MatLamina</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">e1</span>   <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">e2</span>   <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">e3</span>   <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">g12</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">g13</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">g23</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e1</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e2</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e3</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g12</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g13</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g23</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nu12</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nu13</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nu21</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nu23</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nu31</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nu32</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a1</span>   <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a2</span>   <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a3</span>   <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">st1</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">st2</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sc1</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sc2</span>  <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a1</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a2</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a3</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">st1</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">st2</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sc1</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sc2</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ss12</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">strn</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q11</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q12</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q13</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q21</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q22</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q23</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q31</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q32</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q33</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q44</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q55</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q66</span>  <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u</span>    <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q13</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q21</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q23</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q31</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q32</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q33</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q44</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q55</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q66</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="bp">None</span>
+
 
     <span class="k">def</span> <span class="nf">rebuild</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c">#</span>
@@ -177,13 +179,6 @@
         <span class="n">c44</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g23</span>
         <span class="n">c55</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g13</span>
         <span class="n">c66</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g12</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="p">[[</span><span class="n">c11</span><span class="p">,</span> <span class="n">c12</span><span class="p">,</span> <span class="n">c13</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>
-             <span class="p">[</span><span class="n">c12</span><span class="p">,</span> <span class="n">c22</span><span class="p">,</span> <span class="n">c23</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>
-             <span class="p">[</span><span class="n">c13</span><span class="p">,</span> <span class="n">c23</span><span class="p">,</span> <span class="n">c33</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>
-             <span class="p">[</span>  <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">c44</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>
-             <span class="p">[</span>  <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">c55</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>
-             <span class="p">[</span>  <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">c66</span><span class="p">]],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">DOUBLE</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[[</span><span class="n">c11</span><span class="p">,</span> <span class="n">c12</span><span class="p">,</span> <span class="n">c13</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>
              <span class="p">[</span><span class="n">c12</span><span class="p">,</span> <span class="n">c22</span><span class="p">,</span> <span class="n">c23</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>
@@ -226,14 +221,14 @@
         <span class="c"># example 1.2.2 Laminated composite shell: buckling of a</span>
         <span class="c"># cylindrical panel with a circular hole</span>
         <span class="c">#</span>
-        <span class="n">u1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q44</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span>
-        <span class="n">u2</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q22</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">u3</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q44</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span>
-        <span class="n">u4</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">+</span> <span class="mi">6</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q44</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8</span>
-        <span class="n">u5</span> <span class="o">=</span> <span class="p">(</span><span class="n">u1</span><span class="o">-</span><span class="n">u4</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">u6</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q55</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q66</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">u7</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q55</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q66</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="n">u1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q44</span><span class="p">)</span> <span class="o">/</span> <span class="mf">8.</span>
+        <span class="n">u2</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q22</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+        <span class="n">u3</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q44</span><span class="p">)</span> <span class="o">/</span> <span class="mf">8.</span>
+        <span class="n">u4</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">+</span> <span class="mi">6</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q44</span><span class="p">)</span> <span class="o">/</span> <span class="mf">8.</span>
+        <span class="n">u5</span> <span class="o">=</span> <span class="p">(</span><span class="n">u1</span><span class="o">-</span><span class="n">u4</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+        <span class="n">u6</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q55</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q66</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+        <span class="n">u7</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q55</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q66</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[[</span><span class="n">u1</span><span class="p">,</span>  <span class="n">u2</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q11</span>
              <span class="p">[</span><span class="n">u1</span><span class="p">,</span> <span class="o">-</span><span class="n">u2</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q22</span>
              <span class="p">[</span><span class="n">u4</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q12</span>
@@ -244,6 +239,7 @@
              <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">u2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">],</span>                <span class="c"># q14</span>
              <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">u2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">u3</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>  <span class="c"># q24</span>
 
+
     <span class="k">def</span> <span class="nf">read_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{}):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span> <span class="o">=</span> <span class="n">user_setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
@@ -253,6 +249,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu12</span><span class="p">:</span>
             <span class="n">nu12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nu21</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">e1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">e2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nu12</span> <span class="o">=</span> <span class="n">nu12</span>
+
 </div>
 <div class="viewcode-block" id="read_laminaprop"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.matlamina.read_laminaprop">[docs]</a><span class="k">def</span> <span class="nf">read_laminaprop</span><span class="p">(</span><span class="n">laminaprop</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns a ``MatLamina`` object based on an input ``laminaprop`` tuple</span>
@@ -308,18 +305,18 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">laminaprop</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">:</span>
         <span class="n">e2</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">laminaprop</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">laminaprop</span><span class="p">)[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">e2</span><span class="p">,</span> <span class="n">nu12</span><span class="p">,</span> <span class="n">nu12</span><span class="p">])</span>
-    <span class="n">matlam</span><span class="o">.</span><span class="n">e1</span>   <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">matlam</span><span class="o">.</span><span class="n">e2</span>   <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">matlam</span><span class="o">.</span><span class="n">e3</span>   <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="n">matlam</span><span class="o">.</span><span class="n">e1</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">matlam</span><span class="o">.</span><span class="n">e2</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">matlam</span><span class="o">.</span><span class="n">e3</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
     <span class="n">matlam</span><span class="o">.</span><span class="n">nu12</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">matlam</span><span class="o">.</span><span class="n">nu13</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
     <span class="n">matlam</span><span class="o">.</span><span class="n">nu23</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
     <span class="n">matlam</span><span class="o">.</span><span class="n">nu21</span> <span class="o">=</span> <span class="n">matlam</span><span class="o">.</span><span class="n">nu12</span> <span class="o">*</span> <span class="n">matlam</span><span class="o">.</span><span class="n">e2</span> <span class="o">/</span> <span class="n">matlam</span><span class="o">.</span><span class="n">e1</span>
     <span class="n">matlam</span><span class="o">.</span><span class="n">nu31</span> <span class="o">=</span> <span class="n">matlam</span><span class="o">.</span><span class="n">nu13</span> <span class="o">*</span> <span class="n">matlam</span><span class="o">.</span><span class="n">e3</span> <span class="o">/</span> <span class="n">matlam</span><span class="o">.</span><span class="n">e1</span>
     <span class="n">matlam</span><span class="o">.</span><span class="n">nu32</span> <span class="o">=</span> <span class="n">matlam</span><span class="o">.</span><span class="n">nu23</span> <span class="o">*</span> <span class="n">matlam</span><span class="o">.</span><span class="n">e3</span> <span class="o">/</span> <span class="n">matlam</span><span class="o">.</span><span class="n">e2</span>
-    <span class="n">matlam</span><span class="o">.</span><span class="n">g12</span>  <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-    <span class="n">matlam</span><span class="o">.</span><span class="n">g13</span>  <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-    <span class="n">matlam</span><span class="o">.</span><span class="n">g23</span>  <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">matlam</span><span class="o">.</span><span class="n">g12</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">matlam</span><span class="o">.</span><span class="n">g13</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">matlam</span><span class="o">.</span><span class="n">g23</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
 
     <span class="n">matlam</span><span class="o">.</span><span class="n">rebuild</span><span class="p">()</span>
 
@@ -329,12 +326,12 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../../index.html">
               <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
             </a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
@@ -351,26 +348,26 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Nov 14, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Sep 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

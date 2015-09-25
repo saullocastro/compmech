@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Boundary conditions &mdash; CompMech 0.3.2 documentation</title>
+    <title>Boundary conditions &mdash; CompMech 0.4.0 dev documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3.2',
+        VERSION:     '0.4.0 dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,23 +25,23 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.3.2 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.4.0 dev documentation" href="../../index.html" />
     <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="FSDT - First-order Shear Deformation Theory" href="fsdt.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
@@ -49,16 +49,16 @@
         <li class="right" >
           <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="boundary-conditions">
 <span id="id1"></span><h1>Boundary conditions<a class="headerlink" href="#boundary-conditions" title="Permalink to this headline">¶</a></h1>
@@ -100,8 +100,8 @@ boundary conditions.</p>
 \end{tabular}"/></p>
 </div><div class="section" id="using-the-default-boundary-conditions">
 <h2>Using the default boundary conditions<a class="headerlink" href="#using-the-default-boundary-conditions" title="Permalink to this headline">¶</a></h2>
-<p>The analyst may set the boundary conditions specifying the parameter <tt class="docutils literal"><span class="pre">bc</span></tt>
-in the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> object, using the same names specified in the
+<p>The analyst may set the boundary conditions specifying the parameter <code class="docutils literal"><span class="pre">bc</span></code>
+in the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object, using the same names specified in the
 tables above:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s">&#39;fsdt_donnell_bc1&#39;</span>
@@ -109,8 +109,8 @@ tables above:</p>
 </pre></div>
 </div>
 <p>Setting a different boundary condition for the bottom and top edges is
-possible using a hyphen <tt class="docutils literal"><span class="pre">-</span></tt> or an underscore <tt class="docutils literal"><span class="pre">_</span></tt> to separate them,
-obtaining <tt class="docutils literal"><span class="pre">'bcBot-bcTop'</span></tt> or <tt class="docutils literal"><span class="pre">bcBot_bcTop</span></tt>:</p>
+possible using a hyphen <code class="docutils literal"><span class="pre">-</span></code> or an underscore <code class="docutils literal"><span class="pre">_</span></code> to separate them,
+obtaining <code class="docutils literal"><span class="pre">'bcBot-bcTop'</span></code> or <code class="docutils literal"><span class="pre">bcBot_bcTop</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s">&#39;ss1-cc1&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s">&#39;ss1-ss2&#39;</span>
 </pre></div>
@@ -119,16 +119,16 @@ obtaining <tt class="docutils literal"><span class="pre">'bcBot-bcTop'</span></t
 <p class="first admonition-title">Note</p>
 <p class="last">When using boundary conditions from different types in the same
 model the analyst must select the most flexible model to use,
-for example when using <tt class="docutils literal"><span class="pre">cc.bc</span> <span class="pre">=</span> <span class="pre">'ss1-ss2'</span></tt>, the analyst must
-use <tt class="docutils literal"><span class="pre">cc.model</span> <span class="pre">=</span> <span class="pre">'fsdt_donnell_bc2'</span></tt>, a similar one or a more
+for example when using <code class="docutils literal"><span class="pre">cc.bc</span> <span class="pre">=</span> <span class="pre">'ss1-ss2'</span></code>, the analyst must
+use <code class="docutils literal"><span class="pre">cc.model</span> <span class="pre">=</span> <span class="pre">'fsdt_donnell_bc2'</span></code>, a similar one or a more
 flexible model.</p>
 </div>
-<p>The <tt class="docutils literal"><span class="pre">model</span></tt> selected should be compatible with the boundary conditions that
+<p>The <code class="docutils literal"><span class="pre">model</span></code> selected should be compatible with the boundary conditions that
 one whishes to simulate. For example, for the SS4 or CC4 boundary
-conditions, it is recommended to use the <a class="reference internal" href="clpt.html#clpt-donnell-bc4"><em>clpt_donnell_bc4</em></a> or the
-<a class="reference internal" href="fsdt.html#fsdt-donnell-bc4"><em>fsdt_donnell_bc4</em></a> models, and so forth.</p>
+conditions, it is recommended to use the <a class="reference internal" href="clpt.html#clpt-donnell-bc4"><span>clpt_donnell_bc4</span></a> or the
+<a class="reference internal" href="fsdt.html#fsdt-donnell-bc4"><span>fsdt_donnell_bc4</span></a> models, and so forth.</p>
 <p>The more flexible models can be used to simulate the more rigid boundary
-conditions, since <a class="reference internal" href="clpt.html#elastic-constraints"><em>elastic constraints</em></a> are
+conditions, since <a class="reference internal" href="clpt.html#elastic-constraints"><span>elastic constraints</span></a> are
 ajusted in order to provide the right set of boundary conditions, as shown
 in the table above. The table below shows the models that can be used for each
 boundary condition:</p>
@@ -140,13 +140,13 @@ boundary condition:</p>
     SS3 / CC3  &amp; bc3, bc4      \\ \hline
     SS4 / CC4  &amp; bc4
 \end{tabular}"/></p>
-</div><p>Note that the models <tt class="docutils literal"><span class="pre">bc4</span></tt> can be used for all the cases listed above. It
+</div><p>Note that the models <code class="docutils literal"><span class="pre">bc4</span></code> can be used for all the cases listed above. It
 is expected that <strong>more terms are required</strong> in the approximation when
 a model from another group is used.</p>
 </div>
 <div class="section" id="using-arbitrary-boundary-conditions">
 <h2>Using arbitrary boundary conditions<a class="headerlink" href="#using-arbitrary-boundary-conditions" title="Permalink to this headline">¶</a></h2>
-<p>When no value is given to the parameter <tt class="docutils literal"><span class="pre">bc</span></tt> the model will run by
+<p>When no value is given to the parameter <code class="docutils literal"><span class="pre">bc</span></code> the model will run by
 default with the SS1 boundary conditions. The analyst must change
 the elastic stiffnesses by changing the following parameters:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
@@ -160,9 +160,9 @@ the elastic stiffnesses by changing the following parameters:</p>
 </pre></div>
 </div>
 <p>In order to achieve the desired results.</p>
-<p>The other stiffnesses <tt class="docutils literal"><span class="pre">kwBot</span></tt>, <tt class="docutils literal"><span class="pre">kwTop</span></tt>, <tt class="docutils literal"><span class="pre">kphitBot</span></tt> and <tt class="docutils literal"><span class="pre">kphitTop</span></tt>
-will affect only models <a class="reference internal" href="clpt.html#clpt-donnell-bcn"><em>clpt_donnell_bcn</em></a> and
-<a class="reference internal" href="fsdt.html#fsdt-donnell-bcn"><em>fsdt_donnell_bcn</em></a> (or the counterparts that use the Sander&#8217;s equations).</p>
+<p>The other stiffnesses <code class="docutils literal"><span class="pre">kwBot</span></code>, <code class="docutils literal"><span class="pre">kwTop</span></code>, <code class="docutils literal"><span class="pre">kphitBot</span></code> and <code class="docutils literal"><span class="pre">kphitTop</span></code>
+will affect only models <a class="reference internal" href="clpt.html#clpt-donnell-bcn"><span>clpt_donnell_bcn</span></a> and
+<a class="reference internal" href="fsdt.html#fsdt-donnell-bcn"><span>fsdt_donnell_bcn</span></a> (or the counterparts that use the Sander&#8217;s equations).</p>
 </div>
 </div>
 
@@ -170,7 +170,7 @@ will affect only models <a class="reference internal" href="clpt.html#clpt-donne
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
@@ -190,12 +190,14 @@ will affect only models <a class="reference internal" href="clpt.html#clpt-donne
   <h4>Next topic</h4>
   <p class="topless"><a href="tutorials.html"
                         title="next chapter">Tutorials</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/theory/conecyl/bcs.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/conecyl/bcs.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -212,17 +214,17 @@ will affect only models <a class="reference internal" href="clpt.html#clpt-donne
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
@@ -230,15 +232,15 @@ will affect only models <a class="reference internal" href="clpt.html#clpt-donne
         <li class="right" >
           <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
              >previous</a> |</li>
-        <li><a href="../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Nov 14, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Sep 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FSDT - First-order Shear Deformation Theory &mdash; CompMech 0.3.2 documentation</title>
+    <title>FSDT - First-order Shear Deformation Theory &mdash; CompMech 0.4.0 dev documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3.2',
+        VERSION:     '0.4.0 dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,23 +25,23 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.3.2 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.4.0 dev documentation" href="../../index.html" />
     <link rel="up" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
     <link rel="next" title="Boundary conditions" href="bcs.html" />
     <link rel="prev" title="CLPT - Classical Laminated Plate Theory" href="clpt.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="bcs.html" title="Boundary conditions"
@@ -49,17 +49,17 @@
         <li class="right" >
           <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li>
-          <li><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="fsdt-first-order-shear-deformation-theory">
 <span id="theory-conecyl-fsdt"></span><h1>FSDT - First-order Shear Deformation Theory<a class="headerlink" href="#fsdt-first-order-shear-deformation-theory" title="Permalink to this headline">¶</a></h1>
@@ -69,9 +69,9 @@
 <div class="math">
 <p><img src="../../_images/math/591f891e2ca51b472bc1679e814932f40ad4e232.png" alt="u, v, w, \phi_x, \phi_t"/></p>
 </div><p>The displacement field is approximated similarly to the
-<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><em>CLPT</em></a>, but here <img class="math" src="../../_images/math/8debdf841bb9645a2eb811c2d53ab8116ffe284e.png" alt="\phi_x"/> and <img class="math" src="../../_images/math/d25e7b8b0e679e79ff2ffbb51e0af864af42ac68.png" alt="\phi_\theta"/>
+<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><span>CLPT</span></a>, but here <img class="math" src="../../_images/math/8debdf841bb9645a2eb811c2d53ab8116ffe284e.png" alt="\phi_x"/> and <img class="math" src="../../_images/math/d25e7b8b0e679e79ff2ffbb51e0af864af42ac68.png" alt="\phi_\theta"/>
 are independent variables, relaxing the approximation.</p>
-<p>For the <tt class="docutils literal"><span class="pre">ConeCyl</span></tt> implementations, the approximation functions are
+<p>For the <code class="docutils literal"><span class="pre">ConeCyl</span></code> implementations, the approximation functions are
 separated into three components:</p>
 <div class="math">
 <p><img src="../../_images/math/8c928df4aa40a1c24f894459ff32adaf4587fcef.png" alt="u = u_0 + u_1 + u_2\\
@@ -91,12 +91,12 @@ along the edges.</p>
 (clamped) and another value (up to simply supported),
 by using elastic stiffnesses for the corresponding degrees of freedom. The
 elastic stiffnesses are implemented for the FSDT in the same manner described
-for the <a class="reference internal" href="clpt.html#elastic-constraints"><em>CLPT</em></a>.</p>
+for the <a class="reference internal" href="clpt.html#elastic-constraints"><span>CLPT</span></a>.</p>
 </div>
 <div class="section" id="models">
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
 <p>The <strong>recommended models</strong>, according to the
-<a class="reference internal" href="bcs.html#boundary-conditions"><em>desired boundary condition</em></a> , are:</p>
+<a class="reference internal" href="bcs.html#boundary-conditions"><span>desired boundary condition</span></a> , are:</p>
 <ul class="simple">
 <li>SS1- or CC1-type: <a class="reference internal" href="#fsdt-donnell-bc1">fsdt_donnell_bc1</a></li>
 <li>SS2- or CC2-type: <a class="reference internal" href="#fsdt-donnell-bc2">fsdt_donnell_bc2</a></li>
@@ -104,8 +104,8 @@ for the <a class="reference internal" href="clpt.html#elastic-constraints"><em>C
 <li>SS4- or CC4-type: <a class="reference internal" href="#fsdt-donnell-bc4">fsdt_donnell_bc4</a></li>
 </ul>
 <p>Note that the <a class="reference internal" href="#fsdt-donnell-bc4">fsdt_donnell_bc4</a> model can be used to simulate all the other
-types of boundary condition, which is allowed by the use of <a class="reference internal" href="clpt.html#elastic-constraints"><em>elastic
-constraints</em></a>.</p>
+types of boundary condition, which is allowed by the use of <a class="reference internal" href="clpt.html#elastic-constraints"><span>elastic
+constraints</span></a>.</p>
 <p>A more general model, the <a class="reference internal" href="#fsdt-donnell-bcn">fsdt_donnell_bcn</a> (or the counterpart
 <a class="reference internal" href="#fsdt-sanders-bcn">fsdt_sanders_bcn</a>) has been proposed and despite it has the largest
 simulation capabilities, it can be unstable for high stiffeness applied
@@ -326,7 +326,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 </div>
 <div class="section" id="fsdt-sanders-bcn">
 <span id="id6"></span><h3>fsdt_sanders_bcn<a class="headerlink" href="#fsdt-sanders-bcn" title="Permalink to this headline">¶</a></h3>
-<p>Counterpart of <a class="reference internal" href="#fsdt-donnell-bcn"><em>fsdt_donnell_bcn</em></a> using the Sanders non-linear equations.</p>
+<p>Counterpart of <a class="reference internal" href="#fsdt-donnell-bcn"><span>fsdt_donnell_bcn</span></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
 <div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
@@ -453,7 +453,7 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
@@ -484,12 +484,14 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
   <h4>Next topic</h4>
   <p class="topless"><a href="bcs.html"
                         title="next chapter">Boundary conditions</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/theory/conecyl/fsdt.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/conecyl/fsdt.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -506,17 +508,17 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="bcs.html" title="Boundary conditions"
@@ -524,16 +526,16 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
         <li class="right" >
           <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
              >previous</a> |</li>
-        <li><a href="../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li>
-          <li><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Nov 14, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Sep 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

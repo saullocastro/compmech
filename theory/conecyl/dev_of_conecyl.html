@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developing the code for the conecyl module &mdash; CompMech 0.3.2 documentation</title>
+    <title>Developing the code for the conecyl module &mdash; CompMech 0.4.0 dev documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.3.2',
+        VERSION:     '0.4.0 dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,23 +25,23 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.3.2 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.4.0 dev documentation" href="../../index.html" />
     <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
     <link rel="next" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
     <link rel="prev" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="esl_theories.html" title="Equivalent Single Layer (ESL) Theories"
@@ -49,16 +49,16 @@
         <li class="right" >
           <a href="index.html" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="developing-the-code-for-the-conecyl-module">
 <h1>Developing the code for the conecyl module<a class="headerlink" href="#developing-the-code-for-the-conecyl-module" title="Permalink to this headline">¶</a></h1>
@@ -89,10 +89,10 @@ surface loads, concentraded or not</li>
 </div>
 <div class="section" id="definitions">
 <h2>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
-<p>In the <a class="reference internal" href="esl_theories.html#esl-theories"><em>ESL theories section</em></a> it is explained
-the types of kinematic equation implemented, defining the <tt class="docutils literal"><span class="pre">ESL</span> <span class="pre">theory</span></tt>
-prefix mentioned below (currently <tt class="docutils literal"><span class="pre">clpt</span></tt> or <tt class="docutils literal"><span class="pre">fsdt</span></tt>).</p>
-<p>The <tt class="docutils literal"><span class="pre">equation</span> <span class="pre">type</span></tt> prefix will be <tt class="docutils literal"><span class="pre">donnell</span></tt> or <tt class="docutils literal"><span class="pre">sanders</span></tt>, defining
+<p>In the <a class="reference internal" href="esl_theories.html#esl-theories"><span>ESL theories section</span></a> it is explained
+the types of kinematic equation implemented, defining the <code class="docutils literal"><span class="pre">ESL</span> <span class="pre">theory</span></code>
+prefix mentioned below (currently <code class="docutils literal"><span class="pre">clpt</span></code> or <code class="docutils literal"><span class="pre">fsdt</span></code>).</p>
+<p>The <code class="docutils literal"><span class="pre">equation</span> <span class="pre">type</span></code> prefix will be <code class="docutils literal"><span class="pre">donnell</span></code> or <code class="docutils literal"><span class="pre">sanders</span></code>, defining
 if the model is built using the Donnell&#8217;s or the Sanders&#8217; non-linear
 equations.</p>
 </div>
@@ -107,19 +107,19 @@ Mathematica routines necessary for this task are named as:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="mo">00</span><span class="p">,</span> <span class="mo">01</span><span class="p">,</span> <span class="mo">02</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span> <span class="ow">and</span> <span class="mi">22</span>
 </pre></div>
 </div>
-<p>are stored in two text files inside the folder <tt class="docutils literal"><span class="pre">./linear_mathematica</span></tt>,
+<p>are stored in two text files inside the folder <code class="docutils literal"><span class="pre">./linear_mathematica</span></code>,
 one with a Mathematica format and another in Fortran format,
 identified with a prefix
-<tt class="docutils literal"><span class="pre">fortran_</span></tt>. Since the integrated matrices are greatly simplified for the
+<code class="docutils literal"><span class="pre">fortran_</span></code>. Since the integrated matrices are greatly simplified for the
 cylinder case, there are files for both cones and cylinders.</p>
-<p>The routine <tt class="docutils literal"><span class="pre">print_linear_sparse.py</span></tt> is used to convert the Fortran
+<p>The routine <code class="docutils literal"><span class="pre">print_linear_sparse.py</span></code> is used to convert the Fortran
 format to a
-ready-to-past-in-Cython format, separating in <tt class="docutils literal"><span class="pre">row</span></tt>, <tt class="docutils literal"><span class="pre">col</span></tt> and <tt class="docutils literal"><span class="pre">value</span></tt>,
+ready-to-past-in-Cython format, separating in <code class="docutils literal"><span class="pre">row</span></code>, <code class="docutils literal"><span class="pre">col</span></code> and <code class="docutils literal"><span class="pre">value</span></code>,
 which is convenient for the implementation using sparse matrices. The
-generated files are stored in <tt class="docutils literal"><span class="pre">./linear_sparse</span></tt>. Note that the power
-functions <tt class="docutils literal"><span class="pre">var**3</span></tt> are transformed in <tt class="docutils literal"><span class="pre">(var*var*var)</span></tt>, by default,
+generated files are stored in <code class="docutils literal"><span class="pre">./linear_sparse</span></code>. Note that the power
+functions <code class="docutils literal"><span class="pre">var**3</span></code> are transformed in <code class="docutils literal"><span class="pre">(var*var*var)</span></code>, by default,
 which can be modified by changing the parameters in the
-<tt class="docutils literal"><span class="pre">mprint_as_sparse()</span></tt> function.</p>
+<code class="docutils literal"><span class="pre">mprint_as_sparse()</span></code> function.</p>
 <p>The integrated sparse matrices are pasted in the corresponding Cython codes,
 currently:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">clpt_donnell_bcX_linear</span><span class="o">.</span><span class="n">pyx</span>
@@ -130,17 +130,17 @@ currently:</p>
 </div>
 <div class="section" id="integration-of-the-non-linear-matrices">
 <h2>Integration of the non-linear matrices<a class="headerlink" href="#integration-of-the-non-linear-matrices" title="Permalink to this headline">¶</a></h2>
-<p>The non-linear matrices <tt class="docutils literal"><span class="pre">K0L</span></tt>, <tt class="docutils literal"><span class="pre">KG</span></tt> and <tt class="docutils literal"><span class="pre">KLL</span></tt> are not integrated
+<p>The non-linear matrices <code class="docutils literal"><span class="pre">K0L</span></code>, <code class="docutils literal"><span class="pre">KG</span></code> and <code class="docutils literal"><span class="pre">KLL</span></code> are not integrated
 analytically and their integrands are built for the numerical integration
 algorithms. Mathematica is used to build the integrands, in the routines
 named as:</p>
 <div class="highlight-python"><div class="highlight"><pre>{ESL theory}_{equation type}_{boundary condition}_nonlinear.nb
 </pre></div>
 </div>
-<p>The output is printed inside <tt class="docutils literal"><span class="pre">./nonlinear_mathematica</span></tt> and the routine
-<tt class="docutils literal"><span class="pre">print_nonlinear_sparse.py</span></tt> is used to parse these results into something
+<p>The output is printed inside <code class="docutils literal"><span class="pre">./nonlinear_mathematica</span></code> and the routine
+<code class="docutils literal"><span class="pre">print_nonlinear_sparse.py</span></code> is used to parse these results into something
 that can be directly implemented into Cython, and the new outputs are
-stored in <tt class="docutils literal"><span class="pre">./nonlinear_sparse</span></tt>.</p>
+stored in <code class="docutils literal"><span class="pre">./nonlinear_sparse</span></code>.</p>
 <p>For each sub-matrix:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="mo">00</span><span class="p">,</span> <span class="mo">01</span><span class="p">,</span> <span class="mo">02</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span>
 </pre></div>
@@ -149,8 +149,8 @@ stored in <tt class="docutils literal"><span class="pre">./nonlinear_sparse</spa
 <div class="highlight-python"><div class="highlight"><pre>fortran_{cone or cylinder}_{matrix name}_{sub-matrix}.txt
 </pre></div>
 </div>
-<p>The sub-matrix is identified by a left and a right digit (<tt class="docutils literal"><span class="pre">0</span></tt>, <tt class="docutils literal"><span class="pre">1</span></tt> or
-<tt class="docutils literal"><span class="pre">2</span></tt>) that indicate the region of the stiffness matrix that this
+<p>The sub-matrix is identified by a left and a right digit (<code class="docutils literal"><span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">1</span></code> or
+<code class="docutils literal"><span class="pre">2</span></code>) that indicate the region of the stiffness matrix that this
 sub-matrix refers to.</p>
 <p>The sub-matrices&#8217; integrands are printed in a format ready to be programmed
 using sparse matrices:</p>
@@ -160,25 +160,25 @@ using sparse matrices:</p>
 <span class="n">out</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="n">out</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">p00</span><span class="o">*</span><span class="n">q04</span> <span class="o">+</span> <span class="n">p01</span><span class="o">*</span><span class="n">q14</span> <span class="o">+</span> <span class="n">p02</span><span class="o">*</span><span class="n">q24</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where <tt class="docutils literal"><span class="pre">alpha</span></tt> and <tt class="docutils literal"><span class="pre">beta</span></tt> are arguments passed by the numerical integration
+<p>where <code class="docutils literal"><span class="pre">alpha</span></code> and <code class="docutils literal"><span class="pre">beta</span></code> are arguments passed by the numerical integration
 algorithm (they give a pre-calculated weight for the point being integrated),
-<tt class="docutils literal"><span class="pre">pij</span></tt> are the left <tt class="docutils literal"><span class="pre">qij</span></tt> the right components of the integrand.</p>
-<p>The definitions of <tt class="docutils literal"><span class="pre">pij</span></tt> and <tt class="docutils literal"><span class="pre">qij</span></tt> are given in the corresponding files
-with a <tt class="docutils literal"><span class="pre">p</span></tt> and a <tt class="docutils literal"><span class="pre">q</span></tt> character after the matrix name:</p>
+<code class="docutils literal"><span class="pre">pij</span></code> are the left <code class="docutils literal"><span class="pre">qij</span></code> the right components of the integrand.</p>
+<p>The definitions of <code class="docutils literal"><span class="pre">pij</span></code> and <code class="docutils literal"><span class="pre">qij</span></code> are given in the corresponding files
+with a <code class="docutils literal"><span class="pre">p</span></code> and a <code class="docutils literal"><span class="pre">q</span></code> character after the matrix name:</p>
 <div class="highlight-python"><div class="highlight"><pre>fortran_{cone or cylinder}_{matrix name}p_{left digit}.txt
 fortran_{cone or cylinder}_{matrix name}q_{right digit}.txt
 </pre></div>
 </div>
-<p>For example, to calculate the smallest repeatable sub-matrix <tt class="docutils literal"><span class="pre">12</span></tt> of
-<tt class="docutils literal"><span class="pre">KG</span></tt>, first the file:</p>
+<p>For example, to calculate the smallest repeatable sub-matrix <code class="docutils literal"><span class="pre">12</span></code> of
+<code class="docutils literal"><span class="pre">KG</span></code>, first the file:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fortran_cone_kG_12</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
-<p>should be openened, and the definitions for <tt class="docutils literal"><span class="pre">pij</span></tt> are found in:</p>
+<p>should be openened, and the definitions for <code class="docutils literal"><span class="pre">pij</span></code> are found in:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fortran_cone_kGNLp_1</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
-<p>and the definitions for <tt class="docutils literal"><span class="pre">qij</span></tt> are found in:</p>
+<p>and the definitions for <code class="docutils literal"><span class="pre">qij</span></code> are found in:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fortran_cone_kGNLq_2</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
@@ -220,7 +220,7 @@ is easy to implement in the Cython codes:</p>
 <div class="math">
 <p><img src="../../_images/math/a051f32c81112971849a3e49197be49c27520827.png" alt="\{F_{int}\} = \{F_{int}\}_{00} + \{F_{int}\}_{0L} +
               \{F_{int}\}_{L0} + \{F_{int}\}_{LL}"/></p>
-</div><p>As can be seen in function <a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><tt class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.calc_fint()</span></tt></a>,
+</div><p>As can be seen in function <a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><code class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.calc_fint()</span></code></a>,
 the linear component <img class="math" src="../../_images/math/72cc35d5e606f688c08945806109882e3e8d948b.png" alt="\{F_{int}\}_{00}"/> is calculated using:</p>
 <div class="math">
 <p><img src="../../_images/math/1ef4065758fa7616d0c8ec2aef05d0ec872048a8.png" alt="\{F_{int}\}_{00} = [K_0]\{c\}"/></p>
@@ -242,7 +242,7 @@ with the numerical integration of <img class="math" src="../../_images/math/60e3
 <div class="highlight-python"><div class="highlight"><pre><span class="n">print_fint_L0_0L_LL</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>that prints into <tt class="docutils literal"><span class="pre">./nonlinear_sparse</span></tt> in a ready-to-paste format, that
+<p>that prints into <code class="docutils literal"><span class="pre">./nonlinear_sparse</span></code> in a ready-to-paste format, that
 is copy-pasted in Cython.</p>
 </div>
 </div>
@@ -251,7 +251,7 @@ is copy-pasted in Cython.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
@@ -276,12 +276,14 @@ is copy-pasted in Cython.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="esl_theories.html"
                         title="next chapter">Equivalent Single Layer (ESL) Theories</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/theory/conecyl/dev_of_conecyl.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/conecyl/dev_of_conecyl.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -298,17 +300,17 @@ is copy-pasted in Cython.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="esl_theories.html" title="Equivalent Single Layer (ESL) Theories"
@@ -316,15 +318,15 @@ is copy-pasted in Cython.</p>
         <li class="right" >
           <a href="index.html" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)"
              >previous</a> |</li>
-        <li><a href="../../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Nov 14, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Sep 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

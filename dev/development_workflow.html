@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Development workflow &mdash; CompMech 0.3.2 documentation</title>
+    <title>Development workflow &mdash; CompMech 0.4.0 dev documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.3.2',
+        VERSION:     '0.4.0 dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,23 +25,23 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="CompMech 0.3.2 documentation" href="../index.html" />
+    <link rel="top" title="CompMech 0.4.0 dev documentation" href="../index.html" />
     <link rel="up" title="Git for development" href="git_development.html" />
     <link rel="next" title="git resources" href="git_resources.html" />
     <link rel="prev" title="Git configuration" href="configure_git.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="git_resources.html" title="git resources"
@@ -49,44 +49,44 @@
         <li class="right" >
           <a href="configure_git.html" title="Git configuration"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
-          <li><a href="git_development.html" accesskey="U">Git for development</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="git_development.html" accesskey="U">Git for development</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="development-workflow">
 <span id="id1"></span><h1>Development workflow<a class="headerlink" href="#development-workflow" title="Permalink to this headline">¶</a></h1>
 <p>You already have your own forked copy of the <a class="reference external" href="http://compmech.github.io/compmech">CompMech</a> repository, by
-following <a class="reference internal" href="development_setup.html#forking"><em>Making your own copy (fork) of CompMech</em></a>, <a class="reference internal" href="development_setup.html#set-up-fork"><em>Set up your fork</em></a>, you have configured <a class="reference external" href="http://git-scm.com/">git</a>
-by following <a class="reference internal" href="configure_git.html#configure-git"><em>Git configuration</em></a>, and have linked the upstream
-repository as explained in <a class="reference internal" href="development_setup.html#linking-to-upstream"><em>Linking your repository to the upstream repo</em></a>.</p>
+following <a class="reference internal" href="development_setup.html#forking"><span>Making your own copy (fork) of CompMech</span></a>, <a class="reference internal" href="development_setup.html#set-up-fork"><span>Set up your fork</span></a>, you have configured <a class="reference external" href="http://git-scm.com/">git</a>
+by following <a class="reference internal" href="configure_git.html#configure-git"><span>Git configuration</span></a>, and have linked the upstream
+repository as explained in <a class="reference internal" href="development_setup.html#linking-to-upstream"><span>Linking your repository to the upstream repo</span></a>.</p>
 <p>What is described below is a recommended workflow with Git.</p>
 <div class="section" id="basic-workflow">
 <h2>Basic workflow<a class="headerlink" href="#basic-workflow" title="Permalink to this headline">¶</a></h2>
 <p>In short:</p>
 <ol class="arabic">
-<li><p class="first">Update your <tt class="docutils literal"><span class="pre">master</span></tt> branch if it&#8217;s not up to date.
+<li><p class="first">Update your <code class="docutils literal"><span class="pre">master</span></code> branch if it&#8217;s not up to date.
 Then start a new <em>feature branch</em> for each set of edits that you do.
-See <a class="reference internal" href="#making-a-new-feature-branch"><em>below</em></a>.</p>
-<p>Avoid putting new commits in your <tt class="docutils literal"><span class="pre">master</span></tt> branch.</p>
+See <a class="reference internal" href="#making-a-new-feature-branch"><span>below</span></a>.</p>
+<p>Avoid putting new commits in your <code class="docutils literal"><span class="pre">master</span></code> branch.</p>
 </li>
-<li><p class="first">Hack away! See <a class="reference internal" href="#editing-workflow"><em>below</em></a></p>
+<li><p class="first">Hack away! See <a class="reference internal" href="#editing-workflow"><span>below</span></a></p>
 </li>
 <li><p class="first">Avoid merging other branches into your feature branch while you are
 working.</p>
 <p>You can optionally rebase if really needed,
-see <a class="reference internal" href="#rebasing-on-master"><em>below</em></a>.</p>
+see <a class="reference internal" href="#rebasing-on-master"><span>below</span></a>.</p>
 </li>
 <li><p class="first">When finished:</p>
 <ul>
 <li><p class="first"><em>Contributors</em>: push your feature branch to your own Github repo, and
-<a class="reference internal" href="#asking-for-merging"><em>ask for code review or make a pull request</em></a>.</p>
+<a class="reference internal" href="#asking-for-merging"><span>ask for code review or make a pull request</span></a>.</p>
 </li>
 <li><p class="first"><em>Core developers</em> (if you want to push changes without
 further review):</p>
@@ -106,14 +106,14 @@ git log -p upstream/master..
 git push upstream my-new-feature:master
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="#pushing-to-main"><em>below</em></a>.</p>
+<p>See <a class="reference internal" href="#pushing-to-main"><span>below</span></a>.</p>
 </li>
 </ul>
 </li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">It&#8217;s usually a good idea to use the <tt class="docutils literal"><span class="pre">-n</span></tt> flag to <tt class="docutils literal"><span class="pre">git</span> <span class="pre">push</span></tt>
+<p class="last">It&#8217;s usually a good idea to use the <code class="docutils literal"><span class="pre">-n</span></code> flag to <code class="docutils literal"><span class="pre">git</span> <span class="pre">push</span></code>
 to check first that you&#8217;re about to push the changes you want to
 the place you want.</p>
 </div>
@@ -121,9 +121,9 @@ the place you want.</p>
 as clear as possible.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Do not use <tt class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></tt> &#8212; this avoids common mistakes if you are
-new to Git. Instead, always do <tt class="docutils literal"><span class="pre">git</span> <span class="pre">fetch</span></tt> followed by <tt class="docutils literal"><span class="pre">git</span>
-<span class="pre">rebase</span></tt>, <tt class="docutils literal"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">--ff-only</span></tt> or <tt class="docutils literal"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">--no-ff</span></tt>,
+<p class="last">Do not use <code class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></code> &#8212; this avoids common mistakes if you are
+new to Git. Instead, always do <code class="docutils literal"><span class="pre">git</span> <span class="pre">fetch</span></code> followed by <code class="docutils literal"><span class="pre">git</span>
+<span class="pre">rebase</span></code>, <code class="docutils literal"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">--ff-only</span></code> or <code class="docutils literal"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">--no-ff</span></code>,
 depending on what you intend.</p>
 </div>
 <div class="admonition seealso">
@@ -146,17 +146,17 @@ git merge upstream/master --ff-only
 of <a class="reference external" href="http://compmech.github.io/compmech">CompMech</a>.  To do this, you <a class="reference external" href="http://www.kernel.org/pub/software/scm/git/docs/git-push.html">git push</a> this new branch up to your <a class="reference external" href="http://github.com">github</a>
 repo.  Generally (if you followed the instructions in these pages, and
 by default), git will have a link to your <a class="reference external" href="http://github.com">github</a> repo, called
-<tt class="docutils literal"><span class="pre">origin</span></tt>.  You push up to your own repo on <a class="reference external" href="http://github.com">github</a> with:</p>
+<code class="docutils literal"><span class="pre">origin</span></code>.  You push up to your own repo on <a class="reference external" href="http://github.com">github</a> with:</p>
 <div class="highlight-python"><div class="highlight"><pre>git push origin my-new-feature
 </pre></div>
 </div>
 <p>In git &gt;= 1.7 you can ensure that the link is correctly set by using the
-<tt class="docutils literal"><span class="pre">--set-upstream</span></tt> option:</p>
+<code class="docutils literal"><span class="pre">--set-upstream</span></code> option:</p>
 <div class="highlight-python"><div class="highlight"><pre>git push --set-upstream origin my-new-feature
 </pre></div>
 </div>
-<p>From now on <a class="reference external" href="http://git-scm.com/">git</a> will know that <tt class="docutils literal"><span class="pre">my-new-feature</span></tt> is related to the
-<tt class="docutils literal"><span class="pre">my-new-feature</span></tt> branch in your own <a class="reference external" href="http://github.com">github</a> repo.</p>
+<p>From now on <a class="reference external" href="http://git-scm.com/">git</a> will know that <code class="docutils literal"><span class="pre">my-new-feature</span></code> is related to the
+<code class="docutils literal"><span class="pre">my-new-feature</span></code> branch in your own <a class="reference external" href="http://github.com">github</a> repo.</p>
 </div>
 <div class="section" id="the-editing-workflow">
 <span id="editing-workflow"></span><h3>The editing workflow<a class="headerlink" href="#the-editing-workflow" title="Permalink to this headline">¶</a></h3>
@@ -176,7 +176,7 @@ git push
 <ol class="arabic">
 <li><p class="first">Make some changes</p>
 </li>
-<li><p class="first">See which files have changed with <tt class="docutils literal"><span class="pre">git</span> <span class="pre">status</span></tt> (see <a class="reference external" href="http://www.kernel.org/pub/software/scm/git/docs/git-status.html">git status</a>).
+<li><p class="first">See which files have changed with <code class="docutils literal"><span class="pre">git</span> <span class="pre">status</span></code> (see <a class="reference external" href="http://www.kernel.org/pub/software/scm/git/docs/git-status.html">git status</a>).
 You&#8217;ll see a listing like this one:</p>
 <div class="highlight-python"><div class="highlight"><pre># On branch my-new-feature
 # Changed but not updated:
@@ -193,23 +193,23 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 </pre></div>
 </div>
 </li>
-<li><p class="first">Check what the actual changes are with <tt class="docutils literal"><span class="pre">git</span> <span class="pre">diff</span></tt> (<a class="reference external" href="http://www.kernel.org/pub/software/scm/git/docs/git-diff.html">git diff</a>).</p>
+<li><p class="first">Check what the actual changes are with <code class="docutils literal"><span class="pre">git</span> <span class="pre">diff</span></code> (<a class="reference external" href="http://www.kernel.org/pub/software/scm/git/docs/git-diff.html">git diff</a>).</p>
 </li>
-<li><p class="first">Add any new files to version control <tt class="docutils literal"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">new_file_name</span></tt> (see
+<li><p class="first">Add any new files to version control <code class="docutils literal"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">new_file_name</span></code> (see
 <a class="reference external" href="http://www.kernel.org/pub/software/scm/git/docs/git-add.html">git add</a>).</p>
 </li>
 <li><p class="first">To commit all modified files into the local copy of your repo,, do
-<tt class="docutils literal"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-am</span> <span class="pre">'A</span> <span class="pre">commit</span> <span class="pre">message'</span></tt>.  Note the <tt class="docutils literal"><span class="pre">-am</span></tt> options to
-<tt class="docutils literal"><span class="pre">commit</span></tt>. The <tt class="docutils literal"><span class="pre">m</span></tt> flag just signals that you&#8217;re going to type a
+<code class="docutils literal"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-am</span> <span class="pre">'A</span> <span class="pre">commit</span> <span class="pre">message'</span></code>.  Note the <code class="docutils literal"><span class="pre">-am</span></code> options to
+<code class="docutils literal"><span class="pre">commit</span></code>. The <code class="docutils literal"><span class="pre">m</span></code> flag just signals that you&#8217;re going to type a
 message on the command line.   If you leave it out, an editor will open in
 which you can compose your commit message.  For non-trivial commits this is
-often the better choice.  The <tt class="docutils literal"><span class="pre">a</span></tt> flag - you can just take on faith - or
+often the better choice.  The <code class="docutils literal"><span class="pre">a</span></code> flag - you can just take on faith - or
 see <a class="reference external" href="http://www.gitready.com/beginner/2009/01/18/the-staging-area.html">why the -a flag?</a> - and the helpful use-case description in the
 <a class="reference external" href="http://tomayko.com/writings/the-thing-about-git">tangled working copy problem</a>. The section on
-<a class="reference internal" href="#writing-the-commit-message"><em>commit messages</em></a> below might also be useful.</p>
+<a class="reference internal" href="#writing-the-commit-message"><span>commit messages</span></a> below might also be useful.</p>
 </li>
-<li><p class="first">To push the changes up to your forked repo on <a class="reference external" href="http://github.com">github</a>, do a <tt class="docutils literal"><span class="pre">git</span>
-<span class="pre">push</span></tt> (see <img class="math" src="../_images/math/dcb38a5c132f45054d170236fd29c48df9d6109c.png" alt="git push"/>).</p>
+<li><p class="first">To push the changes up to your forked repo on <a class="reference external" href="http://github.com">github</a>, do a <code class="docutils literal"><span class="pre">git</span>
+<span class="pre">push</span></code> (see <img class="math" src="../_images/math/dcb38a5c132f45054d170236fd29c48df9d6109c.png" alt="git push"/>).</p>
 </li>
 </ol>
 </div>
@@ -228,7 +228,7 @@ characters.  If the commit is related to a ticket, indicate that with
 <p>Describing the motivation for a change, the nature of a bug for bug fixes or
 some details on what an enhancement does are also good to include in a commit
 message.  Messages should be understandable without looking at the code
-changes.  A commit message like <tt class="docutils literal"><span class="pre">MAINT:</span> <span class="pre">fixed</span> <span class="pre">another</span> <span class="pre">one</span></tt> is an example of
+changes.  A commit message like <code class="docutils literal"><span class="pre">MAINT:</span> <span class="pre">fixed</span> <span class="pre">another</span> <span class="pre">one</span></code> is an example of
 what not to do; the reader has to go look for context elsewhere.</p>
 <p>Standard acronyms to start the commit message with are:</p>
 <div class="highlight-python"><div class="highlight"><pre>API: an (incompatible) API change
@@ -317,22 +317,22 @@ directly file a pull request.</p>
 <div class="section" id="asking-for-code-review">
 <h4>Asking for code review<a class="headerlink" href="#asking-for-code-review" title="Permalink to this headline">¶</a></h4>
 <ol class="arabic">
-<li><p class="first">Go to your repo URL - e.g. <tt class="docutils literal"><span class="pre">http://github.com/your-user-name/compmech</span></tt>.</p>
+<li><p class="first">Go to your repo URL - e.g. <code class="docutils literal"><span class="pre">http://github.com/your-user-name/compmech</span></code>.</p>
 </li>
 <li><p class="first">Click on the <em>Branch list</em> button:</p>
 <img alt="../_images/branch_list.png" src="../_images/branch_list.png" />
 </li>
-<li><p class="first">Click on the <em>Compare</em> button for your feature branch - here <tt class="docutils literal"><span class="pre">my-new-feature</span></tt>:</p>
+<li><p class="first">Click on the <em>Compare</em> button for your feature branch - here <code class="docutils literal"><span class="pre">my-new-feature</span></code>:</p>
 <img alt="../_images/branch_list_compare.png" src="../_images/branch_list_compare.png" />
 </li>
 <li><p class="first">If asked, select the <em>base</em> and <em>comparison</em> branch names you want to
-compare.  Usually these will be <tt class="docutils literal"><span class="pre">master</span></tt> and <tt class="docutils literal"><span class="pre">my-new-feature</span></tt>
+compare.  Usually these will be <code class="docutils literal"><span class="pre">master</span></code> and <code class="docutils literal"><span class="pre">my-new-feature</span></code>
 (where that is your feature branch name).</p>
 </li>
 <li><p class="first">At this point you should get a nice summary of the changes.  Copy the
 URL for this, and send it to <a href="#id6"><span class="problematic" id="id7">`CompMech mail`_</span></a>, asking for
 review.  The URL will look something like:</p>
-<p><tt class="docutils literal"><span class="pre">http://github.com/your-user-name/compmech/compare/master...my-new-feature</span></tt>.</p>
+<p><code class="docutils literal"><span class="pre">http://github.com/your-user-name/compmech/compare/master...my-new-feature</span></code>.</p>
 <p>There&#8217;s an example at
 <a class="reference external" href="http://github.com/matthew-brett/nipy/compare/master...find-install-data">http://github.com/matthew-brett/nipy/compare/master...find-install-data</a>
 See: <a class="reference external" href="http://github.com/blog/612-introducing-github-compare-view">http://github.com/blog/612-introducing-github-compare-view</a> for
@@ -340,22 +340,22 @@ more detail.</p>
 </li>
 </ol>
 <p>The generated comparison, is between your feature branch
-<tt class="docutils literal"><span class="pre">my-new-feature</span></tt>, and the place in <tt class="docutils literal"><span class="pre">master</span></tt> from which you branched
-<tt class="docutils literal"><span class="pre">my-new-feature</span></tt>.  In other words, you can keep updating <tt class="docutils literal"><span class="pre">master</span></tt>
+<code class="docutils literal"><span class="pre">my-new-feature</span></code>, and the place in <code class="docutils literal"><span class="pre">master</span></code> from which you branched
+<code class="docutils literal"><span class="pre">my-new-feature</span></code>.  In other words, you can keep updating <code class="docutils literal"><span class="pre">master</span></code>
 without interfering with the output from the comparison.  More detail?
-Note the three dots in the URL above (<tt class="docutils literal"><span class="pre">master...my-new-feature</span></tt>) and
-see <a class="reference internal" href="dot2_dot3.html#dot2-dot3"><em>Two and three dots in difference specs</em></a>.</p>
+Note the three dots in the URL above (<code class="docutils literal"><span class="pre">master...my-new-feature</span></code>) and
+see <a class="reference internal" href="dot2_dot3.html#dot2-dot3"><span>Two and three dots in difference specs</span></a>.</p>
 </div>
 <div class="section" id="filing-a-pull-request">
 <h4>Filing a pull request<a class="headerlink" href="#filing-a-pull-request" title="Permalink to this headline">¶</a></h4>
 <p>When you are ready to ask for the merge of your code:</p>
 <ol class="arabic">
 <li><p class="first">Go to the URL of your forked repo, say
-<tt class="docutils literal"><span class="pre">http://github.com/your-user-name/compmech.git</span></tt>.</p>
+<code class="docutils literal"><span class="pre">http://github.com/your-user-name/compmech.git</span></code>.</p>
 </li>
 <li><p class="first">Click on the &#8216;Pull request&#8217; button:</p>
 <img alt="../_images/pull_button.png" src="../_images/pull_button.png" />
-<p>Enter a message; we suggest you select only <tt class="docutils literal"><span class="pre">CompMech</span></tt> as the
+<p>Enter a message; we suggest you select only <code class="docutils literal"><span class="pre">CompMech</span></code> as the
 recipient.  The message will go to the CompMech core developers.  Please
 feel free to add others from the list as you like.</p>
 </li>
@@ -365,8 +365,8 @@ feel free to add others from the list as you like.</p>
 <div class="section" id="pushing-changes-to-the-main-repo">
 <span id="pushing-to-main"></span><h3>Pushing changes to the main repo<a class="headerlink" href="#pushing-changes-to-the-main-repo" title="Permalink to this headline">¶</a></h3>
 <p>When you have a set of &#8220;ready&#8221; changes in a feature branch ready for
-Numpy&#8217;s <tt class="docutils literal"><span class="pre">master</span></tt> or <tt class="docutils literal"><span class="pre">maintenance/1.5.x</span></tt> branches, you can push
-them to <tt class="docutils literal"><span class="pre">upstream</span></tt> as follows:</p>
+Numpy&#8217;s <code class="docutils literal"><span class="pre">master</span></code> or <code class="docutils literal"><span class="pre">maintenance/1.5.x</span></code> branches, you can push
+them to <code class="docutils literal"><span class="pre">upstream</span></code> as follows:</p>
 <ol class="arabic">
 <li><p class="first">First, merge or rebase on the target branch.</p>
 <ol class="loweralpha">
@@ -375,7 +375,7 @@ them to <tt class="docutils literal"><span class="pre">upstream</span></tt> as f
 git rebase upstream/master
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="#rebasing-on-master"><em>above</em></a>.</p>
+<p>See <a class="reference internal" href="#rebasing-on-master"><span>above</span></a>.</p>
 </li>
 <li><p class="first">Many related commits: consider creating a merge commit:</p>
 <div class="highlight-python"><div class="highlight"><pre>git fetch upstream
@@ -399,7 +399,7 @@ git log --oneline --graph
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Avoid using <tt class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></tt> here.</p>
+<p class="last">Avoid using <code class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></code> here.</p>
 </div>
 </div>
 </div>
@@ -425,11 +425,11 @@ a815645 Modify it so that it works
 ...
 </pre></div>
 </div>
-<p>and <tt class="docutils literal"><span class="pre">6ad92e5</span></tt> is the last commit in the <tt class="docutils literal"><span class="pre">master</span></tt> branch. Suppose we
+<p>and <code class="docutils literal"><span class="pre">6ad92e5</span></code> is the last commit in the <code class="docutils literal"><span class="pre">master</span></code> branch. Suppose we
 want to make the following changes:</p>
 <ul class="simple">
-<li>Rewrite the commit message for <tt class="docutils literal"><span class="pre">13d7934</span></tt> to something more sensible.</li>
-<li>Combine the commits <tt class="docutils literal"><span class="pre">2dec1ac</span></tt>, <tt class="docutils literal"><span class="pre">a815645</span></tt>, <tt class="docutils literal"><span class="pre">eadc391</span></tt> into a single one.</li>
+<li>Rewrite the commit message for <code class="docutils literal"><span class="pre">13d7934</span></code> to something more sensible.</li>
+<li>Combine the commits <code class="docutils literal"><span class="pre">2dec1ac</span></code>, <code class="docutils literal"><span class="pre">a815645</span></code>, <code class="docutils literal"><span class="pre">eadc391</span></code> into a single one.</li>
 </ul>
 <p>We do as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre># make a backup of the current state
@@ -466,7 +466,7 @@ f eadc391 Fix some remaining bugs
 </pre></div>
 </div>
 <p>This means that (i) we want to edit the commit message for
-<tt class="docutils literal"><span class="pre">13d7934</span></tt>, and (ii) collapse the last three commits into one. Now we
+<code class="docutils literal"><span class="pre">13d7934</span></code>, and (ii) collapse the last three commits into one. Now we
 save and quit the editor.</p>
 <p>Git will then immediately bring up an editor for editing the commit
 message. After revising it, we get the output:</p>
@@ -483,7 +483,7 @@ Successfully rebased and updated refs/heads/my-feature-branch.
 6ad92e5 * masked is now an instance of a new object, MaskedConstant
 </pre></div>
 </div>
-<p>If it went wrong, recovery is again possible as explained <a class="reference internal" href="#recovering-from-mess-up"><em>above</em></a>.</p>
+<p>If it went wrong, recovery is again possible as explained <a class="reference internal" href="#recovering-from-mess-up"><span>above</span></a>.</p>
 </div>
 <div class="section" id="deleting-a-branch-on-github">
 <h3>Deleting a branch on <a class="reference external" href="http://github.com">github</a><a class="headerlink" href="#deleting-a-branch-on-github" title="Permalink to this headline">¶</a></h3>
@@ -494,7 +494,7 @@ git branch -D my-unwanted-branch
 git push origin :my-unwanted-branch
 </pre></div>
 </div>
-<p>(Note the colon <tt class="docutils literal"><span class="pre">:</span></tt> before <tt class="docutils literal"><span class="pre">test-branch</span></tt>.  See also:
+<p>(Note the colon <code class="docutils literal"><span class="pre">:</span></code> before <code class="docutils literal"><span class="pre">test-branch</span></code>.  See also:
 <a class="reference external" href="http://github.com/guides/remove-a-remote-branch">http://github.com/guides/remove-a-remote-branch</a></p>
 </div>
 <div class="section" id="several-people-sharing-a-single-repository">
@@ -502,9 +502,9 @@ git push origin :my-unwanted-branch
 <p>If you want to work on some stuff with other people, where you are all
 committing into the same repository, or even the same branch, then just
 share it via <a class="reference external" href="http://github.com">github</a>.</p>
-<p>First fork CompMech into your account, as from <a class="reference internal" href="development_setup.html#forking"><em>Making your own copy (fork) of CompMech</em></a>.</p>
+<p>First fork CompMech into your account, as from <a class="reference internal" href="development_setup.html#forking"><span>Making your own copy (fork) of CompMech</span></a>.</p>
 <p>Then, go to your forked repository github page, say
-<tt class="docutils literal"><span class="pre">http://github.com/your-user-name/compmech</span></tt></p>
+<code class="docutils literal"><span class="pre">http://github.com/your-user-name/compmech</span></code></p>
 <p>Click on the &#8216;Admin&#8217; button, and add anyone else to the repo as a
 collaborator:</p>
 <blockquote>
@@ -514,8 +514,8 @@ collaborator:</p>
 <div class="highlight-python"><div class="highlight"><pre>git clone git@githhub.com:your-user-name/compmech.git
 </pre></div>
 </div>
-<p>Remember that links starting with <tt class="docutils literal"><span class="pre">git&#64;</span></tt> use the ssh protocol and are
-read-write; links starting with <tt class="docutils literal"><span class="pre">git://</span></tt> are read-only.</p>
+<p>Remember that links starting with <code class="docutils literal"><span class="pre">git&#64;</span></code> use the ssh protocol and are
+read-write; links starting with <code class="docutils literal"><span class="pre">git://</span></code> are read-only.</p>
 <p>Your collaborators can then commit directly into that repo with the
 usual:</p>
 <div class="highlight-python"><div class="highlight"><pre>git commit -am &#39;ENH - much better code&#39;
@@ -542,7 +542,7 @@ repo.</p>
 <p>Backporting is the process of copying new feature/fixes committed in
 <a href="#id8"><span class="problematic" id="id9">`compmech/master`_</span></a> back to stable release branches. To do this you make a
 branch off the branch you are backporting to, cherry pick the commits you
-want from <tt class="docutils literal"><span class="pre">compmech/master</span></tt>, and then submit a pull request for the
+want from <code class="docutils literal"><span class="pre">compmech/master</span></code>, and then submit a pull request for the
 branch containing the backport.</p>
 <ol class="arabic">
 <li><p class="first">Assuming you already have a fork of CompMech on Github. We need to
@@ -607,7 +607,7 @@ make the pull request against master.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../index.html">
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
@@ -653,12 +653,14 @@ make the pull request against master.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="git_resources.html"
                         title="next chapter">git resources</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/dev/development_workflow.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/dev/development_workflow.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -675,17 +677,17 @@ make the pull request against master.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
+          <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="git_resources.html" title="git resources"
@@ -693,15 +695,15 @@ make the pull request against master.</p>
         <li class="right" >
           <a href="configure_git.html" title="Git configuration"
              >previous</a> |</li>
-        <li><a href="../index.html">CompMech 0.3.2 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
-          <li><a href="git_development.html" >Git for development</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.4.0 dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="git_development.html" >Git for development</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Nov 14, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Sep 24, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
