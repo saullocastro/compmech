@@ -12,6 +12,30 @@ from clpt import *
 #from fsdt import *
 
 db = {
+    'clpt_donnell_bardell_w': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': False,
+                    'commons': clpt_commons_bardell_w,
+                    'linear': clpt_donnell_bardell_w_linear,
+                    'non-linear': None,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'num0': 0,
+                    'num1': 3,
+                    },
+    'clpt_donnell_bc1': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': False,
+                    'commons': clpt_commons_bc1,
+                    'linear': clpt_donnell_bc1_linear,
+                    'non-linear': None,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'num0': 2,
+                    'num1': 3,
+                    },
     'clpt_donnell_free': {
                     'linear static': True,
                     'linear buckling': True,
@@ -69,6 +93,8 @@ def get_linear_matrices(kp):
                            kp.kwLeft, kp.kwRight,
                            kp.kphixLeft, kp.kphixRight,
                            kp.kphiyLeft, kp.kphiyRight)
+    elif 'bardell' in model:
+        k0edges = None
 
     fk0 = db[model]['linear'].fk0
     fkG0 = db[model]['linear'].fkG0
