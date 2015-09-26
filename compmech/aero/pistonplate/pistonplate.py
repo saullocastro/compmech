@@ -271,7 +271,7 @@ class AeroPistonPlate(object):
                     setattr(self, 'kphiy' + sufix, zero)
 
                 else:
-                    txt = '"{}" is not a valid boundary condition!'.format(bc)
+                    txt = '"{0}" is not a valid boundary condition!'.format(bc)
                     raise ValueError(txt)
 
         if self.a is None:
@@ -525,7 +525,7 @@ class AeroPistonPlate(object):
         if not modelDB.db[self.model]['linear buckling']:
             msg('________________________________________________')
             msg('')
-            warn('Model {} cannot be used in linear buckling analysis!'.
+            warn('Model {0} cannot be used in linear buckling analysis!'.
                  format(self.model))
             msg('________________________________________________')
 
@@ -603,9 +603,9 @@ class AeroPistonPlate(object):
 
         msg('finished!', level=2)
 
-        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
+        msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1)
         for eig in eigvals[:self.num_eigvalues_print]:
-            msg('{}'.format(eig), level=2)
+            msg('{0}'.format(eig), level=2)
         self.analysis.last_analysis = 'lb'
 
 
@@ -662,7 +662,7 @@ class AeroPistonPlate(object):
         if not modelDB.db[self.model]['linear buckling']:
             msg('________________________________________________')
             msg('')
-            warn('Model {} cannot be used in linear buckling analysis!'.
+            warn('Model {0} cannot be used in linear buckling analysis!'.
                  format(self.model))
             msg('________________________________________________')
 
@@ -693,7 +693,8 @@ class AeroPistonPlate(object):
         msg('eigs() solver...', level=3, silent=silent)
         k = min(self.num_eigvalues, M.shape[0]-2)
         if sparse_solver:
-            eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM', sigma=-1.)
+            eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
+                                    sigma=-1.)
         else:
             M = M.toarray()
             K = K.toarray()
@@ -715,8 +716,9 @@ class AeroPistonPlate(object):
             eigvecs = eigvecs[:, sort_ind]
 
         if not sparse_solver and reduced_dof:
-            new_eigvecs = np.zeros((3*eigvecs.shape[0], eigvecs.shape[1]))
-            new_eigvecs[2::3, :] = eigvecs
+            new_eigvecs = np.zeros((3*eigvecs.shape[0], eigvecs.shape[1]),
+                    dtype=eigvecs.dtype)
+            new_eigvecs[take, :] = eigvecs
             eigvecs = new_eigvecs
 
         self.eigvals = eigvals
@@ -724,7 +726,7 @@ class AeroPistonPlate(object):
 
         msg('finished!', level=2, silent=silent)
 
-        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1,
+        msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1,
                 silent=silent)
         for eigval in eigvals[:self.num_eigvalues_print]:
             msg('{0} rad/s'.format(eigval), level=2, silent=silent)
@@ -1094,7 +1096,7 @@ class AeroPistonPlate(object):
 
         """
         name = self.name + '.AeroPistonPlate'
-        msg('Saving AeroPistonPlate to {}'.format(name))
+        msg('Saving AeroPistonPlate to {0}'.format(name))
 
         self._clear_matrices()
 
