@@ -15,6 +15,8 @@ Version 0.4.0
   consider the rotational energy properly
 - skew panel with formulation for stringers not aligned with the panel
   longitudinal direction
+- robustness of sparse-solver for the aero module, it is really a pain to use
+  the dense solver because of the relative slowness...
 
 Version 0.5.0
 -------------
