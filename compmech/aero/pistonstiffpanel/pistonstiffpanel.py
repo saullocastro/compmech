@@ -106,9 +106,6 @@ class Stiffener(object):
             self.E1 = 0
             #E3 = 0
             self.S1 = 0
-            self.Je = 0
-            #TODO check this geometric correction factor
-            s = 1.
             yply = self.flam.plies[0].t/2.
             for i, ply in enumerate(self.flam.plies):
                 if i > 0:
@@ -117,7 +114,6 @@ class Stiffener(object):
                 self.E1 += ply.t*(q[0,0] - q[0,1]**2/q[1,1])
                 #E3 += ply.t*(q[2,2] - q[1,2]**2/q[1,1])
                 self.S1 += -yply*ply.t*(q[0,2] - q[0,1]*q[1,2]/q[1,1])
-                self.Je += yply**2*ply.t*(q[2,2] - q[1,2]**2/q[1,1])
 
             self.F1 = self.bf**2/12.*self.E1
 
@@ -927,7 +923,6 @@ class AeroPistonStiffPanel(object):
         """
         #TODO
         # - use a linear or parabolic interpolation to estimate new_beta1
-        # - possibility to include gamma
         msg('Flutter calculation...', level=1, silent=silent)
         if self.speed_sound is None:
             self.speed_sound = 1.
