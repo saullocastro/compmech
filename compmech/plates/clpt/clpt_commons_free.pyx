@@ -15,6 +15,9 @@ INT = np.int64
 ctypedef np.double_t cDOUBLE
 ctypedef np.int64_t cINT
 
+ctypedef void *cfstraintype(double *c, double *xs, double *ys, int size, double
+        a, double b, int m1, int n1, double *c0, int m0, int n0, int funcnum,
+        double *es) nogil
 
 cdef extern from "math.h":
     double cos(double theta) nogil
