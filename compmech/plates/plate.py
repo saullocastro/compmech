@@ -369,8 +369,12 @@ class Plate(object):
 
     def _default_field(self, xs, ys, gridx, gridy):
         if xs is None or ys is None:
-            xs = linspace(-self.a/2., self.a/2, gridx)
-            ys = linspace(-self.b/2., self.b/2, gridy)
+            if self.model == 'clpt_donnell_bc1':
+                xs = linspace(0, self.a, gridx)
+                ys = linspace(0, self.b, gridy)
+            else:
+                xs = linspace(-self.a/2., self.a/2, gridx)
+                ys = linspace(-self.b/2., self.b/2, gridy)
             xs, ys = np.meshgrid(xs, ys, copy=False)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
@@ -443,20 +447,32 @@ class Plate(object):
         self.lam = lam
         self.F = F
 
-        k0 = fk0(a, b, F, m1, n1)
+        if 'bardell' in self.model:
+            k0 = fk0(a, b, F)
+        else:
+            k0 = fk0(a, b, F, m1, n1)
 
         Fx = self.Fx if self.Fx is not None else 0.
         Fy = self.Fy if self.Fy is not None else 0.
         Fxy = self.Fxy if self.Fxy is not None else 0.
         Fyx = self.Fyx if self.Fyx is not None else 0.
 
-        if not combined_load_case:
-            kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, m1, n1)
+        if 'bardell' in self.model:
+            if not combined_load_case:
+                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b)
+            else:
+                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b)
+                kG0_Fy = fkG0(0, Fy, 0, 0, a, b)
+                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b)
+                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b)
         else:
-            kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, m1, n1)
-            kG0_Fy = fkG0(0, Fy, 0, 0, a, b, m1, n1)
-            kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, m1, n1)
-            kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, m1, n1)
+            if not combined_load_case:
+                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, m1, n1)
+            else:
+                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, m1, n1)
+                kG0_Fy = fkG0(0, Fy, 0, 0, a, b, m1, n1)
+                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, m1, n1)
+                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, m1, n1)
 
         # performing checks for the linear stiffness matrices
 
@@ -464,24 +480,26 @@ class Plate(object):
         assert np.any(np.isinf(k0.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
-
         if k0edges is not None:
             assert np.any((np.isnan(k0edges.data)
                            | np.isinf(k0edges.data))) == False
             k0edges = csr_matrix(make_symmetric(k0edges))
 
-        if k0edges is not None:
             msg('Applying elastic constraints!', level=3)
-            #FIXME improve the way to consider the elastic constraints for the
-            #      case of infinity stiffnesses
-            k0max = np.abs(k0).max()
-            k0 = k0 + k0edges/np.abs(k0edges).max()*100*k0max
+            k0 = k0 + k0edges
+
+        if 'bardell' in self.model:
+            i = np.ones(k0.shape[0], dtype=bool)
+            i[[0, 2]] = False
+            k0 = k0[i, :][:, i]
 
         self.k0 = k0
 
         if not combined_load_case:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
             kG0 = csr_matrix(make_symmetric(kG0))
+            if 'bardell' in self.model:
+                kG0 = kG0[i, :][:, i]
             self.kG0 = kG0
 
         else:
@@ -617,7 +635,6 @@ class Plate(object):
             M = M.toarray()
             A = A.toarray()
             msg('eigh() solver...', level=3)
-            print 'HERE'
             eigvals, peigvecs = eigh(a=A, b=M)
             msg('finished!', level=3)
             eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
@@ -753,6 +770,7 @@ class Plate(object):
         model = self.model
 
         fuvw = modelDB.db[model]['commons'].fuvw
+        c = np.ascontiguousarray(c)
         us, vs, ws, phixs, phiys = fuvw(c, m1, n1, a, b, xs, ys,
                 self.out_num_cores)
 
@@ -1430,10 +1448,13 @@ if __name__ == '__main__':
     p.a = 400. # mm
     p.b = 200. # mm
 
+    p.model = 'clpt_donnell_bc1'
+    p.model = 'clpt_donnell_free'
+    p.model = 'clpt_donnell_bardell_w'
     p.laminaprop = (142.5e3, 8.7e3, 0.28, 5.1e3, 5.1e3, 5.1e3, 273.15)
     p.plyt = 0.125 # mm
-    p.stack = [0, +45, -45, 90, -45, +45, 0, 90]
-    p.bc = 'ss1-ss2-cc2-ss2'
+    p.stack = [0, +45, -45, 90, -45, +45, 0]
+    p.bc = 'ss1-ss1-ss1-ss1'
     p.m1 = 8
     p.n1 = 8
 

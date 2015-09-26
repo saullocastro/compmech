@@ -93,6 +93,11 @@ def get_linear_matrices(kp):
                            kp.kwLeft, kp.kwRight,
                            kp.kphixLeft, kp.kphixRight,
                            kp.kphiyLeft, kp.kphiyRight)
+    elif 'bc1' in model:
+        fk0edges = db[model]['linear'].fk0edges
+        k0edges = fk0edges(m1, n1, a, b,
+                           kp.kphixBot, kp.kphixTop,
+                           kp.kphiyLeft, kp.kphiyRight)
     elif 'bardell' in model:
         k0edges = None
 
