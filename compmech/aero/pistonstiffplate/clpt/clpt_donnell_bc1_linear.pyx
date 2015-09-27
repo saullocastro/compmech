@@ -864,22 +864,22 @@ def fkMsb(double mus, double ys, double db, double hb, double a, double b,
                         c += 1
                         kMsbr[c] = row+1
                         kMsbc[c] = col+2
-                        kMsbv[c] += -a*db*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
+                        kMsbv[c] += -a*db*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)/((j1*j1) - (l1*l1))
                         c += 1
                         kMsbr[c] = row+2
                         kMsbc[c] = col+1
-                        kMsbv[c] += a*db*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
+                        kMsbv[c] += a*db*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)/((j1*j1) - (l1*l1))
 
                     elif k1 != i1 and l1 == j1:
                         # kMsb_11 cond_3
                         c += 1
                         kMsbr[c] = row+0
                         kMsbc[c] = col+2
-                        kMsbv[c] += -b*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
+                        kMsbv[c] += -b*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)/((i1*i1) - (k1*k1))
                         c += 1
                         kMsbr[c] = row+2
                         kMsbc[c] = col+0
-                        kMsbv[c] += b*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
+                        kMsbv[c] += b*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)/((i1*i1) - (k1*k1))
 
                     elif k1 == i1 and l1 == j1:
                         # kMsb_11 cond_4
@@ -934,11 +934,11 @@ def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
                         c += 1
                         kMsfr[c] = row+0
                         kMsfc[c] = col+2
-                        kMsfv[c] += -Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
+                        kMsfv[c] += Asf*df*i1*k1*mus*(-2*(-1)**(i1 + k1) + 2)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+0
-                        kMsfv[c] += Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
+                        kMsfv[c] += Asf*df*i1*k1*mus*(2*(-1)**(i1 + k1) - 2)*sin(pi*j1*ys/b)*sin(pi*l1*ys/b)/((i1*i1) - (k1*k1))
 
                     elif k1 == i1 and l1 != j1:
                         # kMsf_11 cond_2
@@ -953,11 +953,11 @@ def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
                         c += 1
                         kMsfr[c] = row+1
                         kMsfc[c] = col+2
-                        kMsfv[c] += 0.5*pi*Asf*a*df*l1*mus*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/b
+                        kMsfv[c] += pi*Asf*a*df*l1*mus*sin(pi*j1*ys/b)*cos(pi*l1*ys/b)/b
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+1
-                        kMsfv[c] += 0.5*pi*Asf*a*df*j1*mus*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/b
+                        kMsfv[c] += pi*Asf*a*df*j1*mus*sin(pi*l1*ys/b)*cos(pi*j1*ys/b)/b
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+2
@@ -968,11 +968,11 @@ def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
                         c += 1
                         kMsfr[c] = row+0
                         kMsfc[c] = col+2
-                        kMsfv[c] += -Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
+                        kMsfv[c] += Asf*df*i1*k1*mus*(-2*(-1)**(i1 + k1) + 2)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+0
-                        kMsfv[c] += Asf*df*i1*k1*mus*((-1)**(i1 + k1) - 1)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
+                        kMsfv[c] += Asf*df*i1*k1*mus*(2*(-1)**(i1 + k1) - 2)*sin(pi*j1*ys/b)**2/((i1*i1) - (k1*k1))
 
                     elif k1 == i1 and l1 == j1:
                         # kMsf_11 cond_4
@@ -987,11 +987,11 @@ def fkMsf(double mus, double ys, double df, double Asf, double a, double b,
                         c += 1
                         kMsfr[c] = row+1
                         kMsfc[c] = col+2
-                        kMsfv[c] += 0.25*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
+                        kMsfv[c] += 0.5*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+1
-                        kMsfv[c] += 0.25*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
+                        kMsfv[c] += 0.5*pi*Asf*a*df*j1*mus*sin(2*pi*j1*ys/b)/b
                         c += 1
                         kMsfr[c] = row+2
                         kMsfc[c] = col+2

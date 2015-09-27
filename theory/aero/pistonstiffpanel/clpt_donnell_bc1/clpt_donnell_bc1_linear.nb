@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    107662,       2508]
-NotebookOptionsPosition[    107088,       2484]
-NotebookOutlinePosition[    107487,       2501]
-CellTagsIndexPosition[    107444,       2498]
+NotebookDataLength[    108416,       2526]
+NotebookOptionsPosition[    107818,       2501]
+NotebookOutlinePosition[    108241,       2519]
+CellTagsIndexPosition[    108198,       2516]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1083,35 +1083,42 @@ Cell[BoxData[{
   RowBox[{"msb", "=", 
    RowBox[{"{", 
     RowBox[{
-     RowBox[{"{", "     ", 
+     RowBox[{"{", "        ", 
       RowBox[{
-      "1", ",", "    ", "0", ",", "0", ",", "                           ", 
-       RowBox[{"-", "db"}], ",", "                               ", "0"}], 
-      "}"}], ",", "\[IndentingNewLine]", "      ", 
-     RowBox[{"{", "     ", 
+      "1", ",", "       ", "0", ",", "0", ",", "                           ", 
+       RowBox[{
+        RowBox[{"-", "2"}], "db"}], ",", "                                  ",
+        "0"}], "}"}], ",", "\[IndentingNewLine]", "      ", 
+     RowBox[{"{", "        ", 
       RowBox[{
-      "0", ",", "    ", "1", ",", "0", ",", "                               ",
-        "0", ",", "                           ", 
-       RowBox[{"-", "db"}]}], "}"}], ",", "\[IndentingNewLine]", "      ", 
-     RowBox[{"{", "     ", 
+      "0", ",", "       ", "1", ",", "0", ",", 
+       "                                  ", "0", ",", 
+       "                           ", 
+       RowBox[{
+        RowBox[{"-", "2"}], "db"}]}], "}"}], ",", "\[IndentingNewLine]", 
+     "      ", 
+     RowBox[{"{", "        ", 
       RowBox[{
-      "0", ",", "    ", "0", ",", "1", ",", "                               ",
-        "0", ",", "                               ", "0"}], "}"}], ",", 
+      "0", ",", "       ", "0", ",", "1", ",", 
+       "                                  ", "0", ",", 
+       "                                  ", "0"}], "}"}], ",", 
      "\[IndentingNewLine]", "      ", 
      RowBox[{"{", " ", 
       RowBox[{
-       RowBox[{"-", "db"}], ",", "    ", "0", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"-", "2"}], "db"}], ",", "       ", "0", ",", "0", ",", "   ", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{
           RowBox[{"hb", "^", "2"}], "/", "12"}], "+", 
          RowBox[{"db", "^", "2"}]}], ")"}], ",", 
-       "                               ", "0"}], "}"}], ",", 
+       "                                  ", "0"}], "}"}], ",", 
      "\[IndentingNewLine]", "      ", 
-     RowBox[{"{", "     ", 
+     RowBox[{"{", "        ", 
       RowBox[{"0", ",", 
-       RowBox[{"-", "db"}], ",", "0", ",", "                               ", 
-       "0", ",", 
+       RowBox[{
+        RowBox[{"-", "2"}], "db"}], ",", "0", ",", 
+       "                                  ", "0", ",", "   ", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{
@@ -1177,37 +1184,43 @@ Cell[BoxData[{
   RowBox[{"msf", "=", " ", 
    RowBox[{"{", 
     RowBox[{
-     RowBox[{"{", "   ", 
+     RowBox[{"{", "       ", 
       RowBox[{
-      "1", ",", "     ", "0", ",", "   ", "0", ",", 
+      "1", ",", "       ", "0", ",", "   ", "0", ",", 
        "                          ", 
-       RowBox[{"-", "df"}], ",", "                              ", "0"}], 
-      "}"}], ",", "\[IndentingNewLine]", "       ", 
-     RowBox[{"{", "    ", 
+       RowBox[{
+        RowBox[{"-", "2"}], "df"}], ",", "                                 ", 
+       "0"}], "}"}], ",", "\[IndentingNewLine]", "       ", 
+     RowBox[{"{", "       ", 
       RowBox[{
-      "0", ",", "    ", "1", ",", "   ", "0", ",", 
-       "                              ", "0", ",", 
+      "0", ",", "       ", "1", ",", "   ", "0", ",", 
+       "                                 ", "0", ",", 
        "                          ", 
-       RowBox[{"-", "df"}]}], "}"}], ",", "\[IndentingNewLine]", "       ", 
-     RowBox[{"{", "    ", 
+       RowBox[{
+        RowBox[{"-", "2"}], "df"}]}], "}"}], ",", "\[IndentingNewLine]", 
+     "       ", 
+     RowBox[{"{", "       ", 
       RowBox[{
-      "0", ",", "    ", "0", ",", "   ", "1", ",", 
-       "                              ", "0", ",", 
-       "                              ", "0"}], "}"}], ",", 
+      "0", ",", "       ", "0", ",", "   ", "1", ",", 
+       "                                 ", "0", ",", 
+       "                                 ", "0"}], "}"}], ",", 
      "\[IndentingNewLine]", "       ", 
      RowBox[{"{", 
       RowBox[{
-       RowBox[{"-", "df"}], ",", "    ", "0", ",", "   ", "0", ",", 
+       RowBox[{
+        RowBox[{"-", "2"}], "df"}], ",", "       ", "0", ",", "   ", "0", ",",
+        "   ", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{"df", "^", "2"}], "+", 
          RowBox[{"Iyy", "/", "Asf"}]}], ")"}], ",", 
-       "                              ", "0"}], "}"}], ",", 
+       "                                 ", "0"}], "}"}], ",", 
      "\[IndentingNewLine]", "       ", 
-     RowBox[{"{", "    ", 
+     RowBox[{"{", "       ", 
       RowBox[{"0", ",", 
-       RowBox[{"-", "df"}], ",", "   ", "0", ",", 
-       "                              ", "0", ",", 
+       RowBox[{
+        RowBox[{"-", "2"}], "df"}], ",", "   ", "0", ",", 
+       "                                 ", "0", ",", "   ", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{"df", "^", "2"}], "+", 
@@ -1280,6 +1293,9 @@ Cell[BoxData[{
       RowBox[{"k0sftmp", "=", 
        RowBox[{"ReplaceAll", "[", 
         RowBox[{"k0sf", ",", "map"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"kG0tmp", "=", 
+       RowBox[{"ReplaceAll", "[", 
+        RowBox[{"kG0", ",", "map"}], "]"}]}], ";", "\[IndentingNewLine]", 
       RowBox[{"k0edgesBTtmp", " ", "=", " ", 
        RowBox[{"ReplaceAll", "[", 
         RowBox[{"k0edgesBT", ",", " ", "map"}], "]"}]}], ";", 
@@ -1288,9 +1304,6 @@ Cell[BoxData[{
        RowBox[{"ReplaceAll", "[", 
         RowBox[{"k0edgesLR", ",", " ", "map"}], "]"}]}], ";", 
       "\[IndentingNewLine]", 
-      RowBox[{"kMtmp", "=", 
-       RowBox[{"ReplaceAll", "[", 
-        RowBox[{"kM", ",", "map"}], "]"}]}], ";", "\[IndentingNewLine]", 
       RowBox[{"kAxtmp", "=", 
        RowBox[{"ReplaceAll", "[", 
         RowBox[{"kAx", ",", "map"}], "]"}]}], ";", "\[IndentingNewLine]", 
@@ -1300,9 +1313,9 @@ Cell[BoxData[{
       RowBox[{"cAtmp", "=", 
        RowBox[{"ReplaceAll", "[", 
         RowBox[{"cA", ",", "map"}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"kG0tmp", "=", 
+      RowBox[{"kMtmp", "=", 
        RowBox[{"ReplaceAll", "[", 
-        RowBox[{"kG0", ",", "map"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"kM", ",", "map"}], "]"}]}], ";", "\[IndentingNewLine]", 
       RowBox[{"kMsftmp", "=", 
        RowBox[{"ReplaceAll", "[", 
         RowBox[{"kMsf", ",", "map"}], "]"}]}], ";", "\[IndentingNewLine]", 
@@ -2441,12 +2454,16 @@ Cell[BoxData[{
    3.650138115812213*^9}, {3.6501381694063897`*^9, 3.6501383943473625`*^9}, {
    3.6501392042273817`*^9, 3.65013924511856*^9}, {3.652209452843474*^9, 
    3.652209503226533*^9}, {3.652267005440235*^9, 3.6522670068308697`*^9}, {
-   3.652267166755729*^9, 3.652267179554284*^9}}],
+   3.652267166755729*^9, 3.652267179554284*^9}, {3.6523119728731136`*^9, 
+   3.6523120115318613`*^9}, {3.6523126400698624`*^9, 
+   3.6523126752957773`*^9}, {3.6523128100306354`*^9, 
+   3.6523128246259584`*^9}, {3.652312880669179*^9, 3.652312884375801*^9}, {
+   3.652315788712077*^9, 3.6523157918422904`*^9}}],
 
 Cell[CellGroupData[{
 
 Cell[BoxData["\<\"Integration conditions:\"\>"], "Print",
- CellChangeTimes->{3.6522671839551635`*^9}],
+ CellChangeTimes->{3.6522671839551635`*^9, 3.6523129009864397`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2454,7 +2471,7 @@ Cell[BoxData[
    "\[InvisibleSpace]", "\<\" cond \"\>", "\[InvisibleSpace]", "1"}],
   SequenceForm["    numcond ", 4, " cond ", 1],
   Editable->False]], "Print",
- CellChangeTimes->{3.652267183970788*^9}],
+ CellChangeTimes->{3.6522671839551635`*^9, 3.6523129010084553`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2462,7 +2479,7 @@ Cell[BoxData[
    "\[InvisibleSpace]", "\<\" cond \"\>", "\[InvisibleSpace]", "2"}],
   SequenceForm["    numcond ", 4, " cond ", 2],
   Editable->False]], "Print",
- CellChangeTimes->{3.652267183970788*^9}],
+ CellChangeTimes->{3.6522671839551635`*^9, 3.6523129010111723`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2470,7 +2487,7 @@ Cell[BoxData[
    "\[InvisibleSpace]", "\<\" cond \"\>", "\[InvisibleSpace]", "3"}],
   SequenceForm["    numcond ", 4, " cond ", 3],
   Editable->False]], "Print",
- CellChangeTimes->{3.652267183986414*^9}],
+ CellChangeTimes->{3.6522671839551635`*^9, 3.6523129010206823`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2478,12 +2495,13 @@ Cell[BoxData[
    "\[InvisibleSpace]", "\<\" cond \"\>", "\[InvisibleSpace]", "4"}],
   SequenceForm["    numcond ", 4, " cond ", 4],
   Editable->False]], "Print",
- CellChangeTimes->{3.652267183999789*^9}]
+ CellChangeTimes->{3.6522671839551635`*^9, 3.6523129010301886`*^9}]
 }, Open  ]]
 }, Open  ]]
 },
+Evaluator->"Local 2",
 WindowSize->{752, 727},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowMargins->{{Automatic, -6}, {Automatic, -6}},
 CellContext->Notebook,
 Magnification->1.100000023841858,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
@@ -2501,13 +2519,13 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 105207, 2421, 8953, "Input"],
+Cell[579, 22, 105809, 2438, 8953, "Input"],
 Cell[CellGroupData[{
-Cell[105811, 2447, 101, 1, 24, "Print"],
-Cell[105915, 2450, 284, 6, 24, "Print"],
-Cell[106202, 2458, 284, 6, 24, "Print"],
-Cell[106489, 2466, 284, 6, 24, "Print"],
-Cell[106776, 2474, 284, 6, 24, "Print"]
+Cell[106413, 2464, 125, 1, 24, "Print"],
+Cell[106541, 2467, 310, 6, 24, "Print"],
+Cell[106854, 2475, 310, 6, 24, "Print"],
+Cell[107167, 2483, 310, 6, 24, "Print"],
+Cell[107480, 2491, 310, 6, 24, "Print"]
 }, Open  ]]
 }, Open  ]]
 }

@@ -80,17 +80,18 @@ class Stiffener(object):
 
     def rebuild(self):
         if self.fstack != []:
+            self.hf = sum(self.fplyts)
             self.flam = laminate.read_stack(self.fstack, plyts=self.fplyts,
                                              laminaprops=self.flaminaprops)
             self.flam.calc_equivalent_modulus()
-            self.hf = self.flam.t
 
         h = sum(self.panel.plyts)
         if self.bstack != []:
+            hb = sum(self.bplyts)
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
-                                            offset=(-h/2.))
-            self.hb = self.blam.t
+                                            offset=(-h/2.-hb/2.))
+            self.hb = hb
 
         #TODO check offset effect on curved panels
         self.df = self.bf/2. + self.hb + h/2.
@@ -515,12 +516,13 @@ class AeroPistonStiffPanel(object):
             if s.blam is not None:
                 Fsb = s.blam.ABD
                 k0 += fk0sb(s.ys, s.bb, a, b, r, m1, n1, Fsb)
+                kM += fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
+
+            if s.flam is not None:
                 k0 += fk0sf(s.bf, s.df, s.ys, a, b, r, m1, n1, s.E1, s.F1,
                             s.S1, s.Jxx)
-
-            if s.blam is not None:
-                kM += fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
-            kM += fkMsf(s.mu, s.ys, s.df, s.Asf, a, b, s.Iyy, s.Jxx, m1, n1)
+                kM += fkMsf(s.mu, s.ys, s.df, s.Asf, a, b, s.Iyy, s.Jxx,
+                            m1, n1)
 
         # performing checks for the linear stiffness matrices
 
