@@ -79,6 +79,14 @@ class Plate(object):
         self.maxinf = 1.e8
         self.zero = 0. # used to define zero stiffnesses
         self.bc = None
+        self.bc1x = None
+        self.bc2x = None
+        self.bc3x = None
+        self.bc4x = None
+        self.bc1y = None
+        self.bc2y = None
+        self.bc3y = None
+        self.bc4y = None
         self.kuBot = self.inf
         self.kvBot = self.inf
         self.kwBot = self.inf
@@ -234,6 +242,8 @@ class Plate(object):
 
             bcs = dict(bc_Bot=bc_Bot, bc_Top=bc_Top,
                        bc_Left=bc_Left, bc_Right=bc_Right)
+
+        if not 'bardell' in self.model and self.bc is not None:
             for k in bcs.keys():
                 sufix = k.split('_')[1] # Bot or Top
                 if bcs[k] == 'ss1':
@@ -296,6 +306,28 @@ class Plate(object):
                 else:
                     txt = '"{}" is not a valid boundary condition!'.format(bc)
                     raise ValueError(txt)
+
+        elif 'bardell' in self.model and self.bc is not None:
+            # displacement at 4 edges is zero
+            # free to rotate at 4 edges (simply supported by default)
+            self.bc1x = 0
+            self.bc2x = 1
+            self.bc3x = 0
+            self.bc4x = 1
+            self.bc1y = 0
+            self.bc2y = 1
+            self.bc3y = 0
+            self.bc4y = 1
+            bcs = dict(bc_Bot=bc_Bot, bc_Top=bc_Top,
+                       bc_Left=bc_Left, bc_Right=bc_Right)
+            if 'cc' in bcs['bc_Bot']:
+                self.bc2x = 0
+            if 'cc' in bcs['bc_Top']:
+                self.bc4x = 0
+            if 'cc' in bcs['bc_Right']:
+                self.bc2y = 0
+            if 'cc' in bcs['bc_Left']:
+                self.bc4y = 0
 
         if self.a is None:
             raise ValueError('The length a must be specified')
@@ -447,8 +479,11 @@ class Plate(object):
         self.lam = lam
         self.F = F
 
+        factor = (a*b/4.)
         if 'bardell' in self.model:
-            k0 = fk0(a, b, F)
+            k0 = factor*fk0(a, b, F,
+                    self.bc1x, self.bc2x, self.bc3x, self.bc4x,
+                    self.bc1y, self.bc2y, self.bc3y, self.bc4y)
         else:
             k0 = fk0(a, b, F, m1, n1)
 
@@ -459,12 +494,22 @@ class Plate(object):
 
         if 'bardell' in self.model:
             if not combined_load_case:
-                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b)
+                kG0 = factor*fkG0(Fx, Fy, Fxy, Fyx, a, b,
+                                  self.bc1x, self.bc2x, self.bc3x, self.bc4x,
+                                  self.bc1y, self.bc2y, self.bc3y, self.bc4y)
             else:
-                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b)
-                kG0_Fy = fkG0(0, Fy, 0, 0, a, b)
-                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b)
-                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b)
+                kG0_Fx = factor*fkG0(Fx, 0, 0, 0, a, b,
+                                  self.bc1x, self.bc2x, self.bc3x, self.bc4x,
+                                  self.bc1y, self.bc2y, self.bc3y, self.bc4y)
+                kG0_Fy = factor*fkG0(0, Fy, 0, 0, a, b,
+                                  self.bc1x, self.bc2x, self.bc3x, self.bc4x,
+                                  self.bc1y, self.bc2y, self.bc3y, self.bc4y)
+                kG0_Fxy = factor*fkG0(0, 0, Fxy, 0, a, b,
+                                  self.bc1x, self.bc2x, self.bc3x, self.bc4x,
+                                  self.bc1y, self.bc2y, self.bc3y, self.bc4y)
+                kG0_Fyx = factor*fkG0(0, 0, 0, Fyx, a, b,
+                                  self.bc1x, self.bc2x, self.bc3x, self.bc4x,
+                                  self.bc1y, self.bc2y, self.bc3y, self.bc4y)
         else:
             if not combined_load_case:
                 kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, m1, n1)
@@ -480,6 +525,8 @@ class Plate(object):
         assert np.any(np.isinf(k0.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
+        if 'bardell' in self.model:
+            k0 = k0[2::3, 2::3]
         if k0edges is not None:
             assert np.any((np.isnan(k0edges.data)
                            | np.isinf(k0edges.data))) == False
@@ -488,18 +535,13 @@ class Plate(object):
             msg('Applying elastic constraints!', level=3)
             k0 = k0 + k0edges
 
-        if 'bardell' in self.model:
-            i = np.ones(k0.shape[0], dtype=bool)
-            i[[0, 2]] = False
-            k0 = k0[i, :][:, i]
-
         self.k0 = k0
 
         if not combined_load_case:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
             kG0 = csr_matrix(make_symmetric(kG0))
             if 'bardell' in self.model:
-                kG0 = kG0[i, :][:, i]
+                kG0 = kG0[2::3, 2::3]
             self.kG0 = kG0
 
         else:
@@ -1445,18 +1487,18 @@ class Plate(object):
 
 if __name__ == '__main__':
     p = Plate()
-    p.a = 400. # mm
-    p.b = 200. # mm
+    p.a = 1000. # mm
+    p.b = 1000. # mm
 
-    p.model = 'clpt_donnell_bc1'
     p.model = 'clpt_donnell_free'
     p.model = 'clpt_donnell_bardell_w'
+    p.model = 'clpt_donnell_bc1'
     p.laminaprop = (142.5e3, 8.7e3, 0.28, 5.1e3, 5.1e3, 5.1e3, 273.15)
     p.plyt = 0.125 # mm
     p.stack = [0, +45, -45, 90, -45, +45, 0]
     p.bc = 'ss1-ss1-ss1-ss1'
-    p.m1 = 8
-    p.n1 = 8
+    p.m1 = 40
+    p.n1 = 40
 
     lb = True
     if lb:

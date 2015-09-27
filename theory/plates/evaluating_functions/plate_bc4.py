@@ -17,4 +17,4 @@ for i in range(1, m+1):
 
 levels = np.linspace(vs.min(), vs.max(), 200)
 plt.contourf(bx, by, vs, levels=levels)
-plt.savefig('plate_bc4.png')
+plt.savefig('test_plate_bc4.png')
