@@ -6,20 +6,22 @@ Version 0.4.0
   analysis
 - simplify and unify setup.py for compmech.conecyl.clpt
 - simplify and unify setup.py for compmech.conecyl.fsdt
-- finish implementing compmech.aero.pisonplate
-- finish implementing compmech.aero.pisonstiffpanel
-- tune eigenvalue solver for freq in compmech.aero, similarly to what has been
-  done for linear buckling analysis....
-- fix mass matrix (kM) calculation for compmech.aero.pisonstiffpanel.fsdt. The
-  rotation degrees of freedom should not use F = m*a, but another relation to
-  consider the rotational energy properly
-- skew panel with formulation for stringers not aligned with the panel
-  longitudinal direction
-- robustness of sparse-solver for the aero module, it is really a pain to use
-  the dense solver because of the relative slowness...
+- finish implementing compmech.aero.pistonplate
+- finish implementing compmech.aero.pistonstiffpanel
+- finish implementing compmech.aero.pistonstiffplate
+- finish implementing compmech.plate (Bardell and Monteiro)
 
 Version 0.5.0
 -------------
+- robustness of sparse-solver for the aero module, it is really a pain to use
+  the dense solver because of the relative slowness...
+- tune eigenvalue solver for freq in compmech.aero, similarly to what has been
+  done for linear buckling analysis....
+- fix mass matrix (kM) calculation for compmech.aero.pistonstiffpanel.fsdt.
+  The rotation degrees of freedom should not use F = m*a, but another relation
+  to consider the rotational energy properly
+- skew panel with formulation for stringers not aligned with the panel
+  longitudinal direction
 - make an installable setup.py
 - add Third-Order Shear Deformation Theory to deal with many papers using
   shear correction factors
