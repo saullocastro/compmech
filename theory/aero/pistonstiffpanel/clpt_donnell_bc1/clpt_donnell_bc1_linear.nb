@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    108416,       2526]
-NotebookOptionsPosition[    107818,       2501]
-NotebookOutlinePosition[    108241,       2519]
-CellTagsIndexPosition[    108198,       2516]
+NotebookDataLength[    108102,       2513]
+NotebookOptionsPosition[    107528,       2489]
+NotebookOutlinePosition[    107927,       2506]
+CellTagsIndexPosition[    107884,       2503]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1083,42 +1083,35 @@ Cell[BoxData[{
   RowBox[{"msb", "=", 
    RowBox[{"{", 
     RowBox[{
-     RowBox[{"{", "        ", 
+     RowBox[{"{", "     ", 
       RowBox[{
-      "1", ",", "       ", "0", ",", "0", ",", "                           ", 
-       RowBox[{
-        RowBox[{"-", "2"}], "db"}], ",", "                                  ",
-        "0"}], "}"}], ",", "\[IndentingNewLine]", "      ", 
-     RowBox[{"{", "        ", 
+      "1", ",", "    ", "0", ",", "0", ",", "                           ", 
+       RowBox[{"-", "db"}], ",", "                               ", "0"}], 
+      "}"}], ",", "\[IndentingNewLine]", "      ", 
+     RowBox[{"{", "     ", 
       RowBox[{
-      "0", ",", "       ", "1", ",", "0", ",", 
-       "                                  ", "0", ",", 
-       "                           ", 
-       RowBox[{
-        RowBox[{"-", "2"}], "db"}]}], "}"}], ",", "\[IndentingNewLine]", 
-     "      ", 
-     RowBox[{"{", "        ", 
+      "0", ",", "    ", "1", ",", "0", ",", "                               ",
+        "0", ",", "                           ", 
+       RowBox[{"-", "db"}]}], "}"}], ",", "\[IndentingNewLine]", "      ", 
+     RowBox[{"{", "     ", 
       RowBox[{
-      "0", ",", "       ", "0", ",", "1", ",", 
-       "                                  ", "0", ",", 
-       "                                  ", "0"}], "}"}], ",", 
+      "0", ",", "    ", "0", ",", "1", ",", "                               ",
+        "0", ",", "                               ", "0"}], "}"}], ",", 
      "\[IndentingNewLine]", "      ", 
      RowBox[{"{", " ", 
       RowBox[{
-       RowBox[{
-        RowBox[{"-", "2"}], "db"}], ",", "       ", "0", ",", "0", ",", "   ", 
+       RowBox[{"-", "db"}], ",", "    ", "0", ",", "0", ",", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{
           RowBox[{"hb", "^", "2"}], "/", "12"}], "+", 
          RowBox[{"db", "^", "2"}]}], ")"}], ",", 
-       "                                  ", "0"}], "}"}], ",", 
+       "                               ", "0"}], "}"}], ",", 
      "\[IndentingNewLine]", "      ", 
-     RowBox[{"{", "        ", 
+     RowBox[{"{", "     ", 
       RowBox[{"0", ",", 
-       RowBox[{
-        RowBox[{"-", "2"}], "db"}], ",", "0", ",", 
-       "                                  ", "0", ",", "   ", 
+       RowBox[{"-", "db"}], ",", "0", ",", "                               ", 
+       "0", ",", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{
@@ -1184,43 +1177,37 @@ Cell[BoxData[{
   RowBox[{"msf", "=", " ", 
    RowBox[{"{", 
     RowBox[{
-     RowBox[{"{", "       ", 
+     RowBox[{"{", "    ", 
       RowBox[{
-      "1", ",", "       ", "0", ",", "   ", "0", ",", 
+      "1", ",", "    ", "0", ",", "   ", "0", ",", 
        "                          ", 
-       RowBox[{
-        RowBox[{"-", "2"}], "df"}], ",", "                                 ", 
-       "0"}], "}"}], ",", "\[IndentingNewLine]", "       ", 
-     RowBox[{"{", "       ", 
+       RowBox[{"-", "df"}], ",", "                              ", "0"}], 
+      "}"}], ",", "\[IndentingNewLine]", "       ", 
+     RowBox[{"{", "    ", 
       RowBox[{
-      "0", ",", "       ", "1", ",", "   ", "0", ",", 
-       "                                 ", "0", ",", 
+      "0", ",", "    ", "1", ",", "   ", "0", ",", 
+       "                              ", "0", ",", 
        "                          ", 
-       RowBox[{
-        RowBox[{"-", "2"}], "df"}]}], "}"}], ",", "\[IndentingNewLine]", 
-     "       ", 
-     RowBox[{"{", "       ", 
+       RowBox[{"-", "df"}]}], "}"}], ",", "\[IndentingNewLine]", "       ", 
+     RowBox[{"{", "    ", 
       RowBox[{
-      "0", ",", "       ", "0", ",", "   ", "1", ",", 
-       "                                 ", "0", ",", 
-       "                                 ", "0"}], "}"}], ",", 
+      "0", ",", "    ", "0", ",", "   ", "1", ",", 
+       "                              ", "0", ",", 
+       "                              ", "0"}], "}"}], ",", 
      "\[IndentingNewLine]", "       ", 
      RowBox[{"{", 
       RowBox[{
-       RowBox[{
-        RowBox[{"-", "2"}], "df"}], ",", "       ", "0", ",", "   ", "0", ",",
-        "   ", 
+       RowBox[{"-", "df"}], ",", "    ", "0", ",", "   ", "0", ",", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{"df", "^", "2"}], "+", 
          RowBox[{"Iyy", "/", "Asf"}]}], ")"}], ",", 
-       "                                 ", "0"}], "}"}], ",", 
+       "                              ", "0"}], "}"}], ",", 
      "\[IndentingNewLine]", "       ", 
-     RowBox[{"{", "       ", 
+     RowBox[{"{", "    ", 
       RowBox[{"0", ",", 
-       RowBox[{
-        RowBox[{"-", "2"}], "df"}], ",", "   ", "0", ",", 
-       "                                 ", "0", ",", "   ", 
+       RowBox[{"-", "df"}], ",", "   ", "0", ",", 
+       "                              ", "0", ",", 
        RowBox[{"(", 
         RowBox[{
          RowBox[{"df", "^", "2"}], "+", 
@@ -2458,7 +2445,8 @@ Cell[BoxData[{
    3.6523120115318613`*^9}, {3.6523126400698624`*^9, 
    3.6523126752957773`*^9}, {3.6523128100306354`*^9, 
    3.6523128246259584`*^9}, {3.652312880669179*^9, 3.652312884375801*^9}, {
-   3.652315788712077*^9, 3.6523157918422904`*^9}}],
+   3.652315788712077*^9, 3.6523157918422904`*^9}, {3.652358215846537*^9, 
+   3.6523582835255404`*^9}}],
 
 Cell[CellGroupData[{
 
@@ -2499,9 +2487,8 @@ Cell[BoxData[
 }, Open  ]]
 }, Open  ]]
 },
-Evaluator->"Local 2",
 WindowSize->{752, 727},
-WindowMargins->{{Automatic, -6}, {Automatic, -6}},
+WindowMargins->{{6, Automatic}, {Automatic, 5}},
 CellContext->Notebook,
 Magnification->1.100000023841858,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
@@ -2519,13 +2506,13 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 105809, 2438, 8953, "Input"],
+Cell[579, 22, 105519, 2426, 8953, "Input"],
 Cell[CellGroupData[{
-Cell[106413, 2464, 125, 1, 24, "Print"],
-Cell[106541, 2467, 310, 6, 24, "Print"],
-Cell[106854, 2475, 310, 6, 24, "Print"],
-Cell[107167, 2483, 310, 6, 24, "Print"],
-Cell[107480, 2491, 310, 6, 24, "Print"]
+Cell[106123, 2452, 125, 1, 24, "Print"],
+Cell[106251, 2455, 310, 6, 24, "Print"],
+Cell[106564, 2463, 310, 6, 24, "Print"],
+Cell[106877, 2471, 310, 6, 24, "Print"],
+Cell[107190, 2479, 310, 6, 24, "Print"]
 }, Open  ]]
 }, Open  ]]
 }
