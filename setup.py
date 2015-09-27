@@ -25,6 +25,7 @@ basedirs = [
             os.path.join('compmech', 'conecyl', 'imperfections'),
             os.path.join('compmech', 'aero', 'pistonplate', 'clpt'),
             os.path.join('compmech', 'aero', 'pistonstiffpanel', 'clpt'),
+            os.path.join('compmech', 'aero', 'pistonstiffplate', 'clpt'),
            ]
 
 for basedir in basedirs:
