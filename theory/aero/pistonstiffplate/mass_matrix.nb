@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      5860,        187]
-NotebookOptionsPosition[      5321,        165]
-NotebookOutlinePosition[      5685,        181]
-CellTagsIndexPosition[      5642,        178]
+NotebookDataLength[      5832,        182]
+NotebookOptionsPosition[      5302,        160]
+NotebookOutlinePosition[      5667,        176]
+CellTagsIndexPosition[      5624,        173]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -33,8 +33,7 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"Integrate", "[", 
      RowBox[{
-      RowBox[{"pho", "*", 
-       RowBox[{"u", "^", "2"}]}], ",", 
+      RowBox[{"2", "*", "pho", "*", "u", "*", "u"}], ",", 
       RowBox[{"{", 
        RowBox[{"z", ",", 
         RowBox[{
@@ -58,8 +57,7 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"Integrate", "[", 
      RowBox[{
-      RowBox[{"pho", "*", 
-       RowBox[{"u", "^", "2"}]}], ",", 
+      RowBox[{"2", "*", "pho", "*", "u", "*", "u"}], ",", 
       RowBox[{"{", 
        RowBox[{"zb", ",", 
         RowBox[{
@@ -84,8 +82,7 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"Integrate", "[", 
      RowBox[{
-      RowBox[{"pho", "*", 
-       RowBox[{"u", "^", "2"}]}], ",", 
+      RowBox[{"2", "*", "pho", "*", "u", "*", "u"}], ",", 
       RowBox[{"{", 
        RowBox[{"zf", ",", 
         RowBox[{
@@ -101,70 +98,68 @@ Cell[BoxData[{
    "]"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]"}], "Input",
  CellChangeTimes->{{3.652312113651209*^9, 3.652312164663289*^9}, {
-  3.6523121951518526`*^9, 3.6523123838191266`*^9}, {3.6523125391488276`*^9, 
-  3.652312543918201*^9}, {3.6523127927594194`*^9, 3.6523127936730657`*^9}}],
+   3.6523121951518526`*^9, 3.6523123838191266`*^9}, {3.6523125391488276`*^9, 
+   3.652312543918201*^9}, {3.6523127927594194`*^9, 3.6523127936730657`*^9}, {
+   3.652337420299201*^9, 3.6523374725689335`*^9}, 3.6523379969787374`*^9, {
+   3.6523380316197042`*^9, 3.6523380484650154`*^9}}],
 
 Cell[BoxData["\<\"Stiffener\"\>"], "Print",
- CellChangeTimes->{
-  3.652312160024008*^9, {3.6523122993456125`*^9, 3.652312326006205*^9}, 
-   3.6523123841433563`*^9, 3.652312546837266*^9}],
+ CellChangeTimes->{3.652337998244376*^9, 3.6523380494494*^9}],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{
-   FractionBox["1", "12"], " ", 
+   FractionBox["1", "6"], " ", 
    SuperscriptBox["h", "3"], " ", 
    SuperscriptBox["phi", "2"], " ", "pho"}], "+", 
-  RowBox[{"h", " ", "pho", " ", 
+  RowBox[{"2", " ", "h", " ", "pho", " ", 
    SuperscriptBox["u0", "2"]}]}]], "Output",
- CellChangeTimes->{
-  3.6523121600380177`*^9, {3.6523122993588543`*^9, 3.6523123260212154`*^9}, 
-   3.652312384157896*^9, 3.6523125468512754`*^9}],
+ CellChangeTimes->{3.652337998244376*^9, 3.652338049465026*^9}],
 
 Cell[BoxData["\<\"Stiffener Base\"\>"], "Print",
- CellChangeTimes->{
-  3.652312160024008*^9, {3.6523122993456125`*^9, 3.652312326006205*^9}, 
-   3.6523123841433563`*^9, 3.652312546852276*^9}],
+ CellChangeTimes->{3.652337998244376*^9, 3.652338049465026*^9}],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{
-   FractionBox["1", "12"], " ", 
+   FractionBox["1", "6"], " ", 
    SuperscriptBox["hb", "3"], " ", 
    SuperscriptBox["phi", "2"], " ", "pho"}], "+", 
   RowBox[{"hb", " ", 
    RowBox[{"(", 
     RowBox[{
-     RowBox[{
+     RowBox[{"2", " ", 
       SuperscriptBox["db", "2"], " ", 
       SuperscriptBox["phi", "2"], " ", "pho"}], "-", 
-     RowBox[{"2", " ", "db", " ", "phi", " ", "pho", " ", "u0"}], "+", 
-     RowBox[{"pho", " ", 
+     RowBox[{"4", " ", "db", " ", "phi", " ", "pho", " ", "u0"}], "+", 
+     RowBox[{"2", " ", "pho", " ", 
       SuperscriptBox["u0", "2"]}]}], ")"}]}]}]], "Output",
- CellChangeTimes->{
-  3.6523121600380177`*^9, {3.6523122993588543`*^9, 3.6523123260212154`*^9}, 
-   3.652312384157896*^9, 3.652312546874292*^9}],
+ CellChangeTimes->{3.652337998244376*^9, 3.652338049496276*^9}],
 
 Cell[BoxData["\<\"Stiffener Flange\"\>"], "Print",
- CellChangeTimes->{
-  3.652312160024008*^9, {3.6523122993456125`*^9, 3.652312326006205*^9}, 
-   3.6523123841433563`*^9, 3.652312546876293*^9}]
-}, Open  ]],
+ CellChangeTimes->{3.652337998244376*^9, 3.652338049496276*^9}],
 
 Cell[BoxData[
- RowBox[{" ", 
-  RowBox[{"(", 
-   RowBox[{
+ RowBox[{
+  RowBox[{
+   FractionBox["1", "6"], " ", 
+   SuperscriptBox["bf", "3"], " ", "hf", " ", 
+   SuperscriptBox["phi", "2"], " ", "pho"}], "+", 
+  RowBox[{"bf", " ", 
+   RowBox[{"(", 
     RowBox[{
-     RowBox[{"-", "2"}], " ", "df", "  ", "phi", " ", "pho", " ", "u0"}], "+",
-     " ", 
-    RowBox[{"pho", " ", 
-     SuperscriptBox["u0", "2"]}]}], ")"}]}]], "Input",
- CellChangeTimes->{{3.65231255679731*^9, 3.6523125580552*^9}, {
-  3.6523126066472235`*^9, 3.6523126342097178`*^9}}]
+     RowBox[{"2", " ", 
+      SuperscriptBox["df", "2"], " ", "hf", " ", 
+      SuperscriptBox["phi", "2"], " ", "pho"}], "-", 
+     RowBox[{"4", " ", "df", " ", "hf", " ", "phi", " ", "pho", " ", "u0"}], 
+     "+", 
+     RowBox[{"2", " ", "hf", " ", "pho", " ", 
+      SuperscriptBox["u0", "2"]}]}], ")"}]}]}]], "Output",
+ CellChangeTimes->{3.652337998244376*^9, 3.652338049527526*^9}]
+}, Open  ]]
 },
 Evaluator->"Local 2",
-WindowSize->{707, 600},
+WindowSize->{1520, 727},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
@@ -181,14 +176,14 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 2790, 82, 452, "Input"],
-Cell[3372, 106, 186, 3, 23, "Print"],
-Cell[3561, 111, 378, 10, 46, "Output"],
-Cell[3942, 123, 191, 3, 23, "Print"],
-Cell[4136, 128, 615, 17, 46, "Output"],
-Cell[4754, 147, 193, 3, 23, "Print"]
-}, Open  ]],
-Cell[4962, 153, 355, 10, 33, InheritFromParent]
+Cell[579, 22, 2898, 81, 412, "Input"],
+Cell[3480, 105, 105, 1, 23, "Print"],
+Cell[3588, 108, 304, 8, 46, "Output"],
+Cell[3895, 118, 112, 1, 23, "Print"],
+Cell[4010, 121, 553, 15, 78, "Output"],
+Cell[4566, 138, 114, 1, 23, "Print"],
+Cell[4683, 141, 603, 16, 46, "Output"]
+}, Open  ]]
 }
 ]
 *)
