@@ -13,7 +13,6 @@ CLPT kinematic assumption.
 """
 modules = [
           'clpt_commons_bc1',
-
           'clpt_donnell_bc1_linear',
           ]
 
