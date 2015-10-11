@@ -54,10 +54,10 @@ class Stiffener(object):
 
 
     """
-    def __init__(self, plate, ys, bb, bf, bstack, bplyts, blaminaprops,
+    def __init__(self, plate, mu, ys, bb, bf, bstack, bplyts, blaminaprops,
                  fstack, fplyts, flaminaprops):
         self.plate = plate
-        self.mu = None
+        self.mu = mu
         self.ys = ys
         self.bb = bb
         self.hb = 0.
@@ -497,15 +497,20 @@ class AeroPistonStiffPlate(object):
         #TODO summing up coo_matrix objects may be very slow!
         for s in self.stiffeners:
             if s.blam is not None:
+                raise RuntimeError('kMsb is wrongly integrated!')
                 Fsb = s.blam.ABD
-                k0 += fk0sb(s.ys, s.bb, a, b, m1, n1, Fsb)
-                kM += fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
+                s.k0sb = fk0sb(s.ys, s.bb, a, b, m1, n1, Fsb)
+                s.kMsb = fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
+                k0 += s.k0sb
+                kM += s.kMsb
 
             if s.flam is not None:
-                k0 += fk0sf(s.bf, s.df, s.ys, a, b, m1, n1, s.E1, s.F1,
-                            s.S1, s.Jxx)
-                kM += fkMsf(s.mu, s.ys, s.df, s.Asf, a, b, s.Iyy, s.Jxx,
-                            m1, n1)
+                s.k0sf = fk0sf(s.bf, s.df, s.ys, a, b, m1, n1, s.E1, s.F1,
+                               s.S1, s.Jxx)
+                s.kMsf = fkMsf(s.mu, s.ys, s.df, s.Asf, a, b, s.Iyy, s.Jxx,
+                               m1, n1)
+                k0 += s.k0sf
+                kM += s.kMsf
 
         # performing checks for the linear stiffness matrices
 
@@ -524,6 +529,7 @@ class AeroPistonStiffPlate(object):
             assert np.any(np.isinf(kM.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
+
         if calc_kA:
             kA = csr_matrix(make_skew_symmetric(kA))
             if cA is not None:
