@@ -26,10 +26,114 @@ import modelDB
 
 
 def load(name):
-    if '.AeroPistonStiffPanel' in name:
+    if '.AeroPistonStiffPanelBay' in name:
         return cPickle.load(open(name, 'rb'))
     else:
-        return cPickle.load(open(name + '.AeroPistonStiffPanel', 'rb'))
+        return cPickle.load(open(name + '.AeroPistonStiffPanelBay', 'rb'))
+
+
+class Panel(object):
+    def __init__(self, bay):
+        self.bay = bay
+
+        # material
+        self.mu = None # laminate material density
+        self.laminaprop = None
+        self.plyt = None
+        self.laminaprops = []
+        self.stack = []
+        self.plyts = []
+
+        self.y1 = None
+        self.y2 = None
+        self.Nxx = None
+        self.Nyy = None
+        self.Nxy = None
+        self.F = None
+        self.k0 = None
+        self.kM = None
+        self.kG0 = None
+        self.kG0_Nxx = None
+        self.kG0_Nyy = None
+        self.kG0_Nxy = None
+
+
+    def calc_linear_matrices(self, combined_load_case=None, silent=False,
+            calc_kG0=True, calc_kM=True):
+        self._rebuild()
+        msg('Calculating linear matrices... ', level=2, silent=silent)
+
+        y1 = self.y1
+        y2 = self.y2
+        mu = self.mu
+        a = self.bay.a
+        b = self.bay.b
+        r = self.bay.r
+        m1 = self.bay.m1
+        n1 = self.bay.n1
+        if calc_kA and self.beta is None:
+            if self.Mach < 1:
+                raise ValueError('Mach number must be >= 1')
+            elif self.Mach == 1:
+                self.Mach = 1.0001
+            M = self.Mach
+            beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
+            gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
+            ainf = self.speed_sound
+            aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
+        elif calc_kA and self.beta is not None:
+            beta = self.beta
+            gamma = self.gamma if self.gamma is not None else 0.
+            aeromu = self.aeromu if self.aeromu is not None else 0.
+        elif not calc_kA:
+            pass
+        else:
+            raise NotImplementedError('check here')
+
+        if self.stack != []:
+            lam = laminate.read_stack(self.stack, plyts=self.plyts,
+                                             laminaprops=self.laminaprops)
+
+        F = lam.ABD
+
+        self.lam = lam
+        self.F = F
+
+        # calculating panel stiffness matrices
+
+        linear = modeldb[self.model]['linear']
+
+        self.k0 = linear.fk0y1y2(y1, y2, a, b, r, m1, n1, F)
+
+        if False:
+            self.k0edges = fk0edges(m1, n1, a, b,
+                                    self.kphixBot, self.kphixTop,
+                                    self.kphiyLeft, self.kphiyRight)
+
+        if calc_kM:
+            h = sum(self.plyts)
+            self.kM = linear.fkMy1y2(y1, y2, mu, 0., h, a, b, m1, n1)
+
+        if calc_kG0:
+            Nxx = self.Nxx if self.Nxx is not None else 0.
+            Nyy = self.Nyy if self.Nyy is not None else 0.
+            Nxy = self.Nxy if self.Nxy is not None else 0.
+            Nxy = self.Nxy if self.Nxy is not None else 0.
+
+            if not combined_load_case:
+                self.kG0 = linear.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r, m1, n1)
+            else:
+                self.kG0_Nxx = linear.fkG0y1y2(y1, y2, Nxx, 0, 0, a, b, r, m1, n1)
+                self.kG0_Nyy = linear.fkG0y1y2(y1, y2, 0, Nyy, 0, a, b, r, m1, n1)
+                self.kG0_Nxy = linear.fkG0y1y2(y1, y2, 0, 0, Nxy, a, b, r, m1, n1)
+
+        #NOTE forcing Python garbage collector to clean the memory
+        #     it DOES make a difference! There is a memory leak not
+        #     identified, probably in the csr_matrix process
+
+        gc.collect()
+
+        msg('finished!', level=2, silent=silent)
 
 
 class Stiffener(object):
@@ -45,7 +149,8 @@ class Stiffener(object):
       =========================  --> panel
 
     Both the flange and the padup are optional. The
-    :class:`.AeroPistonStiffPanel` object may have any number of stiffeners.
+    :class:`.AeroPistonStiffPanelBay` object may have any number of
+    stiffeners.
 
     Each stiffener has a constant `y` coordinate.
 
@@ -119,7 +224,7 @@ class Stiffener(object):
             self.F1 = self.bf**2/12.*self.E1
 
 
-class AeroPistonStiffPanel(object):
+class AeroPistonStiffPanelBay(object):
     r"""Stiffened Panel for Aeroelastic Studies using the Piston Theory
 
     Main characteristics:
@@ -171,20 +276,8 @@ class AeroPistonStiffPanel(object):
         self.m1 = 11
         self.n1 = 11
 
-        # numerical integration
-        self.nx = 160
-        self.ny = 160
-        self.ni_num_cores = cpu_count()//2
-        self.ni_method = 'trapz2d'
-
-        # loads
-        self.Fx = None
-        self.Fy = None
-        self.Fxy = None
-        self.Fyx = None
-
-        # shear correction factor (FSDT only)
-        self.K = 5/6.
+        # panels
+        self.panels = []
 
         # stiffeners
         self.stiffeners = []
@@ -194,14 +287,6 @@ class AeroPistonStiffPanel(object):
         self.b = None
         self.r = None
 
-        # material
-        self.mu = None # laminate material density
-        self.laminaprop = None
-        self.plyt = None
-        self.laminaprops = []
-        self.stack = []
-        self.plyts = []
-
         # aerodynamic properties for the Piston theory
         self.beta = None
         self.gamma = None
@@ -210,9 +295,6 @@ class AeroPistonStiffPanel(object):
         self.speed_sound = None
         self.Mach = None
         self.V = None
-
-        # constitutive law
-        self.F = None
 
         # eigenvalue analysis
         self.num_eigvalues = 25
@@ -234,15 +316,9 @@ class AeroPistonStiffPanel(object):
     def _clear_matrices(self):
         self.k0 = None
         self.kT = None
-        self.kG0 = None
-        self.kG0_Fx = None
-        self.kG0_Fy = None
-        self.kG0_Fxy = None
-        self.kG0_Fyx = None
         self.kM = None
         self.kA = None
         self.cA = None
-        self.lam = None
         self.u = None
         self.v = None
         self.w = None
@@ -250,6 +326,17 @@ class AeroPistonStiffPanel(object):
         self.phiy = None
         self.Xs = None
         self.Ys = None
+
+        for panel in self.panels:
+            panel.k0 = None
+            panel.kM = None
+            panel.kG0 = None
+            panel.kG0_Nxx = None
+            panel.kG0_Nyy = None
+            panel.kG0_Nxy = None
+
+
+
 
         gc.collect()
 
@@ -259,7 +346,7 @@ class AeroPistonStiffPanel(object):
             try:
                 self.name = os.path.basename(__main__.__file__).split('.py')[0]
             except AttributeError:
-                warn('AeroPistonStiffPanel name unchanged')
+                warn('AeroPistonStiffPanelBay name unchanged')
 
         self.model = self.model.lower()
 
@@ -415,19 +502,9 @@ class AeroPistonStiffPanel(object):
             calc_kG0=True, calc_kA=True, calc_kM=True):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2, silent=silent)
-
-        fk0, fkG0, fkAx, fkAy, fcA, fkM, fk0edges, fk0sb, fk0sf, fkMsb, fkMsf = \
-                modelDB.get_linear_matrices(self)
         model = self.model
-        a = self.a
-        b = self.b
-        r = self.r
         m1 = self.m1
         n1 = self.n1
-        laminaprops = self.laminaprops
-        plyts = self.plyts
-        h = sum(plyts)
-        stack = self.stack
         mu = self.mu
         if calc_kA and self.beta is None:
             if self.Mach < 1:
@@ -436,7 +513,7 @@ class AeroPistonStiffPanel(object):
                 self.Mach = 1.0001
             M = self.Mach
             beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
-            gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
+            gamma = beta*1./(2.*self.r*(M**2 - 1)**0.5)
             ainf = self.speed_sound
             aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
         elif calc_kA and self.beta is not None:
@@ -448,76 +525,36 @@ class AeroPistonStiffPanel(object):
         else:
             raise NotImplementedError('check here')
 
-        if stack != []:
-            lam = laminate.read_stack(stack, plyts=plyts,
-                                             laminaprops=laminaprops)
-
-        if 'clpt' in model:
-            if lam is not None:
-                F = lam.ABD
-
-        elif 'fsdt' in model:
-            if lam is not None:
-                F = lam.ABDE
-                F[6:, 6:] *= self.K
-
-        self.lam = lam
-        self.F = F
-
-        k0 = fk0(a, b, r, F, m1, n1)
-
-        if (self.model == 'clpt_donnell_bc1'
-        or  self.model == 'clpt_sanders_bc1'):
-            k0edges = fk0edges(m1, n1, a, b,
-                               self.kphixBot, self.kphixTop,
-                               self.kphiyLeft, self.kphiyRight)
-        elif self.model == 'fsdt_donnell_bc1':
-            k0edges = fk0edges(m1, n1, a, b,
-                               self.kphixBot, self.kphixTop,
-                               self.kphiyBot, self.kphiyTop,
-                               self.kphixLeft, self.kphixRight,
-                               self.kphiyLeft, self.kphiyRight)
+        k0 = 0.
+        kM = 0.
+        if not combined_load_case:
+            kG0 = 0.
         else:
-            raise
+            kG0_Nxx = 0.
+            kG0_Nyy = 0.
+            kG0_Nxy = 0.
 
-        if calc_kA:
-            if self.flow == 'x':
-                kA = fkAx(beta, gamma, a, b, m1, n1)
-            elif self.flow == 'y':
-                kA = fkAy(beta, a, b, m1, n1)
-            if fcA is None:
-                cA = None
-            else:
-                cA = fcA(aeromu, a, b, m1, n1)
-                cA = cA*(0+1j)
-        if calc_kM:
-            if self.model == 'fsdt_donnell_bc1':
-                raise NotImplementedError('There is a bug with kM for model %s'
-                        % self.model)
-            kM = fkM(mu, h, a, b, m1, n1)
-
-        if calc_kG0:
-            Fx = self.Fx if self.Fx is not None else 0.
-            Fy = self.Fy if self.Fy is not None else 0.
-            Fxy = self.Fxy if self.Fxy is not None else 0.
-            Fyx = self.Fyx if self.Fyx is not None else 0.
-
+        # contributions from panels
+        #TODO summing up coo_matrix objects may be very slow!
+        for panel in self.panels:
+            k0 += panel.k0
+            kM += panel.kM
             if not combined_load_case:
-                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, r, m1, n1)
+                kG0 += panel.kG0
             else:
-                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, r, m1, n1)
-                kG0_Fy = fkG0(0, Fy, 0, 0, a, b, r, m1, n1)
-                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, r, m1, n1)
-                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, r, m1, n1)
+                kG0_Nxx += panel.kG0_Nxx
+                kG0_Nyy += panel.kG0_Nyy
+                kG0_Nxy += panel.kG0_Nxy
 
         # contributions from stiffeners
         #TODO summing up coo_matrix objects may be very slow!
         for s in self.stiffeners:
             if s.blam is not None:
-                raise RuntimeError('fMsb is wrongly integrated!')
                 Fsb = s.blam.ABD
-                k0 += fk0sb(s.ys, s.bb, a, b, r, m1, n1, Fsb)
-                kM += fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
+                y1 = s.ys - s.bb/2.
+                y2 = s.ys + s.bb/2.
+                k0 += fk0y1y2(y1, y2, a, b, r, m1, n1, Fsb)
+                kM += fkMy1y2(y1, y2, s.mu, s.db, s.hb, a, b, m1, n1)
 
             if s.flam is not None:
                 k0 += fk0sf(s.bf, s.df, s.ys, a, b, r, m1, n1, s.E1, s.F1,
@@ -525,7 +562,23 @@ class AeroPistonStiffPanel(object):
                 kM += fkMsf(s.mu, s.ys, s.df, s.Asf, a, b, s.Iyy, s.Jxx,
                             m1, n1)
 
-        # performing checks for the linear stiffness matrices
+        # computing global matrices (in the bay domain)
+
+        linear = modeldb[model]['linear']
+
+        if calc_kA:
+            if self.flow == 'x':
+                kA = linear.fkAx(beta, gamma, a, b, m1, n1)
+            elif self.flow == 'y':
+                kA = linear.fkAy(beta, a, b, m1, n1)
+            if fcA is None:
+                cA = None
+            else:
+                cA = linear.fcA(aeromu, a, b, m1, n1)
+                cA = cA*(0+1j)
+
+
+        # performing checks for the stiffness matrices
 
         assert np.any(np.isnan(k0.data)) == False
         assert np.any(np.isinf(k0.data)) == False
@@ -549,11 +602,13 @@ class AeroPistonStiffPanel(object):
         if calc_kM:
             kM = csr_matrix(make_symmetric(kM))
 
-        assert np.any(np.isnan(k0edges.data)) == False
-        assert np.any(np.isinf(k0edges.data)) == False
-        k0edges = csr_matrix(make_symmetric(k0edges))
+        if False:
+            print 'DEBUG, k0edges not taken into account yet'
+            assert np.any(np.isnan(k0edges.data)) == False
+            assert np.any(np.isinf(k0edges.data)) == False
+            k0edges = csr_matrix(make_symmetric(k0edges))
 
-        k0 = k0 + k0edges
+            k0 = k0 + k0edges
 
         self.k0 = k0
         if calc_kA:
@@ -569,24 +624,20 @@ class AeroPistonStiffPanel(object):
                 self.kG0 = kG0
 
             else:
-                assert np.any((np.isnan(kG0_Fx.data)
-                               | np.isinf(kG0_Fx.data))) == False
-                assert np.any((np.isnan(kG0_Fy.data)
-                               | np.isinf(kG0_Fy.data))) == False
-                assert np.any((np.isnan(kG0_Fxy.data)
-                               | np.isinf(kG0_Fxy.data))) == False
-                assert np.any((np.isnan(kG0_Fyx.data)
-                               | np.isinf(kG0_Fyx.data))) == False
+                assert np.any((np.isnan(kG0_Nxx.data)
+                               | np.isinf(kG0_Nxx.data))) == False
+                assert np.any((np.isnan(kG0_Nyy.data)
+                               | np.isinf(kG0_Nyy.data))) == False
+                assert np.any((np.isnan(kG0_Nxy.data)
+                               | np.isinf(kG0_Nxy.data))) == False
 
-                kG0_Fx = csr_matrix(make_symmetric(kG0_Fx))
-                kG0_Fy = csr_matrix(make_symmetric(kG0_Fy))
-                kG0_Fxy = csr_matrix(make_symmetric(kG0_Fxy))
-                kG0_Fyx = csr_matrix(make_symmetric(kG0_Fyx))
+                kG0_Nxx = csr_matrix(make_symmetric(kG0_Nxx))
+                kG0_Nyy = csr_matrix(make_symmetric(kG0_Nyy))
+                kG0_Nxy = csr_matrix(make_symmetric(kG0_Nxy))
 
-                self.kG0_Fx = kG0_Fx
-                self.kG0_Fy = kG0_Fy
-                self.kG0_Fxy = kG0_Fxy
-                self.kG0_Fyx = kG0_Fyx
+                self.kG0_Nxx = kG0_Nxx
+                self.kG0_Nyy = kG0_Nyy
+                self.kG0_Nxy = kG0_Nxy
 
         #NOTE forcing Python garbage collector to clean the memory
         #     it DOES make a difference! There is a memory leak not
@@ -601,8 +652,8 @@ class AeroPistonStiffPanel(object):
             calc_kA=False):
         """Performs a linear buckling analysis
 
-        The following parameters of the ``AeroPistonStiffPanel`` object will
-        affect the linear buckling analysis:
+        The following parameters of the ``AeroPistonStiffPanelBay`` object
+        will affect the linear buckling analysis:
 
         =======================    =====================================
         parameter                  description
@@ -620,10 +671,9 @@ class AeroPistonStiffPanel(object):
             the algorithm to rearrange the linear matrices in a different
             way. The valid values are ``1``, or ``2``, where:
 
-            - ``1`` : find the critical Fx for a fixed Fxy
-            - ``2`` : find the critical Fx for a fixed Fy
-            - ``3`` : find the critical Fy for a fixed Fyx
-            - ``4`` : find the critical Fy for a fixed Fx
+            - ``1`` : find the critical Nxx for a fixed Nxy
+            - ``2`` : find the critical Nxx for a fixed Nyy
+            - ``3`` : find the critical Nyy for a fixed Nxx
         sparse_solver : bool, optional
             Tells if solver :func:`scipy.linalg.eigh` or
             :func:`scipy.sparse.linalg.eigs` should be used.
@@ -631,8 +681,8 @@ class AeroPistonStiffPanel(object):
         Notes
         -----
         The extracted eigenvalues are stored in the ``eigvals`` parameter
-        of the ``AeroPistonStiffPanel`` object and the `i^{th}` eigenvector in
-        the ``eigvecs[:, i-1]`` parameter.
+        of the ``AeroPistonStiffPanelBay`` object and the `i^{th}` eigenvector
+        in the ``eigvecs[:, i-1]`` parameter.
 
         """
         if not modelDB.db[self.model]['linear buckling']:
@@ -658,17 +708,14 @@ class AeroPistonStiffPanel(object):
             M = self.k0 + kA
             A = self.kG0
         elif combined_load_case == 1:
-            M = self.k0 - kA + self.kG0_Fxy
-            A = self.kG0_Fx
+            M = self.k0 - kA + self.kG0_Nxy
+            A = self.kG0_Nxx
         elif combined_load_case == 2:
-            M = self.k0 - kA + self.kG0_Fy
-            A = self.kG0_Fx
+            M = self.k0 - kA + self.kG0_Nyy
+            A = self.kG0_Nxx
         elif combined_load_case == 3:
-            M = self.k0 - kA + self.kG0_Fyx
-            A = self.kG0_Fy
-        elif combined_load_case == 4:
-            M = self.k0 - kA + self.kG0_Fx
-            A = self.kG0_Fy
+            M = self.k0 - kA + self.kG0_Nxx
+            A = self.kG0_Nyy
 
         Amin = abs(A.min())
         # Normalizing A to improve numerical stability
@@ -726,8 +773,8 @@ class AeroPistonStiffPanel(object):
             sort=True, damping=False, reduced_dof=False):
         """Performs a frequency analysis
 
-        The following parameters of the ``AeroPistonStiffPanel`` object will
-        affect the linear buckling analysis:
+        The following parameters of the ``AeroPistonStiffPanelBay`` object
+        will affect the linear buckling analysis:
 
         =======================    =====================================
         parameter                  description
@@ -770,8 +817,8 @@ class AeroPistonStiffPanel(object):
         Notes
         -----
         The extracted eigenvalues are stored in the ``eigvals`` parameter
-        of the ``AeroPistonStiffPanel`` object and the `i^{th}` eigenvector in
-        the ``eigvecs[:, i-1]`` parameter.
+        of the ``AeroPistonStiffPanelBay`` object and the `i^{th}` eigenvector
+        in the ``eigvecs[:, i-1]`` parameter.
 
         """
         if not modelDB.db[self.model]['linear buckling']:
@@ -1001,7 +1048,7 @@ class AeroPistonStiffPanel(object):
         For a given full set of Ritz constants ``c``, the displacement
         field is calculated and stored in the parameters
         ``u``, ``v``, ``w``, ``phix``, ``phiy`` of the
-        ``AeroPistonStiffPanel`` object.
+        ``AeroPistonStiffPanelBay`` object.
 
         Parameters
         ----------
@@ -1030,7 +1077,7 @@ class AeroPistonStiffPanel(object):
         -----
         The returned values ``u```, ``v``, ``w``, ``phix``, ``phiy`` are
         stored as parameters with the same name in the
-        ``AeroPistonStiffPanel`` object.
+        ``AeroPistonStiffPanelBay`` object.
 
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
@@ -1103,8 +1150,8 @@ class AeroPistonStiffPanel(object):
             Resolution of the saved file in dots per inch.
         filename : str, optional
             The file name for the generated image file. If no value is given,
-            the `name` parameter of the ``AeroPistonStiffPanel`` object will
-            be used.
+            the `name` parameter of the ``AeroPistonStiffPanelBay`` object
+            will be used.
         ax : AxesSubplot, optional
             When ``ax`` is given, the contour plot will be created inside it.
         figsize : tuple, optional
@@ -1282,17 +1329,17 @@ class AeroPistonStiffPanel(object):
 
 
     def save(self):
-        """Save the ``AeroPistonStiffPanel`` object using ``cPickle``
+        """Save the ``AeroPistonStiffPanelBay`` object using ``cPickle``
 
         Notes
         -----
         The pickled file will have the name stored in
-        ``AeroPistonStiffPanel.name`` followed by a
-        ``'.AeroPistonStiffPanel'`` extension.
+        ``AeroPistonStiffPanelBay.name`` followed by a
+        ``'.AeroPistonStiffPanelBay'`` extension.
 
         """
-        name = self.name + '.AeroPistonStiffPanel'
-        msg('Saving AeroPistonStiffPanel to {0}'.format(name))
+        name = self.name + '.AeroPistonStiffPanelBay'
+        msg('Saving AeroPistonStiffPanelBay to {0}'.format(name))
 
         self._clear_matrices()
 

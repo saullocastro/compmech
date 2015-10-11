@@ -826,7 +826,6 @@ def fkM(double mu, double h, double a, double b, int m1, int n1):
                         kMc[c] = col+2
                         kMv[c] += 0.25*a*b*h*mu + 0.0208333333333333*(pi*pi)*a*(h*h*h)*(j1*j1)*mu/b + 0.0208333333333333*(pi*pi)*b*(h*h*h)*(i1*i1)*mu/a
 
-
     size = num0 + num1*m1*n1
 
     kM = coo_matrix((kMv, (kMr, kMc)), shape=(size, size))
