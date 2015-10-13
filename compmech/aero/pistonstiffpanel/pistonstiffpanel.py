@@ -51,10 +51,10 @@ class Stiffener(object):
 
 
     """
-    def __init__(self, panel, ys, bb, bf, bstack, bplyts, blaminaprops,
+    def __init__(self, mu, panel, ys, bb, bf, bstack, bplyts, blaminaprops,
                  fstack, fplyts, flaminaprops):
         self.panel = panel
-        self.mu = None
+        self.mu = mu
         self.ys = ys
         self.bb = bb
         self.hb = 0.
@@ -436,12 +436,15 @@ class AeroPistonStiffPanel(object):
                 self.Mach = 1.0001
             M = self.Mach
             beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
-            gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
+            if self.gamma is None:
+                gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
+            else:
+                gamma = self.gamma
             ainf = self.speed_sound
             aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
         elif calc_kA and self.beta is not None:
             beta = self.beta
-            gamma = self.gamma if self.gamma is not None else 0.
+            raise
             aeromu = self.aeromu if self.aeromu is not None else 0.
         elif not calc_kA:
             pass

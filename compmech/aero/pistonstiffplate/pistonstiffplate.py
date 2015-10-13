@@ -55,7 +55,7 @@ class Stiffener(object):
 
     """
     def __init__(self, plate, mu, ys, bb, bf, bstack, bplyts, blaminaprops,
-                 fstack, fplyts, flaminaprops):
+                 fstack, fplyts, flaminaprops, ignore_offsets=False):
         self.plate = plate
         self.mu = mu
         self.ys = ys
@@ -64,6 +64,7 @@ class Stiffener(object):
         self.bf = bf
         self.hf = 0.
 
+        self.ignore_offsets = ignore_offsets
         self.bstack = bstack
         self.bplyts = bplyts
         self.blaminaprops = blaminaprops
@@ -98,6 +99,8 @@ class Stiffener(object):
 
         #TODO check offset effect on curved plates
         self.df = self.bf/2. + self.hb + h/2.
+        if self.ignore_offsets:
+            self.df = 0.
         self.Iyy = self.hf*self.bf**3/12.
         #self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2
         self.Jxx = self.hf*self.bf**3/12. + self.bf*self.hf**3/12.
