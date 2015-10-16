@@ -92,9 +92,10 @@ class Stiffener(object):
         h = sum(self.plate.plyts)
         if self.bstack != []:
             hb = sum(self.bplyts)
+            self.db = -h/2.-hb/2.
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
-                                            offset=(-h/2.-hb/2.))
+                                            offset=self.db)
             self.hb = hb
 
         #TODO check offset effect on curved plates
@@ -500,10 +501,9 @@ class AeroPistonStiffPlate(object):
         #TODO summing up coo_matrix objects may be very slow!
         for s in self.stiffeners:
             if s.blam is not None:
-                raise RuntimeError('kMsb is wrongly integrated!')
                 Fsb = s.blam.ABD
                 s.k0sb = fk0sb(s.ys, s.bb, a, b, m1, n1, Fsb)
-                s.kMsb = fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
+                s.kMsb = fkMsb(s.mu, s.ys, s.bb, s.db, s.hb, a, b, m1, n1)
                 k0 += s.k0sb
                 kM += s.kMsb
 

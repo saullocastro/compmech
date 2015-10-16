@@ -88,9 +88,10 @@ class Stiffener(object):
         h = sum(self.panel.plyts)
         if self.bstack != []:
             hb = sum(self.bplyts)
+            self.db = -h/2.-hb/2.
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
-                                            offset=(-h/2.-hb/2.))
+                                            offset=self.db)
             self.hb = hb
 
         #TODO check offset effect on curved panels
@@ -444,7 +445,11 @@ class AeroPistonStiffPanel(object):
             aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
         elif calc_kA and self.beta is not None:
             beta = self.beta
-            raise
+            if self.gamma is None:
+                M = self.Mach
+                gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
+            else:
+                gamma = self.gamma
             aeromu = self.aeromu if self.aeromu is not None else 0.
         elif not calc_kA:
             pass
@@ -517,10 +522,9 @@ class AeroPistonStiffPanel(object):
         #TODO summing up coo_matrix objects may be very slow!
         for s in self.stiffeners:
             if s.blam is not None:
-                raise RuntimeError('fMsb is wrongly integrated!')
                 Fsb = s.blam.ABD
                 k0 += fk0sb(s.ys, s.bb, a, b, r, m1, n1, Fsb)
-                kM += fkMsb(s.mu, s.ys, s.db, s.hb, a, b, m1, n1)
+                kM += fkMsb(s.mu, s.ys, s.bb, s.db, s.hb, a, b, m1, n1)
 
             if s.flam is not None:
                 k0 += fk0sf(s.bf, s.df, s.ys, a, b, r, m1, n1, s.E1, s.F1,

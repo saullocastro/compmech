@@ -833,13 +833,13 @@ def fkM(double mu, double h, double a, double b, int m1, int n1):
     return kM
 
 
-def fkMsb(double mus, double ys, double db, double hb, double a, double b,
+def fkMsb(double mus, double ys, double bb, double db, double hb, double a, double b,
           int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kMsbr, kMsbc
     cdef np.ndarray[cDOUBLE, ndim=1] kMsbv
 
-    fdim = 3*m1*n1*m1*n1
+    fdim = 5*m1*n1*m1*n1
 
     kMsbr = np.zeros((fdim,), dtype=INT)
     kMsbc = np.zeros((fdim,), dtype=INT)
@@ -861,44 +861,71 @@ def fkMsb(double mus, double ys, double db, double hb, double a, double b,
 
                     if k1 != i1 and l1 != j1:
                         # kMsb_11 cond_1
-                        pass
+                        c += 1
+                        kMsbr[c] = row+0
+                        kMsbc[c] = col+2
+                        kMsbv[c] += b*db*hb*i1*k1*mus*(-2*(-1)**(i1 + k1) + 2)*((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(pi*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        c += 1
+                        kMsbr[c] = row+2
+                        kMsbc[c] = col+0
+                        kMsbv[c] += b*db*hb*i1*k1*mus*(2*(-1)**(i1 + k1) - 2)*((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(pi*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
 
                     elif k1 == i1 and l1 != j1:
                         # kMsb_11 cond_2
                         c += 1
+                        kMsbr[c] = row+0
+                        kMsbc[c] = col+0
+                        kMsbv[c] += a*b*hb*mus*((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(pi*((j1*j1) - (l1*l1)))
+                        c += 1
+                        kMsbr[c] = row+1
+                        kMsbc[c] = col+1
+                        kMsbv[c] += a*b*hb*mus*((j1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(pi*((j1*j1) - (l1*l1)))
+                        c += 1
                         kMsbr[c] = row+1
                         kMsbc[c] = col+2
-                        kMsbv[c] += -a*db*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
+                        kMsbv[c] += a*db*hb*l1*mus*((j1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - l1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) + (j1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) - l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/((j1*j1) - (l1*l1))
                         c += 1
                         kMsbr[c] = row+2
                         kMsbc[c] = col+1
-                        kMsbv[c] += a*db*hb*j1*l1*mus*((-1)**(j1 + l1) - 1)/(2.0*(j1*j1) - 2.0*(l1*l1))
+                        kMsbv[c] += a*db*hb*j1*mus*((j1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b) - l1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b) + (j1*sin(pi*l1*ys/b)*cos(pi*j1*ys/b) - l1*sin(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b))/((j1*j1) - (l1*l1))
+                        c += 1
+                        kMsbr[c] = row+2
+                        kMsbc[c] = col+2
+                        kMsbv[c] += 0.0833333333333333*hb*mus*((j1*((a*a)*(12*(b*b) + (pi*pi)*(l1*l1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb)))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b) + l1*((a*a)*(12*(b*b) + (pi*pi)*(j1*j1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb)))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b))*sin(0.5*pi*bb*j1/b)*cos(0.5*pi*bb*l1/b) - (j1*((a*a)*(12*(b*b) + (pi*pi)*(l1*l1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb)))*cos(pi*j1*ys/b)*cos(pi*l1*ys/b) + l1*((a*a)*(12*(b*b) + (pi*pi)*(j1*j1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb)))*sin(pi*j1*ys/b)*sin(pi*l1*ys/b))*sin(0.5*pi*bb*l1/b)*cos(0.5*pi*bb*j1/b))/(pi*a*b*((j1*j1) - (l1*l1)))
 
                     elif k1 != i1 and l1 == j1:
                         # kMsb_11 cond_3
                         c += 1
                         kMsbr[c] = row+0
                         kMsbc[c] = col+2
-                        kMsbv[c] += -b*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
+                        kMsbv[c] += -0.25*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)*(-b*sin(pi*j1*(bb - 2*ys)/b) - b*sin(pi*j1*(bb + 2*ys)/b) + 2*pi*bb*j1)/(pi*j1*((i1*i1) - (k1*k1)))
                         c += 1
                         kMsbr[c] = row+2
                         kMsbc[c] = col+0
-                        kMsbv[c] += b*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)/(2.0*(i1*i1) - 2.0*(k1*k1))
+                        kMsbv[c] += 0.25*db*hb*i1*k1*mus*((-1)**(i1 + k1) - 1)*(-b*sin(pi*j1*(bb - 2*ys)/b) - b*sin(pi*j1*(bb + 2*ys)/b) + 2*pi*bb*j1)/(pi*j1*((i1*i1) - (k1*k1)))
 
                     elif k1 == i1 and l1 == j1:
                         # kMsb_11 cond_4
                         c += 1
                         kMsbr[c] = row+0
                         kMsbc[c] = col+0
-                        kMsbv[c] += 0.25*a*b*hb*mus
+                        kMsbv[c] += 0.125*a*hb*mus*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(pi*j1)
                         c += 1
                         kMsbr[c] = row+1
                         kMsbc[c] = col+1
-                        kMsbv[c] += 0.25*a*b*hb*mus
+                        kMsbv[c] += 0.125*a*hb*mus*(-b*(sin(pi*j1*(bb - 2*ys)/b) + sin(pi*j1*(bb + 2*ys)/b)) + 2*pi*bb*j1)/(pi*j1)
+                        c += 1
+                        kMsbr[c] = row+1
+                        kMsbc[c] = col+2
+                        kMsbv[c] += 0.25*a*db*hb*mus*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)
+                        c += 1
+                        kMsbr[c] = row+2
+                        kMsbc[c] = col+1
+                        kMsbv[c] += 0.25*a*db*hb*mus*sin(pi*bb*j1/b)*sin(2*pi*j1*ys/b)
                         c += 1
                         kMsbr[c] = row+2
                         kMsbc[c] = col+2
-                        kMsbv[c] += 0.0208333333333333*hb*mus*((a*a)*(12*(b*b) + (pi*pi)*(j1*j1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb)))/(a*b)
+                        kMsbv[c] += 0.0104166666666667*hb*mus*(-b*((a*a)*(12*(b*b) - (pi*pi)*(j1*j1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb)))*sin(pi*j1*(bb - 2*ys)/b) - b*((a*a)*(12*(b*b) - (pi*pi)*(j1*j1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb)))*sin(pi*j1*(bb + 2*ys)/b) + 2*pi*bb*j1*((a*a)*(12*(b*b) + (pi*pi)*(j1*j1)*(12*(db*db) + (hb*hb))) + (pi*pi)*(b*b)*(i1*i1)*(12*(db*db) + (hb*hb))))/(pi*a*(b*b)*j1)
 
     size = num0 + num1*m1*n1
 
