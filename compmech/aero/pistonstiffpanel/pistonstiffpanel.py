@@ -88,10 +88,10 @@ class Stiffener(object):
         h = sum(self.panel.plyts)
         if self.bstack != []:
             hb = sum(self.bplyts)
-            self.db = -h/2.-hb/2.
+            self.db = h/2.+hb/2.
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
-                                            offset=self.db)
+                                            offset=-self.db)
             self.hb = hb
 
         #TODO check offset effect on curved panels
