@@ -530,7 +530,7 @@ class AeroPistonStiffPanel(object):
                 kM += s.kMsb
 
             if s.flam is not None:
-                s.k0sf = fk0sf(s.bf, s.df, s.ys, a, b, m1, n1, s.E1, s.F1,
+                s.k0sf = fk0sf(s.bf, s.df, s.ys, a, b, r, m1, n1, s.E1, s.F1,
                                s.S1, s.Jxx)
                 s.kMsf = fkMsf(s.mu, s.ys, s.df, s.hf, s.bf, h, s.hb,
                                a, b, m1, n1)
