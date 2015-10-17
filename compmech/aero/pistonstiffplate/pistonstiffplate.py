@@ -499,19 +499,20 @@ class AeroPistonStiffPlate(object):
 
         # contributions from stiffeners
         #TODO summing up coo_matrix objects may be very slow!
+        h = sum(self.plyts)
         for s in self.stiffeners:
             if s.blam is not None:
                 Fsb = s.blam.ABD
                 s.k0sb = fk0sb(s.ys, s.bb, a, b, m1, n1, Fsb)
-                s.kMsb = fkMsb(s.mu, s.ys, s.bb, s.db, s.hb, a, b, m1, n1)
+                s.kMsb = fkMsb(s.mu, s.ys, s.bb, s.db, s.hb, h, a, b, m1, n1)
                 k0 += s.k0sb
                 kM += s.kMsb
 
             if s.flam is not None:
                 s.k0sf = fk0sf(s.bf, s.df, s.ys, a, b, m1, n1, s.E1, s.F1,
                                s.S1, s.Jxx)
-                s.kMsf = fkMsf(s.mu, s.ys, s.df, s.Asf, a, b, s.Iyy, s.Jxx,
-                               m1, n1)
+                s.kMsf = fkMsf(s.mu, s.ys, s.df, s.hf, s.bf, h, s.hb,
+                               a, b, m1, n1)
                 k0 += s.k0sf
                 kM += s.kMsf
 
