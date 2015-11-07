@@ -14,5 +14,5 @@ conical shells (:mod:`.compmech.conecyl`), and panels
 level routines are programmed in Cython.
 
 """
-__version__ = '0.4.0'
+__version__ = '0.4.1 dev'
 
