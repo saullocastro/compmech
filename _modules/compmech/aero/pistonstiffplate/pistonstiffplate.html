@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.aero.pistonstiffpanel.pistonstiffpanel &mdash; CompMech 0.4.0 documentation</title>
+    <title>compmech.aero.pistonstiffplate.pistonstiffplate &mdash; CompMech 0.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -51,7 +51,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for compmech.aero.pistonstiffpanel.pistonstiffpanel</h1><div class="highlight"><pre>
+  <h1>Source code for compmech.aero.pistonstiffplate.pistonstiffplate</h1><div class="highlight"><pre>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
 <span class="kn">import</span> <span class="nn">gc</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -80,13 +80,13 @@
 
 
 <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="k">if</span> <span class="s">&#39;.AeroPistonStiffPanel&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s">&#39;.AeroPistonStiffPlate&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.AeroPistonStiffPanel&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.AeroPistonStiffPlate&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="Stiffener"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.Stiffener">[docs]</a><span class="k">class</span> <span class="nc">Stiffener</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Stiffener"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.Stiffener">[docs]</a><span class="k">class</span> <span class="nc">Stiffener</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Stiffener</span>
 
 <span class="sd">    Blade-type of stiffener model using a 1D formulation for the flange and a</span>
@@ -96,18 +96,21 @@
 <span class="sd">                 || --&gt; flange       |</span>
 <span class="sd">                 ||                  |-&gt; stiffener</span>
 <span class="sd">               ======  --&gt; padup     |</span>
-<span class="sd">      =========================  --&gt; panel</span>
+<span class="sd">      =========================  --&gt; plate</span>
 
 <span class="sd">    Both the flange and the padup are optional. The</span>
-<span class="sd">    :class:`.AeroPistonStiffPanel` object may have any number of stiffeners.</span>
+<span class="sd">    :class:`.AeroPistonStiffPlate` object may have any number of stiffeners.</span>
 
 <span class="sd">    Each stiffener has a constant `y` coordinate.</span>
 
+<span class="sd">    .. note:: This class essentially works as the</span>
+<span class="sd">              :class:`.AeroPistonStiffPanel` with `r \rightarrow \infty`.</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">panel</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">bf</span><span class="p">,</span> <span class="n">bstack</span><span class="p">,</span> <span class="n">bplyts</span><span class="p">,</span> <span class="n">blaminaprops</span><span class="p">,</span>
-                 <span class="n">fstack</span><span class="p">,</span> <span class="n">fplyts</span><span class="p">,</span> <span class="n">flaminaprops</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">panel</span> <span class="o">=</span> <span class="n">panel</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plate</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">bf</span><span class="p">,</span> <span class="n">bstack</span><span class="p">,</span> <span class="n">bplyts</span><span class="p">,</span> <span class="n">blaminaprops</span><span class="p">,</span>
+                 <span class="n">fstack</span><span class="p">,</span> <span class="n">fplyts</span><span class="p">,</span> <span class="n">flaminaprops</span><span class="p">,</span> <span class="n">ignore_offsets</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plate</span> <span class="o">=</span> <span class="n">plate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ys</span> <span class="o">=</span> <span class="n">ys</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bb</span> <span class="o">=</span> <span class="n">bb</span>
@@ -115,6 +118,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bf</span> <span class="o">=</span> <span class="n">bf</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hf</span> <span class="o">=</span> <span class="mf">0.</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_offsets</span> <span class="o">=</span> <span class="n">ignore_offsets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bstack</span> <span class="o">=</span> <span class="n">bstack</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bplyts</span> <span class="o">=</span> <span class="n">bplyts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blaminaprops</span> <span class="o">=</span> <span class="n">blaminaprops</span>
@@ -134,12 +138,12 @@
 
     <span class="k">def</span> <span class="nf">rebuild</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fstack</span> <span class="o">!=</span> <span class="p">[]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hf</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fplyts</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flam</span> <span class="o">=</span> <span class="n">laminate</span><span class="o">.</span><span class="n">read_stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fstack</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fplyts</span><span class="p">,</span>
                                              <span class="n">laminaprops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">flaminaprops</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flam</span><span class="o">.</span><span class="n">calc_equivalent_modulus</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flam</span><span class="o">.</span><span class="n">t</span>
 
-        <span class="n">h</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">plyts</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plate</span><span class="o">.</span><span class="n">plyts</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bstack</span> <span class="o">!=</span> <span class="p">[]:</span>
             <span class="n">hb</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bplyts</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="o">+</span><span class="n">hb</span><span class="o">/</span><span class="mf">2.</span>
@@ -148,8 +152,10 @@
                                             <span class="n">offset</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">hb</span> <span class="o">=</span> <span class="n">hb</span>
 
-        <span class="c">#TODO check offset effect on curved panels</span>
+        <span class="c">#TODO check offset effect on curved plates</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bf</span><span class="o">/</span><span class="mf">2.</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hb</span> <span class="o">+</span> <span class="n">h</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_offsets</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Iyy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bf</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="mf">12.</span>
         <span class="c">#self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Jxx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">bf</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="mf">12.</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bf</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="mf">12.</span>
@@ -160,7 +166,6 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fstack</span> <span class="o">!=</span> <span class="p">[]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">E1</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="c">#E3 = 0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">S1</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">yply</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flam</span><span class="o">.</span><span class="n">plies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">t</span><span class="o">/</span><span class="mf">2.</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ply</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flam</span><span class="o">.</span><span class="n">plies</span><span class="p">):</span>
@@ -168,14 +173,13 @@
                     <span class="n">yply</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flam</span><span class="o">.</span><span class="n">plies</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">t</span><span class="o">/</span><span class="mf">2.</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">flam</span><span class="o">.</span><span class="n">plies</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">t</span><span class="o">/</span><span class="mf">2.</span>
                 <span class="n">q</span> <span class="o">=</span> <span class="n">ply</span><span class="o">.</span><span class="n">QL</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">E1</span> <span class="o">+=</span> <span class="n">ply</span><span class="o">.</span><span class="n">t</span><span class="o">*</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-                <span class="c">#E3 += ply.t*(q[2,2] - q[1,2]**2/q[1,1])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">S1</span> <span class="o">+=</span> <span class="o">-</span><span class="n">yply</span><span class="o">*</span><span class="n">ply</span><span class="o">.</span><span class="n">t</span><span class="o">*</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">F1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bf</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">12.</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">E1</span>
 
 </div>
-<div class="viewcode-block" id="AeroPistonStiffPanel"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.AeroPistonStiffPanel">[docs]</a><span class="k">class</span> <span class="nc">AeroPistonStiffPanel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Stiffened Panel for Aeroelastic Studies using the Piston Theory</span>
+<div class="viewcode-block" id="AeroPistonStiffPlate"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.AeroPistonStiffPlate">[docs]</a><span class="k">class</span> <span class="nc">AeroPistonStiffPlate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Stiffened Plate for Aeroelastic Studies using the Piston Theory</span>
 
 <span class="sd">    Main characteristics:</span>
 <span class="sd">        - Supports both airflows along x (axis) or y (circumferential).</span>
@@ -247,7 +251,6 @@
         <span class="c"># geometry</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="c"># material</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="bp">None</span> <span class="c"># laminate material density</span>
@@ -259,7 +262,6 @@
 
         <span class="c"># aerodynamic properties for the Piston theory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">aeromu</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rho_air</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">speed_sound</span> <span class="o">=</span> <span class="bp">None</span>
@@ -314,7 +316,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">__main__</span><span class="o">.</span><span class="n">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.py&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;AeroPistonStiffPanel name unchanged&#39;</span><span class="p">)</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s">&#39;AeroPistonStiffPlate name unchanged&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
@@ -427,7 +429,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;laminaprop must be defined&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="AeroPistonStiffPanel.get_size"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.AeroPistonStiffPanel.get_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AeroPistonStiffPlate.get_size"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.AeroPistonStiffPlate.get_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculate the size of the stiffness matrices</span>
 
 <span class="sd">        The size of the stiffness matrices can be interpreted as the number of</span>
@@ -476,7 +478,6 @@
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
         <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span>
         <span class="n">m1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m1</span>
         <span class="n">n1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n1</span>
         <span class="n">laminaprops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">laminaprops</span>
@@ -491,19 +492,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span> <span class="o">=</span> <span class="mf">1.0001</span>
             <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_air</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">gamma</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
             <span class="n">ainf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_sound</span>
             <span class="n">aeromu</span> <span class="o">=</span> <span class="n">beta</span><span class="o">/</span><span class="p">(</span><span class="n">M</span><span class="o">*</span><span class="n">ainf</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">calc_kA</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span>
-                <span class="n">gamma</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
             <span class="n">aeromu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aeromu</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aeromu</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="n">calc_kA</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -526,25 +518,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F</span>
 
-        <span class="n">k0</span> <span class="o">=</span> <span class="n">fk0</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
+        <span class="n">k0</span> <span class="o">=</span> <span class="n">fk0</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_donnell_bc1&#39;</span>
-        <span class="ow">or</span>  <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s">&#39;clpt_sanders_bc1&#39;</span><span class="p">):</span>
-            <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">kphiyLeft</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kphiyRight</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_donnell_bc1&#39;</span><span class="p">:</span>
-            <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">kphiyBot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kphiyTop</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">kphixLeft</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kphixRight</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">kphiyLeft</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kphiyRight</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">kphixBot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kphixTop</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">kphiyLeft</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kphiyRight</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">calc_kA</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">==</span> <span class="s">&#39;x&#39;</span><span class="p">:</span>
-                <span class="n">kA</span> <span class="o">=</span> <span class="n">fkAx</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
+                <span class="n">kA</span> <span class="o">=</span> <span class="n">fkAx</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">==</span> <span class="s">&#39;y&#39;</span><span class="p">:</span>
                 <span class="n">kA</span> <span class="o">=</span> <span class="n">fkAy</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">fcA</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -553,9 +535,6 @@
                 <span class="n">cA</span> <span class="o">=</span> <span class="n">fcA</span><span class="p">(</span><span class="n">aeromu</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
                 <span class="n">cA</span> <span class="o">=</span> <span class="n">cA</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">+</span><span class="mi">1j</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">calc_kM</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="s">&#39;fsdt_donnell_bc1&#39;</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;There is a bug with kM for model </span><span class="si">%s</span><span class="s">&#39;</span>
-                        <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
             <span class="n">kM</span> <span class="o">=</span> <span class="n">fkM</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">calc_kG0</span><span class="p">:</span>
@@ -565,12 +544,12 @@
             <span class="n">Fyx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fyx</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fyx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">combined_load_case</span><span class="p">:</span>
-                <span class="n">kG0</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="n">Fx</span><span class="p">,</span> <span class="n">Fy</span><span class="p">,</span> <span class="n">Fxy</span><span class="p">,</span> <span class="n">Fyx</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
+                <span class="n">kG0</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="n">Fx</span><span class="p">,</span> <span class="n">Fy</span><span class="p">,</span> <span class="n">Fxy</span><span class="p">,</span> <span class="n">Fyx</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">kG0_Fx</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="n">Fx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
-                <span class="n">kG0_Fy</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Fy</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
-                <span class="n">kG0_Fxy</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Fxy</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
-                <span class="n">kG0_Fyx</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Fyx</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
+                <span class="n">kG0_Fx</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="n">Fx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
+                <span class="n">kG0_Fy</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Fy</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
+                <span class="n">kG0_Fxy</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Fxy</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
+                <span class="n">kG0_Fyx</span> <span class="o">=</span> <span class="n">fkG0</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Fyx</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
 
         <span class="c"># contributions from stiffeners</span>
         <span class="c">#TODO summing up coo_matrix objects may be very slow!</span>
@@ -578,13 +557,13 @@
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stiffeners</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">blam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">Fsb</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">blam</span><span class="o">.</span><span class="n">ABD</span>
-                <span class="n">s</span><span class="o">.</span><span class="n">k0sb</span> <span class="o">=</span> <span class="n">fk0sb</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">ys</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">bb</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">Fsb</span><span class="p">)</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">k0sb</span> <span class="o">=</span> <span class="n">fk0sb</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">ys</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">bb</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">Fsb</span><span class="p">)</span>
                 <span class="n">s</span><span class="o">.</span><span class="n">kMsb</span> <span class="o">=</span> <span class="n">fkMsb</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">ys</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">bb</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">hb</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
                 <span class="n">k0</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">k0sb</span>
                 <span class="n">kM</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">kMsb</span>
 
             <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">flam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">s</span><span class="o">.</span><span class="n">k0sf</span> <span class="o">=</span> <span class="n">fk0sf</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">bf</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">ys</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">E1</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">F1</span><span class="p">,</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">k0sf</span> <span class="o">=</span> <span class="n">fk0sf</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">bf</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">ys</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">E1</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">F1</span><span class="p">,</span>
                                <span class="n">s</span><span class="o">.</span><span class="n">S1</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">Jxx</span><span class="p">)</span>
                 <span class="n">s</span><span class="o">.</span><span class="n">kMsf</span> <span class="o">=</span> <span class="n">fkMsf</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">ys</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">hf</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">bf</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">hb</span><span class="p">,</span>
                                <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
@@ -608,6 +587,7 @@
             <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">kM</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
 
         <span class="n">k0</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_symmetric</span><span class="p">(</span><span class="n">k0</span><span class="p">))</span>
+
         <span class="k">if</span> <span class="n">calc_kA</span><span class="p">:</span>
             <span class="n">kA</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_skew_symmetric</span><span class="p">(</span><span class="n">kA</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">cA</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -663,11 +643,11 @@
         <span class="n">msg</span><span class="p">(</span><span class="s">&#39;finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="AeroPistonStiffPanel.lb"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.AeroPistonStiffPanel.lb">[docs]</a>    <span class="k">def</span> <span class="nf">lb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combined_load_case</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<div class="viewcode-block" id="AeroPistonStiffPlate.lb"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.AeroPistonStiffPlate.lb">[docs]</a>    <span class="k">def</span> <span class="nf">lb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combined_load_case</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
             <span class="n">calc_kA</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Performs a linear buckling analysis</span>
 
-<span class="sd">        The following parameters of the ``AeroPistonStiffPanel`` object will</span>
+<span class="sd">        The following parameters of the ``AeroPistonStiffPlate`` object will</span>
 <span class="sd">        affect the linear buckling analysis:</span>
 
 <span class="sd">        =======================    =====================================</span>
@@ -697,7 +677,7 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        The extracted eigenvalues are stored in the ``eigvals`` parameter</span>
-<span class="sd">        of the ``AeroPistonStiffPanel`` object and the `i^{th}` eigenvector in</span>
+<span class="sd">        of the ``AeroPistonStiffPlate`` object and the `i^{th}` eigenvector in</span>
 <span class="sd">        the ``eigvecs[:, i-1]`` parameter.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -788,11 +768,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">last_analysis</span> <span class="o">=</span> <span class="s">&#39;lb&#39;</span>
 
 </div>
-<div class="viewcode-block" id="AeroPistonStiffPanel.freq"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.AeroPistonStiffPanel.freq">[docs]</a>    <span class="k">def</span> <span class="nf">freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atype</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<div class="viewcode-block" id="AeroPistonStiffPlate.freq"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.AeroPistonStiffPlate.freq">[docs]</a>    <span class="k">def</span> <span class="nf">freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atype</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
             <span class="n">sort</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">damping</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">reduced_dof</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Performs a frequency analysis</span>
 
-<span class="sd">        The following parameters of the ``AeroPistonStiffPanel`` object will</span>
+<span class="sd">        The following parameters of the ``AeroPistonStiffPlate`` object will</span>
 <span class="sd">        affect the linear buckling analysis:</span>
 
 <span class="sd">        =======================    =====================================</span>
@@ -829,14 +809,14 @@
 <span class="sd">        damping : bool, optinal</span>
 <span class="sd">            If aerodynamic damping should be taken into account.</span>
 <span class="sd">        reduced_dof : bool, optional</span>
-<span class="sd">            Considers only the contributions of `v` and `w` to the stiffness</span>
-<span class="sd">            matrix and accelerates the run. Only effective when</span>
+<span class="sd">            Considers only the contributions of `w` to the stiffness matrix</span>
+<span class="sd">            and considerably accelerates the run. Only effective when</span>
 <span class="sd">            ``sparse_solver=False``.</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        The extracted eigenvalues are stored in the ``eigvals`` parameter</span>
-<span class="sd">        of the ``AeroPistonStiffPanel`` object and the `i^{th}` eigenvector in</span>
+<span class="sd">        of the ``AeroPistonStiffPlate`` object and the `i^{th}` eigenvector in</span>
 <span class="sd">        the ``eigvecs[:, i-1]`` parameter.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -891,7 +871,7 @@
             <span class="n">K</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">reduced_dof</span><span class="p">:</span>
                 <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">take</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">3</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">::</span><span class="mi">3</span><span class="p">]))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+                <span class="n">take</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">::</span><span class="mi">3</span><span class="p">]</span>
                 <span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:,</span> <span class="n">take</span><span class="p">][</span><span class="n">take</span><span class="p">,</span> <span class="p">:]</span>
                 <span class="n">K</span> <span class="o">=</span> <span class="n">K</span><span class="p">[:,</span> <span class="n">take</span><span class="p">][</span><span class="n">take</span><span class="p">,</span> <span class="p">:]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">damping</span><span class="p">:</span>
@@ -945,7 +925,7 @@
                 <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">higher_zero</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse_solver</span> <span class="ow">and</span> <span class="n">reduced_dof</span><span class="p">:</span>
-            <span class="n">new_eigvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">eigvecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">eigvecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">new_eigvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">eigvecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">eigvecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">eigvecs</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
             <span class="n">new_eigvecs</span><span class="p">[</span><span class="n">take</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eigvecs</span>
             <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">new_eigvecs</span>
@@ -962,7 +942,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">last_analysis</span> <span class="o">=</span> <span class="s">&#39;freq&#39;</span>
 
 </div>
-<div class="viewcode-block" id="AeroPistonStiffPanel.calc_betacr"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.AeroPistonStiffPanel.calc_betacr">[docs]</a>    <span class="k">def</span> <span class="nf">calc_betacr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="mf">1.e4</span><span class="p">,</span> <span class="n">beta2</span><span class="o">=</span><span class="mf">1.e5</span><span class="p">,</span> <span class="n">rho_air</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">Mach</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+<div class="viewcode-block" id="AeroPistonStiffPlate.calc_betacr"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.AeroPistonStiffPlate.calc_betacr">[docs]</a>    <span class="k">def</span> <span class="nf">calc_betacr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beta1</span><span class="o">=</span><span class="mf">1.e4</span><span class="p">,</span> <span class="n">beta2</span><span class="o">=</span><span class="mf">1.e5</span><span class="p">,</span> <span class="n">rho_air</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">Mach</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
                     <span class="n">modes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
                     <span class="n">num</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">TOL</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">reduced_dof</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculate the critical aerodynamic pressure coefficient</span>
@@ -1005,13 +985,11 @@
 
         <span class="c"># storing original values</span>
         <span class="n">beta_bkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span>
-        <span class="n">gamma_bkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
         <span class="n">Mach_bkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span>
         <span class="n">V_bkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span>
         <span class="n">rho_air_bkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_air</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span> <span class="o">=</span> <span class="n">Mach</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rho_air</span> <span class="o">=</span> <span class="n">rho_air</span>
 
@@ -1051,7 +1029,6 @@
 
         <span class="c"># recovering original values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta_bkp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma_bkp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span> <span class="o">=</span> <span class="n">Mach_bkp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">V_bkp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rho_air</span> <span class="o">=</span> <span class="n">rho_air_bkp</span>
@@ -1061,13 +1038,13 @@
         <span class="k">return</span> <span class="n">beta1</span>
 
 </div>
-<div class="viewcode-block" id="AeroPistonStiffPanel.uvw"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.AeroPistonStiffPanel.uvw">[docs]</a>    <span class="k">def</span> <span class="nf">uvw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+<div class="viewcode-block" id="AeroPistonStiffPlate.uvw"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.AeroPistonStiffPlate.uvw">[docs]</a>    <span class="k">def</span> <span class="nf">uvw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculate the displacement field</span>
 
 <span class="sd">        For a given full set of Ritz constants ``c``, the displacement</span>
 <span class="sd">        field is calculated and stored in the parameters</span>
 <span class="sd">        ``u``, ``v``, ``w``, ``phix``, ``phiy`` of the</span>
-<span class="sd">        ``AeroPistonStiffPanel`` object.</span>
+<span class="sd">        ``AeroPistonStiffPlate`` object.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1096,7 +1073,7 @@
 <span class="sd">        -----</span>
 <span class="sd">        The returned values ``u```, ``v``, ``w``, ``phix``, ``phiy`` are</span>
 <span class="sd">        stored as parameters with the same name in the</span>
-<span class="sd">        ``AeroPistonStiffPanel`` object.</span>
+<span class="sd">        ``AeroPistonStiffPlate`` object.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
@@ -1121,7 +1098,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span>
 
 </div>
-<div class="viewcode-block" id="AeroPistonStiffPanel.plot"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.AeroPistonStiffPanel.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">invert_y</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="AeroPistonStiffPlate.plot"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.AeroPistonStiffPlate.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">invert_y</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span>
              <span class="n">deform_u</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">deform_u_sf</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span>
              <span class="n">filename</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
              <span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">),</span> <span class="n">save</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -1169,7 +1146,7 @@
 <span class="sd">            Resolution of the saved file in dots per inch.</span>
 <span class="sd">        filename : str, optional</span>
 <span class="sd">            The file name for the generated image file. If no value is given,</span>
-<span class="sd">            the `name` parameter of the ``AeroPistonStiffPanel`` object will</span>
+<span class="sd">            the `name` parameter of the ``AeroPistonStiffPlate`` object will</span>
 <span class="sd">            be used.</span>
 <span class="sd">        ax : AxesSubplot, optional</span>
 <span class="sd">            When ``ax`` is given, the contour plot will be created inside it.</span>
@@ -1347,18 +1324,18 @@
         <span class="k">return</span> <span class="n">ax</span>
 
 </div>
-<div class="viewcode-block" id="AeroPistonStiffPanel.save"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffpanel.AeroPistonStiffPanel.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Save the ``AeroPistonStiffPanel`` object using ``cPickle``</span>
+<div class="viewcode-block" id="AeroPistonStiffPlate.save"><a class="viewcode-back" href="../../../../modules/aero/index.html#compmech.aero.pistonstiffplate.AeroPistonStiffPlate.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save the ``AeroPistonStiffPlate`` object using ``cPickle``</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        The pickled file will have the name stored in</span>
-<span class="sd">        ``AeroPistonStiffPanel.name`` followed by a</span>
-<span class="sd">        ``&#39;.AeroPistonStiffPanel&#39;`` extension.</span>
+<span class="sd">        ``AeroPistonStiffPlate.name`` followed by a</span>
+<span class="sd">        ``&#39;.AeroPistonStiffPlate&#39;`` extension.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.AeroPistonStiffPanel&#39;</span>
-        <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Saving AeroPistonStiffPanel to {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.AeroPistonStiffPlate&#39;</span>
+        <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Saving AeroPistonStiffPlate to {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_clear_matrices</span><span class="p">()</span>
 
