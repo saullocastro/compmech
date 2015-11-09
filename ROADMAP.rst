@@ -5,6 +5,7 @@ Version 0.4.1
 - finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
   stiffeners
 - compmech.aero.pistonstiff2Dpanelbay
+- fix k0edges for pistonstiff2Dpanelbay
 
 Version 0.4.2
 -------------
