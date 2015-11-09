@@ -13,7 +13,7 @@ from clpt import *
 
 db = {
     'clpt_donnell_bc1': {
-                    'linear static': True,
+                    'linear static': False,
                     'linear buckling': True,
                     'non-linear static': False,
                     'commons': clpt_commons_bc1,
@@ -25,7 +25,7 @@ db = {
                     'num1': 3,
                     },
     'clpt_donnell_bc4': {
-                    'linear static': True,
+                    'linear static': False,
                     'linear buckling': True,
                     'non-linear static': False,
                     'commons': clpt_commons_bc4,
@@ -37,7 +37,7 @@ db = {
                     'num1': 3,
                     },
     'clpt_donnell_free': {
-                    'linear static': True,
+                    'linear static': False,
                     'linear buckling': True,
                     'non-linear static': False,
                     'commons': clpt_commons_free,
