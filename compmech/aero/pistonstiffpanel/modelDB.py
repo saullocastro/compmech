@@ -13,7 +13,7 @@ from fsdt import *
 
 db = {
     'clpt_donnell_bc1': {
-                    'linear static': True,
+                    'linear static': False,
                     'linear buckling': True,
                     'non-linear static': False,
                     'commons': clpt_commons_bc1,
@@ -25,7 +25,7 @@ db = {
                     'num1': 3,
                     },
     'clpt_sanders_bc1': {
-                    'linear static': True,
+                    'linear static': False,
                     'linear buckling': True,
                     'non-linear static': False,
                     'commons': clpt_commons_bc1,
@@ -37,7 +37,7 @@ db = {
                     'num1': 3,
                     },
     'fsdt_donnell_bc1': {
-                    'linear static': True,
+                    'linear static': False,
                     'linear buckling': True,
                     'non-linear static': False,
                     'commons': fsdt_commons_bc1,

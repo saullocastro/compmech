@@ -12,7 +12,7 @@ from clpt import *
 
 db = {
     'clpt_donnell_bc1': {
-                    'linear static': True,
+                    'linear static': False,
                     'linear buckling': True,
                     'non-linear static': False,
                     'commons': clpt_commons_bc1,
