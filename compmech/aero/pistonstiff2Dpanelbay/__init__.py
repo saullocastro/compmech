@@ -1,15 +1,19 @@
 r"""
-=========================================================================
-Piston Theory in Stiffened Panels (:mod:`compmech.aero.pistonstiffpanel`)
-=========================================================================
+==============================================================================
+Piston Theory in Stiffened Panels (:mod:`compmech.aero.pistonstiff2Dpanelbay`)
+==============================================================================
 
-.. currentmodule:: compmech.aero.pistonstiffpanel
+.. currentmodule:: compmech.aero.pistonstiff2Dpanelbay
 
-.. autoclass:: AeroPistonStiffPanel
+.. autoclass:: AeroPistonStiff2DPanelBay
     :members:
 
-.. autoclass:: Stiffener
+.. autoclass:: Panel
+    :members:
+
+.. autoclass:: Stiffener2D
     :members:
 
 """
-from pistonstiffpanel import load, AeroPistonStiffPanel, Stiffener
+from pistonstiff2Dpanelbay import (load, AeroPistonStiff2DPanelBay,
+        Stiffener2D, Panel)
