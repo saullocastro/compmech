@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    110056,       2562]
-NotebookOptionsPosition[    109481,       2538]
-NotebookOutlinePosition[    109881,       2555]
-CellTagsIndexPosition[    109838,       2552]
+NotebookDataLength[    109939,       2551]
+NotebookOptionsPosition[    109364,       2527]
+NotebookOutlinePosition[    109764,       2544]
+CellTagsIndexPosition[    109721,       2541]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1048,19 +1048,6 @@ Cell[BoxData[{
        RowBox[{"[", 
         RowBox[{
          RowBox[{"3", ";;", "3"}], ",", "All"}], "]"}], "]"}]}]}]}], ";"}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"Nxx", "=", 
-   RowBox[{"Fx", "/", "b"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"Nyy", "=", 
-   RowBox[{"Fy", "/", "a"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"Nxy", "=", 
-    RowBox[{
-     RowBox[{"Fyx", "/", "a"}], "+", 
-     RowBox[{"Fxy", "/", "b"}]}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -2490,13 +2477,15 @@ Cell[BoxData[{
    3.6523582835255404`*^9}, {3.653468181837333*^9, 3.653468183681102*^9}, {
    3.6539447095641127`*^9, 3.6539447153612137`*^9}, {3.653944909799374*^9, 
    3.6539449133439684`*^9}, {3.6540724994640393`*^9, 3.65407252573602*^9}, {
-   3.655909832268473*^9, 3.6559098328778553`*^9}}],
+   3.655909832268473*^9, 3.6559098328778553`*^9}, {3.6562740993076715`*^9, 
+   3.6562741000532107`*^9}, {3.6562741848057704`*^9, 3.656274187371583*^9}, {
+   3.656274255338521*^9, 3.656274257856311*^9}}],
 
 Cell[CellGroupData[{
 
 Cell[BoxData["\<\"Integration conditions:\"\>"], "Print",
  CellChangeTimes->{3.6522671839551635`*^9, 3.6523129009864397`*^9, 
-  3.653944718656524*^9}],
+  3.653944718656524*^9, 3.6562741913343887`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2505,7 +2494,7 @@ Cell[BoxData[
   SequenceForm["    numcond ", 4, " cond ", 1],
   Editable->False]], "Print",
  CellChangeTimes->{3.6522671839551635`*^9, 3.6523129009864397`*^9, 
-  3.653944718668532*^9}],
+  3.653944718656524*^9, 3.6562741913463917`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2514,7 +2503,7 @@ Cell[BoxData[
   SequenceForm["    numcond ", 4, " cond ", 2],
   Editable->False]], "Print",
  CellChangeTimes->{3.6522671839551635`*^9, 3.6523129009864397`*^9, 
-  3.6539447186700325`*^9}],
+  3.653944718656524*^9, 3.656274191348381*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2523,7 +2512,7 @@ Cell[BoxData[
   SequenceForm["    numcond ", 4, " cond ", 3],
   Editable->False]], "Print",
  CellChangeTimes->{3.6522671839551635`*^9, 3.6523129009864397`*^9, 
-  3.653944718675037*^9}],
+  3.653944718656524*^9, 3.656274191352393*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -2532,7 +2521,7 @@ Cell[BoxData[
   SequenceForm["    numcond ", 4, " cond ", 4],
   Editable->False]], "Print",
  CellChangeTimes->{3.6522671839551635`*^9, 3.6523129009864397`*^9, 
-  3.6539447186765385`*^9}]
+  3.653944718656524*^9, 3.6562741913533983`*^9}]
 }, Open  ]]
 }, Open  ]]
 },
@@ -2555,13 +2544,13 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 107343, 2470, 9093, "Input"],
+Cell[579, 22, 107114, 2459, 9013, "Input"],
 Cell[CellGroupData[{
-Cell[107947, 2496, 150, 2, 24, "Print"],
-Cell[108100, 2500, 335, 7, 24, "Print"],
-Cell[108438, 2509, 337, 7, 24, "Print"],
-Cell[108778, 2518, 335, 7, 24, "Print"],
-Cell[109116, 2527, 337, 7, 24, "Print"]
+Cell[107718, 2485, 174, 2, 24, "Print"],
+Cell[107895, 2489, 359, 7, 24, "Print"],
+Cell[108257, 2498, 357, 7, 24, "Print"],
+Cell[108617, 2507, 357, 7, 24, "Print"],
+Cell[108977, 2516, 359, 7, 24, "Print"]
 }, Open  ]]
 }, Open  ]]
 }
