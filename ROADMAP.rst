@@ -6,6 +6,11 @@ Version 0.4.1
   stiffeners
 - compmech.aero.pistonstiff2Dpanelbay
 - fix k0edges for pistonstiff2Dpanelbay
+- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
+- use Nxx, Nyy and Nxy instead of Fx, Fy and Fxy
+- simplify the way we apply pre-stress to be taken as constant or variable
+  along the linear buckling analyses.... we can do Nxx_cte and Nxx_var, for
+  example
 
 Version 0.4.2
 -------------
