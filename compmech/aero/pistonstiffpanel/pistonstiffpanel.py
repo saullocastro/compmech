@@ -179,10 +179,9 @@ class AeroPistonStiffPanel(object):
         self.ni_method = 'trapz2d'
 
         # loads
-        self.Fx = None
-        self.Fy = None
-        self.Fxy = None
-        self.Fyx = None
+        self.Nxx = None
+        self.Nyy = None
+        self.Nxy = None
 
         # shear correction factor (FSDT only)
         self.K = 5/6.
@@ -236,10 +235,9 @@ class AeroPistonStiffPanel(object):
         self.k0 = None
         self.kT = None
         self.kG0 = None
-        self.kG0_Fx = None
-        self.kG0_Fy = None
-        self.kG0_Fxy = None
-        self.kG0_Fyx = None
+        self.kG0_Nxx = None
+        self.kG0_Nyy = None
+        self.kG0_Nxy = None
         self.kM = None
         self.kA = None
         self.cA = None
@@ -505,18 +503,16 @@ class AeroPistonStiffPanel(object):
             kM = fkM(mu, h, a, b, m1, n1)
 
         if calc_kG0:
-            Fx = self.Fx if self.Fx is not None else 0.
-            Fy = self.Fy if self.Fy is not None else 0.
-            Fxy = self.Fxy if self.Fxy is not None else 0.
-            Fyx = self.Fyx if self.Fyx is not None else 0.
+            Nxx = self.Nxx if self.Nxx is not None else 0.
+            Nyy = self.Nyy if self.Nyy is not None else 0.
+            Nxy = self.Nxy if self.Nxy is not None else 0.
 
             if not combined_load_case:
-                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, r, m1, n1)
+                kG0 = fkG0(Nxx, Nyy, Nxy, a, b, r, m1, n1)
             else:
-                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, r, m1, n1)
-                kG0_Fy = fkG0(0, Fy, 0, 0, a, b, r, m1, n1)
-                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, r, m1, n1)
-                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, r, m1, n1)
+                kG0_Nxx = fkG0(Nxx, 0, 0, a, b, r, m1, n1)
+                kG0_Nyy = fkG0(0, Nyy, 0, a, b, r, m1, n1)
+                kG0_Nxy = fkG0(0, 0, Nxy, a, b, r, m1, n1)
 
         # contributions from stiffeners
         #TODO summing up coo_matrix objects may be very slow!
@@ -527,7 +523,8 @@ class AeroPistonStiffPanel(object):
                 s.k0sb = fk0sb(s.ys, s.bb, a, b, r, m1, n1, Fsb)
                 s.kMsb = fkMsb(s.mu, s.ys, s.bb, s.db, s.hb, h, a, b, m1, n1)
                 k0 += s.k0sb
-                kM += s.kMsb
+                if calc_kM:
+                    kM += s.kMsb
 
             if s.flam is not None:
                 s.k0sf = fk0sf(s.bf, s.df, s.ys, a, b, r, m1, n1, s.E1, s.F1,
@@ -535,7 +532,8 @@ class AeroPistonStiffPanel(object):
                 s.kMsf = fkMsf(s.mu, s.ys, s.df, s.hf, s.bf, h, s.hb,
                                a, b, m1, n1)
                 k0 += s.k0sf
-                kM += s.kMsf
+                if calc_kM:
+                    kM += s.kMsf
 
         # performing checks for the linear stiffness matrices
 
@@ -581,24 +579,20 @@ class AeroPistonStiffPanel(object):
                 self.kG0 = kG0
 
             else:
-                assert np.any((np.isnan(kG0_Fx.data)
-                               | np.isinf(kG0_Fx.data))) == False
-                assert np.any((np.isnan(kG0_Fy.data)
-                               | np.isinf(kG0_Fy.data))) == False
-                assert np.any((np.isnan(kG0_Fxy.data)
-                               | np.isinf(kG0_Fxy.data))) == False
-                assert np.any((np.isnan(kG0_Fyx.data)
-                               | np.isinf(kG0_Fyx.data))) == False
+                assert np.any((np.isnan(kG0_Nxx.data)
+                               | np.isinf(kG0_Nxx.data))) == False
+                assert np.any((np.isnan(kG0_Nyy.data)
+                               | np.isinf(kG0_Nyy.data))) == False
+                assert np.any((np.isnan(kG0_Nxy.data)
+                               | np.isinf(kG0_Nxy.data))) == False
 
-                kG0_Fx = csr_matrix(make_symmetric(kG0_Fx))
-                kG0_Fy = csr_matrix(make_symmetric(kG0_Fy))
-                kG0_Fxy = csr_matrix(make_symmetric(kG0_Fxy))
-                kG0_Fyx = csr_matrix(make_symmetric(kG0_Fyx))
+                kG0_Nxx = csr_matrix(make_symmetric(kG0_Nxx))
+                kG0_Nyy = csr_matrix(make_symmetric(kG0_Nyy))
+                kG0_Nxy = csr_matrix(make_symmetric(kG0_Nxy))
 
-                self.kG0_Fx = kG0_Fx
-                self.kG0_Fy = kG0_Fy
-                self.kG0_Fxy = kG0_Fxy
-                self.kG0_Fyx = kG0_Fyx
+                self.kG0_Nxx = kG0_Nxx
+                self.kG0_Nyy = kG0_Nyy
+                self.kG0_Nxy = kG0_Nxy
 
         #NOTE forcing Python garbage collector to clean the memory
         #     it DOES make a difference! There is a memory leak not
@@ -632,10 +626,9 @@ class AeroPistonStiffPanel(object):
             the algorithm to rearrange the linear matrices in a different
             way. The valid values are ``1``, or ``2``, where:
 
-            - ``1`` : find the critical Fx for a fixed Fxy
-            - ``2`` : find the critical Fx for a fixed Fy
-            - ``3`` : find the critical Fy for a fixed Fyx
-            - ``4`` : find the critical Fy for a fixed Fx
+            - ``1`` : find the critical Nxx for a fixed Nxy
+            - ``2`` : find the critical Nxx for a fixed Nyy
+            - ``4`` : find the critical Nyy for a fixed Nxx
         sparse_solver : bool, optional
             Tells if solver :func:`scipy.linalg.eigh` or
             :func:`scipy.sparse.linalg.eigs` should be used.
@@ -670,17 +663,17 @@ class AeroPistonStiffPanel(object):
             M = self.k0 + kA
             A = self.kG0
         elif combined_load_case == 1:
-            M = self.k0 - kA + self.kG0_Fxy
-            A = self.kG0_Fx
+            M = self.k0 - kA + self.kG0_Nxy
+            A = self.kG0_Nxx
         elif combined_load_case == 2:
-            M = self.k0 - kA + self.kG0_Fy
-            A = self.kG0_Fx
+            M = self.k0 - kA + self.kG0_Nyy
+            A = self.kG0_Nxx
         elif combined_load_case == 3:
-            M = self.k0 - kA + self.kG0_Fyx
-            A = self.kG0_Fy
+            M = self.k0 - kA + self.kG0_Nyx
+            A = self.kG0_Nyy
         elif combined_load_case == 4:
-            M = self.k0 - kA + self.kG0_Fx
-            A = self.kG0_Fy
+            M = self.k0 - kA + self.kG0_Nxx
+            A = self.kG0_Nyy
 
         Amin = abs(A.min())
         # Normalizing A to improve numerical stability
