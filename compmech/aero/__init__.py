@@ -7,13 +7,10 @@ Aeroelasticity Module (:mod:`compmech.aero`)
 
 This module contains semi-analytical models for aeroelastic analyses such as:
 
-.. automodule:: compmech.aero.pistonplate
-    :members:
-
 .. automodule:: compmech.aero.pistonstiffpanel
     :members:
 
-.. automodule:: compmech.aero.pistonstiff2Dpanel
+.. automodule:: compmech.aero.pistonstiff2Dpanelbay
     :members:
 
 .. automodule:: compmech.aero.pistonstiffplate
