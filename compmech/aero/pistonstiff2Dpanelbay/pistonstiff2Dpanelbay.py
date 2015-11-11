@@ -58,82 +58,15 @@ class Panel(object):
         self.kG0_Nxy = None
 
 
-    def calc_linear_matrices(self, combined_load_case=None, silent=False,
-            calc_kG0=True, calc_kM=True):
-        self._rebuild()
-        msg('Calculating linear matrices... ', level=2, silent=silent)
+    def rebuild(self):
+        if not self.laminaprops:
+            self.laminaprops = [self.laminaprop for i in self.stack]
+        if not self.plyts:
+            self.plyts = [self.plyt for i in self.stack]
 
-        y1 = self.y1
-        y2 = self.y2
-        mu = self.mu
-        a = self.bay.a
-        b = self.bay.b
-        r = self.bay.r
-        m = self.bay.m
-        n = self.bay.n
-        if calc_kA and self.beta is None:
-            if self.Mach < 1:
-                raise ValueError('Mach number must be >= 1')
-            elif self.Mach == 1:
-                self.Mach = 1.0001
-            M = self.Mach
-            beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
-            gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
-            ainf = self.speed_sound
-            aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
-        elif calc_kA and self.beta is not None:
-            beta = self.beta
-            gamma = self.gamma if self.gamma is not None else 0.
-            aeromu = self.aeromu if self.aeromu is not None else 0.
-        elif not calc_kA:
-            pass
-        else:
-            raise NotImplementedError('check here')
-
-        if self.stack != []:
-            lam = laminate.read_stack(self.stack, plyts=self.plyts,
-                                             laminaprops=self.laminaprops)
-
-        F = lam.ABD
-
-        self.lam = lam
-        self.F = F
-
-        # calculating panel stiffness matrices
-
-        linear = modeldb[self.model]['linear']
-
-        self.k0 = linear.fk0y1y2(y1, y2, a, b, r, m, n, F)
-
-        if False:
-            self.k0edges = fk0edges(m, n, a, b,
-                                    self.kphixBot, self.kphixTop,
-                                    self.kphiyLeft, self.kphiyRight)
-
-        if calc_kM:
-            h = sum(self.plyts)
-            self.kM = linear.fkMy1y2(y1, y2, mu, 0., h, a, b, m, n)
-
-        if calc_kG0:
-            Nxx = self.Nxx if self.Nxx is not None else 0.
-            Nyy = self.Nyy if self.Nyy is not None else 0.
-            Nxy = self.Nxy if self.Nxy is not None else 0.
-            Nxy = self.Nxy if self.Nxy is not None else 0.
-
-            if not combined_load_case:
-                self.kG0 = linear.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r, m, n)
-            else:
-                self.kG0_Nxx = linear.fkG0y1y2(y1, y2, Nxx, 0, 0, a, b, r, m, n)
-                self.kG0_Nyy = linear.fkG0y1y2(y1, y2, 0, Nyy, 0, a, b, r, m, n)
-                self.kG0_Nxy = linear.fkG0y1y2(y1, y2, 0, 0, Nxy, a, b, r, m, n)
-
-        #NOTE forcing Python garbage collector to clean the memory
-        #     it DOES make a difference! There is a memory leak not
-        #     identified, probably in the csr_matrix process
-
-        gc.collect()
-
-        msg('finished!', level=2, silent=silent)
+        # defining load components from force vectors
+        if self.laminaprop is None:
+            raise ValueError('laminaprop must be defined')
 
 
 class Stiffener2D(object):
@@ -168,6 +101,9 @@ class Stiffener2D(object):
         self.bf = bf
         self.hf = 0.
 
+        self.Nxx = None
+        self.Nxy = None
+
         self.bstack = bstack
         self.bplyts = bplyts
         self.blaminaprops = blaminaprops
@@ -196,6 +132,7 @@ class Stiffener2D(object):
         h = sum(self.panel.plyts)
         if self.bstack != []:
             hb = sum(self.bplyts)
+            self.db = abs(-h/2.-hb/2.)
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
                                             offset=(-h/2.-hb/2.))
@@ -433,14 +370,8 @@ class AeroPistonStiff2DPanelBay(object):
         if self.b is None:
             raise ValueError('The width b must be specified')
 
-        if not self.laminaprops:
-            self.laminaprops = [self.laminaprop for i in self.stack]
-        if not self.plyts:
-            self.plyts = [self.plyt for i in self.stack]
-
-        # defining load components from force vectors
-        if self.laminaprop is None:
-            raise ValueError('laminaprop must be defined')
+        for panel in self.panels:
+            panel.rebuild()
 
 
     def get_size(self):
@@ -451,6 +382,9 @@ class AeroPistonStiff2DPanelBay(object):
         constants' vector `\{c\}`, the internal force vector `\{F_{int}\}` and
         the external force vector `\{F_{ext}\}`.
 
+        It takes into account the independent degrees of freedom from each of
+        the `.Stiffener2D` objects that belong to the current assembly.
+
         Returns
         -------
         size : int
@@ -458,7 +392,10 @@ class AeroPistonStiff2DPanelBay(object):
 
         """
         num = modelDB.db[self.model]['num']
+        num1 = modelDB.db[self.model]['num1']
         self.size = num*self.m*self.n
+        for s in self.stiffeners:
+            self.size += num1*s.m1*s.n1
 
         return self.size
 
@@ -487,9 +424,15 @@ class AeroPistonStiff2DPanelBay(object):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2, silent=silent)
         model = self.model
+        a = self.a
+        b = self.b
+        r = self.r
         m = self.m
         n = self.n
-        mu = self.mu
+        num = modelDB.db[self.model]['num']
+        num1 = modelDB.db[self.model]['num1']
+        size = self.get_size()
+
         if calc_kA and self.beta is None:
             if self.Mach < 1:
                 raise ValueError('Mach number must be >= 1')
@@ -518,11 +461,59 @@ class AeroPistonStiff2DPanelBay(object):
             kG0_Nyy = 0.
             kG0_Nxy = 0.
 
+        mod = modelDB.db[self.model]['linear']
+
         # contributions from panels
         #TODO summing up coo_matrix objects may be very slow!
         for panel in self.panels:
+            y1 = panel.y1
+            y2 = panel.y2
+            mu = panel.mu
+
+            if panel.stack != []:
+                lam = laminate.read_stack(panel.stack, plyts=panel.plyts,
+                                          laminaprops=panel.laminaprops)
+            else:
+                raise ValueError('Invalid panel stacking sequence!')
+
+            F = lam.ABD
+
+            panel.lam = lam
+            panel.F = F
+
+            # calculating panel stiffness matrices
+            panel.k0 = mod.fk0y1y2(y1, y2, a, b, r, m, n, F, size, 0, 0)
+
+            if False:
+                panel.k0edges = fk0edges(m, n, a, b,
+                                         panel.kphixBot, panel.kphixTop,
+                                         panel.kphiyLeft, panel.kphiyRight)
+
+            if calc_kM:
+                h = sum(panel.plyts)
+                panel.kM = mod.fkMy1y2(y1, y2, mu, 0., h, a, b, m, n)
+
+            if calc_kG0:
+                Nxx = panel.Nxx if panel.Nxx is not None else 0.
+                Nyy = panel.Nyy if panel.Nyy is not None else 0.
+                Nxy = panel.Nxy if panel.Nxy is not None else 0.
+
+                if not combined_load_case:
+                    panel.kG0 = mod.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r,
+                                             m, n, size, 0, 0)
+                else:
+                    panel.kG0_Nxx = mod.fkG0y1y2(y1, y2, Nxx, 0, 0, a, b, r,
+                                                 m, n, size, 0, 0)
+                    panel.kG0_Nyy = mod.fkG0y1y2(y1, y2, 0, Nyy, 0, a, b, r,
+                                                 m, n, size, 0, 0)
+                    panel.kG0_Nxy = mod.fkG0y1y2(y1, y2, 0, 0, Nxy, a, b, r,
+                                                 m, n, size, 0, 0)
+
+            #TODO summing up coo_matrix objects may be very slow!
             k0 += panel.k0
-            kM += panel.kM
+            if calc_kM:
+                kM += panel.kM
+
             if not combined_load_case:
                 kG0 += panel.kG0
             else:
@@ -531,39 +522,59 @@ class AeroPistonStiff2DPanelBay(object):
                 kG0_Nxy += panel.kG0_Nxy
 
         # contributions from stiffeners
-        #TODO summing up coo_matrix objects may be very slow!
-        for s in self.stiffeners:
+        row0 = num*m*n
+        col0 = num*m*n
+        for i, s in enumerate(self.stiffeners):
+            m1 = s.m1
+            n1 = s.n1
+            bf = s.bf
             if s.blam is not None:
+                # stiffener pad-up
                 Fsb = s.blam.ABD
                 y1 = s.ys - s.bb/2.
                 y2 = s.ys + s.bb/2.
-                k0 += fk0y1y2(y1, y2, a, b, r, m, n, Fsb)
-                kM += fkMy1y2(y1, y2, s.mu, s.db, s.hb, a, b, m, n)
+                k0 += mod.fk0y1y2(y1, y2, a, b, r, m, n, Fsb, size, 0, 0)
+                if calc_kM:
+                    kM += mod.fkMy1y2(y1, y2, s.mu, s.db, s.hb, a, b, m, n,
+                                  size, 0, 0)
 
             if s.flam is not None:
-                k0 += fk0sf(s.bf, s.df, s.ys, a, b, r, m, n, s.E1, s.F1,
-                            s.S1, s.Jxx)
-                kM += fkMsf(s.mu, s.ys, s.df, s.Asf, a, b, s.Iyy, s.Jxx,
-                            m, n)
+                F = s.flam.ABD
+                # stiffener flange
+                if i > 0:
+                    s_1 = self.stiffeners[i-1]
+                    row0 += num1*s_1.m*s_1*n
+                    col0 += num1*s_1.m*s_1*n
+                k0 += mod.fk0f(a, bf, m1, n1, F, size, row0, col0)
+                if calc_kM:
+                    kM += mod.fkMf(s.mu, s.hf, a, bf, m1, n1, size, row0, col0)
+                if calc_kG0:
+                    Nxx = s.Nxx if s.Nxx is not None else 0.
+                    Nxy = s.Nxy if s.Nxy is not None else 0.
+                    kG0 += mod.fkG0f(Nxx, Nxy, a, bf, m1, n1, size, row0, col0)
+
+                # connectivity between skin-stiffener flange
+
+                kt = self.inf
+                k0 += mod.fkCff(kt, a, bf, m1, n1, size, row0, col0)
+                k0 += mod.fkCsf(kt, s.ys, a, b, bf, m, n, m1, n1,
+                                size, 0, col0)
+                k0 += mod.fkCss(kt, s.ys, a, b, m, n, size, 0, 0)
 
         # computing global matrices (in the bay domain)
-
-        linear = modeldb[model]['linear']
-
         if calc_kA:
             if self.flow == 'x':
-                kA = linear.fkAx(beta, gamma, a, b, m, n)
+                kA = mod.fkAx(beta, gamma, a, b, m, n, size, 0, 0)
             elif self.flow == 'y':
-                kA = linear.fkAy(beta, a, b, m, n)
+                kA = mod.fkAy(beta, a, b, m, n, size, 0, 0)
             if fcA is None:
                 cA = None
             else:
-                cA = linear.fcA(aeromu, a, b, m, n)
+                cA = mod.fcA(aeromu, a, b, m, n, size, 0, 0)
                 cA = cA*(0+1j)
 
 
         # performing checks for the stiffness matrices
-
         assert np.any(np.isnan(k0.data)) == False
         assert np.any(np.isinf(k0.data)) == False
 

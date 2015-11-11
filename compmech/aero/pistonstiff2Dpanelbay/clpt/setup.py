@@ -17,7 +17,7 @@ ext_modules = [
               extra_compile_args=args_linear),
     ]
 setup(
-name = 'aeropistonstiffpanel_clpt',
+name = 'aeropistonstiff2Dpanel_clpt',
 cmdclass = {'build_ext': build_ext},
 ext_modules = ext_modules
 )

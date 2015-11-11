@@ -27,7 +27,7 @@ subs = {
 def List(*e):
     return list(e)
 
-for i, filepath in enumerate(
+for ii, filepath in enumerate(
         glob.glob(r'.\linear_mathematica\fortran_*.txt')):
     print filepath
     with open(filepath) as f:
