@@ -628,7 +628,7 @@ class AeroPistonStiffPanel(object):
 
             - ``1`` : find the critical Nxx for a fixed Nxy
             - ``2`` : find the critical Nxx for a fixed Nyy
-            - ``4`` : find the critical Nyy for a fixed Nxx
+            - ``3`` : find the critical Nyy for a fixed Nxx
         sparse_solver : bool, optional
             Tells if solver :func:`scipy.linalg.eigh` or
             :func:`scipy.sparse.linalg.eigs` should be used.
@@ -669,9 +669,6 @@ class AeroPistonStiffPanel(object):
             M = self.k0 - kA + self.kG0_Nyy
             A = self.kG0_Nxx
         elif combined_load_case == 3:
-            M = self.k0 - kA + self.kG0_Nyx
-            A = self.kG0_Nyy
-        elif combined_load_case == 4:
             M = self.k0 - kA + self.kG0_Nxx
             A = self.kG0_Nyy
 
