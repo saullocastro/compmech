@@ -122,10 +122,9 @@ class Plate(object):
         self.ni_method = 'trapz2d'
 
         # loads
-        self.Fx = None
-        self.Fy = None
-        self.Fxy = None
-        self.Fyx = None
+        self.Nxx = None
+        self.Nyy = None
+        self.Nxy = None
         self.NxxTop = None
         self.NxyTop = None
         self.NyyLeft = None
@@ -185,10 +184,9 @@ class Plate(object):
         self.k0 = None
         self.kT = None
         self.kG0 = None
-        self.kG0_Fx = None
-        self.kG0_Fy = None
-        self.kG0_Fxy = None
-        self.kG0_Fyx = None
+        self.kG0_Nxx = None
+        self.kG0_Nyy = None
+        self.kG0_Nxy = None
         self.kG = None
         self.kL = None
         self.lam = None
@@ -487,37 +485,32 @@ class Plate(object):
         else:
             k0 = fk0(a, b, F, m1, n1)
 
-        Fx = self.Fx if self.Fx is not None else 0.
-        Fy = self.Fy if self.Fy is not None else 0.
-        Fxy = self.Fxy if self.Fxy is not None else 0.
-        Fyx = self.Fyx if self.Fyx is not None else 0.
+        Nxx = self.Nxx if self.Nxx is not None else 0.
+        Nyy = self.Nyy if self.Nyy is not None else 0.
+        Nxy = self.Nxy if self.Nxy is not None else 0.
 
         if 'bardell' in self.model:
             if not combined_load_case:
-                kG0 = factor*fkG0(Fx, Fy, Fxy, Fyx, a, b,
+                kG0 = factor*fkG0(Nxx, Nyy, Nxy, a, b,
                                   self.bc1x, self.bc2x, self.bc3x, self.bc4x,
                                   self.bc1y, self.bc2y, self.bc3y, self.bc4y)
             else:
-                kG0_Fx = factor*fkG0(Fx, 0, 0, 0, a, b,
+                kG0_Nxx = factor*fkG0(Nxx, 0, 0, a, b,
                                   self.bc1x, self.bc2x, self.bc3x, self.bc4x,
                                   self.bc1y, self.bc2y, self.bc3y, self.bc4y)
-                kG0_Fy = factor*fkG0(0, Fy, 0, 0, a, b,
+                kG0_Nyy = factor*fkG0(0, Nyy, 0, a, b,
                                   self.bc1x, self.bc2x, self.bc3x, self.bc4x,
                                   self.bc1y, self.bc2y, self.bc3y, self.bc4y)
-                kG0_Fxy = factor*fkG0(0, 0, Fxy, 0, a, b,
-                                  self.bc1x, self.bc2x, self.bc3x, self.bc4x,
-                                  self.bc1y, self.bc2y, self.bc3y, self.bc4y)
-                kG0_Fyx = factor*fkG0(0, 0, 0, Fyx, a, b,
+                kG0_Nxy = factor*fkG0(0, 0, Nxy, a, b,
                                   self.bc1x, self.bc2x, self.bc3x, self.bc4x,
                                   self.bc1y, self.bc2y, self.bc3y, self.bc4y)
         else:
             if not combined_load_case:
-                kG0 = fkG0(Fx, Fy, Fxy, Fyx, a, b, m1, n1)
+                kG0 = fkG0(Nxx, Nyy, Nxy, a, b, m1, n1)
             else:
-                kG0_Fx = fkG0(Fx, 0, 0, 0, a, b, m1, n1)
-                kG0_Fy = fkG0(0, Fy, 0, 0, a, b, m1, n1)
-                kG0_Fxy = fkG0(0, 0, Fxy, 0, a, b, m1, n1)
-                kG0_Fyx = fkG0(0, 0, 0, Fyx, a, b, m1, n1)
+                kG0_Nxx = fkG0(Nxx, 0, 0, 0, a, b, m1, n1)
+                kG0_Nyy = fkG0(0, Nyy, 0, 0, a, b, m1, n1)
+                kG0_Nxy = fkG0(0, 0, Nxy, 0, a, b, m1, n1)
 
         # performing checks for the linear stiffness matrices
 
@@ -545,24 +538,20 @@ class Plate(object):
             self.kG0 = kG0
 
         else:
-            assert np.any((np.isnan(kG0_Fx.data)
-                           | np.isinf(kG0_Fx.data))) == False
-            assert np.any((np.isnan(kG0_Fy.data)
-                           | np.isinf(kG0_Fy.data))) == False
-            assert np.any((np.isnan(kG0_Fxy.data)
-                           | np.isinf(kG0_Fxy.data))) == False
-            assert np.any((np.isnan(kG0_Fyx.data)
-                           | np.isinf(kG0_Fyx.data))) == False
+            assert np.any((np.isnan(kG0_Nxx.data)
+                           | np.isinf(kG0_Nxx.data))) == False
+            assert np.any((np.isnan(kG0_Nyy.data)
+                           | np.isinf(kG0_Nyy.data))) == False
+            assert np.any((np.isnan(kG0_Nxy.data)
+                           | np.isinf(kG0_Nxy.data))) == False
 
-            kG0_Fx = csr_matrix(make_symmetric(kG0_Fx))
-            kG0_Fy = csr_matrix(make_symmetric(kG0_Fy))
-            kG0_Fxy = csr_matrix(make_symmetric(kG0_Fxy))
-            kG0_Fyx = csr_matrix(make_symmetric(kG0_Fyx))
+            kG0_Nxx = csr_matrix(make_symmetric(kG0_Nxx))
+            kG0_Nyy = csr_matrix(make_symmetric(kG0_Nyy))
+            kG0_Nxy = csr_matrix(make_symmetric(kG0_Nxy))
 
-            self.kG0_Fx = kG0_Fx
-            self.kG0_Fy = kG0_Fy
-            self.kG0_Fxy = kG0_Fxy
-            self.kG0_Fyx = kG0_Fyx
+            self.kG0_Nxx = kG0_Nxx
+            self.kG0_Nyy = kG0_Nyy
+            self.kG0_Nxy = kG0_Nxy
 
         #NOTE forcing Python garbage collector to clean the memory
         #     it DOES make a difference! There is a memory leak not
@@ -595,10 +584,9 @@ class Plate(object):
             the algorithm to rearrange the linear matrices in a different
             way. The valid values are ``1``, or ``2``, where:
 
-            - ``1`` : find the critical Fx for a fixed Fxy
-            - ``2`` : find the critical Fx for a fixed Fy
-            - ``3`` : find the critical Fy for a fixed Fyx
-            - ``4`` : find the critical Fy for a fixed Fx
+            - ``1`` : find the critical Nxx for a fixed Nxy
+            - ``2`` : find the critical Nxx for a fixed Nyy
+            - ``3`` : find the critical Nyy for a fixed Nxx
         sparse_solver : bool, optional
             Tells if solver :func:`scipy.linalg.eigh` or
             :func:`scipy.sparse.linalg.eigsh` should be used.
@@ -627,17 +615,14 @@ class Plate(object):
             M = self.k0
             A = self.kG0
         elif combined_load_case == 1:
-            M = self.k0 + self.kG0_Fxy
-            A = self.kG0_Fx
+            M = self.k0 + self.kG0_Nxy
+            A = self.kG0_Nxx
         elif combined_load_case == 2:
-            M = self.k0 + self.kG0_Fy
-            A = self.kG0_Fx
+            M = self.k0 + self.kG0_Nyy
+            A = self.kG0_Nxx
         elif combined_load_case == 3:
-            M = self.k0 + self.kG0_Fyx
-            A = self.kG0_Fy
-        elif combined_load_case == 4:
-            M = self.k0 + self.kG0_Fx
-            A = self.kG0_Fy
+            M = self.k0 + self.kG0_Nxx
+            A = self.kG0_Nyy
 
         #print M.max()
         #raise
@@ -1502,7 +1487,7 @@ if __name__ == '__main__':
 
     lb = True
     if lb:
-        p.Fx = -1
+        p.Nxx = -1
 
         p.lb(sparse_solver=True)
         p.plot(p.eigvecs[:, 0], vec='w', colorbar=True)
