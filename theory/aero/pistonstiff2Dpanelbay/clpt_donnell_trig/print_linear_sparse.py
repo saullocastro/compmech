@@ -19,7 +19,7 @@ var('kuBot, kvBot, kwBot, kphixBot, kphiyBot')
 var('kuTop, kvTop, kwTop, kphixTop, kphiyTop')
 var('kuLeft, kvLeft, kwLeft, kphixLeft, kphiyLeft')
 var('kuRight, kvRight, kwRight, kphixRight, kphiyRight')
-var('kt')
+var('kt, kr')
 
 subs = {
        }
