@@ -823,6 +823,84 @@ def fk0f(double a, double bf, int m1, int n1, np.ndarray[cDOUBLE, ndim=2] F,
     return k0f
 
 
+def fk0fedges(int m1, int n1, double a, double bf, double kt, double kr,
+              int size, int row0, int col0):
+    cdef int i1, j1, k1, l1, row, col, c
+    cdef np.ndarray[cINT, ndim=1] k0fedgesr, k0fedgesc
+    cdef np.ndarray[cDOUBLE, ndim=1] k0fedgesv
+
+    fdim = 1*m1*n1*m1*n1 + 1*m1*n1*m1*n1
+
+    k0fedgesr = np.zeros((fdim,), dtype=INT)
+    k0fedgesc = np.zeros((fdim,), dtype=INT)
+    k0fedgesv = np.zeros((fdim,), dtype=DOUBLE)
+
+    c = -1
+
+    # k0fedges_11
+    for i1 in range(1, m1+1):
+        for j1 in range(1, n1+1):
+            row = row0 + num*((j1-1)*m1 + (i1-1))
+            for k1 in range(1, m1+1):
+                for l1 in range(1, n1+1):
+                    col = col0 + num*((l1-1)*m1 + (k1-1))
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    if k1 != i1 and l1 != j1:
+                        # k0fedges_11 cond_1
+                        pass
+
+                    elif k1 == i1 and l1 != j1:
+                        # k0fedges_11 cond_2
+                        pass
+
+                    elif k1 != i1 and l1 == j1:
+                        # k0fedges_11 cond_3
+                        c += 1
+                        k0fedgesr[c] = row+0
+                        k0fedgesc[c] = col+0
+                        k0fedgesv[c] += 0.5*bf*kt*((-1)**(i1 + k1) + 1)
+                        c += 1
+                        k0fedgesr[c] = row+1
+                        k0fedgesc[c] = col+1
+                        k0fedgesv[c] += 0.5*bf*kt*((-1)**(i1 + k1) + 1)
+                        c += 1
+                        k0fedgesr[c] = row+2
+                        k0fedgesc[c] = col+2
+                        k0fedgesv[c] += 0.5*(pi*pi)*bf*i1*k1*kr*((-1)**(i1 + k1) + 1)/(a*a)
+                        c += 1
+                        k0fedgesr[c] = row+3
+                        k0fedgesc[c] = col+3
+                        k0fedgesv[c] += 0.5*bf*kt*((-1)**(i1 + k1) + 1)
+
+                    elif k1 == i1 and l1 == j1:
+                        # k0fedges_11 cond_4
+                        c += 1
+                        k0fedgesr[c] = row+0
+                        k0fedgesc[c] = col+0
+                        k0fedgesv[c] += bf*kt
+                        c += 1
+                        k0fedgesr[c] = row+1
+                        k0fedgesc[c] = col+1
+                        k0fedgesv[c] += bf*kt
+                        c += 1
+                        k0fedgesr[c] = row+2
+                        k0fedgesc[c] = col+2
+                        k0fedgesv[c] += (pi*pi)*bf*(i1*i1)*kr/(a*a)
+                        c += 1
+                        k0fedgesr[c] = row+3
+                        k0fedgesc[c] = col+3
+                        k0fedgesv[c] += bf*kt
+
+    k0fedges = coo_matrix((k0fedgesv, (k0fedgesr, k0fedgesc)),
+                           shape=(size, size))
+
+    return k0fedges
+
+
 def fkMsf(double mu, double ys, double df, double Asf, double a, double b,
           double Iyy, double Jxx, int m1, int n1,
           int size, int row0, int col0):
@@ -923,7 +1001,7 @@ def fkMsf(double mu, double ys, double df, double Asf, double a, double b,
     return kMsf
 
 
-def fkCff(double kt, double a, double bf, int m1, int n1,
+def fkCff(double kt, double kr, double a, double bf, int m1, int n1,
          int size, int row0, int col0):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kCffr, kCffc
@@ -962,15 +1040,15 @@ def fkCff(double kt, double a, double bf, int m1, int n1,
                         c += 1
                         kCffr[c] = row+1
                         kCffc[c] = col+1
-                        kCffv[c] += 0.5*a*kt
+                        kCffv[c] += 0.5*((a*a)*kt + (pi*pi)*(i1*i1)*kr)/a
                         c += 1
                         kCffr[c] = row+2
                         kCffc[c] = col+2
-                        kCffv[c] += 0.5*(pi*pi)*a*j1*kt*l1/(bf*bf)
+                        kCffv[c] += 0.5*(pi*pi)*a*j1*kr*l1/(bf*bf)
                         c += 1
                         kCffr[c] = row+3
                         kCffc[c] = col+3
-                        kCffv[c] += 0.5*a*kt
+                        kCffv[c] += 0.5*((a*a)*kt + (pi*pi)*(i1*i1)*kr)/a
 
                     elif k1 != i1 and l1 == j1:
                         # kCff_11 cond_3
@@ -985,22 +1063,22 @@ def fkCff(double kt, double a, double bf, int m1, int n1,
                         c += 1
                         kCffr[c] = row+1
                         kCffc[c] = col+1
-                        kCffv[c] += 0.5*a*kt
+                        kCffv[c] += 0.5*((a*a)*kt + (pi*pi)*(i1*i1)*kr)/a
                         c += 1
                         kCffr[c] = row+2
                         kCffc[c] = col+2
-                        kCffv[c] += 0.5*(pi*pi)*a*(j1*j1)*kt/(bf*bf)
+                        kCffv[c] += 0.5*(pi*pi)*a*(j1*j1)*kr/(bf*bf)
                         c += 1
                         kCffr[c] = row+3
                         kCffc[c] = col+3
-                        kCffv[c] += 0.5*a*kt
+                        kCffv[c] += 0.5*((a*a)*kt + (pi*pi)*(i1*i1)*kr)/a
 
     kCff = coo_matrix((kCffv, (kCffr, kCffc)), shape=(size, size))
 
     return kCff
 
 
-def fkCsf(double kt, double ys, double a, double b, double bf,
+def fkCsf(double kt, double kr, double ys, double a, double b, double bf,
          int m, int n, int m1, int n1,
          int size, int row0, int col0):
     cdef int i, j, k1, l1, c, row, col
@@ -1032,57 +1110,57 @@ def fkCsf(double kt, double ys, double a, double b, double bf,
                         c += 1
                         kCsfr[c] = row+0
                         kCsfc[c] = col+0
-                        kCsfv[c] += a*kt*(10*(-1)**(k1 + 10) - 10)*sin(pi*j*ys/b)/(pi*(-(k1*k1) + 100))
+                        kCsfv[c] += a*i*kt*((-1)**(i + k1) - 1)*sin(pi*j*ys/b)/(pi*((i*i) - (k1*k1)))
                         c += 1
                         kCsfr[c] = row+1
                         kCsfc[c] = col+3
-                        kCsfv[c] += a*kt*(-17*(-1)**(k1 + 17) + 17)*sin(pi*j*ys/b)/(pi*(-(k1*k1) + 289))
+                        kCsfv[c] += i*((-1)**(i + k1) - 1)*((a*a)*kt - (pi*pi)*(k1*k1)*kr)*sin(pi*j*ys/b)/(pi*a*(i - k1)*(i + k1))
                         c += 1
                         kCsfr[c] = row+2
                         kCsfc[c] = col+1
-                        kCsfv[c] += a*kt*(19*(-1)**(k1 + 19) - 19)*sin(pi*j*ys/b)/(pi*(-(k1*k1) + 361))
+                        kCsfv[c] += i*((-1)**(i + k1) - 1)*(-(a*a)*kt + (pi*pi)*(k1*k1)*kr)*sin(pi*j*ys/b)/(pi*a*(i - k1)*(i + k1))
 
                     elif k1 == i and l1 != j:
                         # kCsf_11 cond_2
                         c += 1
                         kCsfr[c] = row+2
                         kCsfc[c] = col+2
-                        kCsfv[c] += -0.5*(pi*pi)*a*j*kt*l1*cos(pi*j*ys/b)/(b*bf)
+                        kCsfv[c] += -0.5*(pi*pi)*a*j*kr*l1*cos(pi*j*ys/b)/(b*bf)
 
                     elif k1 != i and l1 == j:
                         # kCsf_11 cond_3
                         c += 1
                         kCsfr[c] = row+0
                         kCsfc[c] = col+0
-                        kCsfv[c] += a*kt*(84*(-1)**(k1 + 84) - 84)*sin(pi*j*ys/b)/(pi*(-(k1*k1) + 7056))
+                        kCsfv[c] += a*i*kt*((-1)**(i + k1) - 1)*sin(pi*j*ys/b)/(pi*((i*i) - (k1*k1)))
                         c += 1
                         kCsfr[c] = row+1
                         kCsfc[c] = col+3
-                        kCsfv[c] += a*kt*(-91*(-1)**(k1 + 91) + 91)*sin(pi*j*ys/b)/(pi*(-(k1*k1) + 8281))
+                        kCsfv[c] += i*((-1)**(i + k1) - 1)*((a*a)*kt - (pi*pi)*(k1*k1)*kr)*sin(pi*j*ys/b)/(pi*a*(i - k1)*(i + k1))
                         c += 1
                         kCsfr[c] = row+2
                         kCsfc[c] = col+1
-                        kCsfv[c] += a*kt*(93*(-1)**(k1 + 93) - 93)*sin(pi*j*ys/b)/(pi*(-(k1*k1) + 8649))
+                        kCsfv[c] += i*((-1)**(i + k1) - 1)*(-(a*a)*kt + (pi*pi)*(k1*k1)*kr)*sin(pi*j*ys/b)/(pi*a*(i - k1)*(i + k1))
 
                     elif k1 == i and l1 == j:
                         # kCsf_11 cond_4
                         c += 1
                         kCsfr[c] = row+2
                         kCsfc[c] = col+2
-                        kCsfv[c] += -0.5*(pi*pi)*a*(j*j)*kt*cos(pi*j*ys/b)/(b*bf)
+                        kCsfv[c] += -0.5*(pi*pi)*a*(j*j)*kr*cos(pi*j*ys/b)/(b*bf)
 
     kCsf = coo_matrix((kCsfv, (kCsfr, kCsfc)), shape=(size, size))
 
     return kCsf
 
 
-def fkCss(double kt, double ys, double a, double b, int m, int n,
+def fkCss(double kt, double kr, double ys, double a, double b, int m, int n,
          int size, int row0, int col0):
     cdef int i, k, j, l, c, row, col
     cdef np.ndarray[cINT, ndim=1] kCssr, kCssc
     cdef np.ndarray[cDOUBLE, ndim=1] kCssv
 
-    fdim = 4*m*n*m*n
+    fdim = 3*m*n*m*n
 
     kCssr = np.zeros((fdim,), dtype=INT)
     kCssc = np.zeros((fdim,), dtype=INT)
@@ -1115,11 +1193,11 @@ def fkCss(double kt, double ys, double a, double b, int m, int n,
                         c += 1
                         kCssr[c] = row+1
                         kCssc[c] = col+1
-                        kCssv[c] += 0.5*a*kt*sin(pi*j*ys/b)*sin(pi*l*ys/b)
+                        kCssv[c] += 0.5*((a*a)*kt + (pi*pi)*(i*i)*kr)*sin(pi*j*ys/b)*sin(pi*l*ys/b)/a
                         c += 1
                         kCssr[c] = row+2
                         kCssc[c] = col+2
-                        kCssv[c] += 0.5*a*kt*((b*b)*sin(pi*j*ys/b)*sin(pi*l*ys/b) + (pi*pi)*j*l*cos(pi*j*ys/b)*cos(pi*l*ys/b))/(b*b)
+                        kCssv[c] += 0.5*((pi*pi)*(a*a)*j*kr*l*cos(pi*j*ys/b)*cos(pi*l*ys/b) + (b*b)*((a*a)*kt + (pi*pi)*(i*i)*kr)*sin(pi*j*ys/b)*sin(pi*l*ys/b))/(a*(b*b))
 
                     elif k != i and l == j:
                         # kCss_11 cond_3
@@ -1134,11 +1212,11 @@ def fkCss(double kt, double ys, double a, double b, int m, int n,
                         c += 1
                         kCssr[c] = row+1
                         kCssc[c] = col+1
-                        kCssv[c] += 0.5*a*kt*sin(pi*j*ys/b)**2
+                        kCssv[c] += 0.5*((a*a)*kt + (pi*pi)*(i*i)*kr)*sin(pi*j*ys/b)**2/a
                         c += 1
                         kCssr[c] = row+2
                         kCssc[c] = col+2
-                        kCssv[c] += 0.5*a*kt*((b*b)*sin(pi*j*ys/b)**2 + (pi*pi)*(j*j)*cos(pi*j*ys/b)**2)/(b*b)
+                        kCssv[c] += 0.5*((pi*pi)*(a*a)*(j*j)*kr*cos(pi*j*ys/b)**2 + (b*b)*((a*a)*kt + (pi*pi)*(i*i)*kr)*sin(pi*j*ys/b)**2)/(a*(b*b))
 
     kCss = coo_matrix((kCssv, (kCssr, kCssc)), shape=(size, size))
 
