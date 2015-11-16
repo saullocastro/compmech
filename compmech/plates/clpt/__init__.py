@@ -12,7 +12,8 @@ assumption.
 
 """
 modules = [
-          'clpt_commons_bardell_w',
+          'clpt_commons_bardell',
+          'clpt_donnell_bardell_linear',
           'clpt_donnell_bardell_w_linear',
           'clpt_commons_bc1',
           'clpt_donnell_bc1_linear',

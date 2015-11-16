@@ -26,7 +26,8 @@ cdef double pi = 3.141592653589793
 
 def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
         double bc1x, double bc2x, double bc3x, double bc4x,
-        double bc1y, double bc2y, double bc3y, double bc4y):
+        double bc1y, double bc2y, double bc3y, double bc4y,
+        int m1, int n1):
     cdef int i1, j1, k1, l1, c, row, col
     cdef double A11, A12, A16, A22, A26, A66
     cdef double B11, B12, B16, B22, B26, B66
@@ -8289,7 +8290,8 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
 
 def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
          double bc1x, double bc2x, double bc3x, double bc4x,
-         double bc1y, double bc2y, double bc3y, double bc4y):
+         double bc1y, double bc2y, double bc3y, double bc4y,
+         int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
     cdef np.ndarray[cDOUBLE, ndim=1] kG0v
