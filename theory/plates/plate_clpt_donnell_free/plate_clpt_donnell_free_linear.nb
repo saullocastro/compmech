@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     92246,       2192]
-NotebookOptionsPosition[     90711,       2145]
-NotebookOutlinePosition[     91077,       2161]
-CellTagsIndexPosition[     91034,       2158]
+NotebookDataLength[     85179,       1960]
+NotebookOptionsPosition[     84483,       1933]
+NotebookOutlinePosition[     84850,       1949]
+CellTagsIndexPosition[     84807,       1946]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1027,15 +1027,6 @@ Cell[BoxData[{
         RowBox[{
          RowBox[{"Transpose", "[", "gARight", "]"}], ".", "kRight", ".", 
          "gBRight"}]}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"Nxx", "=", 
-       RowBox[{"Fx", "/", "b"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"Nyy", "=", 
-       RowBox[{"Fy", "/", "a"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"Nxy", "=", 
-       RowBox[{
-        RowBox[{"Fyx", "/", "a"}], "+", 
-        RowBox[{"Fxy", "/", "b"}]}]}], ";", "\[IndentingNewLine]", 
-      "\[IndentingNewLine]", 
       RowBox[{"Nmat", "=", 
        RowBox[{"{", 
         RowBox[{
@@ -1849,7 +1840,8 @@ Cell[BoxData[{
    3.641248349643832*^9}, {3.6413162646514997`*^9, 3.64131629725132*^9}, {
    3.641316361915925*^9, 3.6413164276927395`*^9}, {3.6413164649142847`*^9, 
    3.6413165330445366`*^9}, {3.641318612287731*^9, 3.6413186291785145`*^9}, {
-   3.641663336248727*^9, 3.641663342732314*^9}}],
+   3.641663336248727*^9, 3.641663342732314*^9}, {3.656619615366188*^9, 
+   3.6566196252937336`*^9}, {3.656619721754697*^9, 3.656619722922523*^9}}],
 
 Cell[CellGroupData[{
 
@@ -1857,7 +1849,7 @@ Cell[BoxData["\<\"Sub-Matrix 00:\"\>"], "Print",
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.6413186337566676`*^9}],
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.656619630158449*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1868,13 +1860,13 @@ Cell[BoxData[
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.6413186337566676`*^9}],
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.6566196301594496`*^9}],
 
 Cell[BoxData["\<\"Sub-Matrix 01:\"\>"], "Print",
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.6413186337566676`*^9}],
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.6566196301604505`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1885,13 +1877,13 @@ Cell[BoxData[
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.6413186337566676`*^9}],
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.6566196301614513`*^9}],
 
 Cell[BoxData["\<\"Sub-Matrix 11:\"\>"], "Print",
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.641318633772294*^9}],
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.656619630168459*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1902,7 +1894,7 @@ Cell[BoxData[
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.641318633772294*^9}],
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.6566196301694717`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1913,7 +1905,7 @@ Cell[BoxData[
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.641318633772294*^9}],
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.6566196301704707`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1924,7 +1916,7 @@ Cell[BoxData[
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.641318633772294*^9}],
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.6566196301704707`*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1935,216 +1927,12 @@ Cell[BoxData[
  CellChangeTimes->{
   3.6411549414590673`*^9, {3.641247585438182*^9, 3.641247597672677*^9}, 
    3.641247945456624*^9, {3.64124835790706*^9, 3.6412483773134985`*^9}, 
-   3.641316646043537*^9, 3.641318633772294*^9}]
-}, Open  ]],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6413190915044613`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6413190915200863`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319091535712*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Infinity :: \
-indet\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319091551337*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319303063982*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319303079607*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6413193030952325`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Infinity :: \
-indet\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6413193031108575`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319363423927*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6413193634395523`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319363455177*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Infinity :: \
-indet\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319363470803*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.6413195075659127`*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319626035782*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319626051407*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319626067032*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"General", "::", "stop"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Further output of \\!\\(\\*StyleBox[\\(Infinity :: \
-indet\\), \\\"MessageName\\\"]\\) will be suppressed during this calculation.\
-\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319626082657*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319658567339*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319713005353*^9}],
-
-Cell[BoxData[
- RowBox[{
-  StyleBox[
-   RowBox[{"Infinity", "::", "indet"}], "MessageName"], 
-  RowBox[{
-  ":", " "}], "\<\"Indeterminate expression \\!\\(ComplexInfinity + \
-ComplexInfinity\\) encountered.\"\>"}]], "Message", "MSG",
- ShowCellLabel->True,
- CellChangeTimes->{3.641319802542794*^9}]
+   3.641316646043537*^9, 3.6413186337566676`*^9, 3.6566196301714587`*^9}]
+}, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1520, 729},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{766, 741},
+WindowMargins->{{-7, Automatic}, {Automatic, -7}},
 CellContext->Notebook,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
@@ -2161,38 +1949,18 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 80341, 1829, 6832, "Input"],
+Cell[579, 22, 80075, 1821, 6872, "Input"],
 Cell[CellGroupData[{
-Cell[80945, 1855, 264, 4, 23, "Print"],
-Cell[81212, 1861, 458, 9, 23, "Print"],
-Cell[81673, 1872, 264, 4, 23, "Print"],
-Cell[81940, 1878, 458, 9, 23, "Print"],
-Cell[82401, 1889, 262, 4, 23, "Print"],
-Cell[82666, 1895, 456, 9, 23, "Print"],
-Cell[83125, 1906, 456, 9, 23, "Print"],
-Cell[83584, 1917, 456, 9, 23, "Print"],
-Cell[84043, 1928, 456, 9, 23, "Print"]
-}, Open  ]],
-Cell[84514, 1940, 298, 8, 21, "Message"],
-Cell[84815, 1950, 298, 8, 21, "Message"],
-Cell[85116, 1960, 296, 8, 21, "Message"],
-Cell[85415, 1970, 344, 9, 21, "Message"],
-Cell[85762, 1981, 296, 8, 21, "Message"],
-Cell[86061, 1991, 296, 8, 21, "Message"],
-Cell[86360, 2001, 298, 8, 21, "Message"],
-Cell[86661, 2011, 346, 9, 21, "Message"],
-Cell[87010, 2022, 296, 8, 21, "Message"],
-Cell[87309, 2032, 298, 8, 21, "Message"],
-Cell[87610, 2042, 296, 8, 21, "Message"],
-Cell[87909, 2052, 344, 9, 21, "Message"],
-Cell[88256, 2063, 298, 8, 21, "Message"],
-Cell[88557, 2073, 296, 8, 21, "Message"],
-Cell[88856, 2083, 296, 8, 21, "Message"],
-Cell[89155, 2093, 296, 8, 21, "Message"],
-Cell[89454, 2103, 344, 9, 21, "Message"],
-Cell[89801, 2114, 296, 8, 21, "Message"],
-Cell[90100, 2124, 296, 8, 21, "Message"],
-Cell[90399, 2134, 296, 8, 21, "Message"]
+Cell[80679, 1847, 286, 4, 23, "Print"],
+Cell[80968, 1853, 482, 9, 23, "Print"],
+Cell[81453, 1864, 288, 4, 23, "Print"],
+Cell[81744, 1870, 482, 9, 23, "Print"],
+Cell[82229, 1881, 286, 4, 23, "Print"],
+Cell[82518, 1887, 482, 9, 23, "Print"],
+Cell[83003, 1898, 482, 9, 23, "Print"],
+Cell[83488, 1909, 482, 9, 23, "Print"],
+Cell[83973, 1920, 482, 9, 23, "Print"]
+}, Open  ]]
 }, Open  ]]
 }
 ]
