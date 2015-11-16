@@ -425,7 +425,7 @@ def fk0edges(int m1, int n1, double a, double b,
     return k0edges
 
 
-def fkG0(double Fx, double Fy, double Fxy, double Fyx,
+def fkG0(double Nxx, double Nyy, double Nxy,
          double a, double b, int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
     cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
@@ -456,19 +456,19 @@ def fkG0(double Fx, double Fy, double Fxy, double Fyx,
                         c += 1
                         kG0r[c] = row+2
                         kG0c[c] = col+2
-                        kG0v[c] += i1*j1*k1*l1*(-2*(-1)**(i1 + k1) + 2)*((-1)**(j1 + l1) - 1)*(Fxy*a + Fyx*b)/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        kG0v[c] += Nxy*i1*j1*k1*l1*(-2*(-1)**(i1 + k1) + 2)*((-1)**(j1 + l1) - 1)/(((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
                         kG0r[c] = row+2
                         kG0c[c] = col+3
-                        kG0v[c] += i1*j1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(Fx*b*(k1*k1) + Fy*a*(l1*l1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        kG0v[c] += i1*j1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(Nxx*(b*b)*(k1*k1) + Nyy*(a*a)*(l1*l1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
                         kG0r[c] = row+3
                         kG0c[c] = col+2
-                        kG0v[c] += k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(Fx*b*(i1*i1) + Fy*a*(j1*j1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        kG0v[c] += k1*l1*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(Nxx*(b*b)*(i1*i1) + Nyy*(a*a)*(j1*j1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
                         c += 1
                         kG0r[c] = row+3
                         kG0c[c] = col+3
-                        kG0v[c] += -((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*(Fxy*a + Fyx*b)*((i1*i1)*(l1*l1) + (j1*j1)*(k1*k1))/(a*b*((i1*i1) - (k1*k1))*((j1*j1) - (l1*l1)))
+                        kG0v[c] += -Nxy*((-1)**(i1 + k1) - 1)*((-1)**(j1 + l1) - 1)*((i1*i1)*(l1*l1) + (j1*j1)*(k1*k1))/((i1 - k1)*(i1 + k1)*(j1 - l1)*(j1 + l1))
 
                     elif k1 == i1 and l1 != j1:
                         # kG0_11 cond_2
@@ -483,19 +483,19 @@ def fkG0(double Fx, double Fy, double Fxy, double Fyx,
                         c += 1
                         kG0r[c] = row+2
                         kG0c[c] = col+2
-                        kG0v[c] += 0.25*(pi*pi)*(Fx*b*(i1*i1) + Fy*a*(j1*j1))/(a*b)
+                        kG0v[c] += 0.25*(pi*pi)*(Nxx*(b*b)*(i1*i1) + Nyy*(a*a)*(j1*j1))/(a*b)
                         c += 1
                         kG0r[c] = row+2
                         kG0c[c] = col+3
-                        kG0v[c] += -0.5*(pi*pi)*i1*j1*(Fxy*a + Fyx*b)/(a*b)
+                        kG0v[c] += -0.5*(pi*pi)*Nxy*i1*j1
                         c += 1
                         kG0r[c] = row+3
                         kG0c[c] = col+2
-                        kG0v[c] += -0.5*(pi*pi)*i1*j1*(Fxy*a + Fyx*b)/(a*b)
+                        kG0v[c] += -0.5*(pi*pi)*Nxy*i1*j1
                         c += 1
                         kG0r[c] = row+3
                         kG0c[c] = col+3
-                        kG0v[c] += 0.25*(pi*pi)*(Fx*b*(i1*i1) + Fy*a*(j1*j1))/(a*b)
+                        kG0v[c] += 0.25*(pi*pi)*(Nxx*(b*b)*(i1*i1) + Nyy*(a*a)*(j1*j1))/(a*b)
 
     size = num0 + num1*m1*n1
 
