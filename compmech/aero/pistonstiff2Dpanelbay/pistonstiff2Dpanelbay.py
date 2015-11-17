@@ -100,6 +100,7 @@ class Stiffener2D(object):
         self.hb = 0.
         self.bf = bf
         self.hf = 0.
+        self.forces = []
 
         self.Nxx = None
         self.Nxy = None
@@ -160,6 +161,7 @@ class AeroPistonStiff2DPanelBay(object):
         #TODO use a marker number for self.inf and self.maxinf if the
         #     normalization of edge stiffnesses is adopted
         #     now it is already independent of self.inf and more robust
+        self.forces_skin = []
         self.flow = 'x'
         self.inf = 1.e+8
         self.maxinf = 1.e+8
@@ -221,7 +223,7 @@ class AeroPistonStiff2DPanelBay(object):
         self.out_num_cores = cpu_count()
 
         # analysis
-        self.analysis = Analysis()
+        self.analysis = Analysis(self.calc_fext, self.calc_k0, None, None)
 
         # outputs
         self.eigvecs = None
@@ -517,12 +519,13 @@ class AeroPistonStiff2DPanelBay(object):
             if calc_kM:
                 kM += panel.kM
 
-            if not combined_load_case:
-                kG0 += panel.kG0
-            else:
-                kG0_Nxx += panel.kG0_Nxx
-                kG0_Nyy += panel.kG0_Nyy
-                kG0_Nxy += panel.kG0_Nxy
+            if calc_kG0:
+                if not combined_load_case:
+                    kG0 += panel.kG0
+                else:
+                    kG0_Nxx += panel.kG0_Nxx
+                    kG0_Nyy += panel.kG0_Nyy
+                    kG0_Nxy += panel.kG0_Nxy
 
         # contributions from stiffeners
         row0 = num*m*n
@@ -551,7 +554,7 @@ class AeroPistonStiff2DPanelBay(object):
                     row0 += num1*s_1.m1*s_1*n1
                     col0 += num1*s_1.m1*s_1*n1
                 k0 += mod.fk0f(a, bf, m1, n1, F, size, row0, col0)
-                k0 += mod.fk0fedges(m1, n1, a, bf, kt, kr, size, row0, col0)
+                #k0 += mod.fk0fedges(m1, n1, a, bf, kt, kr, size, row0, col0)
 
                 if calc_kM:
                     kM += mod.fkMf(s.mu, s.hf, a, bf, m1, n1, size, row0, col0)
@@ -1664,3 +1667,84 @@ class AeroPistonStiff2DPanelBay(object):
         with open(name, 'wb') as f:
             cPickle.dump(self, f, protocol=cPickle.HIGHEST_PROTOCOL)
 
+
+    def calc_fext(self, silent=False):
+        """Calculates the external force vector `\{F_{ext}\}`
+
+        Parameters
+        ----------
+        silent : bool, optional
+            A boolean to tell whether the msg messages should be printed.
+
+        Returns
+        -------
+        fext : np.ndarray
+            The external force vector
+
+        """
+        msg('Calculating external forces...', level=2, silent=silent)
+        num = modelDB.db[self.model]['num']
+        num1 = modelDB.db[self.model]['num1']
+        fg_skin = modelDB.db[self.model]['commons'].fg_skin
+        fg_stiffener = modelDB.db[self.model]['commons'].fg_stiffener
+
+        # punctual forces on skin
+        size = num*self.m*self.n
+        g_skin = np.zeros((3, size), dtype=DOUBLE)
+        fext_skin = np.zeros(size, dtype=DOUBLE)
+        for i, force in enumerate(self.forces_skin):
+            x, y, fx, fy, fz = force
+            fg_skin(g_skin, self.m, self.n, x, y, self.a, self.b)
+
+            fpt = np.array([[fx, fy, fz]])
+            fext_skin += -fpt.dot(g_skin).ravel()
+
+        fext = fext_skin
+        # punctual forces on stiffener
+        for s in self.stiffeners:
+            m1 = s.m1
+            n1 = s.n1
+            bf = s.bf
+            size = num1*m1*n1
+            g_stiffener = np.zeros((3, size), dtype=DOUBLE)
+            fext_stiffener = np.zeros(size, dtype=DOUBLE)
+            for i, force in enumerate(s.forces):
+                xf, yf, fx, fy, fz = force
+                fg_stiffener(g_stiffener, m1, n1, xf, yf, self.a, bf)
+
+                fpt = np.array([[fx, fy, fz]])
+                fext_stiffener += -fpt.dot(g_stiffener).ravel()
+
+            fext = np.concatenate((fext, fext_stiffener))
+
+        msg('finished!', level=2, silent=silent)
+
+        return fext
+
+
+    def static(self, silent=False):
+        """Static analysis for cones and cylinders
+
+        The analysis can be linear or geometrically non-linear. See
+        :class:`.Analysis` for further details about the parameters
+        controlling the non-linear analysis.
+
+        Parameters
+        ----------
+        silent : bool, optional
+            A boolean to tell whether the msg messages should be printed.
+
+        Returns
+        -------
+        c : np.ndarray
+            The Ritz constants.
+
+        """
+        self._rebuild()
+        self.calc_linear_matrices(calc_kG0=False, calc_kA=False, calc_kM=False)
+        self.analysis.static(NLgeom=False, silent=silent)
+        return self.analysis.cs[0]
+
+
+    def calc_k0(self):
+        return self.k0

@@ -246,3 +246,54 @@ cdef void cfwy_stiffener(double *c, int m1, int n1, double *xs, double *ys,
                 wy += c[col+3]*cosi1bx*dcosj1by
 
         outwt[ii] = wy
+
+
+def fg_skin(double[:,::1] g, int m, int n, double x, double y,
+            double a, double b):
+    cfg_skin(g, m, n, x, y, a, b)
+
+
+cdef void cfg_skin(double[:,::1] g, int m, int n, double x, double y,
+                   double a, double b) nogil:
+    cdef int i, j, col
+    cdef double sinibx, sinjby
+    cdef double bx, by
+
+    bx = x/a
+    by = y/b
+
+    for j in range(1, n+1):
+        sinjby = sin(j*pi*by)
+        for i in range(1, m+1):
+            col = num*((j-1)*m + (i-1))
+            sinibx = sin(i*pi*bx)
+            g[0, col+0] = sinibx*sinjby
+            g[1, col+1] = sinibx*sinjby
+            g[2, col+2] = sinibx*sinjby
+
+
+def fg_stiffener(double[:,::1] g, int m1, int n1, double xf, double yf,
+                 double a, double bf):
+    cfg_stiffener(g, m1, n1, xf, yf, a, bf)
+
+
+cdef void cfg_stiffener(double[:,::1] g, int m1, int n1, double xf, double yf,
+                   double a, double bf) nogil:
+    cdef int i1, j1, col
+    cdef double sini1bx, sinj1by, cosi1bx, cosj1by
+    cdef double bx, by
+
+    bx = xf/a
+    by = yf/bf
+
+    for j1 in range(1, n1+1):
+        sinj1by = sin(j1*pi*by)
+        cosj1by = cos(j1*pi*by)
+        for i1 in range(1, m1+1):
+            col = num1*((j1-1)*m1 + (i1-1))
+            sini1bx = sin(i1*pi*bx)
+            cosi1bx = cos(i1*pi*bx)
+            g[0, col+0] = sini1bx*sinj1by
+            g[1, col+1] = sini1bx*sinj1by
+            g[2, col+2] = sini1bx*sinj1by
+            g[2, col+3] = cosi1bx*cosj1by

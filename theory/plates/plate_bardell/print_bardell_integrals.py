@@ -8,7 +8,8 @@ from sympy import pi, sin, cos, var
 
 from compmech.conecyl.sympytools import mprint_as_sparse
 
-var('xi1t, xi1r, xi2t, xi2r')
+var('x1t, x1r, x2t, x2r')
+var('y1t, y1r, y2t, y2r')
 
 subs = {
        }
@@ -28,13 +29,18 @@ for i, filepath in enumerate(
         string = string.replace('\\','')
         tmp = eval(string)
         matrix = sympy.Matrix(np.atleast_2d(tmp))
-        printstr += '\n\ncdef void calc_%s(double[:, ::1] v, double xi1t, double xi1r, double xi2t, double xi2r) nogil:\n' % names[1]
+        printstr += '\n\ncdef double calc_%s(int i, int j, double x1t, double x1r, double x2t, double x2r,\n' % names[1]
+        printstr += '                        double y1t, double y1r, double y2t, double y2r) nogil:\n'
         for i in range(matrix.shape[0]):
+            activerow = False
             for j in range(matrix.shape[1]):
                 if matrix[i,j] == 0:
                     continue
-                else:
-                    printstr += '    v[%d, %d] = %s\n' % (i, j, str(matrix[i, j]))
+                if not activerow:
+                    activerow = True
+                    printstr += '    if i == %d:\n' % i
+                printstr += '        if j == %d:\n' % j
+                printstr += '            return %s\n' % str(matrix[i, j])
 
 with open('.\\bardell_python\\bardell_python.txt', 'w') as f:
     f.write(printstr)
