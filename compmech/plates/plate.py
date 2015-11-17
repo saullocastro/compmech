@@ -109,7 +109,7 @@ class Plate(object):
         self.kphiyRight = 0.
 
         # default equations
-        self.model = 'clpt_donnell_free'
+        self.model = 'clpt_donnell_bc1'
 
         # approximation series
         self.m1 = 11
@@ -399,12 +399,8 @@ class Plate(object):
 
     def _default_field(self, xs, ys, gridx, gridy):
         if xs is None or ys is None:
-            if self.model == 'clpt_donnell_bc1':
-                xs = linspace(0, self.a, gridx)
-                ys = linspace(0, self.b, gridy)
-            else:
-                xs = linspace(-self.a/2., self.a/2, gridx)
-                ys = linspace(-self.b/2., self.b/2, gridy)
+            xs = linspace(0, self.a, gridx)
+            ys = linspace(0, self.b, gridy)
             xs, ys = np.meshgrid(xs, ys, copy=False)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
@@ -481,10 +477,16 @@ class Plate(object):
             factor = (a*b/4.)
         else:
             factor = 1.
-        if 'bardell' in self.model:
+        if 'bardell_w' in self.model:
             k0 = factor*fk0(a, b, F,
                     self.xi1t, self.xi1r, self.xi2t, self.xi2r,
                     self.eta1t, self.eta1r, self.eta2t, self.eta2r,
+                    self.m1, self.n1)
+        elif 'bardell' in self.model:
+            k0 = factor*fk0(a, b, F,
+                    0., 1., 0., 1.,
+                    0., 1., 0., 1.,
+                    0., 1., 0., 1.,
                     self.m1, self.n1)
         else:
             k0 = fk0(a, b, F, m1, n1)
@@ -493,7 +495,7 @@ class Plate(object):
         Nyy = self.Nyy if self.Nyy is not None else 0.
         Nxy = self.Nxy if self.Nxy is not None else 0.
 
-        if 'bardell' in self.model:
+        if 'bardell_w' in self.model:
             if not combined_load_case:
                 kG0 = factor*fkG0(Nxx, Nyy, Nxy, a, b,
                                   self.xi1t, self.xi1r, self.xi2t, self.xi2r,
@@ -512,6 +514,29 @@ class Plate(object):
                                   self.xi1t, self.xi1r, self.xi2t, self.xi2r,
                                   self.eta1t, self.eta1r, self.eta2t,
                                   self.eta2r, self.m1, self.n1)
+        elif 'bardell' in self.model:
+            if not combined_load_case:
+                kG0 = factor*fkG0(Nxx, Nyy, Nxy, a, b,
+                                  0., 1., 0., 1.,
+                                  0., 1., 0., 1.,
+                                  0., 1., 0., 1.,
+                                  self.m1, self.n1)
+            else:
+                kG0_Nxx = factor*fkG0(Nxx, 0, 0, a, b,
+                                  0., 1., 0., 1.,
+                                  0., 1., 0., 1.,
+                                  0., 1., 0., 1.,
+                                  self.m1, self.n1)
+                kG0_Nyy = factor*fkG0(0, Nyy, 0, a, b,
+                                  0., 1., 0., 1.,
+                                  0., 1., 0., 1.,
+                                  0., 1., 0., 1.,
+                                  self.m1, self.n1)
+                kG0_Nxy = factor*fkG0(0, 0, Nxy, a, b,
+                                  0., 1., 0., 1.,
+                                  0., 1., 0., 1.,
+                                  0., 1., 0., 1.,
+                                  self.m1, self.n1)
         else:
             if not combined_load_case:
                 kG0 = fkG0(Nxx, Nyy, Nxy, a, b, m1, n1)
@@ -1488,8 +1513,8 @@ if __name__ == '__main__':
 
     p.model = 'clpt_donnell_bc1'
     p.model = 'clpt_donnell_free'
-    p.model = 'clpt_donnell_bardell_w'
     p.model = 'clpt_donnell_bardell'
+    p.model = 'clpt_donnell_bardell_w'
     p.laminaprop = (142.5e3, 8.7e3, 0.28, 5.1e3, 5.1e3, 5.1e3, 273.15)
     p.plyt = 0.125 # mm
     p.stack = [0, +45, -45, 90, -45, +45, 0]
@@ -1503,6 +1528,7 @@ if __name__ == '__main__':
 
         p.lb(sparse_solver=True)
         p.plot(p.eigvecs[:, 0], vec='w', colorbar=True)
+        print p.eigvecs[:,0]
 
     else:
         for yi in linspace(-p.b/2., p.b/2., 100):

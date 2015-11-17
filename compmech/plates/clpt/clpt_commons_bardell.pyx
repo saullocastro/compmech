@@ -90,9 +90,9 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
         v = 0
         w = 0
 
-        for i1 in range(1, m1+1):
-            for j1 in range(1, n1+1):
-                col = num1*((j1-1)*m1 + (i1-1))
+        for i1 in range(m1):
+            for j1 in range(n1):
+                col = num1*(j1*m1 + i1)
                 u += c[col+0]*fxi[i1]*feta[j1]
                 v += c[col+1]*fxi[i1]*feta[j1]
                 w += c[col+2]*fxi[i1]*feta[j1]
@@ -126,9 +126,9 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
     calc_fxi(fxi, xi)
     calc_fxi(feta, eta)
 
-    for i1 in range(1, m1+1):
-        for j1 in range(1, n1+1):
-            col = num1*((j1-1)*m1 + (i1-1))
+    for i1 in range(m1):
+        for j1 in range(n1):
+            col = num1*(j1*m1 + i1)
             g[0, col+0] = fxi[i1]*feta[j1]
             g[1, col+1] = fxi[i1]*feta[j1]
             g[2, col+2] = fxi[i1]*feta[j1]

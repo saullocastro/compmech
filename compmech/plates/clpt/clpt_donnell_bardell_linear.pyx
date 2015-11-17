@@ -22,8 +22,9 @@ cdef int nmax = 30
 
 
 def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
-        double xi1t, double xi1r, double xi2t, double xi2r,
-        double eta1t, double eta1r, double eta2t, double eta2r,
+        double u1t, double u1r, double u2t, double u2r,
+        double v1t, double v1r, double v2t, double v2r,
+        double w1t, double w1r, double w2t, double w2r,
         int m1, int n1):
     cdef int i1, j1, k1, l1, c, row, col
     cdef double A11, A12, A16, A22, A26, A66
@@ -37,38 +38,29 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
     cdef np.ndarray[cINT, ndim=1] k0r, k0c
     cdef np.ndarray[cDOUBLE, ndim=1] k0v
 
+    cdef double fAufBu, fAufBuxi, fAuxifBu, fAuxifBuxi, fAufBv, fAufBvxi,
+    cdef double fAuxifBv, fAuxifBvxi, fAuxifBwxixi, fAuxifBw, fAufBwxixi,
+    cdef double fAuxifBwxi, fAufBw, fAufBwxi, fAvfBuxi, fAvxifBuxi, fAvfBu,
+    cdef double fAvxifBu, fAvfBv, fAvfBvxi, fAvxifBv, fAvxifBvxi, fAvfBwxixi,
+    cdef double fAvxifBwxixi, fAvfBw, fAvfBwxi, fAvxifBw, fAvxifBwxi,
+    cdef double fAwxixifBuxi, fAwfBuxi, fAwxifBuxi, fAwxixifBu, fAwfBu,
+    cdef double fAwxifBu, fAwxixifBv, fAwxixifBvxi, fAwfBv, fAwfBvxi, fAwxifBv,
+    cdef double fAwxifBvxi, fAwxixifBwxixi, fAwfBwxixi, fAwxixifBw,
+    cdef double fAwxifBwxixi, fAwxixifBwxi, fAwfBw, fAwfBwxi, fAwxifBw,
+    cdef double fAwxifBwxi
+    cdef double gAugBu, gAugBueta, gAuetagBu, gAuetagBueta, gAugBv, gAugBveta,
+    cdef double gAuetagBv, gAuetagBveta, gAuetagBwetaeta, gAuetagBw,
+    cdef double gAugBwetaeta, gAuetagBweta, gAugBw, gAugBweta, gAvgBueta,
+    cdef double gAvetagBueta, gAvgBu, gAvetagBu, gAvgBv, gAvgBveta, gAvetagBv,
+    cdef double gAvetagBveta, gAvgBwetaeta, gAvetagBwetaeta, gAvgBw, gAvgBweta,
+    cdef double gAvetagBw, gAvetagBweta, gAwetaetagBueta, gAwgBueta,
+    cdef double gAwetagBueta, gAwetaetagBu, gAwgBu, gAwetagBu, gAwetaetagBv,
+    cdef double gAwetaetagBveta, gAwgBv, gAwgBveta, gAwetagBv, gAwetagBveta,
+    cdef double gAwetaetagBwetaeta, gAwgBwetaeta, gAwetaetagBw,
+    cdef double gAwetagBwetaeta, gAwetaetagBweta, gAwgBw, gAwgBweta, gAwetagBw,
+    cdef double gAwetagBweta
+
     fdim = 9*m1*m1*n1*n1
-
-    cdef np.ndarray[cDOUBLE, ndim=2] ff, ffxi, ffxixi, fxifxi, fxifxixi, fxixifxixi
-    cdef np.ndarray[cDOUBLE, ndim=2] gg, ggeta, ggetaeta, getageta, getagetaeta, getaetagetaeta
-
-    ff = np.zeros((nmax, nmax), dtype=DOUBLE)
-    ffxi = np.zeros((nmax, nmax), dtype=DOUBLE)
-    ffxixi = np.zeros((nmax, nmax), dtype=DOUBLE)
-    fxifxi = np.zeros((nmax, nmax), dtype=DOUBLE)
-    fxifxixi = np.zeros((nmax, nmax), dtype=DOUBLE)
-    fxixifxixi = np.zeros((nmax, nmax), dtype=DOUBLE)
-
-    gg = np.zeros((nmax, nmax), dtype=DOUBLE)
-    ggeta = np.zeros((nmax, nmax), dtype=DOUBLE)
-    ggetaeta = np.zeros((nmax, nmax), dtype=DOUBLE)
-    getageta = np.zeros((nmax, nmax), dtype=DOUBLE)
-    getagetaeta = np.zeros((nmax, nmax), dtype=DOUBLE)
-    getaetagetaeta = np.zeros((nmax, nmax), dtype=DOUBLE)
-
-    calc_ff(ff, xi1t, xi1r, xi2t, xi2r)
-    calc_ffxi(ffxi, xi1t, xi1r, xi2t, xi2r)
-    calc_ffxixi(ffxixi, xi1t, xi1r, xi2t, xi2r)
-    calc_fxifxi(fxifxi, xi1t, xi1r, xi2t, xi2r)
-    calc_fxifxixi(fxifxixi, xi1t, xi1r, xi2t, xi2r)
-    calc_fxixifxixi(fxixifxixi, xi1t, xi1r, xi2t, xi2r)
-
-    calc_ff(gg, eta1t, eta1r, eta2t, eta2r)
-    calc_ffxi(ggeta, eta1t, eta1r, eta2t, eta2r)
-    calc_ffxixi(ggetaeta, eta1t, eta1r, eta2t, eta2r)
-    calc_fxifxi(getageta, eta1t, eta1r, eta2t, eta2r)
-    calc_fxifxixi(getagetaeta, eta1t, eta1r, eta2t, eta2r)
-    calc_fxixifxixi(getaetagetaeta, eta1t, eta1r, eta2t, eta2r)
 
     k0r = np.zeros((fdim,), dtype=INT)
     k0c = np.zeros((fdim,), dtype=INT)
@@ -95,21 +87,61 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
     D26 = F[4,5]
     D66 = F[5,5]
 
-    # k0_11
-
+    # k0
     c = -1
     for i1 in range(0, m1):
         for k1 in range(0, m1):
 
-            fAfB = ff[i1, k1]
-            fAfBxi = ffxi[i1, k1]
-            fAfBxixi = ffxixi[i1, k1]
-            fAxifB = ffxi[k1, i1]
-            fAxifBxi = fxifxi[i1, k1]
-            fAxifBxixi = fxifxixi[i1, k1]
-            fAxixifB = ffxixi[k1, i1]
-            fAxixifBxi = fxifxixi[k1, i1]
-            fAxixifBxixi = fxixifxixi[i1, k1]
+            fAufBu = calc_ff(i1, k1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
+            fAufBuxi = calc_ffxi(i1, k1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
+            fAuxifBu = calc_ffxi(k1, i1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
+            fAuxifBuxi = calc_fxifxi(i1, k1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
+            fAufBv = calc_ff(i1, k1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
+            fAufBvxi = calc_ffxi(i1, k1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
+            fAuxifBv = calc_ffxi(k1, i1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
+            fAuxifBvxi = calc_fxifxi(i1, k1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
+            fAuxifBwxixi = calc_fxifxixi(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+            fAuxifBw = calc_ffxi(k1, i1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
+            fAufBwxixi = calc_ffxixi(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+            fAuxifBwxi = calc_fxifxi(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+            fAufBw = calc_ff(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+            fAufBwxi = calc_ffxi(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+            fAvfBuxi = calc_ffxi(i1, k1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
+            fAvxifBuxi = calc_fxifxi(i1, k1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
+            fAvfBu = calc_ff(i1, k1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
+            fAvxifBu = calc_ffxi(k1, i1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
+            fAvfBv = calc_ff(i1, k1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
+            fAvfBvxi = calc_ffxi(i1, k1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
+            fAvxifBv = calc_ffxi(k1, i1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
+            fAvxifBvxi = calc_fxifxi(i1, k1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
+            fAvfBwxixi = calc_ffxixi(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+            fAvxifBwxixi = calc_fxifxixi(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+            fAvfBw = calc_ff(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+            fAvfBwxi = calc_ffxi(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+            fAvxifBw = calc_ffxi(k1, i1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
+            fAvxifBwxi = calc_fxifxi(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+            fAwxixifBuxi = calc_fxifxixi(k1, i1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+            fAwfBuxi = calc_ffxi(i1, k1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
+            fAwxifBuxi = calc_fxifxi(i1, k1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
+            fAwxixifBu = calc_ffxixi(k1, i1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+            fAwfBu = calc_ff(i1, k1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
+            fAwxifBu = calc_ffxi(k1, i1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+            fAwxixifBv = calc_ffxixi(k1, i1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+            fAwxixifBvxi = calc_fxifxixi(k1, i1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+            fAwfBv = calc_ff(i1, k1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
+            fAwfBvxi = calc_ffxi(i1, k1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
+            fAwxifBv = calc_ffxi(k1, i1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+            fAwxifBvxi = calc_fxifxi(i1, k1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
+            fAwxixifBwxixi = calc_fxixifxixi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwfBwxixi = calc_ffxixi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwxixifBw = calc_ffxixi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwxifBwxixi = calc_fxifxixi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwxixifBwxi = calc_fxifxixi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwfBw = calc_ff(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwfBwxi = calc_ffxi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwxifBw = calc_ffxi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwxifBwxi = calc_fxifxi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+
 
             for j1 in range(0, n1):
                 for l1 in range(0, n1):
@@ -120,52 +152,92 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
                     if row > col:
                         continue
 
-                    gAgB = gg[j1, l1]
-                    gAgBeta = ggeta[j1, l1]
-                    gAgBetaeta = ggetaeta[j1, l1]
-                    gAetagB = ggeta[l1, j1]
-                    gAetagBeta = getageta[j1, l1]
-                    gAetagBetaeta = getagetaeta[j1, l1]
-                    gAetaetagB = ggetaeta[l1, j1]
-                    gAetaetagBeta = getagetaeta[l1, j1]
-                    gAetaetagBetaeta = getaetagetaeta[j1, l1]
+                    gAugBu = calc_ff(j1, l1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
+                    gAugBueta = calc_ffxi(j1, l1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
+                    gAuetagBu = calc_ffxi(l1, j1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
+                    gAuetagBueta = calc_fxifxi(j1, l1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
+                    gAugBv = calc_ff(j1, l1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
+                    gAugBveta = calc_ffxi(j1, l1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
+                    gAuetagBv = calc_ffxi(l1, j1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
+                    gAuetagBveta = calc_fxifxi(j1, l1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
+                    gAuetagBwetaeta = calc_fxifxixi(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+                    gAuetagBw = calc_ffxi(l1, j1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
+                    gAugBwetaeta = calc_ffxixi(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+                    gAuetagBweta = calc_fxifxi(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+                    gAugBw = calc_ff(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+                    gAugBweta = calc_ffxi(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+                    gAvgBueta = calc_ffxi(j1, l1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
+                    gAvetagBueta = calc_fxifxi(j1, l1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
+                    gAvgBu = calc_ff(j1, l1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
+                    gAvetagBu = calc_ffxi(l1, j1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
+                    gAvgBv = calc_ff(j1, l1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
+                    gAvgBveta = calc_ffxi(j1, l1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
+                    gAvetagBv = calc_ffxi(l1, j1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
+                    gAvetagBveta = calc_fxifxi(j1, l1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
+                    gAvgBwetaeta = calc_ffxixi(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+                    gAvetagBwetaeta = calc_fxifxixi(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+                    gAvgBw = calc_ff(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+                    gAvgBweta = calc_ffxi(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+                    gAvetagBw = calc_ffxi(l1, j1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
+                    gAvetagBweta = calc_fxifxi(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+                    gAwetaetagBueta = calc_fxifxixi(l1, j1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+                    gAwgBueta = calc_ffxi(j1, l1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
+                    gAwetagBueta = calc_fxifxi(j1, l1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
+                    gAwetaetagBu = calc_ffxixi(l1, j1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+                    gAwgBu = calc_ff(j1, l1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
+                    gAwetagBu = calc_ffxi(l1, j1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
+                    gAwetaetagBv = calc_ffxixi(l1, j1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+                    gAwetaetagBveta = calc_fxifxixi(l1, j1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+                    gAwgBv = calc_ff(j1, l1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
+                    gAwgBveta = calc_ffxi(j1, l1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
+                    gAwetagBv = calc_ffxi(l1, j1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
+                    gAwetagBveta = calc_fxifxi(j1, l1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
+                    gAwetaetagBwetaeta = calc_fxixifxixi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwgBwetaeta = calc_ffxixi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwetaetagBw = calc_ffxixi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwetagBwetaeta = calc_fxifxixi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwetaetagBweta = calc_fxifxixi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwgBw = calc_ff(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwgBweta = calc_ffxi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwetagBw = calc_ffxi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwetagBweta = calc_fxifxi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
 
                     c += 1
                     k0r[c] = row+0
                     k0c[c] = col+0
-                    k0v[c] = A11*b*fAxifBxi*gAgB/a + A16*(fAfBxi*gAetagB + fAxifB*gAgBeta) + A66*a*fAfB*gAetagBeta/b
+                    k0v[c] += A11*b*fAuxifBuxi*gAugBu/a + A16*(fAufBuxi*gAuetagBu + fAuxifBu*gAugBueta) + A66*a*fAufBu*gAuetagBueta/b
                     c += 1
                     k0r[c] = row+0
                     k0c[c] = col+1
-                    k0v[c] = A12*fAxifB*gAgBeta + A16*b*fAxifBxi*gAgB/a + A26*a*fAfB*gAetagBeta/b + A66*fAfBxi*gAetagB
+                    k0v[c] += A12*fAuxifBv*gAugBveta + A16*b*fAuxifBvxi*gAugBv/a + A26*a*fAufBv*gAuetagBveta/b + A66*fAufBvxi*gAuetagBv
                     c += 1
                     k0r[c] = row+0
                     k0c[c] = col+2
-                    k0v[c] = -2*B11*b*fAxifBxixi*gAgB/(a*a) - 2*B12*fAxifB*gAgBetaeta/b - 2*B16*(fAfBxixi*gAetagB + 2*fAxifBxi*gAgBeta)/a - 2*B26*a*fAfB*gAetagBetaeta/(b*b) - 4*B66*fAfBxi*gAetagBeta/b
+                    k0v[c] += -2*B11*b*fAuxifBwxixi*gAugBw/(a*a) - 2*B12*fAuxifBw*gAugBwetaeta/b - 2*B16*(fAufBwxixi*gAuetagBw + 2*fAuxifBwxi*gAugBweta)/a - 2*B26*a*fAufBw*gAuetagBwetaeta/(b*b) - 4*B66*fAufBwxi*gAuetagBweta/b
                     c += 1
                     k0r[c] = row+1
                     k0c[c] = col+0
-                    k0v[c] = A12*fAfBxi*gAetagB + A16*b*fAxifBxi*gAgB/a + A26*a*fAfB*gAetagBeta/b + A66*fAxifB*gAgBeta
+                    k0v[c] += A12*fAvfBuxi*gAvetagBu + A16*b*fAvxifBuxi*gAvgBu/a + A26*a*fAvfBu*gAvetagBueta/b + A66*fAvxifBu*gAvgBueta
                     c += 1
                     k0r[c] = row+1
                     k0c[c] = col+1
-                    k0v[c] = A22*a*fAfB*gAetagBeta/b + A26*(fAfBxi*gAetagB + fAxifB*gAgBeta) + A66*b*fAxifBxi*gAgB/a
+                    k0v[c] += A22*a*fAvfBv*gAvetagBveta/b + A26*(fAvfBvxi*gAvetagBv + fAvxifBv*gAvgBveta) + A66*b*fAvxifBvxi*gAvgBv/a
                     c += 1
                     k0r[c] = row+1
                     k0c[c] = col+2
-                    k0v[c] = -2*B12*fAfBxixi*gAetagB/a - 2*B16*b*fAxifBxixi*gAgB/(a*a) - 2*B22*a*fAfB*gAetagBetaeta/(b*b) - 2*B26*(2*fAfBxi*gAetagBeta + fAxifB*gAgBetaeta)/b - 4*B66*fAxifBxi*gAgBeta/a
+                    k0v[c] += -2*B12*fAvfBwxixi*gAvetagBw/a - 2*B16*b*fAvxifBwxixi*gAvgBw/(a*a) - 2*B22*a*fAvfBw*gAvetagBwetaeta/(b*b) - 2*B26*(2*fAvfBwxi*gAvetagBweta + fAvxifBw*gAvgBwetaeta)/b - 4*B66*fAvxifBwxi*gAvgBweta/a
                     c += 1
                     k0r[c] = row+2
                     k0c[c] = col+0
-                    k0v[c] = -2*B11*b*fAxixifBxi*gAgB/(a*a) - 2*B12*fAfBxi*gAetaetagB/b - 2*B16*(2*fAxifBxi*gAetagB + fAxixifB*gAgBeta)/a - 2*B26*a*fAfB*gAetaetagBeta/(b*b) - 4*B66*fAxifB*gAetagBeta/b
+                    k0v[c] += -2*B11*b*fAwxixifBuxi*gAwgBu/(a*a) - 2*B12*fAwfBuxi*gAwetaetagBu/b - 2*B16*(2*fAwxifBuxi*gAwetagBu + fAwxixifBu*gAwgBueta)/a - 2*B26*a*fAwfBu*gAwetaetagBueta/(b*b) - 4*B66*fAwxifBu*gAwetagBueta/b
                     c += 1
                     k0r[c] = row+2
                     k0c[c] = col+1
-                    k0v[c] = -2*B12*fAxixifB*gAgBeta/a - 2*B16*b*fAxixifBxi*gAgB/(a*a) - 2*B22*a*fAfB*gAetaetagBeta/(b*b) - 2*B26*(fAfBxi*gAetaetagB + 2*fAxifB*gAetagBeta)/b - 4*B66*fAxifBxi*gAetagB/a
+                    k0v[c] += -2*B12*fAwxixifBv*gAwgBveta/a - 2*B16*b*fAwxixifBvxi*gAwgBv/(a*a) - 2*B22*a*fAwfBv*gAwetaetagBveta/(b*b) - 2*B26*(fAwfBvxi*gAwetaetagBv + 2*fAwxifBv*gAwetagBveta)/b - 4*B66*fAwxifBvxi*gAwetagBv/a
                     c += 1
                     k0r[c] = row+2
                     k0c[c] = col+2
-                    k0v[c] = 4*D11*b*fAxixifBxixi*gAgB/(a*a*a) + 4*D12*(fAfBxixi*gAetaetagB + fAxixifB*gAgBetaeta)/(a*b) + 8*D16*(fAxifBxixi*gAetagB + fAxixifBxi*gAgBeta)/(a*a) + 4*D22*a*fAfB*gAetaetagBetaeta/(b*b*b) + 8*D26*(fAfBxi*gAetaetagBeta + fAxifB*gAetagBetaeta)/(b*b) + 16*D66*fAxifBxi*gAetagBeta/(a*b)
+                    k0v[c] += 4*D11*b*fAwxixifBwxixi*gAwgBw/(a*a*a) + 4*D12*(fAwfBwxixi*gAwetaetagBw + fAwxixifBw*gAwgBwetaeta)/(a*b) + 8*D16*(fAwxifBwxixi*gAwetagBw + fAwxixifBwxi*gAwgBweta)/(a*a) + 4*D22*a*fAwfBw*gAwetaetagBwetaeta/(b*b*b) + 8*D26*(fAwfBwxi*gAwetaetagBweta + fAwxifBw*gAwetagBwetaeta)/(b*b) + 16*D66*fAwxifBwxi*gAwetagBweta/(a*b)
 
     size = num1*m1*n1
 
@@ -175,49 +247,35 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
 
 
 def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
-         double xi1r, double xi1t, double xi2t, double xi2r,
-         double eta1r, double eta1t, double eta2t, double eta2r,
+         double u1t, double u1r, double u2t, double u2r,
+         double v1t, double v1r, double v2t, double v2r,
+         double w1t, double w1r, double w2t, double w2r,
          int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
 
     cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
     cdef np.ndarray[cDOUBLE, ndim=1] kG0v
 
+    cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
+    cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
+
     fdim = 9*m1*m1*n1*n1
-
-    cdef np.ndarray[cDOUBLE, ndim=2] ff, ffxi, fxifxi
-    cdef np.ndarray[cDOUBLE, ndim=2] gg, ggeta, getageta
-
-    ff = np.zeros((nmax, nmax), dtype=DOUBLE)
-    ffxi = np.zeros((nmax, nmax), dtype=DOUBLE)
-    fxifxi = np.zeros((nmax, nmax), dtype=DOUBLE)
-
-    gg = np.zeros((nmax, nmax), dtype=DOUBLE)
-    ggeta = np.zeros((nmax, nmax), dtype=DOUBLE)
-    getageta = np.zeros((nmax, nmax), dtype=DOUBLE)
-
-    calc_ff(ff, xi1t, xi1r, xi2t, xi2r)
-    calc_ffxi(ffxi, xi1t, xi1r, xi2t, xi2r)
-    calc_fxifxi(fxifxi, xi1t, xi1r, xi2t, xi2r)
-
-    calc_ff(gg, eta1t, eta1r, eta2t, eta2r)
-    calc_ffxi(ggeta, eta1t, eta1r, eta2t, eta2r)
-    calc_fxifxi(getageta, eta1t, eta1r, eta2t, eta2r)
 
     kG0r = np.zeros((fdim,), dtype=INT)
     kG0c = np.zeros((fdim,), dtype=INT)
     kG0v = np.zeros((fdim,), dtype=DOUBLE)
 
-    # kG0_11
+    # kG0
 
     c = -1
     for i1 in range(0, m1):
         for k1 in range(0, m1):
 
-            fAfB = ff[i1, k1]
-            fAfBxi = ffxi[i1, k1]
-            fAxifB = ffxi[k1, i1]
-            fAxifBxi = fxifxi[i1, k1]
+            fAwxifBwxi = calc_fxifxi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwfBwxi = calc_ffxi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwxifBw = calc_ffxi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAwfBw = calc_ff(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+
 
             for j1 in range(0, n1):
                 for l1 in range(0, n1):
@@ -228,15 +286,15 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
                     if row > col:
                         continue
 
-                    gAgB = gg[j1, l1]
-                    gAgBeta = ggeta[j1, l1]
-                    gAetagB = ggeta[l1, j1]
-                    gAetagBeta = getageta[j1, l1]
+                    gAwetagBw = calc_ffxi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwgBw = calc_ff(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwgBweta = calc_ffxi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwetagBweta = calc_fxifxi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
 
                     c += 1
                     kG0r[c] = row+2
                     kG0c[c] = col+2
-                    kG0v[c] = Nxx*b*fAxifBxi*gAgB/a + Nxy*(fAfBxi*gAetagB + fAxifB*gAgBeta) + Nyy*a*fAfB*gAetagBeta/b
+                    kG0v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
 
     size = num1*m1*n1
 
@@ -245,627 +303,1421 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
     return kG0
 
 
-cdef void calc_ff(double[:, ::1] v, double xi1t, double xi1r, double xi2t, double xi2r) nogil:
-    v[0, 0] = 0.742857142857143*xi1t**2
-    v[0, 1] = 0.104761904761905*xi1r*xi1t
-    v[0, 2] = 0.257142857142857*xi1t*xi2t
-    v[0, 3] = -0.0619047619047619*xi1t*xi2r
-    v[0, 4] = 0.0666666666666667*xi1t
-    v[0, 5] = -0.0126984126984127*xi1t
-    v[0, 7] = 0.000288600288600289*xi1t
-    v[1, 0] = 0.104761904761905*xi1r*xi1t
-    v[1, 1] = 0.019047619047619*xi1r**2
-    v[1, 2] = 0.0619047619047619*xi1r*xi2t
-    v[1, 3] = -0.0142857142857143*xi1r*xi2r
-    v[1, 4] = 0.0142857142857143*xi1r
-    v[1, 5] = -0.00158730158730159*xi1r
-    v[1, 6] = -0.000529100529100529*xi1r
-    v[1, 7] = 0.000144300144300144*xi1r
-    v[2, 0] = 0.257142857142857*xi1t*xi2t
-    v[2, 1] = 0.0619047619047619*xi1r*xi2t
-    v[2, 2] = 0.742857142857143*xi2t**2
-    v[2, 3] = -0.104761904761905*xi2r*xi2t
-    v[2, 4] = 0.0666666666666667*xi2t
-    v[2, 5] = 0.0126984126984127*xi2t
-    v[2, 7] = -0.000288600288600289*xi2t
-    v[3, 0] = -0.0619047619047619*xi1t*xi2r
-    v[3, 1] = -0.0142857142857143*xi1r*xi2r
-    v[3, 2] = -0.104761904761905*xi2r*xi2t
-    v[3, 3] = 0.019047619047619*xi2r**2
-    v[3, 4] = -0.0142857142857143*xi2r
-    v[3, 5] = -0.00158730158730159*xi2r
-    v[3, 6] = 0.000529100529100529*xi2r
-    v[3, 7] = 0.000144300144300144*xi2r
-    v[4, 0] = 0.0666666666666667*xi1t
-    v[4, 1] = 0.0142857142857143*xi1r
-    v[4, 2] = 0.0666666666666667*xi2t
-    v[4, 3] = -0.0142857142857143*xi2r
-    v[4, 4] = 0.0126984126984127
-    v[4, 6] = -0.000769600769600770
-    v[4, 8] = 4.44000444000444e-5
-    v[5, 0] = -0.0126984126984127*xi1t
-    v[5, 1] = -0.00158730158730159*xi1r
-    v[5, 2] = 0.0126984126984127*xi2t
-    v[5, 3] = -0.00158730158730159*xi2r
-    v[5, 5] = 0.00115440115440115
-    v[5, 7] = -0.000177600177600178
-    v[5, 9] = 1.48000148000148e-5
-    v[6, 1] = -0.000529100529100529*xi1r
-    v[6, 3] = 0.000529100529100529*xi2r
-    v[6, 4] = -0.000769600769600770
-    v[6, 6] = 0.000266400266400266
-    v[6, 8] = -5.92000592000592e-5
-    v[6, 10] = 6.09412374118256e-6
-    v[7, 0] = 0.000288600288600289*xi1t
-    v[7, 1] = 0.000144300144300144*xi1r
-    v[7, 2] = -0.000288600288600289*xi2t
-    v[7, 3] = 0.000144300144300144*xi2r
-    v[7, 5] = -0.000177600177600178
-    v[7, 7] = 8.88000888000888e-5
-    v[7, 9] = -2.43764949647303e-5
-    v[7, 11] = 2.88669019319174e-6
-    v[8, 4] = 4.44000444000444e-5
-    v[8, 6] = -5.92000592000592e-5
-    v[8, 8] = 3.65647424470954e-5
-    v[8, 10] = -1.15467607727670e-5
-    v[8, 12] = 1.51207581548139e-6
-    v[9, 5] = 1.48000148000148e-5
-    v[9, 7] = -2.43764949647303e-5
-    v[9, 9] = 1.73201411591504e-5
-    v[9, 11] = -6.04830326192555e-6
-    v[9, 13] = 8.54651547880785e-7
-    v[10, 6] = 6.09412374118256e-6
-    v[10, 8] = -1.15467607727670e-5
-    v[10, 10] = 9.07245489288833e-6
-    v[10, 12] = -3.41860619152314e-6
-    v[10, 14] = 5.12790928728471e-7
-    v[11, 7] = 2.88669019319174e-6
-    v[11, 9] = -6.04830326192555e-6
-    v[11, 11] = 5.12790928728471e-6
-    v[11, 13] = -2.05116371491388e-6
-    v[11, 15] = 3.22868362532741e-7
-    v[12, 8] = 1.51207581548139e-6
-    v[12, 10] = -3.41860619152314e-6
-    v[12, 12] = 3.07674557237082e-6
-    v[12, 14] = -1.29147345013096e-6
-    v[12, 16] = 2.11534444418003e-7
-    v[13, 9] = 8.54651547880785e-7
-    v[13, 11] = -2.05116371491388e-6
-    v[13, 13] = 1.93721017519645e-6
-    v[13, 15] = -8.46137777672011e-7
-    v[13, 17] = 1.43297526863808e-7
-    v[14, 10] = 5.12790928728471e-7
-    v[14, 12] = -1.29147345013096e-6
-    v[14, 14] = 1.26920666650802e-6
-    v[14, 16] = -5.73190107455233e-7
-    v[14, 18] = 9.98740338747754e-8
-    v[15, 11] = 3.22868362532741e-7
-    v[15, 13] = -8.46137777672011e-7
-    v[15, 15] = 8.59785161182849e-7
-    v[15, 17] = -3.99496135499102e-7
-    v[15, 19] = 7.13385956248396e-8
-    v[16, 12] = 2.11534444418003e-7
-    v[16, 14] = -5.73190107455233e-7
-    v[16, 16] = 5.99244203248653e-7
-    v[16, 18] = -2.85354382499358e-7
-    v[16, 20] = 5.20578941046127e-8
-    v[17, 13] = 1.43297526863808e-7
-    v[17, 15] = -3.99496135499102e-7
-    v[17, 17] = 4.28031573749038e-7
-    v[17, 19] = -2.08231576418451e-7
-    v[17, 21] = 3.87097161290710e-8
-    v[18, 14] = 9.98740338747754e-8
-    v[18, 16] = -2.85354382499358e-7
-    v[18, 18] = 3.12347364627676e-7
-    v[18, 20] = -1.54838864516284e-7
-    v[18, 22] = 2.92683219512488e-8
-    v[19, 15] = 7.13385956248396e-8
-    v[19, 17] = -2.08231576418451e-7
-    v[19, 19] = 2.32258296774426e-7
-    v[19, 21] = -1.17073287804995e-7
-    v[19, 23] = 2.24617354509584e-8
-    v[20, 16] = 5.20578941046127e-8
-    v[20, 18] = -1.54838864516284e-7
-    v[20, 20] = 1.75609931707493e-7
-    v[20, 22] = -8.98469418038335e-8
-    v[20, 24] = 1.74702386840787e-8
-    v[21, 17] = 3.87097161290710e-8
-    v[21, 19] = -1.17073287804995e-7
-    v[21, 21] = 1.34770412705750e-7
-    v[21, 23] = -6.98809547363149e-8
-    v[21, 25] = 1.37531666236364e-8
-    v[22, 18] = 2.92683219512488e-8
-    v[22, 20] = -8.98469418038335e-8
-    v[22, 22] = 1.04821432104472e-7
-    v[22, 24] = -5.50126664945458e-8
-    v[22, 26] = 1.09463979249351e-8
-    v[23, 19] = 2.24617354509584e-8
-    v[23, 21] = -6.98809547363149e-8
-    v[23, 23] = 8.25189997418187e-8
-    v[23, 25] = -4.37855916997405e-8
-    v[23, 27] = 8.80004539063412e-9
-    v[24, 20] = 1.74702386840787e-8
-    v[24, 22] = -5.50126664945458e-8
-    v[24, 24] = 6.56783875496108e-8
-    v[24, 26] = -3.52001815625365e-8
-    v[24, 28] = 7.13965946787297e-9
-    v[25, 21] = 1.37531666236364e-8
-    v[25, 23] = -4.37855916997405e-8
-    v[25, 25] = 5.28002723438047e-8
-    v[25, 27] = -2.85586378714919e-8
-    v[25, 29] = 5.84153956462334e-9
-    v[26, 22] = 1.09463979249351e-8
-    v[26, 24] = -3.52001815625365e-8
-    v[26, 26] = 4.28379568072378e-8
-    v[26, 28] = -2.33661582584934e-8
-    v[27, 23] = 8.80004539063412e-9
-    v[27, 25] = -2.85586378714919e-8
-    v[27, 27] = 3.50492373877400e-8
-    v[27, 29] = -1.92668322482314e-8
-    v[28, 24] = 7.13965946787297e-9
-    v[28, 26] = -2.33661582584934e-8
-    v[28, 28] = 2.89002483723470e-8
-    v[29, 25] = 5.84153956462334e-9
-    v[29, 27] = -1.92668322482314e-8
-    v[29, 29] = 2.40019011905933e-8
+cdef double calc_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                        double y1t, double y1r, double y2t, double y2r) nogil:
+    if i == 0:
+        if j == 0:
+            return 0.742857142857143*x1t*y1t
+        if j == 1:
+            return 0.104761904761905*x1t*y1r
+        if j == 2:
+            return 0.257142857142857*x1t*y2t
+        if j == 3:
+            return -0.0619047619047619*x1t*y2r
+        if j == 4:
+            return 0.0666666666666667*x1t
+        if j == 5:
+            return -0.0126984126984127*x1t
+        if j == 7:
+            return 0.000288600288600289*x1t
+    if i == 1:
+        if j == 0:
+            return 0.104761904761905*x1r*y1t
+        if j == 1:
+            return 0.019047619047619*x1r*y1r
+        if j == 2:
+            return 0.0619047619047619*x1r*y2t
+        if j == 3:
+            return -0.0142857142857143*x1r*y2r
+        if j == 4:
+            return 0.0142857142857143*x1r
+        if j == 5:
+            return -0.00158730158730159*x1r
+        if j == 6:
+            return -0.000529100529100529*x1r
+        if j == 7:
+            return 0.000144300144300144*x1r
+    if i == 2:
+        if j == 0:
+            return 0.257142857142857*x2t*y1t
+        if j == 1:
+            return 0.0619047619047619*x2t*y1r
+        if j == 2:
+            return 0.742857142857143*x2t*y2t
+        if j == 3:
+            return -0.104761904761905*x2t*y2r
+        if j == 4:
+            return 0.0666666666666667*x2t
+        if j == 5:
+            return 0.0126984126984127*x2t
+        if j == 7:
+            return -0.000288600288600289*x2t
+    if i == 3:
+        if j == 0:
+            return -0.0619047619047619*x2r*y1t
+        if j == 1:
+            return -0.0142857142857143*x2r*y1r
+        if j == 2:
+            return -0.104761904761905*x2r*y2t
+        if j == 3:
+            return 0.019047619047619*x2r*y2r
+        if j == 4:
+            return -0.0142857142857143*x2r
+        if j == 5:
+            return -0.00158730158730159*x2r
+        if j == 6:
+            return 0.000529100529100529*x2r
+        if j == 7:
+            return 0.000144300144300144*x2r
+    if i == 4:
+        if j == 0:
+            return 0.0666666666666667*y1t
+        if j == 1:
+            return 0.0142857142857143*y1r
+        if j == 2:
+            return 0.0666666666666667*y2t
+        if j == 3:
+            return -0.0142857142857143*y2r
+        if j == 4:
+            return 0.0126984126984127
+        if j == 6:
+            return -0.000769600769600770
+        if j == 8:
+            return 4.44000444000444e-5
+    if i == 5:
+        if j == 0:
+            return -0.0126984126984127*y1t
+        if j == 1:
+            return -0.00158730158730159*y1r
+        if j == 2:
+            return 0.0126984126984127*y2t
+        if j == 3:
+            return -0.00158730158730159*y2r
+        if j == 5:
+            return 0.00115440115440115
+        if j == 7:
+            return -0.000177600177600178
+        if j == 9:
+            return 1.48000148000148e-5
+    if i == 6:
+        if j == 1:
+            return -0.000529100529100529*y1r
+        if j == 3:
+            return 0.000529100529100529*y2r
+        if j == 4:
+            return -0.000769600769600770
+        if j == 6:
+            return 0.000266400266400266
+        if j == 8:
+            return -5.92000592000592e-5
+        if j == 10:
+            return 6.09412374118256e-6
+    if i == 7:
+        if j == 0:
+            return 0.000288600288600289*y1t
+        if j == 1:
+            return 0.000144300144300144*y1r
+        if j == 2:
+            return -0.000288600288600289*y2t
+        if j == 3:
+            return 0.000144300144300144*y2r
+        if j == 5:
+            return -0.000177600177600178
+        if j == 7:
+            return 8.88000888000888e-5
+        if j == 9:
+            return -2.43764949647303e-5
+        if j == 11:
+            return 2.88669019319174e-6
+    if i == 8:
+        if j == 4:
+            return 4.44000444000444e-5
+        if j == 6:
+            return -5.92000592000592e-5
+        if j == 8:
+            return 3.65647424470954e-5
+        if j == 10:
+            return -1.15467607727670e-5
+        if j == 12:
+            return 1.51207581548139e-6
+    if i == 9:
+        if j == 5:
+            return 1.48000148000148e-5
+        if j == 7:
+            return -2.43764949647303e-5
+        if j == 9:
+            return 1.73201411591504e-5
+        if j == 11:
+            return -6.04830326192555e-6
+        if j == 13:
+            return 8.54651547880785e-7
+    if i == 10:
+        if j == 6:
+            return 6.09412374118256e-6
+        if j == 8:
+            return -1.15467607727670e-5
+        if j == 10:
+            return 9.07245489288833e-6
+        if j == 12:
+            return -3.41860619152314e-6
+        if j == 14:
+            return 5.12790928728471e-7
+    if i == 11:
+        if j == 7:
+            return 2.88669019319174e-6
+        if j == 9:
+            return -6.04830326192555e-6
+        if j == 11:
+            return 5.12790928728471e-6
+        if j == 13:
+            return -2.05116371491388e-6
+        if j == 15:
+            return 3.22868362532741e-7
+    if i == 12:
+        if j == 8:
+            return 1.51207581548139e-6
+        if j == 10:
+            return -3.41860619152314e-6
+        if j == 12:
+            return 3.07674557237082e-6
+        if j == 14:
+            return -1.29147345013096e-6
+        if j == 16:
+            return 2.11534444418003e-7
+    if i == 13:
+        if j == 9:
+            return 8.54651547880785e-7
+        if j == 11:
+            return -2.05116371491388e-6
+        if j == 13:
+            return 1.93721017519645e-6
+        if j == 15:
+            return -8.46137777672011e-7
+        if j == 17:
+            return 1.43297526863808e-7
+    if i == 14:
+        if j == 10:
+            return 5.12790928728471e-7
+        if j == 12:
+            return -1.29147345013096e-6
+        if j == 14:
+            return 1.26920666650802e-6
+        if j == 16:
+            return -5.73190107455233e-7
+        if j == 18:
+            return 9.98740338747754e-8
+    if i == 15:
+        if j == 11:
+            return 3.22868362532741e-7
+        if j == 13:
+            return -8.46137777672011e-7
+        if j == 15:
+            return 8.59785161182849e-7
+        if j == 17:
+            return -3.99496135499102e-7
+        if j == 19:
+            return 7.13385956248396e-8
+    if i == 16:
+        if j == 12:
+            return 2.11534444418003e-7
+        if j == 14:
+            return -5.73190107455233e-7
+        if j == 16:
+            return 5.99244203248653e-7
+        if j == 18:
+            return -2.85354382499358e-7
+        if j == 20:
+            return 5.20578941046127e-8
+    if i == 17:
+        if j == 13:
+            return 1.43297526863808e-7
+        if j == 15:
+            return -3.99496135499102e-7
+        if j == 17:
+            return 4.28031573749038e-7
+        if j == 19:
+            return -2.08231576418451e-7
+        if j == 21:
+            return 3.87097161290710e-8
+    if i == 18:
+        if j == 14:
+            return 9.98740338747754e-8
+        if j == 16:
+            return -2.85354382499358e-7
+        if j == 18:
+            return 3.12347364627676e-7
+        if j == 20:
+            return -1.54838864516284e-7
+        if j == 22:
+            return 2.92683219512488e-8
+    if i == 19:
+        if j == 15:
+            return 7.13385956248396e-8
+        if j == 17:
+            return -2.08231576418451e-7
+        if j == 19:
+            return 2.32258296774426e-7
+        if j == 21:
+            return -1.17073287804995e-7
+        if j == 23:
+            return 2.24617354509584e-8
+    if i == 20:
+        if j == 16:
+            return 5.20578941046127e-8
+        if j == 18:
+            return -1.54838864516284e-7
+        if j == 20:
+            return 1.75609931707493e-7
+        if j == 22:
+            return -8.98469418038335e-8
+        if j == 24:
+            return 1.74702386840787e-8
+    if i == 21:
+        if j == 17:
+            return 3.87097161290710e-8
+        if j == 19:
+            return -1.17073287804995e-7
+        if j == 21:
+            return 1.34770412705750e-7
+        if j == 23:
+            return -6.98809547363149e-8
+        if j == 25:
+            return 1.37531666236364e-8
+    if i == 22:
+        if j == 18:
+            return 2.92683219512488e-8
+        if j == 20:
+            return -8.98469418038335e-8
+        if j == 22:
+            return 1.04821432104472e-7
+        if j == 24:
+            return -5.50126664945458e-8
+        if j == 26:
+            return 1.09463979249351e-8
+    if i == 23:
+        if j == 19:
+            return 2.24617354509584e-8
+        if j == 21:
+            return -6.98809547363149e-8
+        if j == 23:
+            return 8.25189997418187e-8
+        if j == 25:
+            return -4.37855916997405e-8
+        if j == 27:
+            return 8.80004539063412e-9
+    if i == 24:
+        if j == 20:
+            return 1.74702386840787e-8
+        if j == 22:
+            return -5.50126664945458e-8
+        if j == 24:
+            return 6.56783875496108e-8
+        if j == 26:
+            return -3.52001815625365e-8
+        if j == 28:
+            return 7.13965946787297e-9
+    if i == 25:
+        if j == 21:
+            return 1.37531666236364e-8
+        if j == 23:
+            return -4.37855916997405e-8
+        if j == 25:
+            return 5.28002723438047e-8
+        if j == 27:
+            return -2.85586378714919e-8
+        if j == 29:
+            return 5.84153956462334e-9
+    if i == 26:
+        if j == 22:
+            return 1.09463979249351e-8
+        if j == 24:
+            return -3.52001815625365e-8
+        if j == 26:
+            return 4.28379568072378e-8
+        if j == 28:
+            return -2.33661582584934e-8
+    if i == 27:
+        if j == 23:
+            return 8.80004539063412e-9
+        if j == 25:
+            return -2.85586378714919e-8
+        if j == 27:
+            return 3.50492373877400e-8
+        if j == 29:
+            return -1.92668322482314e-8
+    if i == 28:
+        if j == 24:
+            return 7.13965946787297e-9
+        if j == 26:
+            return -2.33661582584934e-8
+        if j == 28:
+            return 2.89002483723470e-8
+    if i == 29:
+        if j == 25:
+            return 5.84153956462334e-9
+        if j == 27:
+            return -1.92668322482314e-8
+        if j == 29:
+            return 2.40019011905933e-8
 
 
-cdef void calc_ffxi(double[:, ::1] v, double xi1t, double xi1r, double xi2t, double xi2r) nogil:
-    v[0, 0] = -0.5*xi1t**2
-    v[0, 1] = 0.1*xi1r*xi1t
-    v[0, 2] = 0.5*xi1t*xi2t
-    v[0, 3] = -0.1*xi1t*xi2r
-    v[0, 4] = 0.0857142857142857*xi1t
-    v[0, 6] = -0.00317460317460317*xi1t
-    v[1, 0] = -0.1*xi1r*xi1t
-    v[1, 2] = 0.1*xi1r*xi2t
-    v[1, 3] = -0.0166666666666667*xi1r*xi2r
-    v[1, 4] = 0.00952380952380952*xi1r
-    v[1, 5] = 0.00476190476190476*xi1r
-    v[1, 6] = -0.00158730158730159*xi1r
-    v[2, 0] = -0.5*xi1t*xi2t
-    v[2, 1] = -0.1*xi1r*xi2t
-    v[2, 2] = 0.5*xi2t**2
-    v[2, 3] = 0.1*xi2r*xi2t
-    v[2, 4] = -0.0857142857142857*xi2t
-    v[2, 6] = 0.00317460317460317*xi2t
-    v[3, 0] = 0.1*xi1t*xi2r
-    v[3, 1] = 0.0166666666666667*xi1r*xi2r
-    v[3, 2] = -0.1*xi2r*xi2t
-    v[3, 4] = 0.00952380952380952*xi2r
-    v[3, 5] = -0.00476190476190476*xi2r
-    v[3, 6] = -0.00158730158730159*xi2r
-    v[4, 0] = -0.0857142857142857*xi1t
-    v[4, 1] = -0.00952380952380952*xi1r
-    v[4, 2] = 0.0857142857142857*xi2t
-    v[4, 3] = -0.00952380952380952*xi2r
-    v[4, 5] = 0.00634920634920635
-    v[4, 7] = -0.000577200577200577
-    v[5, 1] = -0.00476190476190476*xi1r
-    v[5, 3] = 0.00476190476190476*xi2r
-    v[5, 4] = -0.00634920634920635
-    v[5, 6] = 0.00173160173160173
-    v[5, 8] = -0.000222000222000222
-    v[6, 0] = 0.00317460317460317*xi1t
-    v[6, 1] = 0.00158730158730159*xi1r
-    v[6, 2] = -0.00317460317460317*xi2t
-    v[6, 3] = 0.00158730158730159*xi2r
-    v[6, 5] = -0.00173160173160173
-    v[6, 7] = 0.000666000666000666
-    v[6, 9] = -0.000103600103600104
-    v[7, 4] = 0.000577200577200577
-    v[7, 6] = -0.000666000666000666
-    v[7, 8] = 0.000310800310800311
-    v[7, 10] = -5.48471136706431e-5
-    v[8, 5] = 0.000222000222000222
-    v[8, 7] = -0.000310800310800311
-    v[8, 9] = 0.000164541341011929
-    v[8, 11] = -3.17535921251092e-5
-    v[9, 6] = 0.000103600103600104
-    v[9, 8] = -0.000164541341011929
-    v[9, 10] = 9.52607763753275e-5
-    v[9, 12] = -1.96569856012580e-5
-    v[10, 7] = 5.48471136706431e-5
-    v[10, 9] = -9.52607763753275e-5
-    v[10, 11] = 5.89709568037741e-5
-    v[10, 13] = -1.28197732182118e-5
-    v[11, 8] = 3.17535921251092e-5
-    v[11, 10] = -5.89709568037741e-5
-    v[11, 12] = 3.84593196546353e-5
-    v[11, 14] = -8.71744578838400e-6
-    v[12, 9] = 1.96569856012580e-5
-    v[12, 11] = -3.84593196546353e-5
-    v[12, 13] = 2.61523373651520e-5
-    v[12, 15] = -6.13449888812208e-6
-    v[13, 10] = 1.28197732182118e-5
-    v[13, 12] = -2.61523373651520e-5
-    v[13, 14] = 1.84034966643662e-5
-    v[13, 16] = -4.44222333277806e-6
-    v[14, 11] = 8.71744578838400e-6
-    v[14, 13] = -1.84034966643662e-5
-    v[14, 15] = 1.33266699983342e-5
-    v[14, 17] = -3.29584311786759e-6
-    v[15, 12] = 6.13449888812208e-6
-    v[15, 14] = -1.33266699983342e-5
-    v[15, 16] = 9.88752935360277e-6
-    v[15, 18] = -2.49685084686939e-6
-    v[16, 13] = 4.44222333277806e-6
-    v[16, 15] = -9.88752935360277e-6
-    v[16, 17] = 7.49055254060816e-6
-    v[16, 19] = -1.92614208187067e-6
-    v[17, 14] = 3.29584311786759e-6
-    v[17, 16] = -7.49055254060816e-6
-    v[17, 18] = 5.77842624561201e-6
-    v[17, 20] = -1.50967892903377e-6
-    v[18, 15] = 2.49685084686939e-6
-    v[18, 17] = -5.77842624561201e-6
-    v[18, 19] = 4.52903678710130e-6
-    v[18, 21] = -1.20000120000120e-6
-    v[19, 16] = 1.92614208187067e-6
-    v[19, 18] = -4.52903678710130e-6
-    v[19, 20] = 3.60000360000360e-6
-    v[19, 22] = -9.65854624391210e-7
-    v[20, 17] = 1.50967892903377e-6
-    v[20, 19] = -3.60000360000360e-6
-    v[20, 21] = 2.89756387317363e-6
-    v[20, 23] = -7.86160740783543e-7
-    v[21, 18] = 1.20000120000120e-6
-    v[21, 20] = -2.89756387317363e-6
-    v[21, 22] = 2.35848222235063e-6
-    v[21, 24] = -6.46398831310913e-7
-    v[22, 19] = 9.65854624391210e-7
-    v[22, 21] = -2.35848222235063e-6
-    v[22, 23] = 1.93919649393274e-6
-    v[22, 25] = -5.36373498321821e-7
-    v[23, 20] = 7.86160740783543e-7
-    v[23, 22] = -1.93919649393274e-6
-    v[23, 24] = 1.60912049496546e-6
-    v[23, 26] = -4.48802314922340e-7
-    v[24, 21] = 6.46398831310913e-7
-    v[24, 23] = -1.60912049496546e-6
-    v[24, 25] = 1.34640694476702e-6
-    v[24, 27] = -3.78401951797267e-7
-    v[25, 22] = 5.36373498321821e-7
-    v[25, 24] = -1.34640694476702e-6
-    v[25, 26] = 1.13520585539180e-6
-    v[25, 28] = -3.21284676054284e-7
-    v[26, 23] = 4.48802314922340e-7
-    v[26, 25] = -1.13520585539180e-6
-    v[26, 27] = 9.63854028162851e-7
-    v[26, 29] = -2.74552359537297e-7
-    v[27, 24] = 3.78401951797267e-7
-    v[27, 26] = -9.63854028162851e-7
-    v[27, 28] = 8.23657078611891e-7
-    v[28, 25] = 3.21284676054284e-7
-    v[28, 27] = -8.23657078611891e-7
-    v[28, 29] = 7.08056085122503e-7
-    v[29, 26] = 2.74552359537297e-7
-    v[29, 28] = -7.08056085122503e-7
+cdef double calc_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                        double y1t, double y1r, double y2t, double y2r) nogil:
+    if i == 0:
+        if j == 0:
+            return -0.5*x1t*y1t
+        if j == 1:
+            return 0.1*x1t*y1r
+        if j == 2:
+            return 0.5*x1t*y2t
+        if j == 3:
+            return -0.1*x1t*y2r
+        if j == 4:
+            return 0.0857142857142857*x1t
+        if j == 6:
+            return -0.00317460317460317*x1t
+    if i == 1:
+        if j == 0:
+            return -0.1*x1r*y1t
+        if j == 2:
+            return 0.1*x1r*y2t
+        if j == 3:
+            return -0.0166666666666667*x1r*y2r
+        if j == 4:
+            return 0.00952380952380952*x1r
+        if j == 5:
+            return 0.00476190476190476*x1r
+        if j == 6:
+            return -0.00158730158730159*x1r
+    if i == 2:
+        if j == 0:
+            return -0.5*x2t*y1t
+        if j == 1:
+            return -0.1*x2t*y1r
+        if j == 2:
+            return 0.5*x2t*y2t
+        if j == 3:
+            return 0.1*x2t*y2r
+        if j == 4:
+            return -0.0857142857142857*x2t
+        if j == 6:
+            return 0.00317460317460317*x2t
+    if i == 3:
+        if j == 0:
+            return 0.1*x2r*y1t
+        if j == 1:
+            return 0.0166666666666667*x2r*y1r
+        if j == 2:
+            return -0.1*x2r*y2t
+        if j == 4:
+            return 0.00952380952380952*x2r
+        if j == 5:
+            return -0.00476190476190476*x2r
+        if j == 6:
+            return -0.00158730158730159*x2r
+    if i == 4:
+        if j == 0:
+            return -0.0857142857142857*y1t
+        if j == 1:
+            return -0.00952380952380952*y1r
+        if j == 2:
+            return 0.0857142857142857*y2t
+        if j == 3:
+            return -0.00952380952380952*y2r
+        if j == 5:
+            return 0.00634920634920635
+        if j == 7:
+            return -0.000577200577200577
+    if i == 5:
+        if j == 1:
+            return -0.00476190476190476*y1r
+        if j == 3:
+            return 0.00476190476190476*y2r
+        if j == 4:
+            return -0.00634920634920635
+        if j == 6:
+            return 0.00173160173160173
+        if j == 8:
+            return -0.000222000222000222
+    if i == 6:
+        if j == 0:
+            return 0.00317460317460317*y1t
+        if j == 1:
+            return 0.00158730158730159*y1r
+        if j == 2:
+            return -0.00317460317460317*y2t
+        if j == 3:
+            return 0.00158730158730159*y2r
+        if j == 5:
+            return -0.00173160173160173
+        if j == 7:
+            return 0.000666000666000666
+        if j == 9:
+            return -0.000103600103600104
+    if i == 7:
+        if j == 4:
+            return 0.000577200577200577
+        if j == 6:
+            return -0.000666000666000666
+        if j == 8:
+            return 0.000310800310800311
+        if j == 10:
+            return -5.48471136706431e-5
+    if i == 8:
+        if j == 5:
+            return 0.000222000222000222
+        if j == 7:
+            return -0.000310800310800311
+        if j == 9:
+            return 0.000164541341011929
+        if j == 11:
+            return -3.17535921251092e-5
+    if i == 9:
+        if j == 6:
+            return 0.000103600103600104
+        if j == 8:
+            return -0.000164541341011929
+        if j == 10:
+            return 9.52607763753275e-5
+        if j == 12:
+            return -1.96569856012580e-5
+    if i == 10:
+        if j == 7:
+            return 5.48471136706431e-5
+        if j == 9:
+            return -9.52607763753275e-5
+        if j == 11:
+            return 5.89709568037741e-5
+        if j == 13:
+            return -1.28197732182118e-5
+    if i == 11:
+        if j == 8:
+            return 3.17535921251092e-5
+        if j == 10:
+            return -5.89709568037741e-5
+        if j == 12:
+            return 3.84593196546353e-5
+        if j == 14:
+            return -8.71744578838400e-6
+    if i == 12:
+        if j == 9:
+            return 1.96569856012580e-5
+        if j == 11:
+            return -3.84593196546353e-5
+        if j == 13:
+            return 2.61523373651520e-5
+        if j == 15:
+            return -6.13449888812208e-6
+    if i == 13:
+        if j == 10:
+            return 1.28197732182118e-5
+        if j == 12:
+            return -2.61523373651520e-5
+        if j == 14:
+            return 1.84034966643662e-5
+        if j == 16:
+            return -4.44222333277806e-6
+    if i == 14:
+        if j == 11:
+            return 8.71744578838400e-6
+        if j == 13:
+            return -1.84034966643662e-5
+        if j == 15:
+            return 1.33266699983342e-5
+        if j == 17:
+            return -3.29584311786759e-6
+    if i == 15:
+        if j == 12:
+            return 6.13449888812208e-6
+        if j == 14:
+            return -1.33266699983342e-5
+        if j == 16:
+            return 9.88752935360277e-6
+        if j == 18:
+            return -2.49685084686939e-6
+    if i == 16:
+        if j == 13:
+            return 4.44222333277806e-6
+        if j == 15:
+            return -9.88752935360277e-6
+        if j == 17:
+            return 7.49055254060816e-6
+        if j == 19:
+            return -1.92614208187067e-6
+    if i == 17:
+        if j == 14:
+            return 3.29584311786759e-6
+        if j == 16:
+            return -7.49055254060816e-6
+        if j == 18:
+            return 5.77842624561201e-6
+        if j == 20:
+            return -1.50967892903377e-6
+    if i == 18:
+        if j == 15:
+            return 2.49685084686939e-6
+        if j == 17:
+            return -5.77842624561201e-6
+        if j == 19:
+            return 4.52903678710130e-6
+        if j == 21:
+            return -1.20000120000120e-6
+    if i == 19:
+        if j == 16:
+            return 1.92614208187067e-6
+        if j == 18:
+            return -4.52903678710130e-6
+        if j == 20:
+            return 3.60000360000360e-6
+        if j == 22:
+            return -9.65854624391210e-7
+    if i == 20:
+        if j == 17:
+            return 1.50967892903377e-6
+        if j == 19:
+            return -3.60000360000360e-6
+        if j == 21:
+            return 2.89756387317363e-6
+        if j == 23:
+            return -7.86160740783543e-7
+    if i == 21:
+        if j == 18:
+            return 1.20000120000120e-6
+        if j == 20:
+            return -2.89756387317363e-6
+        if j == 22:
+            return 2.35848222235063e-6
+        if j == 24:
+            return -6.46398831310913e-7
+    if i == 22:
+        if j == 19:
+            return 9.65854624391210e-7
+        if j == 21:
+            return -2.35848222235063e-6
+        if j == 23:
+            return 1.93919649393274e-6
+        if j == 25:
+            return -5.36373498321821e-7
+    if i == 23:
+        if j == 20:
+            return 7.86160740783543e-7
+        if j == 22:
+            return -1.93919649393274e-6
+        if j == 24:
+            return 1.60912049496546e-6
+        if j == 26:
+            return -4.48802314922340e-7
+    if i == 24:
+        if j == 21:
+            return 6.46398831310913e-7
+        if j == 23:
+            return -1.60912049496546e-6
+        if j == 25:
+            return 1.34640694476702e-6
+        if j == 27:
+            return -3.78401951797267e-7
+    if i == 25:
+        if j == 22:
+            return 5.36373498321821e-7
+        if j == 24:
+            return -1.34640694476702e-6
+        if j == 26:
+            return 1.13520585539180e-6
+        if j == 28:
+            return -3.21284676054284e-7
+    if i == 26:
+        if j == 23:
+            return 4.48802314922340e-7
+        if j == 25:
+            return -1.13520585539180e-6
+        if j == 27:
+            return 9.63854028162851e-7
+        if j == 29:
+            return -2.74552359537297e-7
+    if i == 27:
+        if j == 24:
+            return 3.78401951797267e-7
+        if j == 26:
+            return -9.63854028162851e-7
+        if j == 28:
+            return 8.23657078611891e-7
+    if i == 28:
+        if j == 25:
+            return 3.21284676054284e-7
+        if j == 27:
+            return -8.23657078611891e-7
+        if j == 29:
+            return 7.08056085122503e-7
+    if i == 29:
+        if j == 26:
+            return 2.74552359537297e-7
+        if j == 28:
+            return -7.08056085122503e-7
 
 
-cdef void calc_ffxixi(double[:, ::1] v, double xi1t, double xi1r, double xi2t, double xi2r) nogil:
-    v[0, 0] = -0.6*xi1t**2
-    v[0, 1] = -0.55*xi1r*xi1t
-    v[0, 2] = 0.6*xi1t*xi2t
-    v[0, 3] = -0.05*xi1t*xi2r
-    v[0, 5] = 0.0285714285714286*xi1t
-    v[1, 0] = -0.05*xi1r*xi1t
-    v[1, 1] = -0.0666666666666667*xi1r**2
-    v[1, 2] = 0.05*xi1r*xi2t
-    v[1, 3] = 0.0166666666666667*xi1r*xi2r
-    v[1, 4] = -0.0333333333333333*xi1r
-    v[1, 5] = 0.0142857142857143*xi1r
-    v[2, 0] = 0.6*xi1t*xi2t
-    v[2, 1] = 0.05*xi1r*xi2t
-    v[2, 2] = -0.6*xi2t**2
-    v[2, 3] = 0.55*xi2r*xi2t
-    v[2, 5] = -0.0285714285714286*xi2t
-    v[3, 0] = -0.05*xi1t*xi2r
-    v[3, 1] = 0.0166666666666667*xi1r*xi2r
-    v[3, 2] = 0.05*xi2r*xi2t
-    v[3, 3] = -0.0666666666666667*xi2r**2
-    v[3, 4] = 0.0333333333333333*xi2r
-    v[3, 5] = 0.0142857142857143*xi2r
-    v[4, 1] = -0.0333333333333333*xi1r
-    v[4, 3] = 0.0333333333333333*xi2r
-    v[4, 4] = -0.0380952380952381
-    v[4, 6] = 0.00634920634920635
-    v[5, 0] = 0.0285714285714286*xi1t
-    v[5, 1] = 0.0142857142857143*xi1r
-    v[5, 2] = -0.0285714285714286*xi2t
-    v[5, 3] = 0.0142857142857143*xi2r
-    v[5, 5] = -0.0126984126984127
-    v[5, 7] = 0.00288600288600289
-    v[6, 4] = 0.00634920634920635
-    v[6, 6] = -0.00577200577200577
-    v[6, 8] = 0.00155400155400155
-    v[7, 5] = 0.00288600288600289
-    v[7, 7] = -0.00310800310800311
-    v[7, 9] = 0.000932400932400932
-    v[8, 6] = 0.00155400155400155
-    v[8, 8] = -0.00186480186480186
-    v[8, 10] = 0.000603318250377074
-    v[9, 7] = 0.000932400932400932
-    v[9, 9] = -0.00120663650075415
-    v[9, 11] = 0.000412796697626419
-    v[10, 8] = 0.000603318250377074
-    v[10, 10] = -0.000825593395252838
-    v[10, 12] = 0.000294854784018871
-    v[11, 9] = 0.000412796697626419
-    v[11, 11] = -0.000589709568037741
-    v[11, 13] = 0.000217936144709600
-    v[12, 10] = 0.000294854784018871
-    v[12, 12] = -0.000435872289419200
-    v[12, 14] = 0.000165631469979296
-    v[13, 11] = 0.000217936144709600
-    v[13, 13] = -0.000331262939958592
-    v[13, 15] = 0.000128824476650564
-    v[14, 12] = 0.000165631469979296
-    v[14, 14] = -0.000257648953301127
-    v[14, 16] = 0.000102171136653895
-    v[15, 13] = 0.000128824476650564
-    v[15, 15] = -0.000204342273307791
-    v[15, 17] = 8.23960779466897e-5
-    v[16, 14] = 0.000102171136653895
-    v[16, 16] = -0.000164792155893379
-    v[16, 18] = 6.74149728654734e-5
-    v[17, 15] = 8.23960779466897e-5
-    v[17, 17] = -0.000134829945730947
-    v[17, 19] = 5.58581203742494e-5
-    v[18, 16] = 6.74149728654734e-5
-    v[18, 18] = -0.000111716240748499
-    v[18, 20] = 4.68000468000468e-5
-    v[19, 17] = 5.58581203742494e-5
-    v[19, 19] = -9.36000936000936e-5
-    v[19, 21] = 3.96000396000396e-5
-    v[20, 18] = 4.68000468000468e-5
-    v[20, 20] = -7.92000792000792e-5
-    v[20, 22] = 3.38049118536923e-5
-    v[21, 19] = 3.96000396000396e-5
-    v[21, 21] = -6.76098237073847e-5
-    v[21, 23] = 2.90879474089911e-5
-    v[22, 20] = 3.38049118536923e-5
-    v[22, 22] = -5.81758948179822e-5
-    v[22, 24] = 2.52095544211256e-5
-    v[23, 21] = 2.90879474089911e-5
-    v[23, 23] = -5.04191088422512e-5
-    v[23, 25] = 2.19913134311947e-5
-    v[24, 22] = 2.52095544211256e-5
-    v[24, 24] = -4.39826268623894e-5
-    v[24, 26] = 1.92984995416606e-5
-    v[25, 23] = 2.19913134311947e-5
-    v[25, 25] = -3.85969990833213e-5
-    v[25, 27] = 1.70280878308770e-5
-    v[26, 24] = 1.92984995416606e-5
-    v[26, 26] = -3.40561756617541e-5
-    v[26, 28] = 1.51003797745513e-5
-    v[27, 25] = 1.70280878308770e-5
-    v[27, 27] = -3.02007595491027e-5
-    v[27, 29] = 1.34530656173275e-5
-    v[28, 26] = 1.51003797745513e-5
-    v[28, 28] = -2.69061312346551e-5
-    v[29, 27] = 1.34530656173275e-5
-    v[29, 29] = -2.40739068941651e-5
+cdef double calc_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                        double y1t, double y1r, double y2t, double y2r) nogil:
+    if i == 0:
+        if j == 0:
+            return -0.6*x1t*y1t
+        if j == 1:
+            return -0.55*x1t*y1r
+        if j == 2:
+            return 0.6*x1t*y2t
+        if j == 3:
+            return -0.05*x1t*y2r
+        if j == 5:
+            return 0.0285714285714286*x1t
+    if i == 1:
+        if j == 0:
+            return -0.05*x1r*y1t
+        if j == 1:
+            return -0.0666666666666667*x1r*y1r
+        if j == 2:
+            return 0.05*x1r*y2t
+        if j == 3:
+            return 0.0166666666666667*x1r*y2r
+        if j == 4:
+            return -0.0333333333333333*x1r
+        if j == 5:
+            return 0.0142857142857143*x1r
+    if i == 2:
+        if j == 0:
+            return 0.6*x2t*y1t
+        if j == 1:
+            return 0.05*x2t*y1r
+        if j == 2:
+            return -0.6*x2t*y2t
+        if j == 3:
+            return 0.55*x2t*y2r
+        if j == 5:
+            return -0.0285714285714286*x2t
+    if i == 3:
+        if j == 0:
+            return -0.05*x2r*y1t
+        if j == 1:
+            return 0.0166666666666667*x2r*y1r
+        if j == 2:
+            return 0.05*x2r*y2t
+        if j == 3:
+            return -0.0666666666666667*x2r*y2r
+        if j == 4:
+            return 0.0333333333333333*x2r
+        if j == 5:
+            return 0.0142857142857143*x2r
+    if i == 4:
+        if j == 1:
+            return -0.0333333333333333*y1r
+        if j == 3:
+            return 0.0333333333333333*y2r
+        if j == 4:
+            return -0.0380952380952381
+        if j == 6:
+            return 0.00634920634920635
+    if i == 5:
+        if j == 0:
+            return 0.0285714285714286*y1t
+        if j == 1:
+            return 0.0142857142857143*y1r
+        if j == 2:
+            return -0.0285714285714286*y2t
+        if j == 3:
+            return 0.0142857142857143*y2r
+        if j == 5:
+            return -0.0126984126984127
+        if j == 7:
+            return 0.00288600288600289
+    if i == 6:
+        if j == 4:
+            return 0.00634920634920635
+        if j == 6:
+            return -0.00577200577200577
+        if j == 8:
+            return 0.00155400155400155
+    if i == 7:
+        if j == 5:
+            return 0.00288600288600289
+        if j == 7:
+            return -0.00310800310800311
+        if j == 9:
+            return 0.000932400932400932
+    if i == 8:
+        if j == 6:
+            return 0.00155400155400155
+        if j == 8:
+            return -0.00186480186480186
+        if j == 10:
+            return 0.000603318250377074
+    if i == 9:
+        if j == 7:
+            return 0.000932400932400932
+        if j == 9:
+            return -0.00120663650075415
+        if j == 11:
+            return 0.000412796697626419
+    if i == 10:
+        if j == 8:
+            return 0.000603318250377074
+        if j == 10:
+            return -0.000825593395252838
+        if j == 12:
+            return 0.000294854784018871
+    if i == 11:
+        if j == 9:
+            return 0.000412796697626419
+        if j == 11:
+            return -0.000589709568037741
+        if j == 13:
+            return 0.000217936144709600
+    if i == 12:
+        if j == 10:
+            return 0.000294854784018871
+        if j == 12:
+            return -0.000435872289419200
+        if j == 14:
+            return 0.000165631469979296
+    if i == 13:
+        if j == 11:
+            return 0.000217936144709600
+        if j == 13:
+            return -0.000331262939958592
+        if j == 15:
+            return 0.000128824476650564
+    if i == 14:
+        if j == 12:
+            return 0.000165631469979296
+        if j == 14:
+            return -0.000257648953301127
+        if j == 16:
+            return 0.000102171136653895
+    if i == 15:
+        if j == 13:
+            return 0.000128824476650564
+        if j == 15:
+            return -0.000204342273307791
+        if j == 17:
+            return 8.23960779466897e-5
+    if i == 16:
+        if j == 14:
+            return 0.000102171136653895
+        if j == 16:
+            return -0.000164792155893379
+        if j == 18:
+            return 6.74149728654734e-5
+    if i == 17:
+        if j == 15:
+            return 8.23960779466897e-5
+        if j == 17:
+            return -0.000134829945730947
+        if j == 19:
+            return 5.58581203742494e-5
+    if i == 18:
+        if j == 16:
+            return 6.74149728654734e-5
+        if j == 18:
+            return -0.000111716240748499
+        if j == 20:
+            return 4.68000468000468e-5
+    if i == 19:
+        if j == 17:
+            return 5.58581203742494e-5
+        if j == 19:
+            return -9.36000936000936e-5
+        if j == 21:
+            return 3.96000396000396e-5
+    if i == 20:
+        if j == 18:
+            return 4.68000468000468e-5
+        if j == 20:
+            return -7.92000792000792e-5
+        if j == 22:
+            return 3.38049118536923e-5
+    if i == 21:
+        if j == 19:
+            return 3.96000396000396e-5
+        if j == 21:
+            return -6.76098237073847e-5
+        if j == 23:
+            return 2.90879474089911e-5
+    if i == 22:
+        if j == 20:
+            return 3.38049118536923e-5
+        if j == 22:
+            return -5.81758948179822e-5
+        if j == 24:
+            return 2.52095544211256e-5
+    if i == 23:
+        if j == 21:
+            return 2.90879474089911e-5
+        if j == 23:
+            return -5.04191088422512e-5
+        if j == 25:
+            return 2.19913134311947e-5
+    if i == 24:
+        if j == 22:
+            return 2.52095544211256e-5
+        if j == 24:
+            return -4.39826268623894e-5
+        if j == 26:
+            return 1.92984995416606e-5
+    if i == 25:
+        if j == 23:
+            return 2.19913134311947e-5
+        if j == 25:
+            return -3.85969990833213e-5
+        if j == 27:
+            return 1.70280878308770e-5
+    if i == 26:
+        if j == 24:
+            return 1.92984995416606e-5
+        if j == 26:
+            return -3.40561756617541e-5
+        if j == 28:
+            return 1.51003797745513e-5
+    if i == 27:
+        if j == 25:
+            return 1.70280878308770e-5
+        if j == 27:
+            return -3.02007595491027e-5
+        if j == 29:
+            return 1.34530656173275e-5
+    if i == 28:
+        if j == 26:
+            return 1.51003797745513e-5
+        if j == 28:
+            return -2.69061312346551e-5
+    if i == 29:
+        if j == 27:
+            return 1.34530656173275e-5
+        if j == 29:
+            return -2.40739068941651e-5
 
 
-cdef void calc_fxifxi(double[:, ::1] v, double xi1t, double xi1r, double xi2t, double xi2r) nogil:
-    v[0, 0] = 0.6*xi1t**2
-    v[0, 1] = 0.05*xi1r*xi1t
-    v[0, 2] = -0.6*xi1t*xi2t
-    v[0, 3] = 0.05*xi1t*xi2r
-    v[0, 5] = -0.0285714285714286*xi1t
-    v[1, 0] = 0.05*xi1r*xi1t
-    v[1, 1] = 0.0666666666666667*xi1r**2
-    v[1, 2] = -0.05*xi1r*xi2t
-    v[1, 3] = -0.0166666666666667*xi1r*xi2r
-    v[1, 4] = 0.0333333333333333*xi1r
-    v[1, 5] = -0.0142857142857143*xi1r
-    v[2, 0] = -0.6*xi1t*xi2t
-    v[2, 1] = -0.05*xi1r*xi2t
-    v[2, 2] = 0.6*xi2t**2
-    v[2, 3] = -0.05*xi2r*xi2t
-    v[2, 5] = 0.0285714285714286*xi2t
-    v[3, 0] = 0.05*xi1t*xi2r
-    v[3, 1] = -0.0166666666666667*xi1r*xi2r
-    v[3, 2] = -0.05*xi2r*xi2t
-    v[3, 3] = 0.0666666666666667*xi2r**2
-    v[3, 4] = -0.0333333333333333*xi2r
-    v[3, 5] = -0.0142857142857143*xi2r
-    v[4, 1] = 0.0333333333333333*xi1r
-    v[4, 3] = -0.0333333333333333*xi2r
-    v[4, 4] = 0.0380952380952381
-    v[4, 6] = -0.00634920634920635
-    v[5, 0] = -0.0285714285714286*xi1t
-    v[5, 1] = -0.0142857142857143*xi1r
-    v[5, 2] = 0.0285714285714286*xi2t
-    v[5, 3] = -0.0142857142857143*xi2r
-    v[5, 5] = 0.0126984126984127
-    v[5, 7] = -0.00288600288600289
-    v[6, 4] = -0.00634920634920635
-    v[6, 6] = 0.00577200577200577
-    v[6, 8] = -0.00155400155400155
-    v[7, 5] = -0.00288600288600289
-    v[7, 7] = 0.00310800310800311
-    v[7, 9] = -0.000932400932400932
-    v[8, 6] = -0.00155400155400155
-    v[8, 8] = 0.00186480186480186
-    v[8, 10] = -0.000603318250377074
-    v[9, 7] = -0.000932400932400932
-    v[9, 9] = 0.00120663650075415
-    v[9, 11] = -0.000412796697626419
-    v[10, 8] = -0.000603318250377074
-    v[10, 10] = 0.000825593395252838
-    v[10, 12] = -0.000294854784018871
-    v[11, 9] = -0.000412796697626419
-    v[11, 11] = 0.000589709568037741
-    v[11, 13] = -0.000217936144709600
-    v[12, 10] = -0.000294854784018871
-    v[12, 12] = 0.000435872289419200
-    v[12, 14] = -0.000165631469979296
-    v[13, 11] = -0.000217936144709600
-    v[13, 13] = 0.000331262939958592
-    v[13, 15] = -0.000128824476650564
-    v[14, 12] = -0.000165631469979296
-    v[14, 14] = 0.000257648953301127
-    v[14, 16] = -0.000102171136653895
-    v[15, 13] = -0.000128824476650564
-    v[15, 15] = 0.000204342273307791
-    v[15, 17] = -8.23960779466897e-5
-    v[16, 14] = -0.000102171136653895
-    v[16, 16] = 0.000164792155893379
-    v[16, 18] = -6.74149728654734e-5
-    v[17, 15] = -8.23960779466897e-5
-    v[17, 17] = 0.000134829945730947
-    v[17, 19] = -5.58581203742494e-5
-    v[18, 16] = -6.74149728654734e-5
-    v[18, 18] = 0.000111716240748499
-    v[18, 20] = -4.68000468000468e-5
-    v[19, 17] = -5.58581203742494e-5
-    v[19, 19] = 9.36000936000936e-5
-    v[19, 21] = -3.96000396000396e-5
-    v[20, 18] = -4.68000468000468e-5
-    v[20, 20] = 7.92000792000792e-5
-    v[20, 22] = -3.38049118536923e-5
-    v[21, 19] = -3.96000396000396e-5
-    v[21, 21] = 6.76098237073847e-5
-    v[21, 23] = -2.90879474089911e-5
-    v[22, 20] = -3.38049118536923e-5
-    v[22, 22] = 5.81758948179822e-5
-    v[22, 24] = -2.52095544211256e-5
-    v[23, 21] = -2.90879474089911e-5
-    v[23, 23] = 5.04191088422512e-5
-    v[23, 25] = -2.19913134311947e-5
-    v[24, 22] = -2.52095544211256e-5
-    v[24, 24] = 4.39826268623894e-5
-    v[24, 26] = -1.92984995416606e-5
-    v[25, 23] = -2.19913134311947e-5
-    v[25, 25] = 3.85969990833213e-5
-    v[25, 27] = -1.70280878308770e-5
-    v[26, 24] = -1.92984995416606e-5
-    v[26, 26] = 3.40561756617541e-5
-    v[26, 28] = -1.51003797745513e-5
-    v[27, 25] = -1.70280878308770e-5
-    v[27, 27] = 3.02007595491027e-5
-    v[27, 29] = -1.34530656173275e-5
-    v[28, 26] = -1.51003797745513e-5
-    v[28, 28] = 2.69061312346551e-5
-    v[29, 27] = -1.34530656173275e-5
-    v[29, 29] = 2.40739068941651e-5
+cdef double calc_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                        double y1t, double y1r, double y2t, double y2r) nogil:
+    if i == 0:
+        if j == 0:
+            return 0.6*x1t*y1t
+        if j == 1:
+            return 0.05*x1t*y1r
+        if j == 2:
+            return -0.6*x1t*y2t
+        if j == 3:
+            return 0.05*x1t*y2r
+        if j == 5:
+            return -0.0285714285714286*x1t
+    if i == 1:
+        if j == 0:
+            return 0.05*x1r*y1t
+        if j == 1:
+            return 0.0666666666666667*x1r*y1r
+        if j == 2:
+            return -0.05*x1r*y2t
+        if j == 3:
+            return -0.0166666666666667*x1r*y2r
+        if j == 4:
+            return 0.0333333333333333*x1r
+        if j == 5:
+            return -0.0142857142857143*x1r
+    if i == 2:
+        if j == 0:
+            return -0.6*x2t*y1t
+        if j == 1:
+            return -0.05*x2t*y1r
+        if j == 2:
+            return 0.6*x2t*y2t
+        if j == 3:
+            return -0.05*x2t*y2r
+        if j == 5:
+            return 0.0285714285714286*x2t
+    if i == 3:
+        if j == 0:
+            return 0.05*x2r*y1t
+        if j == 1:
+            return -0.0166666666666667*x2r*y1r
+        if j == 2:
+            return -0.05*x2r*y2t
+        if j == 3:
+            return 0.0666666666666667*x2r*y2r
+        if j == 4:
+            return -0.0333333333333333*x2r
+        if j == 5:
+            return -0.0142857142857143*x2r
+    if i == 4:
+        if j == 1:
+            return 0.0333333333333333*y1r
+        if j == 3:
+            return -0.0333333333333333*y2r
+        if j == 4:
+            return 0.0380952380952381
+        if j == 6:
+            return -0.00634920634920635
+    if i == 5:
+        if j == 0:
+            return -0.0285714285714286*y1t
+        if j == 1:
+            return -0.0142857142857143*y1r
+        if j == 2:
+            return 0.0285714285714286*y2t
+        if j == 3:
+            return -0.0142857142857143*y2r
+        if j == 5:
+            return 0.0126984126984127
+        if j == 7:
+            return -0.00288600288600289
+    if i == 6:
+        if j == 4:
+            return -0.00634920634920635
+        if j == 6:
+            return 0.00577200577200577
+        if j == 8:
+            return -0.00155400155400155
+    if i == 7:
+        if j == 5:
+            return -0.00288600288600289
+        if j == 7:
+            return 0.00310800310800311
+        if j == 9:
+            return -0.000932400932400932
+    if i == 8:
+        if j == 6:
+            return -0.00155400155400155
+        if j == 8:
+            return 0.00186480186480186
+        if j == 10:
+            return -0.000603318250377074
+    if i == 9:
+        if j == 7:
+            return -0.000932400932400932
+        if j == 9:
+            return 0.00120663650075415
+        if j == 11:
+            return -0.000412796697626419
+    if i == 10:
+        if j == 8:
+            return -0.000603318250377074
+        if j == 10:
+            return 0.000825593395252838
+        if j == 12:
+            return -0.000294854784018871
+    if i == 11:
+        if j == 9:
+            return -0.000412796697626419
+        if j == 11:
+            return 0.000589709568037741
+        if j == 13:
+            return -0.000217936144709600
+    if i == 12:
+        if j == 10:
+            return -0.000294854784018871
+        if j == 12:
+            return 0.000435872289419200
+        if j == 14:
+            return -0.000165631469979296
+    if i == 13:
+        if j == 11:
+            return -0.000217936144709600
+        if j == 13:
+            return 0.000331262939958592
+        if j == 15:
+            return -0.000128824476650564
+    if i == 14:
+        if j == 12:
+            return -0.000165631469979296
+        if j == 14:
+            return 0.000257648953301127
+        if j == 16:
+            return -0.000102171136653895
+    if i == 15:
+        if j == 13:
+            return -0.000128824476650564
+        if j == 15:
+            return 0.000204342273307791
+        if j == 17:
+            return -8.23960779466897e-5
+    if i == 16:
+        if j == 14:
+            return -0.000102171136653895
+        if j == 16:
+            return 0.000164792155893379
+        if j == 18:
+            return -6.74149728654734e-5
+    if i == 17:
+        if j == 15:
+            return -8.23960779466897e-5
+        if j == 17:
+            return 0.000134829945730947
+        if j == 19:
+            return -5.58581203742494e-5
+    if i == 18:
+        if j == 16:
+            return -6.74149728654734e-5
+        if j == 18:
+            return 0.000111716240748499
+        if j == 20:
+            return -4.68000468000468e-5
+    if i == 19:
+        if j == 17:
+            return -5.58581203742494e-5
+        if j == 19:
+            return 9.36000936000936e-5
+        if j == 21:
+            return -3.96000396000396e-5
+    if i == 20:
+        if j == 18:
+            return -4.68000468000468e-5
+        if j == 20:
+            return 7.92000792000792e-5
+        if j == 22:
+            return -3.38049118536923e-5
+    if i == 21:
+        if j == 19:
+            return -3.96000396000396e-5
+        if j == 21:
+            return 6.76098237073847e-5
+        if j == 23:
+            return -2.90879474089911e-5
+    if i == 22:
+        if j == 20:
+            return -3.38049118536923e-5
+        if j == 22:
+            return 5.81758948179822e-5
+        if j == 24:
+            return -2.52095544211256e-5
+    if i == 23:
+        if j == 21:
+            return -2.90879474089911e-5
+        if j == 23:
+            return 5.04191088422512e-5
+        if j == 25:
+            return -2.19913134311947e-5
+    if i == 24:
+        if j == 22:
+            return -2.52095544211256e-5
+        if j == 24:
+            return 4.39826268623894e-5
+        if j == 26:
+            return -1.92984995416606e-5
+    if i == 25:
+        if j == 23:
+            return -2.19913134311947e-5
+        if j == 25:
+            return 3.85969990833213e-5
+        if j == 27:
+            return -1.70280878308770e-5
+    if i == 26:
+        if j == 24:
+            return -1.92984995416606e-5
+        if j == 26:
+            return 3.40561756617541e-5
+        if j == 28:
+            return -1.51003797745513e-5
+    if i == 27:
+        if j == 25:
+            return -1.70280878308770e-5
+        if j == 27:
+            return 3.02007595491027e-5
+        if j == 29:
+            return -1.34530656173275e-5
+    if i == 28:
+        if j == 26:
+            return -1.51003797745513e-5
+        if j == 28:
+            return 2.69061312346551e-5
+    if i == 29:
+        if j == 27:
+            return -1.34530656173275e-5
+        if j == 29:
+            return 2.40739068941651e-5
 
 
-cdef void calc_fxifxixi(double[:, ::1] v, double xi1t, double xi1r, double xi2t, double xi2r) nogil:
-    v[0, 1] = 0.25*xi1r*xi1t
-    v[0, 3] = -0.25*xi1t*xi2r
-    v[0, 4] = 0.2*xi1t
-    v[1, 0] = -0.25*xi1r*xi1t
-    v[1, 1] = -0.125*xi1r**2
-    v[1, 2] = 0.25*xi1r*xi2t
-    v[1, 3] = -0.125*xi1r*xi2r
-    v[1, 4] = 0.1*xi1r
-    v[2, 1] = -0.25*xi1r*xi2t
-    v[2, 3] = 0.25*xi2r*xi2t
-    v[2, 4] = -0.2*xi2t
-    v[3, 0] = 0.25*xi1t*xi2r
-    v[3, 1] = 0.125*xi1r*xi2r
-    v[3, 2] = -0.25*xi2r*xi2t
-    v[3, 3] = 0.125*xi2r**2
-    v[3, 4] = 0.1*xi2r
-    v[4, 0] = -0.2*xi1t
-    v[4, 1] = -0.1*xi1r
-    v[4, 2] = 0.2*xi2t
-    v[4, 3] = -0.1*xi2r
-    v[4, 5] = 0.0571428571428571
-    v[5, 4] = -0.0571428571428571
-    v[5, 6] = 0.0317460317460317
-    v[6, 5] = -0.0317460317460317
-    v[6, 7] = 0.0202020202020202
-    v[7, 6] = -0.0202020202020202
-    v[7, 8] = 0.0139860139860140
-    v[8, 7] = -0.0139860139860140
-    v[8, 9] = 0.0102564102564103
-    v[9, 8] = -0.0102564102564103
-    v[9, 10] = 0.00784313725490196
-    v[10, 9] = -0.00784313725490196
-    v[10, 11] = 0.00619195046439629
-    v[11, 10] = -0.00619195046439629
-    v[11, 12] = 0.00501253132832080
-    v[12, 11] = -0.00501253132832080
-    v[12, 13] = 0.00414078674948240
-    v[13, 12] = -0.00414078674948240
-    v[13, 14] = 0.00347826086956522
-    v[14, 13] = -0.00347826086956522
-    v[14, 15] = 0.00296296296296296
-    v[15, 14] = -0.00296296296296296
-    v[15, 16] = 0.00255427841634738
-    v[16, 15] = -0.00255427841634738
-    v[16, 17] = 0.00222469410456062
-    v[17, 16] = -0.00222469410456062
-    v[17, 18] = 0.00195503421309873
-    v[18, 17] = -0.00195503421309873
-    v[18, 19] = 0.00173160173160173
-    v[19, 18] = -0.00173160173160173
-    v[19, 20] = 0.00154440154440154
-    v[20, 19] = -0.00154440154440154
-    v[20, 21] = 0.00138600138600139
-    v[21, 20] = -0.00138600138600139
-    v[21, 22] = 0.00125078173858662
-    v[22, 21] = -0.00125078173858662
-    v[22, 23] = 0.00113442994895065
-    v[23, 22] = -0.00113442994895065
-    v[23, 24] = 0.00103359173126615
-    v[24, 23] = -0.00103359173126615
-    v[24, 25] = 0.000945626477541371
-    v[25, 24] = -0.000945626477541371
-    v[25, 26] = 0.000868432479374729
-    v[26, 25] = -0.000868432479374729
-    v[26, 27] = 0.000800320128051221
-    v[27, 26] = -0.000800320128051221
-    v[27, 28] = 0.000739918608953015
-    v[28, 27] = -0.000739918608953015
-    v[28, 29] = 0.000686106346483705
-    v[29, 28] = -0.000686106346483705
+cdef double calc_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                        double y1t, double y1r, double y2t, double y2r) nogil:
+    if i == 0:
+        if j == 1:
+            return 0.25*x1t*y1r
+        if j == 3:
+            return -0.25*x1t*y2r
+        if j == 4:
+            return 0.2*x1t
+    if i == 1:
+        if j == 0:
+            return -0.25*x1r*y1t
+        if j == 1:
+            return -0.125*x1r*y1r
+        if j == 2:
+            return 0.25*x1r*y2t
+        if j == 3:
+            return -0.125*x1r*y2r
+        if j == 4:
+            return 0.1*x1r
+    if i == 2:
+        if j == 1:
+            return -0.25*x2t*y1r
+        if j == 3:
+            return 0.25*x2t*y2r
+        if j == 4:
+            return -0.2*x2t
+    if i == 3:
+        if j == 0:
+            return 0.25*x2r*y1t
+        if j == 1:
+            return 0.125*x2r*y1r
+        if j == 2:
+            return -0.25*x2r*y2t
+        if j == 3:
+            return 0.125*x2r*y2r
+        if j == 4:
+            return 0.1*x2r
+    if i == 4:
+        if j == 0:
+            return -0.2*y1t
+        if j == 1:
+            return -0.1*y1r
+        if j == 2:
+            return 0.2*y2t
+        if j == 3:
+            return -0.1*y2r
+        if j == 5:
+            return 0.0571428571428571
+    if i == 5:
+        if j == 4:
+            return -0.0571428571428571
+        if j == 6:
+            return 0.0317460317460317
+    if i == 6:
+        if j == 5:
+            return -0.0317460317460317
+        if j == 7:
+            return 0.0202020202020202
+    if i == 7:
+        if j == 6:
+            return -0.0202020202020202
+        if j == 8:
+            return 0.0139860139860140
+    if i == 8:
+        if j == 7:
+            return -0.0139860139860140
+        if j == 9:
+            return 0.0102564102564103
+    if i == 9:
+        if j == 8:
+            return -0.0102564102564103
+        if j == 10:
+            return 0.00784313725490196
+    if i == 10:
+        if j == 9:
+            return -0.00784313725490196
+        if j == 11:
+            return 0.00619195046439629
+    if i == 11:
+        if j == 10:
+            return -0.00619195046439629
+        if j == 12:
+            return 0.00501253132832080
+    if i == 12:
+        if j == 11:
+            return -0.00501253132832080
+        if j == 13:
+            return 0.00414078674948240
+    if i == 13:
+        if j == 12:
+            return -0.00414078674948240
+        if j == 14:
+            return 0.00347826086956522
+    if i == 14:
+        if j == 13:
+            return -0.00347826086956522
+        if j == 15:
+            return 0.00296296296296296
+    if i == 15:
+        if j == 14:
+            return -0.00296296296296296
+        if j == 16:
+            return 0.00255427841634738
+    if i == 16:
+        if j == 15:
+            return -0.00255427841634738
+        if j == 17:
+            return 0.00222469410456062
+    if i == 17:
+        if j == 16:
+            return -0.00222469410456062
+        if j == 18:
+            return 0.00195503421309873
+    if i == 18:
+        if j == 17:
+            return -0.00195503421309873
+        if j == 19:
+            return 0.00173160173160173
+    if i == 19:
+        if j == 18:
+            return -0.00173160173160173
+        if j == 20:
+            return 0.00154440154440154
+    if i == 20:
+        if j == 19:
+            return -0.00154440154440154
+        if j == 21:
+            return 0.00138600138600139
+    if i == 21:
+        if j == 20:
+            return -0.00138600138600139
+        if j == 22:
+            return 0.00125078173858662
+    if i == 22:
+        if j == 21:
+            return -0.00125078173858662
+        if j == 23:
+            return 0.00113442994895065
+    if i == 23:
+        if j == 22:
+            return -0.00113442994895065
+        if j == 24:
+            return 0.00103359173126615
+    if i == 24:
+        if j == 23:
+            return -0.00103359173126615
+        if j == 25:
+            return 0.000945626477541371
+    if i == 25:
+        if j == 24:
+            return -0.000945626477541371
+        if j == 26:
+            return 0.000868432479374729
+    if i == 26:
+        if j == 25:
+            return -0.000868432479374729
+        if j == 27:
+            return 0.000800320128051221
+    if i == 27:
+        if j == 26:
+            return -0.000800320128051221
+        if j == 28:
+            return 0.000739918608953015
+    if i == 28:
+        if j == 27:
+            return -0.000739918608953015
+        if j == 29:
+            return 0.000686106346483705
+    if i == 29:
+        if j == 28:
+            return -0.000686106346483705
 
 
-cdef void calc_fxixifxixi(double[:, ::1] v, double xi1t, double xi1r, double xi2t, double xi2r) nogil:
-    v[0, 0] = 1.5*xi1t**2
-    v[0, 1] = 0.75*xi1r*xi1t
-    v[0, 2] = -1.5*xi1t*xi2t
-    v[0, 3] = 0.75*xi1t*xi2r
-    v[1, 0] = 0.75*xi1r*xi1t
-    v[1, 1] = 0.5*xi1r**2
-    v[1, 2] = -0.75*xi1r*xi2t
-    v[1, 3] = 0.25*xi1r*xi2r
-    v[2, 0] = -1.5*xi1t*xi2t
-    v[2, 1] = -0.75*xi1r*xi2t
-    v[2, 2] = 1.5*xi2t**2
-    v[2, 3] = -0.75*xi2r*xi2t
-    v[3, 0] = 0.75*xi1t*xi2r
-    v[3, 1] = 0.25*xi1r*xi2r
-    v[3, 2] = -0.75*xi2r*xi2t
-    v[3, 3] = 0.5*xi2r**2
-    v[4, 4] = 0.400000000000000
-    v[5, 5] = 0.285714285714286
-    v[6, 6] = 0.222222222222222
-    v[7, 7] = 0.181818181818182
-    v[8, 8] = 0.153846153846154
-    v[9, 9] = 0.133333333333333
-    v[10, 10] = 0.117647058823529
-    v[11, 11] = 0.105263157894737
-    v[12, 12] = 0.0952380952380952
-    v[13, 13] = 0.0869565217391304
-    v[14, 14] = 0.0800000000000000
-    v[15, 15] = 0.0740740740740741
-    v[16, 16] = 0.0689655172413793
-    v[17, 17] = 0.0645161290322581
-    v[18, 18] = 0.0606060606060606
-    v[19, 19] = 0.0571428571428571
-    v[20, 20] = 0.0540540540540541
-    v[21, 21] = 0.0512820512820513
-    v[22, 22] = 0.0487804878048781
-    v[23, 23] = 0.0465116279069767
-    v[24, 24] = 0.0444444444444444
-    v[25, 25] = 0.0425531914893617
-    v[26, 26] = 0.0408163265306122
-    v[27, 27] = 0.0392156862745098
-    v[28, 28] = 0.0377358490566038
-    v[29, 29] = 0.0363636363636364
+cdef double calc_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                        double y1t, double y1r, double y2t, double y2r) nogil:
+    if i == 0:
+        if j == 0:
+            return 1.5*x1t*y1t
+        if j == 1:
+            return 0.75*x1t*y1r
+        if j == 2:
+            return -1.5*x1t*y2t
+        if j == 3:
+            return 0.75*x1t*y2r
+    if i == 1:
+        if j == 0:
+            return 0.75*x1r*y1t
+        if j == 1:
+            return 0.5*x1r*y1r
+        if j == 2:
+            return -0.75*x1r*y2t
+        if j == 3:
+            return 0.25*x1r*y2r
+    if i == 2:
+        if j == 0:
+            return -1.5*x2t*y1t
+        if j == 1:
+            return -0.75*x2t*y1r
+        if j == 2:
+            return 1.5*x2t*y2t
+        if j == 3:
+            return -0.75*x2t*y2r
+    if i == 3:
+        if j == 0:
+            return 0.75*x2r*y1t
+        if j == 1:
+            return 0.25*x2r*y1r
+        if j == 2:
+            return -0.75*x2r*y2t
+        if j == 3:
+            return 0.5*x2r*y2r
+    if i == 4:
+        if j == 4:
+            return 0.400000000000000
+    if i == 5:
+        if j == 5:
+            return 0.285714285714286
+    if i == 6:
+        if j == 6:
+            return 0.222222222222222
+    if i == 7:
+        if j == 7:
+            return 0.181818181818182
+    if i == 8:
+        if j == 8:
+            return 0.153846153846154
+    if i == 9:
+        if j == 9:
+            return 0.133333333333333
+    if i == 10:
+        if j == 10:
+            return 0.117647058823529
+    if i == 11:
+        if j == 11:
+            return 0.105263157894737
+    if i == 12:
+        if j == 12:
+            return 0.0952380952380952
+    if i == 13:
+        if j == 13:
+            return 0.0869565217391304
+    if i == 14:
+        if j == 14:
+            return 0.0800000000000000
+    if i == 15:
+        if j == 15:
+            return 0.0740740740740741
+    if i == 16:
+        if j == 16:
+            return 0.0689655172413793
+    if i == 17:
+        if j == 17:
+            return 0.0645161290322581
+    if i == 18:
+        if j == 18:
+            return 0.0606060606060606
+    if i == 19:
+        if j == 19:
+            return 0.0571428571428571
+    if i == 20:
+        if j == 20:
+            return 0.0540540540540541
+    if i == 21:
+        if j == 21:
+            return 0.0512820512820513
+    if i == 22:
+        if j == 22:
+            return 0.0487804878048781
+    if i == 23:
+        if j == 23:
+            return 0.0465116279069767
+    if i == 24:
+        if j == 24:
+            return 0.0444444444444444
+    if i == 25:
+        if j == 25:
+            return 0.0425531914893617
+    if i == 26:
+        if j == 26:
+            return 0.0408163265306122
+    if i == 27:
+        if j == 27:
+            return 0.0392156862745098
+    if i == 28:
+        if j == 28:
+            return 0.0377358490566038
+    if i == 29:
+        if j == 29:
+            return 0.0363636363636364

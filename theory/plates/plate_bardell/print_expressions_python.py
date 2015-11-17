@@ -11,8 +11,10 @@ from compmech.conecyl.sympytools import mprint_as_sparse
 var('A11, A12, A16, A22, A26, A66')
 var('B11, B12, B16, B22, B26, B66')
 var('D11, D12, D16, D22, D26, D66')
-var('fA,fAxi,fAxixi,fB,fBxi,fBxixi')
-var('gA,gAeta,gAetaeta,gB,gBeta,gBetaeta')
+var('fAuxi, fBuxi, gAu, gBu, fAu, fBu, gAueta, gBueta')
+var('fAvxi, fBvxi, fAv, fBv, gAv, gBv, gAveta, gBveta')
+var('fAwxixi, fBwxixi, gAw, gBw, fAwxi, fBwxi, gAweta, gBweta')
+var('fAw, fBw, gAwetaeta, gBwetaeta')
 var('a, b, Nxx, Nyy, Nxy')
 
 subs = {
