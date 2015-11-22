@@ -29,8 +29,8 @@ for i, filepath in enumerate(
         string = string.replace('\\','')
         tmp = eval(string)
         matrix = sympy.Matrix(np.atleast_2d(tmp))
-        printstr += '\n\ncdef double calc_%s(int i, int j, double x1t, double x1r, double x2t, double x2r,\n' % names[1]
-        printstr += '                        double y1t, double y1r, double y2t, double y2r) nogil:\n'
+        printstr += '\n\ncdef double %s(int i, int j, double x1t, double x1r, double x2t, double x2r,\n' % names[1]
+        printstr += '                   double y1t, double y1r, double y2t, double y2r) nogil:\n'
         for i in range(matrix.shape[0]):
             activerow = False
             for j in range(matrix.shape[1]):
