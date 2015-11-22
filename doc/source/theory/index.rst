@@ -18,3 +18,4 @@ The details about each implemented module are given below:
    conecyl/index.rst
    fem/index.rst
    meshfree/index.rst
+   func/index.rst
