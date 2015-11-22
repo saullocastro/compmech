@@ -25,11 +25,13 @@ def remove_null_cols(*args):
     args = list(args)
     log('Removing null columns...', level=3)
     num_cols = args[0].shape[1]
+
     if isinstance(args[0], csr_matrix):
         m = args[0]
     else:
         m = csr_matrix(args[0])
-    used_cols = np.unique(m.indices)
+    rows, cols = m.nonzero()
+    used_cols = np.unique(cols)
 
     for i, arg in enumerate(args):
         if isinstance(arg, csr_matrix):
@@ -38,7 +40,7 @@ def remove_null_cols(*args):
             m = csr_matrix(arg)
         m = m[used_cols, :]
         #NOTE below, converting to csc_matrix seems to require more time than
-        #     the slow column slicing for csr_matrix
+        #     the "slow" column slicing for csr_matrix
         m = m[:, used_cols]
         args[i] = m
     args.append(used_cols)
