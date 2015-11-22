@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     40245,        758]
-NotebookOptionsPosition[     39943,        743]
-NotebookOutlinePosition[     40343,        760]
-CellTagsIndexPosition[     40300,        757]
+NotebookDataLength[     40588,        766]
+NotebookOptionsPosition[     40286,        751]
+NotebookOutlinePosition[     40686,        768]
+CellTagsIndexPosition[     40643,        765]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -302,8 +302,10 @@ Cell[BoxData[
     ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"k0", " ", "=", " ", 
-     RowBox[{"a", "*", 
-      RowBox[{"b", "/", "4"}], "*", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"a", "*", 
+        RowBox[{"b", "/", "4"}]}], ")"}], "*", 
       RowBox[{
        RowBox[{"Transpose", "[", "B0A", "]"}], ".", "F", ".", "B0B"}]}]}], 
     ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
@@ -319,8 +321,10 @@ Cell[BoxData[
    "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"kG0", " ", "=", " ", 
-     RowBox[{"a", "*", 
-      RowBox[{"b", "/", "4"}], "*", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"a", "*", 
+        RowBox[{"b", "/", "4"}]}], ")"}], "*", 
       RowBox[{
        RowBox[{"Transpose", "[", "GA", "]"}], ".", "Nmat", ".", "GB"}]}]}], 
     ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
@@ -362,7 +366,8 @@ Cell[BoxData[
     RowBox[{"Write", "[", 
      RowBox[{"s", ",", "kG0"}], "]"}], ";"}], "\[IndentingNewLine]", 
    RowBox[{
-    RowBox[{"Close", "[", "s", "]"}], ";"}], 
+    RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
    "\[IndentingNewLine]"}]}]], "Input",
  CellChangeTimes->{{3.5988751343024645`*^9, 3.598875149345325*^9}, {
    3.5988753108685637`*^9, 3.5988754321825027`*^9}, {3.598875479589214*^9, 
@@ -739,10 +744,13 @@ Cell[BoxData[
    3.6566129907019124`*^9, 3.656613006086051*^9}, {3.656613078342196*^9, 
    3.656613188630226*^9}, {3.6566133074559336`*^9, 3.656613327908396*^9}, {
    3.656694470204178*^9, 3.6566945529115224`*^9}, {3.656695104843125*^9, 
-   3.6566952149889803`*^9}, {3.6566954008774543`*^9, 3.656695486618509*^9}}]
+   3.6566952149889803`*^9}, {3.6566954008774543`*^9, 3.656695486618509*^9}, {
+   3.657053794897332*^9, 3.6570538003297195`*^9}, 3.6570982346521215`*^9, 
+   3.6570986993553324`*^9, 3.657100220004558*^9, {3.657101897372342*^9, 
+   3.657101912622506*^9}}]
 },
-WindowSize->{766, 792},
-WindowMargins->{{Automatic, -7}, {Automatic, 0}},
+WindowSize->{1520, 727},
+WindowMargins->{{0, Automatic}, {Automatic, 5}},
 CellContext->Notebook,
 Magnification->1.100000023841858,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
@@ -759,7 +767,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 39382, 721, 1513, "Input"]
+Cell[557, 20, 39725, 729, 1513, "Input"]
 }
 ]
 *)
