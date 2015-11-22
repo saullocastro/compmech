@@ -162,7 +162,7 @@ class Plate(object):
         self.force_orthotropic_laminate = False
 
         # eigenvalue analysis
-        self.num_eigvalues = 10
+        self.num_eigvalues = 5
         self.num_eigvalues_print = 5
 
         # output queries
@@ -308,24 +308,40 @@ class Plate(object):
         elif 'bardell' in self.model and self.bc is not None:
             # displacement at 4 edges is zero
             # free to rotate at 4 edges (simply supported by default)
-            self.xi1t = 0
-            self.xi1r = 1
-            self.xi2t = 0
-            self.xi2r = 1
-            self.eta1t = 0
-            self.eta1r = 1
-            self.eta2t = 0
-            self.eta2r = 1
+            self.u1tx = 0.
+            self.u1rx = 0.
+            self.u2tx = 0.
+            self.u2rx = 0.
+            self.v1tx = 0.
+            self.v1rx = 0.
+            self.v2tx = 0.
+            self.v2rx = 0.
+            self.w1tx = 0.
+            self.w1rx = 1.
+            self.w2tx = 0.
+            self.w2rx = 1.
+            self.u1ty = 0.
+            self.u1ry = 0.
+            self.u2ty = 0.
+            self.u2ry = 0.
+            self.v1ty = 0.
+            self.v1ry = 0.
+            self.v2ty = 0.
+            self.v2ry = 0.
+            self.w1ty = 0.
+            self.w1ry = 1.
+            self.w2ty = 0.
+            self.w2ry = 1.
             bcs = dict(bc_Bot=bc_Bot, bc_Top=bc_Top,
                        bc_Left=bc_Left, bc_Right=bc_Right)
             if 'cc' in bcs['bc_Bot']:
-                self.xi1r = 0
+                self.w1rx = 0
             if 'cc' in bcs['bc_Top']:
-                self.xi2r = 0
+                self.w2rx = 0
             if 'cc' in bcs['bc_Right']:
-                self.eta1r = 0
+                self.w1ry = 0
             if 'cc' in bcs['bc_Left']:
-                self.eta2r = 0
+                self.w2ry = 0
 
         if self.a is None:
             raise ValueError('The length a must be specified')
@@ -472,71 +488,41 @@ class Plate(object):
 
         self.lam = lam
         self.F = F
-
-        if 'bardell_w' in self.model:
-            factor = (a*b/4.)
-        else:
-            factor = 1.
-        if 'bardell_w' in self.model:
-            k0 = factor*fk0(a, b, F,
-                    self.xi1t, self.xi1r, self.xi2t, self.xi2r,
-                    self.eta1t, self.eta1r, self.eta2t, self.eta2r,
-                    self.m1, self.n1)
-        elif 'bardell' in self.model:
-            k0 = factor*fk0(a, b, F,
-                    0., 1., 0., 1.,
-                    0., 1., 0., 1.,
-                    0., 1., 0., 1.,
-                    self.m1, self.n1)
-        else:
-            k0 = fk0(a, b, F, m1, n1)
-
         Nxx = self.Nxx if self.Nxx is not None else 0.
         Nyy = self.Nyy if self.Nyy is not None else 0.
         Nxy = self.Nxy if self.Nxy is not None else 0.
 
-        if 'bardell_w' in self.model:
+        if 'bardell' in self.model:
+            k0 = fk0(a, b, F,
+                     self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                     self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                     self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                     self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                     self.m1, self.n1)
+        else:
+            k0 = fk0(a, b, F, m1, n1)
+
+        if 'bardell' in self.model:
             if not combined_load_case:
-                kG0 = factor*fkG0(Nxx, Nyy, Nxy, a, b,
-                                  self.xi1t, self.xi1r, self.xi2t, self.xi2r,
-                                  self.eta1t, self.eta1r, self.eta2t,
-                                  self.eta2r, self.m1, self.n1)
+                kG0 = fkG0(Nxx, Nyy, Nxy, a, b,
+                           self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                           self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                           self.m1, self.n1)
             else:
-                kG0_Nxx = factor*fkG0(Nxx, 0, 0, a, b,
-                                  self.xi1t, self.xi1r, self.xi2t, self.xi2r,
-                                  self.eta1t, self.eta1r, self.eta2t,
-                                  self.eta2r, self.m1, self.n1)
-                kG0_Nyy = factor*fkG0(0, Nyy, 0, a, b,
-                                  self.xi1t, self.xi1r, self.xi2t, self.xi2r,
-                                  self.eta1t, self.eta1r, self.eta2t,
-                                  self.eta2r, self.m1, self.n1)
-                kG0_Nxy = factor*fkG0(0, 0, Nxy, a, b,
-                                  self.xi1t, self.xi1r, self.xi2t, self.xi2r,
-                                  self.eta1t, self.eta1r, self.eta2t,
-                                  self.eta2r, self.m1, self.n1)
-        elif 'bardell' in self.model:
-            if not combined_load_case:
-                kG0 = factor*fkG0(Nxx, Nyy, Nxy, a, b,
-                                  0., 1., 0., 1.,
-                                  0., 1., 0., 1.,
-                                  0., 1., 0., 1.,
-                                  self.m1, self.n1)
-            else:
-                kG0_Nxx = factor*fkG0(Nxx, 0, 0, a, b,
-                                  0., 1., 0., 1.,
-                                  0., 1., 0., 1.,
-                                  0., 1., 0., 1.,
-                                  self.m1, self.n1)
-                kG0_Nyy = factor*fkG0(0, Nyy, 0, a, b,
-                                  0., 1., 0., 1.,
-                                  0., 1., 0., 1.,
-                                  0., 1., 0., 1.,
-                                  self.m1, self.n1)
-                kG0_Nxy = factor*fkG0(0, 0, Nxy, a, b,
-                                  0., 1., 0., 1.,
-                                  0., 1., 0., 1.,
-                                  0., 1., 0., 1.,
-                                  self.m1, self.n1)
+                kG0_Nxx = fkG0(Nxx, 0, 0, a, b,
+                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                               self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                               self.m1, self.n1)
+                kG0_Nyy = fkG0(0, Nyy, 0, a, b,
+                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                               self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                               self.m1, self.n1)
+                kG0_Nxy = fkG0(0, 0, Nxy, a, b,
+                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                               self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                               self.m1, self.n1)
         else:
             if not combined_load_case:
                 kG0 = fkG0(Nxx, Nyy, Nxy, a, b, m1, n1)
@@ -551,8 +537,7 @@ class Plate(object):
         assert np.any(np.isinf(k0.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
-        if 'bardell' in self.model:
-            k0 = k0[2::3, 2::3]
+
         if k0edges is not None:
             assert np.any((np.isnan(k0edges.data)
                            | np.isinf(k0edges.data))) == False
@@ -566,8 +551,6 @@ class Plate(object):
         if not combined_load_case:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
             kG0 = csr_matrix(make_symmetric(kG0))
-            if 'bardell' in self.model:
-                kG0 = kG0[2::3, 2::3]
             self.kG0 = kG0
 
         else:
@@ -585,9 +568,6 @@ class Plate(object):
             self.kG0_Nxx = kG0_Nxx
             self.kG0_Nyy = kG0_Nyy
             self.kG0_Nxy = kG0_Nxy
-
-        print 'DEBUG k0.sum()', k0.sum()
-        print 'DEBUG kG0.sum()', kG0.sum()
 
         #NOTE forcing Python garbage collector to clean the memory
         #     it DOES make a difference! There is a memory leak not
@@ -660,13 +640,6 @@ class Plate(object):
             M = self.k0 + self.kG0_Nxx
             A = self.kG0_Nyy
 
-        #print M.max()
-        #raise
-
-        Amin = abs(A.min())
-        # Normlizing A to improve numerical stability
-        A /= Amin
-
         if sparse_solver:
             mode = 'cayley'
             try:
@@ -686,9 +659,6 @@ class Plate(object):
                 eigvecs = np.zeros((sizebkp, self.num_eigvalues),
                                    dtype=DOUBLE)
                 eigvecs[used_cols, :] = peigvecs
-
-            # Un-normlizing eigvals
-            eigvals *= Amin
 
         else:
             from scipy.linalg import eigh
@@ -833,7 +803,6 @@ class Plate(object):
         model = self.model
 
         fuvw = modelDB.db[model]['commons'].fuvw
-        c = np.ascontiguousarray(c)
         us, vs, ws, phixs, phiys = fuvw(c, m1, n1, a, b, xs, ys,
                 self.out_num_cores)
 
@@ -1508,27 +1477,26 @@ class Plate(object):
 
 if __name__ == '__main__':
     p = Plate()
-    p.a = 1000. # mm
-    p.b = 1000. # mm
+    p.a = 2. # m
+    p.b = 1. # m
 
     p.model = 'clpt_donnell_bc1'
-    p.model = 'clpt_donnell_free'
-    p.model = 'clpt_donnell_bardell'
     p.model = 'clpt_donnell_bardell_w'
-    p.laminaprop = (142.5e3, 8.7e3, 0.28, 5.1e3, 5.1e3, 5.1e3, 273.15)
-    p.plyt = 0.125 # mm
+    p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
+    p.plyt = 0.125e-3 # m
     p.stack = [0, +45, -45, 90, -45, +45, 0]
     p.bc = 'ss1-ss1-ss1-ss1'
-    p.m1 = 10
-    p.n1 = 10
+    p.bc = 'cc1-cc1-cc1-cc1'
+
+    p.m1 = 30
+    p.n1 = 30
 
     lb = True
     if lb:
-        p.Nxx = -1.
+        p.Nxy = -1.
 
         p.lb(sparse_solver=True)
-        p.plot(p.eigvecs[:, 0], vec='w', colorbar=True)
-        print p.eigvecs[:,0]
+        p.plot(p.eigvecs[:, 4], vec='w', colorbar=True)
 
     else:
         for yi in linspace(-p.b/2., p.b/2., 100):

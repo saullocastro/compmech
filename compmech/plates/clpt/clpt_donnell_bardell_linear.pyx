@@ -22,18 +22,17 @@ cdef int nmax = 30
 
 
 def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
-        double u1t, double u1r, double u2t, double u2r,
-        double v1t, double v1r, double v2t, double v2r,
-        double w1t, double w1r, double w2t, double w2r,
+        double u1tx, double u1rx, double u2tx, double u2rx,
+        double v1tx, double v1rx, double v2tx, double v2rx,
+        double w1tx, double w1rx, double w2tx, double w2rx,
+        double u1ty, double u1ry, double u2ty, double u2ry,
+        double v1ty, double v1ry, double v2ty, double v2ry,
+        double w1ty, double w1ry, double w2ty, double w2ry,
         int m1, int n1):
     cdef int i1, j1, k1, l1, c, row, col
     cdef double A11, A12, A16, A22, A26, A66
     cdef double B11, B12, B16, B22, B26, B66
     cdef double D11, D12, D16, D22, D26, D66
-    cdef double fAfB, fAfBxi, fAfBxixi, fAxifB, fAxifBxi, fAxifBxixi,
-    cdef double fAxixifB, fAxixifBxi, fAxixifBxixi
-    cdef double gAgB, gAgBeta, gAgBetaeta, gAetagB, gAetagBeta,
-    cdef double gAetagBetaeta, gAetaetagB, gAetaetagBeta, gAetaetagBetaeta
 
     cdef np.ndarray[cINT, ndim=1] k0r, k0c
     cdef np.ndarray[cDOUBLE, ndim=1] k0v
@@ -92,55 +91,55 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
     for i1 in range(0, m1):
         for k1 in range(0, m1):
 
-            fAufBu = calc_ff(i1, k1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
-            fAufBuxi = calc_ffxi(i1, k1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
-            fAuxifBu = calc_ffxi(k1, i1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
-            fAuxifBuxi = calc_fxifxi(i1, k1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
-            fAufBv = calc_ff(i1, k1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
-            fAufBvxi = calc_ffxi(i1, k1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
-            fAuxifBv = calc_ffxi(k1, i1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
-            fAuxifBvxi = calc_fxifxi(i1, k1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
-            fAuxifBwxixi = calc_fxifxixi(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-            fAuxifBw = calc_ffxi(k1, i1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
-            fAufBwxixi = calc_ffxixi(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-            fAuxifBwxi = calc_fxifxi(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-            fAufBw = calc_ff(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-            fAufBwxi = calc_ffxi(i1, k1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-            fAvfBuxi = calc_ffxi(i1, k1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
-            fAvxifBuxi = calc_fxifxi(i1, k1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
-            fAvfBu = calc_ff(i1, k1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
-            fAvxifBu = calc_ffxi(k1, i1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
-            fAvfBv = calc_ff(i1, k1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
-            fAvfBvxi = calc_ffxi(i1, k1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
-            fAvxifBv = calc_ffxi(k1, i1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
-            fAvxifBvxi = calc_fxifxi(i1, k1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
-            fAvfBwxixi = calc_ffxixi(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-            fAvxifBwxixi = calc_fxifxixi(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-            fAvfBw = calc_ff(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-            fAvfBwxi = calc_ffxi(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-            fAvxifBw = calc_ffxi(k1, i1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
-            fAvxifBwxi = calc_fxifxi(i1, k1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-            fAwxixifBuxi = calc_fxifxixi(k1, i1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-            fAwfBuxi = calc_ffxi(i1, k1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
-            fAwxifBuxi = calc_fxifxi(i1, k1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
-            fAwxixifBu = calc_ffxixi(k1, i1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-            fAwfBu = calc_ff(i1, k1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
-            fAwxifBu = calc_ffxi(k1, i1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-            fAwxixifBv = calc_ffxixi(k1, i1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-            fAwxixifBvxi = calc_fxifxixi(k1, i1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-            fAwfBv = calc_ff(i1, k1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
-            fAwfBvxi = calc_ffxi(i1, k1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
-            fAwxifBv = calc_ffxi(k1, i1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-            fAwxifBvxi = calc_fxifxi(i1, k1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
-            fAwxixifBwxixi = calc_fxixifxixi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwfBwxixi = calc_ffxixi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwxixifBw = calc_ffxixi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwxifBwxixi = calc_fxifxixi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwxixifBwxi = calc_fxifxixi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwfBw = calc_ff(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwfBwxi = calc_ffxi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwxifBw = calc_ffxi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwxifBwxi = calc_fxifxi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+            fAufBu = calc_ff(i1, k1, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+            fAufBuxi = calc_ffxi(i1, k1, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+            fAuxifBu = calc_ffxi(k1, i1, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+            fAuxifBuxi = calc_fxifxi(i1, k1, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+            fAufBv = calc_ff(i1, k1, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
+            fAufBvxi = calc_ffxi(i1, k1, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
+            fAuxifBv = calc_ffxi(k1, i1, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
+            fAuxifBvxi = calc_fxifxi(i1, k1, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
+            fAuxifBwxixi = calc_fxifxixi(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAuxifBw = calc_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
+            fAufBwxixi = calc_ffxixi(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAuxifBwxi = calc_fxifxi(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAufBw = calc_ff(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAufBwxi = calc_ffxi(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvfBuxi = calc_ffxi(i1, k1, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
+            fAvxifBuxi = calc_fxifxi(i1, k1, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
+            fAvfBu = calc_ff(i1, k1, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
+            fAvxifBu = calc_ffxi(k1, i1, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvfBv = calc_ff(i1, k1, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvfBvxi = calc_ffxi(i1, k1, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvxifBv = calc_ffxi(k1, i1, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvxifBvxi = calc_fxifxi(i1, k1, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvfBwxixi = calc_ffxixi(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvxifBwxixi = calc_fxifxixi(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvfBw = calc_ff(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvfBwxi = calc_ffxi(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvxifBw = calc_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvxifBwxi = calc_fxifxi(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBuxi = calc_fxifxixi(k1, i1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBuxi = calc_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
+            fAwxifBuxi = calc_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
+            fAwxixifBu = calc_ffxixi(k1, i1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBu = calc_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
+            fAwxifBu = calc_ffxi(k1, i1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBv = calc_ffxixi(k1, i1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBvxi = calc_fxifxixi(k1, i1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBv = calc_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+            fAwfBvxi = calc_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+            fAwxifBv = calc_ffxi(k1, i1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBvxi = calc_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+            fAwxixifBwxixi = calc_fxixifxixi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBwxixi = calc_ffxixi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBw = calc_ffxixi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBwxixi = calc_fxifxixi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBwxi = calc_fxifxixi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBw = calc_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBwxi = calc_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBw = calc_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBwxi = calc_fxifxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
 
             for j1 in range(0, n1):
@@ -152,55 +151,55 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
                     if row > col:
                         continue
 
-                    gAugBu = calc_ff(j1, l1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
-                    gAugBueta = calc_ffxi(j1, l1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
-                    gAuetagBu = calc_ffxi(l1, j1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
-                    gAuetagBueta = calc_fxifxi(j1, l1, u1t, u1r, u2t, u2r, u1t, u1r, u2t, u2r)
-                    gAugBv = calc_ff(j1, l1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
-                    gAugBveta = calc_ffxi(j1, l1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
-                    gAuetagBv = calc_ffxi(l1, j1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
-                    gAuetagBveta = calc_fxifxi(j1, l1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
-                    gAuetagBwetaeta = calc_fxifxixi(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-                    gAuetagBw = calc_ffxi(l1, j1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
-                    gAugBwetaeta = calc_ffxixi(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-                    gAuetagBweta = calc_fxifxi(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-                    gAugBw = calc_ff(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-                    gAugBweta = calc_ffxi(j1, l1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-                    gAvgBueta = calc_ffxi(j1, l1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
-                    gAvetagBueta = calc_fxifxi(j1, l1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
-                    gAvgBu = calc_ff(j1, l1, v1t, v1r, v2t, v2r, u1t, u1r, u2t, u2r)
-                    gAvetagBu = calc_ffxi(l1, j1, u1t, u1r, u2t, u2r, v1t, v1r, v2t, v2r)
-                    gAvgBv = calc_ff(j1, l1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
-                    gAvgBveta = calc_ffxi(j1, l1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
-                    gAvetagBv = calc_ffxi(l1, j1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
-                    gAvetagBveta = calc_fxifxi(j1, l1, v1t, v1r, v2t, v2r, v1t, v1r, v2t, v2r)
-                    gAvgBwetaeta = calc_ffxixi(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-                    gAvetagBwetaeta = calc_fxifxixi(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-                    gAvgBw = calc_ff(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-                    gAvgBweta = calc_ffxi(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-                    gAvetagBw = calc_ffxi(l1, j1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
-                    gAvetagBweta = calc_fxifxi(j1, l1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-                    gAwetaetagBueta = calc_fxifxixi(l1, j1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-                    gAwgBueta = calc_ffxi(j1, l1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
-                    gAwetagBueta = calc_fxifxi(j1, l1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
-                    gAwetaetagBu = calc_ffxixi(l1, j1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-                    gAwgBu = calc_ff(j1, l1, w1t, w1r, w2t, w2r, u1t, u1r, u2t, u2r)
-                    gAwetagBu = calc_ffxi(l1, j1, u1t, u1r, u2t, u2r, w1t, w1r, w2t, w2r)
-                    gAwetaetagBv = calc_ffxixi(l1, j1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-                    gAwetaetagBveta = calc_fxifxixi(l1, j1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-                    gAwgBv = calc_ff(j1, l1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
-                    gAwgBveta = calc_ffxi(j1, l1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
-                    gAwetagBv = calc_ffxi(l1, j1, v1t, v1r, v2t, v2r, w1t, w1r, w2t, w2r)
-                    gAwetagBveta = calc_fxifxi(j1, l1, w1t, w1r, w2t, w2r, v1t, v1r, v2t, v2r)
-                    gAwetaetagBwetaeta = calc_fxixifxixi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwgBwetaeta = calc_ffxixi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwetaetagBw = calc_ffxixi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwetagBwetaeta = calc_fxifxixi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwetaetagBweta = calc_fxifxixi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwgBw = calc_ff(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwgBweta = calc_ffxi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwetagBw = calc_ffxi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwetagBweta = calc_fxifxi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAugBu = calc_ff(j1, l1, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAugBueta = calc_ffxi(j1, l1, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAuetagBu = calc_ffxi(l1, j1, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAuetagBueta = calc_fxifxi(j1, l1, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAugBv = calc_ff(j1, l1, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAugBveta = calc_ffxi(j1, l1, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAuetagBv = calc_ffxi(l1, j1, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAuetagBveta = calc_fxifxi(j1, l1, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAuetagBwetaeta = calc_fxifxixi(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAuetagBw = calc_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAugBwetaeta = calc_ffxixi(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAuetagBweta = calc_fxifxi(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAugBw = calc_ff(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAugBweta = calc_ffxi(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvgBueta = calc_ffxi(j1, l1, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAvetagBueta = calc_fxifxi(j1, l1, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAvgBu = calc_ff(j1, l1, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAvetagBu = calc_ffxi(l1, j1, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvgBv = calc_ff(j1, l1, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvgBveta = calc_ffxi(j1, l1, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvetagBv = calc_ffxi(l1, j1, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvetagBveta = calc_fxifxi(j1, l1, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvgBwetaeta = calc_ffxixi(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvetagBwetaeta = calc_fxifxixi(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvgBw = calc_ff(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvgBweta = calc_ffxi(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvetagBw = calc_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvetagBweta = calc_fxifxi(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBueta = calc_fxifxixi(l1, j1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBueta = calc_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAwetagBueta = calc_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAwetaetagBu = calc_ffxixi(l1, j1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBu = calc_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAwetagBu = calc_ffxi(l1, j1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBv = calc_ffxixi(l1, j1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBveta = calc_fxifxixi(l1, j1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBv = calc_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAwgBveta = calc_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAwetagBv = calc_ffxi(l1, j1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBveta = calc_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAwetaetagBwetaeta = calc_fxixifxixi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBwetaeta = calc_ffxixi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBw = calc_ffxixi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBwetaeta = calc_fxifxixi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBweta = calc_fxifxixi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBw = calc_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBweta = calc_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBw = calc_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBweta = calc_fxifxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
                     k0r[c] = row+0
@@ -247,9 +246,8 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
 
 
 def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
-         double u1t, double u1r, double u2t, double u2r,
-         double v1t, double v1r, double v2t, double v2r,
-         double w1t, double w1r, double w2t, double w2r,
+         double w1tx, double w1rx, double w2tx, double w2rx,
+         double w1ty, double w1ry, double w2ty, double w2ry,
          int m1, int n1):
     cdef int i1, k1, j1, l1, c, row, col
 
@@ -259,7 +257,7 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
     cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
     cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
 
-    fdim = 9*m1*m1*n1*n1
+    fdim = 1*m1*m1*n1*n1
 
     kG0r = np.zeros((fdim,), dtype=INT)
     kG0c = np.zeros((fdim,), dtype=INT)
@@ -271,11 +269,10 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
     for i1 in range(0, m1):
         for k1 in range(0, m1):
 
-            fAwxifBwxi = calc_fxifxi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwfBwxi = calc_ffxi(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwxifBw = calc_ffxi(k1, i1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-            fAwfBw = calc_ff(i1, k1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-
+            fAwxifBwxi = calc_fxifxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBwxi = calc_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBw = calc_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBw = calc_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
             for j1 in range(0, n1):
                 for l1 in range(0, n1):
@@ -286,10 +283,10 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
                     if row > col:
                         continue
 
-                    gAwetagBw = calc_ffxi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwgBw = calc_ff(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwgBweta = calc_ffxi(j1, l1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
-                    gAwetagBweta = calc_fxifxi(l1, j1, w1t, w1r, w2t, w2r, w1t, w1r, w2t, w2r)
+                    gAwetagBw = calc_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBw = calc_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBweta = calc_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBweta = calc_fxifxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
                     kG0r[c] = row+2
@@ -304,7 +301,7 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
 
 
 cdef double calc_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                        double y1t, double y1r, double y2t, double y2r) nogil:
+                    double y1t, double y1r, double y2t, double y2r) nogil:
     if i == 0:
         if j == 0:
             return 0.742857142857143*x1t*y1t
