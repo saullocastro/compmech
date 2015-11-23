@@ -1481,6 +1481,7 @@ if __name__ == '__main__':
     p.b = 1. # m
 
     p.model = 'clpt_donnell_bc1'
+    p.model = 'clpt_donnell_bardell'
     p.model = 'clpt_donnell_bardell_w'
     p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
     p.plyt = 0.125e-3 # m
