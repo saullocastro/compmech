@@ -14,8 +14,6 @@ assumption.
 modules = [
           'clpt_commons_bardell',
           'clpt_donnell_bardell_linear',
-          'clpt_commons_bardell_w',
-          'clpt_donnell_bardell_w_linear',
           ]
 
 for module in modules:

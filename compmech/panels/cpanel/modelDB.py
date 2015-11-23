@@ -12,18 +12,6 @@ from clpt import *
 #from fsdt import *
 
 db = {
-    'clpt_donnell_bardell_w': {
-                    'linear static': True,
-                    'linear buckling': True,
-                    'non-linear static': False,
-                    'commons': clpt_commons_bardell_w,
-                    'linear': clpt_donnell_bardell_w_linear,
-                    'non-linear': None,
-                    'dofs': 3,
-                    'e_num': 6,
-                    'num0': 0,
-                    'num1': 1,
-                    },
     'clpt_donnell_bardell': {
                     'linear static': True,
                     'linear buckling': True,

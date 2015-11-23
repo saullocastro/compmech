@@ -413,6 +413,7 @@ class CPanel(object):
         model = self.model
         a = self.a
         b = self.b
+        r = self.r
         m1 = self.m1
         n1 = self.n1
         laminaprops = self.laminaprops
@@ -466,7 +467,7 @@ class CPanel(object):
         Nxy = self.Nxy if self.Nxy is not None else 0.
 
         if 'bardell' in self.model:
-            k0 = fk0(a, b, F,
+            k0 = fk0(a, b, r, F,
                      self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                      self.v1tx, self.v1rx, self.v2tx, self.v2rx,
                      self.w1tx, self.w1rx, self.w2tx, self.w2rx,
@@ -1452,17 +1453,18 @@ if __name__ == '__main__':
     p = CPanel()
     p.a = 2. # m
     p.b = 1. # m
+    p.r = p.b*2
 
     p.model = 'clpt_donnell_bc1'
-    p.model = 'clpt_donnell_bardell_w'
+    p.model = 'clpt_donnell_bardell'
     p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
     p.plyt = 0.125e-3 # m
     p.stack = [0, +45, -45, 90, -45, +45, 0]
     p.bc = 'ss1-ss1-ss1-ss1'
     p.bc = 'cc1-cc1-cc1-cc1'
 
-    p.m1 = 30
-    p.n1 = 30
+    p.m1 = 10
+    p.n1 = 10
 
     lb = True
     if lb:

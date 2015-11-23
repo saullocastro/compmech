@@ -8,10 +8,6 @@ ext_modules = [
               extra_compile_args=args_linear),
     Extension('clpt_donnell_bardell_linear', ['clpt_donnell_bardell_linear.pyx'],
               extra_compile_args=args_linear),
-    Extension('clpt_commons_bardell_w', ['clpt_commons_bardell_w.pyx'],
-              extra_compile_args=args_linear),
-    Extension('clpt_donnell_bardell_w_linear', ['clpt_donnell_bardell_w_linear.pyx'],
-              extra_compile_args=args_linear),
     ]
 setup(
 name = 'cpanel_clpt',
