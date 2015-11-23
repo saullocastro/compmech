@@ -9,7 +9,6 @@ from __future__ import division
 from scipy.sparse import coo_matrix
 import numpy as np
 cimport numpy as np
-cimport cython
 
 include '../../func/bardell/bardell.pyx'
 
