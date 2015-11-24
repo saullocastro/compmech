@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     78822,       1861]
-NotebookOptionsPosition[     78518,       1846]
-NotebookOutlinePosition[     78919,       1863]
-CellTagsIndexPosition[     78876,       1860]
+NotebookDataLength[     79065,       1870]
+NotebookOptionsPosition[     78761,       1855]
+NotebookOutlinePosition[     79162,       1872]
+CellTagsIndexPosition[     79119,       1869]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -24,7 +24,7 @@ Cell[BoxData[{
    RowBox[{"SetDirectory", "[", 
     RowBox[{
      RowBox[{"NotebookDirectory", "[", "]"}], "<>", "$PathnameSeparator", 
-     "<>", "\"\<output_expressions _mathematica\>\""}], "]"}], ";"}], 
+     "<>", "\"\<output_expressions_mathematica\>\""}], "]"}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -512,7 +512,9 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
-   RowBox[{"s", ",", "kMy1y2"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kMy1y2", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
@@ -521,7 +523,9 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
-   RowBox[{"s", ",", "kAx"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kAx", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
@@ -530,7 +534,9 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
-   RowBox[{"s", ",", "kAy"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kAy", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
@@ -539,7 +545,9 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
-   RowBox[{"s", ",", "cA"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "cA", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
@@ -1842,7 +1850,8 @@ Cell[BoxData[{
    3.6573147912912235`*^9}, {3.6573148339387274`*^9, 3.657314859072728*^9}, {
    3.657315024660161*^9, 3.65731502522272*^9}, {3.6573151553185916`*^9, 
    3.6573152776000333`*^9}, 3.6573153102358522`*^9, {3.657315386354059*^9, 
-   3.657315390369796*^9}}]
+   3.657315390369796*^9}, 3.657315849160017*^9, {3.657315957447778*^9, 
+   3.657315979994988*^9}}]
 },
 WindowSize->{751, 727},
 WindowMargins->{{18, Automatic}, {Automatic, 5}},
@@ -1862,7 +1871,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 77957, 1824, 4970, "Input"]
+Cell[557, 20, 78200, 1833, 4970, "Input"]
 }
 ]
 *)
