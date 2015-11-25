@@ -39,8 +39,8 @@ for i, filepath in enumerate(
                     continue
                 if not activerow:
                     activerow = True
-                    printstr += '    IF (i == %d) THEN\n' % i
-                printstr += '        IF (j == %d) THEN\n' % j
+                    printstr += '    IF (i == %d) THEN\n' % (i+1)
+                printstr += '        IF (j == %d) THEN\n' % (j+1)
                 printstr += '            out = %s\n' % str(matrix[i, j])
                 printstr += '            RETURN\n'
                 printstr += '        END IF\n'
