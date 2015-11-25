@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 from sympy import var, factorial, factorial2, sympify
 
-nmax = 30
+nmax = 40
 
 xi = var('xi')
 var('t1, r1, t2, r2')
