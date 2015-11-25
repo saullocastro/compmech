@@ -18,7 +18,8 @@ subs = {
 def List(*e):
     return list(e)
 
-printstr = ''
+printstr_full = ''
+printstr_12 = ''
 for i, filepath in enumerate(
         glob.glob(r'.\bardell_integrals_mathematica\fortran_*.txt')):
     print(filepath)
@@ -30,10 +31,9 @@ for i, filepath in enumerate(
         lines = [line.strip() for line in f.readlines()]
         string = ''.join(lines)
         string = string.replace('\\','')
-        if '_12' in filepath:
-            continue
         tmp = eval(string)
         print '\tfinished eval'
+        printstr = ''
         if '_12' in filepath:
             name = '_'.join(names[1:3])
             printstr += 'cdef double integral_%s(double xi1, double xi2, int i, int j,\n' % name
@@ -61,6 +61,13 @@ for i, filepath in enumerate(
                 printstr += '            return %s\n' % str(matrix[i, j])
         printstr += '    return 0\n\n\n'
 
+        if '_12' in filepath:
+            printstr_12 += printstr
+        else:
+            printstr_full += printstr
 
-with open('.\\bardell_integrals_python\\bardell_integrals_python.txt', 'w') as f:
-    f.write(printstr)
+
+with open('.\\bardell_integrals_python\\bardell_integrals_python_12.txt', 'w') as f:
+    f.write(printstr_12)
+with open('.\\bardell_integrals_python\\bardell_integrals_python_full.txt', 'w') as f:
+    f.write(printstr_full)
