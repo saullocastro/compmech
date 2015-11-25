@@ -30,17 +30,19 @@ for i, filepath in enumerate(
         lines = [line.strip() for line in f.readlines()]
         string = ''.join(lines)
         string = string.replace('\\','')
+        if '_12' in filepath:
+            continue
         tmp = eval(string)
         print '\tfinished eval'
         if '_12' in filepath:
             name = '_'.join(names[1:3])
-            printstr += '\n\ncdef double %s(double xi1, double xi2, int i, int j,\n' % name
-            printstr += '                   double x1t, double x1r, double x2t, double x2r,\n'
-            printstr += '                   double y1t, double y1r, double y2t, double y2r) nogil:\n'
+            printstr += 'cdef double integral_%s(double xi1, double xi2, int i, int j,\n' % name
+            printstr += '                       double x1t, double x1r, double x2t, double x2r,\n'
+            printstr += '                       double y1t, double y1r, double y2t, double y2r) nogil:\n'
         else:
             name = names[1]
-            printstr += '\n\ncdef double %s(int i, int j, double x1t, double x1r, double x2t, double x2r,\n' % name
-            printstr += '                   double y1t, double y1r, double y2t, double y2r) nogil:\n'
+            printstr += 'cdef double integral_%s(int i, int j, double x1t, double x1r, double x2t, double x2r,\n' % name
+            printstr += '                        double y1t, double y1r, double y2t, double y2r) nogil:\n'
         matrix = sympy.Matrix(np.atleast_2d(tmp))
         for i in range(matrix.shape[0]):
             activerow = False
@@ -49,9 +51,16 @@ for i, filepath in enumerate(
                     continue
                 if not activerow:
                     activerow = True
-                    printstr += '    if i == %d:\n' % i
-                printstr += '        if j == %d:\n' % j
+                    if i == 0:
+                        printstr += '    if i == %d:\n' % i
+                    else:
+                        printstr += '    elif i == %d:\n' % i
+                    printstr += '        if j == %d:\n' % j
+                else:
+                    printstr += '        elif j == %d:\n' % j
                 printstr += '            return %s\n' % str(matrix[i, j])
+        printstr += '    return 0\n\n\n'
+
 
 with open('.\\bardell_integrals_python\\bardell_integrals_python.txt', 'w') as f:
     f.write(printstr)
