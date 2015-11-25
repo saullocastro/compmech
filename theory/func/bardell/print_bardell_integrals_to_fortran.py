@@ -27,11 +27,12 @@ for i, filepath in enumerate(
         string = string.replace('\\','')
         tmp = eval(string)
         matrix = sympy.Matrix(np.atleast_2d(tmp))
-        printstr += 'SUBROUTINE %s(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)\n' % names[1]
-        printstr += '\n'
+        printstr += 'SUBROUTINE integral_%s(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)\n' % names[1]
         printstr += '    INTEGER, INTENT(IN) :: i, j\n'
         printstr += '    REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r\n'
         printstr += '    REAL*8, INTENT(OUT) :: out\n'
+        printstr += '    out = 0\n'
+        printstr += '    SELECT CASE (i)\n'
         for i in range(matrix.shape[0]):
             activerow = False
             for j in range(matrix.shape[1]):
@@ -39,13 +40,14 @@ for i, filepath in enumerate(
                     continue
                 if not activerow:
                     activerow = True
-                    printstr += '    IF (i == %d) THEN\n' % (i+1)
-                printstr += '        IF (j == %d) THEN\n' % (j+1)
+                    printstr += '    CASE (%d)\n' % (i+1)
+                    printstr += '        SELECT CASE (j)\n'
+                printstr += '        CASE (%d)\n' % (j+1)
                 printstr += '            out = %s\n' % str(matrix[i, j])
                 printstr += '            RETURN\n'
-                printstr += '        END IF\n'
-            printstr += '    END IF\n'
-        printstr += 'END SUBROUTINE %s\n\n\n' % names[1]
+            printstr += '        END SELECT\n'
+        printstr += '    END SELECT\n'
+        printstr += 'END SUBROUTINE integral_%s\n\n\n' % names[1]
 
 with open('.\\bardell_integrals_fortran\\bardell_integrals_fortran.txt', 'w') as f:
     f.write(printstr)
