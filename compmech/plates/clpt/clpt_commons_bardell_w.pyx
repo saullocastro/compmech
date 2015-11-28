@@ -80,8 +80,8 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
         xi = (2*x - a)/a
         eta = (2*y - b)/b
 
-        calc_fxi(fxi, xi)
-        calc_fxi(feta, eta)
+        calc_vec_f(fxi, xi)
+        calc_vec_f(feta, eta)
 
         w = 0
 
@@ -114,8 +114,8 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
     xi = (2*x - a)/a
     eta = (2*y - b)/b
 
-    calc_fxi(fxi, xi)
-    calc_fxi(feta, eta)
+    calc_vec_f(fxi, xi)
+    calc_vec_f(feta, eta)
 
     for i1 in range(m1):
         for j1 in range(n1):

@@ -1453,7 +1453,7 @@ if __name__ == '__main__':
     p = CPanel()
     p.a = 2. # m
     p.b = 1. # m
-    p.r = p.b*2
+    p.r = 10*p.b
 
     p.model = 'clpt_donnell_bc1'
     p.model = 'clpt_donnell_bardell'
@@ -1463,15 +1463,15 @@ if __name__ == '__main__':
     p.bc = 'ss1-ss1-ss1-ss1'
     p.bc = 'cc1-cc1-cc1-cc1'
 
-    p.m1 = 10
-    p.n1 = 10
+    p.m1 = 15
+    p.n1 = 15
 
     lb = True
     if lb:
-        p.Nxy = -1.
+        p.Nxx = -1.
 
         p.lb(sparse_solver=True)
-        p.plot(p.eigvecs[:, 4], vec='w', colorbar=True)
+        p.plot(p.eigvecs[:, 0], vec='w', colorbar=True)
 
     else:
         for yi in linspace(-p.b/2., p.b/2., 100):
