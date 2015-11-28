@@ -19,15 +19,20 @@ def List(*e):
     return list(e)
 
 printstr_full = ''
-printstr_full_h = ''
 printstr_12 = ''
+printstr_full_h = ''
 printstr_12_h = ''
+
+printstr_full += '#include <stdlib.h>\n'
+printstr_full += '#include <math.h>\n\n'
+
+printstr_12 += '#include <stdlib.h>\n'
+printstr_12 += '#include <math.h>\n\n'
+
 for i, filepath in enumerate(
         glob.glob(r'.\bardell_integrals_mathematica\fortran_*.txt')):
     print(filepath)
     with open(filepath) as f:
-        #if filepath != r'.\bardell_integrals_mathematica\fortran_ff_12.txt':
-            #continue
         filename = os.path.basename(filepath)
         names = filename[:-4].split('_')
         lines = [line.strip() for line in f.readlines()]
@@ -72,7 +77,7 @@ for i, filepath in enumerate(
                 printstr += '            return %s;\n' % star2Cpow(str(matrix[i, j]))
         printstr += '              }\n'
         printstr += '    }\n'
-        printstr += '    return 0\n'
+        printstr += '    return 0;\n'
         printstr += '}\n'
 
         if '_12' in filepath:
