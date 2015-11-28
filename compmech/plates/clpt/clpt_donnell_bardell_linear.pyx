@@ -139,7 +139,7 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
             fAwfBw = integral_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwfBwxi = integral_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwxifBw = integral_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBwxi = integral_fxifxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBwxi = integral_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
 
             for j1 in range(0, n1):
@@ -199,7 +199,7 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
                     gAwgBw = integral_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
                     gAwgBweta = integral_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
                     gAwetagBw = integral_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBweta = integral_fxifxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBweta = integral_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
                     k0r[c] = row+0
@@ -269,7 +269,7 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
     for i1 in range(0, m1):
         for k1 in range(0, m1):
 
-            fAwxifBwxi = integral_fxifxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBwxi = integral_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwfBwxi = integral_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwxifBw = integral_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwfBw = integral_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
@@ -286,7 +286,7 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
                     gAwetagBw = integral_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
                     gAwgBw = integral_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
                     gAwgBweta = integral_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBweta = integral_fxifxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBweta = integral_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
                     kG0r[c] = row+2
