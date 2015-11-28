@@ -83,14 +83,14 @@ for i, filepath in enumerate(
             printstr_full_h += printstr_h
 
 
-with open('.\\bardell_integrals_C\\bardell.h', 'w') as g:
+with open(r'..\..\..\C\bardell\bardell.h', 'w') as g:
     g.write(printstr_full_h)
 
-with open('.\\bardell_integrals_C\\bardell.c', 'w') as g:
+with open(r'..\..\..\C\bardell\bardell.c', 'w') as g:
     g.write(printstr_full)
 
-with open('.\\bardell_integrals_C\\bardell_12.h', 'w') as g:
+with open(r'..\..\..\C\bardell\bardell_12.h', 'w') as g:
     g.write(printstr_12_h)
 
-with open('.\\bardell_integrals_C\\bardell_12.c', 'w') as g:
+with open(r'..\..\..\C\bardell\bardell_12.c', 'w') as g:
     g.write(printstr_12)
