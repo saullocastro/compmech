@@ -58,7 +58,7 @@ for i, filepath in enumerate(
                     printstr += '        if j == %d:\n' % j
                 else:
                     printstr += '        elif j == %d:\n' % j
-                printstr += '            return %s\n' % str(matrix[i, j])
+                printstr += '            return %s\n' % str(matrix[i, j].expand())
         printstr += '    return 0\n\n\n'
 
         if '_12' in filepath:
