@@ -15,8 +15,15 @@ var('fAuxi, fBuxi, gAu, gBu, fAu, fBu, gAueta, gBueta')
 var('fAvxi, fBvxi, fAv, fBv, gAv, gBv, gAveta, gBveta')
 var('fAwxixi, fBwxixi, gAw, gBw, fAwxi, fBwxi, gAweta, gBweta')
 var('fAw, fBw, gAwetaeta, gBwetaeta')
-var('r, a, b, Nxx, Nyy, Nxy')
-var('aeromu, beta, gamma, h, mu, d')
+
+var('rAuxi, rBuxi, sAu, sBu, rAu, rBu, sAueta, sBueta')
+var('rAvxi, rBvxi, rAv, rBv, sAv, sBv, sAveta, sBveta')
+var('rAwxixi, rBwxixi, sAw, sBw, rAwxi, rBwxi, sAweta, sBweta')
+var('rAw, rBw, sAwetaeta, sBwetaeta')
+
+var('r, a, b, bf, Nxx, Nyy, Nxy')
+var('aeromu, beta, gamma, h, hf, mu, d')
+var('kt, kr')
 
 subs = {
        }
