@@ -19,10 +19,10 @@ def List(*e):
     return list(e)
 
 printstr_full = ''
-printstr_12 = ''
 for i, filepath in enumerate(
         glob.glob(r'.\bardell_integrals_mathematica\fortran_*.txt')):
     print(filepath)
+    printstr_12 = ''
     with open(filepath) as f:
         #if filepath != r'.\bardell_integrals_mathematica\fortran_ff_12.txt':
             #continue
@@ -39,6 +39,8 @@ for i, filepath in enumerate(
             printstr += 'cdef double integral_%s(double xi1, double xi2, int i, int j,\n' % name
             printstr += '                       double x1t, double x1r, double x2t, double x2r,\n'
             printstr += '                       double y1t, double y1r, double y2t, double y2r) nogil:\n'
+            with open('.\\bardell_integrals_python\\bardell_%s.pxd' % name, 'w') as g:
+                g.write(printstr.replace(':', ''))
         else:
             name = names[1]
             printstr += 'cdef double integral_%s(int i, int j, double x1t, double x1r, double x2t, double x2r,\n' % name
@@ -63,11 +65,11 @@ for i, filepath in enumerate(
 
         if '_12' in filepath:
             printstr_12 += printstr
+            with open('.\\bardell_integrals_python\\bardell_%s.pyx' % name, 'w') as g:
+                g.write(printstr_12)
         else:
             printstr_full += printstr
 
 
-with open('.\\bardell_integrals_python\\bardell_integrals_python_12.txt', 'w') as f:
-    f.write(printstr_12)
-with open('.\\bardell_integrals_python\\bardell_integrals_python_full.txt', 'w') as f:
-    f.write(printstr_full)
+with open('.\\bardell_integrals_python\\bardell_integrals_python_full.txt', 'w') as g:
+    g.write(printstr_full)
