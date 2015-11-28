@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <math.h>
+
 double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
@@ -416,7 +419,7 @@ double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
             return 2.40019011905933e-8;
               }
     }
-    return 0
+    return 0;
 }
 double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
@@ -772,7 +775,7 @@ double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2
             return -7.08056085122503e-7;
               }
     }
-    return 0
+    return 0;
 }
 double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
@@ -1072,7 +1075,7 @@ double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double 
             return -2.40739068941651e-5;
               }
     }
-    return 0
+    return 0;
 }
 double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
@@ -1372,7 +1375,7 @@ double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double 
             return 2.40739068941651e-5;
               }
     }
-    return 0
+    return 0;
 }
 double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
@@ -1608,7 +1611,7 @@ double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, doubl
             return -0.000686106346483705;
               }
     }
-    return 0
+    return 0;
 }
 double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
@@ -1788,5 +1791,5 @@ double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, dou
             return 0.0363636363636364;
               }
     }
-    return 0
+    return 0;
 }
