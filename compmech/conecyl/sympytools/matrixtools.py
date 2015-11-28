@@ -5,6 +5,64 @@ import sympy
 from sympy import collect, var, sin, cos, pi
 
 
+def pow2mult(instr):
+    """Power to multiplications
+
+    Substitutes x**5 by x*x*x*x*x
+
+    Parameters
+    ----------
+    instr : str
+        The input string
+
+    Returns
+    -------
+    outstr : str
+        The output string
+
+    """
+    old_new = []
+    for p in re.findall(r'\w+\*\*\d+', instr):
+        var, exp = p.split('**')
+        new = '(' + '*'.join([var]*int(exp)) + ')'
+        old_new.append([p, new])
+    # putting longer patterns first to avoid wrong
+    # substitutions
+    old_new = sorted(old_new, key=lambda x: len(x[0]))[::-1]
+    outstr = instr
+    for old, new in old_new:
+        outstr = outstr.replace(old, new)
+    return outstr
+
+
+def star2Cpow(instr):
+    """Transforms x**y to pow(x, y)
+
+    Parameters
+    ----------
+    instr : str
+        The input string
+
+    Returns
+    -------
+    outstr : str
+        The output string
+
+    """
+    old_new = []
+    for p in re.findall(r'\w+\*\*\d+', instr):
+        var, exp = p.split('**')
+        new = 'pow(%s, %s)' % (var, exp)
+        old_new.append([p, new])
+    # putting longer patterns first to avoid wrong
+    # substitutions
+    old_new = sorted(old_new, key=lambda x: len(x[0]))[::-1]
+    outstr = instr
+    for old, new in old_new:
+        outstr = outstr.replace(old, new)
+    return outstr
+
+
 def mprint_as_sparse(m, mname, sufix, subs=None,
         header=None, print_file=True, collect_for=None,
         pow_by_mul=True, full_symmetric=False):
@@ -54,17 +112,7 @@ def mprint_as_sparse(m, mname, sufix, subs=None,
                     ls.append('    {expr}'.format(expr=k*expr))
             else:
                 if pow_by_mul:
-                    v = str(v)
-                    old_new = []
-                    for p in re.findall(r'\w+\*\*\d+', v):
-                        var, exp = p.split('**')
-                        new = '(' + '*'.join([var]*int(exp)) + ')'
-                        old_new.append([p, new])
-                    # putting longer patterns first to avoid wrong
-                    # substitutions
-                    old_new = sorted(old_new, key=lambda x: len(x[0]))[::-1]
-                    for old, new in old_new:
-                        v = v.replace(old, new)
+                    v = pow2mult(str(v))
                 ls.append('{mname}v[c] += {v}'.format(mname=mname, v=v))
 
     string = '\n'.join(ls)
