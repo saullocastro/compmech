@@ -10,17 +10,45 @@ from scipy.sparse import coo_matrix
 import numpy as np
 cimport numpy as np
 
-cdef extern from 'bardell_ff_12.h':
-    double integral_ff_12
-cdef extern from 'bardell_ffxi_12.h':
-    double integral_ffxi_12
-from bardell_ffxixi_12 cimport integral_ffxixi_12
-from bardell_fxifxi_12 cimport integral_fxifxi_12
-from bardell_fxifxixi_12 cimport integral_fxifxixi_12
-from bardell_fxixifxixi_12 cimport integral_fxixifxixi_12
+cdef extern from 'bardell.h':
+    double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
 
+cdef extern from 'bardell_12.h':
+    double integral_ff_12(double xi1, double xi2, int i, int j,
+                       double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_ffxi_12(double xi1, double xi2, int i, int j,
+                       double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_ffxixi_12(double xi1, double xi2, int i, int j,
+                       double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxifxi_12(double xi1, double xi2, int i, int j,
+                       double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxifxixi_12(double xi1, double xi2, int i, int j,
+                       double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxixifxixi_12(double xi1, double xi2, int i, int j,
+                       double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
 
-include '../../../func/bardell/bardell.pyx'
+cdef extern from 'bardell_functions.h':
+    double calc_f(int i, double xi, double xi1t, double xi1r,
+                  double xi2t, double xi2r)
+    double calc_fxi(int i, double xi, double xi1t, double xi1r,
+                    double xi2t, double xi2r)
 
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64

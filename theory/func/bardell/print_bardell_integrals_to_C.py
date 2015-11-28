@@ -74,7 +74,7 @@ for i, filepath in enumerate(
                     printstr += '    case %d:\n' % i
                     printstr += '        switch(j) {\n'
                 printstr += '        case %d:\n' % j
-                printstr += '            return %s;\n' % star2Cpow(str(matrix[i, j]))
+                printstr += '            return %s;\n' % star2Cpow(str(matrix[i, j].expand()))
         printstr += '              }\n'
         printstr += '    }\n'
         printstr += '    return 0;\n'

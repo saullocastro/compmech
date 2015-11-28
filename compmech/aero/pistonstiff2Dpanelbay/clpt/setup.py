@@ -1,7 +1,10 @@
 import os
 from distutils.core import setup
 from distutils.extension import Extension
-from Cython.Distutils import build_ext
+from Cython.Build import cythonize
+
+import sys
+sys.path.append(r'C:\repos\compmech\compmech\func\bardell')
 
 if os.name == 'nt':
     args_linear = ['/openmp', '/O2', '/favor:INTEL64']
@@ -9,15 +12,17 @@ if os.name == 'nt':
 else:
     args_linear = ['-O3']
     args_nonlinear = ['-O3']
-ext_modules = [
-    Extension('clpt_commons_bc1', ['clpt_commons_bc1.pyx'],
-              extra_compile_args=args_linear),
 
-    Extension('clpt_donnell_bc1_linear', ['clpt_donnell_bc1_linear.pyx'],
-              extra_compile_args=args_linear),
-    ]
+extensions = [Extension('clpt_donnell_bardell_linear',
+                        ['clpt_donnell_bardell_linear.pyx',
+                         '../../../../C/bardell/bardell.c',
+                         '../../../../C/bardell/bardell_12.c',
+                         '../../../../C/bardell/bardell_functions.c',
+                        ]),
+             ]
+
+ext_modules = cythonize(extensions)
 setup(
 name = 'aeropistonstiff2Dpanel_clpt',
-cmdclass = {'build_ext': build_ext},
 ext_modules = ext_modules
 )
