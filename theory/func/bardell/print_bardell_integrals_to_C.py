@@ -92,5 +92,5 @@ with open('.\\bardell_integrals_C\\bardell.c', 'w') as g:
 with open('.\\bardell_integrals_C\\bardell_12.h', 'w') as g:
     g.write(printstr_12_h)
 
-with open('.\\bardell_integrals_C\\bardell_12.c' % name, 'w') as g:
+with open('.\\bardell_integrals_C\\bardell_12.c', 'w') as g:
     g.write(printstr_12)
