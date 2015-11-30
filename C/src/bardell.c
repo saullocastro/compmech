@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <math.h>
 
-double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                   double y1t, double y1r, double y2t, double y2r) {
+__declspec(dllexport) double integral_ff(int i, int j, double x1t, double x1r,
+        double x2t, double x2r, double y1t, double y1r, double y2t, double
+        y2r) {
     switch(i) {
     case 0:
         switch(j) {
@@ -421,7 +422,8 @@ double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
     }
     return 0;
 }
-double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+
+__declspec(dllexport) double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
     case 0:
@@ -777,7 +779,8 @@ double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2
     }
     return 0;
 }
-double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+
+__declspec(dllexport) double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
     case 0:
@@ -1077,7 +1080,8 @@ double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double 
     }
     return 0;
 }
-double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+
+__declspec(dllexport) double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
     case 0:
@@ -1377,7 +1381,8 @@ double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double 
     }
     return 0;
 }
-double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+
+__declspec(dllexport) double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
     case 0:
@@ -1613,7 +1618,8 @@ double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, doubl
     }
     return 0;
 }
-double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+
+__declspec(dllexport) double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                    double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
     case 0:
