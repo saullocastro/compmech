@@ -43,19 +43,20 @@ for i, filepath in enumerate(
         printstr = ''
         if '_12' in filepath:
             name = '_'.join(names[1:3])
-            printstr += 'double integral_%s(double xi1, double xi2, int i, int j,\n' % name
+            printstr += '__declspec(dllexport) double integral_%s(double xi1, double xi2, int i, int j,\n' % name
             printstr += '                   double x1t, double x1r, double x2t, double x2r,\n'
             printstr += '                   double y1t, double y1r, double y2t, double y2r) {\n'
 
         else:
             name = names[1]
-            printstr += 'double integral_%s(int i, int j, double x1t, double x1r, double x2t, double x2r,\n' % name
-            printstr += '                   double y1t, double y1r, double y2t, double y2r) {\n'
+            printstr += '__declspec(dllexport) double integral_%s(int i, int j,\n' % name
+            printstr += '           double x1t, double x1r, double x2t, double x2r,\n'
+            printstr += '           double y1t, double y1r, double y2t, double y2r) {\n'
 
         printstr_h = '\n'
         printstr_h += '#ifndef BARDELL_%s_H\n' % name.upper()
         printstr_h += '#define BARDELL_%s_H\n' % name.upper()
-        printstr_h += printstr.replace(' {', ';')
+        printstr_h += printstr.replace(' {', ';').replace('dllexport', 'dllimport')
         printstr_h += '#endif /** BARDELL_%s_H */\n' % name.upper()
         printstr_h += '\n'
 
@@ -88,14 +89,14 @@ for i, filepath in enumerate(
             printstr_full_h += printstr_h
 
 
-with open(r'..\..\..\C\bardell\bardell.h', 'w') as g:
+with open(r'..\..\..\C\include\bardell.h', 'w') as g:
     g.write(printstr_full_h)
 
-with open(r'..\..\..\C\bardell\bardell.c', 'w') as g:
+with open(r'..\..\..\C\src\bardell.c', 'w') as g:
     g.write(printstr_full)
 
-with open(r'..\..\..\C\bardell\bardell_12.h', 'w') as g:
+with open(r'..\..\..\C\include\bardell_12.h', 'w') as g:
     g.write(printstr_12_h)
 
-with open(r'..\..\..\C\bardell\bardell_12.c', 'w') as g:
+with open(r'..\..\..\C\src\bardell_12.c', 'w') as g:
     g.write(printstr_12)
