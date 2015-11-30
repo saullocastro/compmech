@@ -20,51 +20,51 @@ for r in range(5, nmax+1):
         utmp.append((-1)**n*factorial2(2*r - 2*n - 7)/den * xi**(r-2*n-1)/1.)
     u.append(sum(utmp))
 
-with open('../../../C/bardell/bardell_functions.c', 'w') as f:
+with open('../../../C/src/bardell_functions.c', 'w') as f:
     f.write("// Bardell's hierarchical functions\n\n")
     f.write('// Number of terms: {0}\n\n'.format(len(u)))
     f.write('#include <stdlib.h>\n')
     f.write('#include <math.h>\n\n')
-    f.write('void calc_vec_f(double *f, double xi, double xi1t, double xi1r,\n' +
-            '                double xi2t, double xi2r) {\n')
+    f.write('__declspec(dllexport) void calc_vec_f(double *f, double xi,\n' +
+            '           double xi1t, double xi1r, double xi2t, double xi2r) {\n')
     consts = {0:'xi1t', 1:'xi1r', 2:'xi2t', 3:'xi2r'}
     for i in range(len(u)):
         const = consts.get(i)
         if const is None:
-            f.write('    f[%d] = %s;\n' % (i, str(u[i])))
+            f.write('    f[%d] = %s;\n' % (i, star2Cpow(str(u[i]))))
         else:
-            f.write('    f[%d] = %s*(%s);\n' % (i, const, str(u[i])))
+            f.write('    f[%d] = %s*(%s);\n' % (i, const, star2Cpow(str(u[i]))))
     f.write('}\n')
 
     f.write('\n\n')
-    f.write('void calc_vec_fxi(double *fxi, double xi, double xi1t, double xi1r,\n' +
-            '                  double xi2t, double xi2r) {\n')
+    f.write('__declspec(dllexport) void calc_vec_fxi(double *fxi, double xi,\n' +
+            '           double xi1t, double xi1r, double xi2t, double xi2r) {\n')
     for i in range(len(u)):
         const = consts.get(i)
         if const is None:
-            f.write('    fxi[%d] = %s;\n' % (i, str(diff(u[i], xi))))
+            f.write('    fxi[%d] = %s;\n' % (i, star2Cpow(str(diff(u[i], xi)))))
         else:
             f.write('    fxi[%d] = %s*(%s);\n' % (i, const, star2Cpow(str(diff(u[i], xi)))))
     f.write('}\n')
 
     f.write('\n\n')
 
-    f.write('double calc_f(int i, double xi, double xi1t, double xi1r,\n' +
-            '              double xi2t, double xi2r) {\n')
+    f.write('__declspec(dllexport) double calc_f(int i, double xi,\n' +
+            '           double xi1t, double xi1r, double xi2t, double xi2r) {\n')
     f.write('    switch(i) {\n')
     for i in range(len(u)):
         const = consts.get(i)
         f.write('    case %d:\n' % i)
         if const is None:
-            f.write('        return %s;\n' % str(u[i]))
+            f.write('        return %s;\n' % star2Cpow(str(u[i])))
         else:
             f.write('        return %s*(%s);\n' % (const, star2Cpow(str(u[i]))))
     f.write('    }\n')
     f.write('}\n')
 
     f.write('\n\n')
-    f.write('double calc_fxi(int i, double xi, double xi1t, double xi1r,\n' +
-            '                double xi2t, double xi2r) {\n')
+    f.write('__declspec(dllexport) double calc_fxi(int i, double xi,\n' +
+            '           double xi1t, double xi1r, double xi2t, double xi2r) {\n')
     f.write('    switch(i) {\n')
     for i in range(len(u)):
         const = consts.get(i)
@@ -76,15 +76,20 @@ with open('../../../C/bardell/bardell_functions.c', 'w') as f:
     f.write('    }\n')
     f.write('}\n')
 
-with open('../../../C/bardell/bardell_functions.h', 'w') as g:
-    g.write('void calc_vec_f(double *f, double xi, double xi1t, double xi1r,\n' +
-            '                double xi2t, double xi2r);\n')
+with open('../../../C/include/bardell_functions.h', 'w') as g:
+    g.write('#ifndef BARDELL_FUNCTIONS_H\n')
+    g.write('#define BARDELL_FUNCTIONS_H\n')
     g.write('\n')
-    g.write('void calc_vec_fxi(double *fxi, double xi, double xi1t, double xi1r,\n' +
-            '                  double xi2t, double xi2r);\n')
+    g.write('__declspec(dllimport) void calc_vec_f(double *f, double xi,\n' +
+            '        double xi1t, double xi1r,double xi2t, double xi2r);\n')
     g.write('\n')
-    g.write('double calc_f(int i, double xi, double xi1t, double xi1r,\n' +
-            '              double xi2t, double xi2r);\n')
+    g.write('__declspec(dllimport) void calc_vec_fxi(double *fxi, double xi,\n' +
+            '        double xi1t, double xi1r,double xi2t, double xi2r);\n')
     g.write('\n')
-    g.write('double calc_fxi(int i, double xi, double xi1t, double xi1r,\n' +
-            '                double xi2t, double xi2r);\n')
+    g.write('__declspec(dllimport) double calc_f(int i, double xi,\n' +
+            '        double xi1t, double xi1r, double xi2t, double xi2r);\n')
+    g.write('\n')
+    g.write('__declspec(dllimport) double calc_fxi(int i, double xi,\n' +
+            '        double xi1t, double xi1r, double xi2t, double xi2r);\n')
+    g.write('\n')
+    g.write('#endif /** BARDELL_FUNCTIONS_H */')
