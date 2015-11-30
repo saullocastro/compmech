@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-__declspec(dllexport) void calc_vec_f(double *f, double xi, double xi1t, double xi1r,
-                double xi2t, double xi2r) {
+__declspec(dllexport) void calc_vec_f(double *f, double xi,
+           double xi1t, double xi1r, double xi2t, double xi2r) {
     f[0] = xi1t*(0.25*pow(xi, 3) - 0.75*xi + 0.5);
     f[1] = xi1r*(0.125*pow(xi, 3) - 0.125*pow(xi, 2) - 0.125*xi + 0.125);
     f[2] = xi2t*(-0.25*pow(xi, 3) + 0.75*xi + 0.5);
@@ -40,8 +40,8 @@ __declspec(dllexport) void calc_vec_f(double *f, double xi, double xi1t, double 
 }
 
 
-__declspec(dllexport) void calc_vec_fxi(double *fxi, double xi, double xi1t, double xi1r,
-                  double xi2t, double xi2r) {
+__declspec(dllexport) void calc_vec_fxi(double *fxi, double xi,
+           double xi1t, double xi1r, double xi2t, double xi2r) {
     fxi[0] = xi1t*(0.75*pow(xi, 2) - 0.75);
     fxi[1] = xi1r*(0.375*pow(xi, 2) - 0.25*xi - 0.125);
     fxi[2] = xi2t*(-0.75*pow(xi, 2) + 0.75);
@@ -75,8 +75,8 @@ __declspec(dllexport) void calc_vec_fxi(double *fxi, double xi, double xi1t, dou
 }
 
 
-__declspec(dllexport) double calc_f(int i, double xi, double xi1t, double xi1r,
-              double xi2t, double xi2r) {
+__declspec(dllexport) double calc_f(int i, double xi,
+           double xi1t, double xi1r, double xi2t, double xi2r) {
     switch(i) {
     case 0:
         return xi1t*(0.25*pow(xi, 3) - 0.75*xi + 0.5);
@@ -142,8 +142,8 @@ __declspec(dllexport) double calc_f(int i, double xi, double xi1t, double xi1r,
 }
 
 
-__declspec(dllexport) double calc_fxi(int i, double xi, double xi1t, double xi1r,
-                double xi2t, double xi2r) {
+__declspec(dllexport) double calc_fxi(int i, double xi,
+           double xi1t, double xi1r, double xi2t, double xi2r) {
     switch(i) {
     case 0:
         return xi1t*(0.75*pow(xi, 2) - 0.75);
