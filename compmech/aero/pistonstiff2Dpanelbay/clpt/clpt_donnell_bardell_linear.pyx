@@ -798,7 +798,7 @@ def fk0f(double a, double bf, np.ndarray[cDOUBLE, ndim=2] F, int m1, int n1,
     return k0f
 
 
-def fkMf(double mu, double ys, double hf, double a, double bf, double d,
+def fkMf(double mu, double hf, double a, double bf, double d,
          int m1, int n1,
          double u1txf, double u1rxf, double u2txf, double u2rxf,
          double v1txf, double v1rxf, double v2txf, double v2rxf,
@@ -1118,7 +1118,8 @@ def fkCss(double kt, double kr, double ys, double a, double b, int m, int n,
     return kCss
 
 
-def fkG0f(double Nxx, double Nyy, double Nxy, double a, double bf, int m1, int n1,
+def fkG0f(double Nxx, double Nyy, double Nxy, double a, double bf,
+          int m1, int n1,
           double w1txf, double w1rxf, double w2txf, double w2rxf,
           double w1tyf, double w1ryf, double w2tyf, double w2ryf,
           int size, int row0, int col0):
