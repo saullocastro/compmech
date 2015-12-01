@@ -10,10 +10,17 @@ else:
     args_linear = ['-O3']
     args_nonlinear = ['-O3']
 
-extensions = [Extension('clpt_donnell_bardell_linear',
+extensions = [
+               Extension('clpt_donnell_bardell_linear',
                         ['clpt_donnell_bardell_linear.pyx'],
                         libraries=['bardell', 'bardell_12',
                         'bardell_functions'],
+                        language='c',
+                        extra_compile_args=args_linear,
+                        ),
+               Extension('clpt_commons_bardell',
+                        ['clpt_commons_bardell.pyx'],
+                        libraries=['bardell_functions'],
                         language='c',
                         extra_compile_args=args_linear,
                         ),

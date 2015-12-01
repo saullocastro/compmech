@@ -11,7 +11,7 @@ import __main__
 
 import numpy as np
 from scipy.sparse import csr_matrix
-from scipy.sparse.linalg import eigs
+from scipy.sparse.linalg import eigs, eigsh
 from scipy.linalg import eig, eigh
 from numpy import linspace
 
@@ -120,6 +120,32 @@ class Stiffener2D(object):
         self.kG0_Nxx = None
         self.kG0_Nxy = None
 
+        self.u1txf = 0.
+        self.u1rxf = 0.
+        self.u2txf = 0.
+        self.u2rxf = 0.
+        self.v1txf = 0.
+        self.v1rxf = 0.
+        self.v2txf = 0.
+        self.v2rxf = 0.
+        self.w1txf = 0.
+        self.w1rxf = 1.
+        self.w2txf = 0.
+        self.w2rxf = 1.
+
+        self.u1tyf = 1.
+        self.u1ryf = 1.
+        self.u2tyf = 1.
+        self.u2ryf = 1.
+        self.v1tyf = 1.
+        self.v1ryf = 1.
+        self.v2tyf = 1.
+        self.v2ryf = 1.
+        self.w1tyf = 1.
+        self.w1ryf = 1.
+        self.w2tyf = 1.
+        self.w2ryf = 1.
+
         self.rebuild()
 
 
@@ -189,7 +215,7 @@ class AeroPistonStiff2DPanelBay(object):
         self.kphiyRight = 0.
 
         # default equations
-        self.model = 'clpt_donnell_bc1'
+        self.model = 'clpt_donnell_bardell'
 
         # approximation series
         self.m = 11
@@ -289,82 +315,31 @@ class AeroPistonStiff2DPanelBay(object):
                  ' numerical instability for higher values', level=2)
             inf = self.maxinf
 
-        if self.bc is not None:
-            bc = self.bc.lower()
+        self.u1tx = 0.
+        self.u1rx = 0.
+        self.u2tx = 0.
+        self.u2rx = 0.
+        self.v1tx = 0.
+        self.v1rx = 0.
+        self.v2tx = 0.
+        self.v2rx = 0.
+        self.w1tx = 0.
+        self.w1rx = 1.
+        self.w2tx = 0.
+        self.w2rx = 1.
 
-            if '_' in bc:
-                # different bc for Bot, Top, Left and Right
-                bc_Bot, bc_Top, bc_Left, bc_Right = self.bc.split('_')
-            elif '-' in bc:
-                # different bc for Bot, Top, Left and Right
-                bc_Bot, bc_Top, bc_Left, bc_Right = self.bc.split('-')
-            else:
-                bc_Bot = bc_Top = bc_Left = bc_Right = bc
-
-            bcs = dict(bc_Bot=bc_Bot, bc_Top=bc_Top,
-                       bc_Left=bc_Left, bc_Right=bc_Right)
-            for k in bcs.keys():
-                sufix = k.split('_')[1] # Bot or Top
-                if bcs[k] == 'ss1':
-                    setattr(self, 'ku' + sufix, inf)
-                    setattr(self, 'kv' + sufix, inf)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-                elif bcs[k] == 'ss2':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, inf)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-                elif bcs[k] == 'ss3':
-                    setattr(self, 'ku' + sufix, inf)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-                elif bcs[k] == 'ss4':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-
-                elif bcs[k] == 'cc1':
-                    setattr(self, 'ku' + sufix, inf)
-                    setattr(self, 'kv' + sufix, inf)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, inf)
-                    setattr(self, 'kphiy' + sufix, inf)
-                elif bcs[k] == 'cc2':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, inf)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, inf)
-                    setattr(self, 'kphiy' + sufix, inf)
-                elif bcs[k] == 'cc3':
-                    setattr(self, 'ku' + sufix, inf)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, inf)
-                    setattr(self, 'kphiy' + sufix, inf)
-                elif bcs[k] == 'cc4':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, inf)
-                    setattr(self, 'kphiy' + sufix, inf)
-
-                elif bcs[k] == 'free':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, zero)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-
-                else:
-                    txt = '"{0}" is not a valid boundary condition!'.format(bc)
-                    raise ValueError(txt)
+        self.u1ty = 0.
+        self.u1ry = 0.
+        self.u2ty = 0.
+        self.u2ry = 0.
+        self.v1ty = 0.
+        self.v1ry = 0.
+        self.v2ty = 0.
+        self.v2ry = 0.
+        self.w1ty = 0.
+        self.w1ry = 1.
+        self.w2ty = 0.
+        self.w2ry = 1.
 
         if self.a is None:
             raise ValueError('The length a must be specified')
@@ -487,7 +462,14 @@ class AeroPistonStiff2DPanelBay(object):
             panel.F = F
 
             # calculating panel stiffness matrices
-            panel.k0 = mod.fk0y1y2(y1, y2, a, b, r, m, n, F, size, 0, 0)
+            panel.k0 = mod.fk0y1y2(y1, y2, a, b, r, F, m, n,
+                     self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                     self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                     self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                     self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                     size, 0, 0)
 
             if False:
                 panel.k0edges = fk0edges(m, n, a, b,
@@ -496,7 +478,15 @@ class AeroPistonStiff2DPanelBay(object):
 
             if calc_kM:
                 h = sum(panel.plyts)
-                panel.kM = mod.fkMy1y2(y1, y2, mu, 0., h, a, b, m, n)
+                panel.kM = mod.fkMy1y2(y1, y2, mu, 0., h, a, b, m, n,
+                                    self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                                    self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                    self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                                    self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                                    self.w1ty, self.w1ry, self.w2ty,
+                                    self.w2ry,
+                                    size, 0, 0)
 
             if calc_kG0:
                 Nxx = panel.Nxx if panel.Nxx is not None else 0.
@@ -505,14 +495,26 @@ class AeroPistonStiff2DPanelBay(object):
 
                 if not combined_load_case:
                     panel.kG0 = mod.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r,
-                                             m, n, size, 0, 0)
+                                             m, n,
+                                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                                    size, 0, 0)
                 else:
                     panel.kG0_Nxx = mod.fkG0y1y2(y1, y2, Nxx, 0, 0, a, b, r,
-                                                 m, n, size, 0, 0)
+                                                 m, n,
+                                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                                    size, 0, 0)
                     panel.kG0_Nyy = mod.fkG0y1y2(y1, y2, 0, Nyy, 0, a, b, r,
-                                                 m, n, size, 0, 0)
+                                                 m, n,
+                                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                                    size, 0, 0)
                     panel.kG0_Nxy = mod.fkG0y1y2(y1, y2, 0, 0, Nxy, a, b, r,
-                                                 m, n, size, 0, 0)
+                                                 m, n,
+                                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                                    size, 0, 0)
 
             #TODO summing up coo_matrix objects may be very slow!
             k0 += panel.k0
@@ -539,9 +541,22 @@ class AeroPistonStiff2DPanelBay(object):
                 Fsb = s.blam.ABD
                 y1 = s.ys - s.bb/2.
                 y2 = s.ys + s.bb/2.
-                k0 += mod.fk0y1y2(y1, y2, a, b, r, m, n, Fsb, size, 0, 0)
+                k0 += mod.fk0y1y2(y1, y2, a, b, r, Fsb, m, n,
+                                  self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                                  self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                                  self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                  self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                                  self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                                  self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                                  size, 0, 0)
                 if calc_kM:
                     kM += mod.fkMy1y2(y1, y2, s.mu, s.db, s.hb, a, b, m, n,
+                                  self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                                  self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                                  self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                  self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                                  self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                                  self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                                   size, 0, 0)
 
             kt = self.inf
@@ -553,21 +568,64 @@ class AeroPistonStiff2DPanelBay(object):
                     s_1 = self.stiffeners[i-1]
                     row0 += num1*s_1.m1*s_1*n1
                     col0 += num1*s_1.m1*s_1*n1
-                k0 += mod.fk0f(a, bf, m1, n1, F, size, row0, col0)
+                k0 += mod.fk0f(a, bf, F, m1, n1,
+                               s.u1txf, s.u1rxf, s.u2txf, s.u2rxf,
+                               s.v1txf, s.v1rxf, s.v2txf, s.v2rxf,
+                               s.w1txf, s.w1rxf, s.w2txf, s.w2rxf,
+                               s.u1tyf, s.u1ryf, s.u2tyf, s.u2ryf,
+                               s.v1tyf, s.v1ryf, s.v2tyf, s.v2ryf,
+                               s.w1tyf, s.w1ryf, s.w2tyf, s.w2ryf,
+                               size, row0, col0)
                 #k0 += mod.fk0fedges(m1, n1, a, bf, kt, kr, size, row0, col0)
 
                 if calc_kM:
-                    kM += mod.fkMf(s.mu, s.hf, a, bf, m1, n1, size, row0, col0)
+                    kM += mod.fkMf(s.mu, s.hf, a, bf, 0., m1, n1,
+                                   s.u1txf, s.u1rxf, s.u2txf, s.u2rxf,
+                                   s.v1txf, s.v1rxf, s.v2txf, s.v2rxf,
+                                   s.w1txf, s.w1rxf, s.w2txf, s.w2rxf,
+                                   s.u1tyf, s.u1ryf, s.u2tyf, s.u2ryf,
+                                   s.v1tyf, s.v1ryf, s.v2tyf, s.v2ryf,
+                                   s.w1tyf, s.w1ryf, s.w2tyf, s.w2ryf,
+                                   size, row0, col0)
                 if calc_kG0:
                     Nxx = s.Nxx if s.Nxx is not None else 0.
                     Nxy = s.Nxy if s.Nxy is not None else 0.
-                    kG0 += mod.fkG0f(Nxx, Nxy, a, bf, m1, n1, size, row0, col0)
+                    kG0 += mod.fkG0f(Nxx, 0., Nxy, a, bf, m1, n1,
+                                     s.w1txf, s.w1rxf, s.w2txf, s.w2rxf,
+                                     s.w1tyf, s.w1ryf, s.w2tyf, s.w2ryf,
+                                     size, row0, col0)
 
                 # connectivity between skin-stiffener flange
-                k0 += mod.fkCff(kt, kr, a, bf, m1, n1, size, row0, col0)
+                k0 += mod.fkCff(kt, kr, a, bf, m1, n1,
+                                s.u1txf, s.u1rxf, s.u2txf, s.u2rxf,
+                                s.v1txf, s.v1rxf, s.v2txf, s.v2rxf,
+                                s.w1txf, s.w1rxf, s.w2txf, s.w2rxf,
+                                s.u1tyf, s.u1ryf, s.u2tyf, s.u2ryf,
+                                s.v1tyf, s.v1ryf, s.v2tyf, s.v2ryf,
+                                s.w1tyf, s.w1ryf, s.w2tyf, s.w2ryf,
+                                size, row0, col0)
                 k0 += mod.fkCsf(kt, kr, s.ys, a, b, bf, m, n, m1, n1,
+                                self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                                self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                                self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                                s.u1txf, s.u1rxf, s.u2txf, s.u2rxf,
+                                s.v1txf, s.v1rxf, s.v2txf, s.v2rxf,
+                                s.w1txf, s.w1rxf, s.w2txf, s.w2rxf,
+                                s.u1tyf, s.u1ryf, s.u2tyf, s.u2ryf,
+                                s.v1tyf, s.v1ryf, s.v2tyf, s.v2ryf,
+                                s.w1tyf, s.w1ryf, s.w2tyf, s.w2ryf,
                                 size, 0, col0)
-                k0 += mod.fkCss(kt, kr, s.ys, a, b, m, n, size, 0, 0)
+                k0 += mod.fkCss(kt, kr, s.ys, a, b, m, n,
+                                self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                                self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                                self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                                size, 0, 0)
 
         # computing global matrices (in the bay domain)
         if calc_kA:
@@ -679,7 +737,7 @@ class AeroPistonStiff2DPanelBay(object):
             - ``3`` : find the critical Nyy for a fixed Nxx
         sparse_solver : bool, optional
             Tells if solver :func:`scipy.linalg.eigh` or
-            :func:`scipy.sparse.linalg.eigs` should be used.
+            :func:`scipy.sparse.linalg.eigsh` should be used.
 
         Notes
         -----
@@ -720,31 +778,25 @@ class AeroPistonStiff2DPanelBay(object):
             M = self.k0 - kA + self.kG0_Nxx
             A = self.kG0_Nyy
 
-        Amin = abs(A.min())
-        # Normalizing A to improve numerical stability
-        A /= Amin
-
         if sparse_solver:
+            mode = 'cayley'
             try:
-                msg('eigs() solver...', level=3)
-                eigvals, eigvecs = eigs(A=A, k=self.num_eigvalues, which='SM',
-                                        M=M, tol=tol, sigma=1.)
+                msg('eigsh() solver...', level=3)
+                eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues,
+                        which='SM', M=M, tol=tol, sigma=1., mode=mode)
                 msg('finished!', level=3)
             except Exception, e:
                 warn(str(e), level=4)
                 msg('aborted!', level=3)
                 sizebkp = A.shape[0]
                 M, A, used_cols = remove_null_cols(M, A)
-                msg('eigs() solver...', level=3)
-                eigvals, peigvecs = eigs(A=A, k=self.num_eigvalues,
-                        which='SM', M=M, tol=tol, sigma=1.)
+                msg('eigsh() solver...', level=3)
+                eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
+                        which='SM', M=M, tol=tol, sigma=1., mode=mode)
                 msg('finished!', level=3)
                 eigvecs = np.zeros((sizebkp, self.num_eigvalues),
                                    dtype=DOUBLE)
                 eigvecs[used_cols, :] = peigvecs
-
-            # Un-normalizing eigvals
-            eigvals *= Amin
 
         else:
             from scipy.linalg import eig
@@ -1100,7 +1152,7 @@ class AeroPistonStiff2DPanelBay(object):
 
         fuvw = modelDB.db[model]['commons'].fuvw
         us, vs, ws, phixs, phiys = fuvw(c, m, n, a, b, xs, ys,
-                self.out_num_cores, skin=True)
+                self.out_num_cores)
 
         self.u = us.reshape(xshape)
         self.v = vs.reshape(xshape)
@@ -1176,7 +1228,7 @@ class AeroPistonStiff2DPanelBay(object):
             raise ValueError('c is the full vector of Ritz constants')
 
         us, vs, ws, phixs, phiys = fuvw(c, m1, n1, a, bf, xs, ys,
-                self.out_num_cores, skin=False)
+                self.out_num_cores)
 
         self.u = us.reshape(xshape)
         self.v = vs.reshape(xshape)
@@ -1685,19 +1737,18 @@ class AeroPistonStiff2DPanelBay(object):
         msg('Calculating external forces...', level=2, silent=silent)
         num = modelDB.db[self.model]['num']
         num1 = modelDB.db[self.model]['num1']
-        fg_skin = modelDB.db[self.model]['commons'].fg_skin
-        fg_stiffener = modelDB.db[self.model]['commons'].fg_stiffener
+        fg = modelDB.db[self.model]['commons'].fg
 
         # punctual forces on skin
         size = num*self.m*self.n
-        g_skin = np.zeros((3, size), dtype=DOUBLE)
+        g = np.zeros((3, size), dtype=DOUBLE)
         fext_skin = np.zeros(size, dtype=DOUBLE)
         for i, force in enumerate(self.forces_skin):
             x, y, fx, fy, fz = force
-            fg_skin(g_skin, self.m, self.n, x, y, self.a, self.b)
+            fg(g, self.m, self.n, x, y, self.a, self.b)
 
             fpt = np.array([[fx, fy, fz]])
-            fext_skin += -fpt.dot(g_skin).ravel()
+            fext_skin += -fpt.dot(g).ravel()
 
         fext = fext_skin
         # punctual forces on stiffener
@@ -1710,7 +1761,7 @@ class AeroPistonStiff2DPanelBay(object):
             fext_stiffener = np.zeros(size, dtype=DOUBLE)
             for i, force in enumerate(s.forces):
                 xf, yf, fx, fy, fz = force
-                fg_stiffener(g_stiffener, m1, n1, xf, yf, self.a, bf)
+                fg(g_stiffener, m1, n1, xf, yf, self.a, bf)
 
                 fpt = np.array([[fx, fy, fz]])
                 fext_stiffener += -fpt.dot(g_stiffener).ravel()

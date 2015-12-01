@@ -71,14 +71,19 @@ for i, filepath in enumerate(
                     if i == 0:
                         printstr += '    switch(i) {\n'
                     else:
-                        printstr += '                  }\n'
+                        printstr += '        default:\n'
+                        printstr += '            return 0.;\n'
+                        printstr += '        }\n'
                     printstr += '    case %d:\n' % i
                     printstr += '        switch(j) {\n'
                 printstr += '        case %d:\n' % j
                 printstr += '            return %s;\n' % star2Cpow(str(matrix[i, j].expand()))
-        printstr += '              }\n'
+        printstr += '        default:\n'
+        printstr += '            return 0.;\n'
+        printstr += '        }\n'
+        printstr += '    default:\n'
+        printstr += '        return 0.;\n'
         printstr += '    }\n'
-        printstr += '    return 0;\n'
         printstr += '}\n'
 
         if '_12' in filepath:
