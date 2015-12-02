@@ -901,10 +901,10 @@ def fkCff(double kt, double kr, double a, double bf, int m1, int n1,
     cdef np.ndarray[cINT, ndim=1] kCffr, kCffc
     cdef np.ndarray[cDOUBLE, ndim=1] kCffv
 
-    cdef double rAurBu, rAvrBv, rAvxirBvxi, rAwrBw, rAwxirBwxi
+    cdef double rAurBu, rAvrBv, rAwrBw
     cdef double sAu, sBu, sAv, sBv, sAw, sBw, sAweta, sBweta
 
-    fdim = 3*m1*n1*m1*n1
+    fdim = 5*m1*n1*m1*n1
 
     kCffr = np.zeros((fdim,), dtype=INT)
     kCffc = np.zeros((fdim,), dtype=INT)
@@ -917,9 +917,7 @@ def fkCff(double kt, double kr, double a, double bf, int m1, int n1,
 
             rAurBu = integral_ff(i1, k1, u1txf, u1rxf, u2txf, u2rxf, u1txf, u1rxf, u2txf, u2rxf)
             rAvrBv = integral_ff(i1, k1, v1txf, v1rxf, v2txf, v2rxf, v1txf, v1rxf, v2txf, v2rxf)
-            rAvxirBvxi = integral_fxifxi(i1, k1, v1txf, v1rxf, v2txf, v2rxf, v1txf, v1rxf, v2txf, v2rxf)
             rAwrBw = integral_ff(i1, k1, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
-            rAwxirBwxi = integral_fxifxi(i1, k1, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
 
             for j1 in range(n1):
                 sAu = calc_f(j1, -1., u1tyf, u1ryf, u2tyf, u2ryf)
@@ -944,15 +942,15 @@ def fkCff(double kt, double kr, double a, double bf, int m1, int n1,
                     c += 1
                     kCffr[c] = row+0
                     kCffc[c] = col+0
-                    kCffv[c] += 0.25*a*kt*rAurBu*sAu*sBu
+                    kCffv[c] += 0.5*a*kt*rAurBu*sAu*sBu
                     c += 1
                     kCffr[c] = row+1
                     kCffc[c] = col+1
-                    kCffv[c] += 0.25*a*(kt*rAvrBv*sAv*sBv + 4*kr*rAvxirBvxi*sAv*sBv/(a*a))
+                    kCffv[c] += 0.5*a*kt*rAvrBv*sAv*sBv
                     c += 1
                     kCffr[c] = row+2
                     kCffc[c] = col+2
-                    kCffv[c] += 0.25*a*(kt*rAwrBw*sAw*sBw + 4*kr*rAwrBw*sAweta*sBweta/(bf*bf) + 4*kr*rAwxirBwxi*sAw*sBw/(a*a))
+                    kCffv[c] += 0.5*a*(kt*rAwrBw*sAw*sBw + 4*kr*rAwrBw*sAweta*sBweta/(bf*bf))
 
     kCff = coo_matrix((kCffv, (kCffr, kCffc)), shape=(size, size))
 
@@ -980,8 +978,8 @@ def fkCsf(double kt, double kr, double ys, double a, double b, double bf,
     cdef np.ndarray[cINT, ndim=1] kCsfr, kCsfc
     cdef np.ndarray[cDOUBLE, ndim=1] kCsfv
 
-    cdef double fAurBu, fAvrBw, fAvxirBwxi, fAwrBv, fAwxirBvxi, fAwrBw
-    cdef double gAu, sBu, gAv, sBw, gAw, sBv, gAweta, sBweta
+    cdef double fAurBu, fAvrBw, fAwrBv, fAwrBw
+    cdef double gAu, gAv, gAw, gAweta, sBu, sBv, sBw, sBweta
 
     eta = 2*ys/b - 1.
 
@@ -998,9 +996,7 @@ def fkCsf(double kt, double kr, double ys, double a, double b, double bf,
 
             fAurBu = integral_ff(i, k1, u1tx, u1rx, u2tx, u2rx, u1txf, u1rxf, u2txf, u2rxf)
             fAvrBw = integral_ff(i, k1, v1tx, v1rx, v2tx, v2rx, w1txf, w1rxf, w2txf, w2rxf)
-            fAvxirBwxi = integral_fxifxi(i, k1, v1tx, v1rx, v2tx, v2rx, w1txf, w1rxf, w2txf, w2rxf)
             fAwrBv = integral_ff(i, k1, w1tx, w1rx, w2tx, w2rx, v1txf, v1rxf, v2txf, v2rxf)
-            fAwxirBvxi = integral_fxifxi(i, k1, w1tx, w1rx, w2tx, w2rx, v1txf, v1rxf, v2txf, v2rxf)
             fAwrBw = integral_ff(i, k1, w1tx, w1rx, w2tx, w2rx, w1txf, w1rxf, w2txf, w2rxf)
 
             for j in range(n):
@@ -1019,26 +1015,26 @@ def fkCsf(double kt, double kr, double ys, double a, double b, double bf,
                         continue
 
                     sBu = calc_f(l1, -1., u1tyf, u1ryf, u2tyf, u2ryf)
-                    sBw = calc_f(l1, -1., w1tyf, w1ryf, w2tyf, w2ryf)
                     sBv = calc_f(l1, -1., v1tyf, v1ryf, v2tyf, v2ryf)
+                    sBw = calc_f(l1, -1., w1tyf, w1ryf, w2tyf, w2ryf)
                     sBweta = calc_fxi(l1, -1., w1tyf, w1ryf, w2tyf, w2ryf)
 
                     c += 1
                     kCsfr[c] = row+0
                     kCsfc[c] = col+0
-                    kCsfv[c] += -0.25*a*fAurBu*kt*gAu*sBu
+                    kCsfv[c] += -0.5*a*fAurBu*gAu*kt*sBu
                     c += 1
                     kCsfr[c] = row+1
                     kCsfc[c] = col+2
-                    kCsfv[c] += 0.25*a*(-fAvrBw*kt*gAv*sBw - 4*fAvxirBwxi*kr*gAv*sBw/(a*a))
+                    kCsfv[c] += -0.5*a*fAvrBw*gAv*kt*sBw
                     c += 1
                     kCsfr[c] = row+2
                     kCsfc[c] = col+1
-                    kCsfv[c] += 0.25*a*(fAwrBv*kt*gAw*sBv + 4*fAwxirBvxi*kr*gAw*sBv/(a*a))
+                    kCsfv[c] += 0.5*a*fAwrBv*gAw*kt*sBv
                     c += 1
                     kCsfr[c] = row+2
                     kCsfc[c] = col+2
-                    kCsfv[c] += -a*fAwrBw*kr*gAweta*sBweta/(b*bf)
+                    kCsfv[c] += -2*a*fAwrBw*gAweta*kr*sBweta/(b*bf)
 
     kCsf = coo_matrix((kCsfv, (kCsfr, kCsfc)), shape=(size, size))
 
@@ -1059,7 +1055,7 @@ def fkCss(double kt, double kr, double ys, double a, double b, int m, int n,
     cdef np.ndarray[cINT, ndim=1] kCssr, kCssc
     cdef np.ndarray[cDOUBLE, ndim=1] kCssv
 
-    cdef double fAufBu, fAvfBv, fAvxifBvxi, fAwfBw, fAwxifBwxi
+    cdef double fAufBu, fAvfBv, fAwfBw
     cdef double gAu, gBu, gAv, gBv, gAw, gBw, gAweta, gBweta
 
     eta = 2*ys/b - 1.
@@ -1077,9 +1073,7 @@ def fkCss(double kt, double kr, double ys, double a, double b, int m, int n,
 
             fAufBu = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
             fAvfBv = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
-            fAvxifBvxi = integral_fxifxi(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
             fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
             for j in range(n):
                 gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
@@ -1103,15 +1097,15 @@ def fkCss(double kt, double kr, double ys, double a, double b, int m, int n,
                     c += 1
                     kCssr[c] = row+0
                     kCssc[c] = col+0
-                    kCssv[c] += 0.25*a*fAufBu*gAu*gBu*kt
+                    kCssv[c] += 0.5*a*fAufBu*gAu*gBu*kt
                     c += 1
                     kCssr[c] = row+1
                     kCssc[c] = col+1
-                    kCssv[c] += 0.25*a*(fAvfBv*gAv*gBv*kt + 4*fAvxifBvxi*gAv*gBv*kr/(a*a))
+                    kCssv[c] += 0.5*a*fAvfBv*gAv*gBv*kt
                     c += 1
                     kCssr[c] = row+2
                     kCssc[c] = col+2
-                    kCssv[c] += 0.25*a*(fAwfBw*gAw*gBw*kt + 4*fAwfBw*gAweta*gBweta*kr/(b*b) + 4*fAwxifBwxi*gAw*gBw*kr/(a*a))
+                    kCssv[c] += 0.5*a*(fAwfBw*gAw*gBw*kt + 4*fAwfBw*gAweta*gBweta*kr/(b*b))
 
     kCss = coo_matrix((kCssv, (kCssr, kCssc)), shape=(size, size))
 

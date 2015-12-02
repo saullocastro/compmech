@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     74094,       1678]
-NotebookOptionsPosition[     73769,       1662]
-NotebookOutlinePosition[     74191,       1680]
-CellTagsIndexPosition[     74148,       1677]
+NotebookDataLength[     72824,       1636]
+NotebookOptionsPosition[     72499,       1620]
+NotebookOutlinePosition[     72921,       1638]
+CellTagsIndexPosition[     72878,       1635]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -966,45 +966,29 @@ Cell[BoxData[{
         RowBox[{
          RowBox[{"Transpose", "[", 
           RowBox[{"{", "uA", "}"}], "]"}], ".", 
-         RowBox[{"{", "uB", "}"}]}]}], "+", 
+         RowBox[{"{", "uB", "}"}]}]}], "\[IndentingNewLine]", "+", 
        RowBox[{"kt", " ", 
         RowBox[{
          RowBox[{"Transpose", "[", 
           RowBox[{"{", "vA", "}"}], "]"}], ".", 
-         RowBox[{"{", "vB", "}"}]}]}], "+", 
+         RowBox[{"{", "vB", "}"}]}]}], "\[IndentingNewLine]", "+", 
        RowBox[{"kt", " ", 
         RowBox[{
          RowBox[{"Transpose", "[", 
           RowBox[{"{", "wA", "}"}], "]"}], ".", 
          RowBox[{"{", "wB", "}"}]}]}], "\[IndentingNewLine]", "  ", "+", 
        RowBox[{"kr", " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "b"}], ")"}], 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "b"}], ")"}], 
         RowBox[{
          RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAeta", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBeta", "}"}]}]}], "+", 
-       RowBox[{"kr", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], 
-        RowBox[{
-         RowBox[{"Transpose", "[", " ", 
-          RowBox[{"{", "wAxi", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBxi", "}"}]}]}], "\[IndentingNewLine]", "  ", "+", 
-       RowBox[{"kr", " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], 
-        RowBox[{
-         RowBox[{"Transpose", "[", 
-          RowBox[{"{", "vAxi", "}"}], "]"}], ".", 
-         RowBox[{"{", "vBxi", "}"}]}]}]}], ")"}]}]}], ";"}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "b"}], ")"}], "wAeta"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "b"}], ")"}], "wBeta"}], "}"}]}]}]}], ")"}]}]}],
+    ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"kCsf", "=", 
@@ -1018,45 +1002,29 @@ Cell[BoxData[{
         RowBox[{
          RowBox[{"Transpose", "[", " ", 
           RowBox[{"{", "uA", "}"}], "]"}], ".", 
-         RowBox[{"{", "uBf", "}"}]}]}], "-", 
+         RowBox[{"{", "uBf", "}"}]}]}], "\[IndentingNewLine]", "-", 
        RowBox[{"kt", " ", 
         RowBox[{
          RowBox[{"Transpose", "[", 
           RowBox[{"{", "vA", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBf", "}"}]}]}], "+", 
+         RowBox[{"{", "wBf", "}"}]}]}], "\[IndentingNewLine]", "+", 
        RowBox[{"kt", " ", 
         RowBox[{
          RowBox[{"Transpose", "[", 
           RowBox[{"{", "wA", "}"}], "]"}], ".", 
          RowBox[{"{", "vBf", "}"}]}]}], "\[IndentingNewLine]", "    ", "-", 
-       RowBox[{"kr", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "b"}], ")"}], 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "bf"}], ")"}], " ", 
-        RowBox[{
-         RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAeta", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBetaf", "}"}]}]}], "+", 
        RowBox[{"kr", " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], 
         RowBox[{
          RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAxi", "}"}], "]"}], ".", 
-         RowBox[{"{", "vBxif", "}"}]}]}], "\[IndentingNewLine]", "    ", "-", 
-       RowBox[{"kr", " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], 
-        RowBox[{
-         RowBox[{"Transpose", "[", 
-          RowBox[{"{", "vAxi", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBxif", "}"}]}]}]}], ")"}]}]}], ";"}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "b"}], ")"}], "wAeta"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "bf"}], ")"}], "wBetaf"}], "}"}]}]}]}], 
+      ")"}]}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"kCff", "=", 
@@ -1069,45 +1037,30 @@ Cell[BoxData[{
         RowBox[{
          RowBox[{"Transpose", "[", 
           RowBox[{"{", "uAf", "}"}], "]"}], ".", 
-         RowBox[{"{", "uBf", "}"}]}]}], "+", 
+         RowBox[{"{", "uBf", "}"}]}]}], "\[IndentingNewLine]", "+", 
        RowBox[{"kt", " ", 
         RowBox[{
          RowBox[{"Transpose", "[", 
           RowBox[{"{", "wAf", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBf", "}"}]}]}], "+", 
+         RowBox[{"{", "wBf", "}"}]}]}], "\[IndentingNewLine]", "+", 
        RowBox[{"kt", " ", 
         RowBox[{
          RowBox[{"Transpose", "[", 
           RowBox[{"{", "vAf", "}"}], "]"}], ".", 
          RowBox[{"{", "vBf", "}"}]}]}], "\[IndentingNewLine]", "  ", "+", 
        RowBox[{"kr", " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "bf"}], ")"}], 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "bf"}], ")"}], 
         RowBox[{
          RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAetaf", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBetaf", "}"}]}]}], "+", 
-       RowBox[{"kr", " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], 
-        RowBox[{
-         RowBox[{"Transpose", "[", 
-          RowBox[{"{", "vAxif", "}"}], "]"}], ".", 
-         RowBox[{"{", "vBxif", "}"}]}]}], "\[IndentingNewLine]", "  ", "+", 
-       RowBox[{"kr", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], " ", 
-        RowBox[{"(", 
-         RowBox[{"2", "/", "a"}], ")"}], " ", 
-        RowBox[{
-         RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAxif", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBxif", "}"}]}]}]}], ")"}]}]}], ";"}], 
-  "\[IndentingNewLine]", "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "bf"}], ")"}], "wAetaf"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "bf"}], ")"}], "wBetaf"}], "}"}]}]}]}], 
+      ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"s", " ", "=", " ", 
    RowBox[{"OpenWrite", "[", "\"\<fortran_k0f.txt\>\"", "]"}]}], 
@@ -1658,11 +1611,16 @@ Cell[BoxData[{
    3.6576568587458687`*^9, 3.657656862131169*^9}, {3.6576570768160048`*^9, 
    3.6576571547501097`*^9}, {3.6576571921614847`*^9, 
    3.6576571955632687`*^9}, {3.6576643188781395`*^9, 
-   3.6576643516237054`*^9}, {3.65766447624356*^9, 3.6576644934707184`*^9}}]
+   3.6576643516237054`*^9}, {3.65766447624356*^9, 3.6576644934707184`*^9}, {
+   3.657993924349655*^9, 3.6579939427564945`*^9}, {3.6579939746174326`*^9, 
+   3.6579940482118134`*^9}, {3.6579940893098793`*^9, 
+   3.6579941874172764`*^9}, {3.6579942748390994`*^9, 3.657994287228136*^9}, {
+   3.6579943337212925`*^9, 3.657994440339776*^9}, {3.6579953765310907`*^9, 
+   3.657995424612873*^9}, {3.658003362723033*^9, 3.6580033912993503`*^9}}]
 },
 Evaluator->"Local 2",
 WindowSize->{751, 727},
-WindowMargins->{{1, Automatic}, {Automatic, 0}},
+WindowMargins->{{Automatic, 1}, {Automatic, 6}},
 CellContext->Notebook,
 Magnification->0.8999999761581421,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
@@ -1679,7 +1637,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 73208, 1640, 4050, "Input"]
+Cell[557, 20, 71938, 1598, 4070, "Input"]
 }
 ]
 *)
