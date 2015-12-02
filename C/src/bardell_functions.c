@@ -5,7 +5,13 @@
 #include <stdlib.h>
 #include <math.h>
 
-__declspec(dllexport) void calc_vec_f(double *f, double xi,
+#if defined(_WIN32) || defined(__WIN32__)
+  #define EXPORTIT __declspec(dllexport)
+#else
+  #define EXPORTIT
+#endif
+
+EXPORTIT void calc_vec_f(double *f, double xi,
            double xi1t, double xi1r, double xi2t, double xi2r) {
     f[0] = xi1t*(0.25*pow(xi, 3) - 0.75*xi + 0.5);
     f[1] = xi1r*(0.125*pow(xi, 3) - 0.125*pow(xi, 2) - 0.125*xi + 0.125);
@@ -40,7 +46,7 @@ __declspec(dllexport) void calc_vec_f(double *f, double xi,
 }
 
 
-__declspec(dllexport) void calc_vec_fxi(double *fxi, double xi,
+EXPORTIT void calc_vec_fxi(double *fxi, double xi,
            double xi1t, double xi1r, double xi2t, double xi2r) {
     fxi[0] = xi1t*(0.75*pow(xi, 2) - 0.75);
     fxi[1] = xi1r*(0.375*pow(xi, 2) - 0.25*xi - 0.125);
@@ -75,7 +81,7 @@ __declspec(dllexport) void calc_vec_fxi(double *fxi, double xi,
 }
 
 
-__declspec(dllexport) double calc_f(int i, double xi,
+EXPORTIT double calc_f(int i, double xi,
            double xi1t, double xi1r, double xi2t, double xi2r) {
     switch(i) {
     case 0:
@@ -138,13 +144,11 @@ __declspec(dllexport) double calc_f(int i, double xi,
         return 9774.81745830178*pow(xi, 28) - 72448.6470438838*pow(xi, 26) + 240263.370298594*pow(xi, 24) - 470302.767392993*pow(xi, 22) + 603555.218154341*pow(xi, 20) - 533374.378834069*pow(xi, 18) + 331732.845372409*pow(xi, 16) - 145816.635328531*pow(xi, 14) + 44828.7628881633*pow(xi, 12) - 9392.69317656755*pow(xi, 10) + 1280.82179680467*pow(xi, 8) - 105.1701182127*pow(xi, 6) + 4.53319475054741*pow(xi, 4) - 0.077490508556366*pow(xi, 2) + 0.000221401453018188;
     case 29:
         return 17864.3215617239*pow(xi, 29) - 136847.444416225*pow(xi, 27) + 470916.205785245*pow(xi, 25) - 961053.481194377*pow(xi, 23) + 1293332.61033073*pow(xi, 21) - 1207110.43630868*pow(xi, 19) + 800061.568251103*pow(xi, 17) - 379123.251854181*pow(xi, 15) + 127589.555912465*pow(xi, 13) - 29885.8419254422*pow(xi, 11) + 4696.34658828378*pow(xi, 9) - 465.753380656242*pow(xi, 7) + 26.292529553175*pow(xi, 5) - 0.697414577007294*pow(xi, 3) + 0.00553503632545471*xi;
-    default:
-        return 0.;
     }
 }
 
 
-__declspec(dllexport) double calc_fxi(int i, double xi,
+EXPORTIT double calc_fxi(int i, double xi,
            double xi1t, double xi1r, double xi2t, double xi2r) {
     switch(i) {
     case 0:
@@ -207,7 +211,5 @@ __declspec(dllexport) double calc_fxi(int i, double xi,
         return 273694.88883245*pow(xi, 27) - 1883664.82314098*pow(xi, 25) + 5766320.88716626*pow(xi, 23) - 10346660.8826458*pow(xi, 21) + 12071104.3630868*pow(xi, 19) - 9600738.81901324*pow(xi, 17) + 5307725.52595854*pow(xi, 15) - 2041432.89459944*pow(xi, 13) + 537945.15465796*pow(xi, 11) - 93926.9317656755*pow(xi, 9) + 10246.5743744373*pow(xi, 7) - 631.020709276199*pow(xi, 5) + 18.1327790021896*pow(xi, 3) - 0.154981017112732*xi;
     case 29:
         return 518065.325289994*pow(xi, 28) - 3694880.99923807*pow(xi, 26) + 11772905.1446311*pow(xi, 24) - 22104230.0674707*pow(xi, 22) + 27159984.8169453*pow(xi, 20) - 22935098.289865*pow(xi, 18) + 13601046.6602688*pow(xi, 16) - 5686848.77781272*pow(xi, 14) + 1658664.22686204*pow(xi, 12) - 328744.261179864*pow(xi, 10) + 42267.119294554*pow(xi, 8) - 3260.2736645937*pow(xi, 6) + 131.462647765875*pow(xi, 4) - 2.09224373102188*pow(xi, 2) + 0.00553503632545471;
-    default:
-        return 0.;
     }
 }
