@@ -316,26 +316,26 @@ class AeroPistonStiff2DPanelBay(object):
             inf = self.maxinf
 
         self.u1tx = 0.
-        self.u1rx = 0.
+        self.u1rx = 1.
         self.u2tx = 0.
-        self.u2rx = 0.
+        self.u2rx = 1.
         self.v1tx = 0.
-        self.v1rx = 0.
+        self.v1rx = 1.
         self.v2tx = 0.
-        self.v2rx = 0.
+        self.v2rx = 1.
         self.w1tx = 0.
         self.w1rx = 1.
         self.w2tx = 0.
         self.w2rx = 1.
 
         self.u1ty = 0.
-        self.u1ry = 0.
+        self.u1ry = 1.
         self.u2ty = 0.
-        self.u2ry = 0.
+        self.u2ry = 1.
         self.v1ty = 0.
-        self.v1ry = 0.
+        self.v1ry = 1.
         self.v2ty = 0.
-        self.v2ry = 0.
+        self.v2ry = 1.
         self.w1ty = 0.
         self.w1ry = 1.
         self.w2ty = 0.
