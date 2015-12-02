@@ -121,13 +121,13 @@ class Stiffener2D(object):
         self.kG0_Nxy = None
 
         self.u1txf = 0.
-        self.u1rxf = 0.
+        self.u1rxf = 1.
         self.u2txf = 0.
-        self.u2rxf = 0.
+        self.u2rxf = 1.
         self.v1txf = 0.
-        self.v1rxf = 0.
+        self.v1rxf = 1.
         self.v2txf = 0.
-        self.v2rxf = 0.
+        self.v2rxf = 1.
         self.w1txf = 0.
         self.w1rxf = 1.
         self.w2txf = 0.
@@ -566,8 +566,8 @@ class AeroPistonStiff2DPanelBay(object):
                 # stiffener flange
                 if i > 0:
                     s_1 = self.stiffeners[i-1]
-                    row0 += num1*s_1.m1*s_1*n1
-                    col0 += num1*s_1.m1*s_1*n1
+                    row0 += num1*s_1.m1*s_1.n1
+                    col0 += num1*s_1.m1*s_1.n1
                 k0 += mod.fk0f(a, bf, F, m1, n1,
                                s.u1txf, s.u1rxf, s.u2txf, s.u2rxf,
                                s.v1txf, s.v1rxf, s.v2txf, s.v2rxf,
@@ -1220,7 +1220,7 @@ class AeroPistonStiff2DPanelBay(object):
         bf = self.stiffeners[si].bf
         if si > 0:
             s_1 = self.stiffeners[si-1]
-            row0 += num1*s_1.m1*s_1*n1
+            row0 += num1*s_1.m1*s_1.n1
         row1 = row0 + num1*m1*n1
         if c.shape[0] == self.get_size():
             c = c[row0:row1]
@@ -1748,7 +1748,7 @@ class AeroPistonStiff2DPanelBay(object):
             fg(g, self.m, self.n, x, y, self.a, self.b)
 
             fpt = np.array([[fx, fy, fz]])
-            fext_skin += -fpt.dot(g).ravel()
+            fext_skin += fpt.dot(g).ravel()
 
         fext = fext_skin
         # punctual forces on stiffener
@@ -1764,7 +1764,7 @@ class AeroPistonStiff2DPanelBay(object):
                 fg(g_stiffener, m1, n1, xf, yf, self.a, bf)
 
                 fpt = np.array([[fx, fy, fz]])
-                fext_stiffener += -fpt.dot(g_stiffener).ravel()
+                fext_stiffener += fpt.dot(g_stiffener).ravel()
 
             fext = np.concatenate((fext, fext_stiffener))
 
