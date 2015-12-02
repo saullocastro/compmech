@@ -1472,9 +1472,9 @@ class ConeCyl(object):
         self._rebuild()
         thetarad = deg2rad(thetadeg)
         if increment:
-            self.forces_inc.append([pt*self.L, thetarad, 0., 0., PL])
+            self.forces_inc.append([pt*self.L, thetarad, 0., 0., -PL])
         else:
-            self.forces.append([pt*self.L, thetarad, 0., 0., PL])
+            self.forces.append([pt*self.L, thetarad, 0., 0., -PL])
 
 
     def add_force(self, x, thetadeg, fx, ftheta, fz, increment=False):
@@ -1501,7 +1501,7 @@ class ConeCyl(object):
 
         """
         thetarad = deg2rad(thetadeg)
-        if incremented:
+        if increment:
             self.forces_inc.append([x, thetarad, fx, ftheta, fz])
         else:
             self.forces.append([x, thetarad, fx, ftheta, fz])
@@ -1589,7 +1589,7 @@ class ConeCyl(object):
                 fpt = np.array([[fx, ftheta, fz]])
             elif dofs == 5:
                 fpt = np.array([[fx, ftheta, fz, 0, 0]])
-            fext += -fpt.dot(gu).ravel()
+            fext += fpt.dot(gu).ravel()
 
         # incremented punctual forces
         for i, force in enumerate(self.forces_inc):
@@ -1602,7 +1602,7 @@ class ConeCyl(object):
                 fpt = inc*np.array([[fx, ftheta, fz]])
             elif dofs == 5:
                 fpt = inc*np.array([[fx, ftheta, fz, 0, 0]])
-            fext += -fpt.dot(gu).ravel()
+            fext += fpt.dot(gu).ravel()
 
         # axial load
         fext_tmp = np.zeros(size, dtype=DOUBLE)
