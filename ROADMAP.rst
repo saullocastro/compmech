@@ -1,5 +1,10 @@
 Version 0.4.1
 -------------
+- move shared functions to pure C and import via DLL (newer versions of Cython
+  had make it harder to share Cython modules via cimport). They give this::
+
+    AttributeError: 'module' object has no attribute '__pyx_capi__'
+
 - simplify and unify setup.py for compmech.conecyl.clpt
 - simplify and unify setup.py for compmech.conecyl.fsdt
 - finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
