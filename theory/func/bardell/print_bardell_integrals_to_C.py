@@ -18,16 +18,29 @@ subs = {
 def List(*e):
     return list(e)
 
-printstr_full = ''
-printstr_12 = ''
-printstr_full_h = ''
-printstr_12_h = ''
+header_c = """
+#include <stdlib.h>
+#include <math.h>
+#if defined(_WIN32) || defined(__WIN32__)
+  #define EXPORTIT __declspec(dllexport)
+#else
+  #define EXPORTIT
+#endif
+"""
+printstr_full = header_c
+printstr_12 = header_c
 
-printstr_full += '#include <stdlib.h>\n'
-printstr_full += '#include <math.h>\n\n'
+header_h = """
+#if defined(_WIN32) || defined(__WIN32__)
+  #define IMPORTIT __declspec(dllimport)
+#else
+  #define IMPORTIT
+#endif
+"""
+printstr_full_h = header_h
+printstr_12_h = header_h
 
-printstr_12 += '#include <stdlib.h>\n'
-printstr_12 += '#include <math.h>\n\n'
+
 
 for i, filepath in enumerate(
         glob.glob(r'.\bardell_integrals_mathematica\fortran_*.txt')):
@@ -43,20 +56,20 @@ for i, filepath in enumerate(
         printstr = ''
         if '_12' in filepath:
             name = '_'.join(names[1:3])
-            printstr += '__declspec(dllexport) double integral_%s(double xi1, double xi2, int i, int j,\n' % name
+            printstr += 'EXPORTIT double integral_%s(double xi1, double xi2, int i, int j,\n' % name
             printstr += '                   double x1t, double x1r, double x2t, double x2r,\n'
             printstr += '                   double y1t, double y1r, double y2t, double y2r) {\n'
 
         else:
             name = names[1]
-            printstr += '__declspec(dllexport) double integral_%s(int i, int j,\n' % name
+            printstr += 'EXPORTIT double integral_%s(int i, int j,\n' % name
             printstr += '           double x1t, double x1r, double x2t, double x2r,\n'
             printstr += '           double y1t, double y1r, double y2t, double y2r) {\n'
 
         printstr_h = '\n'
         printstr_h += '#ifndef BARDELL_%s_H\n' % name.upper()
         printstr_h += '#define BARDELL_%s_H\n' % name.upper()
-        printstr_h += printstr.replace(' {', ';').replace('dllexport', 'dllimport')
+        printstr_h += printstr.replace(' {', ';').replace('EXPORTIT', 'IMPORTIT')
         printstr_h += '#endif /** BARDELL_%s_H */\n' % name.upper()
         printstr_h += '\n'
 

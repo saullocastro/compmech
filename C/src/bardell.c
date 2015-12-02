@@ -1,7 +1,12 @@
+
 #include <stdlib.h>
 #include <math.h>
-
-__declspec(dllexport) double integral_ff(int i, int j,
+#if defined(_WIN32) || defined(__WIN32__)
+  #define EXPORTIT __declspec(dllexport)
+#else
+  #define EXPORTIT
+#endif
+EXPORTIT double integral_ff(int i, int j,
            double x1t, double x1r, double x2t, double x2r,
            double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
@@ -483,7 +488,7 @@ __declspec(dllexport) double integral_ff(int i, int j,
         return 0.;
     }
 }
-__declspec(dllexport) double integral_ffxi(int i, int j,
+EXPORTIT double integral_ffxi(int i, int j,
            double x1t, double x1r, double x2t, double x2r,
            double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
@@ -901,7 +906,7 @@ __declspec(dllexport) double integral_ffxi(int i, int j,
         return 0.;
     }
 }
-__declspec(dllexport) double integral_ffxixi(int i, int j,
+EXPORTIT double integral_ffxixi(int i, int j,
            double x1t, double x1r, double x2t, double x2r,
            double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
@@ -1263,7 +1268,7 @@ __declspec(dllexport) double integral_ffxixi(int i, int j,
         return 0.;
     }
 }
-__declspec(dllexport) double integral_fxifxi(int i, int j,
+EXPORTIT double integral_fxifxi(int i, int j,
            double x1t, double x1r, double x2t, double x2r,
            double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
@@ -1625,7 +1630,7 @@ __declspec(dllexport) double integral_fxifxi(int i, int j,
         return 0.;
     }
 }
-__declspec(dllexport) double integral_fxifxixi(int i, int j,
+EXPORTIT double integral_fxifxixi(int i, int j,
            double x1t, double x1r, double x2t, double x2r,
            double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
@@ -1923,7 +1928,7 @@ __declspec(dllexport) double integral_fxifxixi(int i, int j,
         return 0.;
     }
 }
-__declspec(dllexport) double integral_fxixifxixi(int i, int j,
+EXPORTIT double integral_fxixifxixi(int i, int j,
            double x1t, double x1r, double x2t, double x2r,
            double y1t, double y1r, double y2t, double y2r) {
     switch(i) {
