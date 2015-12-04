@@ -1,19 +1,13 @@
 Version 0.4.1
 -------------
-- move shared functions to pure C and import via DLL (newer versions of Cython
-  had make it harder to share Cython modules via cimport). They give this::
-
-    AttributeError: 'module' object has no attribute '__pyx_capi__'
-
 - finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
   stiffeners
-- compmech.aero.pistonstiff2Dpanelbay
+- implement compmech.aero.pistonstiff2Dpanelbay
 - fix k0edges for pistonstiff2Dpanelbay
 - kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
 - simplify the way we apply pre-stress to be taken as constant or variable
   along the linear buckling analyses.... we can do Nxx_cte and Nxx_var, for
   example
-- make an installable setup.py
 
 Version 0.4.2
 -------------
