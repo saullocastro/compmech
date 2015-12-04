@@ -5,17 +5,15 @@ Version 0.4.1
 
     AttributeError: 'module' object has no attribute '__pyx_capi__'
 
-- simplify and unify setup.py for compmech.conecyl.clpt
-- simplify and unify setup.py for compmech.conecyl.fsdt
 - finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
   stiffeners
 - compmech.aero.pistonstiff2Dpanelbay
 - fix k0edges for pistonstiff2Dpanelbay
 - kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
-- use Nxx, Nyy and Nxy instead of Fx, Fy and Fxy
 - simplify the way we apply pre-stress to be taken as constant or variable
   along the linear buckling analyses.... we can do Nxx_cte and Nxx_var, for
   example
+- make an installable setup.py
 
 Version 0.4.2
 -------------
@@ -32,7 +30,6 @@ Version 0.5.0
   done for linear buckling analysis....
 - skew panel with formulation for stringers not aligned with the panel
   longitudinal direction
-- make an installable setup.py
 - add Third-Order Shear Deformation Theory to deal with many papers using
   shear correction factors
 
