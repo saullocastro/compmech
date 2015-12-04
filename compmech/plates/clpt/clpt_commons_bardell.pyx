@@ -9,11 +9,14 @@ import numpy as np
 from libc.stdlib cimport malloc, free
 from cython.parallel import prange
 
-include '../../func/bardell/bardell.pyx'
+cdef extern from 'bardell_functions.h':
+    double calc_vec_f(double *f, double xi, double xi1t, double xi1r,
+                  double xi2t, double xi2r) nogil
 
 DOUBLE = np.float64
 ctypedef np.double_t cDOUBLE
 
+cdef int nmax = 30
 cdef int num1 = 3
 cdef double pi=3.141592653589793
 
@@ -70,8 +73,8 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
     cdef double *fxi
     cdef double *feta
 
-    fxi = <double *>malloc(nmax() * sizeof(double *))
-    feta = <double *>malloc(nmax() * sizeof(double *))
+    fxi = <double *>malloc(nmax * sizeof(double *))
+    feta = <double *>malloc(nmax * sizeof(double *))
 
     for i in range(size):
         x = xs[i]
@@ -80,8 +83,8 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
         xi = (2*x - a)/a
         eta = (2*y - b)/b
 
-        calc_vec_f(fxi, xi)
-        calc_vec_f(feta, eta)
+        calc_vec_f(fxi, xi, 1., 1., 1., 1.)
+        calc_vec_f(feta, eta, 1., 1., 1., 1.)
 
         u = 0
         v = 0
@@ -114,14 +117,14 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
     cdef double *fxi
     cdef double *feta
 
-    fxi = <double *>malloc(nmax() * sizeof(double *))
-    feta = <double *>malloc(nmax() * sizeof(double *))
+    fxi = <double *>malloc(nmax * sizeof(double *))
+    feta = <double *>malloc(nmax * sizeof(double *))
 
     xi = (2*x - a)/a
     eta = (2*y - b)/b
 
-    calc_vec_f(fxi, xi)
-    calc_vec_f(feta, eta)
+    calc_vec_f(fxi, xi, 1., 1., 1., 1.)
+    calc_vec_f(feta, eta, 1., 1., 1., 1.)
 
     for i1 in range(m1):
         for j1 in range(n1):

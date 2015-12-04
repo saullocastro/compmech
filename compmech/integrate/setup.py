@@ -2,20 +2,20 @@ from __future__ import division, print_function, absolute_import
 
 import os
 from Cython.Build import cythonize
+import numpy
 
-def configuration(parent_package='', top_path=None):
+def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
     if os.name == 'nt':
-        args_linear = ['/openmp']
+        compile_args = ['/openmp']
     else:
-        args_linear = ['-openmp']
+        compile_args = ['-openmp']
 
-    config = Configuration('clpt', parent_package, top_path)
-
-    config.add_extension('clpt_commons_bc1', ['clpt_commons_bc1.pyx'],
-              extra_compile_args=args_linear)
-    config.add_extension('clpt_donnell_bc1_linear', ['clpt_donnell_bc1_linear.pyx'],
-              extra_compile_args=args_linear)
+    config = Configuration('integrate', parent_package, top_path)
+    config.add_extension('integratev',
+                         sources=['integratev.pyx'],
+                         extra_compile_args=compile_args,
+                        )
 
     for ext in config.ext_modules:
         for src in ext.sources:

@@ -9,7 +9,6 @@ cimport numpy as np
 from cython.parallel import prange
 
 DOUBLE = np.float64
-ctypedef np.float_t cDOUBLE
 
 ctypedef void (*f_type)(int npts, double *xs, double *ts, double *out,
                         double *alphas, double *betas, void *args) nogil

@@ -81,7 +81,7 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
     f.write('    }\n')
     f.write('}\n')
 
-with open('../../../C/include/bardell_functions.h', 'w') as g:
+with open('../../../compmech/include/bardell_functions.h', 'w') as g:
     g.write('#if defined(_WIN32) || defined(__WIN32__)\n')
     g.write('  #define IMPORTIT __declspec(dllimport)\n')
     g.write('#else\n')
