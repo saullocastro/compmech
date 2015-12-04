@@ -107,13 +107,13 @@ for i, filepath in enumerate(
             printstr_full_h += printstr_h
 
 
-with open(r'..\..\..\C\include\bardell.h', 'w') as g:
+with open(r'..\..\..\compmech\include\bardell.h', 'w') as g:
     g.write(printstr_full_h)
 
 with open(r'..\..\..\C\src\bardell.c', 'w') as g:
     g.write(printstr_full)
 
-with open(r'..\..\..\C\include\bardell_12.h', 'w') as g:
+with open(r'..\..\..\compmech\include\bardell_12.h', 'w') as g:
     g.write(printstr_12_h)
 
 with open(r'..\..\..\C\src\bardell_12.c', 'w') as g:

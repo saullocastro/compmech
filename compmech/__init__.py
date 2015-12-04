@@ -16,3 +16,10 @@ level routines are programmed in Cython.
 """
 __version__ = '0.4.1 dev'
 
+import os
+lib = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
+if os.name == 'nt':
+    os.environ['PATH'] = (lib + ';' + os.environ['PATH'])
+else:
+    os.environ['PATH'] = (lib + ':' + os.environ['PATH'])
+

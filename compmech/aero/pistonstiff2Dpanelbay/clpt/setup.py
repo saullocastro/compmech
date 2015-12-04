@@ -1,33 +1,44 @@
+from __future__ import division, print_function, absolute_import
+
 import os
-from distutils.core import setup
-from distutils.extension import Extension
 from Cython.Build import cythonize
 
-if os.name == 'nt':
-    args_linear = ['/O2', '/openmp', '/favor:INTEL64']
-    args_nonlinear = ['/O2', '/openmp', '/favor:INTEL64', '/fp:fast']
-else:
-    args_linear = ['-O3']
-    args_nonlinear = ['-O3']
+def configuration(parent_package='', top_path=None):
+    from numpy.distutils.misc_util import Configuration
+    if os.name == 'nt':
+        args_linear = ['/openmp']
+        args_nonlinear = ['/openmp', '/fp:fast']
+    else:
+        args_linear = ['-openmp']
+        args_nonlinear = ['-openmp', '-fp:fast']
 
-extensions = [
-               Extension('clpt_donnell_bardell_linear',
-                        ['clpt_donnell_bardell_linear.pyx'],
-                        libraries=['bardell', 'bardell_12',
-                        'bardell_functions'],
-                        language='c',
-                        extra_compile_args=args_linear,
-                        ),
-               Extension('clpt_commons_bardell',
-                        ['clpt_commons_bardell.pyx'],
-                        libraries=['bardell_functions'],
-                        language='c',
-                        extra_compile_args=args_linear,
-                        ),
-             ]
+    config = Configuration('clpt', parent_package, top_path)
 
-ext_modules = cythonize(extensions)
-setup(
-name = 'aeropistonstiff2Dpanel_clpt',
-ext_modules = ext_modules
-)
+    config.add_extension('clpt_commons_bc1', ['clpt_commons_bc1.pyx'],
+              extra_compile_args=args_linear)
+    config.add_extension('clpt_donnell_bc1_linear', ['clpt_donnell_bc1_linear.pyx'],
+              extra_compile_args=args_linear)
+
+    config.add_extension('clpt_commons_bardell', ['clpt_commons_bardell.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../../include'],
+              libraries=['bardell_functions'],
+              library_dirs=['../../../lib'])
+    config.add_extension('clpt_donnell_bardell_linear', ['clpt_donnell_bardell_linear.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../../include'],
+              libraries=['bardell_functions', 'bardell', 'bardell_12'],
+              library_dirs=['../../../lib'])
+
+
+    for ext in config.ext_modules:
+        for src in ext.sources:
+            cythonize(src)
+
+    config.make_config_py()
+
+    return config
+
+if __name__ == '__main__':
+    from numpy.distutils.core import setup
+    setup(**configuration(top_path='').todict())

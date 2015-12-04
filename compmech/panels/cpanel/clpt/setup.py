@@ -1,16 +1,39 @@
-from distutils.core import setup
-from distutils.extension import Extension
-from Cython.Distutils import build_ext
-args_linear = ['/openmp', '/O2', '/favor:INTEL64']
-args_nonlinear = ['/openmp', '/O2', '/favor:INTEL64', '/fp:fast']
-ext_modules = [
-    Extension('clpt_commons_bardell', ['clpt_commons_bardell.pyx'],
-              extra_compile_args=args_linear),
-    Extension('clpt_donnell_bardell_linear', ['clpt_donnell_bardell_linear.pyx'],
-              extra_compile_args=args_linear),
-    ]
-setup(
-name = 'cpanel_clpt',
-cmdclass = {'build_ext': build_ext},
-ext_modules = ext_modules
-)
+from __future__ import division, print_function, absolute_import
+
+import os
+from Cython.Build import cythonize
+
+def configuration(parent_package='', top_path=None):
+    from numpy.distutils.misc_util import Configuration
+    if os.name == 'nt':
+        args_linear = ['/openmp']
+        args_nonlinear = ['/openmp', '/fp:fast']
+    else:
+        args_linear = ['-openmp']
+        args_nonlinear = ['-openmp', '-fp:fast']
+
+    config = Configuration('clpt', parent_package, top_path)
+
+    config.add_extension('clpt_commons_bardell', ['clpt_commons_bardell.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../../include'],
+              libraries=['bardell_functions'],
+              library_dirs=['../../../lib'])
+    config.add_extension('clpt_donnell_bardell_linear', ['clpt_donnell_bardell_linear.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../../include'],
+              libraries=['bardell'],
+              library_dirs=['../../../lib'])
+
+
+    for ext in config.ext_modules:
+        for src in ext.sources:
+            cythonize(src)
+
+    config.make_config_py()
+
+    return config
+
+if __name__ == '__main__':
+    from numpy.distutils.core import setup
+    setup(**configuration(top_path='').todict())

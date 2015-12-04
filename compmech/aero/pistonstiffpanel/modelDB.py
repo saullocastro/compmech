@@ -9,7 +9,6 @@ import numpy as np
 from scipy.sparse import coo_matrix
 
 from clpt import *
-from fsdt import *
 
 db = {
     'clpt_donnell_bc1': {
@@ -35,18 +34,6 @@ db = {
                     'e_num': 6,
                     'num0': 0,
                     'num1': 3,
-                    },
-    'fsdt_donnell_bc1': {
-                    'linear static': False,
-                    'linear buckling': True,
-                    'non-linear static': False,
-                    'commons': fsdt_commons_bc1,
-                    'linear': fsdt_donnell_bc1_linear,
-                    'non-linear': None,
-                    'dofs': 5,
-                    'e_num': 6,
-                    'num0': 0,
-                    'num1': 5,
                     },
     }
 

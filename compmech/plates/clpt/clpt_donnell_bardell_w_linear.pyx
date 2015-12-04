@@ -10,7 +10,19 @@ from scipy.sparse import coo_matrix
 import numpy as np
 cimport numpy as np
 
-include '../../func/bardell/bardell.pyx'
+cdef extern from 'bardell.h':
+    double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
+    double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
+                       double y1t, double y1r, double y2t, double y2r)
 
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
