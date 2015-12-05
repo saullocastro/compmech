@@ -1,5 +1,7 @@
 Version 0.4.1
 -------------
+- split bardell_12.c into 6 C codes, such that we can compile in parallel into
+  a single DLL
 - finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
   stiffeners
 - implement compmech.aero.pistonstiff2Dpanelbay
