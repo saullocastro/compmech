@@ -37,17 +37,39 @@ Operating System :: Microsoft :: Windows
 Operating System :: Unix
 
 """
+MAJOR = 0
+MINOR = 4
+MICRO = 1
+ISRELEASED = False
+VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
-with open('./compmech/__init__.py') as f:
-    for line in f:
-        if line.startswith('__version__'):
-            if "'" in line:
-                VERSION = line.split("'")[1].strip()
-            else:
-                VERSION = line.split('"')[1].strip()
-            ISRELEASED = True
-            if 'dev' in VERSION:
-                ISRELEASED = False
+def write_version_py(filename='compmech/version.py'):
+    cnt = """
+# THIS FILE IS GENERATED FROM CompMech setup.py
+# short_version = '%(version)s'
+# version = '%(version)s'
+# full_version = '%(full_version)s'
+# git_revision = '%(git_revision)s'
+# isreleased = %(isreleased)s
+if isreleased:
+    __version__ = version
+else:
+    __version__ = full_version
+
+if not isreleased:
+    version = full_version
+"""
+    FULLVERSION, GIT_REVISION = get_version_info()
+
+    a = open(filename, 'w')
+    try:
+        a.write(cnt % {'version': VERSION,
+                       'full_version': FULLVERSION,
+                       'git_revision': GIT_REVISION,
+                       'isreleased': str(ISRELEASED)})
+    finally:
+        a.close()
+
 
 # Return the git revision as a string
 def git_version():

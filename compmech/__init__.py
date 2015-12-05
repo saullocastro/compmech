@@ -24,7 +24,7 @@ The implementation is based on Python and the low level routines are
 programmed in C and Cython.
 
 """
-__version__ = '0.4.1 dev'
+from compmech.version import __version__
 
 import os
 lib = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
