@@ -7,13 +7,9 @@ theories and implementations on the field of Mechanics.
 This setup is based on SciPy's setup.
 
 """
-
-DOCLINES = __doc__.split("\n")
-
 import os
 import sys
 import subprocess
-
 
 if sys.version_info[:2] < (2, 6) or (3, 0) <= sys.version_info[0:2] < (3, 2):
     raise RuntimeError("Python version 2.7 or >= 3.2 required.")
@@ -23,25 +19,12 @@ if sys.version_info[0] < 3:
 else:
     import builtins
 
-CLASSIFIERS = """\
-Development Status :: 4 - Beta
-Intended Audience :: Science/Research
-Intended Audience :: Developers
-License :: BSD Approved
-Programming Language :: FORTRAN
-Programming Language :: C
-Programming Language :: Python
-Topic :: Software Development
-Topic :: Scientific/Engineering
-Operating System :: Microsoft :: Windows
-Operating System :: Unix
-
-"""
 MAJOR = 0
 MINOR = 4
 MICRO = 1
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
+
 
 def write_version_py(filename='compmech/version.py'):
     cnt = """
@@ -94,12 +77,6 @@ def git_version():
         GIT_REVISION = "Unknown"
 
     return GIT_REVISION
-
-
-# BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
-# update it when the contents of directories change.
-if os.path.exists('MANIFEST'):
-    os.remove('MANIFEST')
 
 
 def get_version_info():
@@ -189,4 +166,26 @@ def setup_package():
     setup(**metadata)
 
 if __name__ == '__main__':
+    DOCLINES = __doc__.split("\n")
+
+    CLASSIFIERS = """\
+    Development Status :: 4 - Beta
+    Intended Audience :: Science/Research
+    Intended Audience :: Developers
+    License :: BSD Approved
+    Programming Language :: FORTRAN
+    Programming Language :: C
+    Programming Language :: Python
+    Topic :: Software Development
+    Topic :: Scientific/Engineering
+    Operating System :: Microsoft :: Windows
+    Operating System :: Unix
+
+    """
+
+    # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
+    # update it when the contents of directories change.
+    if os.path.exists('MANIFEST'):
+        os.remove('MANIFEST')
+
     setup_package()
