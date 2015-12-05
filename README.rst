@@ -14,7 +14,7 @@ Requirements
 ------------
 - numpy
 - scipy
-- cython and a C compiler
+- (for building only) Cython and a C compiler
 
 Licensing
 ---------
