@@ -8,7 +8,7 @@ from sympy import collect, var, sin, cos, pi
 def pow2mult(instr):
     """Power to multiplications
 
-    Substitutes x**5 by x*x*x*x*x
+    Substitutes x**5 or pow(x, 5) by x*x*x*x*x
 
     Parameters
     ----------
@@ -32,6 +32,15 @@ def pow2mult(instr):
     outstr = instr
     for old, new in old_new:
         outstr = outstr.replace(old, new)
+
+    old_new = []
+    for p in re.findall(r'pow\(\w+,\s*\w+\)', instr):
+        var, exp = p.split('pow')[1].split('(')[1].split(')')[0].split(',')
+        new = '(' + '*'.join([var]*int(exp)) + ')'
+        old_new.append([p, new])
+    for old, new in old_new:
+        outstr = outstr.replace(old, new)
+
     return outstr
 
 
