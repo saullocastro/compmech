@@ -1,6 +1,7 @@
 from __future__ import division, print_function, absolute_import
 
-import sys
+import os
+from subprocess import Popen
 
 
 def configuration(parent_package='',top_path=None):
@@ -12,12 +13,21 @@ def configuration(parent_package='',top_path=None):
     config.add_subpackage('conecyl')
     config.add_data_dir('include')
     config.add_subpackage('integrate')
-    config.add_subpackage('lib')
+
+    p = Popen(os.path.join(os.path.realpath(config.package_path),
+                           './lib/setup.py') +
+              ' build_ext --inplace clean', shell=True)
+    p.wait()
+
     config.add_data_dir('lib')
     config.add_subpackage('matplotlib_utils')
     config.add_subpackage('panels')
     config.add_subpackage('plates')
     config.add_subpackage('symbolic')
+
+    config.make_config_py()
+
+
     config.make_config_py()
     return config
 
