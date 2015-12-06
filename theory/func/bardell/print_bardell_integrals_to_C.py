@@ -90,7 +90,7 @@ for i, filepath in enumerate(
                     printstr += '    case %d:\n' % i
                     printstr += '        switch(j) {\n'
                 printstr += '        case %d:\n' % j
-                printstr += '            return %s;\n' % star2Cpow(str(matrix[i, j].expand()))
+                printstr += '            return %s;\n' % star2Cpow(str(matrix[i, j].evalf()))
         printstr += '        default:\n'
         printstr += '            return 0.;\n'
         printstr += '        }\n'
@@ -100,8 +100,10 @@ for i, filepath in enumerate(
         printstr += '}\n'
 
         if '_12' in filepath:
-            printstr_12 += printstr
             printstr_12_h += printstr_h
+            filepath = r'..\..\..\C\src\bardell_12_%s.c' % name[:-3]
+            with open(filepath, 'w') as g:
+                g.write(printstr_12 + printstr)
         else:
             printstr_full += printstr
             printstr_full_h += printstr_h
@@ -115,6 +117,3 @@ with open(r'..\..\..\C\src\bardell.c', 'w') as g:
 
 with open(r'..\..\..\compmech\include\bardell_12.h', 'w') as g:
     g.write(printstr_12_h)
-
-with open(r'..\..\..\C\src\bardell_12.c', 'w') as g:
-    g.write(printstr_12)
