@@ -15,6 +15,7 @@ The details about each implemented module are given below:
 .. toctree::
    :maxdepth: 1
 
+   aero/index.rst
    conecyl/index.rst
    fem/index.rst
    meshfree/index.rst
