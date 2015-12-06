@@ -9,6 +9,7 @@ def configuration(parent_package='',top_path=None):
     config.add_subpackage('clpt')
     config.add_subpackage('fsdt')
     config.add_subpackage('imperfections')
+    config.add_subpackage('sympytools')
     config.make_config_py()
     return config
 
