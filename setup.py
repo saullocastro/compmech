@@ -29,11 +29,11 @@ VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 def write_version_py(filename='compmech/version.py'):
     cnt = """
 # THIS FILE IS GENERATED FROM CompMech setup.py
-# short_version = '%(version)s'
-# version = '%(version)s'
-# full_version = '%(full_version)s'
-# git_revision = '%(git_revision)s'
-# isreleased = %(isreleased)s
+short_version = '%(version)s'
+version = '%(version)s'
+full_version = '%(full_version)s'
+git_revision = '%(git_revision)s'
+isreleased = %(isreleased)s
 if isreleased:
     __version__ = version
 else:
@@ -187,5 +187,7 @@ if __name__ == '__main__':
     # update it when the contents of directories change.
     if os.path.exists('MANIFEST'):
         os.remove('MANIFEST')
+
+    write_version_py()
 
     setup_package()
