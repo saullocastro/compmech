@@ -3,7 +3,7 @@
 Bardell's Hierarchical Functions
 ================================
 
-Bardell (1991) [bardell1991]_ proposed a very convinient approximation
+Bardell (1991) [bardell1991]_ proposed a very convinient set of approximation
 functions based on hierarchical polynomials. The convenience comes from the
 fast convergence and from the easiness to simulate practically any type of
 boundary conditions.
