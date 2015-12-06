@@ -1,25 +1,36 @@
 Version 0.4.1
 -------------
-- split bardell_12.c into 6 C codes, such that we can compile in parallel into
-  a single DLL
-- finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
-  stiffeners
 - implement compmech.aero.pistonstiff2Dpanelbay
-- fix k0edges for pistonstiff2Dpanelbay
-- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
 - simplify the way we apply pre-stress to be taken as constant or variable
   along the linear buckling analyses.... we can do Nxx_cte and Nxx_var, for
   example
 
 Version 0.4.2
 -------------
+- finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
+  stiffeners
+- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
+  (pre-load for 1D stiffeners)
+- implement k0edges for pistonstiff2Dpanelbay (not priority)
+
+Version 0.5.0
+-------------
+- unify the calculation of stiffness matrices for panels (e.g. fk0y1y2)
+- unify the calculation of stiffness matrices for plates
+- restructuration of modules based on the unification aforementioned
+-- currently the aero module does linear buckling analysis
+-- create a module panels with stiffeners being optional
+-- create a module plates with stiffeners being optional
+-- create a module unstiffened panels (faster than stiffened)
+-- create a module unstiffened plates (faster than stiffened)
+-- the aeroelasticity functionality will be integrated in the freq()
+   methods
 - finish implementing compmech.plate for Monteiro
 - fix mass matrix (kM) calculation for compmech.aero.pistonstiffpanel.fsdt.
   The rotation degrees of freedom should not use F = m*a, but another relation
   to consider the rotational energy properly
-
-Version 0.5.0
--------------
+- put matrices for cones and cylinders in the new format and unify their
+  calculation as we did for plates and panels
 - robustness of sparse-solver for the aero module, it is really a pain to use
   the dense solver because of the relative slowness...
 - tune eigenvalue solver for freq in compmech.aero, similarly to what has been
