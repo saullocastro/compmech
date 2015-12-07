@@ -43,7 +43,6 @@ class Panel(object):
     """
     def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
             stack=[], plyt=None, laminaprop=[]):
-        self.name = ''
         self.a = a
         self.b = b
         self.y1 = y1
@@ -53,6 +52,9 @@ class Panel(object):
         self.stack = stack
         self.plyt = plyt
         self.laminaprop = laminaprop
+
+        self.name = ''
+        self.bay = None
 
         # model
         self.model = None
@@ -107,15 +109,19 @@ class Panel(object):
         self.w2ty = 0.
         self.w2ry = 1.
 
-        # initial imperfection
-        self.c0 = None
-        self.m0 = 0
-        self.n0 = 0
-        self.funcnum = 2
-
         # material
         self.plyts = []
         self.laminaprops = []
+
+        # aeroelastic parameters
+        self.flow = 'x'
+        self.beta = None
+        self.gamma = None
+        self.aeromu = None
+        self.rho_air = None
+        self.speed_sound = None
+        self.Mach = None
+        self.V = None
 
         # constitutive law
         self.F = None
@@ -449,6 +455,51 @@ class Panel(object):
         kM = csr_matrix(make_symmetric(kM))
 
         self.kM = kM
+
+        #NOTE forcing Python garbage collector to clean the memory
+        #     it DOES make a difference! There is a memory leak not
+        #     identified, probably in the csr_matrix process
+
+        gc.collect()
+
+        msg('finished!', level=2, silent=silent)
+
+
+    def calc_kA(self, speed_sound, V, Mach, rho_air, beta=None, gamma=None,
+            aeromu=None):
+        if 'kpanel' in self.model:
+            raise NotImplementedError('Conical panels not supported')
+
+        r = self.r if self.r is not None else 0.
+
+        if self.beta is None:
+            if self.Mach < 1:
+                raise ValueError('Mach number must be >= 1')
+            elif self.Mach == 1:
+                self.Mach = 1.0001
+            M = self.Mach
+            beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
+            gamma = beta*1./(2.*self.r*(M**2 - 1)**0.5)
+            ainf = self.speed_sound
+            aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
+        else:
+            beta = self.beta
+            gamma = self.gamma if self.gamma is not None else 0.
+            aeromu = self.aeromu if self.aeromu is not None else 0.
+
+        if self.flow.lower() == 'x':
+            kA = matrices.fkAx(beta, gamma, a, b, m, n, self.size, 0, 0)
+        elif self.flow.lower() == 'y':
+            kA = mod.fkAy(beta, a, b, m, n, size, 0, 0)
+        else:
+            raise ValueError('Invalid flow value, must be x or y')
+
+        assert np.any(np.isnan(kA.data)) == False
+        assert np.any(np.isinf(kA.data)) == False
+
+        kA = csr_matrix(make_skew_symmetric(kA))
+
+        self.kA = kA
 
         #NOTE forcing Python garbage collector to clean the memory
         #     it DOES make a difference! There is a memory leak not
