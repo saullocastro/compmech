@@ -178,10 +178,17 @@ class Panel(object):
             raise ValueError('ERROR - valid models are:\n    ' +
                      '\n    '.join(valid_models))
 
+        if not self.stack:
+            raise ValueError('stack must be defined')
+
         if not self.laminaprops:
+            if not self.laminaprop:
+                raise ValueError('laminaprop must be defined')
             self.laminaprops = [self.laminaprop for i in self.stack]
 
         if not self.plyts:
+            if self.plyt is None:
+                raise ValueError('plyt must be defined')
             self.plyts = [self.plyt for i in self.stack]
 
         def check_load(load, size):
@@ -214,10 +221,6 @@ class Panel(object):
         size = self.m+1
         self.Nyy_cte = check_load(self.Nyy_cte, size)
         self.Nyy = check_load(self.Nyy, size)
-
-        # defining load components from force vectors
-        if self.laminaprop is None:
-            raise ValueError('laminaprop must be defined')
 
 
     def get_size(self):
@@ -258,9 +261,12 @@ class Panel(object):
         return xs, ys, xshape, tshape
 
 
-    def calc_k0(self):
+    def calc_k0(self, size=None, row0=0, col0=0):
         self._rebuild()
         msg('Calculating k0... ', level=2)
+
+        if size is None:
+            size = self.get_size()
 
         matrices = modelDB.db[self.model]['matrices']
 
@@ -375,8 +381,11 @@ class Panel(object):
         msg('finished!', level=2)
 
 
-    def calc_kG0(self):
+    def calc_kG0(self, size=None, row0=0, col0=0):
         msg('Calculating kG0... ', level=2)
+
+        if size is None:
+            size = self.get_size()
 
         matrices = modelDB.db[self.model]['matrices']
 
@@ -408,6 +417,46 @@ class Panel(object):
         gc.collect()
 
         msg('finished!', level=2)
+
+
+    def calc_kM(self, size=None, row0=0, col0=0):
+        msg('Calculating kM... ', level=2)
+
+        if size is None:
+            size = self.get_size()
+
+        if y1 is not None and y2 is not None:
+            kM = fkMy1y2(y1, y2, mu, d, h, a, b, m, n,
+                self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                size, row0, col0)
+        else:
+            kM = fkM(mu, d, h, a, b, m, n,
+                self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                size, row0, col0)
+
+        assert np.any(np.isnan(kM.data)) == False
+        assert np.any(np.isinf(kM.data)) == False
+        kM = csr_matrix(make_symmetric(kM))
+
+        self.kM = kM
+
+        #NOTE forcing Python garbage collector to clean the memory
+        #     it DOES make a difference! There is a memory leak not
+        #     identified, probably in the csr_matrix process
+
+        gc.collect()
+
+        msg('finished!', level=2, silent=silent)
 
 
     def lb(self, tol=0, sparse_solver=True):
