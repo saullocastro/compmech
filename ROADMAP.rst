@@ -9,22 +9,29 @@ Version 0.5.0
 -- create a module stiffplate1d
 -- create a module stiffpanelbay1d
 -- create a module stiffpanelbay2d
--- remove module plate and keep only stiffplate, without stiffeners the same
-   behavior obtained with plate alone
--- remove module panel and keep only stiffpanel, same reason as previous item
--- the aeroelasticity functionality will be integrated in the freq()
-   methods
+-- centralize panel calculation in module panel, include functions k0 and
+   k0y1y2, kG0, kG0y1y2 and so forth
+-- centralize plate calculation in module panel, same as for panels
 - kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
   (pre-load for 1D stiffeners)
+
+
+
 
 Version 0.5.1
 -------------
 - implement k0edges for pistonstiff2Dpanelbay (not priority)
-- finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
-  stiffeners
+- finish implementing pre-load for 1D stiffeners
 
 Version 0.6.0
 -------------
+Compromise study considering the two following items
+- centralize the core modules for clpt and fsdt
+- remove plate modules and keep only stiffpanel, with possibility to call:
+-- plate (r is None and alpha is None)
+-- cylindrical panel (r is not None and alpha is None)
+-- conical panel (r is not None and alpha is not None)
+
 - finish implementing compmech.plate for Monteiro
 - fix mass matrix (kM) calculation for compmech.aero.pistonstiffpanel.fsdt.
   The rotation degrees of freedom should not use F = m*a, but another relation
