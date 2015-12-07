@@ -1,30 +1,30 @@
-Version 0.4.1
+Version 0.5.0
 -------------
 - implement compmech.aero.pistonstiff2Dpanelbay
 - simplify the way we apply pre-stress to be taken as constant or variable
   along the linear buckling analyses.... we can do Nxx_cte and Nxx_var, for
   example
-
-Version 0.4.2
--------------
-- finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
-  stiffeners
-- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
-  (pre-load for 1D stiffeners)
-- implement k0edges for pistonstiff2Dpanelbay (not priority)
-
-Version 0.5.0
--------------
-- unify the calculation of stiffness matrices for panels (e.g. fk0y1y2)
-- unify the calculation of stiffness matrices for plates
-- restructuration of modules based on the unification aforementioned
--- currently the aero module does linear buckling analysis
--- create a module panels with stiffeners being optional
--- create a module plates with stiffeners being optional
--- create a module unstiffened panels (faster than stiffened)
--- create a module unstiffened plates (faster than stiffened)
+- restructuration of modules
+-- create a module stiffpanel1d
+-- create a module stiffplate1d
+-- create a module stiffpanelbay1d
+-- create a module stiffpanelbay2d
+-- remove module plate and keep only stiffplate, without stiffeners the same
+   behavior obtained with plate alone
+-- remove module panel and keep only stiffpanel, same reason as previous item
 -- the aeroelasticity functionality will be integrated in the freq()
    methods
+- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
+  (pre-load for 1D stiffeners)
+
+Version 0.5.1
+-------------
+- implement k0edges for pistonstiff2Dpanelbay (not priority)
+- finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
+  stiffeners
+
+Version 0.6.0
+-------------
 - finish implementing compmech.plate for Monteiro
 - fix mass matrix (kM) calculation for compmech.aero.pistonstiffpanel.fsdt.
   The rotation degrees of freedom should not use F = m*a, but another relation
