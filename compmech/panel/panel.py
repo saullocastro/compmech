@@ -24,68 +24,41 @@ import modelDB
 
 
 def load(name):
-    if '.CPanel' in name:
+    if '.Panel' in name:
         return cPickle.load(open(name, 'rb'))
     else:
-        return cPickle.load(open(name + '.CPanel', 'rb'))
+        return cPickle.load(open(name + '.Panel', 'rb'))
 
 
-class CPanel(object):
-    r"""Cylindrical panel using bardell functions
+class Panel(object):
+    r"""General Panel class
 
     The approximation functions for the displacement fields are built using
     :ref:`Bardell's functions <theory_func_bardell>`.
 
+    It will select the proper model according to the `r` (radius) and
+    `alphadeg` (semi-vertex angle).
+
 
     """
-    def __init__(self):
+    def __init__(self, a, b, r=None, alphadeg=None, stack=[], plyt=None,
+            laminaprop=[]):
         self.name = ''
+        self.a = a
+        self.b = b
+        self.r = r
+        self.alphadeg = alphadeg
+        self.stack = stack
+        self.plyt = plyt
+        self.laminaprop = laminaprop
 
-        # boundary conditions
-        # "inf" is used to define the high stiffnesses (removed dofs)
-        #       a high value will cause numerical instabilities
-        #TODO use a marker number for self.inf and self.maxinf if the
-        #     normalization of edge stiffenesses is adopted
-        #     now it is already independent of self.inf and more robust
-        self.inf = 1.e8
-        self.maxinf = 1.e8
-        self.zero = 0. # used to define zero stiffnesses
-        self.bc = None
-        self.xi1t = None
-        self.xi1r = None
-        self.xi2t = None
-        self.xi2r = None
-        self.eta1t = None
-        self.eta1r = None
-        self.eta2t = None
-        self.eta2r = None
-        self.kuBot = self.inf
-        self.kvBot = self.inf
-        self.kwBot = self.inf
-        self.kphixBot = 0.
-        self.kphiyBot = 0.
-        self.kuTop = self.inf
-        self.kvTop = self.inf
-        self.kwTop = self.inf
-        self.kphixTop = 0.
-        self.kphiyTop = 0.
-        self.kuLeft = self.inf
-        self.kvLeft = self.inf
-        self.kwLeft = self.inf
-        self.kphixLeft = 0.
-        self.kphiyLeft = 0.
-        self.kuRight = self.inf
-        self.kvRight = self.inf
-        self.kwRight = self.inf
-        self.kphixRight = 0.
-        self.kphiyRight = 0.
-
-        # default equations
-        self.model = 'clpt_donnell_bardell'
+        # model
+        self.model = None
+        self.K = 5/6. # in case of First-order Shear Deformation Theory
 
         # approximation series
-        self.m1 = 11
-        self.n1 = 11
+        self.m = 11
+        self.n = 11
 
         # numerical integration
         self.nx = 160
@@ -97,20 +70,40 @@ class CPanel(object):
         self.Nxx = None
         self.Nyy = None
         self.Nxy = None
-        self.NxxTop = None
-        self.NxyTop = None
-        self.NyyLeft = None
-        self.NyxLeft = None
-        self.Fx_inc = None
-        self.Fy_inc = None
-        self.Fxy_inc = None
-        self.Fyx_inc = None
-        self.NxxTop_inc = None
-        self.NxyTop_inc = None
-        self.NyyLeft_inc = None
-        self.NyxLeft_inc = None
+        self.Nxx_cte = None
+        self.Nyy_cte = None
+        self.Nxy_cte = None
         self.forces = []
         self.forces_inc = []
+
+        # boundary conditions
+
+        # displacement at 4 edges is zero
+        # free to rotate at 4 edges (simply supported by default)
+        self.u1tx = 0.
+        self.u1rx = 0.
+        self.u2tx = 0.
+        self.u2rx = 0.
+        self.v1tx = 0.
+        self.v1rx = 0.
+        self.v2tx = 0.
+        self.v2rx = 0.
+        self.w1tx = 0.
+        self.w1rx = 1.
+        self.w2tx = 0.
+        self.w2rx = 1.
+        self.u1ty = 0.
+        self.u1ry = 0.
+        self.u2ty = 0.
+        self.u2ry = 0.
+        self.v1ty = 0.
+        self.v1ry = 0.
+        self.v2ty = 0.
+        self.v2ry = 0.
+        self.w1ty = 0.
+        self.w1ry = 1.
+        self.w2ty = 0.
+        self.w2ry = 1.
 
         # initial imperfection
         self.c0 = None
@@ -118,17 +111,9 @@ class CPanel(object):
         self.n0 = 0
         self.funcnum = 2
 
-        self.a = None
-        self.b = None
-        self.r = None
-        self.K = 5/6.
-
         # material
-        self.laminaprop = None
-        self.plyt = None
-        self.laminaprops = []
-        self.stack = []
         self.plyts = []
+        self.laminaprops = []
 
         # constitutive law
         self.F = None
@@ -157,9 +142,6 @@ class CPanel(object):
         self.k0 = None
         self.kT = None
         self.kG0 = None
-        self.kG0_Nxx = None
-        self.kG0_Nyy = None
-        self.kG0_Nxy = None
         self.kG = None
         self.kL = None
         self.lam = None
@@ -179,9 +161,14 @@ class CPanel(object):
             try:
                 self.name = os.path.basename(__main__.__file__).split('.py')[0]
             except AttributeError:
-                warn('CPanel name unchanged')
+                warn('Panel name unchanged')
 
-        self.model = self.model.lower()
+        if self.r is None and self.alphadeg is None:
+            self.model = 'plate_clpt_donnell_bardell'
+        elif self.r is not None and self.alphadeg is None:
+            self.model = 'cplate_clpt_donnell_bardell'
+        elif self.r is not None and self.alphadeg is not None:
+            self.model = 'kplate_clpt_donnell_bardell'
 
         valid_models = sorted(modelDB.db.keys())
 
@@ -189,141 +176,9 @@ class CPanel(object):
             raise ValueError('ERROR - valid models are:\n    ' +
                      '\n    '.join(valid_models))
 
-        # boundary conditions
-        inf = self.inf
-        zero = self.zero
-
-        if inf > self.maxinf:
-            warn('inf reduced to {0:1.1e4} due to the verified'.format(
-                 self.maxinf) +
-                 ' numerical instability for higher values', level=2)
-            inf = self.maxinf
-
-        if self.bc is not None:
-            bc = self.bc.lower()
-
-            if '_' in bc:
-                # different bc for Bot, Top, Left and Right
-                bc_Bot, bc_Top, bc_Left, bc_Right = self.bc.split('_')
-            elif '-' in bc:
-                # different bc for Bot, Top, Left and Right
-                bc_Bot, bc_Top, bc_Left, bc_Right = self.bc.split('-')
-            else:
-                bc_Bot = bc_Top = bc_Left = bc_Right = bc
-
-            bcs = dict(bc_Bot=bc_Bot, bc_Top=bc_Top,
-                       bc_Left=bc_Left, bc_Right=bc_Right)
-
-        if not 'bardell' in self.model and self.bc is not None:
-            for k in bcs.keys():
-                sufix = k.split('_')[1] # Bot or Top
-                if bcs[k] == 'ss1':
-                    setattr(self, 'ku' + sufix, inf)
-                    setattr(self, 'kv' + sufix, inf)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-                elif bcs[k] == 'ss2':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, inf)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-                elif bcs[k] == 'ss3':
-                    setattr(self, 'ku' + sufix, inf)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-                elif bcs[k] == 'ss4':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-
-                elif bcs[k] == 'cc1':
-                    setattr(self, 'ku' + sufix, inf)
-                    setattr(self, 'kv' + sufix, inf)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, inf)
-                    setattr(self, 'kphiy' + sufix, inf)
-                elif bcs[k] == 'cc2':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, inf)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, inf)
-                    setattr(self, 'kphiy' + sufix, inf)
-                elif bcs[k] == 'cc3':
-                    setattr(self, 'ku' + sufix, inf)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, inf)
-                    setattr(self, 'kphiy' + sufix, inf)
-                elif bcs[k] == 'cc4':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, inf)
-                    setattr(self, 'kphix' + sufix, inf)
-                    setattr(self, 'kphiy' + sufix, inf)
-
-                elif bcs[k] == 'free':
-                    setattr(self, 'ku' + sufix, zero)
-                    setattr(self, 'kv' + sufix, zero)
-                    setattr(self, 'kw' + sufix, zero)
-                    setattr(self, 'kphix' + sufix, zero)
-                    setattr(self, 'kphiy' + sufix, zero)
-
-                else:
-                    txt = '"{}" is not a valid boundary condition!'.format(bc)
-                    raise ValueError(txt)
-
-        elif 'bardell' in self.model and self.bc is not None:
-            # displacement at 4 edges is zero
-            # free to rotate at 4 edges (simply supported by default)
-            self.u1tx = 0.
-            self.u1rx = 0.
-            self.u2tx = 0.
-            self.u2rx = 0.
-            self.v1tx = 0.
-            self.v1rx = 0.
-            self.v2tx = 0.
-            self.v2rx = 0.
-            self.w1tx = 0.
-            self.w1rx = 1.
-            self.w2tx = 0.
-            self.w2rx = 1.
-            self.u1ty = 0.
-            self.u1ry = 0.
-            self.u2ty = 0.
-            self.u2ry = 0.
-            self.v1ty = 0.
-            self.v1ry = 0.
-            self.v2ty = 0.
-            self.v2ry = 0.
-            self.w1ty = 0.
-            self.w1ry = 1.
-            self.w2ty = 0.
-            self.w2ry = 1.
-            bcs = dict(bc_Bot=bc_Bot, bc_Top=bc_Top,
-                       bc_Left=bc_Left, bc_Right=bc_Right)
-            if 'cc' in bcs['bc_Bot']:
-                self.w1rx = 0
-            if 'cc' in bcs['bc_Top']:
-                self.w2rx = 0
-            if 'cc' in bcs['bc_Right']:
-                self.w1ry = 0
-            if 'cc' in bcs['bc_Left']:
-                self.w2ry = 0
-
-        if self.a is None:
-            raise ValueError('The length a must be specified')
-
-        if self.b is None:
-            raise ValueError('The width b must be specified')
-
         if not self.laminaprops:
             self.laminaprops = [self.laminaprop for i in self.stack]
+
         if not self.plyts:
             self.plyts = [self.plyt for i in self.stack]
 
@@ -341,25 +196,22 @@ class CPanel(object):
 
                     return newload
                 if not check:
-                    raise ValueError('Invalid NxxTop input')
+                    raise ValueError('Invalid Nxx_cte input')
             else:
                 return np.zeros(size, dtype=DOUBLE)
 
 
         # axial load
-        size = self.n1+1
-        self.NxxTop = check_load(self.NxxTop, size)
-        self.NxxTop_inc = check_load(self.NxxTop_inc, size)
+        size = self.n+1
+        self.Nxx_cte = check_load(self.Nxx_cte, size)
+        self.Nxx = check_load(self.Nxx, size)
         # shear xt
-        self.NxyTop = check_load(self.NxyTop, size)
-        self.NxyTop_inc = check_load(self.NxyTop_inc, size)
+        self.Nxy_cte = check_load(self.Nxy_cte, size)
+        self.Nxy = check_load(self.Nxy, size)
         # circumferential load
-        size = self.m1+1
-        self.NyyLeft = check_load(self.NyyLeft, size)
-        self.NyyLeft_inc = check_load(self.NyyLeft_inc, size)
-        # shear tx
-        self.NyxLeft = check_load(self.NyxLeft, size)
-        self.NyxLeft_inc = check_load(self.NyxLeft_inc, size)
+        size = self.m+1
+        self.Nyy_cte = check_load(self.Nyy_cte, size)
+        self.Nyy = check_load(self.Nyy, size)
 
         # defining load components from force vectors
         if self.laminaprop is None:
@@ -380,9 +232,8 @@ class CPanel(object):
             The size of the stiffness matrices.
 
         """
-        num0 = modelDB.db[self.model]['num0']
-        num1 = modelDB.db[self.model]['num1']
-        self.size = num0 + num1*self.m1*self.n1
+        num = modelDB.db[self.model]['num']
+        self.size = num*self.m*self.n
         return self.size
 
 
@@ -405,20 +256,23 @@ class CPanel(object):
         return xs, ys, xshape, tshape
 
 
-    def calc_linear_matrices(self, combined_load_case=None):
+    def calc_k0(self):
         self._rebuild()
-        msg('Calculating linear matrices... ', level=2)
+        msg('Calculating k0... ', level=2)
 
-        fk0, fkG0, k0edges = modelDB.get_linear_matrices(self)
-        model = self.model
+        matrices = modelDB.db[self.model]['matrices']
+
         a = self.a
         b = self.b
-        r = self.r
-        m1 = self.m1
-        n1 = self.n1
-        laminaprops = self.laminaprops
-        plyts = self.plyts
+        r = self.r if self.r is not None else 0.
+        alphadeg = self.alphadeg if self.alphadeg is not None else 0.
+
+        m = self.m
+        n = self.n
+
         stack = self.stack
+        plyts = self.plyts
+        laminaprops = self.laminaprops
 
         if stack != []:
             lam = laminate.read_stack(stack, plyts=plyts,
@@ -462,86 +316,65 @@ class CPanel(object):
 
         self.lam = lam
         self.F = F
-        Nxx = self.Nxx if self.Nxx is not None else 0.
-        Nyy = self.Nyy if self.Nyy is not None else 0.
-        Nxy = self.Nxy if self.Nxy is not None else 0.
 
-        if 'bardell' in self.model:
-            k0 = fk0(a, b, r, F,
-                     self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                     self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                     self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                     self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                     self.m1, self.n1)
-        else:
-            k0 = fk0(a, b, F, m1, n1)
+        alpharad = deg2rad(alphadeg)
+        k0 = matrices.fk0(a, b, r, alpharad, F,
+                 self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                 self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                 self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                 self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                 self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                 self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                 self.m, self.n)
 
-        if 'bardell' in self.model:
-            if not combined_load_case:
-                kG0 = fkG0(Nxx, Nyy, Nxy, a, b,
-                           self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                           self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                           self.m1, self.n1)
-            else:
-                kG0_Nxx = fkG0(Nxx, 0, 0, a, b,
-                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                               self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                               self.m1, self.n1)
-                kG0_Nyy = fkG0(0, Nyy, 0, a, b,
-                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                               self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                               self.m1, self.n1)
-                kG0_Nxy = fkG0(0, 0, Nxy, a, b,
-                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                               self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                               self.m1, self.n1)
-        else:
-            if not combined_load_case:
-                kG0 = fkG0(Nxx, Nyy, Nxy, a, b, m1, n1)
-            else:
-                kG0_Nxx = fkG0(Nxx, 0, 0, 0, a, b, m1, n1)
-                kG0_Nyy = fkG0(0, Nyy, 0, 0, a, b, m1, n1)
-                kG0_Nxy = fkG0(0, 0, Nxy, 0, a, b, m1, n1)
+        Nxx_cte = self.Nxx_cte if self.Nxx_cte is not None else 0.
+        Nyy_cte = self.Nyy_cte if self.Nyy_cte is not None else 0.
+        Nxy_cte = self.Nxy_cte if self.Nxy_cte is not None else 0.
 
-        # performing checks for the linear stiffness matrices
+        if Nxx_cte != 0. or Nyy_cte != 0. or Nxy_cte != 0.:
+            k0 += fkG0(Nxx_cte, Nyy_cte, Nxy_cte, a, b, r, alpharad
+                       self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                       self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                       self.m, self.n)
 
+        # performing checks for k0
         assert np.any(np.isnan(k0.data)) == False
         assert np.any(np.isinf(k0.data)) == False
 
         k0 = csr_matrix(make_symmetric(k0))
 
-        if k0edges is not None:
-            assert np.any((np.isnan(k0edges.data)
-                           | np.isinf(k0edges.data))) == False
-            k0edges = csr_matrix(make_symmetric(k0edges))
-
-            msg('Applying elastic constraints!', level=3)
-            k0 = k0 + k0edges
-
         self.k0 = k0
 
-        if not combined_load_case:
-            assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
-            kG0 = csr_matrix(make_symmetric(kG0))
-            self.kG0 = kG0
+        gc.collect()
 
-        else:
-            assert np.any((np.isnan(kG0_Nxx.data)
-                           | np.isinf(kG0_Nxx.data))) == False
-            assert np.any((np.isnan(kG0_Nyy.data)
-                           | np.isinf(kG0_Nyy.data))) == False
-            assert np.any((np.isnan(kG0_Nxy.data)
-                           | np.isinf(kG0_Nxy.data))) == False
+        msg('finished!', level=2)
 
-            kG0_Nxx = csr_matrix(make_symmetric(kG0_Nxx))
-            kG0_Nyy = csr_matrix(make_symmetric(kG0_Nyy))
-            kG0_Nxy = csr_matrix(make_symmetric(kG0_Nxy))
 
-            self.kG0_Nxx = kG0_Nxx
-            self.kG0_Nyy = kG0_Nyy
-            self.kG0_Nxy = kG0_Nxy
+    def calc_kG0(self):
+        msg('Calculating kG0... ', level=2)
+
+        matrices = modelDB.db[self.model]['matrices']
+
+        a = self.a
+        b = self.b
+        r = self.r if self.r is not None else 0.
+        alphadeg = self.alphadeg if self.alphadeg is not None else 0.
+
+        m = self.m
+        n = self.n
+
+        Nxx = self.Nxx if self.Nxx is not None else 0.
+        Nyy = self.Nyy if self.Nyy is not None else 0.
+        Nxy = self.Nxy if self.Nxy is not None else 0.
+
+        kG0 = matrices.fkG0(Nxx, Nyy, Nxy, a, b, r, alpharad,
+                   self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                   self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                   self.m, self.n)
+
+        assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
+        kG0 = csr_matrix(make_symmetric(kG0))
+        self.kG0 = kG0
 
         #NOTE forcing Python garbage collector to clean the memory
         #     it DOES make a difference! There is a memory leak not
@@ -552,10 +385,10 @@ class CPanel(object):
         msg('finished!', level=2)
 
 
-    def lb(self, tol=0, combined_load_case=None, sparse_solver=True):
+    def lb(self, tol=0, sparse_solver=True):
         """Performs a linear buckling analysis
 
-        The following parameters of the ``CPanel`` object will affect the
+        The following parameters of the ``Panel`` object will affect the
         linear buckling analysis:
 
         =======================    =====================================
@@ -568,15 +401,6 @@ class CPanel(object):
 
         Parameters
         ----------
-        combined_load_case : int, optional
-            It tells whether the linear buckling analysis must be computed
-            considering combined load cases, each value will tell
-            the algorithm to rearrange the linear matrices in a different
-            way. The valid values are ``1``, or ``2``, where:
-
-            - ``1`` : find the critical Nxx for a fixed Nxy
-            - ``2`` : find the critical Nxx for a fixed Nyy
-            - ``3`` : find the critical Nyy for a fixed Nxx
         sparse_solver : bool, optional
             Tells if solver :func:`scipy.linalg.eigh` or
             :func:`scipy.sparse.linalg.eigsh` should be used.
@@ -584,7 +408,7 @@ class CPanel(object):
         Notes
         -----
         The extracted eigenvalues are stored in the ``eigvals`` parameter
-        of the ``CPanel`` object and the `i^{th}` eigenvector in the
+        of the ``Panel`` object and the `i^{th}` eigenvector in the
         ``eigvecs[:, i-1]`` parameter.
 
         """
@@ -601,18 +425,8 @@ class CPanel(object):
 
         msg('Eigenvalue solver... ', level=2)
 
-        if not combined_load_case:
-            M = self.k0
-            A = self.kG0
-        elif combined_load_case == 1:
-            M = self.k0 + self.kG0_Nxy
-            A = self.kG0_Nxx
-        elif combined_load_case == 2:
-            M = self.k0 + self.kG0_Nyy
-            A = self.kG0_Nxx
-        elif combined_load_case == 3:
-            M = self.k0 + self.kG0_Nxx
-            A = self.kG0_Nyy
+        M = self.k0
+        A = self.kG0
 
         if sparse_solver:
             mode = 'cayley'
@@ -637,14 +451,14 @@ class CPanel(object):
         else:
             from scipy.linalg import eigh
 
-            size22 = A.shape[0]
+            size = A.shape[0]
             M, A, used_cols = remove_null_cols(M, A)
             M = M.toarray()
             A = A.toarray()
             msg('eigh() solver...', level=3)
             eigvals, peigvecs = eigh(a=A, b=M)
             msg('finished!', level=3)
-            eigvecs = np.zeros((size22, self.num_eigvalues), dtype=DOUBLE)
+            eigvecs = np.zeros((size, self.num_eigvalues), dtype=DOUBLE)
             eigvecs[used_cols, :] = peigvecs[:, :self.num_eigvalues]
 
         eigvals = -1./eigvals
@@ -660,83 +474,12 @@ class CPanel(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def calc_NL_matrices(self, c, num_cores=None):
-        r"""Calculates the non-linear stiffness matrices
-
-        Parameters
-        ----------
-        c : np.ndarray
-            Ritz constants representing the current state to calculate the
-            stiffness matrices.
-        num_cores : int, optional
-            Number of CPU cores used by the algorithm.
-
-        Notes
-        -----
-        Nothing is returned, the calculated matrices
-
-        """
-        c = np.ascontiguousarray(c, dtype=DOUBLE)
-
-        if num_cores is None:
-            num_cores = self.ni_num_cores
-
-        if self.k0 is None:
-            self.calc_linear_matrices()
-
-        msg('Calculating non-linear matrices...', level=2)
-        a = self.a
-        b = self.b
-        F = self.F
-        m1 = self.m1
-        n1 = self.n1
-        c0 = self.c0
-        m0 = self.m0
-        n0 = self.n0
-        funcnum = self.funcnum
-
-        nlmodule = modelDB.db[self.model]['non-linear']
-        if nlmodule:
-            calc_k0L = nlmodule.calc_k0L
-            calc_kG = nlmodule.calc_kG
-            calc_kLL = nlmodule.calc_kLL
-
-            ni_method = self.ni_method
-            nx = self.nx
-            ny = self.ny
-            kG = calc_kG(c, a, b, F, m1, n1, nx=nx, ny=ny,
-                    num_cores=num_cores, method=ni_method, c0=c0, m0=m0,
-                    n0=n0)
-            k0L = calc_k0L(c, a, b, F, m1, n1, nx=nx, ny=ny,
-                    num_cores=num_cores, method=ni_method, c0=c0, m0=m0,
-                    n0=n0)
-            kLL = calc_kLL(c, a, b, F, m1, n1, nx=nx, ny=ny,
-                    num_cores=num_cores, method=ni_method, c0=c0, m0=m0,
-                    n0=n0)
-
-        else:
-            raise ValueError(
-            'Non-Linear analysis not implemented for model {0}'.format(
-                self.model))
-
-        kL0 = k0L.T
-
-        #TODO maybe slow...
-        self.kT = self.k0 + k0L + kL0 + kLL + kG
-
-        #NOTE intended for non-linear eigenvalue analyses
-        self.kL = self.k0 + k0L + kL0 + kLL
-        self.kG = kG
-
-        msg('finished!', level=2)
-
-
     def uvw(self, c, xs=None, ys=None, gridx=300, gridy=300):
         r"""Calculates the displacement field
 
         For a given full set of Ritz constants ``c``, the displacement
         field is calculated and stored in the parameters
-        ``u``, ``v``, ``w``, ``phix``, ``phiy`` of the ``CPanel`` object.
+        ``u``, ``v``, ``w``, ``phix``, ``phiy`` of the ``Panel`` object.
 
         Parameters
         ----------
@@ -764,20 +507,20 @@ class CPanel(object):
         Notes
         -----
         The returned values ``u```, ``v``, ``w``, ``phix``, ``phiy`` are
-        stored as parameters with the same name in the ``CPanel`` object.
+        stored as parameters with the same name in the ``Panel`` object.
 
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
 
         xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
-        m1 = self.m1
-        n1 = self.n1
+        m = self.m
+        n = self.n
         a = self.a
         b = self.b
         model = self.model
 
         fuvw = modelDB.db[model]['commons'].fuvw
-        us, vs, ws, phixs, phiys = fuvw(c, m1, n1, a, b, xs, ys,
+        us, vs, ws, phixs, phiys = fuvw(c, m, n, a, b, xs, ys,
                 self.out_num_cores)
 
         self.u = us.reshape(xshape)
@@ -816,8 +559,8 @@ class CPanel(object):
 
         a = self.a
         b = self.b
-        m1 = self.m1
-        n1 = self.n1
+        m = self.m
+        n = self.n
         c0 = self.c0
         m0 = self.m0
         n0 = self.n0
@@ -835,7 +578,7 @@ class CPanel(object):
             raise NotImplementedError(
                 '{} is not a valid NL_kinematics option'.format(NL_kinematics))
 
-        es = fstrain(c, xs, ys, a, b, m1, n1,
+        es = fstrain(c, xs, ys, a, b, m, n,
                 c0, m0, n0, funcnum, int_NL_kinematics, self.out_num_cores)
 
         return es.reshape((xshape + (e_num,)))
@@ -869,8 +612,8 @@ class CPanel(object):
         F = self.F
         a = self.a
         b = self.b
-        m1 = self.m1
-        n1 = self.n1
+        m = self.m
+        n = self.n
         c0 = self.c0
         m0 = self.m0
         n0 = self.n0
@@ -889,42 +632,9 @@ class CPanel(object):
                     '{} is not a valid NL_kinematics option'.format(
                     NL_kinematics))
 
-        Ns = fstress(c, F, xs, ys, a, b, m1, n1, c0, m0, n0,
+        Ns = fstress(c, F, xs, ys, a, b, m, n, c0, m0, n0,
                 funcnum, int_NL_kinematics, self.out_num_cores)
         return Ns.reshape((xshape + (e_num,)))
-
-
-    def add_SPL(self, PL, pt=0.5, y=0., cte=True):
-        """Add a Single Perturbation Load `\{{F_{PL}}_i\}`
-
-        The perturbation load is a particular case of the punctual load which
-        as only the normal component (along the `z` axis).
-
-        Parameters
-        ----------
-        PL : float
-            The perturbation load value.
-        pt : float, optional
-            The normalized meridional in which the new SPL will be included.
-        y : float, optional
-            The angular position in radians.
-        cte : bool, optional
-            Constant forces are not incremented during the non-linear
-            analysis.
-
-        Notes
-        -----
-        Each single perturbation load is added to the ``forces`` parameter of
-        the ``CPanel`` object if ``cte=True``, or to the ``forces_inc``
-        parameter if ``cte=False``, which may be changed by the analyst at any
-        time.
-
-        """
-        self._rebuild()
-        if cte:
-            self.forces.append([pt*self.a, y, 0., 0., PL])
-        else:
-            self.forces_inc.append([pt*self.a, y, 0., 0., PL])
 
 
     def add_force(self, x, y, fx, fy, fz, cte=True):
@@ -984,8 +694,8 @@ class CPanel(object):
         msg('Calculating external forces...', level=2, silent=silent)
         a = self.a
         b = self.b
-        m1 = self.m1
-        n1 = self.n1
+        m = self.m
+        n = self.n
         model = self.model
 
         if not model in modelDB.db.keys():
@@ -993,8 +703,7 @@ class CPanel(object):
                     '{} is not a valid model option'.format(model))
 
         db = modelDB.db
-        num0 = db[model]['num0']
-        num1 = db[model]['num1']
+        num = db[model]['num']
         dofs = db[model]['dofs']
         fg = db[model]['commons'].fg
 
@@ -1006,7 +715,7 @@ class CPanel(object):
         # non-incrementable punctual forces
         for i, force in enumerate(self.forces):
             x, y, fx, fy, fz = force
-            fg(g, m1, n1, x, y, a, b)
+            fg(g, m, n, x, y, a, b)
             if dofs == 3:
                 fpt = np.array([[fx, fy, fz]])
             elif dofs == 5:
@@ -1016,24 +725,24 @@ class CPanel(object):
         # incrementable punctual forces
         for i, force in enumerate(self.forces_inc):
             x, y, fx, fy, fz = force
-            fg(g, m1, n1, x, y, a, b)
+            fg(g, m, n, x, y, a, b)
             if dofs == 3:
                 fpt = np.array([[fx, fy, fz]])*inc
             elif dofs == 5:
                 fpt = np.array([[fx, fy, fz, 0, 0]])*inc
             fext += fpt.dot(g).ravel()
 
-        # NxxTop
+        # Nxx_cte
 
-        NxxTop = self.NxxTop
-        NyyLeft = self.NyyLeft
-        NxxTop += inc*self.NxxTop_inc
-        NyyLeft += inc*self.NyyLeft_inc
+        Nxx_cte = self.Nxx_cte
+        Nyy_cte = self.Nyy_cte
+        Nxx_cte += inc*self.Nxx
+        Nyy_cte += inc*self.Nyy
 
-        for j1 in range(1, n1+1):
-            Nxxj = NxxTop[j1]
-            for i1 in range(1, m1+1):
-                col = num1*((j1-1)*m1 + (i1-1))
+        for j1 in range(1, n+1):
+            Nxxj = Nxx_cte[j1]
+            for i1 in range(1, m+1):
+                col = num*((j1-1)*m + (i1-1))
                 fext[col+0] += 1/2.*(-1)**i1*Nxxj*b
 
         msg('finished!', level=2, silent=silent)
@@ -1042,99 +751,6 @@ class CPanel(object):
             raise ValueError('No load was applied!')
 
         return fext
-
-
-    def calc_k0(self):
-        self.calc_linear_matrices()
-        return self.k0
-
-
-    def calc_fint(self, c, inc=1., m=1):
-        r"""Calculates the internal force vector `\{F_{int}\}`
-
-        The following attributes affect the numerical integration:
-
-        =================    ================================================
-        Attribute            Description
-        =================    ================================================
-        ``ni_num_cores``     ``int``, number of cores used for the numerical
-                             integration
-        ``ni_method``        ``str``, integration method:
-                                 - ``'trapz2d'`` for 2-D Trapezoidal's rule
-                                 - ``'simps2d'`` for 2-D Simpsons' rule
-        ``nx``               ``int``, number of integration points along the
-                             `x` coordinate
-        ``ny``               ``int``, number of integration points along the
-                             `y` coordinate
-        =================    ================================================
-
-        Parameters
-        ----------
-        c : np.ndarray
-            The Ritz constants that will be used to compute the internal
-            forces.
-        inc : float, optional
-            A load multiplier only needed to fit the correct function
-            signature.
-        m : integer, optional
-            A multiplier to the number of integration points if one wishes to
-            use more integration points to calculate `\{F_{int}\}` than to
-            calculate `[K_T]`.
-
-        Returns
-        -------
-        fint : np.ndarray
-            The internal force vector.
-
-        """
-        ni_num_cores = self.ni_num_cores
-        ni_method = self.ni_method
-        nlmodule = modelDB.db[self.model]['non-linear']
-        nx = self.nx*m
-        ny = self.ny*m
-        fint = nlmodule.calc_fint_0L_L0_LL(c, self.a, self.b, self.F, self.m1,
-                self.n1, nx, ny, ni_num_cores, ni_method, self.c0, self.m0,
-                self.n0)
-        fint += self.k0*c
-
-        return fint
-
-
-    def calc_kT(self, c, inc=1.):
-        r"""Calculates the tangent stiffness matrix
-
-        The following attributes affect the numerical integration:
-
-        =================    ================================================
-        Attribute            Description
-        =================    ================================================
-        ``ni_num_cores``     ``int``, number of cores used for the numerical
-                             integration
-        ``ni_method``        ``str``, integration method:
-                                 - ``'trapz2d'`` for 2-D Trapezoidal's rule
-                                 - ``'simps2d'`` for 2-D Simpsons' rule
-        ``nx``               ``int``, number of integration points along the
-                             `x` coordinate
-        ``ny``               ``int``, number of integration points along the
-                             `y` coordinate
-        =================    ================================================
-
-        Parameters
-        ----------
-        c : np.ndarray
-            The Ritz constant vector of the current state.
-        inc : float, optional
-            A load multiplier only needed to fit the correct function
-            signature.
-
-        Returns
-        -------
-        kT : sparse matrix
-            The tangent stiffness matrix.
-
-        """
-        self.calc_NL_matrices(c)
-        return self.kT
 
 
     def static(self, NLgeom=False, silent=False):
@@ -1244,7 +860,7 @@ class CPanel(object):
             Resolution of the saved file in dots per inch.
         filename : str, optional
             The file name for the generated image file. If no value is given,
-            the `name` parameter of the ``CPanel`` object will be used.
+            the `name` parameter of the ``Panel`` object will be used.
         ax : AxesSubplot, optional
             When ``ax`` is given, the contour plot will be created inside it.
         figsize : tuple, optional
@@ -1384,12 +1000,12 @@ class CPanel(object):
 
         elif add_title:
             if self.analysis.last_analysis == 'static':
-                ax.set_title('$m_1, n_1={0}, {1}$'.format(self.m1, self.n1))
+                ax.set_title('$m_1, n_1={0}, {1}$'.format(self.m, self.n))
 
             elif self.analysis.last_analysis == 'lb':
                 ax.set_title(
-       r'$m_1, n_1={0}, {1}$, $\lambda_{{CR}}={4:1.3e}$'.format(self.m1,
-           self.n1, self.eigvals[0]))
+       r'$m_1, n_1={0}, {1}$, $\lambda_{{CR}}={4:1.3e}$'.format(self.m,
+           self.n, self.eigvals[0]))
 
         fig.tight_layout()
         ax.set_aspect(aspect)
@@ -1432,16 +1048,16 @@ class CPanel(object):
 
 
     def save(self):
-        """Save the ``CPanel`` object using ``cPickle``
+        """Save the ``Panel`` object using ``cPickle``
 
         Notes
         -----
-        The pickled file will have the name stored in ``CPanel.name``
-        followed by a ``'.CPanel'`` extension.
+        The pickled file will have the name stored in ``Panel.name``
+        followed by a ``'.Panel'`` extension.
 
         """
-        name = self.name + '.CPanel'
-        msg('Saving CPanel to {}'.format(name))
+        name = self.name + '.Panel'
+        msg('Saving Panel to {}'.format(name))
 
         self._clear_matrices()
 
@@ -1450,7 +1066,7 @@ class CPanel(object):
 
 
 if __name__ == '__main__':
-    p = CPanel()
+    p = Panel()
     p.a = 2. # m
     p.b = 1. # m
     p.r = 10*p.b
@@ -1463,8 +1079,8 @@ if __name__ == '__main__':
     p.bc = 'ss1-ss1-ss1-ss1'
     p.bc = 'cc1-cc1-cc1-cc1'
 
-    p.m1 = 15
-    p.n1 = 15
+    p.m = 15
+    p.n = 15
 
     lb = True
     if lb:
