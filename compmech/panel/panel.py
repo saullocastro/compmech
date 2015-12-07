@@ -41,11 +41,13 @@ class Panel(object):
 
 
     """
-    def __init__(self, a, b, r=None, alphadeg=None, stack=[], plyt=None,
-            laminaprop=[]):
+    def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
+            stack=[], plyt=None, laminaprop=[]):
         self.name = ''
         self.a = a
         self.b = b
+        self.y1 = y1
+        self.y2 = y2
         self.r = r
         self.alphadeg = alphadeg
         self.stack = stack
@@ -264,6 +266,8 @@ class Panel(object):
 
         a = self.a
         b = self.b
+        y1 = self.y1
+        y2 = self.y2
         r = self.r if self.r is not None else 0.
         alphadeg = self.alphadeg if self.alphadeg is not None else 0.
 
@@ -317,25 +321,46 @@ class Panel(object):
         self.lam = lam
         self.F = F
 
-        alpharad = deg2rad(alphadeg)
-        k0 = matrices.fk0(a, b, r, alpharad, F,
-                 self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                 self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                 self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                 self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                 self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                 self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                 self.m, self.n)
+        alpharad = np.deg2rad(alphadeg)
+
+        if y1 is not None and y2 is not None:
+            k0 = matrices.fk0y1y2(y1, y2, a, b, r, alpharad, F,
+                     self.m, self.n,
+                     self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                     self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                     self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                     self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                     size, row0, col0):
+        else:
+            k0 = matrices.fk0(a, b, r, alpharad, F,
+                     self.m, self.n,
+                     self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                     self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                     self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                     self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                     size, row0, col0):
 
         Nxx_cte = self.Nxx_cte if self.Nxx_cte is not None else 0.
         Nyy_cte = self.Nyy_cte if self.Nyy_cte is not None else 0.
         Nxy_cte = self.Nxy_cte if self.Nxy_cte is not None else 0.
 
         if Nxx_cte != 0. or Nyy_cte != 0. or Nxy_cte != 0.:
-            k0 += fkG0(Nxx_cte, Nyy_cte, Nxy_cte, a, b, r, alpharad
-                       self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                       self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                       self.m, self.n)
+            if y1 is not None and y2 is not None:
+                k0 += fkG0y1y2(y1, y2, Nxx_cte, Nyy_cte, Nxy_cte,
+                               a, b, r, alpharad, self.m, self.n,
+                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                               self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                               size, row0, col0)
+            else:
+                k0 += fkG0(Nxx_cte, Nyy_cte, Nxy_cte,
+                           a, b, r, alpharad, self.m, self.n,
+                           self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                           self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                           size, row0, col0)
 
         # performing checks for k0
         assert np.any(np.isnan(k0.data)) == False
