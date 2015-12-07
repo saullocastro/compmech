@@ -7,17 +7,19 @@ def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     if os.name == 'nt':
         args_linear = ['/openmp']
+        args_nonlinear = ['/openmp', '/fp:fast']
     else:
         args_linear = ['-openmp']
+        args_nonlinear = ['-openmp', '-fp:fast']
 
-    config = Configuration('clpt', parent_package, top_path)
+    config = Configuration('models', parent_package, top_path)
 
-    config.add_extension('clpt_commons_bc1', ['clpt_commons_bc1.pyx'],
-              extra_compile_args=args_linear)
-    config.add_extension('clpt_donnell_bc1_linear', ['clpt_donnell_bc1_linear.pyx'],
-              extra_compile_args=args_linear)
-    config.add_extension('clpt_sanders_bc1_linear', ['clpt_sanders_bc1_linear.pyx'],
-              extra_compile_args=args_linear)
+    config.add_extension('bladestiff2d_clt_donnell_bardell',
+                     ['bladestiff2d_clt_donnell_bardell.pyx'],
+                     extra_compile_args=args_linear,
+                     include_dirs=['../../include'],
+                     libraries=['bardell_functions', 'bardell', 'bardell_12'],
+                     library_dirs=['../../lib'])
 
     for ext in config.ext_modules:
         for src in ext.sources:

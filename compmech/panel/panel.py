@@ -173,11 +173,11 @@ class Panel(object):
                 warn('Panel name unchanged')
 
         if self.r is None and self.alphadeg is None:
-            self.model = 'plate_clpt_donnell_bardell'
+            self.model = 'plate_clt_donnell_bardell'
         elif self.r is not None and self.alphadeg is None:
-            self.model = 'cplate_clpt_donnell_bardell'
+            self.model = 'cplate_clt_donnell_bardell'
         elif self.r is not None and self.alphadeg is not None:
-            self.model = 'kplate_clpt_donnell_bardell'
+            self.model = 'kplate_clt_donnell_bardell'
 
         valid_models = sorted(modelDB.db.keys())
 
@@ -268,7 +268,7 @@ class Panel(object):
         return xs, ys, xshape, tshape
 
 
-    def calc_k0(self, size=None, row0=0, col0=0, silent=False):
+    def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
@@ -295,7 +295,7 @@ class Panel(object):
             lam = laminate.read_stack(stack, plyts=plyts,
                                              laminaprops=laminaprops)
 
-        if 'clpt' in model:
+        if 'clt' in model:
             if lam is not None:
                 F = lam.ABD
 
@@ -305,8 +305,8 @@ class Panel(object):
                 F[6:, 6:] *= self.K
 
         if self.force_orthotropic_laminate:
-            msg('')
-            msg('Forcing orthotropic laminate...', level=2)
+            msg('', silent=silent)
+            msg('Forcing orthotropic laminate...', level=2, silent=silent)
             F[0, 2] = 0. # A16
             F[1, 2] = 0. # A26
             F[2, 0] = 0. # A61
@@ -375,11 +375,11 @@ class Panel(object):
                            self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                            size, row0, col0)
 
-        # performing checks for k0
-        assert np.any(np.isnan(k0.data)) == False
-        assert np.any(np.isinf(k0.data)) == False
-
-        k0 = csr_matrix(make_symmetric(k0))
+        if finalize:
+            # performing final checks for k0 and making symmetry
+            assert np.any(np.isnan(k0.data)) == False
+            assert np.any(np.isinf(k0.data)) == False
+            k0 = csr_matrix(make_symmetric(k0))
 
         self.k0 = k0
 
@@ -388,10 +388,10 @@ class Panel(object):
         #     identified, probably in the csr_matrix process
         gc.collect()
 
-        msg('finished!', level=2)
+        msg('finished!', level=2, silent=silent)
 
 
-    def calc_kG0(self, size=None, row0=0, col0=0, silent=False):
+    def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         msg('Calculating kG0... ', level=2, silent=silent)
 
         if size is None:
@@ -416,17 +416,19 @@ class Panel(object):
                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                    self.m, self.n)
 
-        assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
-        kG0 = csr_matrix(make_symmetric(kG0))
+        if finalize:
+            assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
+            kG0 = csr_matrix(make_symmetric(kG0))
+
         self.kG0 = kG0
 
         #NOTE memory cleanup
         gc.collect()
 
-        msg('finished!', level=2)
+        msg('finished!', level=2, silent=silent)
 
 
-    def calc_kM(self, size=None, row0=0, col0=0, silent=False):
+    def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         msg('Calculating kM... ', level=2, silent=silent)
 
         if size is None:
@@ -451,9 +453,10 @@ class Panel(object):
                 self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                 size, row0, col0)
 
-        assert np.any(np.isnan(kM.data)) == False
-        assert np.any(np.isinf(kM.data)) == False
-        kM = csr_matrix(make_symmetric(kM))
+        if finalize:
+            assert np.any(np.isnan(kM.data)) == False
+            assert np.any(np.isinf(kM.data)) == False
+            kM = csr_matrix(make_symmetric(kM))
 
         self.kM = kM
 
@@ -463,8 +466,7 @@ class Panel(object):
         msg('finished!', level=2, silent=silent)
 
 
-    def calc_kA(self, speed_sound, V, Mach, rho_air, beta=None, gamma=None,
-            aeromu=None, silent=False):
+    def calc_kA(self, silent=False, finalize=True):
         msg('Calculating kA... ', level=2, silent=silent)
 
         if 'kpanel' in self.model:
@@ -494,10 +496,10 @@ class Panel(object):
         else:
             raise ValueError('Invalid flow value, must be x or y')
 
-        assert np.any(np.isnan(kA.data)) == False
-        assert np.any(np.isinf(kA.data)) == False
-
-        kA = csr_matrix(make_skew_symmetric(kA))
+        if finalize:
+            assert np.any(np.isnan(kA.data)) == False
+            assert np.any(np.isinf(kA.data)) == False
+            kA = csr_matrix(make_skew_symmetric(kA))
 
         self.kA = kA
 
@@ -507,15 +509,18 @@ class Panel(object):
         msg('finished!', level=2, silent=silent)
 
 
-    def calc_cA(self, aeromu, silent=False):
+    def calc_cA(self, aeromu, silent=False, finalize=True):
         msg('Calculating cA... ', level=2, silent=silent)
 
         cA = matrices.fcA(aeromu, self.a, self.b, self.m, self.n,
                           self.size, 0, 0)
         cA = cA*(0+1j)
-        assert np.any(np.isnan(cA.data)) == False
-        assert np.any(np.isinf(cA.data)) == False
-        cA = csr_matrix(make_symmetric(cA))
+
+        if finalize:
+            assert np.any(np.isnan(cA.data)) == False
+            assert np.any(np.isinf(cA.data)) == False
+            cA = csr_matrix(make_symmetric(cA))
+
         self.cA = cA
 
         #NOTE memory cleanup
@@ -524,11 +529,10 @@ class Panel(object):
         msg('finished!', level=2, silent=silent)
 
 
-    def lb(self, tol=0, sparse_solver=True):
+    def lb(self, tol=0, sparse_solver=True, calc_kA=False, silent=False):
         """Performs a linear buckling analysis
 
-        The following parameters of the ``Panel`` object will affect the
-        linear buckling analysis:
+        The following parameters will affect the linear buckling analysis:
 
         =======================    =====================================
         parameter                  description
@@ -540,9 +544,15 @@ class Panel(object):
 
         Parameters
         ----------
+        tol : float, optional
+            A float tolerance passsed to the eigenvalue solver.
         sparse_solver : bool, optional
             Tells if solver :func:`scipy.linalg.eigh` or
             :func:`scipy.sparse.linalg.eigsh` should be used.
+        calc_kA : bool, optional
+            If the Aerodynamic matrix should be considered.
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
 
         Notes
         -----
@@ -551,38 +561,38 @@ class Panel(object):
         ``eigvecs[:, i-1]`` parameter.
 
         """
-        if not modelDB.db[self.model]['linear buckling']:
-            msg('________________________________________________')
-            msg('')
-            warn('Model {} cannot be used in linear buckling analysis!'.
-                 format(self.model))
-            msg('________________________________________________')
+        msg('Running linear buckling analysis...', silent=silent)
 
-        msg('Running linear buckling analysis...')
+        msg('Eigenvalue solver... ', level=2, silent=silent)
 
-        self.calc_linear_matrices(combined_load_case=combined_load_case)
+        self.calc_k0(silent=silent)
+        self.calc_kG0(silent=silent)
 
-        msg('Eigenvalue solver... ', level=2)
+        if calc_kA:
+            self.calc_kA(silent=silent)
+            kA = self.kA
+        else:
+            kA = self.k0*0
 
-        M = self.k0
+        M = self.k0 + kA
         A = self.kG0
 
         if sparse_solver:
             mode = 'cayley'
             try:
-                msg('eigsh() solver...', level=3)
+                msg('eigsh() solver...', level=3, silent=silent)
                 eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues,
                         which='SM', M=M, tol=tol, sigma=1., mode=mode)
-                msg('finished!', level=3)
+                msg('finished!', level=3, silent=silent)
             except Exception, e:
-                warn(str(e), level=4)
-                msg('aborted!', level=3)
+                warn(str(e), level=4, silent=silent)
+                msg('aborted!', level=3, silent=silent)
                 sizebkp = A.shape[0]
                 M, A, used_cols = remove_null_cols(M, A)
-                msg('eigsh() solver...', level=3)
+                msg('eigsh() solver...', level=3, silent=silent)
                 eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
                         which='SM', M=M, tol=tol, sigma=1., mode=mode)
-                msg('finished!', level=3)
+                msg('finished!', level=3, silent=silent)
                 eigvecs = np.zeros((sizebkp, self.num_eigvalues),
                                    dtype=DOUBLE)
                 eigvecs[used_cols, :] = peigvecs
@@ -594,9 +604,9 @@ class Panel(object):
             M, A, used_cols = remove_null_cols(M, A)
             M = M.toarray()
             A = A.toarray()
-            msg('eigh() solver...', level=3)
+            msg('eigh() solver...', level=3, silent=silent)
             eigvals, peigvecs = eigh(a=A, b=M)
-            msg('finished!', level=3)
+            msg('finished!', level=3, silent=silent)
             eigvecs = np.zeros((size, self.num_eigvalues), dtype=DOUBLE)
             eigvecs[used_cols, :] = peigvecs[:, :self.num_eigvalues]
 
@@ -605,17 +615,18 @@ class Panel(object):
         self.eigvals = eigvals
         self.eigvecs = eigvecs
 
-        msg('finished!', level=2)
+        msg('finished!', level=2, silent=silent)
 
-        msg('first {} eigenvalues:'.format(self.num_eigvalues_print), level=1)
+        msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1,
+            silent=silent)
         for eig in eigvals[:self.num_eigvalues_print]:
-            msg('{}'.format(eig), level=2)
+            msg('{0}'.format(eig), level=2, silent=silent)
         self.analysis.last_analysis = 'lb'
 
 
     def freq(self, atype=4, tol=0, sparse_solver=False, silent=False,
              sort=True, damping=False, reduced_dof=False):
-        """Performs a frequency analysis
+        """Performs a natural frequency analysis
 
         The following parameters of the will affect the linear buckling
         analysis:
@@ -664,13 +675,6 @@ class Panel(object):
         the `i^{th}` eigenvector in the ``eigvecs[:, i-1]`` parameter.
 
         """
-        if not modelDB.db[self.model]['linear buckling']:
-            msg('________________________________________________')
-            msg('')
-            warn('Model {0} cannot be used in linear buckling analysis!'.
-                 format(self.model))
-            msg('________________________________________________')
-
         msg('Running frequency analysis...', silent=silent)
 
         self.calc_k0(silent=silent)
@@ -684,7 +688,6 @@ class Panel(object):
                 K = self.k0 + self.kA + self.kG0
 
         elif atype == 2:
-            self.calc_linear_matrices(silent=silent, calc_kG0=False)
             self.calc_kA(silent=silent)
             K = self.k0 + self.kA
             if damping:
@@ -779,12 +782,109 @@ class Panel(object):
         msg('finished!', level=2, silent=silent)
 
         msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1,
-                silent=silent)
+            silent=silent)
         for eigval in eigvals[:self.num_eigvalues_print]:
             msg('{0} rad/s'.format(eigval), level=2, silent=silent)
         self.analysis.last_analysis = 'freq'
 
 
+    def calc_betacr(self, beta1=1.e4, beta2=1.e5, rho_air=0.3, Mach=2.,
+                    modes=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+                    num=5, silent=False, TOL=0.001, reduced_dof=False):
+        r"""Calculate the critical aerodynamic pressure coefficient
+
+        Parameters
+        ----------
+        rho_air : float, optional
+            Air density.
+        Mach : float, optional
+            Mach number.
+        modes : tuple, optional
+            The modes that should be monitored.
+        num : int, optional
+            Number of points to search for each iteration.
+        TOL: float, optional
+            Convergence criterion.
+        reduced_dof : bool, optional
+            Considers only the contributions of `v` and `w` to the stiffness
+            matrix and accelerates the run. Only effective when
+            ``sparse_solver=False``.
+
+        Returns
+        -------
+        betacr : float
+            The critical ``beta``.
+
+        """
+        #TODO
+        # - use a linear or parabolic interpolation to estimate new_beta1
+        msg('Flutter calculation...', level=1, silent=silent)
+        if self.speed_sound is None:
+            self.speed_sound = 1.
+        new_beta1 = 1.e6
+        new_beta2 = -1e6
+        eigvals_imag = np.zeros((num, len(modes)))
+        if max(modes) > self.num_eigvalues-1:
+            self.num_eigvalues = max(modes)+1
+
+        count = 0
+
+        # storing original values
+        beta_bkp = self.beta
+        gamma_bkp = self.gamma
+        Mach_bkp = self.Mach
+        V_bkp = self.V
+        rho_air_bkp = self.rho_air
+
+        self.beta = None
+        self.gamma = None
+        self.Mach = Mach
+        self.rho_air = rho_air
+
+        while True:
+            count += 1
+            betas = np.linspace(beta1, beta2, num)
+            msg('iteration %d:' % count, level=2, silent=silent)
+            msg('beta_min: %1.3f' % beta1, level=3, silent=silent)
+            msg('beta_max: %1.3f' % beta2, level=3, silent=silent)
+
+            for i, beta in enumerate(betas):
+                self.V = ((Mach**2 - 1)**0.5 * beta / rho_air)**0.5
+                self.freq(atype=1, sparse_solver=False, silent=True,
+                          reduced_dof=reduced_dof)
+                for j, mode in enumerate(modes):
+                    eigvals_imag[i, j] = self.eigvals[mode].imag
+
+            check = np.where(eigvals_imag != 0.)
+            if not np.any(check):
+                beta1 = beta1 / 2.
+                beta2 = 2 * beta2
+                continue
+            if np.abs(eigvals_imag[check]).min() < TOL:
+                break
+            if 0 in check[0]:
+                new_beta1 = min(new_beta1, 0.5*betas[check[0][0]])
+                new_beta2 = max(new_beta2, 1.5*betas[check[0][-1]])
+            elif check[0].min() > 0:
+                new_beta1 = betas[check[0][0]-1]
+                new_beta2 = betas[check[0][0]]
+            else:
+                new_beta1 = min(new_beta1, beta1/2.)
+                new_beta2 = max(new_beta2, 2*beta2)
+
+            beta1 = new_beta1
+            beta2 = new_beta2
+
+        # recovering original values
+        self.beta = beta_bkp
+        self.gamma = gamma_bkp
+        self.Mach = Mach_bkp
+        self.V = V_bkp
+        self.rho_air = rho_air_bkp
+
+        msg('finished!', level=1)
+        msg('Number of analyses = %d' % (count*num), level=1)
+        return beta1
 
 
     def uvw(self, c, xs=None, ys=None, gridx=300, gridy=300):
@@ -1384,8 +1484,6 @@ if __name__ == '__main__':
     p.b = 1. # m
     p.r = 10*p.b
 
-    p.model = 'clpt_donnell_bc1'
-    p.model = 'clpt_donnell_bardell'
     p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
     p.plyt = 0.125e-3 # m
     p.stack = [0, +45, -45, 90, -45, +45, 0]
