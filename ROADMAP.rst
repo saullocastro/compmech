@@ -1,26 +1,17 @@
 Version 0.5.0
 -------------
-- implement compmech.aero.pistonstiff2Dpanelbay
-- simplify the way we apply pre-stress to be taken as constant or variable
-  along the linear buckling analyses.... we can do Nxx_cte and Nxx_var, for
-  example
 - restructuration of modules
--- create a module stiffpanel1d
--- create a module stiffplate1d
--- create a module stiffpanelbay1d
--- create a module stiffpanelbay2d
+-- create a module stiffpanelbay
+-- create a module panel
+-- create a module stiffener
 -- centralize panel calculation in module panel, include functions k0 and
    k0y1y2, kG0, kG0y1y2 and so forth
 -- centralize plate calculation in module panel, same as for panels
-- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
-  (pre-load for 1D stiffeners)
-
-
-
 
 Version 0.5.1
 -------------
-- implement k0edges for pistonstiff2Dpanelbay (not priority)
+- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
+  (pre-load for 1D stiffeners)
 - finish implementing pre-load for 1D stiffeners
 
 Version 0.6.0
