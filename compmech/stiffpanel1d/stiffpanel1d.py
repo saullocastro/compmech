@@ -51,7 +51,7 @@ class Stiffener(object):
 
 
     """
-    def __init__(self, mu, panel, ys, bb, bf, bstack, bplyts, blaminaprops,
+    def __init__(self, panel, mu, ys, bb, bf, bstack, bplyts, blaminaprops,
                  fstack, fplyts, flaminaprops):
         self.panel = panel
         self.mu = mu
@@ -61,6 +61,7 @@ class Stiffener(object):
         self.bf = bf
         self.hf = 0.
 
+        self.ignore_offsets = ignore_offsets
         self.bstack = bstack
         self.bplyts = bplyts
         self.blaminaprops = blaminaprops
@@ -96,6 +97,8 @@ class Stiffener(object):
 
         #TODO check offset effect on curved panels
         self.df = self.bf/2. + self.hb + h/2.
+        if self.ignore_offsets:
+            self.df = 0.
         self.Iyy = self.hf*self.bf**3/12.
         #self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2
         self.Jxx = self.hf*self.bf**3/12. + self.bf*self.hf**3/12.
@@ -106,7 +109,6 @@ class Stiffener(object):
 
         if self.fstack != []:
             self.E1 = 0
-            #E3 = 0
             self.S1 = 0
             yply = self.flam.plies[0].t/2.
             for i, ply in enumerate(self.flam.plies):
@@ -114,7 +116,6 @@ class Stiffener(object):
                     yply += self.flam.plies[i-1].t/2. + self.flam.plies[i].t/2.
                 q = ply.QL
                 self.E1 += ply.t*(q[0,0] - q[0,1]**2/q[1,1])
-                #E3 += ply.t*(q[2,2] - q[1,2]**2/q[1,1])
                 self.S1 += -yply*ply.t*(q[0,2] - q[0,1]*q[1,2]/q[1,1])
 
             self.F1 = self.bf**2/12.*self.E1
