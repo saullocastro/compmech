@@ -148,10 +148,10 @@ class Panel(object):
 
     def _clear_matrices(self):
         self.k0 = None
-        self.kT = None
         self.kG0 = None
-        self.kG = None
-        self.kL = None
+        self.kM = None
+        self.kA = None
+        self.cA = None
         self.lam = None
         self.u = None
         self.v = None
@@ -161,6 +161,7 @@ class Panel(object):
         self.Xs = None
         self.Ys = None
 
+        #NOTE memory cleanup
         gc.collect()
 
 
@@ -267,9 +268,9 @@ class Panel(object):
         return xs, ys, xshape, tshape
 
 
-    def calc_k0(self, size=None, row0=0, col0=0):
+    def calc_k0(self, size=None, row0=0, col0=0, silent=False):
         self._rebuild()
-        msg('Calculating k0... ', level=2)
+        msg('Calculating k0... ', level=2, silent=silent)
 
         if size is None:
             size = self.get_size()
@@ -382,13 +383,16 @@ class Panel(object):
 
         self.k0 = k0
 
+        #NOTE forcing Python garbage collector to clean the memory
+        #     it DOES make a difference! There is a memory leak not
+        #     identified, probably in the csr_matrix process
         gc.collect()
 
         msg('finished!', level=2)
 
 
-    def calc_kG0(self, size=None, row0=0, col0=0):
-        msg('Calculating kG0... ', level=2)
+    def calc_kG0(self, size=None, row0=0, col0=0, silent=False):
+        msg('Calculating kG0... ', level=2, silent=silent)
 
         if size is None:
             size = self.get_size()
@@ -416,17 +420,14 @@ class Panel(object):
         kG0 = csr_matrix(make_symmetric(kG0))
         self.kG0 = kG0
 
-        #NOTE forcing Python garbage collector to clean the memory
-        #     it DOES make a difference! There is a memory leak not
-        #     identified, probably in the csr_matrix process
-
+        #NOTE memory cleanup
         gc.collect()
 
         msg('finished!', level=2)
 
 
-    def calc_kM(self, size=None, row0=0, col0=0):
-        msg('Calculating kM... ', level=2)
+    def calc_kM(self, size=None, row0=0, col0=0, silent=False):
+        msg('Calculating kM... ', level=2, silent=silent)
 
         if size is None:
             size = self.get_size()
@@ -456,17 +457,16 @@ class Panel(object):
 
         self.kM = kM
 
-        #NOTE forcing Python garbage collector to clean the memory
-        #     it DOES make a difference! There is a memory leak not
-        #     identified, probably in the csr_matrix process
-
+        #NOTE memory cleanup
         gc.collect()
 
         msg('finished!', level=2, silent=silent)
 
 
     def calc_kA(self, speed_sound, V, Mach, rho_air, beta=None, gamma=None,
-            aeromu=None):
+            aeromu=None, silent=False):
+        msg('Calculating kA... ', level=2, silent=silent)
+
         if 'kpanel' in self.model:
             raise NotImplementedError('Conical panels not supported')
 
@@ -501,10 +501,24 @@ class Panel(object):
 
         self.kA = kA
 
-        #NOTE forcing Python garbage collector to clean the memory
-        #     it DOES make a difference! There is a memory leak not
-        #     identified, probably in the csr_matrix process
+        #NOTE memory cleanup
+        gc.collect()
 
+        msg('finished!', level=2, silent=silent)
+
+
+    def calc_cA(self, aeromu, silent=False):
+        msg('Calculating cA... ', level=2, silent=silent)
+
+        cA = matrices.fcA(aeromu, self.a, self.b, self.m, self.n,
+                          self.size, 0, 0)
+        cA = cA*(0+1j)
+        assert np.any(np.isnan(cA.data)) == False
+        assert np.any(np.isinf(cA.data)) == False
+        cA = csr_matrix(make_symmetric(cA))
+        self.cA = cA
+
+        #NOTE memory cleanup
         gc.collect()
 
         msg('finished!', level=2, silent=silent)
@@ -597,6 +611,180 @@ class Panel(object):
         for eig in eigvals[:self.num_eigvalues_print]:
             msg('{}'.format(eig), level=2)
         self.analysis.last_analysis = 'lb'
+
+
+    def freq(self, atype=4, tol=0, sparse_solver=False, silent=False,
+             sort=True, damping=False, reduced_dof=False):
+        """Performs a frequency analysis
+
+        The following parameters of the will affect the linear buckling
+        analysis:
+
+        =======================    =====================================
+        parameter                  description
+        =======================    =====================================
+        ``num_eigenvalues``        Number of eigenvalues to be extracted
+        ``num_eigvalues_print``    Number of eigenvalues to print after
+                                   the analysis is completed
+        =======================    =====================================
+
+        Parameters
+        ----------
+        atype : int, optional
+            Tells which analysis type should be performed:
+
+            - ``1`` : considers k0, kA and kG0
+            - ``2`` : considers k0 and kA
+            - ``3`` : considers k0 and kG0
+            - ``4`` : considers k0 only
+
+        tol : float, optional
+            A tolerance value passed to ``scipy.sparse.linalg.eigs``.
+        sparse_solver : bool, optional
+            Tells if solver :func:`scipy.linalg.eig` or
+            :func:`scipy.sparse.linalg.eigs` should be used.
+
+            .. note:: It is recommended ``sparse_solver=False``, because it
+                      was verified that the sparse solver becomes unstable
+                      for some cases, though the sparse solver is faster.
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+        sort : bool, optional
+            Sort the output eigenvalues and eigenmodes.
+        damping : bool, optinal
+            If aerodynamic damping should be taken into account.
+        reduced_dof : bool, optional
+            Considers only the contributions of `v` and `w` to the stiffness
+            matrix and accelerates the run. Only effective when
+            ``sparse_solver=False``.
+
+        Notes
+        -----
+        The extracted eigenvalues are stored in the ``eigvals`` parameter and
+        the `i^{th}` eigenvector in the ``eigvecs[:, i-1]`` parameter.
+
+        """
+        if not modelDB.db[self.model]['linear buckling']:
+            msg('________________________________________________')
+            msg('')
+            warn('Model {0} cannot be used in linear buckling analysis!'.
+                 format(self.model))
+            msg('________________________________________________')
+
+        msg('Running frequency analysis...', silent=silent)
+
+        self.calc_k0(silent=silent)
+        if atype == 1:
+            self.calc_kG0(silent=silent)
+            self.calc_kA(silent=silent)
+            if damping:
+                self.calc_cA(silent=silent)
+                K = self.k0 + self.kA + self.kG0 + self.cA
+            else:
+                K = self.k0 + self.kA + self.kG0
+
+        elif atype == 2:
+            self.calc_linear_matrices(silent=silent, calc_kG0=False)
+            self.calc_kA(silent=silent)
+            K = self.k0 + self.kA
+            if damping:
+                self.calc_cA(silent=silent)
+                K = self.k0 + self.kA + self.cA
+            else:
+                K = self.k0 + self.kA
+
+        elif atype == 3:
+            self.calc_kG0(silent=silent)
+            K = self.k0 + self.kG0
+
+        elif atype == 4:
+            K = self.k0
+
+        M = self.kM
+
+        msg('Eigenvalue solver... ', level=2, silent=silent)
+        msg('eigs() solver...', level=3, silent=silent)
+        k = min(self.num_eigvalues, M.shape[0]-2)
+        if sparse_solver:
+            eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
+                                    sigma=-1.)
+            eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
+        else:
+            M = M.toarray()
+            K = K.toarray()
+            if reduced_dof:
+                i = np.arange(M.shape[0])
+                take = np.column_stack((i[1::3], i[2::3])).flatten()
+                M = M[:, take][take, :]
+                K = K[:, take][take, :]
+            if not damping:
+                M = -M
+            else:
+                size = M.shape[0]
+                cA = self.cA.toarray()
+                if reduced_dof:
+                    cA = cA[:, take][take, :]
+                I = np.identity(M.shape[0])
+                Z = np.zeros_like(M)
+                M = np.row_stack((np.column_stack((I, Z)),
+                                  np.column_stack((Z, -M))))
+                K = np.row_stack((np.column_stack((Z, -I)),
+                                  np.column_stack((K, cA))))
+
+            eigvals, eigvecs = eig(a=M, b=K)
+
+            if not damping:
+                eigvals = np.sqrt(-1./eigvals) # -1/omega^2 to omega, in rad/s
+                eigvals = eigvals
+            else:
+                eigvals = -1./eigvals # -1/omega to omega, in rad/s
+                shape = eigvals.shape
+                eigvals = eigvals[:shape[0]//2]
+                eigvecs = eigvecs[:eigvecs.shape[0]//2, :shape[0]//2]
+
+        msg('finished!', level=3, silent=silent)
+
+        if sort:
+            if damping:
+                higher_zero = eigvals.real > 1e-6
+
+                eigvals = eigvals[higher_zero]
+                eigvecs = eigvecs[:, higher_zero]
+
+                sort_ind = np.lexsort((np.round(eigvals.imag, 1),
+                                       np.round(eigvals.real, 0)))
+                eigvals = eigvals[sort_ind]
+                eigvecs = eigvecs[:, sort_ind]
+
+            else:
+                sort_ind = np.lexsort((np.round(eigvals.imag, 1),
+                                       np.round(eigvals.real, 1)))
+                eigvals = eigvals[sort_ind]
+                eigvecs = eigvecs[:, sort_ind]
+
+                higher_zero = eigvals.real > 1e-6
+
+                eigvals = eigvals[higher_zero]
+                eigvecs = eigvecs[:, higher_zero]
+
+        if not sparse_solver and reduced_dof:
+            new_eigvecs = np.zeros((3*eigvecs.shape[0]//2, eigvecs.shape[1]),
+                    dtype=eigvecs.dtype)
+            new_eigvecs[take, :] = eigvecs
+            eigvecs = new_eigvecs
+
+        self.eigvals = eigvals
+        self.eigvecs = eigvecs
+
+        msg('finished!', level=2, silent=silent)
+
+        msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1,
+                silent=silent)
+        for eigval in eigvals[:self.num_eigvalues_print]:
+            msg('{0} rad/s'.format(eigval), level=2, silent=silent)
+        self.analysis.last_analysis = 'freq'
+
+
 
 
     def uvw(self, c, xs=None, ys=None, gridx=300, gridy=300):
