@@ -21,14 +21,14 @@ def configuration(parent_package='', top_path=None):
 
     config.add_extension('clpt_commons_bardell', ['clpt_commons_bardell.pyx'],
               extra_compile_args=args_linear,
-              include_dirs=['../../../include'],
+              include_dirs=['../../include'],
               libraries=['bardell_functions'],
-              library_dirs=['../../../lib'])
+              library_dirs=['../../lib'])
     config.add_extension('clpt_donnell_bardell_linear', ['clpt_donnell_bardell_linear.pyx'],
               extra_compile_args=args_linear,
-              include_dirs=['../../../include'],
+              include_dirs=['../../include'],
               libraries=['bardell_functions', 'bardell', 'bardell_12'],
-              library_dirs=['../../../lib'])
+              library_dirs=['../../lib'])
 
 
     for ext in config.ext_modules:
