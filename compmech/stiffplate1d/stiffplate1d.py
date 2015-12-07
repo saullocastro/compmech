@@ -127,7 +127,7 @@ class Stiffener(object):
 class StiffPlate1D(object):
     r"""Stiffened Plate
 
-    Can be used for supersonic Aeroelastic Studies with Piston Theory.
+    Can be used in supersonic Aeroelastic Studies with the Piston Theory.
 
     Main characteristics:
         - Supports both airflows along x (axis) or y (circumferential).
@@ -438,10 +438,19 @@ class StiffPlate1D(object):
                 self.Mach = 1.0001
             M = self.Mach
             beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
+            if self.gamma is None:
+                gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
+            else:
+                gamma = self.gamma
             ainf = self.speed_sound
             aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
         elif calc_kA and self.beta is not None:
             beta = self.beta
+            if self.gamma is None:
+                M = self.Mach
+                gamma = beta*1./(2.*r*(M**2 - 1)**0.5)
+            else:
+                gamma = self.gamma
             aeromu = self.aeromu if self.aeromu is not None else 0.
         elif not calc_kA:
             pass
@@ -472,7 +481,7 @@ class StiffPlate1D(object):
 
         if calc_kA:
             if self.flow == 'x':
-                kA = fkAx(beta, a, b, m1, n1)
+                kA = fkAx(beta, gamma, a, b, m1, n1)
             elif self.flow == 'y':
                 kA = fkAy(beta, a, b, m1, n1)
             if fcA is None:
@@ -504,7 +513,8 @@ class StiffPlate1D(object):
                 s.k0sb = fk0sb(s.ys, s.bb, a, b, m1, n1, Fsb)
                 s.kMsb = fkMsb(s.mu, s.ys, s.bb, s.db, s.hb, h, a, b, m1, n1)
                 k0 += s.k0sb
-                kM += s.kMsb
+                if calc_kM:
+                    kM += s.kMsb
 
             if s.flam is not None:
                 s.k0sf = fk0sf(s.bf, s.df, s.ys, a, b, m1, n1, s.E1, s.F1,
@@ -512,7 +522,8 @@ class StiffPlate1D(object):
                 s.kMsf = fkMsf(s.mu, s.ys, s.df, s.hf, s.bf, h, s.hb,
                                a, b, m1, n1)
                 k0 += s.k0sf
-                kM += s.kMsf
+                if calc_kM:
+                    kM += s.kMsf
 
         # performing checks for the linear stiffness matrices
 
@@ -921,11 +932,13 @@ class StiffPlate1D(object):
 
         # storing original values
         beta_bkp = self.beta
+        gamma_bkp = self.gamma
         Mach_bkp = self.Mach
         V_bkp = self.V
         rho_air_bkp = self.rho_air
 
         self.beta = None
+        self.gamma = None
         self.Mach = Mach
         self.rho_air = rho_air
 
@@ -965,6 +978,7 @@ class StiffPlate1D(object):
 
         # recovering original values
         self.beta = beta_bkp
+        self.gamma = gamma_bkp
         self.Mach = Mach_bkp
         self.V = V_bkp
         self.rho_air = rho_air_bkp
