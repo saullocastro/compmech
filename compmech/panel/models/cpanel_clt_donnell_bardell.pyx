@@ -55,7 +55,6 @@ DOUBLE = np.float64
 ctypedef np.int64_t cINT
 INT = np.int64
 
-cdef double pi = 3.141592653589793
 cdef int num = 3
 
 
