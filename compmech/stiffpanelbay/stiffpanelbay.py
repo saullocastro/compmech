@@ -22,9 +22,7 @@ from compmech.constants import DOUBLE
 from compmech.sparse import (make_symmetric, make_skew_symmetric,
                              remove_null_cols)
 from compmech.panel import Panel
-from compmech.stiffener import BladeStiffener2D
-
-import modelDB
+from compmech.stiffener import BladeStiff2D
 
 
 def load(name):
@@ -63,6 +61,7 @@ class StiffPanelBay(Panel):
         self.forces_skin = []
         self.flow = 'x'
         self.bc = None
+        self.model = None
 
         # approximation series
         self.m = 11
@@ -149,14 +148,6 @@ class StiffPanelBay(Panel):
                 self.name = os.path.basename(__main__.__file__).split('.py')[0]
             except AttributeError:
                 warn('StiffPanelBay name unchanged')
-
-        self.model = self.model.lower()
-
-        valid_models = sorted(modelDB.db.keys())
-
-        if not self.model in valid_models:
-            raise ValueError('ERROR - valid models are:\n    ' +
-                     '\n    '.join(valid_models))
 
         # boundary conditions
         self.u1tx = 0.
@@ -425,7 +416,7 @@ class StiffPanelBay(Panel):
 
         # contributions from panels
         #TODO summing up coo_matrix objects may be slow!
-        panel = self.panels[0]:
+        panel = self.panels[0]
         #TODO if the initialization of panel is correct, the line below is
         #     unnecessary
         panel.flow = self.flow
