@@ -171,12 +171,13 @@ class Panel(object):
             except AttributeError:
                 warn('Panel name unchanged')
 
-        if self.r is None and self.alphadeg is None:
-            self.model = 'plate_clt_donnell_bardell'
-        elif self.r is not None and self.alphadeg is None:
-            self.model = 'cpanel_clt_donnell_bardell'
-        elif self.r is not None and self.alphadeg is not None:
-            self.model = 'kpanel_clt_donnell_bardell'
+        if self.model is None:
+            if self.r is None and self.alphadeg is None:
+                self.model = 'plate_clt_donnell_bardell'
+            elif self.r is not None and self.alphadeg is None:
+                self.model = 'cpanel_clt_donnell_bardell'
+            elif self.r is not None and self.alphadeg is not None:
+                self.model = 'kpanel_clt_donnell_bardell'
 
         valid_models = sorted(modelDB.db.keys())
 
