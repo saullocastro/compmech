@@ -29,19 +29,19 @@ DOUBLE = np.float64
 ctypedef np.int64_t cINT
 INT = np.int64
 
-cdef double pi = 3.141592653589793
-cdef int num1 = 3
+cdef int num = 3
 
 
-def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
+def fk0(double a, double b, double r, double alpharad,
+        np.ndarray[cDOUBLE, ndim=2] F, int m, int n,
         double u1tx, double u1rx, double u2tx, double u2rx,
         double v1tx, double v1rx, double v2tx, double v2rx,
         double w1tx, double w1rx, double w2tx, double w2rx,
         double u1ty, double u1ry, double u2ty, double u2ry,
         double v1ty, double v1ry, double v2ty, double v2ry,
         double w1ty, double w1ry, double w2ty, double w2ry,
-        int m1, int n1):
-    cdef int i1, j1, k1, l1, c, row, col
+        int size, int row0, int col0):
+    cdef int i, j, k, l, c, row, col
     cdef double A11, A12, A16, A22, A26, A66
     cdef double B11, B12, B16, B22, B26, B66
     cdef double D11, D12, D16, D22, D26, D66
@@ -71,7 +71,7 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
     cdef double gAwetagBwetaeta, gAwetaetagBweta, gAwgBw, gAwgBweta, gAwetagBw,
     cdef double gAwetagBweta
 
-    fdim = 9*m1*m1*n1*n1
+    fdim = 9*m*m*n*n
 
     k0r = np.zeros((fdim,), dtype=INT)
     k0c = np.zeros((fdim,), dtype=INT)
@@ -100,118 +100,118 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
 
     # k0
     c = -1
-    for i1 in range(0, m1):
-        for k1 in range(0, m1):
+    for i in range(0, m):
+        for k in range(0, m):
 
-            fAufBu = integral_ff(i1, k1, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
-            fAufBuxi = integral_ffxi(i1, k1, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
-            fAuxifBu = integral_ffxi(k1, i1, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
-            fAuxifBuxi = integral_fxifxi(i1, k1, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
-            fAufBv = integral_ff(i1, k1, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
-            fAufBvxi = integral_ffxi(i1, k1, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
-            fAuxifBv = integral_ffxi(k1, i1, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
-            fAuxifBvxi = integral_fxifxi(i1, k1, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
-            fAuxifBwxixi = integral_fxifxixi(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-            fAuxifBw = integral_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
-            fAufBwxixi = integral_ffxixi(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-            fAuxifBwxi = integral_fxifxi(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-            fAufBw = integral_ff(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-            fAufBwxi = integral_ffxi(i1, k1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-            fAvfBuxi = integral_ffxi(i1, k1, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
-            fAvxifBuxi = integral_fxifxi(i1, k1, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
-            fAvfBu = integral_ff(i1, k1, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
-            fAvxifBu = integral_ffxi(k1, i1, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
-            fAvfBv = integral_ff(i1, k1, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
-            fAvfBvxi = integral_ffxi(i1, k1, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
-            fAvxifBv = integral_ffxi(k1, i1, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
-            fAvxifBvxi = integral_fxifxi(i1, k1, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
-            fAvfBwxixi = integral_ffxixi(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-            fAvxifBwxixi = integral_fxifxixi(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-            fAvfBw = integral_ff(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-            fAvfBwxi = integral_ffxi(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-            fAvxifBw = integral_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
-            fAvxifBwxi = integral_fxifxi(i1, k1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxixifBuxi = integral_fxifxixi(k1, i1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBuxi = integral_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
-            fAwxifBuxi = integral_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
-            fAwxixifBu = integral_ffxixi(k1, i1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBu = integral_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
-            fAwxifBu = integral_ffxi(k1, i1, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxixifBv = integral_ffxixi(k1, i1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxixifBvxi = integral_fxifxixi(k1, i1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBv = integral_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
-            fAwfBvxi = integral_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
-            fAwxifBv = integral_ffxi(k1, i1, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBvxi = integral_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
-            fAwxixifBwxixi = integral_fxixifxixi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBwxixi = integral_ffxixi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxixifBw = integral_ffxixi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBwxixi = integral_fxifxixi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxixifBwxi = integral_fxifxixi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBw = integral_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBwxi = integral_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBw = integral_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBwxi = integral_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAufBu = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+            fAufBuxi = integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+            fAuxifBu = integral_ffxi(k, i, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+            fAuxifBuxi = integral_fxifxi(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+            fAufBv = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
+            fAufBvxi = integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
+            fAuxifBv = integral_ffxi(k, i, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
+            fAuxifBvxi = integral_fxifxi(i, k, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
+            fAuxifBwxixi = integral_fxifxixi(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAuxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
+            fAufBwxixi = integral_ffxixi(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAuxifBwxi = integral_fxifxi(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAufBw = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAufBwxi = integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvfBuxi = integral_ffxi(i, k, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
+            fAvxifBuxi = integral_fxifxi(i, k, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
+            fAvfBu = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, u1tx, u1rx, u2tx, u2rx)
+            fAvxifBu = integral_ffxi(k, i, u1tx, u1rx, u2tx, u2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvfBv = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvfBvxi = integral_ffxi(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvxifBv = integral_ffxi(k, i, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvxifBvxi = integral_fxifxi(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvfBwxixi = integral_ffxixi(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvxifBwxixi = integral_fxifxixi(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvfBw = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvfBwxi = integral_ffxi(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAvxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+            fAvxifBwxi = integral_fxifxi(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBuxi = integral_fxifxixi(k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBuxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
+            fAwxifBuxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
+            fAwxixifBu = integral_ffxixi(k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBu = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, u1tx, u1rx, u2tx, u2rx)
+            fAwxifBu = integral_ffxi(k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBv = integral_ffxixi(k, i, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBvxi = integral_fxifxixi(k, i, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBv = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+            fAwfBvxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+            fAwxifBv = integral_ffxi(k, i, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBvxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+            fAwxixifBwxixi = integral_fxixifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBwxixi = integral_ffxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBw = integral_ffxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBwxixi = integral_fxifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxixifBwxi = integral_fxifxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
 
-            for j1 in range(0, n1):
-                for l1 in range(0, n1):
+            for j in range(0, n):
+                for l in range(0, n):
 
-                    row = num1*(j1*m1 + i1)
-                    col = num1*(l1*m1 + k1)
+                    row = row0 + num*(j*m + i)
+                    col = col0 + num*(l*m + k)
 
                     if row > col:
                         continue
 
-                    gAugBu = integral_ff(j1, l1, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAugBueta = integral_ffxi(j1, l1, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAuetagBu = integral_ffxi(l1, j1, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAuetagBueta = integral_fxifxi(j1, l1, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAugBv = integral_ff(j1, l1, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAugBveta = integral_ffxi(j1, l1, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAuetagBv = integral_ffxi(l1, j1, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAuetagBveta = integral_fxifxi(j1, l1, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAuetagBwetaeta = integral_fxifxixi(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAuetagBw = integral_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAugBwetaeta = integral_ffxixi(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAuetagBweta = integral_fxifxi(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAugBw = integral_ff(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAugBweta = integral_ffxi(j1, l1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAvgBueta = integral_ffxi(j1, l1, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAvetagBueta = integral_fxifxi(j1, l1, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAvgBu = integral_ff(j1, l1, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAvetagBu = integral_ffxi(l1, j1, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAvgBv = integral_ff(j1, l1, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAvgBveta = integral_ffxi(j1, l1, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAvetagBv = integral_ffxi(l1, j1, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAvetagBveta = integral_fxifxi(j1, l1, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAvgBwetaeta = integral_ffxixi(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAvetagBwetaeta = integral_fxifxixi(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAvgBw = integral_ff(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAvgBweta = integral_ffxi(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAvetagBw = integral_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAvetagBweta = integral_fxifxi(j1, l1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetaetagBueta = integral_fxifxixi(l1, j1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBueta = integral_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAwetagBueta = integral_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAwetaetagBu = integral_ffxixi(l1, j1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBu = integral_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-                    gAwetagBu = integral_ffxi(l1, j1, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetaetagBv = integral_ffxixi(l1, j1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetaetagBveta = integral_fxifxixi(l1, j1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBv = integral_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAwgBveta = integral_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAwetagBv = integral_ffxi(l1, j1, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBveta = integral_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
-                    gAwetaetagBwetaeta = integral_fxixifxixi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBwetaeta = integral_ffxixi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetaetagBw = integral_ffxixi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBwetaeta = integral_fxifxixi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetaetagBweta = integral_fxifxixi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBw = integral_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBweta = integral_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBw = integral_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBweta = integral_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAugBu = integral_ff(j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAugBueta = integral_ffxi(j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAuetagBu = integral_ffxi(l, j, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAuetagBueta = integral_fxifxi(j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAugBv = integral_ff(j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAugBveta = integral_ffxi(j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAuetagBv = integral_ffxi(l, j, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAuetagBveta = integral_fxifxi(j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAuetagBwetaeta = integral_fxifxixi(j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAuetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAugBwetaeta = integral_ffxixi(j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAuetagBweta = integral_fxifxi(j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAugBw = integral_ff(j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAugBweta = integral_ffxi(j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvgBueta = integral_ffxi(j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAvetagBueta = integral_fxifxi(j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAvgBu = integral_ff(j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAvetagBu = integral_ffxi(l, j, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvgBv = integral_ff(j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvgBveta = integral_ffxi(j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvetagBv = integral_ffxi(l, j, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvetagBveta = integral_fxifxi(j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvgBwetaeta = integral_ffxixi(j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvetagBwetaeta = integral_fxifxixi(j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvgBw = integral_ff(j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvgBweta = integral_ffxi(j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAvetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAvetagBweta = integral_fxifxi(j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBueta = integral_fxifxixi(l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBueta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAwetagBueta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAwetaetagBu = integral_ffxixi(l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBu = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                    gAwetagBu = integral_ffxi(l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBv = integral_ffxixi(l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBveta = integral_fxifxixi(l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBv = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAwgBveta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAwetagBv = integral_ffxi(l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBveta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+                    gAwetaetagBwetaeta = integral_fxixifxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBwetaeta = integral_ffxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBw = integral_ffxixi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBwetaeta = integral_fxifxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaetagBweta = integral_fxifxixi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBweta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
                     k0r[c] = row+0
@@ -250,18 +250,17 @@ def fk0(double a, double b, np.ndarray[cDOUBLE, ndim=2] F,
                     k0c[c] = col+2
                     k0v[c] += 4*D11*b*fAwxixifBwxixi*gAwgBw/(a*a*a) + 4*D12*(fAwfBwxixi*gAwetaetagBw + fAwxixifBw*gAwgBwetaeta)/(a*b) + 8*D16*(fAwxifBwxixi*gAwetagBw + fAwxixifBwxi*gAwgBweta)/(a*a) + 4*D22*a*fAwfBw*gAwetaetagBwetaeta/(b*b*b) + 8*D26*(fAwfBwxi*gAwetaetagBweta + fAwxifBw*gAwetagBwetaeta)/(b*b) + 16*D66*fAwxifBwxi*gAwetagBweta/(a*b)
 
-    size = num1*m1*n1
-
     k0 = coo_matrix((k0v, (k0r, k0c)), shape=(size, size))
 
     return k0
 
 
-def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
+def fkG0(double Nxx, double Nyy, double Nxy,
+         double a, double b, double r, double alpharad, int m, int n,
          double w1tx, double w1rx, double w2tx, double w2rx,
          double w1ty, double w1ry, double w2ty, double w2ry,
-         int m1, int n1):
-    cdef int i1, k1, j1, l1, c, row, col
+         int size, int row0, int col0):
+    cdef int i, k, j, l, c, row, col
 
     cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
     cdef np.ndarray[cDOUBLE, ndim=1] kG0v
@@ -269,7 +268,7 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
     cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
     cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
 
-    fdim = 1*m1*m1*n1*n1
+    fdim = 1*m*m*n*n
 
     kG0r = np.zeros((fdim,), dtype=INT)
     kG0c = np.zeros((fdim,), dtype=INT)
@@ -278,34 +277,32 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
     # kG0
 
     c = -1
-    for i1 in range(0, m1):
-        for k1 in range(0, m1):
+    for i in range(0, m):
+        for k in range(0, m):
 
-            fAwxifBwxi = integral_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBwxi = integral_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBw = integral_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBw = integral_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j1 in range(0, n1):
-                for l1 in range(0, n1):
+            for j in range(0, n):
+                for l in range(0, n):
 
-                    row = num1*(j1*m1 + i1)
-                    col = num1*(l1*m1 + k1)
+                    row = row0 + num*(j*m + i)
+                    col = col0 + num*(l*m + k)
 
                     if row > col:
                         continue
 
-                    gAwetagBw = integral_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBw = integral_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBweta = integral_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBweta = integral_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBweta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
                     kG0r[c] = row+2
                     kG0c[c] = col+2
                     kG0v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
-
-    size = num1*m1*n1
 
     kG0 = coo_matrix((kG0v, (kG0r, kG0c)), shape=(size, size))
 

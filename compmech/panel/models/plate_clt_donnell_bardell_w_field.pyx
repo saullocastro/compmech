@@ -18,7 +18,6 @@ ctypedef np.double_t cDOUBLE
 
 cdef int nmax = 30
 cdef int num1 = 1
-cdef double pi=3.141592653589793
 
 
 def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int n1, double a, double b,

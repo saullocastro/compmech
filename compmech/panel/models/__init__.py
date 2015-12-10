@@ -27,12 +27,14 @@ Fourth part:
 
 """
 modules = [
-          'cpanel_clpt_donnell_bardell_field',
-          'cpanel_clpt_donnell_bardell',
-          'kpanel_clpt_donnell_bardell_field',
-          'kpanel_clpt_donnell_bardell',
-          'plate_clpt_donnell_bardell_field',
-          'plate_clpt_donnell_bardell',
+          'cpanel_clt_donnell_bardell_field',
+          'cpanel_clt_donnell_bardell',
+          'kpanel_clt_donnell_bardell_field',
+          'kpanel_clt_donnell_bardell',
+          'plate_clt_donnell_bardell_field',
+          'plate_clt_donnell_bardell',
+          'plate_clt_donnell_bardell_w_field',
+          'plate_clt_donnell_bardell_w',
           ]
 
 for module in modules:
@@ -41,5 +43,3 @@ for module in modules:
     except:
         print('WARNING - module {0} could not be imported!'.format(module))
         exec('{0} = None'.format(module))
-
-
