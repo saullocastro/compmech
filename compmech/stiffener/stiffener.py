@@ -1,4 +1,5 @@
 import numpy as np
+from numpy import deg2rad
 
 import modelDB
 import compmech.panel.modelDB as panmodelDB
@@ -93,8 +94,10 @@ class BladeStiff1d(object):
             self.F1 = self.bf**2/12.*self.E1
 
         assert self.panel1.model == self.panel2.model
-        assert self.panel1.m1 == self.panel2.m1
-        assert self.panel1.n1 == self.panel2.n1
+        assert self.panel1.m == self.panel2.m
+        assert self.panel1.n == self.panel2.n
+        assert self.panel1.r == self.panel2.r
+        assert self.panel1.alphadeg == self.panel2.alphadeg
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
@@ -107,15 +110,19 @@ class BladeStiff1d(object):
         bay = self.bay
         a = bay.a
         b = bay.b
-        m1 = self.panel1.m1
-        n1 = self.panel1.n1
+        m = self.panel1.m
+        n = self.panel1.n
+        r = self.panel1.r
+        alphadeg = self.panel1.alphadeg
+        alphadeg = alphadeg if alphadeg is not None else 0.
+        alpharad = deg2rad(alphadeg)
 
         k0 = 0.
         if self.blam is not None:
             Fsb = self.blam.ABD
             y1 = self.ys - self.bb/2.
             y2 = self.ys + self.bb/2.
-            k0 += panmod.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m1, n1,
+            k0 += panmod.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -125,8 +132,13 @@ class BladeStiff1d(object):
                                  size=size, row0=row0, col0=col0)
 
         if self.flam is not None:
-            k0 += mod.fk0sf(self.bf, self.df, self.ys, a, b, r, m1, n1,
-                    self.E1, self.F1, self.S1, self.Jxx)
+            k0 += mod.fk0f(a, b, self.bf, self.df, self.E1, self.F1, self.S1,
+                           self.Jxx, m, n,
+                           bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                           bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                           bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                           bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                           size=size, row0=row0, col0=col0)
 
         if finalize:
             assert np.any(np.isnan(k0.data)) == False
@@ -192,17 +204,16 @@ class BladeStiff1d(object):
         bay = self.bay
         a = bay.a
         b = bay.b
-        m1 = self.m1
-        n1 = self.n1
+        m = self.panel1.m
+        n = self.panel1.n
         mu = self.mu
+        h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
 
         kM = 0.
         if self.blam is not None:
-            Fsb = self.blam.ABD
             y1 = self.ys - self.bb/2.
             y2 = self.ys + self.bb/2.
-            kM += panmod.fkMy1y2(y1, y2, self.mu, self.db, self.hb, a, b,
-                          m1, n1,
+            kM += panmod.fkMy1y2(y1, y2, self.mu, self.db, self.hb, a, b, m, n,
                           bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                           bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                           bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -212,8 +223,15 @@ class BladeStiff1d(object):
                           size=size, row0=row0, col0=col0)
 
         if self.flam is not None:
-            kM += mod.fkMsf(self.mu, self.ys, self.df, self.Asf, a, b,
-                    self.Iyy, self.Jxx, m1, n1)
+            kM += mod.fkMf(self.mu, h, self.hb, self.hf, a, b, self.bf,
+                           self.df, m, n,
+                           bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                           bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                           bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                           bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                           bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                           bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                           size=size, row0=row0, col0=col0)
 
         if finalize:
             assert np.any(np.isnan(kM.data)) == False
@@ -331,6 +349,10 @@ class BladeStiff2D(object):
             self.hb = hb
 
         assert self.panel1.model == self.panel2.model
+        assert self.panel1.m == self.panel2.m
+        assert self.panel1.n == self.panel2.n
+        assert self.panel1.r == self.panel2.r
+        assert self.panel1.alphadeg == self.panel2.alphadeg
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
@@ -346,6 +368,9 @@ class BladeStiff2D(object):
         r = bay.r
         m = bay.m
         n = bay.n
+        alphadeg = self.panel1.alphadeg
+        alphadeg = alphadeg if alphadeg is not None else 0.
+        alpharad = deg2rad(alphadeg)
 
         m1 = self.m1
         n1 = self.n1
@@ -357,14 +382,15 @@ class BladeStiff2D(object):
             Fsb = self.blam.ABD
             y1 = self.ys - self.bb/2.
             y2 = self.ys + self.bb/2.
-            k0 += panmod.fk0y1y2(y1, y2, a, b, r, Fsb, m, n,
+            k0 += panmod.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
                                  bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
                                  bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                                 size, 0, 0)
+                                 size, row0, col0)
+
         #TODO add contribution from Nxx_cte from flange and padup
         if self.flam is not None:
             kt = self.inf
