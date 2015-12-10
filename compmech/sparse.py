@@ -5,7 +5,7 @@ from scipy.sparse.linalg import spsolve
 from compmech.logger import *
 
 
-def remove_null_cols(*args):
+def remove_null_cols(*args, **kwargs):
     """Remove null rows and cols of a symmetric, square sparse matrix.
 
     Parameters
@@ -22,8 +22,9 @@ def remove_null_cols(*args):
         an array containing the removed columns at the last position.
 
     """
+    silent = kwargs.get('silent', False)
     args = list(args)
-    log('Removing null columns...', level=3)
+    log('Removing null columns...', level=3, silent=silent)
     num_cols = args[0].shape[1]
 
     if isinstance(args[0], csr_matrix):
@@ -44,8 +45,9 @@ def remove_null_cols(*args):
         m = m[:, used_cols]
         args[i] = m
     args.append(used_cols)
-    log('{} columns removed'.format(num_cols - used_cols.shape[0]), level=4)
-    log('finished!', level=3)
+    log('{} columns removed'.format(num_cols - used_cols.shape[0]),
+            level=4, silent=silent)
+    log('finished!', level=3, silent=silent)
 
     return args
 
