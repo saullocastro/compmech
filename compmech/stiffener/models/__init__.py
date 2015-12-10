@@ -1,18 +1,14 @@
 r"""
 ================================================
-CLPT (:mod:`compmech.stiffpanelbay2d.clpt`)
+CLPT (:mod:`compmech.stiffener.models`)
 ================================================
 
-.. currentmodule:: compmech.stiffpanelbay2d.clpt
-
-Contains all the methods and functions to calculate the stiffness matrices,
-aerodynamic matrix, mass matrix, the displacement strain and the stress fields
-for all models using the CLPT kinematic assumption.
+.. currentmodule:: compmech.stiffener.models
 
 """
 modules = [
-          'clpt_commons_bardell',
-          'clpt_donnell_bardell_linear',
+          'bladestiff1d_clt_donnell_bardell',
+          'bladestiff2d_clt_donnell_bardell',
           ]
 
 for module in modules:
