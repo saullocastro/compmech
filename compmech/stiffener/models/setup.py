@@ -14,11 +14,18 @@ def configuration(parent_package='', top_path=None):
 
     config = Configuration('models', parent_package, top_path)
 
+    config.add_extension('bladestiff1d_clt_donnell_bardell',
+                     ['bladestiff1d_clt_donnell_bardell.pyx'],
+                     extra_compile_args=args_linear,
+                     include_dirs=['../../include'],
+                     libraries=['bardell'],
+                     library_dirs=['../../lib'])
+
     config.add_extension('bladestiff2d_clt_donnell_bardell',
                      ['bladestiff2d_clt_donnell_bardell.pyx'],
                      extra_compile_args=args_linear,
                      include_dirs=['../../include'],
-                     libraries=['bardell_functions', 'bardell', 'bardell_12'],
+                     libraries=['bardell_functions', 'bardell'],
                      library_dirs=['../../lib'])
 
     for ext in config.ext_modules:
