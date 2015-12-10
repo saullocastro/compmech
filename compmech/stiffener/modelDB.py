@@ -8,6 +8,15 @@ Used to configure the main parameters for each implemented model.
 from models import *
 
 db = {
+    'bladestiff1d_clt_donnell_bardell': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': False,
+                    'matrices': bladestiff1d_clt_donnell_bardell,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'num': 3,
+                    },
     'bladestiff2d_clt_donnell_bardell': {
                     'linear static': True,
                     'linear buckling': True,

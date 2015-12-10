@@ -5,7 +5,7 @@ import modelDB
 import compmech.panel.modelDB as panmodelDB
 
 
-class BladeStiff1d(object):
+class BladeStiff1D(object):
     r"""Blade Stiffener using 1D Formulation for Flange
 
     Blade-type of stiffener model using a 1D formulation for the flange and a
