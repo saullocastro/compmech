@@ -21,8 +21,9 @@ from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
 from compmech.sparse import (make_symmetric, make_skew_symmetric,
                              remove_null_cols)
-from compmech.panel import Panel
-from compmech.stiffener import BladeStiff2D
+from compmech.panel import Panel, modelDB as panmDB
+from compmech.stiffener import BladeStiff2D, modelDB as stiffmDB
+
 
 
 def load(name):
@@ -182,8 +183,12 @@ class StiffPanelBay(Panel):
         if self.b is None:
             raise ValueError('The width b must be specified')
 
-        for panel in self.panels:
-            panel._rebuild()
+        for p in self.panels:
+            p._rebuild()
+            if self.model is not None:
+                assert self.model == p.model
+            else:
+                self.model = p.model
 
 
     def get_size(self):
@@ -203,10 +208,10 @@ class StiffPanelBay(Panel):
             The size of the stiffness matrices.
 
         """
-        num = modelDB.db[self.model]['num']
-        num1 = modelDB.db[self.model]['num1']
+        num = panmDB.db[self.model]['num']
         self.size = num*self.m*self.n
         for s in self.stiffeners2D:
+            num1 = stiffmDB.db[s.model]['num1']
             self.size += num1*s.m1*s.n1
 
         return self.size
@@ -243,26 +248,24 @@ class StiffPanelBay(Panel):
         r = self.r
         m = self.m
         n = self.n
-        num = modelDB.db[self.model]['num']
-        num1 = modelDB.db[self.model]['num1']
+        num = panmDB.db[self.model]['num']
         size = self.get_size()
 
         k0 = 0.
 
-        mod = modelDB.db[self.model]['linear']
-
         # contributions from panels
-        for panel in self.panels:
-            panel.calc_k0(size=size, row0=0, col0=0, silent=silent,
+        for p in self.panels:
+            p.calc_k0(size=size, row0=0, col0=0, silent=silent,
                           finalize=False)
 
             #TODO summing up coo_matrix objects may be slow!
-            k0 += panel.k0
+            k0 += p.k0
 
         # contributions from stiffeners2D
         row0 = num*m*n
         col0 = num*m*n
         for i, s in enumerate(self.stiffeners2D):
+            num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
                 s_1 = bay.stiffeners2D[i-1]
                 row0 += num1*s_1.m1*s_1.n1
@@ -296,26 +299,24 @@ class StiffPanelBay(Panel):
         b = self.b
         m = self.m
         n = self.n
-        num = modelDB.db[self.model]['num']
-        num1 = modelDB.db[self.model]['num1']
+        num = panmDB.db[self.model]['num']
         size = self.get_size()
 
         kG0 = 0.
 
-        mod = modelDB.db[self.model]['linear']
-
         # contributions from panels
-        for panel in self.panels:
-            panel.calc_kG0(size=size, row0=0, col0=0, silent=silent,
+        for p in self.panels:
+            p.calc_kG0(size=size, row0=0, col0=0, silent=silent,
                            finalize=False)
 
             #TODO summing up coo_matrix objects may be slow!
-            kG0 += panel.kG0
+            kG0 += p.kG0
 
         # contributions from stiffeners2D
         row0 = num*m*n
         col0 = num*m*n
         for i, s in enumerate(self.stiffeners2D):
+            num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
                 s_1 = bay.stiffeners2D[i-1]
                 row0 += num1*s_1.m1*s_1.n1
@@ -344,25 +345,23 @@ class StiffPanelBay(Panel):
         b = self.b
         m = self.m
         n = self.n
-        num = modelDB.db[self.model]['num']
-        num1 = modelDB.db[self.model]['num1']
+        num = panmDB.db[self.model]['num']
         size = self.get_size()
 
         kM = 0.
 
-        mod = modelDB.db[self.model]['linear']
-
-        for panel in self.panels:
-            panel.calc_kM(size=size, row0=0, col0=0, silent=silent,
+        for p in self.panels:
+            p.calc_kM(size=size, row0=0, col0=0, silent=silent,
                     finalize=False)
 
             #TODO summing up coo_matrix objects may be slow!
-            kM += panel.kM
+            kM += p.kM
 
         # contributions from stiffeners2D
         row0 = num*m*n
         col0 = num*m*n
         for i, s in enumerate(self.stiffeners2D):
+            num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
                 s_1 = self.stiffeners2D[i-1]
                 row0 += num1*s_1.m1*s_1.n1
@@ -393,8 +392,7 @@ class StiffPanelBay(Panel):
         r = self.r
         m = self.m
         n = self.n
-        num = modelDB.db[self.model]['num']
-        num1 = modelDB.db[self.model]['num1']
+        num = panmDB.db[self.model]['num']
         size = self.get_size()
 
         if self.beta is None:
@@ -412,17 +410,15 @@ class StiffPanelBay(Panel):
             gamma = self.gamma if self.gamma is not None else 0.
             aeromu = self.aeromu if self.aeromu is not None else 0.
 
-        mod = modelDB.db[self.model]['linear']
-
         # contributions from panels
         #TODO summing up coo_matrix objects may be slow!
-        panel = self.panels[0]
+        p = self.panels[0]
         #TODO if the initialization of panel is correct, the line below is
         #     unnecessary
-        panel.flow = self.flow
-        panel.calc_kA(silent=silent, finalize=False)
+        p.flow = self.flow
+        p.calc_kA(silent=silent, finalize=False)
 
-        kA = panel.kA
+        kA = p.kA
 
         assert np.any(np.isnan(kA.data)) == False
         assert np.any(np.isinf(kA.data)) == False
@@ -447,8 +443,7 @@ class StiffPanelBay(Panel):
         r = self.r
         m = self.m
         n = self.n
-        num = modelDB.db[self.model]['num']
-        num1 = modelDB.db[self.model]['num1']
+        num = panmDB.db[self.model]['num']
         size = self.get_size()
 
         if self.beta is None:
@@ -466,12 +461,10 @@ class StiffPanelBay(Panel):
             gamma = self.gamma if self.gamma is not None else 0.
             aeromu = self.aeromu if self.aeromu is not None else 0.
 
-        mod = modelDB.db[self.model]['linear']
-
         # contributions from panels
-        panel = self.panels[0]
-        panel.calc_cA(size=size, row0=0, col0=0, silent=silent)
-        cA = panel.cA
+        p = self.panels[0]
+        p.calc_cA(size=size, row0=0, col0=0, silent=silent)
+        cA = p.cA
 
         assert np.any(np.isnan(cA.data)) == False
         assert np.any(np.isinf(cA.data)) == False
@@ -536,12 +529,12 @@ class StiffPanelBay(Panel):
         model = self.model
 
         if c.shape[0] == self.get_size():
-            num = modelDB.db[self.model]['num']
+            num = panmDB.db[self.model]['num']
             c = c[:num*self.m*self.n]
         else:
             raise ValueError('c is the full vector of Ritz constants')
 
-        fuvw = modelDB.db[model]['commons'].fuvw
+        fuvw = panmDB.db[model]['field'].fuvw
         us, vs, ws, phixs, phiys = fuvw(c, m, n, a, b, xs, ys,
                 self.out_num_cores)
 
@@ -601,17 +594,18 @@ class StiffPanelBay(Panel):
         a = self.a
         model = self.model
 
-        fuvw = modelDB.db[model]['commons'].fuvw
+        fuvw = stiffmDB.db[model]['field'].fuvw
 
-        num = modelDB.db[self.model]['num']
-        num1 = modelDB.db[self.model]['num1']
+        num = panmDB.db[self.model]['num']
         row0 = num*self.m*self.n
         m1 = self.stiffeners2D[si].m1
         n1 = self.stiffeners2D[si].n1
         bf = self.stiffeners2D[si].bf
         if si > 0:
             s_1 = self.stiffeners2D[si-1]
+            num1 = stiffmDB.db[s_1.model]['num1']
             row0 += num1*s_1.m1*s_1.n1
+        num1 = stiffmDB.db[self.stiffeners2D[si].model]['num1']
         row1 = row0 + num1*m1*n1
         if c.shape[0] == self.get_size():
             c = c[row0:row1]
@@ -1126,9 +1120,8 @@ class StiffPanelBay(Panel):
 
         """
         msg('Calculating external forces...', level=2, silent=silent)
-        num = modelDB.db[self.model]['num']
-        num1 = modelDB.db[self.model]['num1']
-        fg = modelDB.db[self.model]['commons'].fg
+        num = panmDB.db[self.model]['num']
+        fg = panmDB.db[self.model]['field'].fg
 
         # punctual forces on skin
         size = num*self.m*self.n
@@ -1144,6 +1137,7 @@ class StiffPanelBay(Panel):
         fext = fext_skin
         # punctual forces on stiffener
         for s in self.stiffeners2D:
+            num1 = stiffmDB.db[s.model]['num1']
             m1 = s.m1
             n1 = s.n1
             bf = s.bf
