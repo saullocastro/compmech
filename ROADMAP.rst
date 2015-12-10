@@ -1,13 +1,3 @@
-Version 0.5.0
--------------
-- restructuration of modules
--- create a module stiffpanelbay
--- create a module panel
--- create a module stiffener
--- centralize panel calculation in module panel, include functions k0 and
-   k0y1y2, kG0, kG0y1y2 and so forth
--- centralize plate calculation in module panel, same as for panels
-
 Version 0.5.1
 -------------
 - kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
