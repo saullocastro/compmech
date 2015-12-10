@@ -86,7 +86,7 @@ def configuration(parent_package='', top_path=None):
     config.make_config_py()
 
     for instlib in config.libraries:
-        p = Pool(cpu_count())
+        p = Pool(cpu_count()-1)
         partial_compile = partial(compile, config)
         p.map(partial_compile, instlib[1]['sources'])
         p.close()
