@@ -12,7 +12,7 @@ import __main__
 import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.sparse.linalg import eigsh
-from numpy import linspace
+from numpy import linspace, deg2rad
 
 import compmech.composite.laminate as laminate
 from compmech.analysis import Analysis
@@ -135,8 +135,7 @@ class Panel(object):
         self.out_num_cores = cpu_count()
 
         # analysis
-        self.analysis = Analysis(self.calc_fext, self.calc_k0, self.calc_fint,
-                self.calc_kT)
+        self.analysis = Analysis(self.calc_fext, self.calc_k0, None, None)
 
         # outputs
         self.increments = None
@@ -175,9 +174,9 @@ class Panel(object):
         if self.r is None and self.alphadeg is None:
             self.model = 'plate_clt_donnell_bardell'
         elif self.r is not None and self.alphadeg is None:
-            self.model = 'cplate_clt_donnell_bardell'
+            self.model = 'cpanel_clt_donnell_bardell'
         elif self.r is not None and self.alphadeg is not None:
-            self.model = 'kplate_clt_donnell_bardell'
+            self.model = 'kpanel_clt_donnell_bardell'
 
         valid_models = sorted(modelDB.db.keys())
 
@@ -198,36 +197,117 @@ class Panel(object):
                 raise ValueError('plyt must be defined')
             self.plyts = [self.plyt for i in self.stack]
 
-        def check_load(load, size):
-            if load is not None:
-                check = False
-                if isinstance(load, np.ndarray):
-                    if load.ndim == 1:
-                        assert load.shape[0] == size
+        if False:
+            def check_load(load, size):
+                if load is not None:
+                    check = False
+                    if isinstance(load, np.ndarray):
+                        if load.ndim == 1:
+                            assert load.shape[0] == size
 
-                        return load
-                elif type(load) in (int, float):
-                    newload = np.zeros(size, dtype=DOUBLE)
-                    newload[0] = load
+                            return load
+                    elif type(load) in (int, float):
+                        newload = np.zeros(size, dtype=DOUBLE)
+                        newload[0] = load
 
-                    return newload
-                if not check:
-                    raise ValueError('Invalid Nxx_cte input')
-            else:
-                return np.zeros(size, dtype=DOUBLE)
+                        return newload
+                    if not check:
+                        raise ValueError('Invalid Nxx_cte input')
+                else:
+                    return np.zeros(size, dtype=DOUBLE)
 
 
-        # axial load
-        size = self.n+1
-        self.Nxx_cte = check_load(self.Nxx_cte, size)
-        self.Nxx = check_load(self.Nxx, size)
-        # shear xt
-        self.Nxy_cte = check_load(self.Nxy_cte, size)
-        self.Nxy = check_load(self.Nxy, size)
-        # circumferential load
-        size = self.m+1
-        self.Nyy_cte = check_load(self.Nyy_cte, size)
-        self.Nyy = check_load(self.Nyy, size)
+            # axial load
+            size = self.n+1
+            self.Nxx_cte = check_load(self.Nxx_cte, size)
+            self.Nxx = check_load(self.Nxx, size)
+            # shear xt
+            self.Nxy_cte = check_load(self.Nxy_cte, size)
+            self.Nxy = check_load(self.Nxy, size)
+            # circumferential load
+            size = self.m+1
+            self.Nyy_cte = check_load(self.Nyy_cte, size)
+            self.Nyy = check_load(self.Nyy, size)
+
+
+    def bc_sfss(self):
+        self.u1tx = 0.
+        self.u1rx = 0.
+        self.u2tx = 1.
+        self.u2rx = 1.
+        self.v1tx = 0.
+        self.v1rx = 0.
+        self.v2tx = 1.
+        self.v2rx = 1.
+        self.w1tx = 0.
+        self.w1rx = 1.
+        self.w2tx = 1.
+        self.w2rx = 1.
+        self.u1ty = 0.
+        self.u1ry = 1.
+        self.u2ty = 0.
+        self.u2ry = 0.
+        self.v1ty = 0.
+        self.v1ry = 1.
+        self.v2ty = 0.
+        self.v2ry = 0.
+        self.w1ty = 0.
+        self.w1ry = 1.
+        self.w2ty = 0.
+        self.w2ry = 1.
+
+    def bc_ssfs(self):
+        self.u1tx = 0.
+        self.u1rx = 0.
+        self.u2tx = 0.
+        self.u2rx = 0.
+        self.v1tx = 0.
+        self.v1rx = 0.
+        self.v2tx = 0.
+        self.v2rx = 0.
+        self.w1tx = 0.
+        self.w1rx = 1.
+        self.w2tx = 0.
+        self.w2rx = 1.
+        self.u1ty = 1.
+        self.u1ry = 1.
+        self.u2ty = 0.
+        self.u2ry = 0.
+        self.v1ty = 1.
+        self.v1ry = 1.
+        self.v2ty = 0.
+        self.v2ry = 0.
+        self.w1ty = 1.
+        self.w1ry = 1.
+        self.w2ty = 0.
+        self.w2ry = 1.
+
+
+    def bc_ssss(self):
+        self.u1tx = 0.
+        self.u1rx = 0.
+        self.u2tx = 0.
+        self.u2rx = 0.
+        self.v1tx = 0.
+        self.v1rx = 0.
+        self.v2tx = 0.
+        self.v2rx = 0.
+        self.w1tx = 0.
+        self.w1rx = 1.
+        self.w2tx = 0.
+        self.w2rx = 1.
+        self.u1ty = 0.
+        self.u1ry = 0.
+        self.u2ty = 0.
+        self.u2ry = 0.
+        self.v1ty = 0.
+        self.v1ry = 0.
+        self.v2ty = 0.
+        self.v2ry = 0.
+        self.w1ty = 0.
+        self.w1ry = 1.
+        self.w2ty = 0.
+        self.w2ry = 1.
 
 
     def get_size(self):
@@ -295,11 +375,11 @@ class Panel(object):
             lam = laminate.read_stack(stack, plyts=plyts,
                                              laminaprops=laminaprops)
 
-        if 'clt' in model:
+        if 'clt' in self.model:
             if lam is not None:
                 F = lam.ABD
 
-        elif 'fsdt' in model:
+        elif 'fsdt' in self.model:
             if lam is not None:
                 F = lam.ABDE
                 F[6:, 6:] *= self.K
@@ -345,7 +425,7 @@ class Panel(object):
                      self.u1ty, self.u1ry, self.u2ty, self.u2ry,
                      self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                      self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                     size, row0, col0):
+                     size, row0, col0)
         else:
             k0 = matrices.fk0(a, b, r, alpharad, F,
                      self.m, self.n,
@@ -355,7 +435,7 @@ class Panel(object):
                      self.u1ty, self.u1ry, self.u2ty, self.u2ry,
                      self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                      self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                     size, row0, col0):
+                     size, row0, col0)
 
         Nxx_cte = self.Nxx_cte if self.Nxx_cte is not None else 0.
         Nyy_cte = self.Nyy_cte if self.Nyy_cte is not None else 0.
@@ -403,6 +483,7 @@ class Panel(object):
         b = self.b
         r = self.r if self.r is not None else 0.
         alphadeg = self.alphadeg if self.alphadeg is not None else 0.
+        alpharad = deg2rad(alphadeg)
 
         m = self.m
         n = self.n
@@ -411,10 +492,10 @@ class Panel(object):
         Nyy = self.Nyy if self.Nyy is not None else 0.
         Nxy = self.Nxy if self.Nxy is not None else 0.
 
-        kG0 = matrices.fkG0(Nxx, Nyy, Nxy, a, b, r, alpharad,
+        kG0 = matrices.fkG0(Nxx, Nyy, Nxy, a, b, r, alpharad, self.m, self.n,
                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                   self.m, self.n)
+                   size, row0, col0)
 
         if finalize:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
@@ -588,7 +669,7 @@ class Panel(object):
                 warn(str(e), level=4, silent=silent)
                 msg('aborted!', level=3, silent=silent)
                 sizebkp = A.shape[0]
-                M, A, used_cols = remove_null_cols(M, A)
+                M, A, used_cols = remove_null_cols(M, A, silent=silent)
                 msg('eigsh() solver...', level=3, silent=silent)
                 eigvals, peigvecs = eigsh(A=A, k=self.num_eigvalues,
                         which='SM', M=M, tol=tol, sigma=1., mode=mode)
@@ -601,7 +682,7 @@ class Panel(object):
             from scipy.linalg import eigh
 
             size = A.shape[0]
-            M, A, used_cols = remove_null_cols(M, A)
+            M, A, used_cols = remove_null_cols(M, A, silent=silent)
             M = M.toarray()
             A = A.toarray()
             msg('eigh() solver...', level=3, silent=silent)
@@ -932,7 +1013,7 @@ class Panel(object):
         b = self.b
         model = self.model
 
-        fuvw = modelDB.db[model]['commons'].fuvw
+        fuvw = modelDB.db[model]['field'].fuvw
         us, vs, ws, phixs, phiys = fuvw(c, m, n, a, b, xs, ys,
                 self.out_num_cores)
 
@@ -980,7 +1061,7 @@ class Panel(object):
         funcnum = self.funcnum
         model = self.model
         NL_kinematics = model.split('_')[1]
-        fstrain = modelDB.db[model]['commons'].fstrain
+        fstrain = modelDB.db[model]['field'].fstrain
         e_num = modelDB.db[model]['e_num']
 
         if 'donnell' in NL_kinematics:
@@ -1033,7 +1114,7 @@ class Panel(object):
         funcnum = self.funcnum
         model = self.model
         NL_kinematics = model.split('_')[1]
-        fstress = modelDB.db[model]['commons'].fstress
+        fstress = modelDB.db[model]['field'].fstress
         e_num = modelDB.db[model]['e_num']
 
         if 'donnell' in NL_kinematics:
@@ -1118,7 +1199,7 @@ class Panel(object):
         db = modelDB.db
         num = db[model]['num']
         dofs = db[model]['dofs']
-        fg = db[model]['commons'].fg
+        fg = db[model]['field'].fg
 
         size = self.get_size()
 
@@ -1477,32 +1558,3 @@ class Panel(object):
         with open(name, 'wb') as f:
             cPickle.dump(self, f, protocol=cPickle.HIGHEST_PROTOCOL)
 
-
-if __name__ == '__main__':
-    p = Panel()
-    p.a = 2. # m
-    p.b = 1. # m
-    p.r = 10*p.b
-
-    p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
-    p.plyt = 0.125e-3 # m
-    p.stack = [0, +45, -45, 90, -45, +45, 0]
-    p.bc = 'ss1-ss1-ss1-ss1'
-    p.bc = 'cc1-cc1-cc1-cc1'
-
-    p.m = 15
-    p.n = 15
-
-    lb = True
-    if lb:
-        p.Nxx = -1.
-
-        p.lb(sparse_solver=True)
-        p.plot(p.eigvecs[:, 0], vec='w', colorbar=True)
-
-    else:
-        for yi in linspace(-p.b/2., p.b/2., 100):
-            p.add_force(p.a/2., yi, -10.*yi, 0., 0.)
-
-        p.static()
-        p.plot(p.analysis.cs[0], vec='w', colorbar=True, cbar_fontsize=6.)
