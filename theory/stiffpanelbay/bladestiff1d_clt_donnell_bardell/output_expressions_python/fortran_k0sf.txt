@@ -1,0 +1,18 @@
+# k0sf_11
+# k0sf_11_num=4
+c += 1
+k0sfr[c] = row+0
+k0sfc[c] = col+0
+k0sfv[c] += E1*(bf*bf)*fAuxi*fBuxi*gAu*gBu/a
+c += 1
+k0sfr[c] = row+0
+k0sfc[c] = col+2
+k0sfv[c] += 2*(bf*bf)*fAuxi*gAu*(E1*b*df*fBwxixi*gBw - S1*a*fBwxi*gBweta)/((a*a)*b)
+c += 1
+k0sfr[c] = row+2
+k0sfc[c] = col+0
+k0sfv[c] += 2*(bf*bf)*fBuxi*gBu*(E1*b*df*fAwxixi*gAw - S1*a*fAwxi*gAweta)/((a*a)*b)
+c += 1
+k0sfr[c] = row+2
+k0sfc[c] = col+2
+k0sfv[c] += 4*(bf*bf)*(Jxx*(a*a)*fAwxi*fBwxi*gAweta*gBweta - S1*a*b*df*(fAwxi*fBwxixi*gAweta*gBw + fAwxixi*fBwxi*gAw*gBweta) + (b*b)*fAwxixi*fBwxixi*gAw*gBw*(E1*(df*df) + F1))/((a*a*a)*(b*b))

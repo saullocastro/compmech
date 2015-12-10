@@ -1,30 +1,28 @@
-Version 0.4.1
--------------
-- implement compmech.aero.pistonstiff2Dpanelbay
-- simplify the way we apply pre-stress to be taken as constant or variable
-  along the linear buckling analyses.... we can do Nxx_cte and Nxx_var, for
-  example
-
-Version 0.4.2
--------------
-- finish implementing compmech.aero.pistonstiffpanelbay, add pre-load for
-  stiffeners
-- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
-  (pre-load for 1D stiffeners)
-- implement k0edges for pistonstiff2Dpanelbay (not priority)
-
 Version 0.5.0
 -------------
-- unify the calculation of stiffness matrices for panels (e.g. fk0y1y2)
-- unify the calculation of stiffness matrices for plates
-- restructuration of modules based on the unification aforementioned
--- currently the aero module does linear buckling analysis
--- create a module panels with stiffeners being optional
--- create a module plates with stiffeners being optional
--- create a module unstiffened panels (faster than stiffened)
--- create a module unstiffened plates (faster than stiffened)
--- the aeroelasticity functionality will be integrated in the freq()
-   methods
+- restructuration of modules
+-- create a module stiffpanelbay
+-- create a module panel
+-- create a module stiffener
+-- centralize panel calculation in module panel, include functions k0 and
+   k0y1y2, kG0, kG0y1y2 and so forth
+-- centralize plate calculation in module panel, same as for panels
+
+Version 0.5.1
+-------------
+- kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
+  (pre-load for 1D stiffeners)
+- finish implementing pre-load for 1D stiffeners
+
+Version 0.6.0
+-------------
+Compromise study considering the two following items
+- centralize the core modules for clpt and fsdt
+- remove plate modules and keep only stiffpanel, with possibility to call:
+-- plate (r is None and alpha is None)
+-- cylindrical panel (r is not None and alpha is None)
+-- conical panel (r is not None and alpha is not None)
+
 - finish implementing compmech.plate for Monteiro
 - fix mass matrix (kM) calculation for compmech.aero.pistonstiffpanel.fsdt.
   The rotation degrees of freedom should not use F = m*a, but another relation

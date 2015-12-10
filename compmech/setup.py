@@ -7,22 +7,25 @@ from subprocess import Popen
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('compmech',parent_package,top_path)
-    config.add_subpackage('aero')
+
     config.add_subpackage('analysis')
     config.add_subpackage('composite')
     config.add_subpackage('conecyl')
     config.add_data_dir('include')
     config.add_subpackage('integrate')
 
-    p = Popen(os.path.join(os.path.realpath(config.package_path),
+    # lib
+    p = Popen('python ' +
+              os.path.join(os.path.realpath(config.package_path),
                            './lib/setup.py') +
               ' build_ext --inplace clean', shell=True)
     p.wait()
-
     config.add_data_dir('lib')
+
     config.add_subpackage('matplotlib_utils')
-    config.add_subpackage('panels')
-    config.add_subpackage('plates')
+    config.add_subpackage('panel')
+    config.add_subpackage('stiffener')
+    config.add_subpackage('stiffpanelbay')
     config.add_subpackage('symbolic')
 
     config.make_config_py()
