@@ -25,26 +25,6 @@ cdef extern from 'bardell.h':
     double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
                        double y1t, double y1r, double y2t, double y2r)
 
-cdef extern from 'bardell_12.h':
-    double integral_ff_12(double xi1, double xi2, int i, int j,
-                       double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
-    double integral_ffxi_12(double xi1, double xi2, int i, int j,
-                       double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
-    double integral_ffxixi_12(double xi1, double xi2, int i, int j,
-                       double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
-    double integral_fxifxi_12(double xi1, double xi2, int i, int j,
-                       double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
-    double integral_fxifxixi_12(double xi1, double xi2, int i, int j,
-                       double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
-    double integral_fxixifxixi_12(double xi1, double xi2, int i, int j,
-                       double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
-
 cdef extern from 'bardell_functions.h':
     double calc_f(int i, double xi, double xi1t, double xi1r,
                   double xi2t, double xi2r)
