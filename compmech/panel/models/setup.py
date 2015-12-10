@@ -12,24 +12,46 @@ def configuration(parent_package='', top_path=None):
         args_linear = ['-openmp']
         args_nonlinear = ['-openmp', '-fp:fast']
 
-    config = Configuration('clpt', parent_package, top_path)
+    config = Configuration('models', parent_package, top_path)
 
-    config.add_extension('clpt_commons_bc1', ['clpt_commons_bc1.pyx'],
-              extra_compile_args=args_linear)
-    config.add_extension('clpt_donnell_bc1_linear', ['clpt_donnell_bc1_linear.pyx'],
-              extra_compile_args=args_linear)
-
-    config.add_extension('clpt_commons_bardell', ['clpt_commons_bardell.pyx'],
-              extra_compile_args=args_linear,
-              include_dirs=['../../include'],
-              libraries=['bardell_functions'],
-              library_dirs=['../../lib'])
-    config.add_extension('clpt_donnell_bardell_linear', ['clpt_donnell_bardell_linear.pyx'],
+    config.add_extension('cpanel_clt_donnell_bardell',
+              sources=['cpanel_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
               include_dirs=['../../include'],
               libraries=['bardell_functions', 'bardell', 'bardell_12'],
               library_dirs=['../../lib'])
+    config.add_extension('cpanel_clt_donnell_bardell_field',
+              sources=['cpanel_clt_donnell_bardell_field.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../include'],
+              libraries=['bardell_functions'],
+              library_dirs=['../../lib'])
 
+    config.add_extension('plate_clt_donnell_bardell',
+              sources=['plate_clt_donnell_bardell.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../include'],
+              libraries=['bardell_functions', 'bardell', 'bardell_12'],
+              library_dirs=['../../lib'])
+    config.add_extension('plate_clt_donnell_bardell_field',
+              sources=['plate_clt_donnell_bardell_field.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../include'],
+              libraries=['bardell_functions'],
+              library_dirs=['../../lib'])
+
+    config.add_extension('plate_clt_donnell_bardell_w',
+              sources=['plate_clt_donnell_bardell_w.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../include'],
+              libraries=['bardell_functions', 'bardell', 'bardell_12'],
+              library_dirs=['../../lib'])
+    config.add_extension('plate_clt_donnell_bardell_w_field',
+              sources=['plate_clt_donnell_bardell_w_field.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../include'],
+              libraries=['bardell_functions'],
+              library_dirs=['../../lib'])
 
     for ext in config.ext_modules:
         for src in ext.sources:
