@@ -25,7 +25,6 @@ from compmech.panel import Panel, modelDB as panmDB
 from compmech.stiffener import BladeStiff2D, modelDB as stiffmDB
 
 
-
 def load(name):
     if '.StiffPanelBay' in name:
         return cPickle.load(open(name, 'rb'))
@@ -44,10 +43,8 @@ class StiffPanelBay(Panel):
 
     - Supports both airflows along x (axis) or y (circumferential).
       Controlled by the parameter ``flow``
-    - Can have any number of :class:`.BladeStiffener1D` or
-      :class:`.BladeStiffener2D`, each one with a fixed `y` position
-    - ``stiffeners1D`` has the stiffeners with 1D formulation
-    - ``stiffeners2D`` has the stiffeners with 2D formulation
+    - ``bladestiff1ds`` contains the :class:`.BladeStiff1D` stiffeners
+    - ``bladestiff2ds`` contains the :class:`.BladeStiff2D` stiffeners
 
     """
     def __init__(self):
@@ -72,8 +69,8 @@ class StiffPanelBay(Panel):
         self.panels = []
 
         # stiffeners
-        self.stiffeners1D = []
-        self.stiffeners2D = []
+        self.bladestiff1ds = []
+        self.bladestiff2ds = []
 
         # geometry
         self.a = None
@@ -125,22 +122,22 @@ class StiffPanelBay(Panel):
             panel.k0 = None
             panel.kM = None
             panel.kG0 = None
-            panel.kG0_Nxx = None
-            panel.kG0_Nyy = None
-            panel.kG0_Nxy = None
 
-        for s in self.stiffeners2D:
+        for s in self.bladestiff2ds:
             s.k0 = None
             s.kM = None
             s.kG0 = None
-            s.kG0_Nxx = None
-            s.kG0_Nxy = None
+
+        for s in self.bladestiff1ds:
+            s.k0 = None
+            s.kM = None
+            s.kG0 = None
 
         gc.collect()
 
 
     def _rebuild(self):
-        if len(self.stiffeners1D) > 0:
+        if len(self.bladestiff1ds) > 0:
             #TODO
             raise NotImplementedError('#TODO')
 
@@ -190,6 +187,12 @@ class StiffPanelBay(Panel):
             else:
                 self.model = p.model
 
+        for s in self.bladestiff1ds:
+            s._rebuild()
+
+        for s in self.bladestiff2ds:
+            s._rebuild()
+
 
     def get_size(self):
         r"""Calculate the size of the stiffness matrices
@@ -210,7 +213,8 @@ class StiffPanelBay(Panel):
         """
         num = panmDB.db[self.model]['num']
         self.size = num*self.m*self.n
-        for s in self.stiffeners2D:
+
+        for s in self.bladestiff2ds:
             num1 = stiffmDB.db[s.model]['num1']
             self.size += num1*s.m1*s.n1
 
@@ -223,7 +227,7 @@ class StiffPanelBay(Panel):
             if si is None:
                 ys = linspace(0., self.b, gridy)
             else: # stiffener
-                ys = linspace(0., self.stiffeners2D[si].bf, gridy)
+                ys = linspace(0., self.bladestiff2ds[si].bf, gridy)
             xs, ys = np.meshgrid(xs, ys, copy=False)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
@@ -257,22 +261,27 @@ class StiffPanelBay(Panel):
         for p in self.panels:
             p.calc_k0(size=size, row0=0, col0=0, silent=silent,
                           finalize=False)
-
             #TODO summing up coo_matrix objects may be slow!
             k0 += p.k0
 
-        # contributions from stiffeners2D
+        # contributions from bladestiff1ds
+        for s in self.bladestiff1ds:
+            s.calc_k0(size=size, row0=0, col0=0, silent=silent,
+                      finalize=False)
+            #TODO summing up coo_matrix objects may be slow!
+            k0 += s.k0
+
+        # contributions from bladestiff2ds
         row0 = num*m*n
         col0 = num*m*n
-        for i, s in enumerate(self.stiffeners2D):
+        for i, s in enumerate(self.bladestiff2ds):
             num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
-                s_1 = bay.stiffeners2D[i-1]
+                s_1 = bay.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
             s.calc_k0(size=size, row0=row0, col0=col0, silent=silent,
                       finalize=False)
-
             #TODO summing up coo_matrix objects may be slow!
             k0 += s.k0
 
@@ -308,21 +317,29 @@ class StiffPanelBay(Panel):
         for p in self.panels:
             p.calc_kG0(size=size, row0=0, col0=0, silent=silent,
                            finalize=False)
-
             #TODO summing up coo_matrix objects may be slow!
             kG0 += p.kG0
 
-        # contributions from stiffeners2D
+        # contributions from bladestiff1ds
+        for s in self.bladestiff1ds:
+            s.calc_kG0(size=size, row0=0, col0=0, silent=silent,
+                       finalize=False)
+            #TODO summing up coo_matrix objects may be slow!
+            kG0 += s.kG0
+
+        # contributions from bladestiff2ds
         row0 = num*m*n
         col0 = num*m*n
-        for i, s in enumerate(self.stiffeners2D):
+        for i, s in enumerate(self.bladestiff2ds):
             num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
-                s_1 = bay.stiffeners2D[i-1]
+                s_1 = bay.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
             s.calc_kG0(size=size, row0=row0, col0=col0, silent=silent,
                        finalize=False)
+            #TODO summing up coo_matrix objects may be slow!
+            kG0 += s.kG0
 
         assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
         kG0 = csr_matrix(make_symmetric(kG0))
@@ -353,21 +370,29 @@ class StiffPanelBay(Panel):
         for p in self.panels:
             p.calc_kM(size=size, row0=0, col0=0, silent=silent,
                     finalize=False)
-
             #TODO summing up coo_matrix objects may be slow!
             kM += p.kM
 
-        # contributions from stiffeners2D
+        # contributions from bladestiff1ds
+        for s in self.bladestiff1ds:
+            s.calc_kM(size=size, row0=0, col0=0, silent=silent,
+                      finalize=False)
+            #TODO summing up coo_matrix objects may be slow!
+            kM += s.kM
+
+        # contributions from bladestiff2ds
         row0 = num*m*n
         col0 = num*m*n
-        for i, s in enumerate(self.stiffeners2D):
+        for i, s in enumerate(self.bladestiff2ds):
             num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
-                s_1 = self.stiffeners2D[i-1]
+                s_1 = self.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
             s.calc_kM(size=size, row0=row0, col0=col0, silent=silent,
                     finalize=False)
+            #TODO summing up coo_matrix objects may be slow!
+            kM += s.kM
 
         assert np.any(np.isnan(kM.data)) == False
         assert np.any(np.isinf(kM.data)) == False
@@ -598,14 +623,14 @@ class StiffPanelBay(Panel):
 
         num = panmDB.db[self.model]['num']
         row0 = num*self.m*self.n
-        m1 = self.stiffeners2D[si].m1
-        n1 = self.stiffeners2D[si].n1
-        bf = self.stiffeners2D[si].bf
+        m1 = self.bladestiff2ds[si].m1
+        n1 = self.bladestiff2ds[si].n1
+        bf = self.bladestiff2ds[si].bf
         if si > 0:
-            s_1 = self.stiffeners2D[si-1]
+            s_1 = self.bladestiff2ds[si-1]
             num1 = stiffmDB.db[s_1.model]['num1']
             row0 += num1*s_1.m1*s_1.n1
-        num1 = stiffmDB.db[self.stiffeners2D[si].model]['num1']
+        num1 = stiffmDB.db[self.bladestiff2ds[si].model]['num1']
         row1 = row0 + num1*m1*n1
         if c.shape[0] == self.get_size():
             c = c[row0:row1]
@@ -1036,8 +1061,8 @@ class StiffPanelBay(Panel):
             ax.set_title(str(title))
 
         elif add_title:
-            m1 = self.stiffeners2D[si].m1
-            n1 = self.stiffeners2D[si].n1
+            m1 = self.bladestiff2ds[si].m1
+            n1 = self.bladestiff2ds[si].n1
             if self.analysis.last_analysis == 'static':
                 ax.set_title('$m_1, n_1={0}, {1}$'.format(m1, n1))
 
@@ -1136,7 +1161,7 @@ class StiffPanelBay(Panel):
 
         fext = fext_skin
         # punctual forces on stiffener
-        for s in self.stiffeners2D:
+        for s in self.bladestiff2ds:
             num1 = stiffmDB.db[s.model]['num1']
             m1 = s.m1
             n1 = s.n1
