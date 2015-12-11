@@ -36,11 +36,13 @@ def compile(config, src):
             bkpdir = os.getcwd()
             os.chdir(srcdir)
             os.system('cl /Ox /c {0}'.format(basename(srcpath)))
+            fsize = os.path.getsize(basename(srcpath))
             os.chdir(bkpdir)
         else:
             raise NotImplementedError('Only Windows supported yet...')
-        with open(hashpath, 'wb') as f:
-            f.write(hash_new + '\n')
+        if fsize > 1L:
+            with open(hashpath, 'wb') as f:
+                f.write(hash_new + '\n')
     else:
         print('Source {0} already compiled!'.format(srcpath))
 
