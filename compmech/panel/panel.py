@@ -12,6 +12,7 @@ import __main__
 import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.sparse.linalg import eigsh
+from scipy.linalg import eig
 from numpy import linspace, deg2rad
 
 import compmech.composite.laminate as laminate
@@ -85,31 +86,32 @@ class Panel(object):
         # displacement at 4 edges is zero
         # free to rotate at 4 edges (simply supported by default)
         self.u1tx = 0.
-        self.u1rx = 0.
+        self.u1rx = 1.
         self.u2tx = 0.
-        self.u2rx = 0.
+        self.u2rx = 1.
         self.v1tx = 0.
-        self.v1rx = 0.
+        self.v1rx = 1.
         self.v2tx = 0.
-        self.v2rx = 0.
+        self.v2rx = 1.
         self.w1tx = 0.
         self.w1rx = 1.
         self.w2tx = 0.
         self.w2rx = 1.
         self.u1ty = 0.
-        self.u1ry = 0.
+        self.u1ry = 1.
         self.u2ty = 0.
-        self.u2ry = 0.
+        self.u2ry = 1.
         self.v1ty = 0.
-        self.v1ry = 0.
+        self.v1ry = 1.
         self.v2ty = 0.
-        self.v2ry = 0.
+        self.v2ry = 1.
         self.w1ty = 0.
         self.w1ry = 1.
         self.w2ty = 0.
         self.w2ry = 1.
 
         # material
+        self.mu = None
         self.plyts = []
         self.laminaprops = []
 
@@ -513,18 +515,24 @@ class Panel(object):
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         msg('Calculating kM... ', level=2, silent=silent)
 
+        y1 = self.y1
+        y2 = self.y2
+        matrices = modelDB.db[self.model]['matrices']
+
         if size is None:
             size = self.get_size()
 
         if y1 is not None and y2 is not None:
-            kM = fkMy1y2(y1, y2, mu, d, h, a, b, m, n,
-                self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                size, row0, col0)
+            h = sum(self.plyts)
+            kM = matrices.fkMy1y2(y1, y2, self.mu, self.d, h,
+                                  self.a, self.b, self.m, self.n,
+                                  self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                                  self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                                  self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                                  self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                                  self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                                  self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                                  size, row0, col0)
         else:
             kM = fkM(mu, d, h, a, b, m, n,
                 self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -760,6 +768,7 @@ class Panel(object):
         msg('Running frequency analysis...', silent=silent)
 
         self.calc_k0(silent=silent)
+        self.calc_kM(silent=silent)
         if atype == 1:
             self.calc_kG0(silent=silent)
             self.calc_kA(silent=silent)
