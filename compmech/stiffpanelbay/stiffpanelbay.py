@@ -59,7 +59,7 @@ class StiffPanelBay(Panel):
         self.forces_skin = []
         self.flow = 'x'
         self.bc = None
-        self.model = None
+        self.model = 'cpanel_clt_donnell_bardell'
         self.stack = []
         self.laminaprop = None
         self.laminaprops = []
@@ -68,7 +68,7 @@ class StiffPanelBay(Panel):
 
         # approximation series
         self.m = 11
-        self.n = 11
+        self.n = 12
 
         # panels
         self.panels = []
