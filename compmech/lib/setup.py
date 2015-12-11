@@ -27,10 +27,14 @@ def compile(config, src):
                    basename(srcpath).split(extsep)[0] + '.' + objext)
 
     needscompile = True
-    if os.path.isfile(hashpath) and os.path.isfile(objpath):
-        hash_old = open(hashpath, 'rb').read().strip()
-        if hash_old == hash_new:
-            needscompile = False
+    if os.path.isfile(hashpath):
+        if os.path.isfile(objpath):
+            fsize = os.path.getsize(objpath)
+            if fsize > 1L:
+                hash_old = open(hashpath, 'rb').read().strip()
+                if hash_old == hash_new:
+                    needscompile = False
+
     if needscompile:
         if os.name == 'nt':
             bkpdir = os.getcwd()
