@@ -60,6 +60,11 @@ class StiffPanelBay(Panel):
         self.flow = 'x'
         self.bc = None
         self.model = None
+        self.stack = []
+        self.laminaprop = None
+        self.laminaprops = []
+        self.plyt = None
+        self.plyts = []
 
         # approximation series
         self.m = 11
@@ -77,6 +82,33 @@ class StiffPanelBay(Panel):
         self.b = None
         self.r = None
         self.alphadeg = None
+
+        # boundary conditions
+        self.u1tx = 0.
+        self.u1rx = 1.
+        self.u2tx = 0.
+        self.u2rx = 1.
+        self.v1tx = 0.
+        self.v1rx = 1.
+        self.v2tx = 0.
+        self.v2rx = 1.
+        self.w1tx = 0.
+        self.w1rx = 1.
+        self.w2tx = 0.
+        self.w2rx = 1.
+
+        self.u1ty = 0.
+        self.u1ry = 1.
+        self.u2ty = 0.
+        self.u2ry = 1.
+        self.v1ty = 0.
+        self.v1ry = 1.
+        self.v2ty = 0.
+        self.v2ry = 1.
+        self.w1ty = 0.
+        self.w1ry = 1.
+        self.w2ty = 0.
+        self.w2ry = 1.
 
         # aerodynamic properties for the Piston theory
         self.beta = None
@@ -147,33 +179,6 @@ class StiffPanelBay(Panel):
             except AttributeError:
                 warn('StiffPanelBay name unchanged')
 
-        # boundary conditions
-        self.u1tx = 0.
-        self.u1rx = 1.
-        self.u2tx = 0.
-        self.u2rx = 1.
-        self.v1tx = 0.
-        self.v1rx = 1.
-        self.v2tx = 0.
-        self.v2rx = 1.
-        self.w1tx = 0.
-        self.w1rx = 1.
-        self.w2tx = 0.
-        self.w2rx = 1.
-
-        self.u1ty = 0.
-        self.u1ry = 1.
-        self.u2ty = 0.
-        self.u2ry = 1.
-        self.v1ty = 0.
-        self.v1ry = 1.
-        self.v2ty = 0.
-        self.v2ry = 1.
-        self.w1ty = 0.
-        self.w1ry = 1.
-        self.w2ty = 0.
-        self.w2ry = 1.
-
         if self.a is None:
             raise ValueError('The length a must be specified')
 
@@ -192,6 +197,28 @@ class StiffPanelBay(Panel):
 
         for s in self.bladestiff2ds:
             s._rebuild()
+
+
+    def _default_field(self, xs, ys, gridx, gridy, si=None):
+        if xs is None or ys is None:
+            xs = linspace(0., self.a, gridx)
+            if si is None:
+                ys = linspace(0., self.b, gridy)
+            else: # stiffener
+                ys = linspace(0., self.bladestiff2ds[si].bf, gridy)
+            xs, ys = np.meshgrid(xs, ys, copy=False)
+        xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
+        ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
+        xshape = xs.shape
+        tshape = ys.shape
+        if xshape != tshape:
+            raise ValueError('Arrays xs and ys must have the same shape')
+        self.Xs = xs
+        self.Ys = ys
+        xs = xs.ravel()
+        ys = ys.ravel()
+
+        return xs, ys, xshape, tshape
 
 
     def get_size(self):
@@ -221,26 +248,66 @@ class StiffPanelBay(Panel):
         return self.size
 
 
-    def _default_field(self, xs, ys, gridx, gridy, si=None):
-        if xs is None or ys is None:
-            xs = linspace(0., self.a, gridx)
-            if si is None:
-                ys = linspace(0., self.b, gridy)
-            else: # stiffener
-                ys = linspace(0., self.bladestiff2ds[si].bf, gridy)
-            xs, ys = np.meshgrid(xs, ys, copy=False)
-        xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
-        ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
-        xshape = xs.shape
-        tshape = ys.shape
-        if xshape != tshape:
-            raise ValueError('Arrays xs and ys must have the same shape')
-        self.Xs = xs
-        self.Ys = ys
-        xs = xs.ravel()
-        ys = ys.ravel()
+    def add_bladestiff1d(self):
+        pass
 
-        return xs, ys, xshape, tshape
+
+    def add_panel(self, y1, y2, stack=None, plyt=None, plyts=None,
+            laminaprop=None, laminaprops=None, model=None, mu=None, **kwargs):
+        p = Panel()
+        p.m = self.m
+        p.n = self.n
+        p.a = self.a
+        p.b = self.b
+        p.r = self.r
+        p.y1 = y1
+        p.y2 = y2
+        p.d = 0.
+        if model is None:
+            p.model = self.model
+        if stack is None:
+            p.stack = self.stack
+        if plyt is None:
+            p.plyt = self.plyt
+        if plyts is None:
+            p.plyts = self.plyts
+        if laminaprop is None:
+            p.laminaprop = self.laminaprop
+        if laminaprops is None:
+            p.laminaprops = self.laminaprops
+        if mu is None:
+            p.mu = self.mu
+
+        p.u1tx = self.u1tx
+        p.u1rx = self.u1rx
+        p.u2tx = self.u2tx
+        p.u2rx = self.u2rx
+        p.v1tx = self.v1tx
+        p.v1rx = self.v1rx
+        p.v2tx = self.v2tx
+        p.v2rx = self.v2rx
+        p.w1tx = self.w1tx
+        p.w1rx = self.w1rx
+        p.w2tx = self.w2tx
+        p.w2rx = self.w2rx
+        p.u1ty = self.u1ty
+        p.u1ry = self.u1ry
+        p.u2ty = self.u2ty
+        p.u2ry = self.u2ry
+        p.v1ty = self.v1ty
+        p.v1ry = self.v1ry
+        p.v2ty = self.v2ty
+        p.v2ry = self.v2ry
+        p.w1ty = self.w1ty
+        p.w1ry = self.w1ry
+        p.w2ty = self.w2ty
+        p.w2ry = self.w2ry
+
+
+
+        for k, v in kwargs.items():
+            setattr(p, k, v)
+        self.panels.append(p)
 
 
     def calc_k0(self, silent=False):
@@ -259,14 +326,14 @@ class StiffPanelBay(Panel):
 
         # contributions from panels
         for p in self.panels:
-            p.calc_k0(size=size, row0=0, col0=0, silent=silent,
+            p.calc_k0(size=size, row0=0, col0=0, silent=True,
                           finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             k0 += p.k0
 
         # contributions from bladestiff1ds
         for s in self.bladestiff1ds:
-            s.calc_k0(size=size, row0=0, col0=0, silent=silent,
+            s.calc_k0(size=size, row0=0, col0=0, silent=True,
                       finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             k0 += s.k0
@@ -280,7 +347,7 @@ class StiffPanelBay(Panel):
                 s_1 = bay.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
-            s.calc_k0(size=size, row0=row0, col0=col0, silent=silent,
+            s.calc_k0(size=size, row0=row0, col0=col0, silent=True,
                       finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             k0 += s.k0
@@ -315,14 +382,14 @@ class StiffPanelBay(Panel):
 
         # contributions from panels
         for p in self.panels:
-            p.calc_kG0(size=size, row0=0, col0=0, silent=silent,
-                           finalize=False)
+            p.calc_kG0(size=size, row0=0, col0=0, silent=True,
+                       finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             kG0 += p.kG0
 
         # contributions from bladestiff1ds
         for s in self.bladestiff1ds:
-            s.calc_kG0(size=size, row0=0, col0=0, silent=silent,
+            s.calc_kG0(size=size, row0=0, col0=0, silent=True,
                        finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
@@ -336,7 +403,7 @@ class StiffPanelBay(Panel):
                 s_1 = bay.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
-            s.calc_kG0(size=size, row0=row0, col0=col0, silent=silent,
+            s.calc_kG0(size=size, row0=row0, col0=col0, silent=True,
                        finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
@@ -368,14 +435,14 @@ class StiffPanelBay(Panel):
         kM = 0.
 
         for p in self.panels:
-            p.calc_kM(size=size, row0=0, col0=0, silent=silent,
-                    finalize=False)
+            p.calc_kM(size=size, row0=0, col0=0, silent=True,
+                      finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             kM += p.kM
 
         # contributions from bladestiff1ds
         for s in self.bladestiff1ds:
-            s.calc_kM(size=size, row0=0, col0=0, silent=silent,
+            s.calc_kM(size=size, row0=0, col0=0, silent=True,
                       finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             kM += s.kM
@@ -389,7 +456,7 @@ class StiffPanelBay(Panel):
                 s_1 = self.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
-            s.calc_kM(size=size, row0=row0, col0=col0, silent=silent,
+            s.calc_kM(size=size, row0=row0, col0=col0, silent=True,
                     finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             kM += s.kM
