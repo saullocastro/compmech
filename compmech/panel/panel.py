@@ -11,7 +11,7 @@ import __main__
 
 import numpy as np
 from scipy.sparse import csr_matrix
-from scipy.sparse.linalg import eigsh
+from scipy.sparse.linalg import eigs, eigsh
 from scipy.linalg import eig
 from numpy import linspace, deg2rad
 
@@ -800,8 +800,19 @@ class Panel(object):
         msg('eigs() solver...', level=3, silent=silent)
         k = min(self.num_eigvalues, M.shape[0]-2)
         if sparse_solver:
-            eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
-                                    sigma=-1.)
+            try:
+                eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
+                                        sigma=-1.)
+            except:
+                sizebkp = M.shape[0]
+                M, K, used_cols = remove_null_cols(M, K, silent=silent,
+                        level=3)
+                eigvals, peigvecs = eigs(A=M, k=k, which='SM', M=K, tol=tol,
+                                         sigma=-1.)
+                eigvecs = np.zeros((sizebkp, self.num_eigvalues),
+                                   dtype=DOUBLE)
+                eigvecs[used_cols, :] = peigvecs
+
             eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
         else:
             M = M.toarray()
