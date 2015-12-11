@@ -300,8 +300,6 @@ class BladeStiff2D(object):
         self.k0 = None
         self.kM = None
         self.kG0 = None
-        self.kG0_Nxx = None
-        self.kG0_Nxy = None
 
         self.u1txf = 0.
         self.u1rxf = 1.
