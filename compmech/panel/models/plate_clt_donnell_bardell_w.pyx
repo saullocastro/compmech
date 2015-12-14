@@ -69,8 +69,8 @@ def fk0(double a, double b, double r, double alpharad,
 
     # k0
     c = -1
-    for i in range(0, m):
-        for k in range(0, m):
+    for i in range(m):
+        for k in range(m):
 
             fAwxixifBwxixi = integral_fxixifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwfBwxixi = integral_ffxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
@@ -82,12 +82,13 @@ def fk0(double a, double b, double r, double alpharad,
             fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(0, n):
-                for l in range(0, n):
+            for j in range(n):
+                for l in range(n):
 
                     row = row0 + num*(j*m + i)
                     col = col0 + num*(l*m + k)
 
+                    #NOTE symmetry
                     if row > col:
                         continue
 
@@ -133,20 +134,21 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
     # kG0
 
     c = -1
-    for i in range(0, m):
-        for k in range(0, m):
+    for i in range(m):
+        for k in range(m):
 
             fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(0, n):
-                for l in range(0, n):
+            for j in range(n):
+                for l in range(n):
 
                     row = row0 + num*(j*m + i)
                     col = col0 + num*(l*m + k)
 
+                    #NOTE symmetry
                     if row > col:
                         continue
 
