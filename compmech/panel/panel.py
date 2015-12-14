@@ -734,8 +734,8 @@ class Panel(object):
         atype : int, optional
             Tells which analysis type should be performed:
 
-            - ``1`` : considers k0, kA and kG0
-            - ``2`` : considers k0 and kA
+            - ``1`` : considers k0, kA and kG0 (and cA depending on 'damping')
+            - ``2`` : considers k0 and kA (and cA depending on 'damping')
             - ``3`` : considers k0 and kG0
             - ``4`` : considers k0 only
 
