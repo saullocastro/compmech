@@ -27,20 +27,26 @@ def compile(config, src):
                    basename(srcpath).split(extsep)[0] + '.' + objext)
 
     needscompile = True
-    if os.path.isfile(hashpath) and os.path.isfile(objpath):
-        hash_old = open(hashpath, 'rb').read().strip()
-        if hash_old == hash_new:
-            needscompile = False
+    if os.path.isfile(hashpath):
+        if os.path.isfile(objpath):
+            fsize = os.path.getsize(objpath)
+            if fsize > 1L:
+                hash_old = open(hashpath, 'rb').read().strip()
+                if hash_old == hash_new:
+                    needscompile = False
+
     if needscompile:
         if os.name == 'nt':
             bkpdir = os.getcwd()
             os.chdir(srcdir)
             os.system('cl /Ox /c {0}'.format(basename(srcpath)))
+            fsize = os.path.getsize(basename(srcpath))
             os.chdir(bkpdir)
         else:
             raise NotImplementedError('Only Windows supported yet...')
-        with open(hashpath, 'wb') as f:
-            f.write(hash_new + '\n')
+        if fsize > 1L:
+            with open(hashpath, 'wb') as f:
+                f.write(hash_new + '\n')
     else:
         print('Source {0} already compiled!'.format(srcpath))
 
