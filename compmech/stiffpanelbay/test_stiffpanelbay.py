@@ -14,7 +14,7 @@ sp.add_panel(0, sp.b/2., plyt=sp.plyt, Nxx=-1)
 sp.add_panel(sp.b/2., sp.b, plyt=sp.plyt, Nxx=-1)
 
 sp.freq(sparse_solver=False)
-sp.plot(sp.eigvecs[0, :], filename='test.png')
+sp.plot(sp.eigvecs[:, 0], filename='test.png')
 
 
 
