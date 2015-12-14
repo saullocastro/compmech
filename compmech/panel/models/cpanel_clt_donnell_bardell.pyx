@@ -720,6 +720,97 @@ def fkMy1y2(double y1, double y2, double mu, double d, double h,
     return kM
 
 
+def fkM(double mu, double d, double h,
+        double a, double b, int m, int n,
+        double u1tx, double u1rx, double u2tx, double u2rx,
+        double v1tx, double v1rx, double v2tx, double v2rx,
+        double w1tx, double w1rx, double w2tx, double w2rx,
+        double u1ty, double u1ry, double u2ty, double u2ry,
+        double v1ty, double v1ry, double v2ty, double v2ry,
+        double w1ty, double w1ry, double w2ty, double w2ry,
+        int size, int row0, int col0):
+    cdef int i, k, j, l, c, row, col
+    cdef double xi1, xi2
+
+    cdef np.ndarray[cINT, ndim=1] kMr, kMc
+    cdef np.ndarray[cDOUBLE, ndim=1] kMv
+
+    cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwxifBu, fAwfBv, fAwfBw, fAwxifBwxi
+    cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBu, gAwetagBv, gAwgBw, gAwetagBweta
+
+    fdim = 7*m*n*m*n
+
+    kMr = np.zeros((fdim,), dtype=INT)
+    kMc = np.zeros((fdim,), dtype=INT)
+    kMv = np.zeros((fdim,), dtype=DOUBLE)
+
+    # kM
+    c = -1
+    for j in range(n):
+        for l in range(n):
+
+            gAugBu = integral_ff(j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+            gAugBw = integral_ff(j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAvgBv = integral_ff(j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+            gAvgBweta = integral_ffxi(j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBu = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+            gAwetagBv = integral_ffxi(l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+
+            for i in range(m):
+                for k in range(m):
+
+                    row = row0 + num*(j*m + i)
+                    col = col0 + num*(l*m + k)
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    fAufBu = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+                    fAufBwxi = integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+                    fAvfBv = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+                    fAvfBw = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+                    fAwxifBu = integral_ffxi(k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+                    fAwfBv = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+                    fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                    fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+
+                    c += 1
+                    kMr[c] = row+0
+                    kMc[c] = col+0
+                    kMv[c] += 0.25*a*b*fAufBu*gAugBu*h*mu
+                    c += 1
+                    kMr[c] = row+0
+                    kMc[c] = col+2
+                    kMv[c] += 0.5*b*d*fAufBwxi*gAugBw*h*mu
+                    c += 1
+                    kMr[c] = row+1
+                    kMc[c] = col+1
+                    kMv[c] += 0.25*a*b*fAvfBv*gAvgBv*h*mu
+                    c += 1
+                    kMr[c] = row+1
+                    kMc[c] = col+2
+                    kMv[c] += 0.5*a*d*fAvfBw*gAvgBweta*h*mu
+                    c += 1
+                    kMr[c] = row+2
+                    kMc[c] = col+0
+                    kMv[c] += 0.5*b*d*fAwxifBu*gAwgBu*h*mu
+                    c += 1
+                    kMr[c] = row+2
+                    kMc[c] = col+1
+                    kMv[c] += 0.5*a*d*fAwfBv*gAwetagBv*h*mu
+                    c += 1
+                    kMr[c] = row+2
+                    kMc[c] = col+2
+                    kMv[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
+
+    kM = coo_matrix((kMv, (kMr, kMc)), shape=(size, size))
+
+    return kM
+
+
 def fkAx(double beta, double gamma, double a, double b, int m, int n,
          double w1tx, double w1rx, double w2tx, double w2rx,
          double w1ty, double w1ry, double w2ty, double w2ry,
