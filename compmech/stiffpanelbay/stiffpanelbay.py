@@ -59,16 +59,17 @@ class StiffPanelBay(Panel):
         self.forces_skin = []
         self.flow = 'x'
         self.bc = None
-        self.model = None
+        self.model = 'cpanel_clt_donnell_bardell'
         self.stack = []
         self.laminaprop = None
         self.laminaprops = []
         self.plyt = None
         self.plyts = []
+        self.mu = None
 
         # approximation series
         self.m = 11
-        self.n = 11
+        self.n = 12
 
         # panels
         self.panels = []
@@ -263,20 +264,13 @@ class StiffPanelBay(Panel):
         p.y1 = y1
         p.y2 = y2
         p.d = 0.
-        if model is None:
-            p.model = self.model
-        if stack is None:
-            p.stack = self.stack
-        if plyt is None:
-            p.plyt = self.plyt
-        if plyts is None:
-            p.plyts = self.plyts
-        if laminaprop is None:
-            p.laminaprop = self.laminaprop
-        if laminaprops is None:
-            p.laminaprops = self.laminaprops
-        if mu is None:
-            p.mu = self.mu
+        p.model = model if model is not None else self.model
+        p.stack = stack if stack is not None else self.stack
+        p.plyt = plyt if plyt is not None else self.plyt
+        p.plyts = plyts if plyts is not None else self.plyts
+        p.laminaprop = laminaprop if laminaprop is not None else self.laminaprop
+        p.laminaprops = laminaprops if laminaprops is not None else self.laminaprops
+        p.mu = mu if mu is not None else self.mu
 
         p.u1tx = self.u1tx
         p.u1rx = self.u1rx
@@ -302,8 +296,6 @@ class StiffPanelBay(Panel):
         p.w1ry = self.w1ry
         p.w2ty = self.w2ty
         p.w2ry = self.w2ry
-
-
 
         for k, v in kwargs.items():
             setattr(p, k, v)

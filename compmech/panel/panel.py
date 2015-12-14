@@ -11,7 +11,7 @@ import __main__
 
 import numpy as np
 from scipy.sparse import csr_matrix
-from scipy.sparse.linalg import eigsh
+from scipy.sparse.linalg import eigs, eigsh
 from scipy.linalg import eig
 from numpy import linspace, deg2rad
 
@@ -53,6 +53,7 @@ class Panel(object):
         self.stack = stack
         self.plyt = plyt
         self.laminaprop = laminaprop
+        self.d = 0.
 
         self.name = ''
         self.bay = None
@@ -522,8 +523,8 @@ class Panel(object):
         if size is None:
             size = self.get_size()
 
+        h = sum(self.plyts)
         if y1 is not None and y2 is not None:
-            h = sum(self.plyts)
             kM = matrices.fkMy1y2(y1, y2, self.mu, self.d, h,
                                   self.a, self.b, self.m, self.n,
                                   self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -534,14 +535,15 @@ class Panel(object):
                                   self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                                   size, row0, col0)
         else:
-            kM = fkM(mu, d, h, a, b, m, n,
-                self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                size, row0, col0)
+            kM = matrices.fkM(self.mu, self.d, h,
+                              self.a, self.b, self.m, self.n,
+                              self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                              self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                              self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                              self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                              self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                              self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                              size, row0, col0)
 
         if finalize:
             assert np.any(np.isnan(kM.data)) == False
@@ -800,8 +802,19 @@ class Panel(object):
         msg('eigs() solver...', level=3, silent=silent)
         k = min(self.num_eigvalues, M.shape[0]-2)
         if sparse_solver:
-            eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
-                                    sigma=-1.)
+            try:
+                eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
+                                        sigma=-1.)
+            except:
+                sizebkp = M.shape[0]
+                M, K, used_cols = remove_null_cols(M, K, silent=silent,
+                        level=3)
+                eigvals, peigvecs = eigs(A=M, k=k, which='SM', M=K, tol=tol,
+                                         sigma=-1.)
+                eigvecs = np.zeros((sizebkp, self.num_eigvalues),
+                                   dtype=DOUBLE)
+                eigvecs[used_cols, :] = peigvecs
+
             eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
         else:
             M = M.toarray()
