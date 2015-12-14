@@ -716,7 +716,7 @@ class Panel(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def freq(self, atype=4, tol=0, sparse_solver=False, silent=False,
+    def freq(self, atype=4, tol=0, sparse_solver=True, silent=False,
              sort=True, damping=False, reduced_dof=False):
         """Performs a natural frequency analysis
 
@@ -799,9 +799,9 @@ class Panel(object):
         M = self.kM
 
         msg('Eigenvalue solver... ', level=2, silent=silent)
-        msg('eigs() solver...', level=3, silent=silent)
         k = min(self.num_eigvalues, M.shape[0]-2)
         if sparse_solver:
+            msg('eigs() solver...', level=3, silent=silent)
             try:
                 eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
                                         sigma=-1.)
@@ -812,11 +812,12 @@ class Panel(object):
                 eigvals, peigvecs = eigs(A=M, k=k, which='SM', M=K, tol=tol,
                                          sigma=-1.)
                 eigvecs = np.zeros((sizebkp, self.num_eigvalues),
-                                   dtype=DOUBLE)
+                                   dtype=peigvecs.dtype)
                 eigvecs[used_cols, :] = peigvecs
 
             eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
         else:
+            msg('eig() solver...', level=3, silent=silent)
             M = M.toarray()
             K = K.toarray()
             if reduced_dof:
