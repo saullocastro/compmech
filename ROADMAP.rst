@@ -1,8 +1,3 @@
-Version 0.5.
--------------
-- kM for plate_clt_donnell_bardell and plate_clt_donnell_bardell_w
-- kAx, kAy and cA for plate_clt_donnell_bardell and clt_donnell_bardell_w
-
 Version 0.5.1
 -------------
 - kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
