@@ -1,8 +1,13 @@
+Version 0.5.
+-------------
+- kM for plate_clt_donnell_bardell and plate_clt_donnell_bardell_w
+
 Version 0.5.1
 -------------
 - kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
   (pre-load for 1D stiffeners)
 - finish implementing pre-load for 1D stiffeners
+- complete the kpanel modulus (quite easy now...)
 
 Version 0.6.0
 -------------
