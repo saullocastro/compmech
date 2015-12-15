@@ -374,8 +374,8 @@ def fkM(double mu, double d, double h,
                     gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
-                    kMr[c] = row+2
-                    kMc[c] = col+2
+                    kMr[c] = row+0
+                    kMc[c] = col+0
                     kMv[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
 
     kM = coo_matrix((kMv, (kMr, kMc)), shape=(size, size))
@@ -432,8 +432,8 @@ def fkMy1y2(double y1, double y2, double mu, double d, double h,
                     fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
                     c += 1
-                    kMy1y2r[c] = row+2
-                    kMy1y2c[c] = col+2
+                    kMy1y2r[c] = row+0
+                    kMy1y2c[c] = col+0
                     kMy1y2v[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
 
     kMy1y2 = coo_matrix((kMy1y2v, (kMy1y2r, kMy1y2c)), shape=(size, size))
@@ -477,8 +477,8 @@ def fkAx(double beta, double gamma, double a, double b, int m, int n,
                     gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
-                    kAxr[c] = row+2
-                    kAxc[c] = col+2
+                    kAxr[c] = row+0
+                    kAxc[c] = col+0
                     kAxv[c] += -0.5*b*beta*fAwxifBw*gAwgBw
 
     kAx = coo_matrix((kAxv, (kAxr, kAxc)), shape=(size, size))
@@ -522,8 +522,8 @@ def fkAy(double beta, double a, double b, int m, int n,
                     gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
-                    kAyr[c] = row+2
-                    kAyc[c] = col+2
+                    kAyr[c] = row+0
+                    kAyc[c] = col+0
                     kAyv[c] += -0.5*a*beta*fAwfBw*gAwetagBw
 
     kAy = coo_matrix((kAyv, (kAyr, kAyc)), shape=(size, size))
@@ -567,8 +567,8 @@ def fcA(double aeromu, double a, double b, int m, int n,
                     gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                     c += 1
-                    cAr[c] = row+2
-                    cAc[c] = col+2
+                    cAr[c] = row+0
+                    cAc[c] = col+0
                     cAv[c] += -0.25*a*aeromu*b*fAwfBw*gAwgBw
 
     cA = coo_matrix((cAv, (cAr, cAc)), shape=(size, size))
