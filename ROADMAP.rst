@@ -1,6 +1,7 @@
 Version 0.5.
 -------------
 - kM for plate_clt_donnell_bardell and plate_clt_donnell_bardell_w
+- kAx, kAy and cA for plate_clt_donnell_bardell and clt_donnell_bardell_w
 
 Version 0.5.1
 -------------
