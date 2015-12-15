@@ -25,30 +25,24 @@ cdef extern from 'bardell.h':
                        double y1t, double y1r, double y2t, double y2r)
 
 cdef extern from 'bardell_12.h':
-    double integral_ff_12(double xi1, double xi2, int i, int j,
+    double integral_ff_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
                        double y1t, double y1r, double y2t, double y2r)
-    double integral_ffxi_12(double xi1, double xi2, int i, int j,
+    double integral_ffxi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
                        double y1t, double y1r, double y2t, double y2r)
-    double integral_ffxixi_12(double xi1, double xi2, int i, int j,
+    double integral_ffxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
                        double y1t, double y1r, double y2t, double y2r)
-    double integral_fxifxi_12(double xi1, double xi2, int i, int j,
+    double integral_fxifxi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
                        double y1t, double y1r, double y2t, double y2r)
-    double integral_fxifxixi_12(double xi1, double xi2, int i, int j,
+    double integral_fxifxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
                        double y1t, double y1r, double y2t, double y2r)
-    double integral_fxixifxixi_12(double xi1, double xi2, int i, int j,
+    double integral_fxixifxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
                        double y1t, double y1r, double y2t, double y2r)
-
-cdef extern from 'bardell_functions.h':
-    double calc_f(int i, double xi, double xi1t, double xi1r,
-                  double xi2t, double xi2r)
-    double calc_fxi(int i, double xi, double xi1t, double xi1r,
-                    double xi2t, double xi2r)
 
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
@@ -282,61 +276,6 @@ def fk0(double a, double b, double r, double alpharad,
     return k0
 
 
-def fkG0(double Nxx, double Nyy, double Nxy,
-         double a, double b, double r, double alpharad, int m, int n,
-         double w1tx, double w1rx, double w2tx, double w2rx,
-         double w1ty, double w1ry, double w2ty, double w2ry,
-         int size, int row0, int col0):
-    cdef int i, k, j, l, c, row, col
-
-    cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
-    cdef np.ndarray[cDOUBLE, ndim=1] kG0v
-
-    cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
-    cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
-
-    fdim = 1*m*m*n*n
-
-    kG0r = np.zeros((fdim,), dtype=INT)
-    kG0c = np.zeros((fdim,), dtype=INT)
-    kG0v = np.zeros((fdim,), dtype=DOUBLE)
-
-    # kG0
-
-    c = -1
-    for i in range(0, m):
-        for k in range(0, m):
-
-            fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-
-            for j in range(0, n):
-                for l in range(0, n):
-
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
-
-                    #NOTE symmetry
-                    if row > col:
-                        continue
-
-                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBweta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-
-                    c += 1
-                    kG0r[c] = row+2
-                    kG0c[c] = col+2
-                    kG0v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
-
-    kG0 = coo_matrix((kG0v, (kG0r, kG0c)), shape=(size, size))
-
-    return kG0
-
-
 def fk0y1y2(double y1, double y2, double a, double b, double r,
             double alpharad, np.ndarray[cDOUBLE, ndim=2] F,
             int m, int n,
@@ -348,7 +287,7 @@ def fk0y1y2(double y1, double y2, double a, double b, double r,
             double w1ty, double w1ry, double w2ty, double w2ry,
             int size, int row0, int col0):
     cdef int i, j, k, l, row, col, c
-    cdef double xi1, xi2
+    cdef double eta1, eta2
     cdef double A11, A12, A16, A22, A26, A66
     cdef double B11, B12, B16, B22, B26, B66
     cdef double D11, D12, D16, D22, D26, D66
@@ -405,63 +344,63 @@ def fk0y1y2(double y1, double y2, double a, double b, double r,
     D26 = F[4,5]
     D66 = F[5,5]
 
-    xi1 = 2*y1/b - 1.
-    xi2 = 2*y2/b - 1.
+    eta1 = 2*y1/b - 1.
+    eta2 = 2*y2/b - 1.
 
     # k0y1y2
     c = -1
     for j in range(n):
         for l in range(n):
 
-            gAugBu = integral_ff_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-            gAugBueta = integral_ffxi_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-            gAuetagBu = integral_ffxi_12(xi1, xi2, l, j, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-            gAuetagBueta = integral_fxifxi_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-            gAugBv = integral_ff_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
-            gAugBveta = integral_ffxi_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
-            gAuetagBv = integral_ffxi_12(xi1, xi2, l, j, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
-            gAuetagBveta = integral_fxifxi_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
-            gAuetagBwetaeta = integral_fxifxixi_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAuetagBw = integral_ffxi_12(xi1, xi2, l, j, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-            gAugBwetaeta = integral_ffxixi_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAuetagBweta = integral_fxifxi_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAugBw = integral_ff_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAugBweta = integral_ffxi_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAvgBueta = integral_ffxi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
-            gAvetagBueta = integral_fxifxi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
-            gAvgBu = integral_ff_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
-            gAvetagBu = integral_ffxi_12(xi1, xi2, l, j, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
-            gAvgBv = integral_ff_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-            gAvgBveta = integral_ffxi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-            gAvetagBv = integral_ffxi_12(xi1, xi2, l, j, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-            gAvetagBveta = integral_fxifxi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-            gAvgBwetaeta = integral_ffxixi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAvetagBwetaeta = integral_fxifxixi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAvgBw = integral_ff_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAvgBweta = integral_ffxi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAvetagBw = integral_ffxi_12(xi1, xi2, l, j, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
-            gAvetagBweta = integral_fxifxi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetaetagBueta = integral_fxifxixi_12(xi1, xi2, l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBueta = integral_ffxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-            gAwetagBueta = integral_fxifxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-            gAwetaetagBu = integral_ffxixi_12(xi1, xi2, l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBu = integral_ff_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-            gAwetagBu = integral_ffxi_12(xi1, xi2, l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetaetagBv = integral_ffxixi_12(xi1, xi2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetaetagBveta = integral_fxifxixi_12(xi1, xi2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBv = integral_ff_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
-            gAwgBveta = integral_ffxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
-            gAwetagBv = integral_ffxi_12(xi1, xi2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBveta = integral_fxifxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
-            gAwetaetagBwetaeta = integral_fxixifxixi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBwetaeta = integral_ffxixi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetaetagBw = integral_ffxixi_12(xi1, xi2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBwetaeta = integral_fxifxixi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetaetagBweta = integral_fxifxixi_12(xi1, xi2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBw = integral_ff_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBweta = integral_ffxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBw = integral_ffxi_12(xi1, xi2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBweta = integral_fxifxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAugBu = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+            gAugBueta = integral_ffxi_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+            gAuetagBu = integral_ffxi_12(eta1, eta2, l, j, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+            gAuetagBueta = integral_fxifxi_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+            gAugBv = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+            gAugBveta = integral_ffxi_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+            gAuetagBv = integral_ffxi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+            gAuetagBveta = integral_fxifxi_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+            gAuetagBwetaeta = integral_fxifxixi_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAuetagBw = integral_ffxi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+            gAugBwetaeta = integral_ffxixi_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAuetagBweta = integral_fxifxi_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAugBw = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAugBweta = integral_ffxi_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAvgBueta = integral_ffxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+            gAvetagBueta = integral_fxifxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+            gAvgBu = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, u1ty, u1ry, u2ty, u2ry)
+            gAvetagBu = integral_ffxi_12(eta1, eta2, l, j, u1ty, u1ry, u2ty, u2ry, v1ty, v1ry, v2ty, v2ry)
+            gAvgBv = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+            gAvgBveta = integral_ffxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+            gAvetagBv = integral_ffxi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+            gAvetagBveta = integral_fxifxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+            gAvgBwetaeta = integral_ffxixi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAvetagBwetaeta = integral_fxifxixi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAvgBw = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAvgBweta = integral_ffxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAvetagBw = integral_ffxi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+            gAvetagBweta = integral_fxifxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetaetagBueta = integral_fxifxixi_12(eta1, eta2, l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBueta = integral_ffxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+            gAwetagBueta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+            gAwetaetagBu = integral_ffxixi_12(eta1, eta2, l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBu = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+            gAwetagBu = integral_ffxi_12(eta1, eta2, l, j, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetaetagBv = integral_ffxixi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetaetagBveta = integral_fxifxixi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBv = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+            gAwgBveta = integral_ffxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+            gAwetagBv = integral_ffxi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetagBveta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, v1ty, v1ry, v2ty, v2ry)
+            gAwetaetagBwetaeta = integral_fxixifxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBwetaeta = integral_ffxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetaetagBw = integral_ffxixi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetagBwetaeta = integral_fxifxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetaetagBweta = integral_fxifxixi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBweta = integral_ffxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetagBw = integral_ffxi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
             for i in range(m):
                 for k in range(m):
@@ -566,13 +505,68 @@ def fk0y1y2(double y1, double y2, double a, double b, double r,
     return k0
 
 
+def fkG0(double Nxx, double Nyy, double Nxy,
+         double a, double b, double r, double alpharad, int m, int n,
+         double w1tx, double w1rx, double w2tx, double w2rx,
+         double w1ty, double w1ry, double w2ty, double w2ry,
+         int size, int row0, int col0):
+    cdef int i, k, j, l, c, row, col
+
+    cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
+    cdef np.ndarray[cDOUBLE, ndim=1] kG0v
+
+    cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
+    cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
+
+    fdim = 1*m*m*n*n
+
+    kG0r = np.zeros((fdim,), dtype=INT)
+    kG0c = np.zeros((fdim,), dtype=INT)
+    kG0v = np.zeros((fdim,), dtype=DOUBLE)
+
+    # kG0
+
+    c = -1
+    for i in range(0, m):
+        for k in range(0, m):
+
+            fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+
+            for j in range(0, n):
+                for l in range(0, n):
+
+                    row = row0 + num*(j*m + i)
+                    col = col0 + num*(l*m + k)
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwgBweta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                    gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+
+                    c += 1
+                    kG0r[c] = row+2
+                    kG0c[c] = col+2
+                    kG0v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
+
+    kG0 = coo_matrix((kG0v, (kG0r, kG0c)), shape=(size, size))
+
+    return kG0
+
+
 def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
              double a, double b, double r, double alpharad, int m, int n,
              double w1tx, double w1rx, double w2tx, double w2rx,
              double w1ty, double w1ry, double w2ty, double w2ry,
              int size, int row0, int col0):
     cdef int i, k, j, l, c, row, col
-    cdef double xi1, xi2
+    cdef double eta1, eta2
 
     cdef np.ndarray[cINT, ndim=1] kG0y1y2r, kG0y1y2c
     cdef np.ndarray[cDOUBLE, ndim=1] kG0y1y2v
@@ -586,18 +580,18 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
     kG0y1y2c = np.zeros((fdim,), dtype=INT)
     kG0y1y2v = np.zeros((fdim,), dtype=DOUBLE)
 
-    xi1 = 2*y1/b - 1.
-    xi2 = 2*y2/b - 1.
+    eta1 = 2*y1/b - 1.
+    eta2 = 2*y2/b - 1.
 
     # kG0y1y2
     c = -1
     for j in range(n):
         for l in range(n):
 
-            gAwetagBw = integral_ffxi_12(xi1, xi2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBw = integral_ff_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBweta = integral_ffxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBweta = integral_fxifxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetagBw = integral_ffxi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBweta = integral_ffxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
             for i in range(m):
                 for k in range(m):
@@ -622,100 +616,6 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
     kG0 = coo_matrix((kG0y1y2v, (kG0y1y2r, kG0y1y2c)), shape=(size, size))
 
     return kG0
-
-
-def fkMy1y2(double y1, double y2, double mu, double d, double h,
-            double a, double b, int m, int n,
-            double u1tx, double u1rx, double u2tx, double u2rx,
-            double v1tx, double v1rx, double v2tx, double v2rx,
-            double w1tx, double w1rx, double w2tx, double w2rx,
-            double u1ty, double u1ry, double u2ty, double u2ry,
-            double v1ty, double v1ry, double v2ty, double v2ry,
-            double w1ty, double w1ry, double w2ty, double w2ry,
-            int size, int row0, int col0):
-    cdef int i, k, j, l, c, row, col
-    cdef double xi1, xi2
-
-    cdef np.ndarray[cINT, ndim=1] kMy1y2r, kMy1y2c
-    cdef np.ndarray[cDOUBLE, ndim=1] kMy1y2v
-
-    cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwxifBu, fAwfBv, fAwfBw, fAwxifBwxi
-    cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBu, gAwetagBv, gAwgBw, gAwetagBweta
-
-    fdim = 7*m*n*m*n
-
-    kMy1y2r = np.zeros((fdim,), dtype=INT)
-    kMy1y2c = np.zeros((fdim,), dtype=INT)
-    kMy1y2v = np.zeros((fdim,), dtype=DOUBLE)
-
-    xi1 = 2*y1/b - 1.
-    xi2 = 2*y2/b - 1.
-
-    # kMy1y2
-    c = -1
-    for j in range(n):
-        for l in range(n):
-
-            gAugBu = integral_ff_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-            gAugBw = integral_ff_12(xi1, xi2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-            gAvgBv = integral_ff_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-            gAvgBweta = integral_ffxi_12(xi1, xi2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBu = integral_ff_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-            gAwetagBv = integral_ffxi_12(xi1, xi2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBw = integral_ff_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBweta = integral_fxifxi_12(xi1, xi2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-
-            for i in range(m):
-                for k in range(m):
-
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
-
-                    #NOTE symmetry
-                    if row > col:
-                        continue
-
-                    fAufBu = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
-                    fAufBwxi = integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAvfBv = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
-                    fAvfBw = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxifBu = integral_ffxi(k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwfBv = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
-                    fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-
-                    c += 1
-                    kMy1y2r[c] = row+0
-                    kMy1y2c[c] = col+0
-                    kMy1y2v[c] += 0.25*a*b*fAufBu*gAugBu*h*mu
-                    c += 1
-                    kMy1y2r[c] = row+0
-                    kMy1y2c[c] = col+2
-                    kMy1y2v[c] += 0.5*b*d*fAufBwxi*gAugBw*h*mu
-                    c += 1
-                    kMy1y2r[c] = row+1
-                    kMy1y2c[c] = col+1
-                    kMy1y2v[c] += 0.25*a*b*fAvfBv*gAvgBv*h*mu
-                    c += 1
-                    kMy1y2r[c] = row+1
-                    kMy1y2c[c] = col+2
-                    kMy1y2v[c] += 0.5*a*d*fAvfBw*gAvgBweta*h*mu
-                    c += 1
-                    kMy1y2r[c] = row+2
-                    kMy1y2c[c] = col+0
-                    kMy1y2v[c] += 0.5*b*d*fAwxifBu*gAwgBu*h*mu
-                    c += 1
-                    kMy1y2r[c] = row+2
-                    kMy1y2c[c] = col+1
-                    kMy1y2v[c] += 0.5*a*d*fAwfBv*gAwetagBv*h*mu
-                    c += 1
-                    kMy1y2r[c] = row+2
-                    kMy1y2c[c] = col+2
-                    kMy1y2v[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
-
-    kM = coo_matrix((kMy1y2v, (kMy1y2r, kMy1y2c)), shape=(size, size))
-
-    return kM
 
 
 def fkM(double mu, double d, double h,
@@ -804,6 +704,100 @@ def fkM(double mu, double d, double h,
                     kMv[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
 
     kM = coo_matrix((kMv, (kMr, kMc)), shape=(size, size))
+
+    return kM
+
+
+def fkMy1y2(double y1, double y2, double mu, double d, double h,
+            double a, double b, int m, int n,
+            double u1tx, double u1rx, double u2tx, double u2rx,
+            double v1tx, double v1rx, double v2tx, double v2rx,
+            double w1tx, double w1rx, double w2tx, double w2rx,
+            double u1ty, double u1ry, double u2ty, double u2ry,
+            double v1ty, double v1ry, double v2ty, double v2ry,
+            double w1ty, double w1ry, double w2ty, double w2ry,
+            int size, int row0, int col0):
+    cdef int i, k, j, l, c, row, col
+    cdef double eta1, eta2
+
+    cdef np.ndarray[cINT, ndim=1] kMy1y2r, kMy1y2c
+    cdef np.ndarray[cDOUBLE, ndim=1] kMy1y2v
+
+    cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwxifBu, fAwfBv, fAwfBw, fAwxifBwxi
+    cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBu, gAwetagBv, gAwgBw, gAwetagBweta
+
+    fdim = 7*m*n*m*n
+
+    kMy1y2r = np.zeros((fdim,), dtype=INT)
+    kMy1y2c = np.zeros((fdim,), dtype=INT)
+    kMy1y2v = np.zeros((fdim,), dtype=DOUBLE)
+
+    eta1 = 2*y1/b - 1.
+    eta2 = 2*y2/b - 1.
+
+    # kMy1y2
+    c = -1
+    for j in range(n):
+        for l in range(n):
+
+            gAugBu = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+            gAugBw = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+            gAvgBv = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+            gAvgBweta = integral_ffxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBu = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+            gAwetagBv = integral_ffxi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+            gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+
+            for i in range(m):
+                for k in range(m):
+
+                    row = row0 + num*(j*m + i)
+                    col = col0 + num*(l*m + k)
+
+                    #NOTE symmetry
+                    if row > col:
+                        continue
+
+                    fAufBu = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+                    fAufBwxi = integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+                    fAvfBv = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+                    fAvfBw = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+                    fAwxifBu = integral_ffxi(k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+                    fAwfBv = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+                    fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                    fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+
+                    c += 1
+                    kMy1y2r[c] = row+0
+                    kMy1y2c[c] = col+0
+                    kMy1y2v[c] += 0.25*a*b*fAufBu*gAugBu*h*mu
+                    c += 1
+                    kMy1y2r[c] = row+0
+                    kMy1y2c[c] = col+2
+                    kMy1y2v[c] += 0.5*b*d*fAufBwxi*gAugBw*h*mu
+                    c += 1
+                    kMy1y2r[c] = row+1
+                    kMy1y2c[c] = col+1
+                    kMy1y2v[c] += 0.25*a*b*fAvfBv*gAvgBv*h*mu
+                    c += 1
+                    kMy1y2r[c] = row+1
+                    kMy1y2c[c] = col+2
+                    kMy1y2v[c] += 0.5*a*d*fAvfBw*gAvgBweta*h*mu
+                    c += 1
+                    kMy1y2r[c] = row+2
+                    kMy1y2c[c] = col+0
+                    kMy1y2v[c] += 0.5*b*d*fAwxifBu*gAwgBu*h*mu
+                    c += 1
+                    kMy1y2r[c] = row+2
+                    kMy1y2c[c] = col+1
+                    kMy1y2v[c] += 0.5*a*d*fAwfBv*gAwetagBv*h*mu
+                    c += 1
+                    kMy1y2r[c] = row+2
+                    kMy1y2c[c] = col+2
+                    kMy1y2v[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
+
+    kM = coo_matrix((kMy1y2v, (kMy1y2r, kMy1y2c)), shape=(size, size))
 
     return kM
 
