@@ -18,7 +18,7 @@ def configuration(parent_package='', top_path=None):
               sources=['cpanel_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
               include_dirs=['../../include'],
-              libraries=['bardell_functions', 'bardell', 'bardell_12'],
+              libraries=['bardell', 'bardell_12'],
               library_dirs=['../../lib'])
     config.add_extension('cpanel_clt_donnell_bardell_field',
               sources=['cpanel_clt_donnell_bardell_field.pyx'],
@@ -31,7 +31,7 @@ def configuration(parent_package='', top_path=None):
               sources=['plate_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
               include_dirs=['../../include'],
-              libraries=['bardell_functions', 'bardell', 'bardell_12'],
+              libraries=['bardell', 'bardell_12'],
               library_dirs=['../../lib'])
     config.add_extension('plate_clt_donnell_bardell_field',
               sources=['plate_clt_donnell_bardell_field.pyx'],
@@ -44,7 +44,7 @@ def configuration(parent_package='', top_path=None):
               sources=['plate_clt_donnell_bardell_w.pyx'],
               extra_compile_args=args_linear,
               include_dirs=['../../include'],
-              libraries=['bardell_functions', 'bardell', 'bardell_12'],
+              libraries=['bardell', 'bardell_12'],
               library_dirs=['../../lib'])
     config.add_extension('plate_clt_donnell_bardell_w_field',
               sources=['plate_clt_donnell_bardell_w_field.pyx'],
