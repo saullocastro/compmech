@@ -575,6 +575,9 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
     kG0y1y2c = np.zeros((fdim,), dtype=INT)
     kG0y1y2v = np.zeros((fdim,), dtype=DOUBLE)
 
+    eta1 = 2*y1/b - 1.
+    eta2 = 2*y2/b - 1.
+
     # kG0y1y2
 
     c = -1
