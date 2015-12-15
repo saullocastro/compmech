@@ -1,5 +1,6 @@
 Version 0.5.1
 -------------
+- first version with a Travis CI successful build...
 - kG0 for stiffener flange (create a fkG0sf) and base (use kG0y1y2)
   (pre-load for 1D stiffeners)
 - finish implementing pre-load for 1D stiffeners
