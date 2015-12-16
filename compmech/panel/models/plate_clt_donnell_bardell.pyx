@@ -12,37 +12,37 @@ cimport numpy as np
 
 cdef extern from 'bardell.h':
     double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
 
 cdef extern from 'bardell_12.h':
     double integral_ff_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxixifxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
 
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
@@ -614,7 +614,7 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
 
 
 def fkM(double mu, double d, double h,
-        double a, double b, int m, int n,
+        double a, double b, double r, double alpharad, int m, int n,
         double u1tx, double u1rx, double u2tx, double u2rx,
         double v1tx, double v1rx, double v2tx, double v2rx,
         double w1tx, double w1rx, double w2tx, double w2rx,
@@ -704,7 +704,7 @@ def fkM(double mu, double d, double h,
 
 
 def fkMy1y2(double y1, double y2, double mu, double d, double h,
-            double a, double b, int m, int n,
+            double a, double b, double r, double alpharad, int m, int n,
             double u1tx, double u1rx, double u2tx, double u2rx,
             double v1tx, double v1rx, double v2tx, double v2rx,
             double w1tx, double w1rx, double w2tx, double w2rx,

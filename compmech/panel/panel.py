@@ -516,9 +516,13 @@ class Panel(object):
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         msg('Calculating kM... ', level=2, silent=silent)
 
+        matrices = modelDB.db[self.model]['matrices']
+
         y1 = self.y1
         y2 = self.y2
-        matrices = modelDB.db[self.model]['matrices']
+        r = self.r if self.r is not None else 0.
+        alphadeg = self.alphadeg if self.alphadeg is not None else 0.
+        alpharad = deg2rad(alphadeg)
 
         if size is None:
             size = self.get_size()
@@ -526,7 +530,7 @@ class Panel(object):
         h = sum(self.plyts)
         if y1 is not None and y2 is not None:
             kM = matrices.fkMy1y2(y1, y2, self.mu, self.d, h,
-                                  self.a, self.b, self.m, self.n,
+                                  self.a, self.b, r, alpharad, self.m, self.n,
                                   self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                                   self.v1tx, self.v1rx, self.v2tx, self.v2rx,
                                   self.w1tx, self.w1rx, self.w2tx, self.w2rx,
@@ -536,7 +540,7 @@ class Panel(object):
                                   size, row0, col0)
         else:
             kM = matrices.fkM(self.mu, self.d, h,
-                              self.a, self.b, self.m, self.n,
+                              self.a, self.b, r, alpharad, self.m, self.n,
                               self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                               self.v1tx, self.v1rx, self.v2tx, self.v2rx,
                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
