@@ -8,6 +8,16 @@ Used to configure the main parameters for each implemented model.
 from models import *
 
 db = {
+    'kpanel_clt_donnell_bardell': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': False,
+                    'field': plate_clt_donnell_bardell_field,
+                    'matrices': kpanel_clt_donnell_bardell,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'num': 3,
+                    },
     'cpanel_clt_donnell_bardell': {
                     'linear static': True,
                     'linear buckling': True,

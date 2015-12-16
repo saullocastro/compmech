@@ -14,6 +14,19 @@ def configuration(parent_package='', top_path=None):
 
     config = Configuration('models', parent_package, top_path)
 
+    config.add_extension('kpanel_clt_donnell_bardell',
+              sources=['kpanel_clt_donnell_bardell.pyx'],
+              extra_compile_args=args_linear,
+              include_dirs=['../../include'],
+              libraries=['bardell', 'bardell_12'],
+              library_dirs=['../../lib'])
+    #config.add_extension('kpanel_clt_donnell_bardell_field',
+              #sources=['kpanel_clt_donnell_bardell_field.pyx'],
+              #extra_compile_args=args_linear,
+              #include_dirs=['../../include'],
+              #libraries=['bardell_functions'],
+              #library_dirs=['../../lib'])
+
     config.add_extension('cpanel_clt_donnell_bardell',
               sources=['cpanel_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
