@@ -9,8 +9,8 @@ def configuration(parent_package='', top_path=None):
         args_linear = ['/openmp']
         args_nonlinear = ['/openmp', '/fp:fast']
     else:
-        args_linear = ['-openmp']
-        args_nonlinear = ['-openmp', '-fp:fast']
+        args_linear = ['-fopenmp']
+        args_nonlinear = ['-fopenmp', '-ffast-math']
 
     config = Configuration('fsdt', parent_package, top_path)
     config.add_extension('fsdt_commons_bc1', ['fsdt_commons_bc1.pyx'],
