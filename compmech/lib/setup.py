@@ -41,7 +41,7 @@ def compile(config, src):
         if os.name == 'nt':
             os.system('cl /Ox /c {0}'.format(basename(srcpath)))
         else:
-            os.system('gcc -O3 -c -fpic {0}'.format(basename(srcpath)))
+            os.system('gcc -pthread -g -O2 -fPIC -g -c -Wall {0}'.format(basename(srcpath)))
         fsize = os.path.getsize(basename(srcpath))
         os.chdir(bkpdir)
         if fsize > 1L:
@@ -72,7 +72,7 @@ def link(config, instlib):
     if os.name == 'nt':
         os.system('link /DLL {0} /OUT:{1}'.format(objs, libpath))
     else:
-        os.system('gcc -shared -o {1} {0}'.format(objs, libpath))
+        os.system('gcc -shared -Wl -o {1} {0}'.format(objs, libpath))
 
 
 def configuration(parent_package='', top_path=None):
