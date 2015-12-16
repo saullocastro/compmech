@@ -6,7 +6,8 @@ from compmech.panel import Panel
 def test_lb():
     for model in ['plate_clt_donnell_bardell',
                   'plate_clt_donnell_bardell_w',
-                  'cpanel_clt_donnell_bardell']:
+                  'cpanel_clt_donnell_bardell',
+                  'kpanel_clt_donnell_bardell']:
         print('Linear buckling for model {0}'.format(model))
         # ssss
         p = Panel()
@@ -20,6 +21,7 @@ def test_lb():
         p.a = 1.
         p.b = 0.5
         p.r = 1.e8
+        p.alphadeg = 0.
         p.Nxx = -1
         p.lb(silent=True)
         if '_w' in model:
@@ -47,6 +49,7 @@ def test_lb():
         p.a = 1.
         p.b = 0.5
         p.r = 1.e8
+        p.alphadeg = 0.
         p.Nxx = -1
         p.lb(silent=True)
         if '_w' in model:
@@ -67,7 +70,8 @@ def test_lb():
 def test_freq():
     for model in ['plate_clt_donnell_bardell',
                   'plate_clt_donnell_bardell_w',
-                  'cpanel_clt_donnell_bardell']:
+                  'cpanel_clt_donnell_bardell',
+                  'kpanel_clt_donnell_bardell']:
         for atype in [3, 4]:
             print('Frequency Analysis, atype={0}, model={1}'.format(
                   atype, model))
@@ -77,6 +81,7 @@ def test_freq():
             p.a = 1.
             p.b = 0.5
             p.r = 1.e8
+            p.alphadeg = 0.
             p.stack = [0, 90, -45, +45]
             p.plyt = 1e-3*0.125
             p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)

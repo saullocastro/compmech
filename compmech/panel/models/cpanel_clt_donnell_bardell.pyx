@@ -12,37 +12,37 @@ cimport numpy as np
 
 cdef extern from 'bardell.h':
     double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
 
 cdef extern from 'bardell_12.h':
     double integral_ff_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxixifxixi_12(double eta1, double eta2, int i, int j,
                        double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
 
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
@@ -121,8 +121,8 @@ def fk0(double a, double b, double r, double alpharad,
 
     # k0
     c = -1
-    for i in range(0, m):
-        for k in range(0, m):
+    for i in range(m):
+        for k in range(m):
 
             fAufBu = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
             fAufBuxi = integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
@@ -174,8 +174,8 @@ def fk0(double a, double b, double r, double alpharad,
             fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(0, n):
-                for l in range(0, n):
+            for j in range(n):
+                for l in range(n):
 
                     row = row0 + num*(j*m + i)
                     col = col0 + num*(l*m + k)
@@ -500,9 +500,9 @@ def fk0y1y2(double y1, double y2, double a, double b, double r,
                     k0y1y2v[c] += 0.25*A22*a*b*fAwfBw*gAwgBw/(r*r) - B12*b*gAwgBw*(fAwfBwxixi + fAwxixifBw)/(a*r) - B22*a*fAwfBw*(gAwgBwetaeta + gAwetaetagBw)/(b*r) - 2*B26*(fAwfBwxi*gAwgBweta + fAwxifBw*gAwetagBw)/r + 4*D11*b*fAwxixifBwxixi*gAwgBw/(a*a*a) + 4*D12*(fAwfBwxixi*gAwetaetagBw + fAwxixifBw*gAwgBwetaeta)/(a*b) + 8*D16*(fAwxifBwxixi*gAwetagBw + fAwxixifBwxi*gAwgBweta)/(a*a) + 4*D22*a*fAwfBw*gAwetaetagBwetaeta/(b*b*b) + 8*D26*(fAwfBwxi*gAwetaetagBweta + fAwxifBw*gAwetagBwetaeta)/(b*b) + 16*D66*fAwxifBwxi*gAwetagBweta/(a*b)
 
 
-    k0 = coo_matrix((k0y1y2v, (k0y1y2r, k0y1y2c)), shape=(size, size))
+    k0y1y2 = coo_matrix((k0y1y2v, (k0y1y2r, k0y1y2c)), shape=(size, size))
 
-    return k0
+    return k0y1y2
 
 
 def fkG0(double Nxx, double Nyy, double Nxy,
@@ -525,18 +525,17 @@ def fkG0(double Nxx, double Nyy, double Nxy,
     kG0v = np.zeros((fdim,), dtype=DOUBLE)
 
     # kG0
-
     c = -1
-    for i in range(0, m):
-        for k in range(0, m):
+    for i in range(m):
+        for k in range(m):
 
             fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
             fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(0, n):
-                for l in range(0, n):
+            for j in range(n):
+                for l in range(n):
 
                     row = row0 + num*(j*m + i)
                     col = col0 + num*(l*m + k)
@@ -613,13 +612,13 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
                     kG0y1y2c[c] = col+2
                     kG0y1y2v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
 
-    kG0 = coo_matrix((kG0y1y2v, (kG0y1y2r, kG0y1y2c)), shape=(size, size))
+    kG0y1y2 = coo_matrix((kG0y1y2v, (kG0y1y2r, kG0y1y2c)), shape=(size, size))
 
-    return kG0
+    return kG0y1y2
 
 
 def fkM(double mu, double d, double h,
-        double a, double b, int m, int n,
+        double a, double b, double r, double alpharad, int m, int n,
         double u1tx, double u1rx, double u2tx, double u2rx,
         double v1tx, double v1rx, double v2tx, double v2rx,
         double w1tx, double w1rx, double w2tx, double w2rx,
@@ -709,7 +708,7 @@ def fkM(double mu, double d, double h,
 
 
 def fkMy1y2(double y1, double y2, double mu, double d, double h,
-            double a, double b, int m, int n,
+            double a, double b, double r, double alpharad, int m, int n,
             double u1tx, double u1rx, double u2tx, double u2rx,
             double v1tx, double v1rx, double v2tx, double v2rx,
             double w1tx, double w1rx, double w2tx, double w2rx,
@@ -797,9 +796,9 @@ def fkMy1y2(double y1, double y2, double mu, double d, double h,
                     kMy1y2c[c] = col+2
                     kMy1y2v[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
 
-    kM = coo_matrix((kMy1y2v, (kMy1y2r, kMy1y2c)), shape=(size, size))
+    kMy1y2 = coo_matrix((kMy1y2v, (kMy1y2r, kMy1y2c)), shape=(size, size))
 
-    return kM
+    return kMy1y2
 
 
 def fkAx(double beta, double gamma, double a, double b, int m, int n,
