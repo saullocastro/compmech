@@ -49,5 +49,6 @@ script:
   - ls -la /home/travis/miniconda/envs/TestEnv/lib/python2.7/site-packages
   - echo $PYTHONPATH
   - echo $PATH
+  - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
 
   #- py.test
