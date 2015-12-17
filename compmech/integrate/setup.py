@@ -9,7 +9,7 @@ def configuration(parent_package='',top_path=None):
     if os.name == 'nt':
         compile_args = ['/openmp']
     else:
-        compile_args = ['-openmp']
+        compile_args = ['-fopenmp']
 
     config = Configuration('integrate', parent_package, top_path)
     config.add_extension('integratev',
