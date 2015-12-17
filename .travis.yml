@@ -37,6 +37,7 @@ before_install:
 install:
   - conda create --name TestEnv python=$TRAVIS_PYTHON_VERSION atlas numpy scipy cython
   - source activate TestEnv
+  - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
   - python setup.py install
 
 # running tests
