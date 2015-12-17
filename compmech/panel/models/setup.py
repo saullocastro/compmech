@@ -9,8 +9,8 @@ def configuration(parent_package='', top_path=None):
         args_linear = ['/openmp']
         args_nonlinear = ['/openmp', '/fp:fast']
     else:
-        args_linear = ['-fopenmp']
-        args_nonlinear = ['-fopenmp', '-ffast-math']
+        args_linear = []
+        args_nonlinear = ['-ffast-math']
 
     config = Configuration('models', parent_package, top_path)
 
