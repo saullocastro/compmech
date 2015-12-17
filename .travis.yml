@@ -37,15 +37,13 @@ before_install:
 install:
   - conda create --name TestEnv python=$TRAVIS_PYTHON_VERSION atlas numpy=1.9.1 scipy=0.15.1 cython=0.23.4
   - source activate TestEnv
-  #- python setup.py install
+  - python setup.py install
 
 # running tests
 script:
+  # activating the TestEnv is not setting this environment variable
   - export PYTHONPATH=/home/travis/miniconda/envs/TestEnv/lib/python${TRAVIS_PYTHON_VERSION}/site-packages:$PYTHONPATH
-  - ls -la  ../../../virtualenv/python2.7.9/lib/python2.7/site-packages
-  - ls -la /home/travis/miniconda/envs/TestEnv/lib/python${TRAVIS_PYTHON_VERSION}/site-packages
-  - echo $PYTHONPATH
-  - echo $PATH
-  - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
-
-  #- py.test
+  #- ls -la  ../../../virtualenv/python2.7.9/lib/python2.7/site-packages
+  # useful to get all environment variables
+  #- python -c "import os;print('\n'.join(map(str, os.environ.items())))"
+  - py.test
