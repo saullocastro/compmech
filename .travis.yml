@@ -45,5 +45,9 @@ script:
   - ls -la /home/travis/miniconda/envs/TestEnv/bin
   - ls -la /home/travis/miniconda/envs/TestEnv
   - ls -la /home/travis/miniconda/envs/TestEnv/lib
+  - ls -la /home/travis/miniconda/envs/TestEnv/lib/python2.7
+  - ls -la /home/travis/miniconda/envs/TestEnv/lib/python2.7/site-packages
+  - echo $PYTHONPATH
+  - echo $PATH
 
   #- py.test
