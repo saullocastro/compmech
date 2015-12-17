@@ -22,7 +22,7 @@ def compile(config, src):
     if os.name == 'nt':
         objext = 'obj'
     else:
-        objext = 'a'
+        objext = 'o'
     objpath = join(dirname(srcpath),
                    basename(srcpath).split(extsep)[0] + '.' + objext)
 
@@ -36,14 +36,14 @@ def compile(config, src):
                     needscompile = False
 
     if needscompile:
+        bkpdir = os.getcwd()
+        os.chdir(srcdir)
         if os.name == 'nt':
-            bkpdir = os.getcwd()
-            os.chdir(srcdir)
             os.system('cl /Ox /c {0}'.format(basename(srcpath)))
-            fsize = os.path.getsize(basename(srcpath))
-            os.chdir(bkpdir)
         else:
-            raise NotImplementedError('Only Windows supported yet...')
+            os.system('gcc -pthread -g -O3 -fPIC -g -c -Wall {0}'.format(basename(srcpath)))
+        fsize = os.path.getsize(basename(srcpath))
+        os.chdir(bkpdir)
         if fsize > 1L:
             with open(hashpath, 'wb') as f:
                 f.write(hash_new + '\n')
@@ -52,19 +52,26 @@ def compile(config, src):
 
 
 def link(config, instlib):
+    objs = ''
+    libdir = realpath(config.package_path)
     if os.name == 'nt':
-        objs = ''
-        libdir = realpath(config.package_path)
-        for src in instlib[1]['sources']:
-            if config.top_path.endswith('lib'):
-                srcpath = join(realpath(config.package_path), src)
-            else:
-                srcpath = join(realpath(config.top_path), src)
-            objs += srcpath.replace('.c', '.obj') + ' '
+        objext = 'obj'
+    else:
+        objext = 'o'
+
+    for src in instlib[1]['sources']:
+        if config.top_path.endswith('lib'):
+            srcpath = join(realpath(config.package_path), src)
+        else:
+            srcpath = join(realpath(config.top_path), src)
+        objs += srcpath.replace('.c', '.' + objext) + ' '
+
+    if os.name == 'nt':
         libpath = join(libdir, instlib[0] + '.dll')
         os.system('link /DLL {0} /OUT:{1}'.format(objs, libpath))
     else:
-        raise NotImplementedError('Only Windows supported yet...')
+        libpath = join(libdir, 'lib' + instlib[0] + '.so')
+        os.system('gcc -shared -o {1} {0}'.format(objs, libpath))
 
 
 def configuration(parent_package='', top_path=None):
