@@ -26,7 +26,7 @@ before_install:
   - export PATH=/home/travis/miniconda/bin:$PATH
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
+  - conda update conda
   # Useful for debugging any issues with conda
   - conda info -a
   # The next couple lines fix a crash with multiprocessing on Travis and are
@@ -35,8 +35,8 @@ before_install:
   - sudo ln -s /run/shm /dev/shm
 
 install:
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION atlas numpy=1.9.1 scipy=0.15.1 cython=0.23.4
-  - source activate test-environment
+  - conda create --name TestEnv python=$TRAVIS_PYTHON_VERSION atlas numpy=1.9.1 scipy=0.15.1 cython=0.23.4
+  - source activate TestEnv
   #- python setup.py install
 
 # running tests
