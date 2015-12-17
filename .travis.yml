@@ -38,8 +38,10 @@ install:
   - conda install python=$TRAVIS_PYTHON_VERSION atlas numpy scipy cython
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION atlas numpy scipy cython
   - source activate test-environment
-  - python setup.py install
+  #- python setup.py install
 
 # running tests
 script:
-  - py.test
+  - ls  ../../../virtualenv/python2.7.9/lib/python2.7/site-packages/py
+
+  #- py.test
