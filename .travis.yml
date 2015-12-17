@@ -9,9 +9,11 @@ python:
  #- "3.4"
  #- "3.5"
  #- "3.5-dev" # 3.5 development branch
- #
+
+notifications:
+    email: false
  
-install:
+before_install:
   - sudo apt-get update
   # We do this conditionally because it saves us some downloading if the
   # version is the same.
@@ -27,13 +29,17 @@ install:
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
+  # The next couple lines fix a crash with multiprocessing on Travis and are
+  # not specific to using Miniconda
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
 
+install:
+  - conda install python=$TRAVIS_PYTHON_VERSION atlas numpy scipy cython
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION atlas numpy scipy cython
   - source activate test-environment
   - python setup.py install
 
-# command to run tests
+# running tests
 script:
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION atlas numpy scipy cython
-  - source activate test-environment
   - py.test
