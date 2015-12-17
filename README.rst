@@ -1,11 +1,11 @@
-==================================
-Computational Mechanics (compmech)
-==================================
-
 |Build status|
 
 .. |Build status| image:: https://travis-ci.org/compmech/compmech.svg?branch=master
     :target: https://travis-ci.org/compmech/compmech
+
+==================================
+Computational Mechanics (compmech)
+==================================
 
 This repository was built with the intention to become a collection of
 theories and implementations on the field of Mechanics.
