@@ -36,12 +36,12 @@ before_install:
 
 install:
   - conda create --name TestEnv python=$TRAVIS_PYTHON_VERSION atlas numpy=1.9.1 scipy=0.15.1 cython=0.23.4
-    #- source activate TestEnv
-  - activate TestEnv
+  - source activate TestEnv
   #- python setup.py install
 
 # running tests
 script:
+  - export PYTHONPATH=/home/travis/miniconda/envs/TestEnv/lib/python${TRAVIS_PYTHON_VERSION}/site-packages:$PYTHONPATH
   - ls -la  ../../../virtualenv/python2.7.9/lib/python2.7/site-packages
   - ls -la /home/travis/miniconda/envs/TestEnv/lib/python${TRAVIS_PYTHON_VERSION}/site-packages
   - echo $PYTHONPATH
