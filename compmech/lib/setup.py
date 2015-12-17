@@ -41,7 +41,7 @@ def compile(config, src):
         if os.name == 'nt':
             os.system('cl /Ox /c {0}'.format(basename(srcpath)))
         else:
-            os.system('gcc -pthread -g -O2 -fPIC -g -c -Wall {0}'.format(basename(srcpath)))
+            os.system('gcc -pthread -g -O3 -fPIC -g -c -Wall {0}'.format(basename(srcpath)))
         fsize = os.path.getsize(basename(srcpath))
         os.chdir(bkpdir)
         if fsize > 1L:
@@ -56,10 +56,8 @@ def link(config, instlib):
     libdir = realpath(config.package_path)
     if os.name == 'nt':
         objext = 'obj'
-        sharedext = 'dll'
     else:
         objext = 'o'
-        sharedext = 'so'
 
     for src in instlib[1]['sources']:
         if config.top_path.endswith('lib'):
@@ -67,12 +65,13 @@ def link(config, instlib):
         else:
             srcpath = join(realpath(config.top_path), src)
         objs += srcpath.replace('.c', '.' + objext) + ' '
-    libpath = join(libdir, instlib[0] + '.' + sharedext)
 
     if os.name == 'nt':
+        libpath = join(libdir, instlib[0] + '.dll')
         os.system('link /DLL {0} /OUT:{1}'.format(objs, libpath))
     else:
-        os.system('gcc -shared -Wl -o {1} {0}'.format(objs, libpath))
+        libpath = join(libdir, 'lib' + instlib[0] + '.so')
+        os.system('gcc -shared -o {1} {0}'.format(objs, libpath))
 
 
 def configuration(parent_package='', top_path=None):
