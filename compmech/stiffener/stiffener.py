@@ -18,7 +18,7 @@ class BladeStiff1D(object):
       =========================  --> panels
          Panel1      Panel2
 
-    Both the flange and the padup are optional.
+    Both the flange and the padup are optional, but one must exist.
 
     Each stiffener has a constant `y` coordinate.
 
@@ -50,6 +50,8 @@ class BladeStiff1D(object):
         self.Jxx = None
         self.Iyy = None
 
+        self.Fx = None
+
         self._rebuild()
 
 
@@ -71,7 +73,6 @@ class BladeStiff1D(object):
         #TODO check offset effect on curved panels
         self.df = self.bf/2. + self.hb + h/2.
         self.Iyy = self.hf*self.bf**3/12.
-        #self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2
         self.Jxx = self.hf*self.bf**3/12. + self.bf*self.hf**3/12.
 
         self.Asb = self.bb*self.hb
@@ -173,12 +174,13 @@ class BladeStiff1D(object):
             y1 = self.ys - self.bb/2.
             y2 = self.ys + self.bb/2.
             # TODO include kG0 for padup
+            #      now it is assumed that all the load goes to the flange
 
         if self.flam is not None:
-            #TODO where is the pre-load going???
-
-            kG0 += mod.fkG0f(self.bf, self.df, self.ys, a, b, r, m1, n1,
-                    self.E1, self.F1, self.S1, self.Jxx)
+            kG0 += mod.fkG0f(self.Fx, self.a, self.bf, m1, n1,
+                             bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                             bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                             size, row0, col0)
 
         if finalize:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
