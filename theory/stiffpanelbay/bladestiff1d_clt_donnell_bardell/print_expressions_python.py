@@ -14,7 +14,7 @@ var('fAwxixi, fBwxixi, gAw, gBw, fAwxi, fBwxi, gAweta, gBweta')
 var('fAw, fBw, gAwetaeta, gBwetaeta')
 
 var('df, bf, a, b, h, hb, hf, mu')
-var('E1, S1, F1, Jxx')
+var('E1, S1, F1, Jxx, Fx, aeromu')
 
 subs = {
        }
