@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Computational Mechanics (compmech) &mdash; CompMech 0.4.0 documentation</title>
+    <title>Computational Mechanics (compmech) &mdash; CompMech 0.5.2 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.4.0',
+        VERSION:     '0.5.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/logo.png"/>
     <link rel="author" title="About these documents" href="about.html" />
-    <link rel="top" title="CompMech 0.4.0 documentation" href="#" />
+    <link rel="top" title="CompMech 0.5.2 documentation" href="#" />
     <link rel="next" title="Modules" href="modules/index.html" /> 
   </head>
   <body role="document">
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="modules/index.html" title="Modules"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">CompMech 0.4.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">CompMech 0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,13 +55,23 @@
             
   <div class="section" id="computational-mechanics-compmech">
 <h1>Computational Mechanics (compmech)<a class="headerlink" href="#computational-mechanics-compmech" title="Permalink to this headline">¶</a></h1>
-<p>The compmech package contains semi-analytical routines for linear buckling,
-linear static and non-linear static analysis of unstiffened cylindrical and
-conical shells (<a class="reference internal" href="modules/conecyl/index.html#module-compmech.conecyl" title="compmech.conecyl"><code class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></code></a>), and panels
-(<a class="reference internal" href="modules/panels/index.html#module-compmech.panels" title="compmech.panels"><code class="xref py py-mod docutils literal"><span class="pre">compmech.panels</span></code></a>). The implementation is based on Python and the low
-level routines are programmed in Cython.</p>
-<p>The details about the theory of the implementations are given
-in <a class="reference internal" href="theory/index.html#theory"><span>Theory, Implementation and Tutorials</span></a>.</p>
+<p>The compmech package contains semi-analytical routines for the analyses:</p>
+<ul class="simple">
+<li>linear buckling</li>
+<li>linear static</li>
+<li>non-linear static</li>
+<li>linear flutter</li>
+<li>linear vibration</li>
+</ul>
+<p>for:</p>
+<ul class="simple">
+<li>unstiffened cylindrical and conical shells</li>
+<li>stiffened and unstiffened panels and plates</li>
+</ul>
+<p>The implementation is based on Python and the low level routines are
+programmed in C and Cython.</p>
+<p>The details about the theory and the implementations of all tools are given in
+<a class="reference internal" href="theory/index.html#theory"><span>the theoretical part of the documentation</span></a>.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules/index.html">Modules</a></li>
@@ -74,6 +84,7 @@ in <a class="reference internal" href="theory/index.html#theory"><span>Theory, I
 <div class="section" id="released-versions">
 <h2>Released Versions<a class="headerlink" href="#released-versions" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/compmech/compmech/releases">All released versions available here</a></p>
+<p><a class="reference external" href="https://github.com/compmech/compmech/releases/tag/0.5.2">Version 0.5.2</a></p>
 <p><a class="reference external" href="https://github.com/compmech/compmech/releases/tag/0.4.0">Version 0.4.0</a></p>
 <p><a class="reference external" href="https://github.com/compmech/compmech/releases/tag/0.3.2">Version 0.3.2</a></p>
 <p><a class="reference external" href="https://github.com/compmech/compmech/releases/tag/0.2.0">Version 0.2.0 used in the PhD Thesis of Saullo G. P. Castro</a></p>
@@ -139,12 +150,12 @@ in <a class="reference internal" href="theory/index.html#theory"><span>Theory, I
         <li class="right" >
           <a href="modules/index.html" title="Modules"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">CompMech 0.4.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">CompMech 0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Nov 07, 2015.
+      Last updated on Jan 06, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

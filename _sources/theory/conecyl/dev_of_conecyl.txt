@@ -199,5 +199,3 @@ that prints into ``./nonlinear_sparse`` in a ready-to-paste format, that
 is copy-pasted in Cython.
 
 
-
-

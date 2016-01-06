@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bardell’s Hierarchical Functions &mdash; CompMech 0.5.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.5.2 documentation" href="../../index.html" />
+    <link rel="up" title="Approximation Functions Used in Various Models" href="index.html" />
+    <link rel="next" title="References" href="ref.html" />
+    <link rel="prev" title="Approximation Functions Used in Various Models" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ref.html" title="References"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Approximation Functions Used in Various Models"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Approximation Functions Used in Various Models</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="bardell-s-hierarchical-functions">
+<span id="theory-func-bardell"></span><h1>Bardell&#8217;s Hierarchical Functions<a class="headerlink" href="#bardell-s-hierarchical-functions" title="Permalink to this headline">¶</a></h1>
+<p>Bardell (1991) <a class="reference internal" href="ref.html#bardell1991" id="id1">[bardell1991]</a> proposed a very convinient set of approximation
+functions based on hierarchical polynomials. The convenience comes from the
+fast convergence and from the easiness to simulate practically any type of
+boundary conditions.</p>
+<p>The boundary condition is controlled by the first 4 terms of the approximation
+function, herein defined as:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">t1</span></code>: the translation at extremity 1 (<img class="math" src="../../_images/math/6c46ae3c3c5b8ad66d90ce0c5a3c9725ca58bcb4.png" alt="\xi = -1"/>)</li>
+<li><code class="docutils literal"><span class="pre">r1</span></code>: the rotation at extremity 1</li>
+<li><code class="docutils literal"><span class="pre">t2</span></code>: the translation at extremity 2 (<img class="math" src="../../_images/math/eba14d201b255bad4126b283043aeb4163a7a15e.png" alt="\xi = +1"/>)</li>
+<li><code class="docutils literal"><span class="pre">r2</span></code>: the rotation at extremity 2</li>
+</ul>
+<p>The following code can be used to generate the Bardell functions for a given
+number of terms <code class="docutils literal"><span class="pre">nmax</span></code>. The substitution <code class="docutils literal"><span class="pre">replace('**',</span> <span class="pre">'^')</span></code> aims to
+create an input to Mathematica.</p>
+<div class="literal-block-wrapper container" id="theory-func-bardell-bardell-py">
+<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell.py</span><a class="headerlink" href="#theory-func-bardell-bardell-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">var</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">factorial2</span><span class="p">,</span> <span class="n">sympify</span>
+
+<span class="n">nmax</span> <span class="o">=</span> <span class="mi">40</span>
+
+<span class="n">xi</span> <span class="o">=</span> <span class="n">var</span><span class="p">(</span><span class="s">&#39;xi&#39;</span><span class="p">)</span>
+<span class="n">var</span><span class="p">(</span><span class="s">&#39;t1, r1, t2, r2&#39;</span><span class="p">)</span>
+
+<span class="n">u</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">sympify</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;1/2 - 3/4*xi + 1/4*xi**3&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;1/8 - 1/8*xi - 1/8*xi**2 + 1/8*xi**3&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;1/2 + 3/4*xi - 1/4*xi**3&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;-1/8 - 1/8*xi + 1/8*xi**2 + 1/8*xi**3&#39;</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">nmax</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">utmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">den</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">n</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">utmp</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">n</span><span class="o">*</span><span class="n">factorial2</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span> <span class="o">-</span> <span class="mi">7</span><span class="p">)</span><span class="o">/</span><span class="n">den</span> <span class="o">*</span> <span class="n">xi</span><span class="o">**</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">u</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">utmp</span><span class="p">))</span>
+
+<span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t1</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">r1</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">t2</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">r2</span><span class="o">*</span><span class="n">u</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;bardell.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Bardell&#39;s hierarchical functions</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;Number of terms: {0}</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">u</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;**&#39;</span><span class="p">,</span> <span class="s">&#39;^&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The output of the code above is:</p>
+<p>In order to calculate the displacement, strain of stress fields using Cython,
+the above output is not adequate due to very long integer numbers that will
+cause precision overflows. The code below should be used to create an input to
+Cython:</p>
+<div class="literal-block-wrapper container" id="theory-func-bardell-bardell-floating-point-py">
+<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell_floating_point.py</span><a class="headerlink" href="#theory-func-bardell-bardell-floating-point-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">var</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">factorial2</span><span class="p">,</span> <span class="n">sympify</span><span class="p">,</span> <span class="n">diff</span>
+
+<span class="n">nmax</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="n">xi</span> <span class="o">=</span> <span class="n">var</span><span class="p">(</span><span class="s">&#39;xi&#39;</span><span class="p">)</span>
+
+<span class="n">u</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">sympify</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;1./2. - 3./4.*xi + 1./4.*xi**3&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;1./8. - 1./8.*xi - 1./8.*xi**2 + 1./8.*xi**3&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;1./2. + 3./4.*xi - 1./4.*xi**3&#39;</span><span class="p">,</span>
+                  <span class="s">&#39;-1./8. - 1./8.*xi + 1./8.*xi**2 + 1./8.*xi**3&#39;</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">nmax</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">utmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">den</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">n</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">utmp</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">n</span><span class="o">*</span><span class="n">factorial2</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span> <span class="o">-</span> <span class="mi">7</span><span class="p">)</span><span class="o">/</span><span class="n">den</span> <span class="o">*</span> <span class="n">xi</span><span class="o">**</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">1.</span><span class="p">)</span>
+    <span class="n">u</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">utmp</span><span class="p">))</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;bardell_floating_point.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Bardell&#39;s hierarchical functions</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;Number of terms: {0}</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)))</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;cdef void calc_vec_f(double *f, double xi, double xi1t=1., double xi1r=1.,</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span>
+            <span class="s">&#39;                 double xi2t=1., double xi2r=1.) nogil:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">consts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s">&#39;xi1t&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="s">&#39;xi1r&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s">&#39;xi2t&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s">&#39;xi2r&#39;</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)):</span>
+        <span class="n">const</span> <span class="o">=</span> <span class="n">consts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">const</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;    f[</span><span class="si">%d</span><span class="s">] = </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;    f[</span><span class="si">%d</span><span class="s">] = </span><span class="si">%s</span><span class="s">*(</span><span class="si">%s</span><span class="s">)</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">const</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;cdef void calc_vec_fxi(double *fxi, double xi, double xi1t=1., double xi1r=1.,</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span>
+            <span class="s">&#39;                       double xi2t=1., double xi2r=1.) nogil:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)):</span>
+        <span class="n">const</span> <span class="o">=</span> <span class="n">consts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">const</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;    fxi[</span><span class="si">%d</span><span class="s">] = </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">xi</span><span class="p">))))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;    fxi[</span><span class="si">%d</span><span class="s">] = </span><span class="si">%s</span><span class="s">*(</span><span class="si">%s</span><span class="s">)</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">const</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">xi</span><span class="p">))))</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;cdef double calc_f(int i, double xi, double xi1t, double xi1r,</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span>
+            <span class="s">&#39;                   double xi2t, double xi2r) nogil:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)):</span>
+        <span class="n">const</span> <span class="o">=</span> <span class="n">consts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;    if i == </span><span class="si">%d</span><span class="s">:</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">const</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;        return </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;        return </span><span class="si">%s</span><span class="s">*(</span><span class="si">%s</span><span class="s">)</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">const</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;cdef double calc_fxi(int i, double xi, double xi1t, double xi1r,</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span>
+            <span class="s">&#39;                     double xi2t, double xi2r) nogil:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)):</span>
+        <span class="n">const</span> <span class="o">=</span> <span class="n">consts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;    if i == </span><span class="si">%d</span><span class="s">:</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">const</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;        return </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">xi</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;        return </span><span class="si">%s</span><span class="s">*(</span><span class="si">%s</span><span class="s">)</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">const</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">xi</span><span class="p">))))</span>
+</pre></div>
+</div>
+</div>
+<p>Generating the following output:</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Approximation Functions Used in Various Models</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ref.html"
+                        title="next chapter">References</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/theory/func/bardell.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ref.html" title="References"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Approximation Functions Used in Various Models"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Approximation Functions Used in Various Models</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Jan 06, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

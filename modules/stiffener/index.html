@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Semi-analytical models for Stiffeners (compmech.stiffener) &mdash; CompMech 0.5.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.5.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.5.2 documentation" href="../../index.html" />
+    <link rel="up" title="Modules" href="../index.html" />
+    <link rel="next" title="Stiffened Panel Bay (compmech.stiffpanelbay)" href="../stiffpanelbay/index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../stiffpanelbay/index.html" title="Stiffened Panel Bay (compmech.stiffpanelbay)"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-compmech.stiffener"></span><div class="section" id="semi-analytical-models-for-stiffeners-compmech-stiffener">
+<h1>Semi-analytical models for Stiffeners (<a class="reference internal" href="#module-compmech.stiffener" title="compmech.stiffener"><code class="xref py py-mod docutils literal"><span class="pre">compmech.stiffener</span></code></a>)<a class="headerlink" href="#semi-analytical-models-for-stiffeners-compmech-stiffener" title="Permalink to this headline">¶</a></h1>
+<p>This module has all stiffener&#8217;s formulations used along other classes.</p>
+<dl class="class">
+<dt id="compmech.stiffener.BladeStiff1D">
+<em class="property">class </em><code class="descclassname">compmech.stiffener.</code><code class="descname">BladeStiff1D</code><span class="sig-paren">(</span><em>bay</em>, <em>mu</em>, <em>panel1</em>, <em>panel2</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>bstack</em>, <em>bplyts</em>, <em>blaminaprops</em>, <em>fstack</em>, <em>fplyts</em>, <em>flaminaprops</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/stiffener.html#BladeStiff1D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blade Stiffener using 1D Formulation for Flange</p>
+<p>Blade-type of stiffener model using a 1D formulation for the flange and a
+2D formulation for the padup (base):</p>
+<div class="highlight-python"><div class="highlight"><pre>           || --&gt; flange       |
+           ||                  |-&gt; stiffener
+         ======  --&gt; padup     |
+=========================  --&gt; panels
+   Panel1      Panel2
+</pre></div>
+</div>
+<p>Both the flange and the padup are optional, but one must exist.</p>
+<p>Each stiffener has a constant <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> coordinate.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="method">
+<dt id="compmech.stiffener.BladeStiff1D.calc_k0">
+<code class="descname">calc_k0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/stiffener.html#BladeStiff1D.calc_k0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff1D.calc_k0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the linear constitutive stiffness matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.stiffener.BladeStiff1D.calc_kG0">
+<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/stiffener.html#BladeStiff1D.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff1D.calc_kG0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the linear geometric stiffness matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.stiffener.BladeStiff1D.calc_kM">
+<code class="descname">calc_kM</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/stiffener.html#BladeStiff1D.calc_kM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff1D.calc_kM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the mass matrix</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compmech.stiffener.BladeStiff2D">
+<em class="property">class </em><code class="descclassname">compmech.stiffener.</code><code class="descname">BladeStiff2D</code><span class="sig-paren">(</span><em>bay</em>, <em>mu</em>, <em>panel1</em>, <em>panel2</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>bstack</em>, <em>bplyts</em>, <em>blaminaprops</em>, <em>fstack</em>, <em>fplyts</em>, <em>flaminaprops</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/stiffener.html#BladeStiff2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blade Stiffener using 2D Formulation for Flange</p>
+<p>Blade-type of stiffener model using a 2D formulation for the flange and a
+2D formulation for the padup (base):</p>
+<div class="highlight-python"><div class="highlight"><pre>           || --&gt; flange       |
+           ||                  |-&gt; stiffener
+         ======  --&gt; padup     |
+=========================  --&gt; panels
+   Panel1      Panel2
+</pre></div>
+</div>
+<p>Both the flange and the padup are optional.</p>
+<p>Each stiffener has a constant <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> coordinate.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="method">
+<dt id="compmech.stiffener.BladeStiff2D.calc_k0">
+<code class="descname">calc_k0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/stiffener.html#BladeStiff2D.calc_k0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff2D.calc_k0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the linear constitutive stiffness matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.stiffener.BladeStiff2D.calc_kG0">
+<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/stiffener.html#BladeStiff2D.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff2D.calc_kG0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the linear geometric stiffness matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.stiffener.BladeStiff2D.calc_kM">
+<code class="descname">calc_kM</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/stiffener.html#BladeStiff2D.calc_kM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff2D.calc_kM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the mass matrix</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../stiffpanelbay/index.html"
+                        title="next chapter">Stiffened Panel Bay (<code class="docutils literal"><span class="pre">compmech.stiffpanelbay</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/stiffener/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../stiffpanelbay/index.html" title="Stiffened Panel Bay (compmech.stiffpanelbay)"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Jan 06, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

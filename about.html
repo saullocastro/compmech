@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>About &mdash; CompMech 0.4.0 documentation</title>
+    <title>About &mdash; CompMech 0.5.2 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.4.0',
+        VERSION:     '0.5.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/logo.png"/>
     <link rel="author" title="About these documents" href="#" />
-    <link rel="top" title="CompMech 0.4.0 documentation" href="index.html" />
+    <link rel="top" title="CompMech 0.5.2 documentation" href="index.html" />
     <link rel="next" title="Next Steps" href="next_steps.html" />
-    <link rel="prev" title="Meshfree Methods" href="theory/meshfree/index.html" /> 
+    <link rel="prev" title="References" href="theory/func/ref.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -46,9 +46,9 @@
           <a href="next_steps.html" title="Next Steps"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="theory/meshfree/index.html" title="Meshfree Methods"
+          <a href="theory/func/ref.html" title="References"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CompMech 0.4.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CompMech 0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,16 +71,14 @@ or cloned using <a class="reference external" href="http://git-scm.com/downloads
 </div>
 <p>You can also:</p>
 <p><a class="reference external" href="https://github.com/compmech/compmech">- Visit the source code page</a></p>
-<p><a class="reference external" href="https://github.com/compmech/compmech/archive/master.zip">- Click here to start downloading the latest source code</a></p>
+<p><a class="reference external" href="https://github.com/compmech/compmech/archive/master.zip">- Click here to start downloading the source code for the latest commit</a></p>
 <p><a class="reference external" href="https://github.com/compmech/compmech/releases">- Check the released versions</a></p>
 </div>
-<div class="section" id="compiling-the-cython-files">
-<h3>2) Compiling the Cython files<a class="headerlink" href="#compiling-the-cython-files" title="Permalink to this headline">¶</a></h3>
-<p>After you have downloaded the <code class="docutils literal"><span class="pre">compmech-master.zip</span></code> unpack it and go into
-the <code class="docutils literal"><span class="pre">compmech-master</span></code> folder. If you cloned using <code class="docutils literal"><span class="pre">git</span></code> go to the
-<code class="docutils literal"><span class="pre">compmech</span></code> folder.</p>
-<p>Run the setup:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span>
+<div class="section" id="installing">
+<h3>2) Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h3>
+<p>After you have downloaded the selected version or the latest commit from
+GitHub, run the setup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -89,14 +87,6 @@ the <code class="docutils literal"><span class="pre">compmech-master</span></cod
 </div>
 <p>On Windows 64 bit you should use the free Microsoft SDK compiler,
 as explained <a class="reference external" href="https://github.com/cython/cython/wiki/64BitCythonExtensionsOnWindows">in this Cython Github thread</a>.</p>
-</div>
-<div class="section" id="setting-the-environment">
-<h3>3) Setting the environment<a class="headerlink" href="#setting-the-environment" title="Permalink to this headline">¶</a></h3>
-<p>Copy the <code class="docutils literal"><span class="pre">compmech</span></code> module (the folder at the same level as the
-<code class="docutils literal"><span class="pre">README.rst</span></code> file) and paste it to some directory pointed by your
-<code class="docutils literal"><span class="pre">PYTHONPATH</span></code> environment variable (can be inside the <code class="docutils literal"><span class="pre">site-packages</span></code>
-directory of your Python installation or any other directory, once you add it
-to <code class="docutils literal"><span class="pre">PYTHONPATH</span></code>).</p>
 </div>
 <div class="section" id="testing">
 <h3>3) Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h3>
@@ -109,14 +99,14 @@ to <code class="docutils literal"><span class="pre">PYTHONPATH</span></code>).</
 <ul class="simple">
 <li>NumPy</li>
 <li>SciPy</li>
-<li>Cython and a C compiler</li>
+<li>(for building only) Cython and a C compiler</li>
 </ul>
 </div>
 <div class="section" id="licensing">
 <h2>Licensing<a class="headerlink" href="#licensing" title="Permalink to this headline">¶</a></h2>
 <p>The new BSD License covers all files in the compmech repository
 unless otherwise stated:</p>
-<div class="highlight-python"><div class="highlight"><pre>Copyright (c) 2012-2015 Saullo G. P. Castro
+<div class="highlight-python"><div class="highlight"><pre>Copyright (c) 2012-2016 Saullo G. P. Castro
 
 All rights reserved.
 
@@ -163,8 +153,7 @@ DAMAGE.
 <li><a class="reference internal" href="#">About</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a><ul>
 <li><a class="reference internal" href="#downloading">1) Downloading</a></li>
-<li><a class="reference internal" href="#compiling-the-cython-files">2) Compiling the Cython files</a></li>
-<li><a class="reference internal" href="#setting-the-environment">3) Setting the environment</a></li>
+<li><a class="reference internal" href="#installing">2) Installing</a></li>
 <li><a class="reference internal" href="#testing">3) Testing</a></li>
 </ul>
 </li>
@@ -175,8 +164,8 @@ DAMAGE.
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="theory/meshfree/index.html"
-                        title="previous chapter">Meshfree Methods</a></p>
+  <p class="topless"><a href="theory/func/ref.html"
+                        title="previous chapter">References</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="next_steps.html"
                         title="next chapter">Next Steps</a></p>
@@ -220,14 +209,14 @@ DAMAGE.
           <a href="next_steps.html" title="Next Steps"
              >next</a> |</li>
         <li class="right" >
-          <a href="theory/meshfree/index.html" title="Meshfree Methods"
+          <a href="theory/func/ref.html" title="References"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CompMech 0.4.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">CompMech 0.5.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Nov 07, 2015.
+      Last updated on Jan 06, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
