@@ -107,8 +107,8 @@ def test_freq_Stiffener2D():
     sp.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
     sp.model = 'plate_clt_donnell_bardell'
     sp.mu = 1.3e3
-    sp.m = 15
-    sp.n = 16
+    sp.m = 11
+    sp.n = 12
 
     sp.add_panel(y1=0, y2=sp.b/2., plyt=sp.plyt)
     sp.add_panel(y1=sp.b/2., y2=sp.b, plyt=sp.plyt)
@@ -119,7 +119,7 @@ def test_freq_Stiffener2D():
 
     sp.freq(silent=True, atype=4)
 
-    assert np.isclose(sp.eigvals[0].real, 161.159295942)
+    assert np.isclose(sp.eigvals[0].real, 138.51917530043477)
 
 
 if __name__ == '__main__':
