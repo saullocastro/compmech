@@ -155,8 +155,6 @@ def fkG0f(double Fx, double a, double bf, int m, int n,
                     kG0fc[c] = col+2
                     kG0fv[c] += Fx*bf*fAwxifBwxi*gAwgBw/a
 
-                    raise
-
     kG0f = coo_matrix((kG0fv, (kG0fr, kG0fc)), shape=(size, size))
 
     return kG0f
