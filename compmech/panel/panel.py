@@ -353,6 +353,8 @@ class Panel(object):
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear constitutive stiffness matrix
+        """
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
@@ -447,13 +449,13 @@ class Panel(object):
 
         if Nxx_cte != 0. or Nyy_cte != 0. or Nxy_cte != 0.:
             if y1 is not None and y2 is not None:
-                k0 += fkG0y1y2(y1, y2, Nxx_cte, Nyy_cte, Nxy_cte,
+                k0 += matrices.fkG0y1y2(y1, y2, Nxx_cte, Nyy_cte, Nxy_cte,
                                a, b, r, alpharad, self.m, self.n,
                                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                                size, row0, col0)
             else:
-                k0 += fkG0(Nxx_cte, Nyy_cte, Nxy_cte,
+                k0 += matrices.fkG0(Nxx_cte, Nyy_cte, Nxy_cte,
                            a, b, r, alpharad, self.m, self.n,
                            self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                            self.w1ty, self.w1ry, self.w2ty, self.w2ry,
@@ -476,6 +478,8 @@ class Panel(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear geometric stiffness matrix
+        """
         msg('Calculating kG0... ', level=2, silent=silent)
 
         if size is None:
@@ -514,6 +518,8 @@ class Panel(object):
 
 
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the mass matrix
+        """
         msg('Calculating kM... ', level=2, silent=silent)
 
         matrices = modelDB.db[self.model]['matrices']
@@ -563,6 +569,8 @@ class Panel(object):
 
 
     def calc_kA(self, silent=False, finalize=True):
+        """Calculate the aerodynamic matrix using the linear piston theory
+        """
         msg('Calculating kA... ', level=2, silent=silent)
 
         if 'kpanel' in self.model:
@@ -606,6 +614,8 @@ class Panel(object):
 
 
     def calc_cA(self, aeromu, silent=False, finalize=True):
+        """Calculate the aerodynamic damping matrix using the piston theory
+        """
         msg('Calculating cA... ', level=2, silent=silent)
 
         cA = matrices.fcA(aeromu, self.a, self.b, self.m, self.n,

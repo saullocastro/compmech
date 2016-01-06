@@ -25,3 +25,9 @@ programmed in C and Cython.
 
 """
 from compmech.version import __version__
+
+import os
+
+if os.name == 'nt':
+    lib = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
+    os.environ['PATH'] = (lib + ';' + os.environ['PATH'])
