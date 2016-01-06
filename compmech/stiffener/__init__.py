@@ -1,6 +1,6 @@
 r"""
 ==============================================================================
-Stiffeners (:mod:`compmech.stiffener`)
+Semi-analytical models for Stiffeners (:mod:`compmech.stiffener`)
 ==============================================================================
 
 .. currentmodule:: compmech.stiffener
