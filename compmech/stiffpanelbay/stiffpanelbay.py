@@ -22,7 +22,7 @@ from compmech.constants import DOUBLE
 from compmech.sparse import (make_symmetric, make_skew_symmetric,
                              remove_null_cols)
 from compmech.panel import Panel, modelDB as panmDB
-from compmech.stiffener import BladeStiff2D, modelDB as stiffmDB
+from compmech.stiffener import BladeStiff1D, BladeStiff2D, modelDB as stiffmDB
 
 
 def load(name):
@@ -156,12 +156,12 @@ class StiffPanelBay(Panel):
             panel.kM = None
             panel.kG0 = None
 
-        for s in self.bladestiff2ds:
+        for s in self.bladestiff1ds:
             s.k0 = None
             s.kM = None
             s.kG0 = None
 
-        for s in self.bladestiff1ds:
+        for s in self.bladestiff2ds:
             s.k0 = None
             s.kM = None
             s.kG0 = None
@@ -170,10 +170,6 @@ class StiffPanelBay(Panel):
 
 
     def _rebuild(self):
-        if len(self.bladestiff1ds) > 0:
-            #TODO
-            raise NotImplementedError('#TODO')
-
         if not self.name:
             try:
                 self.name = os.path.basename(__main__.__file__).split('.py')[0]
@@ -205,7 +201,7 @@ class StiffPanelBay(Panel):
             xs = linspace(0., self.a, gridx)
             if si is None:
                 ys = linspace(0., self.b, gridy)
-            else: # stiffener
+            else: # stiffeners 2D
                 ys = linspace(0., self.bladestiff2ds[si].bf, gridy)
             xs, ys = np.meshgrid(xs, ys, copy=False)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
@@ -249,12 +245,253 @@ class StiffPanelBay(Panel):
         return self.size
 
 
-    def add_bladestiff1d(self):
-        pass
+    def add_bladestiff1d(self, ys, mu=None, bb=None, bstack=None,
+            bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
+            bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
+            flaminaprop=None, **kwargs):
+        """Add a new BladeStiff1D to the current panel bay
+
+        Parameters
+        ----------
+        ys : float
+            Stiffener position.
+        mu : float, optional
+            Stiffener's material density. If not given the bay density will be
+            used.
+        bb : float, optional
+            Stiffener base width.
+        bstack : list, optional
+            Stacking sequence for the stiffener base laminate.
+        bplyts : list, optional
+            Thicknesses for each stiffener base ply.
+        bplyt : float, optional
+            Unique thickness for all stiffener base plies.
+        blaminaprops : list, optional
+            Lamina properties for each stiffener base ply.
+        blaminaprop : float, optional
+            Unique lamina properties for all stiffener base plies.
+        bf : float
+            Stiffener flange width.
+        fstack : list, optional
+            Stacking sequence for the stiffener flange laminate.
+        fplyts : list, optional
+            Thicknesses for each stiffener flange ply.
+        fplyt : float, optional
+            Unique thickness for all stiffener flange plies.
+        flaminaprops : list, optional
+            Lamina properties for each stiffener flange ply.
+        flaminaprop : float, optional
+            Unique lamina properties for all stiffener flange plies.
+
+        Notes
+        -----
+        Additional parameters can be passed using the ``kwargs``.
+
+        """
+        if mu is None:
+            mu = self.mu
+
+        if bstack is None and fstack is None:
+            raise ValueError('bstack or fstack must be defined!')
+
+        if bstack is not None:
+            if bplyts is None:
+                if bplyt is None:
+                    raise ValueError('bplyts or bplyt must be defined!')
+                else:
+                    bplyts = [bplyt for _ in bstack]
+            if blaminaprops is None:
+                if blaminaprop is None:
+                    raise ValueError('blaminaprops or blaminaprop must be defined!')
+                else:
+                    blaminaprops = [blaminaprop for _ in bstack]
+
+        if fstack is not None:
+            if fplyts is None:
+                if fplyt is None:
+                    raise ValueError('fplyts or fplyt must be defined!')
+                else:
+                    fplyts = [fplyt for _ in fstack]
+            if flaminaprops is None:
+                if flaminaprop is None:
+                    raise ValueError('flaminaprops or flaminaprop must be defined!')
+                else:
+                    flaminaprops = [flaminaprop for _ in fstack]
+
+        if len(self.panels) == 0:
+            raise RuntimeError('The panels must be added before the stiffeners')
+
+        # finding panel1 and panel2
+        panel1 = None
+        panel2 = None
+
+        for p in self.panels:
+            if p.y2 == ys:
+                panel1 = p
+            if p.y1 == ys:
+                panel2 = p
+            if np.isclose(ys, 0):
+                if np.isclose(p.y1, ys):
+                    panel1 = panel2 = p
+            if np.isclose(ys, self.b):
+                if np.isclose(p.y2, ys):
+                    panel1 = panel2 = p
+
+        if panel1 is None or panel2 is None:
+            raise RuntimeError('panel1 and panel2 could not be found!')
+
+        s = BladeStiff1D(bay=self, mu=mu, panel1=panel1, panel2=panel2, ys=ys,
+                bb=bb, bf=bf, bstack=bstack, bplyts=bplyts,
+                blaminaprops=blaminaprops, fstack=fstack, fplyts=fplyts,
+                flaminaprops=flaminaprops)
+
+        for k, v in kwargs.items():
+            setattr(s, k, v)
+
+        self.bladestiff1ds.append(s)
 
 
-    def add_panel(self, y1, y2, stack=None, plyt=None, plyts=None,
-            laminaprop=None, laminaprops=None, model=None, mu=None, **kwargs):
+    def add_bladestiff2d(self, ys, mu=None, bb=None, bstack=None,
+            bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
+            bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
+            flaminaprop=None, **kwargs):
+        """Add a new BladeStiff2D to the current panel bay
+
+        Parameters
+        ----------
+        ys : float
+            Stiffener position.
+        mu : float, optional
+            Stiffener's material density. If not given the bay density will be
+            used.
+        bb : float, optional
+            Stiffener base width.
+        bstack : list, optional
+            Stacking sequence for the stiffener base laminate.
+        bplyts : list, optional
+            Thicknesses for each stiffener base ply.
+        bplyt : float, optional
+            Unique thickness for all stiffener base plies.
+        blaminaprops : list, optional
+            Lamina properties for each stiffener base ply.
+        blaminaprop : float, optional
+            Unique lamina properties for all stiffener base plies.
+        bf : float
+            Stiffener flange width.
+        fstack : list, optional
+            Stacking sequence for the stiffener flange laminate.
+        fplyts : list, optional
+            Thicknesses for each stiffener flange ply.
+        fplyt : float, optional
+            Unique thickness for all stiffener flange plies.
+        flaminaprops : list, optional
+            Lamina properties for each stiffener flange ply.
+        flaminaprop : float, optional
+            Unique lamina properties for all stiffener flange plies.
+
+        Notes
+        -----
+        Additional parameters can be passed using the ``kwargs``.
+
+        """
+        if mu is None:
+            mu = self.mu
+
+        if bstack is None and fstack is None:
+            raise ValueError('bstack or fstack must be defined!')
+
+        if bstack is not None:
+            if bplyts is None:
+                if bplyt is None:
+                    raise ValueError('bplyts or bplyt must be defined!')
+                else:
+                    bplyts = [bplyt for _ in bstack]
+            if blaminaprops is None:
+                if blaminaprop is None:
+                    raise ValueError('blaminaprops or blaminaprop must be defined!')
+                else:
+                    blaminaprops = [blaminaprop for _ in bstack]
+
+        if fstack is not None:
+            if fplyts is None:
+                if fplyt is None:
+                    raise ValueError('fplyts or fplyt must be defined!')
+                else:
+                    fplyts = [fplyt for _ in fstack]
+            if flaminaprops is None:
+                if flaminaprop is None:
+                    raise ValueError('flaminaprops or flaminaprop must be defined!')
+                else:
+                    flaminaprops = [flaminaprop for _ in fstack]
+
+        if len(self.panels) == 0:
+            raise RuntimeError('The panels must be added before the stiffeners')
+
+        # finding panel1 and panel2
+        panel1 = None
+        panel2 = None
+
+        for p in self.panels:
+            if p.y2 == ys:
+                panel1 = p
+            if p.y1 == ys:
+                panel2 = p
+            if np.isclose(ys, 0):
+                if np.isclose(p.y1, ys):
+                    panel1 = panel2 = p
+            if np.isclose(ys, self.b):
+                if np.isclose(p.y2, ys):
+                    panel1 = panel2 = p
+
+        if panel1 is None or panel2 is None:
+            raise RuntimeError('panel1 and panel2 could not be found!')
+
+        s = BladeStiff2D(bay=self, mu=mu, panel1=panel1, panel2=panel2, ys=ys,
+                bb=bb, bf=bf, bstack=bstack, bplyts=bplyts,
+                blaminaprops=blaminaprops, fstack=fstack, fplyts=fplyts,
+                flaminaprops=flaminaprops)
+
+        for k, v in kwargs.items():
+            setattr(s, k, v)
+
+        self.bladestiff2ds.append(s)
+
+
+    def add_panel(self, y1, y2, stack=None, plyts=None, plyt=None,
+            laminaprops=None, laminaprop=None, model=None, mu=None, **kwargs):
+        """Add a new panel to the current panel bay
+
+        Parameters
+        ----------
+        y1 : float
+            Position of the first panel edge along `y`.
+        y2 : float
+            Position of the second panel edge along `y`.
+        stack : list, optional
+            Panel stacking sequence. If not given the stacking sequence of the
+            bay will be used.
+        plyts : list, optional
+            Thicknesses for each panel ply. If not supplied the bay ``plyts``
+            attribute will be used.
+        plyt : float, optional
+            Unique thickness to be used for all panel plies. If not supplied
+            the bay ``plyt`` attribute will be used.
+        laminaprops : list, optional
+            Lamina properties for each panel ply.
+        laminaprop : list, optional
+            Unique lamina properties for all panel plies.
+        model : str, optional
+            Not recommended to pass this parameter, but the user can use a
+            different model for each panel. It is recommended to defined
+            ``model`` for the bay object.
+        mu : float, optional
+            Panel material density. If not given the bay density will be used.
+
+        Notes
+        -----
+        Additional parameters can be passed using the ``kwargs``.
+
+        """
         p = Panel()
         p.m = self.m
         p.n = self.n
@@ -299,6 +536,7 @@ class StiffPanelBay(Panel):
 
         for k, v in kwargs.items():
             setattr(p, k, v)
+
         self.panels.append(p)
 
 
@@ -676,7 +914,7 @@ class StiffPanelBay(Panel):
         xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy,
                 si=si)
         a = self.a
-        model = self.model
+        model = self.bladestiff2ds[si].model
 
         fuvw = stiffmDB.db[model]['field'].fuvw
 
