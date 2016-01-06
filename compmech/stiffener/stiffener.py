@@ -110,6 +110,8 @@ class BladeStiff1D(object):
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear constitutive stiffness matrix
+        """
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
@@ -165,6 +167,8 @@ class BladeStiff1D(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear geometric stiffness matrix
+        """
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
@@ -208,6 +212,8 @@ class BladeStiff1D(object):
 
 
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the mass matrix
+        """
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
 
@@ -368,6 +374,8 @@ class BladeStiff2D(object):
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear constitutive stiffness matrix
+        """
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
@@ -465,6 +473,8 @@ class BladeStiff2D(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear geometric stiffness matrix
+        """
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
@@ -506,6 +516,8 @@ class BladeStiff2D(object):
 
 
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the mass matrix
+        """
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
 
