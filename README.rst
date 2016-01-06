@@ -1,3 +1,8 @@
+|Build status|
+
+.. |Build status| image:: https://travis-ci.org/compmech/compmech.svg?branch=master
+    :target: https://travis-ci.org/compmech/compmech
+
 ==================================
 Computational Mechanics (compmech)
 ==================================
