@@ -47,4 +47,4 @@ script:
   #- ls -la  ../../../virtualenv/python2.7.9/lib/python2.7/site-packages
   # useful to get all environment variables
   - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
-  - py.test
+  - py.test --cache-clear
