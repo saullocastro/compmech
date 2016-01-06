@@ -17,4 +17,5 @@ for module in modules:
     except:
         print('WARNING - module {0} could not be imported!'.format(module))
         exec('{0} = None'.format(module))
+        raise
 

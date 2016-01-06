@@ -9,11 +9,12 @@ def configuration(parent_package='', top_path=None):
 
     libpath = os.path.join(os.path.realpath(config.package_path),
                            '..', '..', 'lib')
-    runtime_library_dirs = [libpath]
     if os.name == 'nt':
+        runtime_library_dirs = None
         args_linear = ['/openmp']
         args_nonlinear = ['/openmp', '/fp:fast']
     else:
+        runtime_library_dirs = [libpath]
         args_linear = []
         args_nonlinear = ['-ffast-math']
 
