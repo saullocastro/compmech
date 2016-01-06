@@ -447,13 +447,13 @@ class Panel(object):
 
         if Nxx_cte != 0. or Nyy_cte != 0. or Nxy_cte != 0.:
             if y1 is not None and y2 is not None:
-                k0 += fkG0y1y2(y1, y2, Nxx_cte, Nyy_cte, Nxy_cte,
+                k0 += matrices.fkG0y1y2(y1, y2, Nxx_cte, Nyy_cte, Nxy_cte,
                                a, b, r, alpharad, self.m, self.n,
                                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                                size, row0, col0)
             else:
-                k0 += fkG0(Nxx_cte, Nyy_cte, Nxy_cte,
+                k0 += matrices.fkG0(Nxx_cte, Nyy_cte, Nxy_cte,
                            a, b, r, alpharad, self.m, self.n,
                            self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                            self.w1ty, self.w1ry, self.w2ty, self.w2ry,
