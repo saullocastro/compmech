@@ -1,8 +1,13 @@
+from __future__ import division
+import gc
+
 import numpy as np
 from numpy import deg2rad
 
 import modelDB
 import compmech.panel.modelDB as panmodelDB
+from compmech.logger import msg, warn
+from compmech.composite import laminate
 
 
 class BladeStiff1D(object):
@@ -18,18 +23,18 @@ class BladeStiff1D(object):
       =========================  --> panels
          Panel1      Panel2
 
-    Both the flange and the padup are optional.
+    Both the flange and the padup are optional, but one must exist.
 
     Each stiffener has a constant `y` coordinate.
 
     """
-    def __init__(self, bay, panel1, panel2, ys, bb, bf, bstack, bplyts,
+    def __init__(self, bay, mu, panel1, panel2, ys, bb, bf, bstack, bplyts,
             blaminaprops, fstack, fplyts, flaminaprops):
         self.bay = bay
         self.panel1 = panel1
         self.panel2 = panel2
         self.model = 'bladestiff1d_clt_donnell_bardell'
-        self.mu = None
+        self.mu = mu
         self.ys = ys
         self.bb = bb
         self.hb = 0.
@@ -46,37 +51,41 @@ class BladeStiff1D(object):
         self.flam = None
 
         self.As = None
+        self.Asb = None
         self.Asf = None
         self.Jxx = None
         self.Iyy = None
+
+        self.Fx = None
 
         self._rebuild()
 
 
     def _rebuild(self):
-        if self.fstack != []:
+        if self.fstack != [] and self.fstack is not None:
             self.hf = sum(self.fplyts)
+            self.Asf = self.bf*self.hf
             self.flam = laminate.read_stack(self.fstack, plyts=self.fplyts,
                                              laminaprops=self.flaminaprops)
             self.flam.calc_equivalent_modulus()
 
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
-        if self.bstack != []:
+        if self.bstack != [] and self.bstack is not None:
             hb = sum(self.bplyts)
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
                                             offset=(-h/2.-hb/2.))
             self.hb = hb
+            self.Asb = self.bb*self.hb
 
         #TODO check offset effect on curved panels
         self.df = self.bf/2. + self.hb + h/2.
         self.Iyy = self.hf*self.bf**3/12.
-        #self.Iyy = self.hf*self.bf**3/12. + self.hf*self.bf*self.df**2
         self.Jxx = self.hf*self.bf**3/12. + self.bf*self.hf**3/12.
 
-        self.Asb = self.bb*self.hb
-        self.Asf = self.bf*self.hf
-        self.As = self.Asb + self.Asf
+        Asb = self.Asb if self.Asb is not None else 0.
+        Asf = self.Asf if self.Asf is not None else 0.
+        self.As = Asb + Asf
 
         if self.fstack != []:
             self.E1 = 0
@@ -101,6 +110,8 @@ class BladeStiff1D(object):
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear constitutive stiffness matrix
+        """
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
@@ -156,14 +167,18 @@ class BladeStiff1D(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear geometric stiffness matrix
+        """
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
         panmod = panmodelDB.db[self.panel1.model]['matrices']
         mod = modelDB.db[self.model]['matrices']
 
-        m1 = self.m1
-        n1 = self.n1
+        bay = self.bay
+
+        m1 = bay.m
+        n1 = bay.n
         mu = self.mu
 
         kG0 = 0.
@@ -173,12 +188,14 @@ class BladeStiff1D(object):
             y1 = self.ys - self.bb/2.
             y2 = self.ys + self.bb/2.
             # TODO include kG0 for padup
+            #      now it is assumed that all the load goes to the flange
 
         if self.flam is not None:
-            #TODO where is the pre-load going???
-
-            kG0 += mod.fkG0f(self.bf, self.df, self.ys, a, b, r, m1, n1,
-                    self.E1, self.F1, self.S1, self.Jxx)
+            Fx = self.Fx if self.Fx is not None else 0.
+            kG0 += mod.fkG0f(Fx, bay.a, self.bf, m1, n1,
+                             bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                             bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                             size, row0, col0)
 
         if finalize:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
@@ -195,6 +212,8 @@ class BladeStiff1D(object):
 
 
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the mass matrix
+        """
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
 
@@ -267,14 +286,14 @@ class BladeStiff2D(object):
     Each stiffener has a constant `y` coordinate.
 
     """
-    def __init__(self, mu, bay, panel1, panel2, ys, bb, bf, bstack, bplyts,
+    def __init__(self, bay, mu, panel1, panel2, ys, bb, bf, bstack, bplyts,
             blaminaprops, fstack, fplyts, flaminaprops):
         self.bay = bay
         self.panel1 = panel1
         self.panel2 = panel2
         self.model = 'bladestiff2d_clt_donnell_bardell'
-        self.m1 = None
-        self.n1 = None
+        self.m1 = 14
+        self.n1 = 11
         self.mu = mu
         self.ys = ys
         self.bb = bb
@@ -283,7 +302,8 @@ class BladeStiff2D(object):
         self.hf = 0.
         self.forces = []
 
-        self.inf = 1.e8
+        self.kt = 1.e8
+        self.kr = 1.e8
 
         self.Nxx = None
         self.Nxy = None
@@ -331,14 +351,14 @@ class BladeStiff2D(object):
 
 
     def _rebuild(self):
-        if self.fstack != []:
+        if self.fstack != [] and self.fstack is not None:
             self.hf = sum(self.fplyts)
             self.flam = laminate.read_stack(self.fstack, plyts=self.fplyts,
                                             laminaprops=self.flaminaprops)
             self.flam.calc_equivalent_modulus()
 
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
-        if self.bstack != []:
+        if self.bstack != [] and self.bstack is not None:
             hb = sum(self.bplyts)
             self.db = abs(-h/2.-hb/2.)
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
@@ -354,6 +374,8 @@ class BladeStiff2D(object):
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear constitutive stiffness matrix
+        """
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
@@ -391,8 +413,8 @@ class BladeStiff2D(object):
 
         #TODO add contribution from Nxx_cte from flange and padup
         if self.flam is not None:
-            kt = self.inf
-            kr = self.inf
+            kt = self.kt
+            kr = self.kr
             F = self.flam.ABD
             k0 += mod.fk0f(a, bf, F, m1, n1,
                            self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
@@ -451,6 +473,8 @@ class BladeStiff2D(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the linear geometric stiffness matrix
+        """
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
@@ -492,6 +516,8 @@ class BladeStiff2D(object):
 
 
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+        """Calculate the mass matrix
+        """
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
 
@@ -507,6 +533,9 @@ class BladeStiff2D(object):
         m1 = self.m1
         n1 = self.n1
         bf = self.bf
+
+        kM = 0.
+
         if self.blam is not None:
             # stiffener pad-up
             y1 = self.ys - self.bb/2.

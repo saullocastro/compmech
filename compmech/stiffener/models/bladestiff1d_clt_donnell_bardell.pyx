@@ -115,8 +115,7 @@ def fk0f(double a, double b, double bf, double df, double E1, double F1,
     return k0f
 
 
-def fkG0f(double Nxx, double Nyy, double Nxy, double a, double bf,
-          int m, int n,
+def fkG0f(double Fx, double a, double bf, int m, int n,
           double w1txf, double w1rxf, double w2txf, double w2rxf,
           double w1tyf, double w1ryf, double w2tyf, double w2ryf,
           int size, int row0, int col0):
@@ -138,10 +137,7 @@ def fkG0f(double Nxx, double Nyy, double Nxy, double a, double bf,
     c = -1
     for i in range(m):
         for k in range(m):
-            rAwxirBwxi = integral_fxifxi(i, k, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
-            rAwrBwxi = integral_ffxi(i, k, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
-            rAwxirBw = integral_ffxi(k, i, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
-            rAwrBw = integral_ff(i, k, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
+            fAwxifBwxi = integral_fxifxi(i, k, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
 
             for j in range(n):
                 for l in range(n):
@@ -152,16 +148,12 @@ def fkG0f(double Nxx, double Nyy, double Nxy, double a, double bf,
                     if row > col:
                         continue
 
-                    sAwsBw = integral_ff(j, l, w1tyf, w1ryf, w2tyf, w2ryf, w1tyf, w1ryf, w2tyf, w2ryf)
-                    sAwsBweta = integral_ffxi(j, l, w1tyf, w1ryf, w2tyf, w2ryf, w1tyf, w1ryf, w2tyf, w2ryf)
-                    sAwetasBw = integral_ffxi(l, j, w1tyf, w1ryf, w2tyf, w2ryf, w1tyf, w1ryf, w2tyf, w2ryf)
-                    sAwetasBweta = integral_fxifxi(j, l, w1tyf, w1ryf, w2tyf, w2ryf, w1tyf, w1ryf, w2tyf, w2ryf)
+                    gAwgBw = integral_ff(j, l, w1tyf, w1ryf, w2tyf, w2ryf, w1tyf, w1ryf, w2tyf, w2ryf)
 
                     c += 1
                     kG0fr[c] = row+2
                     kG0fc[c] = col+2
-                    kG0fv[c] += Nxx*bf*rAwxirBwxi*sAwsBw/a + Nxy*(rAwrBwxi*sAwetasBw + rAwxirBw*sAwsBweta) + Nyy*a*rAwrBw*sAwetasBweta/bf
-                    raise
+                    kG0fv[c] += Fx*bf*fAwxifBwxi*gAwgBw/a
 
     kG0f = coo_matrix((kG0fv, (kG0fr, kG0fc)), shape=(size, size))
 
