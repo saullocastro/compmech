@@ -100,19 +100,19 @@ def fk0f(double ys, double a, double b, double bf, double df, double E1, double 
                     c += 1
                     k0fr[c] = row+0
                     k0fc[c] = col+0
-                    k0fv[c] += E1*(bf*bf)*fAuxifBuxi*gAu*gBu/a
+                    k0fv[c] += 2*E1*bf*fAuxifBuxi*gAu*gBu/a
                     c += 1
                     k0fr[c] = row+0
                     k0fc[c] = col+2
-                    k0fv[c] += 2*(bf*bf)*(E1*b*df*fAuxifBwxixi*gAu*gBw - S1*a*fAuxifBwxi*gAu*gBweta)/((a*a)*b)
+                    k0fv[c] += 0.5*a*bf*(8*E1*df*fAuxifBwxixi*gAu*gBw/(a*a*a) - 8*S1*fAuxifBwxi*gAu*gBweta/((a*a)*b))
                     c += 1
                     k0fr[c] = row+2
                     k0fc[c] = col+0
-                    k0fv[c] += 2*(bf*bf)*(E1*b*df*fAwxixifBuxi*gAw*gBu - S1*a*fAwxifBuxi*gAweta*gBu)/((a*a)*b)
+                    k0fv[c] += bf*gBu*(4*E1*df*fAwxixifBuxi*gAw/(a*a) - 4*S1*fAwxifBuxi*gAweta/(a*b))
                     c += 1
                     k0fr[c] = row+2
                     k0fc[c] = col+2
-                    k0fv[c] += 4*(bf*bf)*(Jxx*(a*a)*fAwxifBwxi*gAweta*gBweta - S1*a*b*df*(fAwxifBwxixi*gAweta*gBw + fAwxixifBwxi*gAw*gBweta) + (b*b)*fAwxixifBwxixi*gAw*gBw*(E1*(df*df) + F1))/((a*a*a)*(b*b))
+                    k0fv[c] += 0.5*a*bf*(-4*gBweta*(-4*Jxx*fAwxifBwxi*gAweta/(a*b) + 4*S1*df*fAwxixifBwxi*gAw/(a*a))/(a*b) - 4*gBw*(4*S1*df*fAwxifBwxixi*gAweta/(a*b) + fAwxixifBwxixi*gAw*(-4*E1*(df*df) - 4*F1)/(a*a))/(a*a))
 
     k0f = coo_matrix((k0fv, (k0fr, k0fc)), shape=(size, size))
 
@@ -161,7 +161,7 @@ def fkG0f(double ys, double Fx, double a, double b, double bf, int m, int n,
                     c += 1
                     kG0fr[c] = row+2
                     kG0fc[c] = col+2
-                    kG0fv[c] += Fx*bf*fAwxifBwxi*gAw*gBw/a
+                    kG0fv[c] += 2*Fx*fAwxifBwxi*gAw*gBw/a
 
     kG0f = coo_matrix((kG0fv, (kG0fr, kG0fc)), shape=(size, size))
 
@@ -234,31 +234,31 @@ def fkMf(double ys, double mu, double h, double hb, double hf, double a,
                     c += 1
                     kMfr[c] = row+0
                     kMfc[c] = col+0
-                    kMfv[c] += 0.25*a*(bf*bf)*fAufBu*gAu*gBu*hf*mu
+                    kMfv[c] += 0.5*a*bf*fAufBu*gAu*gBu*hf*mu
                     c += 1
                     kMfr[c] = row+0
                     kMfc[c] = col+2
-                    kMfv[c] += (bf*bf)*df*fAufBwxi*gAu*gBw*hf*mu
+                    kMfv[c] += 2*bf*df*fAufBwxi*gAu*gBw*hf*mu
                     c += 1
                     kMfr[c] = row+1
                     kMfc[c] = col+1
-                    kMfv[c] += 0.25*a*(bf*bf)*fAvfBv*gAv*gBv*hf*mu
+                    kMfv[c] += 0.5*a*bf*fAvfBv*gAv*gBv*hf*mu
                     c += 1
                     kMfr[c] = row+1
                     kMfc[c] = col+2
-                    kMfv[c] += a*(bf*bf)*df*fAvfBw*gAv*gBweta*hf*mu/b
+                    kMfv[c] += 2*a*bf*df*fAvfBw*gAv*gBweta*hf*mu/b
                     c += 1
                     kMfr[c] = row+2
                     kMfc[c] = col+0
-                    kMfv[c] += (bf*bf)*df*fAwxifBu*gAw*gBu*hf*mu
+                    kMfv[c] += 2*bf*df*fAwxifBu*gAw*gBu*hf*mu
                     c += 1
                     kMfr[c] = row+2
                     kMfc[c] = col+1
-                    kMfv[c] += a*(bf*bf)*df*fAwfBv*gAweta*gBv*hf*mu/b
+                    kMfv[c] += 2*a*bf*df*fAwfBv*gAweta*gBv*hf*mu/b
                     c += 1
                     kMfr[c] = row+2
                     kMfc[c] = col+2
-                    kMfv[c] += 0.0833333333333333*(bf*bf)*hf*mu*((a*a)*fAwfBw*(3*(b*b)*gAw*gBw + gAweta*gBweta*(4*(bf*bf) + 6*bf*(h + 2*hb) + 3*(h + 2*hb)**2)) + (b*b)*fAwxifBwxi*gAw*gBw*(4*(bf*bf) + 6*bf*(h + 2*hb) + 3*(h + 2*hb)**2))/(a*(b*b))
+                    kMfv[c] += 0.166666666666667*bf*hf*mu*((a*a)*fAwfBw*(3*(b*b)*gAw*gBw + gAweta*gBweta*(4*(bf*bf) + 6*bf*(h + 2*hb) + 3*(h + 2*hb)**2)) + (b*b)*fAwxifBwxi*gAw*gBw*(4*(bf*bf) + 6*bf*(h + 2*hb) + 3*(h + 2*hb)**2))/(a*(b*b))
 
     kMf = coo_matrix((kMfv, (kMfr, kMfc)), shape=(size, size))
 
