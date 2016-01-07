@@ -23,7 +23,7 @@ def configuration(parent_package='', top_path=None):
                      extra_compile_args=args_linear,
                      runtime_library_dirs=runtime_library_dirs,
                      include_dirs=['../../include'],
-                     libraries=['bardell'],
+                     libraries=['bardell_functions', 'bardell'],
                      library_dirs=['../../lib'])
 
     config.add_extension('bladestiff2d_clt_donnell_bardell',

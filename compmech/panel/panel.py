@@ -43,7 +43,7 @@ class Panel(object):
 
     """
     def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
-            stack=[], plyt=None, laminaprop=[]):
+            stack=None, plyt=None, laminaprop=None):
         self.a = a
         self.b = b
         self.y1 = y1
@@ -113,8 +113,8 @@ class Panel(object):
 
         # material
         self.mu = None
-        self.plyts = []
-        self.laminaprops = []
+        self.plyts = None
+        self.laminaprops = None
 
         # aeroelastic parameters
         self.flow = 'x'
@@ -377,7 +377,7 @@ class Panel(object):
         plyts = self.plyts
         laminaprops = self.laminaprops
 
-        if stack != []:
+        if stack is not None:
             lam = laminate.read_stack(stack, plyts=plyts,
                                              laminaprops=laminaprops)
 
