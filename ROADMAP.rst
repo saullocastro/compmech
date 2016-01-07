@@ -1,3 +1,7 @@
+Version 0.5.4
+-------------
+- tests for aeroelastic routines with the piston theory
+
 Version 0.6.0
 -------------
 - skew panel with formulation for stringers not aligned with the panel
