@@ -19,7 +19,8 @@ import compmech.composite.laminate as laminate
 from compmech.analysis import Analysis
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
-from compmech.sparse import make_symmetric, remove_null_cols
+from compmech.sparse import (make_symmetric, remove_null_cols,
+        make_skew_symmetric)
 
 import modelDB
 
@@ -573,6 +574,13 @@ class Panel(object):
         """
         msg('Calculating kA... ', level=2, silent=silent)
 
+        matrices = modelDB.db[self.model]['matrices']
+
+        a = self.a
+        b = self.b
+        m = self.m
+        n = self.n
+
         if 'kpanel' in self.model:
             raise NotImplementedError('Conical panels not supported')
 
@@ -594,9 +602,17 @@ class Panel(object):
             aeromu = self.aeromu if self.aeromu is not None else 0.
 
         if self.flow.lower() == 'x':
-            kA = matrices.fkAx(beta, gamma, a, b, m, n, self.size, 0, 0)
+            kA = matrices.fkAx(
+                    beta, gamma, a, b, m, n,
+                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                    self.size, 0, 0)
         elif self.flow.lower() == 'y':
-            kA = mod.fkAy(beta, a, b, m, n, size, 0, 0)
+            kA = mod.fkAy(
+                    beta, a, b, m, n,
+                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                    self.size, 0, 0)
         else:
             raise ValueError('Invalid flow value, must be x or y')
 
@@ -618,8 +634,11 @@ class Panel(object):
         """
         msg('Calculating cA... ', level=2, silent=silent)
 
-        cA = matrices.fcA(aeromu, self.a, self.b, self.m, self.n,
-                          self.size, 0, 0)
+        cA = matrices.fcA(
+                aeromu, self.a, self.b, self.m, self.n,
+                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                self.size, 0, 0)
         cA = cA*(0+1j)
 
         if finalize:
@@ -643,7 +662,7 @@ class Panel(object):
         =======================    =====================================
         parameter                  description
         =======================    =====================================
-        ``num_eigenvalues``        Number of eigenvalues to be extracted
+        ``num_eigvalues``        Number of eigenvalues to be extracted
         ``num_eigvalues_print``    Number of eigenvalues to print after
                                    the analysis is completed
         =======================    =====================================
@@ -740,7 +759,7 @@ class Panel(object):
         =======================    =====================================
         parameter                  description
         =======================    =====================================
-        ``num_eigenvalues``        Number of eigenvalues to be extracted
+        ``num_eigvalues``        Number of eigenvalues to be extracted
         ``num_eigvalues_print``    Number of eigenvalues to print after
                                    the analysis is completed
         =======================    =====================================
@@ -816,24 +835,28 @@ class Panel(object):
         k = min(self.num_eigvalues, M.shape[0]-2)
         if sparse_solver:
             msg('eigs() solver...', level=3, silent=silent)
-            try:
-                eigvals, eigvecs = eigs(A=M, M=K, k=k, tol=tol, which='SM',
-                                        sigma=-1.)
-            except:
-                sizebkp = M.shape[0]
-                M, K, used_cols = remove_null_cols(M, K, silent=silent,
-                        level=3)
-                eigvals, peigvecs = eigs(A=M, k=k, which='SM', M=K, tol=tol,
-                                         sigma=-1.)
-                eigvecs = np.zeros((sizebkp, self.num_eigvalues),
-                                   dtype=peigvecs.dtype)
-                eigvecs[used_cols, :] = peigvecs
+            sizebkp = M.shape[0]
+            M, K, used_cols = remove_null_cols(M, K, silent=silent,
+                    level=3)
+            eigvals, peigvecs = eigs(A=M, k=k, which='SM', M=K, tol=tol,
+                                     sigma=-1.)
+            eigvecs = np.zeros((sizebkp, self.num_eigvalues),
+                               dtype=peigvecs.dtype)
+            eigvecs[used_cols, :] = peigvecs
 
             eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
+
         else:
             msg('eig() solver...', level=3, silent=silent)
             M = M.toarray()
             K = K.toarray()
+            sizebkp = M.shape[0]
+            col_sum = M.sum(axis=0)
+            check = col_sum != 0
+            used_cols = np.arange(M.shape[0])[check]
+            M = M[:, check][check, :]
+            K = K[:, check][check, :]
+
             if reduced_dof:
                 i = np.arange(M.shape[0])
                 take = np.column_stack((i[1::3], i[2::3])).flatten()
@@ -844,6 +867,7 @@ class Panel(object):
             else:
                 size = M.shape[0]
                 cA = self.cA.toarray()
+                cA = cA[:, check][check, :]
                 if reduced_dof:
                     cA = cA[:, take][take, :]
                 I = np.identity(M.shape[0])
@@ -853,7 +877,11 @@ class Panel(object):
                 K = np.row_stack((np.column_stack((Z, -I)),
                                   np.column_stack((K, cA))))
 
-            eigvals, eigvecs = eig(a=M, b=K)
+            eigvals, peigvecs = eig(a=M, b=K)
+
+            eigvecs = np.zeros((sizebkp, K.shape[0]),
+                               dtype=peigvecs.dtype)
+            eigvecs[check, :] = peigvecs
 
             if not damping:
                 eigvals = np.sqrt(-1./eigvals) # -1/omega^2 to omega, in rad/s
