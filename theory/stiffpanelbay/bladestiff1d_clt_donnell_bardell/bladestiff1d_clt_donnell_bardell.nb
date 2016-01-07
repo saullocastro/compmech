@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     51346,        963]
-NotebookOptionsPosition[     51022,        947]
-NotebookOutlinePosition[     51444,        965]
-CellTagsIndexPosition[     51401,        962]
+NotebookDataLength[     51411,        961]
+NotebookOptionsPosition[     51087,        945]
+NotebookOutlinePosition[     51509,        963]
+CellTagsIndexPosition[     51466,        960]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -295,11 +295,10 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"k0sf", "=", " ", 
+   RowBox[{"k0f", "=", " ", 
     RowBox[{
      RowBox[{"(", 
-      RowBox[{"a", "*", 
-       RowBox[{"bf", "/", "4"}]}], ")"}], "*", "bf", "*", 
+      RowBox[{"a", "/", "2"}], ")"}], "*", "bf", "*", 
      RowBox[{
       RowBox[{"Transpose", "[", "gAsf", "]"}], ".", "ksf", ".", "gBsf"}]}]}], 
    ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
@@ -322,8 +321,7 @@ Cell[BoxData[{
    RowBox[{"kG0f", " ", "=", " ", 
     RowBox[{
      RowBox[{"(", 
-      RowBox[{"a", "*", 
-       RowBox[{"bf", "/", "4"}]}], ")"}], "*", 
+      RowBox[{"a", "/", "2"}], ")"}], "*", 
      RowBox[{
       RowBox[{"Transpose", "[", "GA", "]"}], ".", 
       RowBox[{"{", 
@@ -351,47 +349,45 @@ Cell[BoxData[{
    RowBox[{"{", 
     RowBox[{
      RowBox[{"{", "       ", 
-      RowBox[{"1", ",", "       ", "0", ",", "   ", "0", ",", " ", 
+      RowBox[{"1", ",", "       ", "0", ",", "   ", "0", ",", "  ", 
        RowBox[{
-        RowBox[{"-", "2"}], "df"}], ",", "        ", "0"}], "}"}], ",", 
-     "\[IndentingNewLine]", "       ", 
+        RowBox[{"-", "2"}], "df"}], ",", "         ", "0"}], "}"}], ",", 
+     "\[IndentingNewLine]", "        ", 
      RowBox[{"{", "       ", 
       RowBox[{
-      "0", ",", "       ", "1", ",", "   ", "0", ",", "        ", "0", ",", 
+      "0", ",", "       ", "1", ",", "   ", "0", ",", "          ", "0", ",", 
        " ", 
        RowBox[{
         RowBox[{"-", "2"}], "df"}]}], "}"}], ",", "\[IndentingNewLine]", 
-     "       ", 
+     "        ", 
      RowBox[{"{", "       ", 
       RowBox[{
-      "0", ",", "       ", "0", ",", "   ", "1", ",", "        ", "0", ",", 
-       "        ", "0"}], "}"}], ",", "\[IndentingNewLine]", "       ", 
+      "0", ",", "       ", "0", ",", "   ", "1", ",", "          ", "0", ",", 
+       "          ", "0"}], "}"}], ",", "\[IndentingNewLine]", "        ", 
      RowBox[{"{", 
       RowBox[{
        RowBox[{
         RowBox[{"-", "2"}], "df"}], ",", "       ", "0", ",", "   ", "0", ",",
-        "kmf44", ",", "        ", "0"}], "}"}], ",", "\[IndentingNewLine]", 
-     "       ", 
+        "kmf44", ",", "         ", "0"}], "}"}], ",", "\[IndentingNewLine]", 
+     "        ", 
      RowBox[{"{", "       ", 
       RowBox[{"0", ",", 
        RowBox[{
-        RowBox[{"-", "2"}], "df"}], ",", "   ", "0", ",", "        ", "0", 
+        RowBox[{"-", "2"}], "df"}], ",", "   ", "0", ",", "         ", "0", 
        ",", "kmf55"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"kMsf", "=", 
+   RowBox[{"kMf", "=", 
     RowBox[{
      RowBox[{"(", 
-      RowBox[{"a", "*", 
-       RowBox[{"bf", "/", "4"}]}], ")"}], "*", "hf", "*", "bf", "*", "mu", 
-     "*", 
+      RowBox[{"a", "/", "2"}], ")"}], "*", "hf", "*", "bf", "*", "mu", "*", 
      RowBox[{
       RowBox[{"Transpose", "[", "gA5", "]"}], ".", "msf", ".", "gB5"}]}]}], 
    ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"k0sf", "=", 
-    RowBox[{"FortranForm", "[", "k0sf", "]"}]}], ";"}], 
+   RowBox[{"k0f", "=", 
+    RowBox[{"FortranForm", "[", "k0f", "]"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"kG0f", "=", 
@@ -402,17 +398,17 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"kMsf", "=", 
+   RowBox[{"kMf", "=", 
     RowBox[{"FortranForm", "[", 
-     RowBox[{"Simplify", "[", "kMsf", "]"}], "]"}]}], ";"}], 
+     RowBox[{"Simplify", "[", "kMf", "]"}], "]"}]}], ";"}], 
   "\[IndentingNewLine]", "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"s", " ", "=", " ", 
-   RowBox[{"OpenWrite", "[", "\"\<fortran_k0sf.txt\>\"", "]"}]}], 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_k0f.txt\>\"", "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
-   RowBox[{"s", ",", "k0sf"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"s", ",", "k0f"}], "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
@@ -426,11 +422,11 @@ Cell[BoxData[{
   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"s", " ", "=", " ", 
-   RowBox[{"OpenWrite", "[", "\"\<fortran_kMsf.txt\>\"", "]"}]}], 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kMf.txt\>\"", "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
-   RowBox[{"s", ",", "kMsf"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"s", ",", "kMf"}], "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"Close", "[", "s", "]"}], ";"}], 
@@ -943,7 +939,9 @@ Cell[BoxData[{
    3.6610200887207313`*^9, 3.661020267786625*^9}, {3.6610207873380003`*^9, 
    3.661020791616642*^9}, {3.661020866764896*^9, 3.661020925370688*^9}, {
    3.661021167227887*^9, 3.66102117604799*^9}, {3.661021392877621*^9, 
-   3.6610213929245076`*^9}}]
+   3.6610213929245076`*^9}, {3.661187188741164*^9, 3.6611872142768044`*^9}, {
+   3.6611874439810038`*^9, 3.6611874568862596`*^9}, {3.661187775329991*^9, 
+   3.6611878252623243`*^9}}]
 },
 Evaluator->"Local 2",
 WindowSize->{751, 727},
@@ -964,7 +962,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 50461, 925, 1430, "Input"]
+Cell[557, 20, 50526, 923, 1430, "Input"]
 }
 ]
 *)
