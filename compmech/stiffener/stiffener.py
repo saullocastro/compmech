@@ -62,7 +62,7 @@ class BladeStiff1D(object):
 
 
     def _rebuild(self):
-        if self.fstack != [] and self.fstack is not None:
+        if self.fstack is not None:
             self.hf = sum(self.fplyts)
             self.Asf = self.bf*self.hf
             self.flam = laminate.read_stack(self.fstack, plyts=self.fplyts,
@@ -70,7 +70,7 @@ class BladeStiff1D(object):
             self.flam.calc_equivalent_modulus()
 
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
-        if self.bstack != [] and self.bstack is not None:
+        if self.bstack is not None:
             hb = sum(self.bplyts)
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
@@ -87,7 +87,7 @@ class BladeStiff1D(object):
         Asf = self.Asf if self.Asf is not None else 0.
         self.As = Asb + Asf
 
-        if self.fstack != []:
+        if self.fstack is not None:
             self.E1 = 0
             #E3 = 0
             self.S1 = 0
@@ -119,6 +119,7 @@ class BladeStiff1D(object):
         mod = modelDB.db[self.model]['matrices']
 
         bay = self.bay
+        ys = self.ys
         a = bay.a
         b = bay.b
         m = self.panel1.m
@@ -131,8 +132,8 @@ class BladeStiff1D(object):
         k0 = 0.
         if self.blam is not None:
             Fsb = self.blam.ABD
-            y1 = self.ys - self.bb/2.
-            y2 = self.ys + self.bb/2.
+            y1 = ys - self.bb/2.
+            y2 = ys + self.bb/2.
             k0 += panmod.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
@@ -143,8 +144,8 @@ class BladeStiff1D(object):
                                  size=size, row0=row0, col0=col0)
 
         if self.flam is not None:
-            k0 += mod.fk0f(a, b, self.bf, self.df, self.E1, self.F1, self.S1,
-                           self.Jxx, m, n,
+            k0 += mod.fk0f(ys, a, b, self.bf, self.df, self.E1, self.F1,
+                           self.S1, self.Jxx, m, n,
                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
                            bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
@@ -177,22 +178,23 @@ class BladeStiff1D(object):
 
         bay = self.bay
 
-        m1 = bay.m
-        n1 = bay.n
+        ys = self.ys
+        m = bay.m
+        n = bay.n
         mu = self.mu
 
         kG0 = 0.
 
         if self.blam is not None:
             Fsb = self.blam.ABD
-            y1 = self.ys - self.bb/2.
-            y2 = self.ys + self.bb/2.
+            y1 = ys - self.bb/2.
+            y2 = ys + self.bb/2.
             # TODO include kG0 for padup
             #      now it is assumed that all the load goes to the flange
 
         if self.flam is not None:
             Fx = self.Fx if self.Fx is not None else 0.
-            kG0 += mod.fkG0f(Fx, bay.a, self.bf, m1, n1,
+            kG0 += mod.fkG0f(ys, Fx, bay.a, bay.b, self.bf, m, n,
                              bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
                              bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
                              size, row0, col0)
@@ -221,6 +223,7 @@ class BladeStiff1D(object):
         mod = modelDB.db[self.model]['matrices']
 
         bay = self.bay
+        ys = self.ys
         a = bay.a
         b = bay.b
         m = self.panel1.m
@@ -230,8 +233,8 @@ class BladeStiff1D(object):
 
         kM = 0.
         if self.blam is not None:
-            y1 = self.ys - self.bb/2.
-            y2 = self.ys + self.bb/2.
+            y1 = ys - self.bb/2.
+            y2 = ys + self.bb/2.
             kM += panmod.fkMy1y2(y1, y2, self.mu, self.db, self.hb, a, b, m, n,
                           bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                           bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
@@ -242,7 +245,7 @@ class BladeStiff1D(object):
                           size=size, row0=row0, col0=col0)
 
         if self.flam is not None:
-            kM += mod.fkMf(self.mu, h, self.hb, self.hf, a, b, self.bf,
+            kM += mod.fkMf(ys, self.mu, h, self.hb, self.hf, a, b, self.bf,
                            self.df, m, n,
                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                            bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
@@ -351,14 +354,14 @@ class BladeStiff2D(object):
 
 
     def _rebuild(self):
-        if self.fstack != [] and self.fstack is not None:
+        if self.fstack is not None:
             self.hf = sum(self.fplyts)
             self.flam = laminate.read_stack(self.fstack, plyts=self.fplyts,
                                             laminaprops=self.flaminaprops)
             self.flam.calc_equivalent_modulus()
 
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
-        if self.bstack != [] and self.bstack is not None:
+        if self.bstack is not None:
             hb = sum(self.bplyts)
             self.db = abs(-h/2.-hb/2.)
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
