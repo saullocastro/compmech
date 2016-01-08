@@ -2,124 +2,141 @@ import numpy as np
 
 from compmech.stiffpanelbay import StiffPanelBay
 
-def test_freq():
-    print('Testing frequency analysis for StiffPanelBay with 2 panels')
-    sp = StiffPanelBay()
-    sp.a = 1.
-    sp.b = 0.5
-    sp.r = sp.b*10
-    sp.stack = [0, 90, -45, +45]
-    sp.plyt = 1e-3*0.125
-    sp.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
-    sp.model = 'cpanel_clt_donnell_bardell'
-    sp.mu = 1.3e3
-    sp.m = 11
-    sp.n = 12
 
-    sp.add_panel(0, sp.b/2., plyt=sp.plyt, Nxx=-1)
-    sp.add_panel(sp.b/2., sp.b, plyt=sp.plyt, Nxx=-1)
+def test_freq_models():
+    print('Testing frequency analysis for StiffPanelBay with 2 plates')
+    # From Table 4 of
+    # Lee and Lee. "Vibration analysis of anisotropic plates with eccentric
+    #    stiffeners". Computers & Structures, Vol. 57, No. 1, pp. 99-105,
+    #    1995.
+    for model in ['plate_clt_donnell_bardell',
+                  'cpanel_clt_donnell_bardell',
+                  'kpanel_clt_donnell_bardell']:
+        spb = StiffPanelBay()
+        spb.a = 0.5
+        spb.b = 0.250
+        spb.plyt = 0.00013
+        spb.laminaprop = (128.e9, 11.e9, 0.25, 4.48e9, 1.53e9, 1.53e9)
+        spb.stack = [0, -45, +45, 90, 90, +45, -45, 0]
+        spb.model = model
+        spb.r = 1.e6
+        spb.alphadeg = 0.
+        spb.mu = 1.5e3
+        spb.m = 9
+        spb.n = 10
 
-    sp.freq(sparse_solver=False, silent=True)
+        # clamping
+        spb.w1rx = 0.
+        spb.w2rx = 0.
+        spb.w1ry = 0.
+        spb.w2ry = 0.
 
-    assert np.allclose(sp.eigvals[0], 155.648180838)
+        spb.add_panel(0, spb.b/2., plyt=spb.plyt)
+        spb.add_panel(spb.b/2., spb.b, plyt=spb.plyt)
+
+        spb.freq(sparse_solver=True, silent=True)
+
+        ref = [85.12907802-0.j, 134.16422850-0.j, 206.77295186-0.j,
+                216.45992453-0.j, 252.24546171-0.j]
+        assert np.allclose(spb.eigvals[:5]/2/np.pi, ref)
 
 
 def test_lb_Stiffener1D():
     print('Testing linear buckling for StiffPanelBay with a 1D Stiffener')
-    sp = StiffPanelBay()
-    sp.a = 1.
-    sp.b = 0.5
-    sp.stack = [0, 90, 90, 0]
-    sp.plyt = 1e-3*0.125
-    sp.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
-    sp.model = 'plate_clt_donnell_bardell'
-    sp.mu = 1.3e3
-    sp.m = 15
-    sp.n = 16
+    spb = StiffPanelBay()
+    spb.a = 1.
+    spb.b = 0.5
+    spb.stack = [0, 90, 90, 0]
+    spb.plyt = 1e-3*0.125
+    spb.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
+    spb.model = 'plate_clt_donnell_bardell'
+    spb.mu = 1.3e3
+    spb.m = 15
+    spb.n = 16
 
-    sp.add_panel(y1=0, y2=sp.b/2., plyt=sp.plyt, Nxx=-1.)
-    sp.add_panel(y1=sp.b/2., y2=sp.b, plyt=sp.plyt, Nxx_cte=1000.)
+    spb.add_panel(y1=0, y2=spb.b/2., plyt=spb.plyt, Nxx=-1.)
+    spb.add_panel(y1=spb.b/2., y2=spb.b, plyt=spb.plyt, Nxx_cte=1000.)
 
-    sp.add_bladestiff1d(ys=sp.b/2., Fx=0., bf=0.05, fstack=[0, 90, 90, 0],
-            fplyt=sp.plyt, flaminaprop=sp.laminaprop)
+    spb.add_bladestiff1d(ys=spb.b/2., Fx=0., bf=0.05, fstack=[0, 90, 90, 0],
+            fplyt=spb.plyt, flaminaprop=spb.laminaprop)
 
-    sp.lb(silent=True)
+    spb.lb(silent=True)
 
-    assert np.isclose(sp.eigvals[0].real, 295.35629419)
+    assert np.isclose(spb.eigvals[0].real, 295.35629419)
 
 
 def test_lb_Stiffener2D():
     print('Testing linear buckling for StiffPanelBay with a 2D Stiffener')
-    sp = StiffPanelBay()
-    sp.a = 1.
-    sp.b = 0.5
-    sp.stack = [0, 90, 90, 0]
-    sp.plyt = 1e-3*0.125
-    sp.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
-    sp.model = 'plate_clt_donnell_bardell'
-    sp.mu = 1.3e3
-    sp.m = 15
-    sp.n = 16
+    spb = StiffPanelBay()
+    spb.a = 1.
+    spb.b = 0.5
+    spb.stack = [0, 90, 90, 0]
+    spb.plyt = 1e-3*0.125
+    spb.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
+    spb.model = 'plate_clt_donnell_bardell'
+    spb.mu = 1.3e3
+    spb.m = 15
+    spb.n = 16
 
-    sp.add_panel(y1=0, y2=sp.b/2., plyt=sp.plyt, Nxx=-1.)
-    sp.add_panel(y1=sp.b/2., y2=sp.b, plyt=sp.plyt, Nxx_cte=1000.)
+    spb.add_panel(y1=0, y2=spb.b/2., plyt=spb.plyt, Nxx=-1.)
+    spb.add_panel(y1=spb.b/2., y2=spb.b, plyt=spb.plyt, Nxx_cte=1000.)
 
-    sp.add_bladestiff2d(ys=sp.b/2., m1=14, n1=11, bf=0.05,
+    spb.add_bladestiff2d(ys=spb.b/2., m1=14, n1=11, bf=0.05,
                         fstack=[0, 90, 90, 0],
-                        fplyt=sp.plyt, flaminaprop=sp.laminaprop)
+                        fplyt=spb.plyt, flaminaprop=spb.laminaprop)
 
-    sp.lb(silent=True)
+    spb.lb(silent=True)
 
-    assert np.isclose(sp.eigvals[0].real, 299.162436099)
+    assert np.isclose(spb.eigvals[0].real, 299.162436099)
 
 
 def test_freq_Stiffener1D():
     print('Testing frequency analysis for StiffPanelBay with a 1D Stiffener')
-    sp = StiffPanelBay()
-    sp.a = 1.
-    sp.b = 0.5
-    sp.stack = [0, 90, 90, 0]
-    sp.plyt = 1e-3*0.125
-    sp.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
-    sp.model = 'plate_clt_donnell_bardell'
-    sp.mu = 1.3e3
-    sp.m = 15
-    sp.n = 16
+    spb = StiffPanelBay()
+    spb.a = 1.
+    spb.b = 0.5
+    spb.stack = [0, 90, 90, 0]
+    spb.plyt = 1e-3*0.125
+    spb.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
+    spb.model = 'plate_clt_donnell_bardell'
+    spb.mu = 1.3e3
+    spb.m = 15
+    spb.n = 16
 
-    sp.add_panel(y1=0, y2=sp.b/2., plyt=sp.plyt)
-    sp.add_panel(y1=sp.b/2., y2=sp.b, plyt=sp.plyt)
+    spb.add_panel(y1=0, y2=spb.b/2., plyt=spb.plyt)
+    spb.add_panel(y1=spb.b/2., y2=spb.b, plyt=spb.plyt)
 
-    sp.add_bladestiff1d(ys=sp.b/2., Fx=0., bf=0.08, fstack=[0, 90, 90, 0]*5,
-            fplyt=sp.plyt, flaminaprop=sp.laminaprop)
+    spb.add_bladestiff1d(ys=spb.b/2., Fx=0., bf=0.08, fstack=[0, 90, 90, 0]*5,
+            fplyt=spb.plyt, flaminaprop=spb.laminaprop)
 
-    sp.freq(silent=True, atype=4)
+    spb.freq(silent=True, atype=4)
 
-    assert np.isclose(sp.eigvals[0].real, 81.9342050889)
+    assert np.isclose(spb.eigvals[0].real, 81.9342050889)
 
 
 def test_freq_Stiffener2D():
     print('Testing frequency analysis for StiffPanelBay with a 2D Stiffener')
-    sp = StiffPanelBay()
-    sp.a = 1.
-    sp.b = 0.5
-    sp.stack = [0, 90, 90, 0]
-    sp.plyt = 1e-3*0.125
-    sp.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
-    sp.model = 'plate_clt_donnell_bardell'
-    sp.mu = 1.3e3
-    sp.m = 11
-    sp.n = 12
+    spb = StiffPanelBay()
+    spb.a = 1.
+    spb.b = 0.5
+    spb.stack = [0, 90, 90, 0]
+    spb.plyt = 1e-3*0.125
+    spb.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
+    spb.model = 'plate_clt_donnell_bardell'
+    spb.mu = 1.3e3
+    spb.m = 11
+    spb.n = 12
 
-    sp.add_panel(y1=0, y2=sp.b/2., plyt=sp.plyt)
-    sp.add_panel(y1=sp.b/2., y2=sp.b, plyt=sp.plyt)
+    spb.add_panel(y1=0, y2=spb.b/2., plyt=spb.plyt)
+    spb.add_panel(y1=spb.b/2., y2=spb.b, plyt=spb.plyt)
 
-    sp.add_bladestiff2d(ys=sp.b/2., m1=14, n1=11, bf=0.08,
-                        fstack=[0, 90, 90, 0]*5, fplyt=sp.plyt,
-                        flaminaprop=sp.laminaprop)
+    spb.add_bladestiff2d(ys=spb.b/2., m1=14, n1=11, bf=0.08,
+                        fstack=[0, 90, 90, 0]*5, fplyt=spb.plyt,
+                        flaminaprop=spb.laminaprop)
 
-    sp.freq(silent=True, atype=4)
+    spb.freq(silent=True, atype=4)
 
-    assert np.isclose(sp.eigvals[0].real, 138.51917530043477)
+    assert np.isclose(spb.eigvals[0].real, 138.51917530043477)
 
 
 def test_Lee_and_Lee_table4():
@@ -147,6 +164,7 @@ def test_Lee_and_Lee_table4():
         bf = bf
         n = int(hf/plyt)
         fstack = [0]*(n//4) + [90]*(n//4) + [90]*(n//4) + [0]*(n//4)
+        # clamping
         spb.w1rx = 0.
         spb.w2rx = 0.
         spb.w1ry = 0.
@@ -162,7 +180,7 @@ def test_Lee_and_Lee_table4():
 
 
 if __name__ == '__main__':
-    test_freq()
+    test_freq_models()
     test_lb_Stiffener1D()
     test_lb_Stiffener2D()
     test_freq_Stiffener1D()
