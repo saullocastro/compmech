@@ -4,8 +4,8 @@ clone_depth: 1
 build: false
 
 environment:
-  matrix:
-    - PYTHON_VERSION: 2.7
+  global:
+      python: "C:/Python27-x64"
       MINICONDA: C:\Miniconda
 
 init:
@@ -20,7 +20,7 @@ install:
   - activate testenv
   # for Python 2.7
   - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
-  - '"C:\Program Files\Microsoft SDKs\Windows\v7.0\Bin\SetEnv.cmd" /x64 /release'
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 /release'
   - python setup.py install
 
 test_script:
