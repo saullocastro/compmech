@@ -16,12 +16,12 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython"
+  - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython"
   - activate testenv
   # for Python 2.7
   - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
-  #- '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 /release'
-  - python setup.py install -c mingw32
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 /release'
+  - python setup.py install
 
 test_script:
   - py.test --cache-clear
