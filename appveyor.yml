@@ -5,7 +5,8 @@ build: false
 
 environment:
   global:
-      SET_COMPILER: "cmd /E:ON /V:ON /C .\\scripts\\appveyor\\set_compiler_env.cmd"
+      CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\scripts\\appveyor\\cmd_in_env.cmd"
+
   matrix:
       - PYTHON_VERSION: 2.7
         PYTHON_ARCH: "32"
