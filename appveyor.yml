@@ -4,9 +4,13 @@ clone_depth: 1
 build: false
 
 environment:
+  global:
+      SET_COMPILER: "cmd /E:ON /V:ON /C .\\scripts\\appveyor\\set_compiler_env.cmd"
   matrix:
-    - PYTHON_VERSION: 2.7
-      MINICONDA: C:\Miniconda
+      - PYTHON_VERSION: 2.7
+        PYTHON_HOME: "C:\\Python2.7-x64"
+        PYTHON_ARCH: "64"
+        MINICONDA: C:\Miniconda
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -18,9 +22,8 @@ install:
   - conda info -a
   - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython"
   - activate testenv
-  # for Python 2.7
   - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
-  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 /release'
+  - "%SET_COMPILER"
   - python setup.py install
 
 test_script:
