@@ -100,7 +100,7 @@ def configuration(parent_package='', top_path=None):
 
     for instlib in config.libraries:
         if os.environ.get('APPVEYOR_PROJECT_NAME', None) is not None:
-            compile(config, instlib)
+            compile(config, instlib[1]['sources'])
             link(config, instlib)
         else:
             p = Pool(cpu_count()-1)
