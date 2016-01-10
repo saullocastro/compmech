@@ -1,0 +1,27 @@
+os: Windows 10
+
+clone_folder: C:\projects\compmech
+
+clone_depth: 1
+build: false
+
+environment:
+  matrix:
+    - PYTHON_VERSION: 2.7
+      MINICONDA: C:\Miniconda
+
+init:
+  - "ECHO %PYTHON_VERSION% %MINICONDA%"
+
+install:
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython"
+  - activate testenv
+  - pip install coverage
+  - python setup.py install
+
+test_script:
+  - py.test --cache-clear
