@@ -8,8 +8,8 @@ environment:
       SET_COMPILER: "cmd /E:ON /V:ON /C .\\scripts\\appveyor\\set_compiler_env.cmd"
   matrix:
       - PYTHON_VERSION: 2.7
-        PYTHON_HOME: "C:\\Python2.7-x64"
-        PYTHON_ARCH: "64"
+        PYTHON_HOME: "C:\\Python2.7"
+        PYTHON_ARCH: "32"
         MINICONDA: C:\Miniconda
 
 init:
