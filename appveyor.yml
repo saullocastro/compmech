@@ -18,7 +18,9 @@ install:
   - conda info -a
   - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython"
   - activate testenv
-  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 /release'
+  # for Python 2.7
+  - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.0\Bin\SetEnv.cmd" /x64 /release'
   - python setup.py install
 
 test_script:
