@@ -191,8 +191,8 @@ if __name__ == '__main__':
     write_version_py()
 
     if os.name == 'nt':
-        #os.environ['DISTUTILS_USE_SDK'] = '1'
-        #os.environ['MSSdk'] = '1'
+        os.environ['DISTUTILS_USE_SDK'] = '1'
+        os.environ['MSSdk'] = '1'
         pass
 
     setup_package()
