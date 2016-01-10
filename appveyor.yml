@@ -21,7 +21,7 @@ install:
   # for Python 2.7
   - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
   #- '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 /release'
-  - python setup.py install --compiler=mingw32
+  - python setup.py install -c mingw32
 
 test_script:
   - py.test --cache-clear
