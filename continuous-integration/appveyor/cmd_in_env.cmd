@@ -16,8 +16,10 @@ IF "%PYTHON_ARCH%"=="64" (
     ECHO Configuring Windows SDK %WINDOWS_SDK_VERSION% for Python %MAJOR_PYTHON_VERSION% on a 64 bit architecture
     SET DISTUTILS_USE_SDK=1
     SET MSSdk=1
+    python -c "import os;print('\n'.join(map(str, os.environ.items())))"
     "%WIN_SDK_ROOT%\%WINDOWS_SDK_VERSION%\Setup\WindowsSdkVer.exe" -q -version:%WINDOWS_SDK_VERSION%
     "%WIN_SDK_ROOT%\%WINDOWS_SDK_VERSION%\Bin\SetEnv.cmd" /x64 /release
 ) ELSE (
     ECHO Using default MSVC build environment for 32 bit architecture
+    python -c "import os;print('\n'.join(map(str, os.environ.items())))"
 )
