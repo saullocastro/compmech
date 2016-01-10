@@ -10,9 +10,9 @@ def configuration(parent_package='',top_path=None):
 
     config.add_subpackage('analysis')
     config.add_subpackage('composite')
-    config.add_subpackage('conecyl')
+    #config.add_subpackage('conecyl')
     config.add_data_dir('include')
-    config.add_subpackage('integrate')
+    #config.add_subpackage('integrate')
 
     # lib
     p = Popen('python ' +
