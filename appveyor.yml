@@ -1,14 +1,24 @@
-os: Windows 10
-
 clone_folder: C:\projects\compmech
 
 clone_depth: 1
 build: false
 
 environment:
+  global:
+      CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\continuous-integration\\appveyor\\cmd_in_env.cmd"
+
   matrix:
-    - PYTHON_VERSION: 2.7
-      MINICONDA: C:\Miniconda
+      - PYTHON_VERSION: 2.7
+        PYTHON_ARCH: "32"
+        PYTHON_HOME: "C:\\Python27"
+        WINDOWS_SDK_VERSION: "v7.0"
+        MINICONDA: C:\Miniconda
+
+      - PYTHON_VERSION: 2.7
+        PYTHON_ARCH: "64"
+        PYTHON_HOME: "C:\\Python27-x64"
+        WINDOWS_SDK_VERSION: "v7.0"
+        MINICONDA: C:\Miniconda-x64
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -20,8 +30,8 @@ install:
   - conda info -a
   - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython"
   - activate testenv
-  - pip install coverage
-  - python setup.py install
+  #- python -c "import os;print('\n'.join(map(str, os.environ.items())))"
+  - "CALL %CMD_IN_ENV% python setup.py install"
 
 test_script:
   - py.test --cache-clear

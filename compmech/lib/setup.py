@@ -99,11 +99,16 @@ def configuration(parent_package='', top_path=None):
     config.make_config_py()
 
     for instlib in config.libraries:
-        p = Pool(cpu_count()-1)
-        partial_compile = partial(compile, config)
-        p.map(partial_compile, instlib[1]['sources'])
-        p.close()
-        link(config, instlib)
+        if os.environ.get('APPVEYOR_PROJECT_NAME', None) is not None:
+            for src in instlib[1]['sources']:
+                compile(config, src)
+            link(config, instlib)
+        else:
+            p = Pool(cpu_count()-1)
+            partial_compile = partial(compile, config)
+            p.map(partial_compile, instlib[1]['sources'])
+            p.close()
+            link(config, instlib)
 
     return config
 
