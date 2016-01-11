@@ -25,7 +25,7 @@ install:
   - activate testenv
   #- python -c "import os;print('\n'.join(map(str, os.environ.items())))"
   #FIXME next line is a workaround due to a buggy environment in conda
-  - "copy %CONDA_DEFAULT_ENV%\libs\libmsvcr90.a %CONDA_DEFAULT_ENV%\libs\libmsvcr90d.a"
+  - copy %CONDA_DEFAULT_ENV%\libs\libmsvcr90.a %CONDA_DEFAULT_ENV%\libs\libmsvcr90d.a
   - "CALL %CMD_IN_ENV% python setup.py install"
 
 test_script:
