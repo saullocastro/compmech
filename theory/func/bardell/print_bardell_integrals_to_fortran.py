@@ -6,6 +6,7 @@ import numpy as np
 import sympy
 from sympy import pi, sin, cos, var
 
+var('xi1, xi2')
 var('x1t, x1r, x2t, x2r')
 var('y1t, y1r, y2t, y2r')
 
@@ -15,7 +16,8 @@ subs = {
 def List(*e):
     return list(e)
 
-printstr = ''
+printstr_12 = ''
+printstr_full = ''
 for i, filepath in enumerate(
         glob.glob(r'.\bardell_integrals_mathematica\fortran_*.txt')):
     print(filepath)
@@ -26,8 +28,12 @@ for i, filepath in enumerate(
         string = ''.join(lines)
         string = string.replace('\\','')
         tmp = eval(string)
+        if '_12' in filepath:
+            name = '_'.join(names[1:3])
+        else:
+            name = names[1]
         matrix = sympy.Matrix(np.atleast_2d(tmp))
-        printstr += 'SUBROUTINE integral_%s(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)\n' % names[1]
+        printstr = 'SUBROUTINE integral_%s(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)\n' % name
         printstr += '    INTEGER, INTENT(IN) :: i, j\n'
         printstr += '    REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r\n'
         printstr += '    REAL*8, INTENT(OUT) :: out\n'
@@ -47,7 +53,13 @@ for i, filepath in enumerate(
                 printstr += '            RETURN\n'
             printstr += '        END SELECT\n'
         printstr += '    END SELECT\n'
-        printstr += 'END SUBROUTINE integral_%s\n\n\n' % names[1]
+        printstr += 'END SUBROUTINE integral_%s\n\n\n' % name
+        if '_12' in filepath:
+            printstr_12 += printstr
+        else:
+            printstr_full += printstr
 
-with open('.\\bardell_integrals_fortran\\bardell_integrals_fortran.txt', 'w') as f:
-    f.write(printstr)
+with open('.\\bardell_integrals_fortran\\bardell_integrals_fortran_12.txt', 'w') as f:
+    f.write(printstr_12)
+with open('.\\bardell_integrals_fortran\\bardell_integrals_fortran_full.txt', 'w') as f:
+    f.write(printstr_full)
