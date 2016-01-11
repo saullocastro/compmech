@@ -72,7 +72,7 @@
 !   If 0. the end at y=b cannot translate along w   
 
 INCLUDE 'calc_matrices.f90'
-INCLUDE 'bardell.f90'
+INCLUDE '../bardell.f90'
 
 PROGRAM BUCKLING_PLATE_BARDELL
     IMPLICIT NONE
