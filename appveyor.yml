@@ -10,15 +10,8 @@ environment:
   matrix:
       - PYTHON_VERSION: 2.7
         PYTHON_ARCH: "32"
-        PYTHON_HOME: "C:\\Python27"
         WINDOWS_SDK_VERSION: "v7.0"
         MINICONDA: C:\Miniconda
-
-      - PYTHON_VERSION: 2.7
-        PYTHON_ARCH: "64"
-        PYTHON_HOME: "C:\\Python27-x64"
-        WINDOWS_SDK_VERSION: "v7.0"
-        MINICONDA: C:\Miniconda-x64
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -31,6 +24,10 @@ install:
   - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython"
   - activate testenv
   #- python -c "import os;print('\n'.join(map(str, os.environ.items())))"
+  
+  #FIXME next line is a workaround due to a buggy environment in conda
+  - "copy %CONDA_DEFAULT_ENV%\libs\libmsvcr90.a %CONDA_DEFAULT_ENV%\libs\libmsvcr90d.a"
+  
   - "CALL %CMD_IN_ENV% python setup.py install"
 
 test_script:
