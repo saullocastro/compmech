@@ -6,8 +6,9 @@ import hashlib
 from multiprocessing import Pool, cpu_count
 from functools import partial
 
-def in_appveyor_ci():
-    if os.environ.get('APPVEYOR_PROJECT_NAME', None) is None:
+
+def in_conda_env():
+    if os.environ.get('CONDA_DEFAULT_ENV', None) is None:
         return False
     else:
         return True
@@ -25,7 +26,7 @@ def compile(config, src):
     hashpath = srcpath + '.hashcode'
     hash_new = hashlib.sha256(os.name + open(srcpath, 'rb').read()).digest()
 
-    if os.name == 'nt' and not in_appveyor_ci():
+    if os.name == 'nt' and not in_conda_env():
         objext = 'obj'
     else:
         objext = 'o'
@@ -44,7 +45,7 @@ def compile(config, src):
     if needscompile:
         bkpdir = os.getcwd()
         os.chdir(srcdir)
-        if os.name == 'nt' and not in_appveyor_ci():
+        if os.name == 'nt' and not in_conda_env():
             os.system('cl /Ox /c {0}'.format(basename(srcpath)))
         else:
             os.system('gcc -pthread -g -O3 -fPIC -g -c -Wall {0}'.format(basename(srcpath)))
@@ -60,7 +61,7 @@ def compile(config, src):
 def link(config, instlib):
     objs = ''
     libdir = realpath(config.package_path)
-    if os.name == 'nt' and not in_appveyor_ci():
+    if os.name == 'nt' and not in_conda_env():
         objext = 'obj'
     else:
         objext = 'o'
@@ -72,7 +73,7 @@ def link(config, instlib):
             srcpath = join(realpath(config.top_path), src)
         objs += srcpath.replace('.c', '.' + objext) + ' '
 
-    if os.name == 'nt' and not in_appveyor_ci():
+    if os.name == 'nt' and not in_conda_env():
         libpath = join(libdir, instlib[0] + '.dll')
         os.system('link /DLL {0} /OUT:{1}'.format(objs, libpath))
     else:
@@ -105,7 +106,7 @@ def configuration(parent_package='', top_path=None):
     config.make_config_py()
 
     for instlib in config.libraries:
-        if in_appveyor_ci():
+        if in_conda_env():
             for src in instlib[1]['sources']:
                 compile(config, src)
             link(config, instlib)
