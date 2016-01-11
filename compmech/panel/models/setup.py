@@ -11,10 +11,10 @@ def configuration(parent_package='', top_path=None):
                            '..', '..', 'lib')
     if os.name == 'nt':
         runtime_library_dirs = None
-        if os.environ.get('APPVEYOR_PROJECT_NAME', None) is not None:
+        if os.environ.get('CONDA_DEFAULT_ENV', None) is not None:
             #NOTE removing openmp to compile in AppVeyor
             args_linear = []
-            args_nonlinear = ['/fp:fast']
+            args_nonlinear = []
         else:
             args_linear = ['/openmp']
             args_nonlinear = ['/openmp', '/fp:fast']

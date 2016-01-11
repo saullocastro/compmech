@@ -7,7 +7,7 @@ import numpy
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
     if os.name == 'nt':
-        if os.environ.get('APPVEYOR_PROJECT_NAME', None) is not None:
+        if os.environ.get('CONDA_DEFAULT_ENV', None) is not None:
             #NOTE removing openmp to compile in AppVeyor
             compile_args = []
         else:
