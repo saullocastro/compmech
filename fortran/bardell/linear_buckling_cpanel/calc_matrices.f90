@@ -29,14 +29,6 @@ SUBROUTINE CALC_K0(M, N, K0, a, b, r, &
     REAL*8 gAwetaetagBveta, gAwgBv, gAwgBveta, gAwetagBv, gAwetagBveta, gAwetaetagBwetaeta, gAwgBwetaeta
     REAL*8 gAwetaetagBw, gAwetagBwetaeta, gAwetaetagBweta, gAwgBw, gAwgBweta, gAwetagBw, gAwetagBweta
 
-    write(*, *) a, b, r
-    write(*, *) A11, A12, A16, A22, A26, A66
-    write(*, *) B11, B12, B16, B22, B26, B66
-    write(*, *) D11, D12, D16, D22, D26, D66
-    write(*, *) u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry
-    write(*, *) v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry
-    write(*, *) w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
-
     DO j=1, N
         DO l=1, N
 
@@ -177,10 +169,6 @@ SUBROUTINE CALC_KG0(M, N, KG0, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty
     INTEGER row, col, i, j, k, l
     REAL*8 fAwfBw, fAwfBwxi, fAwxifBw, fAwxifBwxi
     REAL*8 gAwgBw, gAwgBweta, gAwetagBw, gAwetagBweta
-
-
-    write(*, *) a, b, Nxx, Nyy, Nxy
-    
 
     DO j=1, N
         DO l=1, N
