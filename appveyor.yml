@@ -1,14 +1,17 @@
-os: Windows 10
-
 clone_folder: C:\projects\compmech
 
 clone_depth: 1
 build: false
 
 environment:
+  global:
+      CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\continuous-integration\\appveyor\\cmd_in_env.cmd"
+
   matrix:
-    - PYTHON_VERSION: 2.7
-      MINICONDA: C:\Miniconda
+      - PYTHON_VERSION: 2.7
+        PYTHON_ARCH: 32
+        WINDOWS_SDK_VERSION: "v7.0"
+        MINICONDA: C:\Miniconda
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -18,10 +21,17 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython"
+  - conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython
   - activate testenv
-  - pip install coverage
-  - python setup.py install
+  #FIXME next lines are a workaround due to a buggy environment in conda
+  - cd %CONDA_DEFAULT_ENV%
+  - cd MinGW
+  - cd *-mingw32
+  - cd lib
+  - copy libmsvcr90d.a %CONDA_DEFAULT_ENV%\libs
+  - cd %APPVEYOR_BUILD_FOLDER%
+
+  - "CALL %CMD_IN_ENV% python setup.py install"
 
 test_script:
   - py.test --cache-clear
