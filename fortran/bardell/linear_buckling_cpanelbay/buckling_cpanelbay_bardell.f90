@@ -212,16 +212,13 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
             REAL*8, INTENT(IN) :: xi1, xi2, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
-        SUBROUTINE CALC_K0Y1Y2(M, N, K0, y1, y2, a, b, r, &
-                           A11, A12, A16, A22, A26, A66, B11, B12, B16, B22, B26, B66, D11, D12, D16, D22, D26, D66, &
+        SUBROUTINE CALC_K0Y1Y2(M, N, K0, y1, y2, a, b, r, ABD, &
                            u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
                            v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry, &
                            w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
             INTEGER, INTENT(IN) :: M, N
             REAL*8, INTENT(IN) :: y1, y2, a, b, r
-            REAL*8, INTENT(IN) :: A11, A12, A16, A22, A26, A66
-            REAL*8, INTENT(IN) :: B11, B12, B16, B22, B26, B66
-            REAL*8, INTENT(IN) :: D11, D12, D16, D22, D26, D66
+            REAL*8, INTENT(IN) :: ABD(6, 6)
             REAL*8, INTENT(IN) :: u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry
             REAL*8, INTENT(IN) :: v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry
             REAL*8, INTENT(IN) :: w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
@@ -259,14 +256,13 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     ! inputs
     CHARACTER BALANC, JOBVL, JOBVR, SENSE
     INTEGER NT, nulls, NUM, M, N
+    REAL*8 a, b, r
     REAL*8, ALLOCATABLE :: K0(:, :), KG0(:, :), K02(:, :), KG02(:, :)
-    REAL*8 A11, A12, A16, A22, A26, A66
-    REAL*8 B11, B12, B16, B22, B26, B66
-    REAL*8 D11, D12, D16, D22, D26, D66
+    REAL*8, ALLOCATABLE :: y1s(:), y2s(:), Nxxs(:), Nyys(:), Nxys(:)
+    REAL*8, ALLOCATABLE :: NxxsCTE(:), NyysCTE(:), NxysCTE(:)
     REAL*8 u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry
     REAL*8 v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry
     REAL*8 w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
-    REAL*8 a, b, r, Nxx, Nyy, Nxy
     INTEGER LDA, LDB, LDZ
 
     ! workspace
@@ -300,36 +296,67 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         CALL GET_COMMAND_ARGUMENT(2, VALUE=output_file, STATUS=stat)
     END IF
 
+    i = 0
     OPEN(10, FILE=input_file)
     DO 
         READ(10, *) line
         IF (TRIM(line) == "NUM") READ(10, *) NUM
+        IF (TRIM(line) == "NPANELS") THEN
+            READ(10, *) NPANELS
+            ALLOCATE(ABDs(NPANELS, 6, 6))
+            ALLOCATE(y1s(NPANELS))
+            ALLOCATE(y2s(NPANELS))
+            ALLOCATE(Nxxs(NPANELS))
+            ALLOCATE(Nyys(NPANELS))
+            ALLOCATE(Nxys(NPANELS))
+            ALLOCATE(NxxsCTE(NPANELS))
+            ALLOCATE(NyysCTE(NPANELS))
+            ALLOCATE(NxysCTE(NPANELS))
+            ABDs = 0
+            Nxxs = 0
+            Nyys = 0
+            Nxys = 0
+        ENDIF
         IF (TRIM(line) == "M") READ(10, *) M
         IF (TRIM(line) == "N") READ(10, *) N
         IF (TRIM(line) == "a") READ(10, *) a
         IF (TRIM(line) == "b") READ(10, *) b
         IF (TRIM(line) == "r") READ(10, *) r
-        IF (TRIM(line) == "Nxx") READ(10, *) Nxx
-        IF (TRIM(line) == "Nyy") READ(10, *) Nyy
-        IF (TRIM(line) == "Nxy") READ(10, *) Nxy
-        IF (TRIM(line) == "A11") READ(10, *) A11
-        IF (TRIM(line) == "A12") READ(10, *) A12
-        IF (TRIM(line) == "A16") READ(10, *) A16
-        IF (TRIM(line) == "A22") READ(10, *) A22
-        IF (TRIM(line) == "A26") READ(10, *) A26
-        IF (TRIM(line) == "A66") READ(10, *) A66
-        IF (TRIM(line) == "B11") READ(10, *) B11
-        IF (TRIM(line) == "B12") READ(10, *) B12
-        IF (TRIM(line) == "B16") READ(10, *) B16
-        IF (TRIM(line) == "B22") READ(10, *) B22
-        IF (TRIM(line) == "B26") READ(10, *) B26
-        IF (TRIM(line) == "B66") READ(10, *) B66
-        IF (TRIM(line) == "D11") READ(10, *) D11
-        IF (TRIM(line) == "D12") READ(10, *) D12
-        IF (TRIM(line) == "D16") READ(10, *) D16
-        IF (TRIM(line) == "D22") READ(10, *) D22
-        IF (TRIM(line) == "D26") READ(10, *) D26
-        IF (TRIM(line) == "D66") READ(10, *) D66
+
+        IF (TRIM(line) == "Panel") READ(10, *) i
+
+        IF (TRIM(line) == "y1") READ(10, *) y1s(i)
+        IF (TRIM(line) == "y2") READ(10, *) y2s(i)
+
+        IF (TRIM(line) == "Nxx") READ(10, *) Nxxs(i)
+        IF (TRIM(line) == "Nyy") READ(10, *) Nyys(i)
+        IF (TRIM(line) == "Nxy") READ(10, *) Nxys(i)
+
+        IF (TRIM(line) == "NxxCTE") READ(10, *) NxxsCTE(i)
+        IF (TRIM(line) == "NyyCTE") READ(10, *) NyysCTE(i)
+        IF (TRIM(line) == "NxyCTE") READ(10, *) NxysCTE(i)
+
+        IF (TRIM(line) == "A11") READ(10, *) ABDs(i, 1, 1)
+        IF (TRIM(line) == "A12") READ(10, *) ABDs(i, 1, 2)
+        IF (TRIM(line) == "A16") READ(10, *) ABDs(i, 1, 3)
+        IF (TRIM(line) == "A22") READ(10, *) ABDs(i, 2, 2)
+        IF (TRIM(line) == "A26") READ(10, *) ABDs(i, 2, 3)
+        IF (TRIM(line) == "A66") READ(10, *) ABDs(i, 3, 3)
+
+        IF (TRIM(line) == "B11") READ(10, *) ABDs(i, 1, 4)
+        IF (TRIM(line) == "B12") READ(10, *) ABDs(i, 1, 5)
+        IF (TRIM(line) == "B16") READ(10, *) ABDs(i, 1, 6)
+        IF (TRIM(line) == "B22") READ(10, *) ABDs(i, 2, 5)
+        IF (TRIM(line) == "B26") READ(10, *) ABDs(i, 2, 6)
+        IF (TRIM(line) == "B66") READ(10, *) ABDs(i, 3, 6)
+
+        IF (TRIM(line) == "D11") READ(10, *) ABDs(i, 4, 4)
+        IF (TRIM(line) == "D12") READ(10, *) ABDs(i, 4, 5)
+        IF (TRIM(line) == "D16") READ(10, *) ABDs(i, 4, 6)
+        IF (TRIM(line) == "D22") READ(10, *) ABDs(i, 5, 5)
+        IF (TRIM(line) == "D26") READ(10, *) ABDs(i, 5, 6)
+        IF (TRIM(line) == "D66") READ(10, *) ABDs(i, 6, 6)
+
         IF (TRIM(line) == "u1tx") READ(10, *) u1tx
         IF (TRIM(line) == "u1rx") READ(10, *) u1rx
         IF (TRIM(line) == "u2tx") READ(10, *) u2tx
@@ -338,6 +365,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         IF (TRIM(line) == "u1ry") READ(10, *) u1ry
         IF (TRIM(line) == "u2ty") READ(10, *) u2ty
         IF (TRIM(line) == "u2ry") READ(10, *) u2ry
+
         IF (TRIM(line) == "v1tx") READ(10, *) v1tx
         IF (TRIM(line) == "v1rx") READ(10, *) v1rx
         IF (TRIM(line) == "v2tx") READ(10, *) v2tx
@@ -346,6 +374,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         IF (TRIM(line) == "v1ry") READ(10, *) v1ry
         IF (TRIM(line) == "v2ty") READ(10, *) v2ty
         IF (TRIM(line) == "v2ry") READ(10, *) v2ry
+
         IF (TRIM(line) == "w1tx") READ(10, *) w1tx
         IF (TRIM(line) == "w1rx") READ(10, *) w1rx
         IF (TRIM(line) == "w2tx") READ(10, *) w2tx
@@ -354,6 +383,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         IF (TRIM(line) == "w1ry") READ(10, *) w1ry
         IF (TRIM(line) == "w2ty") READ(10, *) w2ty
         IF (TRIM(line) == "w2ry") READ(10, *) w2ry
+
         IF (TRIM(line) == "END") EXIT       
     END DO
 
@@ -363,15 +393,27 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     ALLOCATE(K0(NT, NT))
     ALLOCATE(KG0(NT, NT))
 
-    ! constitutive stiffness matrix
-    CALL CALC_K0(M, N, K0, a, b, r, &
-                 A11, A12, A16, A22, A26, A66, B11, B12, B16, B22, B26, B66, D11, D12, D16, D22, D26, D66, &
-                 u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
-                 v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry, &
-                 w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+    K0 = 0
+    KG0 = 0
 
-    ! geometric stiffness matrix
-    CALL CALC_KG0(M, N, KG0, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+    WRITE(*, *) "Stiffness matrices started..."
+    DO i=1, NPANELS
+        WRITE(*, *) "    Calculating panel ", i
+        ! constitutive stiffness matrix K0
+        CALL CALC_K0Y1Y2(M, N, K0, y1s(i), y2s(i), a, b, r, ABDs(i, :, :), &
+                         u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
+                         v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry, &
+                         w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+        ! constante stress state that contributes to K0
+        CALL CALC_KG0Y1Y2(M, N, K0, y1s(i), y2s(i), a, b, &
+                          NxxsCTE(i), NyysCTE(i), NxysCTE(i), &
+                          w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+        ! geometric stiffness matrix
+        CALL CALC_KG0Y1Y2(M, N, KG0, y1s(i), y2s(i), a, b, &
+                          NxxsCTE(i), NyysCTE(i), NxysCTE(i), &
+                          w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+    END DO
+    WRITE(*, *) "Stiffness matrices finished!"
 
     ! removing null rows and columns
     ALLOCATE(TMP(NT)) 
