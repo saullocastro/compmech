@@ -32,17 +32,21 @@ for i, filepath in enumerate(
             name = '_'.join(names[1:3])
         else:
             name = names[1]
-        matrix = sympy.Matrix(np.atleast_2d(tmp))
-        printstr = 'SUBROUTINE integral_%s(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)\n' % name
+        matrix = sympy.Matrix(np.atleast_2d(tmp)).evalf()
+        if '_12' in filepath:
+            printstr = 'SUBROUTINE integral_%s(xi1, xi2, i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)\n' % name
+            printstr += '    REAL*8, INTENT(IN) :: xi1, xi2, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r\n'
+        else:
+            printstr = 'SUBROUTINE integral_%s(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)\n' % name
+            printstr += '    REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r\n'
         printstr += '    INTEGER, INTENT(IN) :: i, j\n'
-        printstr += '    REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r\n'
         printstr += '    REAL*8, INTENT(OUT) :: out\n'
         printstr += '    out = 0\n'
         printstr += '    SELECT CASE (i)\n'
         for i in range(matrix.shape[0]):
             activerow = False
             for j in range(matrix.shape[1]):
-                if matrix[i,j] == 0:
+                if matrix[i, j] == 0:
                     continue
                 if not activerow:
                     activerow = True
