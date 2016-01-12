@@ -6,8 +6,13 @@ from Cython.Build import cythonize
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     if os.name == 'nt':
-        args_linear = ['/openmp']
-        args_nonlinear = ['/openmp', '/fp:fast']
+        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
+            #NOTE removing openmp to compile in AppVeyor
+            args_linear = []
+            args_nonlinear = []
+        else:
+            args_linear = ['/openmp']
+            args_nonlinear = ['/openmp', '/fp:fast']
     else:
         args_linear = ['-fopenmp']
         args_nonlinear = ['-fopenmp', '-ffast-math']
