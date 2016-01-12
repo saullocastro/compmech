@@ -190,9 +190,8 @@ if __name__ == '__main__':
 
     write_version_py()
 
-    if os.name == 'nt':
+    if os.name == 'nt' and os.environ.get('CONDA_DEFAULT_ENV') is None:
         os.environ['DISTUTILS_USE_SDK'] = '1'
         os.environ['MSSdk'] = '1'
-        pass
 
     setup_package()

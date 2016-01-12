@@ -9,7 +9,7 @@ environment:
 
   matrix:
       - PYTHON_VERSION: 2.7
-        PYTHON_ARCH: "32"
+        PYTHON_ARCH: 32
         WINDOWS_SDK_VERSION: "v7.0"
         MINICONDA: C:\Miniconda
 
@@ -21,11 +21,20 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython"
+  - conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython
   - activate testenv
-  #- python -c "import os;print('\n'.join(map(str, os.environ.items())))"
-  #FIXME next line is a workaround due to a buggy environment in conda
-  - copy %CONDA_DEFAULT_ENV%\libs\libmsvcr90.a %CONDA_DEFAULT_ENV%\libs\libmsvcr90d.a
+  #FIXME next lines are a workaround due to a buggy environment in conda
+  - cd %CONDA_DEFAULT_ENV%
+  - cd ..
+  - cd ..
+  - cd pkgs
+  - cd ming*
+  - cd MinGW
+  - cd x86_*
+  - cd lib
+  - copy libmsvcr90d.a %CONDA_DEFAULT_ENV%\libs
+  - cd %APPVEYOR_BUILD_FOLDER%
+
   - "CALL %CMD_IN_ENV% python setup.py install"
 
 test_script:

@@ -8,7 +8,7 @@ from functools import partial
 
 
 def in_conda_env():
-    if os.environ.get('CONDA_DEFAULT_ENV', None) is None:
+    if os.environ.get('CONDA_DEFAULT_ENV') is None:
         return False
     else:
         return True
@@ -78,7 +78,12 @@ def link(config, instlib):
         os.system('link /DLL {0} /OUT:{1}'.format(objs, libpath))
     else:
         libpath = join(libdir, 'lib' + instlib[0] + '.so')
-        os.system('gcc -shared -o {1} {0}'.format(objs, libpath))
+        if in_conda_env():
+            libpath_a = libpath.replace('.so', '.a')
+            os.system('gcc -shared {0} -o {1} -Wl,--out-implib,{2}'.format(
+                objs, libpath, libpath_a))
+        else:
+            os.system('gcc -shared {0} -o {1}'.format(objs, libpath))
 
 
 def configuration(parent_package='', top_path=None):
