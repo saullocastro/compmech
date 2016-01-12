@@ -258,9 +258,10 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     INTEGER NT, nulls, NUM, M, N
     REAL*8 a, b, r
     REAL*8, ALLOCATABLE :: K0(:, :), KG0(:, :), K02(:, :), KG02(:, :)
+    REAL*8, ALLOCATABLE :: ABDs(:, :, :)
     REAL*8, ALLOCATABLE :: y1s(:), y2s(:), Nxxs(:), Nyys(:), Nxys(:)
     REAL*8, ALLOCATABLE :: NxxsCTE(:), NyysCTE(:), NxysCTE(:)
-    REAL*8, ALLOCATABLE :: Fxs(:), E1s(:), F1s(:), S1s(:), Jxxs(:)
+    REAL*8, ALLOCATABLE :: Fxs(:), FxsCTE(:), E1s(:), F1s(:), S1s(:), Jxxs(:)
     REAL*8, ALLOCATABLE :: ys(:), bfs(:), dfs(:)
     REAL*8 u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry
     REAL*8 v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry
@@ -322,7 +323,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         ENDIF
 
         IF (TRIM(line) == "NSTIFF") THEN
-            REAL(10, *) NSTIFF
+            READ(10, *) NSTIFF
             ALLOCATE(ys(NSTIFF))
             ALLOCATE(bfs(NSTIFF))
             ALLOCATE(dfs(NSTIFF))
@@ -330,6 +331,8 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
             ALLOCATE(F1s(NSTIFF))
             ALLOCATE(S1s(NSTIFF))
             ALLOCATE(Jxxs(NSTIFF))
+            ALLOCATE(Fxs(NSTIFF))
+            ALLOCATE(FxsCTE(NSTIFF))
         ENDIF
 
         IF (TRIM(line) == "M") READ(10, *) M
