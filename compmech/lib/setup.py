@@ -78,9 +78,12 @@ def link(config, instlib):
         os.system('link /DLL {0} /OUT:{1}'.format(objs, libpath))
     else:
         libpath = join(libdir, 'lib' + instlib[0] + '.so')
-        libpath_a = libpath.replace('.so', '.a')
-        os.system('gcc -shared {0} -o {1} -Wl,--out-implib,{2}'.format(
-            objs, libpath, libpath_a))
+        if in_conda_env():
+            libpath_a = libpath.replace('.so', '.a')
+            os.system('gcc -shared {0} -o {1} -Wl,--out-implib,{2}'.format(
+                objs, libpath, libpath_a))
+        else:
+            os.system('gcc -shared -o {1} {0}'.format(objs, libpath))
 
 
 def configuration(parent_package='', top_path=None):
