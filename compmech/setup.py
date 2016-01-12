@@ -11,7 +11,7 @@ def configuration(parent_package='',top_path=None):
     config.add_subpackage('analysis')
     config.add_subpackage('composite')
 
-    if os.environ.get('APPVEYOR_PROJECT_NAME') is not None:
+    if os.environ.get('APPVEYOR_BUILD_FOLDER') is not None:
         config.add_subpackage('conecyl')
 
     config.add_data_dir('include')
