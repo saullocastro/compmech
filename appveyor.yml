@@ -25,12 +25,8 @@ install:
   - activate testenv
   #FIXME next lines are a workaround due to a buggy environment in conda
   - cd %CONDA_DEFAULT_ENV%
-  - cd ..
-  - cd ..
-  - cd pkgs
-  - cd ming*
   - cd MinGW
-  - dir
+  - cd *-mingw32
   - cd lib
   - copy libmsvcr90d.a %CONDA_DEFAULT_ENV%\libs
   - cd %APPVEYOR_BUILD_FOLDER%
