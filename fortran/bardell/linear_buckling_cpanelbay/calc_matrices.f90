@@ -4,7 +4,7 @@ SUBROUTINE CALC_K0Y1Y2(M, N, K0, y1, y2, a, b, r, ABD, &
                        w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
     INTEGER, INTENT(IN) :: M, N
     REAL*8, INTENT(IN) :: y1, y2, a, b, r
-    REAL*8, INTENT(IN) :: ABS(6, 6)
+    REAL*8, INTENT(IN) :: ABD(6, 6)
     REAL*8, INTENT(IN) :: u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry
     REAL*8, INTENT(IN) :: v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry
     REAL*8, INTENT(IN) :: w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
