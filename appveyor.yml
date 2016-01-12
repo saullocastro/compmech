@@ -30,7 +30,7 @@ install:
   - cd pkgs
   - cd ming*
   - cd MinGW
-  - cd x86_*
+  - dir
   - cd lib
   - copy libmsvcr90d.a %CONDA_DEFAULT_ENV%\libs
   - cd %APPVEYOR_BUILD_FOLDER%
