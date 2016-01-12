@@ -1,20 +1,19 @@
-SUBROUTINE CALC_K0Y1Y2(M, N, K0, y1, y2, a, b, r, &
-                   A11, A12, A16, A22, A26, A66, B11, B12, B16, B22, B26, B66, D11, D12, D16, D22, D26, D66, &
-                   u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
-                   v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry, &
-                   w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+SUBROUTINE CALC_K0Y1Y2(M, N, K0, y1, y2, a, b, r, ABD, &
+                       u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
+                       v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry, &
+                       w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
     INTEGER, INTENT(IN) :: M, N
     REAL*8, INTENT(IN) :: y1, y2, a, b, r
-    REAL*8, INTENT(IN) :: A11, A12, A16, A22, A26, A66
-    REAL*8, INTENT(IN) :: B11, B12, B16, B22, B26, B66
-    REAL*8, INTENT(IN) :: D11, D12, D16, D22, D26, D66
+    REAL*8, INTENT(IN) :: ABS(6, 6)
     REAL*8, INTENT(IN) :: u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry
     REAL*8, INTENT(IN) :: v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry
     REAL*8, INTENT(IN) :: w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
     REAL*8, INTENT(OUT) :: K0(3*M*N, 3*M*N)
 
     INTEGER row, col, i, j, k, l
-
+    REAL*8 A11, A12, A16, A22, A26, A66
+    REAL*8 B11, B12, B16, B22, B26, B66
+    REAL*8 D11, D12, D16, D22, D26, D66
     REAL*8 eta1, eta2
 
     REAL*8 fAufBu, fAufBuxi, fAuxifBu, fAuxifBuxi, fAufBv, fAufBvxi
@@ -38,6 +37,27 @@ SUBROUTINE CALC_K0Y1Y2(M, N, K0, y1, y2, a, b, r, &
     REAL*8 gAwetaetagBwetaeta, gAwgBwetaeta, gAwetaetagBw
     REAL*8 gAwetagBwetaeta, gAwetaetagBweta, gAwgBw, gAwgBweta, gAwetagBw
     REAL*8 gAwetagBweta
+
+    A11 = ABD(1, 1)
+    A12 = ABD(1, 2)
+    A16 = ABD(1, 3)
+    A22 = ABD(2, 2)
+    A26 = ABD(2, 3)
+    A66 = ABD(3, 3)
+
+    B11 = ABD(1, 4)
+    B12 = ABD(1, 5)
+    B16 = ABD(1, 6)
+    B22 = ABD(2, 5)
+    B26 = ABD(2, 6)
+    B66 = ABD(3, 6)
+
+    D11 = ABD(4, 4)
+    D12 = ABD(4, 5)
+    D16 = ABD(4, 6)
+    D22 = ABD(5, 5)
+    D26 = ABD(5, 6)
+    D66 = ABD(6, 6)
 
     eta1 = 2*y1/b - 1.
     eta2 = 2*y2/b - 1.
