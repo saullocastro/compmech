@@ -4,13 +4,6 @@ import os
 from subprocess import Popen
 
 
-def in_appveyor_ci():
-    if os.environ.get('APPVEYOR_PROJECT_NAME', None) is None:
-        return False
-    else:
-        return True
-
-
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('compmech',parent_package,top_path)
@@ -18,7 +11,7 @@ def configuration(parent_package='',top_path=None):
     config.add_subpackage('analysis')
     config.add_subpackage('composite')
 
-    if not in_appveyor_ci():
+    if os.environ.get('APPVEYOR_PROJECT_NAME') is not None:
         config.add_subpackage('conecyl')
 
     config.add_data_dir('include')
