@@ -260,6 +260,8 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     REAL*8, ALLOCATABLE :: K0(:, :), KG0(:, :), K02(:, :), KG02(:, :)
     REAL*8, ALLOCATABLE :: y1s(:), y2s(:), Nxxs(:), Nyys(:), Nxys(:)
     REAL*8, ALLOCATABLE :: NxxsCTE(:), NyysCTE(:), NxysCTE(:)
+    REAL*8, ALLOCATABLE :: Fxs(:), E1s(:), F1s(:), S1s(:), Jxxs(:)
+    REAL*8, ALLOCATABLE :: ys(:), bfs(:), dfs(:)
     REAL*8 u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry
     REAL*8 v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry
     REAL*8 w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
@@ -268,7 +270,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     ! workspace
     CHARACTER (LEN=100) :: line
     CHARACTER (LEN=400) :: input_file, output_file
-    INTEGER stat, i, j, id, jd
+    INTEGER stat, i, j, id, jd, NPANELS, NSTIFF
     INTEGER LWORK
     INTEGER, ALLOCATABLE :: IWORK(:)
     REAL*8, ALLOCATABLE :: WORK(:)
@@ -301,6 +303,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     DO 
         READ(10, *) line
         IF (TRIM(line) == "NUM") READ(10, *) NUM
+
         IF (TRIM(line) == "NPANELS") THEN
             READ(10, *) NPANELS
             ALLOCATE(ABDs(NPANELS, 6, 6))
@@ -317,6 +320,18 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
             Nyys = 0
             Nxys = 0
         ENDIF
+
+        IF (TRIM(line) == "NSTIFF") THEN
+            REAL(10, *) NSTIFF
+            ALLOCATE(ys(NSTIFF))
+            ALLOCATE(bfs(NSTIFF))
+            ALLOCATE(dfs(NSTIFF))
+            ALLOCATE(E1s(NSTIFF))
+            ALLOCATE(F1s(NSTIFF))
+            ALLOCATE(S1s(NSTIFF))
+            ALLOCATE(Jxxs(NSTIFF))
+        ENDIF
+
         IF (TRIM(line) == "M") READ(10, *) M
         IF (TRIM(line) == "N") READ(10, *) N
         IF (TRIM(line) == "a") READ(10, *) a
@@ -357,6 +372,16 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         IF (TRIM(line) == "D26") READ(10, *) ABDs(i, 5, 6)
         IF (TRIM(line) == "D66") READ(10, *) ABDs(i, 6, 6)
 
+        IF (TRIM(line) == "Stiffener") READ(10, *) i
+
+        IF (TRIM(LINE) == "ys") READ(10, *) ys(i)
+        IF (TRIM(LINE) == "bf") READ(10, *) bfs(i)
+        IF (TRIM(LINE) == "df") READ(10, *) dfs(i)
+        IF (TRIM(LINE) == "E1") READ(10, *) E1s(i)
+        IF (TRIM(LINE) == "F1") READ(10, *) F1s(i)
+        IF (TRIM(LINE) == "S1") READ(10, *) S1s(i)
+        IF (TRIM(LINE) == "Jxx") READ(10, *) Jxxs(i)
+
         IF (TRIM(line) == "u1tx") READ(10, *) u1tx
         IF (TRIM(line) == "u1rx") READ(10, *) u1rx
         IF (TRIM(line) == "u2tx") READ(10, *) u2tx
@@ -396,7 +421,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     K0 = 0
     KG0 = 0
 
-    WRITE(*, *) "Stiffness matrices started..."
+    WRITE(*, *) "Calculating matrices for each panel..."
     DO i=1, NPANELS
         WRITE(*, *) "    Calculating panel ", i
         ! constitutive stiffness matrix K0
@@ -410,10 +435,31 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
                           w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
         ! geometric stiffness matrix
         CALL CALC_KG0Y1Y2(M, N, KG0, y1s(i), y2s(i), a, b, &
-                          NxxsCTE(i), NyysCTE(i), NxysCTE(i), &
+                          Nxxs(i), Nyys(i), Nxys(i), &
                           w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
     END DO
-    WRITE(*, *) "Stiffness matrices finished!"
+    WRITE(*, *) "finished!"
+
+    WRITE(*, *) "Calculating matrices for each stiffener..."
+    DO i=1, NSTIFF
+        WRITE(*, *) "    Calculating stiffener ", i
+        ! constitutive stiffness matrix K0
+        CALL CALC_K0F(M, N, K0, ys(i), a, b, bfs(i), dfs(i), &
+                      E1s(i), F1s(i), S1s(i), Jxxs(i), &
+                      u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
+                      w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+        ! constante stress state that contributes to K0
+        CALL CALC_KG0F(M, N, K0, ys(i), FxsCTE(i), a, b, bfs(i), dfs(i),&
+                       u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
+                       w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+        ! geometric stiffness matrix
+        CALL CALC_KG0F(M, N, KG0, ys(i), Fxs(i), a, b, bfs(i), dfs(i),&
+                       u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
+                       w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+    END DO
+    WRITE(*, *) "finished!"
+
+
 
     ! removing null rows and columns
     ALLOCATE(TMP(NT)) 
