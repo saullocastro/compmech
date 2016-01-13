@@ -3,6 +3,7 @@ SUBROUTINE CALC_K0(M, N, K0, a, b, r, &
                    u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
                    v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry, &
                    w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+    IMPLICIT NONE
     REAL*8, INTENT(IN) :: A11, A12, A16, A22, A26, A66
     REAL*8, INTENT(IN) :: B11, B12, B16, B22, B26, B66
     REAL*8, INTENT(IN) :: D11, D12, D16, D22, D26, D66
@@ -161,6 +162,7 @@ END SUBROUTINE
 
 
 SUBROUTINE CALC_KG0(M, N, KG0, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: M, N
     REAL*8, INTENT(IN) :: a, b, Nxx, Nyy, Nxy
     REAL*8, INTENT(IN) :: w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
@@ -176,7 +178,7 @@ SUBROUTINE CALC_KG0(M, N, KG0, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty
             CALL integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwgBw)
             CALL integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwgBweta)
             CALL integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBw)
-            CALL integral_fxifxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBweta)
+            CALL integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBweta)
 
             DO i=1, M
                 DO k=1, M
@@ -191,7 +193,7 @@ SUBROUTINE CALC_KG0(M, N, KG0, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty
                     CALL integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBw)
                     CALL integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBwxi)
                     CALL integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBw)
-                    CALL integral_fxifxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBwxi)
+                    CALL integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBwxi)
 
                     KG0(row+2, col+2) = Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
 
