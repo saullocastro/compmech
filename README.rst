@@ -3,9 +3,8 @@
 .. |Build status| image:: https://travis-ci.org/compmech/compmech.svg?branch=master
     :target: https://travis-ci.org/compmech/compmech
 
-[![Build status](https://ci.appveyor.com/api/projects/status/s08qgb4egku0pa3d?svg=true)
-![Test status](http://teststatusbadge.azurewebsites.net/api/status/mmaitre314/securestringcodegen)]
-(https://ci.appveyor.com/project/mmaitre314/securestringcodegen)
+.. |Build status| image:: https://ci.appveyor.com/api/projects/status/github/compmech/compmech?retina=True
+
 
 ==================================
 Computational Mechanics (compmech)
