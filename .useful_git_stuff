@@ -1,0 +1,31 @@
+# configure user
+git config --global user.name "saullocastro"
+git config --global user.mail "saullogiovani@gmail.com"
+#
+# proxy
+git config --global http.proxy https://proxy_user:proxy_password@proxy_server:port
+# in the password, use %40 to represent a @
+
+# find largest files in repository (over a million bytes)
+git rev-list master | while read rev; do git ls-tree -lr $rev | cut -c54- | grep -v '^ '; done | sort -u | perl -e '
+  while (<>) {
+    chomp;
+    @stuff=split("\t");
+    $sums{$stuff[1]} += $stuff[0];
+  }
+  print "$sums{$_} $_\n" for (keys %sums);
+' | sort -rn >> large_files.txt
+
+# clean up a given file from all commits
+git filter-branch --prune-empty -d /def/shm/scratch --index-filter "git rm --cached -f --ignore-unmatch C/src/bardell_12.c" --tag-name-filter cat -- --all
+# can also force to overwrite previous backups (-f after filter-branch)
+git filter-branch -f --prune-empty -d /def/shm/scratch --index-filter "git rm --cached -f --ignore-unmatch C/src/bardell_12.c" --tag-name-filter cat -- --all
+
+# Remove backup files
+git filter-branch -f --index-filter 'git rm --cached --ignore-unmatch Rakefile' HEAD
+
+
+#  remove all stuff that has been cleaned up for once and for all
+git for-each-ref --format='delete %(refname)' refs/original | git update-ref --stdin
+git reflog expire --expire=now --all
+git gc --prune=now
