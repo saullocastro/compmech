@@ -20,7 +20,7 @@ SUBROUTINE CALC_K0(M, N, K, a, b, D11, D12, D16, D22, D26, D66, w1tx, w1rx, w2tx
             CALL integral_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwgBw)
             CALL integral_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwgBweta)
             CALL integral_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBw)
-            CALL integral_fxifxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBweta)
+            CALL integral_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBweta)
 
             DO i1=1, M
                 DO k1=1, M
@@ -40,7 +40,7 @@ SUBROUTINE CALC_K0(M, N, K, a, b, D11, D12, D16, D22, D26, D66, w1tx, w1rx, w2tx
                     CALL integral_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBw)
                     CALL integral_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBwxi)
                     CALL integral_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBw)
-                    CALL integral_fxifxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBwxi)
+                    CALL integral_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBwxi)
 
                     K(row, col) = 4*D11*b*fAwxixifBwxixi*gAwgBw/(a*a*a) + 4*D12*(fAwfBwxixi*gAwetaetagBw + fAwxixifBw*gAwgBwetaeta)/(a*b) + 8*D16*(fAwxifBwxixi*gAwetagBw + fAwxixifBwxi*gAwgBweta)/(a*a) + 4*D22*a*fAwfBw*gAwetaetagBwetaeta/(b*b*b) + 8*D26*(fAwfBwxi*gAwetaetagBweta + fAwxifBw*gAwetagBwetaeta)/(b*b) + 16*D66*fAwxifBwxi*gAwetagBweta/(a*b)
 
@@ -68,7 +68,7 @@ SUBROUTINE CALC_KG0(M, N, K, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty, 
             CALL integral_ff(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwgBw)
             CALL integral_ffxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwgBweta)
             CALL integral_ffxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBw)
-            CALL integral_fxifxi(l1, j1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBweta)
+            CALL integral_fxifxi(j1, l1, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry, gAwetagBweta)
 
             DO i1=1, M
                 DO k1=1, M
@@ -83,7 +83,7 @@ SUBROUTINE CALC_KG0(M, N, K, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty, 
                     CALL integral_ff(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBw)
                     CALL integral_ffxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBwxi)
                     CALL integral_ffxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBw)
-                    CALL integral_fxifxi(k1, i1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBwxi)
+                    CALL integral_fxifxi(i1, k1, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwxifBwxi)
 
                     K(row, col) = Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
 

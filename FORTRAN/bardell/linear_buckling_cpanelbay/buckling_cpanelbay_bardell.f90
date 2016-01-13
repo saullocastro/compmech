@@ -311,6 +311,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     END IF
 
     ipanel = 0
+    istiff = 0
     OPEN(10, FILE=input_file)
     DO 
         READ(10, *) line

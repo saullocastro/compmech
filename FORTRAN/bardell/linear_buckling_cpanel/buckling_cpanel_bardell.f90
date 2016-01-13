@@ -152,31 +152,37 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     IMPLICIT NONE
     INTERFACE
         SUBROUTINE integral_ff(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_ffxi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_ffxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxifxi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxifxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxixifxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
@@ -186,6 +192,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
                            u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
                            v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry, &
                            w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: M, N
             REAL*8, INTENT(IN) :: a, b, r
             REAL*8, INTENT(IN) :: A11, A12, A16, A22, A26, A66
@@ -197,6 +204,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
             REAL*8, INTENT(OUT) :: K(3*M*N, 3*M*N)
         END SUBROUTINE
         SUBROUTINE CALC_KG0(M, N, K, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: M, N
             REAL*8, INTENT(IN) :: a, b, Nxx, Nyy, Nxy
             REAL*8, INTENT(IN) :: w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
@@ -356,7 +364,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     DEALLOCATE(TMP)
 
     ! allocating arrays
-    ALLOCATE(IWORK((NT-nulls)**2))
+    ALLOCATE(IWORK((NT-nulls)*25))
 
     ! allocating output arrays
     ALLOCATE(EIGVALS(NT-nulls))
@@ -367,7 +375,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     LDB = NT-nulls
     LDZ = NT-nulls
 
-    WRITE(*, *) "Eigenvalue analysis started..."
+    WRITE(*, *) 'Eigenvalue analysis started...'
 
     ! signature of eigenvalue solver used:
     !
@@ -379,7 +387,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
 
     ! Workspace query
     LWORK = -1
-    ALLOCATE(WORK(1))    
+    ALLOCATE(WORK(10))    
     CALL DSYGVX(1, "N", "A", "U", (NT-nulls), KG02, LDB, K02, LDA, &
                 -1.D10, 0, 1, NUM, 0., Mout, EIGVALS, EIGVECS, LDZ, &
                 WORK, LWORK, IWORK, IFAIL, INFO)
