@@ -121,9 +121,9 @@ SUBROUTINE CALC_K0Y1Y2(M, N, K0, y1, y2, a, b, r, ABD, &
                     row = 3*((j-1)*M + (i-1)) + 1
                     col = 3*((l-1)*M + (k-1)) + 1
 
-                    !IF (row > col) THEN
-                        !continue
-                    !END IF
+                    IF (row > col) THEN
+                        CYCLE
+                    END IF
 
                     CALL integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx, fAufBu)
                     CALL integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx, fAufBuxi)
@@ -222,9 +222,9 @@ SUBROUTINE CALC_KG0Y1Y2(M, N, KG0, y1, y2, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx
                     row = 3*((j-1)*M + (i-1)) + 1
                     col = 3*((l-1)*M + (k-1)) + 1
 
-                    !IF (row > col) THEN
-                        !continue
-                    !END IF
+                    IF (row > col) THEN
+                        CYCLE
+                    END IF
 
                     CALL integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBw)
                     CALL integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBwxi)
@@ -286,9 +286,9 @@ SUBROUTINE CALC_K0F(M, N, K0F, ys, a, b, bf, df, &
                     row = 3*((j-1)*M + (i-1)) + 1
                     col = 3*((l-1)*M + (k-1)) + 1
 
-                    !IF (row > col) THEN
-                        !continue
-                    !END IF
+                    IF (row > col) THEN
+                        CYCLE
+                    END IF
 
                     CALL calc_f(l, eta, u1ty, u1ry, u2ty, u2ry, gBu)
                     CALL calc_f(l, eta, w1ty, w1ry, w2ty, w2ry, gBw)
@@ -337,9 +337,9 @@ SUBROUTINE CALC_KG0F(M, N, KG0F, ys, Fx, a, b, bf, df, &
                     row = 3*((j-1)*M + (i-1)) + 1
                     col = 3*((l-1)*M + (k-1)) + 1
 
-                    !IF (row > col) THEN
-                        !continue
-                    !END IF
+                    IF (row > col) THEN
+                        CYCLE
+                    END IF
 
                     CALL calc_f(l, eta, w1ty, w1ry, w2ty, w2ry, gBw)
 

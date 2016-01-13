@@ -88,9 +88,9 @@ SUBROUTINE CALC_K0(M, N, K0, a, b, r, &
                     row = 3*((j-1)*M + (i-1)) + 1
                     col = 3*((l-1)*M + (k-1)) + 1
 
-                    !IF (row > col) THEN
-                        !continue
-                    !END IF
+                    IF (row > col) THEN
+                        CYCLE
+                    END IF
 
                     CALL integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx, fAufBu)
                     CALL integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx, fAufBuxi)
@@ -184,9 +184,9 @@ SUBROUTINE CALC_KG0(M, N, KG0, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty
                     row = 3*((j-1)*M + (i-1)) + 1
                     col = 3*((l-1)*M + (k-1)) + 1
 
-                    !IF (row > col) THEN
-                        !continue
-                    !END IF
+                    IF (row > col) THEN
+                        CYCLE
+                    END IF
 
                     CALL integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBw)
                     CALL integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx, fAwfBwxi)

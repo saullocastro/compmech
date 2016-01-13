@@ -260,24 +260,28 @@ PROGRAM BUCKLING_CPANEL_BARDELL
         IF (TRIM(line) == "Nxx") READ(10, *) Nxx
         IF (TRIM(line) == "Nyy") READ(10, *) Nyy
         IF (TRIM(line) == "Nxy") READ(10, *) Nxy
+
         IF (TRIM(line) == "A11") READ(10, *) A11
         IF (TRIM(line) == "A12") READ(10, *) A12
         IF (TRIM(line) == "A16") READ(10, *) A16
         IF (TRIM(line) == "A22") READ(10, *) A22
         IF (TRIM(line) == "A26") READ(10, *) A26
         IF (TRIM(line) == "A66") READ(10, *) A66
+
         IF (TRIM(line) == "B11") READ(10, *) B11
         IF (TRIM(line) == "B12") READ(10, *) B12
         IF (TRIM(line) == "B16") READ(10, *) B16
         IF (TRIM(line) == "B22") READ(10, *) B22
         IF (TRIM(line) == "B26") READ(10, *) B26
         IF (TRIM(line) == "B66") READ(10, *) B66
+
         IF (TRIM(line) == "D11") READ(10, *) D11
         IF (TRIM(line) == "D12") READ(10, *) D12
         IF (TRIM(line) == "D16") READ(10, *) D16
         IF (TRIM(line) == "D22") READ(10, *) D22
         IF (TRIM(line) == "D26") READ(10, *) D26
         IF (TRIM(line) == "D66") READ(10, *) D66
+
         IF (TRIM(line) == "u1tx") READ(10, *) u1tx
         IF (TRIM(line) == "u1rx") READ(10, *) u1rx
         IF (TRIM(line) == "u2tx") READ(10, *) u2tx
@@ -286,6 +290,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
         IF (TRIM(line) == "u1ry") READ(10, *) u1ry
         IF (TRIM(line) == "u2ty") READ(10, *) u2ty
         IF (TRIM(line) == "u2ry") READ(10, *) u2ry
+         
         IF (TRIM(line) == "v1tx") READ(10, *) v1tx
         IF (TRIM(line) == "v1rx") READ(10, *) v1rx
         IF (TRIM(line) == "v2tx") READ(10, *) v2tx
@@ -294,6 +299,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
         IF (TRIM(line) == "v1ry") READ(10, *) v1ry
         IF (TRIM(line) == "v2ty") READ(10, *) v2ty
         IF (TRIM(line) == "v2ry") READ(10, *) v2ry
+
         IF (TRIM(line) == "w1tx") READ(10, *) w1tx
         IF (TRIM(line) == "w1rx") READ(10, *) w1rx
         IF (TRIM(line) == "w2tx") READ(10, *) w2tx
@@ -324,7 +330,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     ! removing null rows and columns
     ALLOCATE(TMP(NT)) 
     TMP = 0
-    WHERE (ABS(SUM(K0, DIM=1)) <= 0.0001) TMP = 1
+    WHERE (ABS(SUM(K0, DIM=1)) <= 0.0000001) TMP = 1
     nulls = SUM(TMP)
     WRITE(*, *) "Number of removed cols:", nulls
 

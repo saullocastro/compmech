@@ -206,7 +206,7 @@ PROGRAM BUCKLING_PLATE_BARDELL
     ! removing null rows and columns
     ALLOCATE(TMP(NT)) 
     TMP = 0
-    WHERE (ABS(SUM(K0, DIM=1)) <= 0.0001) TMP = 1
+    WHERE (ABS(SUM(K0, DIM=1)) <= 0.0000001) TMP = 1
     nulls = SUM(TMP)
     WRITE(*, *) "Number of removed cols:", nulls
 
