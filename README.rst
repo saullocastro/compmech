@@ -1,9 +1,6 @@
-|Build status|
-
 .. image:: https://travis-ci.org/compmech/compmech.svg?branch=master
-    :target: https://travis-ci.org/compmech/compmech
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/compmech/compmech?retina=True
+.. image:: https://ci.appveyor.com/api/projects/status/github/compmech/compmech
 
 
 ==================================
