@@ -1,0 +1,135 @@
+! BUCKLING_PLATE_BARDELL program
+!
+! The required inputs that should be given are described below
+! 
+! Run control
+! -----------
+! NUM : integer
+!   Number of returned eigenvalues
+!
+! M : integer
+!   Number of terms along x
+!
+! N : integer
+!   Number of terms along x
+!
+! Geometry
+! --------
+! a : float
+!   The plate length (dimension along x)
+! b : float
+!   The plate width (dimension along y)
+!
+! Applied Loads
+! -------------
+! Nxx : float
+!   Nxx stress
+! Nyy : float
+!   Nyy stress
+! Nxy : float
+!   Nxy stress
+!
+! Laminate Constitutive Varibles (matrix D)
+! -----------------------------------------
+! D11 : float
+!   Bending stiffness
+! D12 : float
+!   Bending-Bending stiffness
+! D16 : float
+!   Bending-twist stiffness
+! D22 : float
+!   Bending stiffness
+! D26 : float
+!   Bending-twist stiffness
+! D66 : float
+!   Twist (torsion) stiffness
+!
+! Boundary conditions
+! -------------------
+! w1tx : float
+!   If 1. the edge at x=0 can translate along w   
+!   If 0. the edge at x=0 cannot translate along w   
+! w1rx : float
+!   If 1. the end at x=0 can rotate
+!   If 0. the end at x=0 cannot translate along w   
+! w2tx : float
+!   If 1. the edge at x=a can translate along w   
+!   If 0. the edge at x=a cannot translate along w   
+! w2rx : float
+!   If 1. the end at x=a can rotate
+!   If 0. the end at x=a cannot translate along w   
+! w1ty : float
+!   If 1. the edge at y=0 can translate along w   
+!   If 0. the edge at y=0 cannot translate along w   
+! w1ry : float
+!   If 1. the end at y=0 can rotate
+!   If 0. the end at y=0 cannot translate along w   
+! w2ty : float
+!   If 1. the edge at y=b can translate along w   
+!   If 0. the edge at y=b cannot translate along w   
+! w2ry : float
+!   If 1. the end at y=b can rotate
+!   If 0. the end at y=b cannot translate along w   
+
+! stacking sequence [-45, +45, 0, 0, -30, +30]
+! ply thickness 0.125 mm
+! material properties (from DESICOS, 2015):
+! - E1 152.4e3 MPa
+! - E2 8.8e3 MPa
+! - nu12 0.31
+! - G12 4.9e3 MPa
+! - G13 4.9e3 MPa
+! - G23 4.9e3 MPa
+
+NUM
+5
+
+M
+12
+N
+12
+
+a
+2000.
+b
+1000.
+
+Nxx
+-1.
+Nyy
+0.
+Nxy
+0.
+
+D11
+21389.02263159
+D12
+7818.42688222
+D16
+-1770.29307963
+D22
+10107.67149624
+D26
+-1538.54153782
+D66
+8425.02059231
+
+w1tx
+0.
+w1rx
+1.
+w2tx
+0.
+w2rx
+1.
+
+w1ty
+0.
+w1ry
+1.
+w2ty
+0.
+w2ry
+1.
+
+END
