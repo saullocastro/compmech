@@ -197,7 +197,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
             REAL*8, INTENT(OUT) :: K(3*M*N, 3*M*N)
         END SUBROUTINE
         SUBROUTINE CALC_KG0(M, N, K, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
-            INTEGER, INTENT(IN) :: N
+            INTEGER, INTENT(IN) :: M, N
             REAL*8, INTENT(IN) :: a, b, Nxx, Nyy, Nxy
             REAL*8, INTENT(IN) :: w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
             REAL*8, INTENT(OUT) :: K(3*M*N, 3*M*N)
