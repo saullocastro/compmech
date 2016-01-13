@@ -282,7 +282,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     ! workspace
     CHARACTER (LEN=100) :: line
     CHARACTER (LEN=400) :: input_file, output_file
-    INTEGER stat, i, j, id, jd, NPANELS, NSTIFF
+    INTEGER stat, ipanel, istiff, i, j, id, jd, NPANELS, NSTIFF
     INTEGER LWORK
     INTEGER, ALLOCATABLE :: IWORK(:)
     REAL*8, ALLOCATABLE :: WORK(:)
@@ -310,7 +310,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         CALL GET_COMMAND_ARGUMENT(2, VALUE=output_file, STATUS=stat)
     END IF
 
-    i = 0
+    ipanel = 0
     OPEN(10, FILE=input_file)
     DO 
         READ(10, *) line
@@ -327,10 +327,6 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
             ALLOCATE(NxxsCTE(NPANELS))
             ALLOCATE(NyysCTE(NPANELS))
             ALLOCATE(NxysCTE(NPANELS))
-            ABDs = 0
-            Nxxs = 0
-            Nyys = 0
-            Nxys = 0
         ENDIF
 
         IF (TRIM(line) == "NSTIFF") THEN
@@ -352,49 +348,71 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         IF (TRIM(line) == "b") READ(10, *) b
         IF (TRIM(line) == "r") READ(10, *) r
 
-        IF (TRIM(line) == "Panel") READ(10, *) i
+        IF (TRIM(line) == "Panel") THEN
+            READ(10, *) ipanel
+            ABDs(ipanel, 6, 6) = 0.
+            y1s(ipanel) = 0.
+            y2s(ipanel) = 0.
+            Nxxs(ipanel) = 0.
+            Nyys(ipanel) = 0.
+            Nxys(ipanel) = 0.
+            NxxsCTE(ipanel) = 0.
+            NyysCTE(ipanel) = 0.
+            NxysCTE(ipanel) = 0.
+        ENDIF
 
-        IF (TRIM(line) == "y1") READ(10, *) y1s(i)
-        IF (TRIM(line) == "y2") READ(10, *) y2s(i)
+        IF (TRIM(line) == "y1") READ(10, *) y1s(ipanel)
+        IF (TRIM(line) == "y2") READ(10, *) y2s(ipanel)
 
-        IF (TRIM(line) == "Nxx") READ(10, *) Nxxs(i)
-        IF (TRIM(line) == "Nyy") READ(10, *) Nyys(i)
-        IF (TRIM(line) == "Nxy") READ(10, *) Nxys(i)
+        IF (TRIM(line) == "Nxx") READ(10, *) Nxxs(ipanel)
+        IF (TRIM(line) == "Nyy") READ(10, *) Nyys(ipanel)
+        IF (TRIM(line) == "Nxy") READ(10, *) Nxys(ipanel)
 
-        IF (TRIM(line) == "NxxCTE") READ(10, *) NxxsCTE(i)
-        IF (TRIM(line) == "NyyCTE") READ(10, *) NyysCTE(i)
-        IF (TRIM(line) == "NxyCTE") READ(10, *) NxysCTE(i)
+        IF (TRIM(line) == "NxxCTE") READ(10, *) NxxsCTE(ipanel)
+        IF (TRIM(line) == "NyyCTE") READ(10, *) NyysCTE(ipanel)
+        IF (TRIM(line) == "NxyCTE") READ(10, *) NxysCTE(ipanel)
 
-        IF (TRIM(line) == "A11") READ(10, *) ABDs(i, 1, 1)
-        IF (TRIM(line) == "A12") READ(10, *) ABDs(i, 1, 2)
-        IF (TRIM(line) == "A16") READ(10, *) ABDs(i, 1, 3)
-        IF (TRIM(line) == "A22") READ(10, *) ABDs(i, 2, 2)
-        IF (TRIM(line) == "A26") READ(10, *) ABDs(i, 2, 3)
-        IF (TRIM(line) == "A66") READ(10, *) ABDs(i, 3, 3)
+        IF (TRIM(line) == "A11") READ(10, *) ABDs(ipanel, 1, 1)
+        IF (TRIM(line) == "A12") READ(10, *) ABDs(ipanel, 1, 2)
+        IF (TRIM(line) == "A16") READ(10, *) ABDs(ipanel, 1, 3)
+        IF (TRIM(line) == "A22") READ(10, *) ABDs(ipanel, 2, 2)
+        IF (TRIM(line) == "A26") READ(10, *) ABDs(ipanel, 2, 3)
+        IF (TRIM(line) == "A66") READ(10, *) ABDs(ipanel, 3, 3)
 
-        IF (TRIM(line) == "B11") READ(10, *) ABDs(i, 1, 4)
-        IF (TRIM(line) == "B12") READ(10, *) ABDs(i, 1, 5)
-        IF (TRIM(line) == "B16") READ(10, *) ABDs(i, 1, 6)
-        IF (TRIM(line) == "B22") READ(10, *) ABDs(i, 2, 5)
-        IF (TRIM(line) == "B26") READ(10, *) ABDs(i, 2, 6)
-        IF (TRIM(line) == "B66") READ(10, *) ABDs(i, 3, 6)
+        IF (TRIM(line) == "B11") READ(10, *) ABDs(ipanel, 1, 4)
+        IF (TRIM(line) == "B12") READ(10, *) ABDs(ipanel, 1, 5)
+        IF (TRIM(line) == "B16") READ(10, *) ABDs(ipanel, 1, 6)
+        IF (TRIM(line) == "B22") READ(10, *) ABDs(ipanel, 2, 5)
+        IF (TRIM(line) == "B26") READ(10, *) ABDs(ipanel, 2, 6)
+        IF (TRIM(line) == "B66") READ(10, *) ABDs(ipanel, 3, 6)
 
-        IF (TRIM(line) == "D11") READ(10, *) ABDs(i, 4, 4)
-        IF (TRIM(line) == "D12") READ(10, *) ABDs(i, 4, 5)
-        IF (TRIM(line) == "D16") READ(10, *) ABDs(i, 4, 6)
-        IF (TRIM(line) == "D22") READ(10, *) ABDs(i, 5, 5)
-        IF (TRIM(line) == "D26") READ(10, *) ABDs(i, 5, 6)
-        IF (TRIM(line) == "D66") READ(10, *) ABDs(i, 6, 6)
+        IF (TRIM(line) == "D11") READ(10, *) ABDs(ipanel, 4, 4)
+        IF (TRIM(line) == "D12") READ(10, *) ABDs(ipanel, 4, 5)
+        IF (TRIM(line) == "D16") READ(10, *) ABDs(ipanel, 4, 6)
+        IF (TRIM(line) == "D22") READ(10, *) ABDs(ipanel, 5, 5)
+        IF (TRIM(line) == "D26") READ(10, *) ABDs(ipanel, 5, 6)
+        IF (TRIM(line) == "D66") READ(10, *) ABDs(ipanel, 6, 6)
 
-        IF (TRIM(line) == "Stiffener") READ(10, *) i
+        IF (TRIM(line) == "Stiffener") THEN
+            READ(10, *) istiff
+            ys(istiff) = 0.
+            bfs(istiff) = 0.
+            dfs(istiff) = 0.
+            E1s(istiff) = 0.
+            F1s(istiff) = 0.
+            S1s(istiff) = 0.
+            Jxxs(istiff) = 0.
+            Fxs(istiff) = 0.
+            FxsCTE(istiff) = 0.
+        END IF
 
-        IF (TRIM(LINE) == "ys") READ(10, *) ys(i)
-        IF (TRIM(LINE) == "bf") READ(10, *) bfs(i)
-        IF (TRIM(LINE) == "df") READ(10, *) dfs(i)
-        IF (TRIM(LINE) == "E1") READ(10, *) E1s(i)
-        IF (TRIM(LINE) == "F1") READ(10, *) F1s(i)
-        IF (TRIM(LINE) == "S1") READ(10, *) S1s(i)
-        IF (TRIM(LINE) == "Jxx") READ(10, *) Jxxs(i)
+        IF (TRIM(LINE) == "ys") READ(10, *) ys(istiff)
+        IF (TRIM(LINE) == "bf") READ(10, *) bfs(istiff)
+        IF (TRIM(LINE) == "df") READ(10, *) dfs(istiff)
+        IF (TRIM(LINE) == "E1") READ(10, *) E1s(istiff)
+        IF (TRIM(LINE) == "F1") READ(10, *) F1s(istiff)
+        IF (TRIM(LINE) == "S1") READ(10, *) S1s(istiff)
+        IF (TRIM(LINE) == "Jxx") READ(10, *) Jxxs(istiff)
 
         IF (TRIM(line) == "u1tx") READ(10, *) u1tx
         IF (TRIM(line) == "u1rx") READ(10, *) u1rx
