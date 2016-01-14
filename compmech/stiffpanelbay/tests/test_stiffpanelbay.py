@@ -62,7 +62,7 @@ def test_lb_Stiffener1D():
 
     spb.lb(silent=True)
 
-    assert np.isclose(spb.eigvals[0].real, 295.35629419)
+    assert np.isclose(spb.eigvals[0].real, 297.54633249887456)
 
 
 def test_lb_Stiffener2D():
@@ -87,7 +87,7 @@ def test_lb_Stiffener2D():
 
     spb.lb(silent=True)
 
-    assert np.isclose(spb.eigvals[0].real, 299.162436099)
+    assert np.isclose(spb.eigvals[0].real, 301.0825233702252)
 
 
 def test_freq_Stiffener1D():
