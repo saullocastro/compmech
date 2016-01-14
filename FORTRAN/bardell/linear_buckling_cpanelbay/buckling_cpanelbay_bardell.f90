@@ -458,6 +458,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         IF (TRIM(LINE) == "F1") READ(10, *) F1s(istiff)
         IF (TRIM(LINE) == "S1") READ(10, *) S1s(istiff)
         IF (TRIM(LINE) == "Jxx") READ(10, *) Jxxs(istiff)
+        IF (TRIM(LINE) == "Fx") READ(10, *) Fxs(istiff)
 
         IF (TRIM(line) == "u1tx") READ(10, *) u1tx
         IF (TRIM(line) == "u1rx") READ(10, *) u1rx
