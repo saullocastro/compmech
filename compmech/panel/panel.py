@@ -491,6 +491,8 @@ class Panel(object):
         a = self.a
         b = self.b
         r = self.r if self.r is not None else 0.
+        y1 = self.y1
+        y2 = self.y2
         alphadeg = self.alphadeg if self.alphadeg is not None else 0.
         alpharad = deg2rad(alphadeg)
 
@@ -501,10 +503,17 @@ class Panel(object):
         Nyy = self.Nyy if self.Nyy is not None else 0.
         Nxy = self.Nxy if self.Nxy is not None else 0.
 
-        kG0 = matrices.fkG0(Nxx, Nyy, Nxy, a, b, r, alpharad, self.m, self.n,
-                   self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                   self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                   size, row0, col0)
+        if y1 is not None and y2 is not None:
+            kG0 = matrices.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r, alpharad,
+                       self.m, self.n,
+                       self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                       self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                       size, row0, col0)
+        else:
+            kG0 = matrices.fkG0(Nxx, Nyy, Nxy, a, b, r, alpharad, self.m, self.n,
+                       self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                       self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                       size, row0, col0)
 
         if finalize:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
