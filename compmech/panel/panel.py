@@ -944,13 +944,16 @@ class Panel(object):
         self.analysis.last_analysis = 'freq'
 
 
-    def calc_betacr(self, beta1=1.e4, beta2=1.e5, rho_air=0.3, Mach=2.,
+    def calc_betacr(self, atype=2,
+                    beta1=1.e4, beta2=1.e5, rho_air=0.3, Mach=2.,
                     modes=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
                     num=5, silent=False, TOL=0.001, reduced_dof=False):
         r"""Calculate the critical aerodynamic pressure coefficient
 
         Parameters
         ----------
+        atype : int, optional
+            See :meth:`.Panel.freq` for more details.
         rho_air : float, optional
             Air density.
         Mach : float, optional
@@ -1005,16 +1008,16 @@ class Panel(object):
             msg('beta_max: %1.3f' % beta2, level=3, silent=silent)
 
             for i, beta in enumerate(betas):
-                self.V = ((Mach**2 - 1)**0.5 * beta / rho_air)**0.5
-                self.freq(atype=1, sparse_solver=False, silent=True,
+                self.V = ((Mach**2 - 1)**0.5*beta/rho_air)**0.5
+                self.freq(atype=atype, sparse_solver=False, silent=True,
                           reduced_dof=reduced_dof)
                 for j, mode in enumerate(modes):
                     eigvals_imag[i, j] = self.eigvals[mode].imag
 
             check = np.where(eigvals_imag != 0.)
             if not np.any(check):
-                beta1 = beta1 / 2.
-                beta2 = 2 * beta2
+                beta1 = beta1/2.
+                beta2 = 2.*beta2
                 continue
             if np.abs(eigvals_imag[check]).min() < TOL:
                 break
@@ -1038,8 +1041,8 @@ class Panel(object):
         self.V = V_bkp
         self.rho_air = rho_air_bkp
 
-        msg('finished!', level=1)
-        msg('Number of analyses = %d' % (count*num), level=1)
+        msg('finished!', level=1, silent=silent)
+        msg('Number of analyses = %d' % (count*num), level=1, silent=silent)
         return beta1
 
 
