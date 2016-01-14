@@ -1,4 +1,5 @@
 SUBROUTINE integral_ff(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: i, j
     REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
     REAL*8, INTENT(OUT) :: out
@@ -585,6 +586,7 @@ END SUBROUTINE integral_ff
 
 
 SUBROUTINE integral_ffxi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: i, j
     REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
     REAL*8, INTENT(OUT) :: out
@@ -1075,6 +1077,7 @@ END SUBROUTINE integral_ffxi
 
 
 SUBROUTINE integral_ffxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: i, j
     REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
     REAL*8, INTENT(OUT) :: out
@@ -1481,6 +1484,7 @@ END SUBROUTINE integral_ffxixi
 
 
 SUBROUTINE integral_fxifxi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: i, j
     REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
     REAL*8, INTENT(OUT) :: out
@@ -1887,6 +1891,7 @@ END SUBROUTINE integral_fxifxi
 
 
 SUBROUTINE integral_fxifxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: i, j
     REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
     REAL*8, INTENT(OUT) :: out
@@ -2197,6 +2202,7 @@ END SUBROUTINE integral_fxifxixi
 
 
 SUBROUTINE integral_fxixifxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: i, j
     REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
     REAL*8, INTENT(OUT) :: out

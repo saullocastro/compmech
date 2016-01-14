@@ -249,6 +249,32 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     M = 15
     N = 15
 
+    ! Default boundary conditions (simply supported)
+    u1tx = 0.
+    u1rx = 1.
+    u2tx = 0.
+    u2rx = 1.
+    u1ty = 0.
+    u1ry = 1.
+    u2ty = 0.
+    u2ry = 1.
+    v1tx = 0.
+    v1rx = 1.
+    v2tx = 0.
+    v2rx = 1.
+    v1ty = 0.
+    v1ry = 1.
+    v2ty = 0.
+    v2ry = 1.
+    w1tx = 0.
+    w1rx = 1.
+    w2tx = 0.
+    w2rx = 1.
+    w1ty = 0.
+    w1ry = 1.
+    w2ty = 0.
+    w2ry = 1.
+
     IF (COMMAND_ARGUMENT_COUNT() .NE. 2) THEN
         STOP "This program should be called as: 'buckling_cpanel_bardell input output'"
     ELSE
@@ -388,14 +414,14 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     ! Workspace query
     LWORK = -1
     ALLOCATE(WORK(10))    
-    CALL DSYGVX(1, "N", "A", "U", (NT-nulls), KG02, LDB, K02, LDA, &
+    CALL DSYGVX(1, "N", "I", "U", (NT-nulls), KG02, LDB, K02, LDA, &
                 -1.D10, 0, 1, NUM, 0., Mout, EIGVALS, EIGVECS, LDZ, &
                 WORK, LWORK, IWORK, IFAIL, INFO)
     LWORK = WORK(1)
     DEALLOCATE(WORK)
     ! Eigensolver query
     ALLOCATE(WORK(LWORK))
-    CALL DSYGVX(1, "N", "A", "U", (NT-nulls), KG02, LDB, K02, LDA, &
+    CALL DSYGVX(1, "N", "I", "U", (NT-nulls), KG02, LDB, K02, LDA, &
                 -1.D10, 0, 1, NUM, 0., Mout, EIGVALS, EIGVECS, LDZ, &
                 WORK, LWORK, IWORK, IFAIL, INFO)
     DEALLOCATE(WORK)
@@ -414,10 +440,15 @@ PROGRAM BUCKLING_CPANEL_BARDELL
         WRITE(*, *) 'EIGVALS', EIGVALS(1), EIGVALS(2)
         WRITE(*, *) 'Mout', Mout
         WRITE(*, *) 'INFO', NT-nulls, INFO
-        WRITE(*, *) 'IFAIL', IFAIL
+        !WRITE(*, *) 'IFAIL', IFAIL
         WRITE(*, *) 'MIN(K02), MAX(K02)', MINVAL(K02), MAXVAL(K02)
         WRITE(*, *) 'SUM(K02), SUM(KG02)', SUM(K02), SUM(KG02)
     END IF
+    WRITE(*, *) 'EIGVALS', EIGVALS(1), EIGVALS(2)
+    WRITE(*, *) 'Mout', Mout
+    WRITE(*, *) 'INFO', NT-nulls, INFO
+    WRITE(*, *) 'MIN(K02), MAX(K02)', MINVAL(K02), MAXVAL(K02)
+    WRITE(*, *) 'SUM(K02), SUM(KG02)', SUM(K02), SUM(KG02)
 
     DEALLOCATE(K0)
     DEALLOCATE(KG0)

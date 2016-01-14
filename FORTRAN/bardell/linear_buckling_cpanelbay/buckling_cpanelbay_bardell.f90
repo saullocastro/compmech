@@ -154,71 +154,85 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     IMPLICIT NONE
     INTERFACE
         SUBROUTINE integral_ff(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_ffxi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_ffxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxifxi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxifxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
-        REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
+            REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxixifxixi(i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_ff_12(xi1, xi2, i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: xi1, xi2, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_ffxi_12(xi1, xi2, i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: xi1, xi2, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_ffxixi_12(xi1, xi2, i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: xi1, xi2, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxifxi_12(xi1, xi2, i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: xi1, xi2, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxifxixi_12(xi1, xi2, i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: xi1, xi2, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE integral_fxixifxixi_12(xi1, xi2, i, j, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i, j
             REAL*8, INTENT(IN) :: xi1, xi2, x1t, x1r, x2t, x2r, y1t, y1r, y2t, y2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE calc_f(i, xi, x1t, x1r, x2t, x2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i
             REAL*8, INTENT(IN) :: xi, x1t, x1r, x2t, x2r
             REAL*8, INTENT(OUT) :: out
         END SUBROUTINE
         SUBROUTINE calc_fxi(i, xi, x1t, x1r, x2t, x2r, out)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: i
             REAL*8, INTENT(IN) :: xi, x1t, x1r, x2t, x2r
             REAL*8, INTENT(OUT) :: out
@@ -227,6 +241,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
                            u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
                            v1tx, v1rx, v2tx, v2rx, v1ty, v1ry, v2ty, v2ry, &
                            w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: M, N
             REAL*8, INTENT(IN) :: y1, y2, a, b, r
             REAL*8, INTENT(IN) :: ABD(6, 6)
@@ -236,7 +251,8 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
             REAL*8, INTENT(OUT) :: K0(3*M*N, 3*M*N)
         END SUBROUTINE
         SUBROUTINE CALC_KG0Y1Y2(M, N, KG0, y1, y2, a, b, Nxx, Nyy, Nxy, w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
-            INTEGER, INTENT(IN) :: N
+            IMPLICIT NONE
+            INTEGER, INTENT(IN) :: M, N
             REAL*8, INTENT(IN) :: y1, y2, a, b, Nxx, Nyy, Nxy
             REAL*8, INTENT(IN) :: w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry
             REAL*8, INTENT(OUT) :: KG0(3*M*N, 3*M*N)
@@ -245,6 +261,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
                             E1, F1, S1, Jxx, &
                             u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
                             w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: M, N
             REAL*8, INTENT(IN) :: ys, a, b, bf, df
             REAL*8, INTENT(IN) :: E1, F1, S1, Jxx
@@ -255,6 +272,7 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         SUBROUTINE CALC_KG0F(M, N, KG0F, ys, Fx, a, b, bf, df, &
                             u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry, &
                             w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
+            IMPLICIT NONE
             INTEGER, INTENT(IN) :: M, N
             REAL*8, INTENT(IN) :: ys, Fx, a, b, bf, df
             REAL*8, INTENT(IN) :: u1tx, u1rx, u2tx, u2rx, u1ty, u1ry, u2ty, u2ry
@@ -302,6 +320,32 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     NUM = 10
     M = 15
     N = 15
+
+    ! Default boundary conditions (simply supported)
+    u1tx = 0.
+    u1rx = 1.D0
+    u2tx = 0.D0
+    u2rx = 1.D0
+    u1ty = 0.D0
+    u1ry = 1.D0
+    u2ty = 0.D0
+    u2ry = 1.D0
+    v1tx = 0.D0
+    v1rx = 1.D0
+    v2tx = 0.D0
+    v2rx = 1.D0
+    v1ty = 0.D0
+    v1ry = 1.D0
+    v2ty = 0.D0
+    v2ry = 1.D0
+    w1tx = 0.D0
+    w1rx = 1.D0
+    w2tx = 0.D0
+    w2rx = 1.D0
+    w1ty = 0.D0
+    w1ry = 1.D0
+    w2ty = 0.D0
+    w2ry = 1.D0
 
     IF (COMMAND_ARGUMENT_COUNT() .NE. 2) THEN
         STOP "This program should be called as: 'buckling_cpanel_bardell input output'"
@@ -351,15 +395,15 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
 
         IF (TRIM(line) == "Panel") THEN
             READ(10, *) ipanel
-            ABDs(ipanel, 6, 6) = 0.
-            y1s(ipanel) = 0.
-            y2s(ipanel) = 0.
-            Nxxs(ipanel) = 0.
-            Nyys(ipanel) = 0.
-            Nxys(ipanel) = 0.
-            NxxsCTE(ipanel) = 0.
-            NyysCTE(ipanel) = 0.
-            NxysCTE(ipanel) = 0.
+            ABDs(ipanel, 6, 6) = 0.D0
+            y1s(ipanel) = 0.D0
+            y2s(ipanel) = 0.D0
+            Nxxs(ipanel) = 0.D0
+            Nyys(ipanel) = 0.D0
+            Nxys(ipanel) = 0.D0
+            NxxsCTE(ipanel) = 0.D0
+            NyysCTE(ipanel) = 0.D0
+            NxysCTE(ipanel) = 0.D0
         ENDIF
 
         IF (TRIM(line) == "y1") READ(10, *) y1s(ipanel)
@@ -396,15 +440,15 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
 
         IF (TRIM(line) == "Stiffener") THEN
             READ(10, *) istiff
-            ys(istiff) = 0.
-            bfs(istiff) = 0.
-            dfs(istiff) = 0.
-            E1s(istiff) = 0.
-            F1s(istiff) = 0.
-            S1s(istiff) = 0.
-            Jxxs(istiff) = 0.
-            Fxs(istiff) = 0.
-            FxsCTE(istiff) = 0.
+            ys(istiff) = 0.D0
+            bfs(istiff) = 0.D0
+            dfs(istiff) = 0.D0
+            E1s(istiff) = 0.D0
+            F1s(istiff) = 0.D0
+            S1s(istiff) = 0.D0
+            Jxxs(istiff) = 0.D0
+            Fxs(istiff) = 0.D0
+            FxsCTE(istiff) = 0.D0
         END IF
 
         IF (TRIM(LINE) == "ys") READ(10, *) ys(istiff)
@@ -451,8 +495,8 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     ALLOCATE(K0(NT, NT))
     ALLOCATE(KG0(NT, NT))
 
-    K0 = 0
-    KG0 = 0
+    K0 = 0.D0
+    KG0 = 0.D0
 
     WRITE(*, *) "Calculating matrices for each panel..."
     DO i=1, NPANELS
@@ -491,8 +535,6 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
                        w1tx, w1rx, w2tx, w2rx, w1ty, w1ry, w2ty, w2ry)
     END DO
     WRITE(*, *) "finished!"
-
-
 
     ! removing null rows and columns
     ALLOCATE(TMP(NT)) 
@@ -547,14 +589,14 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
     ! Workspace query
     LWORK = -1
     ALLOCATE(WORK(1))    
-    CALL DSYGVX(1, "N", "A", "U", (NT-nulls), KG02, LDB, K02, LDA, &
+    CALL DSYGVX(1, "N", "I", "U", (NT-nulls), KG02, LDB, K02, LDA, &
                 -1.D10, 0, 1, NUM, 0., Mout, EIGVALS, EIGVECS, LDZ, &
                 WORK, LWORK, IWORK, IFAIL, INFO)
     LWORK = WORK(1)
     DEALLOCATE(WORK)
     ! Eigensolver query
     ALLOCATE(WORK(LWORK))
-    CALL DSYGVX(1, "N", "A", "U", (NT-nulls), KG02, LDB, K02, LDA, &
+    CALL DSYGVX(1, "N", "I", "U", (NT-nulls), KG02, LDB, K02, LDA, &
                 -1.D10, 0, 1, NUM, 0., Mout, EIGVALS, EIGVECS, LDZ, &
                 WORK, LWORK, IWORK, IFAIL, INFO)
     DEALLOCATE(WORK)
@@ -573,10 +615,15 @@ PROGRAM BUCKLING_CPANELBAY_BARDELL
         WRITE(*, *) 'EIGVALS', EIGVALS(1), EIGVALS(2)
         WRITE(*, *) 'Mout', Mout
         WRITE(*, *) 'INFO', NT-nulls, INFO
-        WRITE(*, *) 'IFAIL', IFAIL
+        !WRITE(*, *) 'IFAIL', IFAIL
         WRITE(*, *) 'MIN(K02), MAX(K02)', MINVAL(K02), MAXVAL(K02)
         WRITE(*, *) 'SUM(K02), SUM(KG02)', SUM(K02), SUM(KG02)
     END IF
+    WRITE(*, *) 'EIGVALS', EIGVALS(1), EIGVALS(2)
+    WRITE(*, *) 'Mout', Mout
+    WRITE(*, *) 'INFO', NT-nulls, INFO
+    WRITE(*, *) 'MIN(K02), MAX(K02)', MINVAL(K02), MAXVAL(K02)
+    WRITE(*, *) 'SUM(K02), SUM(KG02)', SUM(K02), SUM(KG02)
 
     DEALLOCATE(K0)
     DEALLOCATE(KG0)
