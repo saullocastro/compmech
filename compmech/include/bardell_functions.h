@@ -19,4 +19,7 @@ IMPORTIT double calc_f(int i, double xi,
 IMPORTIT double calc_fxi(int i, double xi,
         double xi1t, double xi1r, double xi2t, double xi2r);
 
+IMPORTIT double calc_fxixi(int i, double xi,
+        double xi1t, double xi1r, double xi2t, double xi2r);
+
 #endif /** BARDELL_FUNCTIONS_H */
