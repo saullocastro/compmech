@@ -25,17 +25,17 @@ def test_panel_lb():
         p.Nxx = -1
         p.lb(silent=True)
         if '_w' in model:
-            assert np.allclose(p.eigvals[0], 88.4769618837)
+            assert np.isclose(p.eigvals[0], 88.47696, atol=0.1, rtol=0)
         else:
-            assert np.allclose(p.eigvals[0], 85.2911727144)
+            assert np.isclose(p.eigvals[0], 85.2912, atol=0.1, rtol=0)
 
         p.Nxx = 0
         p.Nyy = -1
         p.lb(silent=True)
         if '_w' in model:
-            assert np.allclose(p.eigvals[0], 26.4588171556)
+            assert np.isclose(p.eigvals[0], 26.45882, atol=0.1, rtol=0)
         else:
-            assert np.allclose(p.eigvals[0], 25.1756170679)
+            assert np.isclose(p.eigvals[0], 25.17562, atol=0.1, rtol=0)
 
         # ssfs
         p = Panel()
@@ -53,18 +53,18 @@ def test_panel_lb():
         p.Nxx = -1
         p.lb(silent=True)
         if '_w' in model:
-            assert np.allclose(p.eigvals[0], 17.1442703121)
+            assert np.isclose(p.eigvals[0], 17.14427, atol=0.1, rtol=0)
         else:
-            assert np.allclose(p.eigvals[0], 15.8423562314)
+            assert np.isclose(p.eigvals[0], 15.842356, atol=0.1, rtol=0)
 
         p.bc_sfss()
         p.Nxx = 0
         p.Nyy = -1
         p.lb(silent=True)
         if '_w' in model:
-            assert np.allclose(p.eigvals[0], 15.8099861083)
+            assert np.isclose(p.eigvals[0], 15.809986, atol=0.1, rtol=0)
         else:
-            assert np.allclose(p.eigvals[0], 13.9421987614)
+            assert np.isclose(p.eigvals[0], 13.9421988, atol=0.1, rtol=0)
 
 
 if __name__ == '__main__':

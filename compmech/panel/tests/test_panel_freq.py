@@ -30,14 +30,14 @@ def test_panel_freq():
                    atype=atype)
             if atype == 3:
                 if '_w' in model:
-                    assert np.allclose(p.eigvals[0], 19.9271684726)
+                    assert np.isclose(p.eigvals[0], 19.9272, atol=0.1, rtol=0)
                 else:
-                    assert np.allclose(p.eigvals[0], 17.8587479369)
+                    assert np.isclose(p.eigvals[0], 17.85875, atol=0.1, rtol=0)
             elif atype == 4:
                 if '_w' in model:
-                    assert np.allclose(p.eigvals[0], 40.3728103572)
+                    assert np.isclose(p.eigvals[0], 40.37281, atol=0.1, rtol=0)
                 else:
-                    assert np.allclose(p.eigvals[0], 39.3147553173)
+                    assert np.isclose(p.eigvals[0], 39.31476, atol=0.1, rtol=0)
 
 
 def test_reduced_dof_freq_plate():
@@ -67,7 +67,7 @@ def test_reduced_dof_freq_plate():
         p.freq(sparse_solver=True, reduced_dof=True, silent=True,
                atype=atype)
         reduced_true = p.eigvals[0]
-        assert np.isclose(reduced_false, reduced_true)
+        assert np.isclose(reduced_false, reduced_true, atol=0.0001)
 
 
 if __name__ == '__main__':
