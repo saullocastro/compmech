@@ -14,8 +14,8 @@ ctypedef void (*f_type)(int npts, double *xs, double *ts, double *out,
                         double *alphas, double *betas, void *args) nogil
 
 
-def int trapz2d_points(double xmin, double xmax, int nx,
-                        double ymin, double ymax, int ny):
+def trapz2d_points(double xmin, double xmax, int nx,
+                   double ymin, double ymax, int ny):
     cdef int i, j, npts, k
     cdef double c, hx, hy, x, y, alpha, beta
     cdef np.ndarray[cDOUBLE, ndim=1] xs, ys, xs2, ys2, alphas, betas
