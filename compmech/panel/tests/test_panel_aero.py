@@ -33,14 +33,14 @@ def test_panel_aero():
             betacr = p.calc_betacr(atype=atype, silent=True)
             if atype == 1:
                 if not model.endswith('_w'):
-                    assert np.isclose(betacr, 128.746624962)
+                    assert np.isclose(betacr, 128.7466, atol=0.1, rtol=0)
                 else:
-                    assert np.isclose(betacr, 137.156572493)
+                    assert np.isclose(betacr, 137.15657, atol=0.1, rtol=0)
             elif atype == 2:
                 if not model.endswith('_w'):
-                    assert np.isclose(betacr, 678.003066614)
+                    assert np.isclose(betacr, 678.0031, atol=0.1, rtol=0)
                 else:
-                    assert np.isclose(betacr, 651.28383404)
+                    assert np.isclose(betacr, 651.2838, atol=0.1, rtol=0)
 
             # testing commong methodology based on betastar
             if atype == 1:
@@ -63,14 +63,14 @@ def test_panel_aero():
             ind = np.where(np.any(out.imag != 0, axis=1))[0][0]
             if atype == 1:
                 if not model.endswith('_w'):
-                    assert np.isclose(betas[ind], 347.163461538)
+                    assert np.isclose(betas[ind], 347.16346, atol=0.1, rtol=0)
                 else:
-                    assert np.isclose(betas[ind], 174.278846154)
+                    assert np.isclose(betas[ind], 174.27885, atol=0.1, rtol=0)
             elif atype == 2:
                 if not model.endswith('_w'):
-                    assert np.isclose(betas[ind], 728.625)
+                    assert np.isclose(betas[ind], 728.625, atol=0.1, rtol=0)
                 else:
-                    assert np.isclose(betas[ind], 728.625)
+                    assert np.isclose(betas[ind], 728.625, atol=0.1, rtol=0)
 
 if __name__ == '__main__':
     out = test_panel_aero()
