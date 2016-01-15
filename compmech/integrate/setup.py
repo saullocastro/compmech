@@ -16,6 +16,10 @@ def configuration(parent_package='',top_path=None):
         compile_args = ['-fopenmp']
 
     config = Configuration('integrate', parent_package, top_path)
+    config.add_extension('integrate',
+                         sources=['integrate.pyx'],
+                         extra_compile_args=compile_args,
+                        )
     config.add_extension('integratev',
                          sources=['integratev.pyx'],
                          extra_compile_args=compile_args,
@@ -28,6 +32,7 @@ def configuration(parent_package='',top_path=None):
     config.make_config_py()
 
     return config
+
 
 if __name__ == '__main__':
     from numpy.distutils.core import setup
