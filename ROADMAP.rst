@@ -1,14 +1,6 @@
-Version 0.5.4
--------------
-- implement CI with AppVeyor (Windows)
-- tests for aeroelastic routines with the piston theory
-- finish FORTRANs for linear buckling:
--- plate (w)
--- cpanel
--- cpanelbay
-
 Version 0.5.5
 -------------
+- check why plate lb with reduced_dof=True is not the same as plate_w
 - implement CI compilation and test for FORTRANs
 - improve the numerical stability of FORTRAN's eigensolver (cpanelbay)
 - reconsider reading bardell_12 from the C code and reuse in FORTRAN
