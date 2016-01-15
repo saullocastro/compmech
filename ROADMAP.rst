@@ -5,6 +5,7 @@ Version 0.5.5
   geometrically non-linear analyses)
 - check why plate lb with reduced_dof=True is not the same as plate_w
 - reconsider reading bardell_12 from the C code and reuse in FORTRAN
+- tests for integrate module
 
 Version 0.6.0
 -------------
