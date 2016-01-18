@@ -597,7 +597,7 @@ class StiffPanelBay(Panel):
         msg('finished!', level=2, silent=silent)
 
 
-    def calc_kG0(self, silent=False):
+    def calc_kG0(self, silent=False, c=None):
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
         model = self.model
@@ -613,14 +613,14 @@ class StiffPanelBay(Panel):
         # contributions from panels
         for p in self.panels:
             p.calc_kG0(size=size, row0=0, col0=0, silent=True,
-                       finalize=False)
+                       finalize=False, c=c)
             #TODO summing up coo_matrix objects may be slow!
             kG0 += p.kG0
 
         # contributions from bladestiff1ds
         for s in self.bladestiff1ds:
             s.calc_kG0(size=size, row0=0, col0=0, silent=True,
-                       finalize=False)
+                       finalize=False, c=c)
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
 
@@ -634,7 +634,7 @@ class StiffPanelBay(Panel):
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
             s.calc_kG0(size=size, row0=row0, col0=col0, silent=True,
-                       finalize=False)
+                       finalize=False, c=c)
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
 
