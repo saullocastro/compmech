@@ -1,12 +1,16 @@
 Version 0.5.5
 -------------
+- numerical integration for kG0 of panels, possibility to include non-uniform
+  stress states and pretty much any load then (this will pave the way for
+  geometrically non-linear analyses)
 - check why plate lb with reduced_dof=True is not the same as plate_w
-- implement CI compilation and test for FORTRANs
-- improve the numerical stability of FORTRAN's eigensolver (cpanelbay)
 - reconsider reading bardell_12 from the C code and reuse in FORTRAN
+- tests for integrate module
 
 Version 0.6.0
 -------------
+- implement CI compilation and test for FORTRANs
+- improve the numerical stability of FORTRAN's eigensolver (cpanelbay)
 - skew panel with formulation for stringers not aligned with the panel
   longitudinal direction
 - put matrices for cones and cylinders in the new format and unify their

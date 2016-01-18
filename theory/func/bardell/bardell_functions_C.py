@@ -81,6 +81,20 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
     f.write('    }\n')
     f.write('}\n')
 
+    f.write('\n\n')
+    f.write('EXPORTIT double calc_fxixi(int i, double xi,\n' +
+            '           double xi1t, double xi1r, double xi2t, double xi2r) {\n')
+    f.write('    switch(i) {\n')
+    for i in range(len(u)):
+        const = consts.get(i)
+        f.write('    case %d:\n' % i)
+        if const is None:
+            f.write('        return %s;\n' % star2Cpow(str(diff(u[i], xi, xi))))
+        else:
+            f.write('        return %s*(%s);\n' % (const, star2Cpow(str(diff(u[i], xi, xi)))))
+    f.write('    }\n')
+    f.write('}\n')
+
 with open('../../../compmech/include/bardell_functions.h', 'w') as g:
     g.write('#if defined(_WIN32) || defined(__WIN32__)\n')
     g.write('  #define IMPORTIT __declspec(dllimport)\n')
@@ -100,6 +114,9 @@ with open('../../../compmech/include/bardell_functions.h', 'w') as g:
             '        double xi1t, double xi1r, double xi2t, double xi2r);\n')
     g.write('\n')
     g.write('IMPORTIT double calc_fxi(int i, double xi,\n' +
+            '        double xi1t, double xi1r, double xi2t, double xi2r);\n')
+    g.write('\n')
+    g.write('IMPORTIT double calc_fxixi(int i, double xi,\n' +
             '        double xi1t, double xi1r, double xi2t, double xi2r);\n')
     g.write('\n')
     g.write('#endif /** BARDELL_FUNCTIONS_H */')

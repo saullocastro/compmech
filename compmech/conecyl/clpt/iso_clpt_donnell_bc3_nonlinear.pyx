@@ -12,7 +12,7 @@ from scipy.sparse import coo_matrix
 
 from compmech.conecyl.clpt.clpt_commons_bc3 cimport cfwx, cfwt, cfN
 from compmech.conecyl.imperfections.mgi cimport cfw0x, cfw0t
-from compmech.integrate.integratev cimport trapz2d, simps2d
+from compmech.integrate.integratev cimport integratev
 
 
 ctypedef np.double_t cDOUBLE
@@ -105,12 +105,8 @@ def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    if method=='trapz2d':
-        trapz2d(<void *>cfk0L, fdim, k0Lv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
-    elif method=='simps2d':
-        simps2d(<void *>cfk0L, fdim, k0Lv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
+    integratev(<void *>cfk0L, fdim, k0Lv, xa, xb, nx, ta, tb, nt,
+               &args, num_cores, method)
 
     c = -1
 
@@ -615,12 +611,8 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    if method=='trapz2d':
-        trapz2d(<void *>cfkLL, fdim, kLLv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
-    elif method=='simps2d':
-        simps2d(<void *>cfkLL, fdim, kLLv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
+    integratev(<void *>cfkLL, fdim, kLLv, xa, xb, nx, ta, tb, nt,
+               &args, num_cores, method)
 
     c = -1
 

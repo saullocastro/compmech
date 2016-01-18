@@ -8,195 +8,51 @@ import numpy as np
 cimport numpy as np
 from cython.parallel import prange
 
+from compmech.integrate.integrate import trapz2d_points, simps2d_points
+
+
 DOUBLE = np.float64
 
-ctypedef void (*f_type)(int npts, double *xs, double *ts, double *out,
+ctypedef void (*f_type)(int npts, double *xs, double *ys, double *out,
                         double *alphas, double *betas, void *args) nogil
 
+cdef extern from "math.h":
+    double sin(double x) nogil
+    double atan(double x) nogil
 
-cdef int trapz2d(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
-                 double xmin, double xmax, int nx,
-                 double ymin, double ymax, int ny,
-                 void *args, int num_cores):
-    cdef int i, j, npts, k, rest
-    cdef double c, hx, hy, x, y, alpha, beta
-    cdef np.ndarray[cDOUBLE, ndim=1] xs, ys, xs2, ts2, alphas, betas
+
+cdef int integratev(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
+                    double xmin, double xmax, int nx,
+                    double ymin, double ymax, int ny,
+                    void *args, int num_cores, str method):
+    """Integration of vecto-valued functions
+    """
+    cdef int i, npts, k, rest
+    cdef np.ndarray[cDOUBLE, ndim=1] xs2, ys2, alphas, betas
     cdef np.ndarray[cDOUBLE, ndim=2] outs
     cdef f_type f
     f = <f_type>fin
 
     outs = np.zeros((num_cores, out.shape[0]), DOUBLE)
-    nx -= 1
-    ny -= 1
+    if method == 'trapz2d':
+        xs2, ys2, alphas, betas = trapz2d_points(xmin, xmax, nx, ymin, ymax, ny)
+    elif method == 'simps2d':
+        xs2, ys2, alphas, betas = simps2d_points(xmin, xmax, nx, ymin, ymax, ny)
+    else:
+        print('RuntimeError: Method {0} not recognized!'.format(method))
+        raise
 
-    xs = np.linspace(xmin, xmax, nx+1).astype(DOUBLE)
-    ys = np.linspace(ymin, ymax, ny+1).astype(DOUBLE)
-
-    npts = (nx+1)*(ny+1)
-    xs2 = np.zeros(npts, DOUBLE)
-    ts2 = np.zeros(npts, DOUBLE)
-    alphas = np.zeros(npts, DOUBLE)
-    betas = np.zeros(npts, DOUBLE)
-
-    hx = (xmax-xmin)/nx
-    hy = (ymax-ymin)/ny
-    c = 1/4.*hx*hy
-
-    # building integration points
-    k = -1
-    for i,j in ((0, 0), (nx, 0), (0, ny), (nx, ny)):
-        k += 1
-        xs2[k] = xs[i]
-        ts2[k] = ys[j]
-        alphas[k] = 1*c
-        betas[k] = 1
-    for i in range(1, nx): # i from 1 to nx-1
-        for j in (0, ny):
-            k += 1
-            xs2[k] = xs[i]
-            ts2[k] = ys[j]
-            alphas[k] = 2*c
-            betas[k] = 1
-    for i in (0, nx):
-        for j in range(1, ny): # j from 1 to ny-1
-            k += 1
-            xs2[k] = xs[i]
-            ts2[k] = ys[j]
-            alphas[k] = 2*c
-            betas[k] = 1
-    for i in range(1, nx): # i from 1 to nx-1
-        for j in range(1, ny): # j from 1 to ny-1
-            k += 1
-            xs2[k] = xs[i]
-            ts2[k] = ys[j]
-            alphas[k] = 4*c
-            betas[k] = 1
-
+    npts = xs2.shape[0]
     k = npts/num_cores
     for i in prange(num_cores, nogil=True, chunksize=1, num_threads=num_cores,
             schedule='static'):
-        f(k, &xs2[k*i], &ts2[k*i], &outs[i, 0], &alphas[k*i], &betas[k*i],
+        f(k, &xs2[k*i], &ys2[k*i], &outs[i, 0], &alphas[k*i], &betas[k*i],
           args=args)
 
     rest = npts - k*num_cores
     assert rest >= 0, 'ERROR rest < 0!'
     if rest>0:
-        f(rest, &xs2[k*num_cores], &ts2[k*num_cores], &outs[0, 0],
-          &alphas[k*num_cores], &betas[k*num_cores], args=args)
-
-    np.sum(outs, axis=0, out=out)
-
-    return 0
-
-
-cdef int simps2d(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
-                 double xmin, double xmax, int nx,
-                 double ymin, double ymax, int ny,
-                 void *args, int num_cores):
-    cdef int i, j, npts, k, rest
-    cdef double c, hx, hy, x, y, alpha, beta
-    cdef np.ndarray[cDOUBLE, ndim=1] xs, ys, xs2, ts2, alphas, betas
-    cdef np.ndarray[cDOUBLE, ndim=2] outs
-    cdef f_type f
-    f = <f_type>fin
-
-    outs = np.zeros((num_cores, out.shape[0]), DOUBLE)
-    if nx % 2 != 0:
-        nx += 1
-    if ny % 2 != 0:
-        ny += 1
-
-    nx /= 2
-    ny /= 2
-
-    xs = np.linspace(xmin, xmax, (2*nx+1)).astype(DOUBLE)
-    ys = np.linspace(ymin, ymax, (2*ny+1)).astype(DOUBLE)
-
-    npts = (2*nx + 1)*(2*ny + 1)
-    xs2 = np.zeros(npts, DOUBLE)
-    ts2 = np.zeros(npts, DOUBLE)
-    alphas = np.zeros(npts, DOUBLE)
-    betas = np.zeros(npts, DOUBLE)
-
-    hx = (xmax-xmin)/(2*nx)
-    hy = (ymax-ymin)/(2*ny)
-    c = 1/9.*hx*hy
-
-    # building integration points
-    k = -1
-    for i,j in ((0, 0), (2*nx, 0), (0, 2*ny), (2*nx, 2*ny)):
-        k += 1
-        xs2[k] = xs[i]
-        ts2[k] = ys[j]
-        alphas[k] = 1*c
-        betas[k] = 1
-    for i in (0, 2*nx):
-        for j in range(1, ny+1): # from 1 to ny
-            k += 1
-            xs2[k] = xs[i]
-            ts2[k] = ys[2*j-1]
-            alphas[k] = 4*c
-            betas[k] = 1
-    for i in (0, 2*nx):
-        for j in range(1, ny): # from 1 to ny-1
-            k += 1
-            xs2[k] = xs[i]
-            ts2[k] = ys[2*j]
-            alphas[k] = 2*c
-            betas[k] = 1
-    for i in range(1, nx+1): # from 1 to nx
-        for j in (0, 2*ny):
-            k += 1
-            xs2[k] = xs[2*i-1]
-            ts2[k] = ys[j]
-            alphas[k] = 4*c
-            betas[k] = 1
-    for i in range(1, nx): # from 1 to nx-1
-        for j in (0, 2*ny):
-            k += 1
-            xs2[k] = xs[2*i]
-            ts2[k] = ys[j]
-            alphas[k] = 2*c
-            betas[k] = 1
-    for i in range(1, nx+1): # from 1 to nx
-        for j in range(1, ny+1): # from 1 to ny
-            k += 1
-            xs2[k] = xs[2*i-1]
-            ts2[k] = ys[2*j-1]
-            alphas[k] = 16*c
-            betas[k] = 1
-    for i in range(1, nx+1):
-        for j in range(1, ny):
-            k += 1
-            xs2[k] = xs[2*i-1]
-            ts2[k] = ys[2*j]
-            alphas[k] = 8*c
-            betas[k] = 1
-    for i in range(1, nx):
-        for j in range(1, ny+1):
-            k += 1
-            xs2[k] = xs[2*i]
-            ts2[k] = ys[2*j-1]
-            alphas[k] = 8*c
-            betas[k] = 1
-    for i in range(1, nx):
-        for j in range(1, ny):
-            k += 1
-            xs2[k] = xs[2*i]
-            ts2[k] = ys[2*j]
-            alphas[k] = 4*c
-            betas[k] = 1
-
-    k = npts/num_cores
-    for i in prange(num_cores, nogil=True, chunksize=1, num_threads=num_cores,
-            schedule='static'):
-        f(k, &xs2[k*i], &ts2[k*i], &outs[i, 0],
-          &alphas[k*i], &betas[k*i], args=args)
-
-    rest = npts - k*num_cores
-    assert rest >= 0, 'ERROR rest < 0!'
-    if rest>0:
-        f(rest, &xs2[k*num_cores], &ts2[k*num_cores], &outs[0, 0],
+        f(rest, &xs2[k*num_cores], &ys2[k*num_cores], &outs[0, 0],
           &alphas[k*num_cores], &betas[k*num_cores], args=args)
 
     np.sum(outs, axis=0, out=out)
@@ -216,3 +72,28 @@ cdef int trapz_wp(int npts, double xa, double xb, double *weights,
     weights[npts-1] = factor
     pts[0] = xa
     pts[npts-1] = xb
+
+
+cdef void _fsinsin(int npts, double *xs, double *ys, double *out,
+                   double *alphas, double *betas, void *args) nogil:
+    cdef int i
+    cdef double pi, x, y
+
+    with gil:
+        pi = 4*atan(1.)
+
+        for i in range(npts):
+            x = xs[i]
+            y = ys[i]
+            out[0] = out[0]*betas[i] + alphas[i]*(sin(x*pi)*sin(y*pi))
+            out[1] = out[1]*betas[i] + alphas[i]*(sin(3*x*pi)*sin(3*y*pi))
+            out[2] = out[2]*betas[i] + alphas[i]*(sin(5*x*pi)*sin(5*y*pi))
+
+
+def _test_integratev(nx, ny, method):
+    cdef double args
+    args = 0.
+    out = np.zeros((3,), dtype=DOUBLE)
+    integratev(<void *>_fsinsin, 3, out, 0., 1., nx, 0., 1., ny,
+               <void *>&args, 1, method)
+    return out
