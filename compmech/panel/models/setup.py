@@ -20,8 +20,8 @@ def configuration(parent_package='', top_path=None):
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
         runtime_library_dirs = [libpath]
-        args_linear = []
-        args_nonlinear = ['-ffast-math']
+        args_linear = ['-fopenmp']
+        args_nonlinear = ['-fopenmp', '-ffast-math']
 
     config.add_extension('kpanel_clt_donnell_bardell',
               sources=['kpanel_clt_donnell_bardell.pyx'],
@@ -59,6 +59,13 @@ def configuration(parent_package='', top_path=None):
               runtime_library_dirs=runtime_library_dirs,
               include_dirs=['../../include'],
               libraries=['bardell', 'bardell_12'],
+              library_dirs=['../../lib'])
+    config.add_extension('plate_clt_donnell_bardell_num',
+              sources=['plate_clt_donnell_bardell_num.pyx'],
+              extra_compile_args=args_nonlinear,
+              runtime_library_dirs=runtime_library_dirs,
+              include_dirs=['../../include'],
+              libraries=['bardell_functions'],
               library_dirs=['../../lib'])
     config.add_extension('plate_clt_donnell_bardell_field',
               sources=['plate_clt_donnell_bardell_field.pyx'],

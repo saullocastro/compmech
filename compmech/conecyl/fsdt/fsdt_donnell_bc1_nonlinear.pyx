@@ -54,12 +54,8 @@ def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    if method=='trapz2d':
-        trapz2d(<void *>cfk0L, fdim, k0Lv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
-    elif method=='simps2d':
-        simps2d(<void *>cfk0L, fdim, k0Lv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
+    integratev(<void *>cfk0L, fdim, k0Lv, xa, xb, nx, ta, tb, nt,
+               &args, num_cores, method)
 
     c = -1
 
@@ -718,12 +714,8 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    if method=='trapz2d':
-        trapz2d(<void *>cfkG, fdim, kGv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
-    elif method=='simps2d':
-        simps2d(<void *>cfkG, fdim, kGv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
+    integratev(<void *>cfkG, fdim, kGv, xa, xb, nx, ta, tb, nt,
+               &args, num_cores, method)
 
     c = -1
 
@@ -1026,12 +1018,8 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    if method=='trapz2d':
-        trapz2d(<void *>cfkLL, fdim, kLLv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
-    elif method=='simps2d':
-        simps2d(<void *>cfkLL, fdim, kLLv, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
+    integratev(<void *>cfkLL, fdim, kLLv, xa, xb, nx, ta, tb, nt,
+               &args, num_cores, method)
 
     c = -1
 
@@ -1356,12 +1344,8 @@ def calc_fint_0L_L0_LL(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    if method=='trapz2d':
-        trapz2d(<void *>cffint, fdim, fint, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
-    elif method=='simps2d':
-        simps2d(<void *>cffint, fdim, fint, xa, xb, nx, ta, tb, nt,
-                &args, num_cores)
+    integratev(<void *>cffint, fdim, fint, xa, xb, nx, ta, tb, nt,
+               &args, num_cores, method)
 
     return fint
 
