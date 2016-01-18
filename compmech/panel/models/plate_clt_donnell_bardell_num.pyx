@@ -10,7 +10,7 @@ from scipy.sparse import coo_matrix
 import numpy as np
 cimport numpy as np
 
-from compmech.integrate.integratev import trapz2d_points
+from compmech.integrate.integratev import trapz2d_points, simps2d_points
 
 
 cdef extern from 'bardell.h':
@@ -89,6 +89,7 @@ def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
     fdim = 1*m*m*n*n
 
     xs2, ys2, alphas, betas = trapz2d_points(0., a, nx, y1, y2, ny)
+    #xs2, ys2, alphas, betas = simps2d_points(0., a, nx, y1, y2, ny)
     npts = xs2.shape[0]
 
     kG0y1y2r = np.zeros((fdim,), dtype=INT)
@@ -167,6 +168,7 @@ def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                             fBwxi = calc_fxi(j, xi, w1tx, w1rx, w2tx, w2rx)
 
                             c += 1
+
                             if pti == 0:
                                 kG0y1y2r[c] = row+2
                                 kG0y1y2c[c] = col+2

@@ -79,29 +79,29 @@ def test_panel_fkG0y1y2_num():
         p.plyt = 1e-3*0.125
         p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
         p.model = 'plate_clt_donnell_bardell'
-        p.m = 10
-        p.n = 11
+        p.m = 7
+        p.n = 8
         p.Nxx = -1.
-        p.nx = 40
-        p.ny = 40
+        p.nx = 32
+        p.ny = 32
         num = 100.
         for i in range(int(num)):
             if i == 0 or i == num - 2:
-                fx = np.sin(np.pi/2*i/(num-1.))*p.Nxx*p.a/(num-1.)/2.
+                fx = p.Nxx*p.a/(num-1.)/2.
             else:
-                fx = np.sin(np.pi/2*i/(num-1.))*p.Nxx*p.a/(num-1.)
+                fx = p.Nxx*p.a/(num-1.)
             p.u2tx = 1
             p.u2rx = 1
             p.add_force(x=p.a, y=i*p.b/(num-1.), fx=fx, fy=0., fz=0.,
                         cte=True)
         p.static()
-        p.plot(p.analysis.cs[0], filename='test.png', colorbar=True)
+        #p.plot(p.analysis.cs[0], filename='test.png', colorbar=True)
 
         p.lb(silent=True)
         p.plot(p.eigvecs[:, 0], filename='test_lb.png')
 
-        #p.lb(silent=True, c=p.analysis.cs[0])
-        #p.plot(p.eigvecs[:, 0], filename='test_lb2.png')
+        p.lb(silent=True, c=p.analysis.cs[0])
+        p.plot(p.eigvecs[:, 0], filename='test_lb2.png')
 
 if __name__ == '__main__':
     #test_panel_lb()
