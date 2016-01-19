@@ -82,8 +82,8 @@ def test_panel_fkG0y1y2_num():
         p.m = 7
         p.n = 8
         p.Nxx = -1.
-        p.nx = 32
-        p.ny = 32
+        p.nx = 25
+        p.ny = 25
         num = 100.
         for i in range(int(num)):
             if i == 0 or i == num - 2:
