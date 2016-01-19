@@ -65,7 +65,7 @@ def configuration(parent_package='', top_path=None):
               extra_compile_args=args_nonlinear,
               runtime_library_dirs=runtime_library_dirs,
               include_dirs=['../../include'],
-              libraries=['bardell_functions'],
+              libraries=['bardell_functions', 'legendre_gauss_quadrature'],
               library_dirs=['../../lib'])
     config.add_extension('plate_clt_donnell_bardell_field',
               sources=['plate_clt_donnell_bardell_field.pyx'],

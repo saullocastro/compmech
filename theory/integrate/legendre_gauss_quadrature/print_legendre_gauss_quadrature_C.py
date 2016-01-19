@@ -31,6 +31,7 @@ with open('../../../C/src/legendre_gauss_quadrature.c', 'wb') as f:
             f.write('        points[{0}] = {1};\n'.format(i, pt))
         for i, (pt, wg) in enumerate(v):
             f.write('        weights[{0}] = {1};\n'.format(i, wg))
+        f.write('        return;\n')
     f.write('    }\n')
     f.write('}\n')
 
