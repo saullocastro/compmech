@@ -10,7 +10,7 @@ from scipy.sparse import coo_matrix
 import numpy as np
 cimport numpy as np
 
-from compmech.integrate.integratev import trapz2d_points, simps2d_points
+from compmech.integrate.integrate cimport trapz_quad
 
 
 cdef extern from 'bardell.h':
@@ -97,8 +97,10 @@ def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
     etas = np.zeros(ny, dtype=DOUBLE)
     weightsy = np.zeros(ny, dtype=DOUBLE)
 
-    leggauss_quad(nx, &xis[0], &weightsx[0])
-    leggauss_quad(ny, &etas[0], &weightsy[0])
+    #leggauss_quad(nx, &xis[0], &weightsx[0])
+    #leggauss_quad(ny, &etas[0], &weightsy[0])
+    trapz_quad(nx, &xis[0], &weightsx[0])
+    trapz_quad(ny, &etas[0], &weightsy[0])
 
     kG0y1y2r = np.zeros((fdim,), dtype=INT)
     kG0y1y2c = np.zeros((fdim,), dtype=INT)
@@ -134,16 +136,16 @@ def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                         gAueta = calc_fxi(j, eta, u1ty, u1ry, u2ty, u2ry)
                         gAveta = calc_fxi(j, eta, v1ty, v1ry, v2ty, v2ry)
                         gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
-                        gAwetaeta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        gAwetaeta = calc_fxixi(j, eta, w1ty, w1ry, w2ty, w2ry)
 
                         row = row0 + num*(j*m + i)
 
-                        exx += cs[row+0]*fAuxi*gAu
-                        eyy += cs[row+1]*fAv*gAveta
-                        gxy += cs[row+0]*fAu*gAueta + cs[row+1]*fAvxi*gAv
-                        kxx += -cs[row+2]*fAwxixi*gAw
-                        kyy += -cs[row+2]*fAw*gAwetaeta
-                        kxy += -2*cs[row+2]*fAwxi*gAweta
+                        exx += cs[row+0]*(2/a)*fAuxi*gAu
+                        eyy += cs[row+1]*fAv*(2/b)*gAveta
+                        gxy += cs[row+0]*fAu*(2/b)*gAueta + cs[row+1]*(2/a)*fAvxi*gAv
+                        kxx += -cs[row+2]*(2/a)*(2/a)*fAwxixi*gAw
+                        kyy += -cs[row+2]*(2/b)*fAw*gAwetaeta
+                        kxy += -2*cs[row+2]*(2/a)*fAwxi*(2/b)*gAweta
 
                 Nxx = A11*exx + A12*eyy + A16*gxy + B11*kxx + B12*kyy + B16*kxy
                 Nyy = A12*exx + A22*eyy + A26*gxy + B12*kxx + B22*kyy + B26*kxy
@@ -177,7 +179,8 @@ def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                                 if ptx == 0:
                                     kG0y1y2r[c] = row+2
                                     kG0y1y2c[c] = col+2
-                                kG0y1y2v[c] += kG0y1y2v[c] + alpha*(Nxx*b*fAwxi*fBwxi*gAw*gBw/a + Nxy*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta) + Nyy*a*fAw*fBw*gAweta*gBweta/b)
+
+                                kG0y1y2v[c] = kG0y1y2v[c] + alpha*(Nxx*b*fAwxi*fBwxi*gAw*gBw/a + Nxy*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta) + Nyy*a*fAw*fBw*gAweta*gBweta/b)
 
     kG0y1y2 = coo_matrix((kG0y1y2v, (kG0y1y2r, kG0y1y2c)), shape=(size, size))
 
