@@ -27,55 +27,43 @@ cdef void trapz_quad(int nx, double *xis, double *weights) nogil:
 
 def trapz2d_points(double xmin, double xmax, int nx,
                    double ymin, double ymax, int ny):
-    cdef int i, j, npts, k
-    cdef double c, hx, hy, x, y, alpha, beta
-    cdef np.ndarray[cDOUBLE, ndim=1] xs, ys, xs2, ys2, alphas, betas
+    cdef int i, j, c
+    cdef double x, y, xi, eta, ctex, ctey
+    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
+    cdef np.ndarray[cDOUBLE, ndim=1] xs2, ys2, alphas, betas
 
-    nx -= 1
-    ny -= 1
+    xis = np.zeros(nx, dtype=DOUBLE)
+    weightsxi = np.zeros(nx, dtype=DOUBLE)
+    etas = np.zeros(ny, dtype=DOUBLE)
+    weightseta = np.zeros(ny, dtype=DOUBLE)
 
-    xs = np.linspace(xmin, xmax, nx+1).astype(DOUBLE)
-    ys = np.linspace(ymin, ymax, ny+1).astype(DOUBLE)
+    xs2 = np.zeros(nx*ny, DOUBLE)
+    ys2 = np.zeros(nx*ny, DOUBLE)
+    alphas = np.zeros(nx*ny, DOUBLE)
+    betas = np.zeros(nx*ny, DOUBLE)
 
-    npts = (nx+1)*(ny+1)
-    xs2 = np.zeros(npts, DOUBLE)
-    ys2 = np.zeros(npts, DOUBLE)
-    alphas = np.zeros(npts, DOUBLE)
-    betas = np.zeros(npts, DOUBLE)
+    with nogil:
+        trapz_quad(nx, &xis[0], &weightsxi[0])
+        trapz_quad(ny, &etas[0], &weightseta[0])
 
-    hx = (xmax-xmin)/nx
-    hy = (ymax-ymin)/ny
-    c = 1/4.*hx*hy
+        # building integration points
 
-    # building integration points
-    k = -1
-    for i, j in ((0, 0), (nx, 0), (0, ny), (nx, ny)):
-        k += 1
-        xs2[k] = xs[i]
-        ys2[k] = ys[j]
-        alphas[k] = 1*c
-        betas[k] = 1
-    for i in range(1, nx): # i from 1 to nx-1
-        for j in (0, ny):
-            k += 1
-            xs2[k] = xs[i]
-            ys2[k] = ys[j]
-            alphas[k] = 2*c
-            betas[k] = 1
-    for i in (0, nx):
-        for j in range(1, ny): # j from 1 to ny-1
-            k += 1
-            xs2[k] = xs[i]
-            ys2[k] = ys[j]
-            alphas[k] = 2*c
-            betas[k] = 1
-    for i in range(1, nx): # i from 1 to nx-1
-        for j in range(1, ny): # j from 1 to ny-1
-            k += 1
-            xs2[k] = xs[i]
-            ys2[k] = ys[j]
-            alphas[k] = 4*c
-            betas[k] = 1
+        ctex = (xmax - xmin)/2.
+        ctey = (ymax - ymin)/2.
+        c = -1
+        for i in range(nx):
+            xi = xis[i]
+            x = ctex*(xi + 1) + xmin
+            for j in range(ny):
+                eta = etas[j]
+                y = ctey*(eta + 1) + ymin
+
+                c += 1
+
+                xs2[c] = x
+                ys2[c] = y
+                alphas[c] = ctex*ctey*weightsxi[i]*weightseta[j]
+                betas[c] = 1.
 
     return xs2, ys2, alphas, betas
 
