@@ -125,6 +125,15 @@ class Analysis(object):
 
         Selects the specific solver based on the ``NL_method`` parameter.
 
+        Parameters
+        ----------
+
+        NLgeom : bool
+            Flag to indicate whether a linear or a non-linear analysis is to
+            be performed.
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+
         """
         self.increments = []
         self.cs = []
@@ -141,11 +150,11 @@ class Analysis(object):
 
         else:
             msg('Started Linear Static Analysis', silent=silent)
-            fext = self.calc_fext()
-            k0 = self.calc_k0()
+            fext = self.calc_fext(silent=silent)
+            k0 = self.calc_k0(silent=silent)
 
             if self.calc_k0_bc is not None:
-                k0_bc = self.calc_k0_bc()
+                k0_bc = self.calc_k0_bc(silent=silent)
                 k0max = k0.max()
                 k0 /= k0max
 
@@ -154,7 +163,7 @@ class Analysis(object):
 
                 k0 = k0 + k0_bc
 
-            c = solve(k0, fext)
+            c = solve(k0, fext, silent=silent)
 
             if self.calc_k0_bc is not None:
                 k0 *= k0max
