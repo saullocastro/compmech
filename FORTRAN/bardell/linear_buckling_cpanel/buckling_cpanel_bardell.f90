@@ -1,6 +1,8 @@
 ! BUCKLING_CPANEL_BARDELL program
 !
-! The required inputs that should be given are described below
+! Buckling of cylindrical panels.
+!
+! The required inputs that should be given are described below.
 ! 
 ! Run control
 ! -----------
@@ -20,7 +22,19 @@
 ! b : float
 !   The panel circumferential width (dimension along y)
 ! r : float
-!   The panel radius.
+!   The panel radius. (Set a high value to simulate a plate)
+! t : float, optional (used with ISOTROPIC flag)
+!   Panel thickness
+!
+! Isotropic Material Properties
+! -----------------------------
+! ISOTROPIC : flag
+!   If present in the input, matrix ABD will be calculated based on
+!   E, nu and t.
+! E : float
+!   Elastic modulus
+! nu : float
+!   Poisson's ratio
 !
 ! Applied Loads
 ! -------------
@@ -33,6 +47,8 @@
 !
 ! Laminate Constitutive Varibles (matrix ABD)
 ! -------------------------------------------
+! ONLY used if ISOTROPIC = FALSE
+!
 ! A11 : float
 !   Membrane stiffness along x
 ! A12 : float
@@ -232,6 +248,8 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     INTEGER LWORK
     INTEGER, ALLOCATABLE :: IWORK(:)
     REAL*8, ALLOCATABLE :: WORK(:)
+    REAL*8 E11, nu, G12, t
+    CHARACTER (LEN=5) :: ISOTROPIC
     INTEGER, ALLOCATABLE :: TMP(:)
 
     ! outputs
@@ -248,6 +266,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     NUM = 10
     M = 15
     N = 15
+    ISOTROPIC = "FALSE"
 
     ! Default boundary conditions (simply supported)
     u1tx = 0.
@@ -294,6 +313,11 @@ PROGRAM BUCKLING_CPANEL_BARDELL
         IF (TRIM(line) == "Nxx") READ(10, *) Nxx
         IF (TRIM(line) == "Nyy") READ(10, *) Nyy
         IF (TRIM(line) == "Nxy") READ(10, *) Nxy
+
+        IF (TRIM(line) == "ISOTROPIC") ISOTROPIC = "TRUE"
+        IF (TRIM(line) == "E") READ(10, *) E11
+        IF (TRIM(line) == "nu") READ(10, *) nu
+        IF (TRIM(line) == "t") READ(10, *) t
 
         IF (TRIM(line) == "A11") READ(10, *) A11
         IF (TRIM(line) == "A12") READ(10, *) A12
@@ -347,6 +371,33 @@ PROGRAM BUCKLING_CPANEL_BARDELL
 
     NT = 3*M*N
 
+    ! Calculating ABD
+
+    IF (ISOTROPIC == "TRUE") THEN
+        G12 = E11/(2*(1 + nu))
+
+        A11 = E11*t/(1 - nu**2)
+        A12 = nu*E11*t/(1 - nu**2)
+        A16 = 0
+        A22 = E11*t/(1 - nu**2)
+        A26 = 0
+        A66 = G12*t
+
+        B11 = 0
+        B12 = 0
+        B16 = 0
+        B22 = 0
+        B26 = 0
+        B66 = 0
+
+        D11 = E11*t**3/(12*(1 - nu**2))
+        D12 = nu*E11*t**3/(12*(1 - nu**2))
+        D16 = 0
+        D22 = E11*t**3/(12*(1 - nu**2))
+        D26 = 0
+        D66 = G12*t**3/12
+    END IF
+
     ! allocating arrays
     ALLOCATE(K0(NT, NT))
     ALLOCATE(KG0(NT, NT))
@@ -364,7 +415,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     ! removing null rows and columns
     ALLOCATE(TMP(NT)) 
     TMP = 0
-    WHERE (ABS(SUM(K0, DIM=1)) <= 0.0000001) TMP = 1
+    WHERE (ABS(SUM(K0, DIM=1)) <= 0.0000000001) TMP = 1
     nulls = SUM(TMP)
     WRITE(*, *) "Number of removed cols:", nulls
 
@@ -436,19 +487,19 @@ PROGRAM BUCKLING_CPANEL_BARDELL
         WRITE(11, *) EIGVALS(i)
     END DO
 
+    WRITE(*, *) 'EIGVALS:'
+    WRITE(*, *) '    1st) ', EIGVALS(1)
+    WRITE(*, *) '    2nd) ', EIGVALS(2)
+    WRITE(*, *) '    3rd) ', EIGVALS(3)
+    WRITE(*, *) '    4th) ', EIGVALS(4)
+    WRITE(*, *) '    5th) ', EIGVALS(5)
     IF (INFO /= 0) THEN
-        WRITE(*, *) 'EIGVALS', EIGVALS(1), EIGVALS(2)
         WRITE(*, *) 'Mout', Mout
         WRITE(*, *) 'INFO', NT-nulls, INFO
         !WRITE(*, *) 'IFAIL', IFAIL
         WRITE(*, *) 'MIN(K02), MAX(K02)', MINVAL(K02), MAXVAL(K02)
         WRITE(*, *) 'SUM(K02), SUM(KG02)', SUM(K02), SUM(KG02)
     END IF
-    WRITE(*, *) 'EIGVALS', EIGVALS(1), EIGVALS(2)
-    WRITE(*, *) 'Mout', Mout
-    WRITE(*, *) 'INFO', NT-nulls, INFO
-    WRITE(*, *) 'MIN(K02), MAX(K02)', MINVAL(K02), MAXVAL(K02)
-    WRITE(*, *) 'SUM(K02), SUM(KG02)', SUM(K02), SUM(KG02)
 
     DEALLOCATE(K0)
     DEALLOCATE(KG0)
