@@ -531,10 +531,9 @@ class Panel(object):
                            self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                            size, row0, col0)
         else:
-            if y1 is None or y2 is None:
-                y1 = 0.
-                y2 = b
-            kG0 = matrices.fkG0y1y2_num(c, F, y1, y2, a, b, r,
+            if y1 is not None or y2 is not None:
+                raise NotImplementedError('Only y1=0, y2=b in implemented!')
+            kG0 = matrices.fkG0_num(c, F, a, b, r,
                        alpharad, self.m, self.n,
                        self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                        self.u1ty, self.u1ry, self.u2ty, self.u2ry,
@@ -1351,7 +1350,6 @@ class Panel(object):
         NLgeom : bool
             Flag to indicate whether a linear or a non-linear analysis is to
             be performed.
-
         silent : bool, optional
             A boolean to tell whether the log messages should be printed.
 
