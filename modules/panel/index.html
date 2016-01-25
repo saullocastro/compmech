@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Semi-analytical Models for Panels (compmech.panel) &mdash; CompMech 0.5.3 documentation</title>
+    <title>Semi-analytical Models for Panels (compmech.panel) &mdash; CompMech 0.5.5.dev0+08244a6 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.5.3',
+        VERSION:     '0.5.5.dev0+08244a6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.5.3 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.5.5.dev0+08244a6 documentation" href="../../index.html" />
     <link rel="up" title="Modules" href="../index.html" />
     <link rel="prev" title="Semi-analytical Models for Cones and Cylinder (compmech.conecyl)" href="../conecyl/index.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="../conecyl/index.html" title="Semi-analytical Models for Cones and Cylinder (compmech.conecyl)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.3 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
       </ul>
     </div>  
@@ -84,7 +84,7 @@
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">bc_ssss</span></code>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_betacr" title="compmech.panel.panel.Panel.calc_betacr"><code class="xref py py-obj docutils literal"><span class="pre">calc_betacr</span></code></a>([beta1,&nbsp;beta2,&nbsp;rho_air,&nbsp;Mach,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_betacr" title="compmech.panel.panel.Panel.calc_betacr"><code class="xref py py-obj docutils literal"><span class="pre">calc_betacr</span></code></a>([atype,&nbsp;beta1,&nbsp;beta2,&nbsp;rho_air,&nbsp;...])</td>
 <td>Calculate the critical aerodynamic pressure coefficient</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_cA" title="compmech.panel.panel.Panel.calc_cA"><code class="xref py py-obj docutils literal"><span class="pre">calc_cA</span></code></a>(aeromu[,&nbsp;silent,&nbsp;finalize])</td>
@@ -99,7 +99,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_kA" title="compmech.panel.panel.Panel.calc_kA"><code class="xref py py-obj docutils literal"><span class="pre">calc_kA</span></code></a>([silent,&nbsp;finalize])</td>
 <td>Calculate the aerodynamic matrix using the linear piston theory</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_kG0" title="compmech.panel.panel.Panel.calc_kG0"><code class="xref py py-obj docutils literal"><span class="pre">calc_kG0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_kG0" title="compmech.panel.panel.Panel.calc_kG0"><code class="xref py py-obj docutils literal"><span class="pre">calc_kG0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize,&nbsp;c])</td>
 <td>Calculate the linear geometric stiffness matrix</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_kM" title="compmech.panel.panel.Panel.calc_kM"><code class="xref py py-obj docutils literal"><span class="pre">calc_kM</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize])</td>
@@ -111,7 +111,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.get_size" title="compmech.panel.panel.Panel.get_size"><code class="xref py py-obj docutils literal"><span class="pre">get_size</span></code></a>()</td>
 <td>Calculates the size of the stiffness matrices</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.lb" title="compmech.panel.panel.Panel.lb"><code class="xref py py-obj docutils literal"><span class="pre">lb</span></code></a>([tol,&nbsp;sparse_solver,&nbsp;calc_kA,&nbsp;silent])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.lb" title="compmech.panel.panel.Panel.lb"><code class="xref py py-obj docutils literal"><span class="pre">lb</span></code></a>([tol,&nbsp;sparse_solver,&nbsp;calc_kA,&nbsp;silent,&nbsp;c])</td>
 <td>Performs a linear buckling analysis</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.plot" title="compmech.panel.panel.Panel.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(c[,&nbsp;invert_y,&nbsp;plot_type,&nbsp;vec,&nbsp;...])</td>
@@ -175,13 +175,17 @@ analysis.</p>
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.calc_betacr">
-<code class="descname">calc_betacr</code><span class="sig-paren">(</span><em>beta1=10000.0</em>, <em>beta2=100000.0</em>, <em>rho_air=0.3</em>, <em>Mach=2.0</em>, <em>modes=(0</em>, <em>1</em>, <em>2</em>, <em>3</em>, <em>4</em>, <em>5</em>, <em>6</em>, <em>7</em>, <em>8</em>, <em>9)</em>, <em>num=5</em>, <em>silent=False</em>, <em>TOL=0.001</em>, <em>reduced_dof=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_betacr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_betacr" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calc_betacr</code><span class="sig-paren">(</span><em>atype=2</em>, <em>beta1=10000.0</em>, <em>beta2=100000.0</em>, <em>rho_air=0.3</em>, <em>Mach=2.0</em>, <em>modes=(0</em>, <em>1</em>, <em>2</em>, <em>3</em>, <em>4</em>, <em>5</em>, <em>6</em>, <em>7</em>, <em>8</em>, <em>9)</em>, <em>num=5</em>, <em>silent=False</em>, <em>TOL=0.001</em>, <em>reduced_dof=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_betacr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_betacr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the critical aerodynamic pressure coefficient</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rho_air</strong> : float, optional</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>atype</strong> : int, optional</p>
+<blockquote>
+<div><p>See <a class="reference internal" href="#compmech.panel.panel.Panel.freq" title="compmech.panel.panel.Panel.freq"><code class="xref py py-meth docutils literal"><span class="pre">Panel.freq()</span></code></a> for more details.</p>
+</div></blockquote>
+<p><strong>rho_air</strong> : float, optional</p>
 <blockquote>
 <div><p>Air density.</p>
 </div></blockquote>
@@ -273,7 +277,7 @@ matrix and accelerates the run. Only effective when
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.calc_kG0">
-<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_kG0" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_kG0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the linear geometric stiffness matrix</p>
 </dd></dl>
 
@@ -289,26 +293,6 @@ matrix and accelerates the run. Only effective when
 <dd><p>Performs a natural frequency analysis</p>
 <p>The following parameters of the will affect the linear buckling
 analysis:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="38%" />
-<col width="62%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">parameter</th>
-<th class="head">description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">num_eigenvalues</span></code></td>
-<td>Number of eigenvalues to be extracted</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">num_eigvalues_print</span></code></td>
-<td>Number of eigenvalues to print after
-the analysis is completed</td>
-</tr>
-</tbody>
-</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -389,29 +373,9 @@ the external force vector <img class="math" src="../../_images/math/cb43e5db3d9b
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.lb">
-<code class="descname">lb</code><span class="sig-paren">(</span><em>tol=0</em>, <em>sparse_solver=True</em>, <em>calc_kA=False</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.lb" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lb</code><span class="sig-paren">(</span><em>tol=0</em>, <em>sparse_solver=True</em>, <em>calc_kA=False</em>, <em>silent=False</em>, <em>c=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.lb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a linear buckling analysis</p>
 <p>The following parameters will affect the linear buckling analysis:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="38%" />
-<col width="62%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">parameter</th>
-<th class="head">description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">num_eigenvalues</span></code></td>
-<td>Number of eigenvalues to be extracted</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">num_eigvalues_print</span></code></td>
-<td>Number of eigenvalues to print after
-the analysis is completed</td>
-</tr>
-</tbody>
-</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -430,8 +394,12 @@ the analysis is completed</td>
 <div><p>If the Aerodynamic matrix should be considered.</p>
 </div></blockquote>
 <p><strong>silent</strong> : bool, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>A boolean to tell whether the log messages should be printed.</p>
+</div></blockquote>
+<p><strong>c</strong> : array-like, optional</p>
+<blockquote class="last">
+<div><p>A set of Ritz constants that will be use to compute KG.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -827,13 +795,13 @@ stored as parameters with the same name in the <code class="docutils literal"><s
         <li class="right" >
           <a href="../conecyl/index.html" title="Semi-analytical Models for Cones and Cylinder (compmech.conecyl)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.3 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jan 07, 2016.
+      Last updated on Jan 25, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
