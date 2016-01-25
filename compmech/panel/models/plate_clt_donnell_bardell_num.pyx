@@ -47,21 +47,20 @@ INT = np.int64
 cdef int num = 3
 
 
-def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
-                 double y1, double y2,
-                 double a, double b, double r, double alpharad, int m, int n,
-                 double u1tx, double u1rx, double u2tx, double u2rx,
-                 double u1ty, double u1ry, double u2ty, double u2ry,
-                 double v1tx, double v1rx, double v2tx, double v2rx,
-                 double v1ty, double v1ry, double v2ty, double v2ry,
-                 double w1tx, double w1rx, double w2tx, double w2rx,
-                 double w1ty, double w1ry, double w2ty, double w2ry,
-                 int size, int row0, int col0, int nx, int ny):
+def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
+             double a, double b, double r, double alpharad, int m, int n,
+             double u1tx, double u1rx, double u2tx, double u2rx,
+             double u1ty, double u1ry, double u2ty, double u2ry,
+             double v1tx, double v1rx, double v2tx, double v2rx,
+             double v1ty, double v1ry, double v2ty, double v2ry,
+             double w1tx, double w1rx, double w2tx, double w2rx,
+             double w1ty, double w1ry, double w2ty, double w2ry,
+             int size, int row0, int col0, int nx, int ny):
     cdef int i, k, j, l, c, row, col, ptx, pty
     cdef double xi, eta, x, y, alpha
 
-    cdef np.ndarray[cINT, ndim=1] kG0y1y2r, kG0y1y2c
-    cdef np.ndarray[cDOUBLE, ndim=1] kG0y1y2v
+    cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
+    cdef np.ndarray[cDOUBLE, ndim=1] kG0v
 
     cdef double fAu, fAv, fAw, fAuxi, fAvxi, fAwxi, fAwxixi
     cdef double gAu, gAv, gAw, gAueta, gAveta, gAweta, gAwetaeta
@@ -97,14 +96,14 @@ def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
     etas = np.zeros(ny, dtype=DOUBLE)
     weightsy = np.zeros(ny, dtype=DOUBLE)
 
-    #leggauss_quad(nx, &xis[0], &weightsx[0])
-    #leggauss_quad(ny, &etas[0], &weightsy[0])
-    trapz_quad(nx, &xis[0], &weightsx[0])
-    trapz_quad(ny, &etas[0], &weightsy[0])
+    leggauss_quad(nx, &xis[0], &weightsx[0])
+    leggauss_quad(ny, &etas[0], &weightsy[0])
+    #trapz_quad(nx, &xis[0], &weightsx[0])
+    #trapz_quad(ny, &etas[0], &weightsy[0])
 
-    kG0y1y2r = np.zeros((fdim,), dtype=INT)
-    kG0y1y2c = np.zeros((fdim,), dtype=INT)
-    kG0y1y2v = np.zeros((fdim,), dtype=DOUBLE)
+    kG0r = np.zeros((fdim,), dtype=INT)
+    kG0c = np.zeros((fdim,), dtype=INT)
+    kG0v = np.zeros((fdim,), dtype=DOUBLE)
 
     with nogil:
         for ptx in range(nx):
@@ -113,7 +112,7 @@ def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                 eta = etas[pty]
                 alpha = weightsx[ptx]*weightsy[pty]
 
-                # kG0y1y2
+                # kG0
 
                 exx = 0.
                 eyy = 0.
@@ -152,38 +151,38 @@ def fkG0y1y2_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                 Nxy = A16*exx + A26*eyy + A66*gxy + B16*kxx + B26*kyy + B66*kxy
 
                 c = -1
-                for j in range(n):
-                    gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
-                    gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                for i in range(m):
+                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
 
-                    for l in range(n):
-                        gBw = calc_f(l, eta, w1ty, w1ry, w2ty, w2ry)
-                        gBweta = calc_fxi(l, eta, w1ty, w1ry, w2ty, w2ry)
+                    for k in range(m):
+                        fBw = calc_f(k, xi, w1tx, w1rx, w2tx, w2rx)
+                        fBwxi = calc_fxi(k, xi, w1tx, w1rx, w2tx, w2rx)
 
-                        for i in range(m):
-                            fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
-                            fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                        for j in range(n):
+                            gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                            gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
 
-                            for k in range(m):
+                            for l in range(n):
+                                gBw = calc_f(l, eta, w1ty, w1ry, w2ty, w2ry)
+                                gBweta = calc_fxi(l, eta, w1ty, w1ry, w2ty, w2ry)
+
                                 row = row0 + num*(j*m + i)
                                 col = col0 + num*(l*m + k)
 
                                 if row > col:
                                     continue
 
-                                fBw = calc_f(j, xi, w1tx, w1rx, w2tx, w2rx)
-                                fBwxi = calc_fxi(j, xi, w1tx, w1rx, w2tx, w2rx)
-
                                 c += 1
 
-                                if ptx == 0:
-                                    kG0y1y2r[c] = row+2
-                                    kG0y1y2c[c] = col+2
+                                if ptx == 0 and pty == 0:
+                                    kG0r[c] = row+2
+                                    kG0c[c] = col+2
 
-                                kG0y1y2v[c] = kG0y1y2v[c] + alpha*(Nxx*b*fAwxi*fBwxi*gAw*gBw/a + Nxy*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta) + Nyy*a*fAw*fBw*gAweta*gBweta/b)
+                                kG0v[c] = kG0v[c] + alpha*(Nxx*b*fAwxi*fBwxi*gAw*gBw/a + Nxy*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta) + Nyy*a*fAw*fBw*gAweta*gBweta/b)
 
-    kG0y1y2 = coo_matrix((kG0y1y2v, (kG0y1y2r, kG0y1y2c)), shape=(size, size))
+    kG0 = coo_matrix((kG0v, (kG0r, kG0c)), shape=(size, size))
 
-    return kG0y1y2
+    return kG0
 
 
