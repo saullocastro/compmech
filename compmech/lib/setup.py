@@ -1,6 +1,7 @@
 from __future__ import division, print_function, absolute_import
 
 import os
+from distutils.sysconfig import get_python_lib
 from os.path import basename, dirname, realpath, extsep, join
 import hashlib
 from multiprocessing import Pool, cpu_count
@@ -15,8 +16,6 @@ def in_appveyor_ci():
 
 
 def compile(config, src):
-    libdir = realpath(config.package_path)
-
     if config.top_path.endswith('lib'):
         srcpath = join(realpath(config.package_path), src)
     else:
@@ -60,7 +59,12 @@ def compile(config, src):
 
 def link(config, instlib):
     objs = ''
-    libdir = realpath(config.package_path)
+    libdir = join(get_python_lib(), 'compmech', 'lib')
+    try:
+        os.makedirs(libdir)
+    except:
+        pass
+
     if os.name == 'nt' and not in_appveyor_ci():
         objext = 'obj'
     else:
