@@ -533,7 +533,7 @@ class Panel(object):
         else:
             if y1 is not None or y2 is not None:
                 raise NotImplementedError('Only y1=0, y2=b in implemented!')
-            kG0 = matrices.fkG0_num(c, F, a, b, r,
+            kG0 = matrices.fkG_num(c, F, a, b, r,
                        alpharad, self.m, self.n,
                        self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                        self.u1ty, self.u1ry, self.u2ty, self.u2ry,
