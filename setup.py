@@ -122,7 +122,7 @@ def setup_package():
         name='compmech',
         maintainer='CompMech Developers',
         maintainer_email='compmech.project@gmail.com ',
-        version = FULLVERSION,
+        version=FULLVERSION,
         description=DOCLINES[0],
         long_description='\n'.join(DOCLINES[2:]),
         url='http://compmech.github.io/compmech/',

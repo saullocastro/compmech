@@ -167,9 +167,14 @@ class BladeStiff1D(object):
         msg('finished!', level=2, silent=silent)
 
 
-    def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+    def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
+            c=None):
         """Calculate the linear geometric stiffness matrix
         """
+        #TODO
+        if c is not None:
+            raise NotImplementedError('numerical kG0 not implemented')
+
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
@@ -475,9 +480,14 @@ class BladeStiff2D(object):
         msg('finished!', level=2, silent=silent)
 
 
-    def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+    def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
+            c=None):
         """Calculate the linear geometric stiffness matrix
         """
+        #TODO
+        if c is not None:
+            raise NotImplementedError('numerical kG0 not implemented')
+
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 

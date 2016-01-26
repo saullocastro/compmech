@@ -13,7 +13,11 @@ def configuration(parent_package='',top_path=None):
         else:
             compile_args = ['/openmp']
     else:
-        compile_args = ['-fopenmp']
+        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
+            #NOTE removing openmp to compile in Travis CI
+            compile_args = []
+        else:
+            compile_args = ['-fopenmp']
 
     config = Configuration('integrate', parent_package, top_path)
     config.add_extension('integrate',

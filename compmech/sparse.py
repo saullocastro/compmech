@@ -52,7 +52,7 @@ def remove_null_cols(*args, **kwargs):
     return args
 
 
-def solve(a, b, **kwargs):
+def solve(a, b, silent=False, **kwargs):
     """Wrapper for spsolve removing null columns
 
     The null columns of matrix ``a`` is removed such and the linear system of
@@ -65,6 +65,8 @@ def solve(a, b, **kwargs):
         A square matrix that will be converted to CSR form in the solution.
     b : scipy sparse matrix
         The matrix or vector representing the right hand side of the equation.
+    silent : bool, optional
+        A boolean to tell whether the log messages should be printed.
     kwargs : keyword arguments, optional
         Other arguments directly passed to :func:`spsolve`.
 
@@ -77,7 +79,7 @@ def solve(a, b, **kwargs):
         ``(a.shape[1], b.shape[1])``.
 
     """
-    a, used_cols = remove_null_cols(a)
+    a, used_cols = remove_null_cols(a, silent=silent)
     px = spsolve(a, b[used_cols], **kwargs)
     x = np.zeros(b.shape[0], dtype=b.dtype)
     x[used_cols] = px
