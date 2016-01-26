@@ -21,7 +21,7 @@ def configuration(parent_package='', top_path=None):
             args_linear = ['/openmp']
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
-        runtime_library_dirs = [libpath]
+        runtime_library_dirs = [lib]
         args_linear = ['-fopenmp']
         args_nonlinear = ['-fopenmp', '-ffast-math']
 
