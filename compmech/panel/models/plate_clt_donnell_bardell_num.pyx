@@ -31,7 +31,7 @@ INT = np.int64
 cdef int num = 3
 
 
-def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
+def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
              double a, double b, double r, double alpharad, int m, int n,
              double u1tx, double u1rx, double u2tx, double u2rx,
              double u1ty, double u1ry, double u2ty, double u2ry,
@@ -43,8 +43,8 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
     cdef int i, k, j, l, c, row, col, ptx, pty
     cdef double xi, eta, x, y, alpha
 
-    cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
-    cdef np.ndarray[cDOUBLE, ndim=1] kG0v
+    cdef np.ndarray[cINT, ndim=1] kGr, kGc
+    cdef np.ndarray[cDOUBLE, ndim=1] kGv
 
     cdef double fAu, fAv, fAw, fAuxi, fAvxi, fAwxi, fAwxixi
     cdef double gAu, gAv, gAw, gAueta, gAveta, gAweta, gAwetaeta
@@ -83,9 +83,9 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
     leggauss_quad(nx, &xis[0], &weightsxi[0])
     leggauss_quad(ny, &etas[0], &weightseta[0])
 
-    kG0r = np.zeros((fdim,), dtype=INT)
-    kG0c = np.zeros((fdim,), dtype=INT)
-    kG0v = np.zeros((fdim,), dtype=DOUBLE)
+    kGr = np.zeros((fdim,), dtype=INT)
+    kGc = np.zeros((fdim,), dtype=INT)
+    kGv = np.zeros((fdim,), dtype=DOUBLE)
 
     with nogil:
         for ptx in range(nx):
@@ -94,7 +94,7 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                 eta = etas[pty]
                 alpha = weightsxi[ptx]*weightseta[pty]
 
-                # kG0
+                # Nxx, Nyy and Nxy
 
                 exx = 0.
                 eyy = 0.
@@ -132,6 +132,8 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                 Nyy = A12*exx + A22*eyy + A26*gxy + B12*kxx + B22*kyy + B26*kxy
                 Nxy = A16*exx + A26*eyy + A66*gxy + B16*kxx + B26*kyy + B66*kxy
 
+                # computing kG
+
                 c = -1
                 for i in range(m):
                     fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
@@ -158,13 +160,13 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                                 c += 1
 
                                 if ptx == 0 and pty == 0:
-                                    kG0r[c] = row+2
-                                    kG0c[c] = col+2
+                                    kGr[c] = row+2
+                                    kGc[c] = col+2
 
-                                kG0v[c] = kG0v[c] + alpha*(Nxx*b*fAwxi*fBwxi*gAw*gBw/a + Nxy*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta) + Nyy*a*fAw*fBw*gAweta*gBweta/b)
+                                kGv[c] = kGv[c] + alpha*(Nxx*b*fAwxi*fBwxi*gAw*gBw/a + Nxy*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta) + Nyy*a*fAw*fBw*gAweta*gBweta/b)
 
-    kG0 = coo_matrix((kG0v, (kG0r, kG0c)), shape=(size, size))
+    kG = coo_matrix((kGv, (kGr, kGc)), shape=(size, size))
 
-    return kG0
+    return kG
 
 
