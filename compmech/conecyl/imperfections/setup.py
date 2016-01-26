@@ -7,9 +7,17 @@ import numpy
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
     if os.name == 'nt':
-        compile_args = ['/openmp']
+        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
+            #NOTE removing openmp to compile in MiniConda
+            compile_args = []
+        else:
+            compile_args = ['/openmp']
     else:
-        compile_args = ['-fopenmp']
+        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
+            #NOTE removing openmp to compile in MiniConda
+            compile_args = []
+        else:
+            compile_args = ['-fopenmp']
 
     config = Configuration('imperfections', parent_package, top_path)
     config.add_extension('mgi',
