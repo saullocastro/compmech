@@ -1,14 +1,16 @@
 from __future__ import division, print_function, absolute_import
 
 import os
+from distutils.sysconfig import get_python_lib
 from Cython.Build import cythonize
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('models', parent_package, top_path)
 
-    libpath = os.path.join(os.path.realpath(config.package_path),
-                           '..', '..', 'lib')
+    include = os.path.join(get_python_lib(), 'compmech', 'include')
+    lib = os.path.join(get_python_lib(), 'compmech', 'lib')
+
     if os.name == 'nt':
         runtime_library_dirs = None
         if os.environ.get('CONDA_DEFAULT_ENV') is not None:
@@ -27,68 +29,68 @@ def configuration(parent_package='', top_path=None):
               sources=['kpanel_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
               runtime_library_dirs=runtime_library_dirs,
-              include_dirs=['../../include'],
+              include_dirs=[include],
               libraries=['bardell', 'bardell_12'],
-              library_dirs=['../../lib'])
+              library_dirs=[lib])
     #config.add_extension('kpanel_clt_donnell_bardell_field',
               #sources=['kpanel_clt_donnell_bardell_field.pyx'],
               #extra_compile_args=args_linear,
               #runtime_library_dirs=runtime_library_dirs,
-              #include_dirs=['../../include'],
+              #include_dirs=[include],
               #libraries=['bardell_functions'],
-              #library_dirs=['../../lib'])
+              #library_dirs=[lib])
 
     config.add_extension('cpanel_clt_donnell_bardell',
               sources=['cpanel_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
               runtime_library_dirs=runtime_library_dirs,
-              include_dirs=['../../include'],
+              include_dirs=[include],
               libraries=['bardell', 'bardell_12'],
-              library_dirs=['../../lib'])
+              library_dirs=[lib])
     config.add_extension('cpanel_clt_donnell_bardell_field',
               sources=['cpanel_clt_donnell_bardell_field.pyx'],
               extra_compile_args=args_linear,
               runtime_library_dirs=runtime_library_dirs,
-              include_dirs=['../../include'],
+              include_dirs=[include],
               libraries=['bardell_functions'],
-              library_dirs=['../../lib'])
+              library_dirs=[lib])
 
     config.add_extension('plate_clt_donnell_bardell',
               sources=['plate_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
               runtime_library_dirs=runtime_library_dirs,
-              include_dirs=['../../include'],
+              include_dirs=[include],
               libraries=['bardell', 'bardell_12'],
-              library_dirs=['../../lib'])
+              library_dirs=[lib])
     config.add_extension('plate_clt_donnell_bardell_num',
               sources=['plate_clt_donnell_bardell_num.pyx'],
               extra_compile_args=args_nonlinear,
               runtime_library_dirs=runtime_library_dirs,
-              include_dirs=['../../include'],
+              include_dirs=[include],
               libraries=['bardell_functions', 'legendre_gauss_quadrature'],
-              library_dirs=['../../lib'])
+              library_dirs=[lib])
     config.add_extension('plate_clt_donnell_bardell_field',
               sources=['plate_clt_donnell_bardell_field.pyx'],
               extra_compile_args=args_linear,
               runtime_library_dirs=runtime_library_dirs,
-              include_dirs=['../../include'],
+              include_dirs=[include],
               libraries=['bardell_functions'],
-              library_dirs=['../../lib'])
+              library_dirs=[lib])
 
     config.add_extension('plate_clt_donnell_bardell_w',
               sources=['plate_clt_donnell_bardell_w.pyx'],
               extra_compile_args=args_linear,
               runtime_library_dirs=runtime_library_dirs,
-              include_dirs=['../../include'],
+              include_dirs=[include],
               libraries=['bardell', 'bardell_12'],
-              library_dirs=['../../lib'])
+              library_dirs=[lib])
     config.add_extension('plate_clt_donnell_bardell_w_field',
               sources=['plate_clt_donnell_bardell_w_field.pyx'],
               extra_compile_args=args_linear,
               runtime_library_dirs=runtime_library_dirs,
-              include_dirs=['../../include'],
+              include_dirs=[include],
               libraries=['bardell_functions'],
-              library_dirs=['../../lib'])
+              library_dirs=[lib])
 
     for ext in config.ext_modules:
         for src in ext.sources:
