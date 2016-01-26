@@ -3,9 +3,12 @@ Version 0.5.5
 - numerical integration for kG0 of panels, possibility to include non-uniform
   stress states and pretty much any load then (this will pave the way for
   geometrically non-linear analyses)
+- tests for integrate module
+
+Version 0.5.6
+-------------
 - check why plate lb with reduced_dof=True is not the same as plate_w
 - reconsider reading bardell_12 from the C code and reuse in FORTRAN
-- tests for integrate module
 
 Version 0.6.0
 -------------

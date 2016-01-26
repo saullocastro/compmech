@@ -92,6 +92,7 @@ def configuration(parent_package='', top_path=None):
 
 
     config = Configuration('lib', parent_package, top_path)
+
     config.add_installed_library('bardell',
             sources=['../../C/src/bardell.c'],
             install_dir=config.package_path)
@@ -108,6 +109,11 @@ def configuration(parent_package='', top_path=None):
     config.add_installed_library('bardell_functions',
             sources=['../../C/src/bardell_functions.c'],
             install_dir=config.package_path)
+
+    config.add_installed_library('legendre_gauss_quadrature',
+            sources=['../../C/src/legendre_gauss_quadrature.c'],
+            install_dir=config.package_path)
+
     config.options['ignore_setup_xxx_py'] = True
     config.make_config_py()
 

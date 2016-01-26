@@ -13,13 +13,18 @@ from compmech.integrate.integrate import trapz2d_points, simps2d_points
 
 DOUBLE = np.float64
 
-ctypedef void (*f_type)(int npts, double *xs, double *ts, double *out,
+ctypedef void (*f_type)(int npts, double *xs, double *ys, double *out,
                         double *alphas, double *betas, void *args) nogil
+
+cdef extern from "math.h":
+    double sin(double x) nogil
+    double atan(double x) nogil
+
 
 cdef int integratev(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
                     double xmin, double xmax, int nx,
                     double ymin, double ymax, int ny,
-                    void *args, int num_cores, method='trapz'):
+                    void *args, int num_cores, str method):
     """Integration of vecto-valued functions
     """
     cdef int i, npts, k, rest
@@ -29,12 +34,13 @@ cdef int integratev(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
     f = <f_type>fin
 
     outs = np.zeros((num_cores, out.shape[0]), DOUBLE)
-    if method == 'trapz':
+    if method == 'trapz2d':
         xs2, ys2, alphas, betas = trapz2d_points(xmin, xmax, nx, ymin, ymax, ny)
-    elif method == 'simps':
+    elif method == 'simps2d':
         xs2, ys2, alphas, betas = simps2d_points(xmin, xmax, nx, ymin, ymax, ny)
     else:
-        raise ValueError('Method not recognized!')
+        print('RuntimeError: Method {0} not recognized!'.format(method))
+        raise
 
     npts = xs2.shape[0]
     k = npts/num_cores
@@ -66,3 +72,28 @@ cdef int trapz_wp(int npts, double xa, double xb, double *weights,
     weights[npts-1] = factor
     pts[0] = xa
     pts[npts-1] = xb
+
+
+cdef void _fsinsin(int npts, double *xs, double *ys, double *out,
+                   double *alphas, double *betas, void *args) nogil:
+    cdef int i
+    cdef double pi, x, y
+
+    with gil:
+        pi = 4*atan(1.)
+
+        for i in range(npts):
+            x = xs[i]
+            y = ys[i]
+            out[0] = out[0]*betas[i] + alphas[i]*(sin(x*pi)*sin(y*pi))
+            out[1] = out[1]*betas[i] + alphas[i]*(sin(3*x*pi)*sin(3*y*pi))
+            out[2] = out[2]*betas[i] + alphas[i]*(sin(5*x*pi)*sin(5*y*pi))
+
+
+def _test_integratev(nx, ny, method):
+    cdef double args
+    args = 0.
+    out = np.zeros((3,), dtype=DOUBLE)
+    integratev(<void *>_fsinsin, 3, out, 0., 1., nx, 0., 1., ny,
+               <void *>&args, 1, method)
+    return out

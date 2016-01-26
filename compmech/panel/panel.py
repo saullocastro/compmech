@@ -72,6 +72,7 @@ class Panel(object):
         self.ny = 160
         self.ni_num_cores = cpu_count()//2
         self.ni_method = 'trapz2d'
+        self.c0 = None
 
         # loads
         self.Nxx = None
@@ -353,6 +354,47 @@ class Panel(object):
         return xs, ys, xshape, tshape
 
 
+    def _get_lam_F(self):
+        if self.lam is None:
+            raise RuntimeError('lam object is None!')
+        if 'clt' in self.model:
+            F = self.lam.ABD
+
+        elif 'fsdt' in self.model:
+            F = self.lam.ABDE
+            F[6:, 6:] *= self.K
+
+        if self.force_orthotropic_laminate:
+            msg('', silent=silent)
+            msg('Forcing orthotropic laminate...', level=2, silent=silent)
+            F[0, 2] = 0. # A16
+            F[1, 2] = 0. # A26
+            F[2, 0] = 0. # A61
+            F[2, 1] = 0. # A62
+
+            F[0, 5] = 0. # B16
+            F[5, 0] = 0. # B61
+            F[1, 5] = 0. # B26
+            F[5, 1] = 0. # B62
+
+            F[3, 2] = 0. # B16
+            F[2, 3] = 0. # B61
+            F[4, 2] = 0. # B26
+            F[2, 4] = 0. # B62
+
+            F[3, 5] = 0. # D16
+            F[4, 5] = 0. # D26
+            F[5, 3] = 0. # D61
+            F[5, 4] = 0. # D62
+
+            if F.shape[0] == 8:
+                F[6, 7] = 0. # A45
+                F[7, 6] = 0. # A54
+
+        return F
+
+
+
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         """Calculate the linear constitutive stiffness matrix
         """
@@ -382,49 +424,13 @@ class Panel(object):
             lam = laminate.read_stack(stack, plyts=plyts,
                                              laminaprops=laminaprops)
 
-        if 'clt' in self.model:
-            if lam is not None:
-                F = lam.ABD
-
-        elif 'fsdt' in self.model:
-            if lam is not None:
-                F = lam.ABDE
-                F[6:, 6:] *= self.K
-
-        if self.force_orthotropic_laminate:
-            msg('', silent=silent)
-            msg('Forcing orthotropic laminate...', level=2, silent=silent)
-            F[0, 2] = 0. # A16
-            F[1, 2] = 0. # A26
-            F[2, 0] = 0. # A61
-            F[2, 1] = 0. # A62
-
-            F[0, 5] = 0. # B16
-            F[5, 0] = 0. # B61
-            F[1, 5] = 0. # B26
-            F[5, 1] = 0. # B62
-
-            F[3, 2] = 0. # B16
-            F[2, 3] = 0. # B61
-            F[4, 2] = 0. # B26
-            F[2, 4] = 0. # B62
-
-            F[3, 5] = 0. # D16
-            F[4, 5] = 0. # D26
-            F[5, 3] = 0. # D61
-            F[5, 4] = 0. # D62
-
-            if F.shape[0] == 8:
-                F[6, 7] = 0. # A45
-                F[7, 6] = 0. # A54
-
         self.lam = lam
-        self.F = F
+        self.F = self._get_lam_F()
 
         alpharad = np.deg2rad(alphadeg)
 
         if y1 is not None and y2 is not None:
-            k0 = matrices.fk0y1y2(y1, y2, a, b, r, alpharad, F,
+            k0 = matrices.fk0y1y2(y1, y2, a, b, r, alpharad, self.F,
                      self.m, self.n,
                      self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                      self.v1tx, self.v1rx, self.v2tx, self.v2rx,
@@ -434,7 +440,7 @@ class Panel(object):
                      self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                      size, row0, col0)
         else:
-            k0 = matrices.fk0(a, b, r, alpharad, F,
+            k0 = matrices.fk0(a, b, r, alpharad, self.F,
                      self.m, self.n,
                      self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                      self.v1tx, self.v1rx, self.v2tx, self.v2rx,
@@ -477,8 +483,11 @@ class Panel(object):
 
         msg('finished!', level=2, silent=silent)
 
+        return k0
 
-    def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
+
+    def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
+            c=None):
         """Calculate the linear geometric stiffness matrix
         """
         msg('Calculating kG0... ', level=2, silent=silent)
@@ -486,7 +495,10 @@ class Panel(object):
         if size is None:
             size = self.get_size()
 
-        matrices = modelDB.db[self.model]['matrices']
+        if c is None:
+            matrices = modelDB.db[self.model]['matrices']
+        else:
+            matrices = modelDB.db[self.model]['matrices_num']
 
         a = self.a
         b = self.b
@@ -503,17 +515,33 @@ class Panel(object):
         Nyy = self.Nyy if self.Nyy is not None else 0.
         Nxy = self.Nxy if self.Nxy is not None else 0.
 
-        if y1 is not None and y2 is not None:
-            kG0 = matrices.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r, alpharad,
-                       self.m, self.n,
-                       self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                       self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                       size, row0, col0)
+        F = self._get_lam_F()
+
+        if c is None:
+            if y1 is not None and y2 is not None:
+                kG0 = matrices.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r,
+                           alpharad, self.m, self.n,
+                           self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                           self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                           size, row0, col0)
+            else:
+                kG0 = matrices.fkG0(Nxx, Nyy, Nxy, a, b, r, alpharad,
+                           self.m, self.n,
+                           self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                           self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                           size, row0, col0)
         else:
-            kG0 = matrices.fkG0(Nxx, Nyy, Nxy, a, b, r, alpharad, self.m, self.n,
+            if y1 is not None or y2 is not None:
+                raise NotImplementedError('Only y1=0, y2=b in implemented!')
+            kG0 = matrices.fkG0_num(c, F, a, b, r,
+                       alpharad, self.m, self.n,
+                       self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                       self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                       self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                       self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                        self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                        self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                       size, row0, col0)
+                       size, row0, col0, self.nx, self.ny)
 
         if finalize:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
@@ -663,7 +691,8 @@ class Panel(object):
         msg('finished!', level=2, silent=silent)
 
 
-    def lb(self, tol=0, sparse_solver=True, calc_kA=False, silent=False):
+    def lb(self, tol=0, sparse_solver=True, calc_kA=False, silent=False,
+            c=None):
         """Performs a linear buckling analysis
 
         The following parameters will affect the linear buckling analysis:
@@ -687,6 +716,8 @@ class Panel(object):
             If the Aerodynamic matrix should be considered.
         silent : bool, optional
             A boolean to tell whether the log messages should be printed.
+        c : array-like, optional
+            A set of Ritz constants that will be use to compute KG.
 
         Notes
         -----
@@ -700,7 +731,7 @@ class Panel(object):
         msg('Eigenvalue solver... ', level=2, silent=silent)
 
         self.calc_k0(silent=silent)
-        self.calc_kG0(silent=silent)
+        self.calc_kG0(silent=silent, c=c)
 
         if calc_kA:
             self.calc_kA(silent=silent)
@@ -1304,24 +1335,6 @@ class Panel(object):
                 fpt = np.array([[fx, fy, fz, 0, 0]])*inc
             fext += fpt.dot(g).ravel()
 
-        # Nxx_cte
-
-        Nxx_cte = self.Nxx_cte
-        Nyy_cte = self.Nyy_cte
-        Nxx_cte += inc*self.Nxx
-        Nyy_cte += inc*self.Nyy
-
-        for j1 in range(1, n+1):
-            Nxxj = Nxx_cte[j1]
-            for i1 in range(1, m+1):
-                col = num*((j1-1)*m + (i1-1))
-                fext[col+0] += 1/2.*(-1)**i1*Nxxj*b
-
-        msg('finished!', level=2, silent=silent)
-
-        if np.all(fext==0):
-            raise ValueError('No load was applied!')
-
         return fext
 
 
@@ -1337,7 +1350,6 @@ class Panel(object):
         NLgeom : bool
             Flag to indicate whether a linear or a non-linear analysis is to
             be performed.
-
         silent : bool, optional
             A boolean to tell whether the log messages should be printed.
 

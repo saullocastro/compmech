@@ -22,7 +22,7 @@
 ! b : float
 !   The panel circumferential width (dimension along y)
 ! r : float
-!   The panel radius.
+!   The panel radius. (Set a high value to simulate a plate)
 ! t : float, optional (used with ISOTROPIC flag)
 !   Panel thickness
 !
@@ -165,62 +165,31 @@ NUM
 5
 
 M
-11
+22
 N
-12
+22
 
 a
 2.
 b
 1.
 r
-10.
+2.
 
 Nxx
--100.
+-1.
 Nyy
 0.
 Nxy
 0.
 
-A11
-4.90582156e+07
-A12
-9.75027276e+06
-A16
-0
-A22
-4.90582156e+07
-A26
-1.86264515e-09
-A66
-1.17394857e+07
-
-B11
--1978.6214288 
-B12
-1978.6214288
-B16
-525.16998998
-B22
--1978.6214288
-B26
-525.16998998
-B66
-1978.6214288
-
-D11
-2.65988873
-D12
-0.62192915
-D16
-0.26258499
-D22
-1.60954875
-D26
-0.26258499
-D66
-0.71517351
+ISOTROPIC
+t
+0.0016
+E
+71.e9
+nu
+0.33
 
 u1tx
 0.

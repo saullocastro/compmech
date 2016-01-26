@@ -34,6 +34,7 @@ db = {
                     'non-linear static': False,
                     'field': plate_clt_donnell_bardell_field,
                     'matrices': plate_clt_donnell_bardell,
+                    'matrices_num': plate_clt_donnell_bardell_num,
                     'dofs': 3,
                     'e_num': 6,
                     'num': 3,
