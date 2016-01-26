@@ -3,9 +3,9 @@ import numpy as np
 from compmech.panel import Panel
 
 
-def test_panel_fkG0y1y2_num():
+def test_panel_fkG0_num():
     for model in ['plate_clt_donnell_bardell']:
-        print('Checking fkG0y1y2_num for model {0}'.format(model))
+        print('Checking fkG0_num for model {0}'.format(model))
         # ssss
         p = Panel()
         p.bc_ssss()
@@ -53,4 +53,4 @@ def test_panel_fkG0y1y2_num():
 
 
 if __name__ == '__main__':
-    test_panel_fkG0y1y2_num()
+    test_panel_fkG0_num()

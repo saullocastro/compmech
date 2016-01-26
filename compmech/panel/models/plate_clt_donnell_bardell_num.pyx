@@ -73,7 +73,7 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
 
     cdef double *css
 
-    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsx, weightsy
+    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
 
     A11 = F[0,0]
     A12 = F[0,1]
@@ -92,14 +92,14 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
     fdim = 1*m*m*n*n
 
     xis = np.zeros(nx, dtype=DOUBLE)
-    weightsx = np.zeros(nx, dtype=DOUBLE)
+    weightsxi = np.zeros(nx, dtype=DOUBLE)
     etas = np.zeros(ny, dtype=DOUBLE)
-    weightsy = np.zeros(ny, dtype=DOUBLE)
+    weightseta = np.zeros(ny, dtype=DOUBLE)
 
-    leggauss_quad(nx, &xis[0], &weightsx[0])
-    leggauss_quad(ny, &etas[0], &weightsy[0])
-    #trapz_quad(nx, &xis[0], &weightsx[0])
-    #trapz_quad(ny, &etas[0], &weightsy[0])
+    leggauss_quad(nx, &xis[0], &weightsxi[0])
+    leggauss_quad(ny, &etas[0], &weightseta[0])
+    #trapz_quad(nx, &xis[0], &weightsxi[0])
+    #trapz_quad(ny, &etas[0], &weightseta[0])
 
     kG0r = np.zeros((fdim,), dtype=INT)
     kG0c = np.zeros((fdim,), dtype=INT)
@@ -110,7 +110,7 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
             for pty in range(ny):
                 xi = xis[ptx]
                 eta = etas[pty]
-                alpha = weightsx[ptx]*weightsy[pty]
+                alpha = weightsxi[ptx]*weightseta[pty]
 
                 # kG0
 
