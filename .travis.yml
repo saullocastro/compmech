@@ -39,6 +39,9 @@ install:
   - source activate TestEnv
   - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
   - python setup.py install
+  # removing local libraries to be sure the installation is correct
+  - rm -rf ./compmech/lib
+  - rm -rf ./compmech/include
 
 # running tests
 script:

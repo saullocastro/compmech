@@ -32,6 +32,9 @@ install:
   - cd %APPVEYOR_BUILD_FOLDER%
 
   - "CALL %CMD_IN_ENV% python setup.py install"
+  # removing local libraries to be sure the installation is correct
+  - del /s *.dll
+  - del /s *.h
 
 test_script:
   - py.test --cache-clear
