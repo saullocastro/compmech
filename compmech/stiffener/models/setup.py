@@ -20,13 +20,8 @@ def configuration(parent_package='', top_path=None):
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
         runtime_library_dirs = ['../../lib']
-        #NOTE removing openmp to compile in Travis CI
-        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
-            args_linear = []
-            args_nonlinear = []
-        else:
-            args_linear = ['-fopenmp']
-            args_nonlinear = ['-fopenmp', '-ffast-math']
+        args_linear = ['-fopenmp']
+        args_nonlinear = ['-fopenmp', '-ffast-math']
 
     config.add_extension('bladestiff1d_clt_donnell_bardell',
                      ['bladestiff1d_clt_donnell_bardell.pyx'],

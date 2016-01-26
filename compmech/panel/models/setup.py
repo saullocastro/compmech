@@ -20,12 +20,8 @@ def configuration(parent_package='', top_path=None):
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
         runtime_library_dirs = ['../../lib']
-        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
-            args_linear = []
-            args_nonlinear = []
-        else:
-            args_linear = ['-fopenmp']
-            args_nonlinear = ['-fopenmp', '-ffast-math']
+        args_linear = ['-fopenmp']
+        args_nonlinear = ['-fopenmp', '-ffast-math']
 
     config.add_extension('kpanel_clt_donnell_bardell',
               sources=['kpanel_clt_donnell_bardell.pyx'],
