@@ -14,7 +14,7 @@ def configuration(parent_package='', top_path=None):
     if os.name == 'nt':
         runtime_library_dirs = None
         if os.environ.get('CONDA_DEFAULT_ENV') is not None:
-            #NOTE removing openmp to compile in AppVeyor
+            #NOTE removing openmp to compile in MiniConda
             args_linear = []
             args_nonlinear = []
         else:
@@ -23,7 +23,7 @@ def configuration(parent_package='', top_path=None):
     else:
         runtime_library_dirs = [lib]
         if os.environ.get('CONDA_DEFAULT_ENV') is not None:
-            #NOTE removing openmp to compile in Travis CI
+            #NOTE removing openmp to compile in MiniConda
             args_linear = []
             args_nonlinear = []
         else:
