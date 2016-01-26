@@ -7,8 +7,8 @@ def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('models', parent_package, top_path)
 
-    #libpath = os.path.join(os.path.realpath(config.package_path),
-                           #'..', '..', 'lib')
+    libpath = os.path.join(os.path.realpath(config.package_path),
+                           '..', '..', 'lib')
     if os.name == 'nt':
         runtime_library_dirs = None
         if os.environ.get('CONDA_DEFAULT_ENV') is not None:
@@ -19,7 +19,7 @@ def configuration(parent_package='', top_path=None):
             args_linear = ['/openmp']
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
-        runtime_library_dirs = ['../../lib']
+        runtime_library_dirs = [libpath]
         args_linear = ['-fopenmp']
         args_nonlinear = ['-fopenmp', '-ffast-math']
 
