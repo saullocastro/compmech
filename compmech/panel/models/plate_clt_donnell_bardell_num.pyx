@@ -10,22 +10,6 @@ from scipy.sparse import coo_matrix
 import numpy as np
 cimport numpy as np
 
-from compmech.integrate.integrate cimport trapz_quad
-
-
-cdef extern from 'bardell.h':
-    double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
-    double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
-    double integral_ffxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
-    double integral_fxifxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
-    double integral_fxifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
-    double integral_fxixifxixi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
 
 cdef extern from 'bardell_functions.h':
     double calc_f(int i, double xi, double xi1t, double xi1r,
@@ -98,8 +82,6 @@ def fkG0_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
 
     leggauss_quad(nx, &xis[0], &weightsxi[0])
     leggauss_quad(ny, &etas[0], &weightseta[0])
-    #trapz_quad(nx, &xis[0], &weightsxi[0])
-    #trapz_quad(ny, &etas[0], &weightseta[0])
 
     kG0r = np.zeros((fdim,), dtype=INT)
     kG0c = np.zeros((fdim,), dtype=INT)
