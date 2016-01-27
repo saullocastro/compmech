@@ -15,6 +15,8 @@ def configuration(parent_package='',top_path=None):
     # include
     print('Copying include files...')
     includedir = os.path.join(get_python_lib(), 'compmech', 'include')
+    if os.path.isdir(includedir):
+        shutil.rmtree(includedir)
     shutil.copytree(os.path.join(os.path.realpath(config.package_path),
                     'include'), includedir)
 
