@@ -248,7 +248,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     INTEGER LWORK
     INTEGER, ALLOCATABLE :: IWORK(:)
     REAL*8, ALLOCATABLE :: WORK(:)
-    REAL*8 E11, nu, G12, t
+    REAL*8 E11, nu, G12, t, NULLTOL
     CHARACTER (LEN=5) :: ISOTROPIC
     INTEGER, ALLOCATABLE :: TMP(:)
 
@@ -266,6 +266,10 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     NUM = 10
     M = 15
     N = 15
+
+    ! Tolerance to consider a zero in K0 and KG0
+    NULLTOL = 1.e-15 
+
     ISOTROPIC = "FALSE"
 
     ! Default boundary conditions (simply supported)
@@ -415,7 +419,7 @@ PROGRAM BUCKLING_CPANEL_BARDELL
     ! removing null rows and columns
     ALLOCATE(TMP(NT)) 
     TMP = 0
-    WHERE (ABS(SUM(K0, DIM=1)) <= 0.0000000001) TMP = 1
+    WHERE (ABS(SUM(K0, DIM=1)) <= NULLTOL) TMP = 1
     nulls = SUM(TMP)
     WRITE(*, *) "Number of removed cols:", nulls
 
