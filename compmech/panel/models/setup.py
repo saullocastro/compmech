@@ -52,6 +52,13 @@ def configuration(parent_package='', top_path=None):
               include_dirs=[include],
               libraries=['bardell', 'bardell_12'],
               library_dirs=[lib])
+    config.add_extension('cpanel_clt_donnell_bardell_num',
+              sources=['cpanel_clt_donnell_bardell_num.pyx'],
+              extra_compile_args=args_nonlinear,
+              runtime_library_dirs=runtime_library_dirs,
+              include_dirs=[include],
+              libraries=['bardell_functions', 'legendre_gauss_quadrature'],
+              library_dirs=[lib])
     config.add_extension('cpanel_clt_donnell_bardell_field',
               sources=['cpanel_clt_donnell_bardell_field.pyx'],
               extra_compile_args=args_linear,

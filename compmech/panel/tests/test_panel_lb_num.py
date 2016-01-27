@@ -4,13 +4,15 @@ from compmech.panel import Panel
 
 
 def test_panel_fkG_num():
-    for model in ['plate_clt_donnell_bardell']:
+    for model in ['plate_clt_donnell_bardell',
+                  'cpanel_clt_donnell_bardell']:
         print('Checking fkG_num for model {0}'.format(model))
         # ssss
         p = Panel()
         p.bc_ssss()
         p.a = 8.
         p.b = 4.
+        p.r = 1.e8
         p.stack = [0, 90, 90, 0, -45, +45]
         p.plyt = 1e-3*0.125
         p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
