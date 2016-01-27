@@ -122,7 +122,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                         row = row0 + num*(j*m + i)
 
                         exx += cs[row+0]*(2/a)*fAuxi*gAu
-                        eyy += cs[row+1]*fAv*(2/b)*gAveta
+                        eyy += cs[row+1]*fAv*(2/b)*gAveta + 1/r*cs[row+2]*fAw*gAw
                         gxy += cs[row+0]*fAu*(2/b)*gAueta + cs[row+1]*(2/a)*fAvxi*gAv
                         kxx += -cs[row+2]*(2/a)*(2/a)*fAwxixi*gAw
                         kyy += -cs[row+2]*(2/b)*fAw*gAwetaeta
