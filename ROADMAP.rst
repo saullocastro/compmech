@@ -12,6 +12,10 @@ Version 0.5.6
 
 Version 0.6.0
 -------------
+- T, Z and I 2D stiffeners
+
+Version 0.7.0
+-------------
 - implement CI compilation and test for FORTRANs
 - improve the numerical stability of FORTRAN's eigensolver (cpanelbay)
 - skew panel with formulation for stringers not aligned with the panel
