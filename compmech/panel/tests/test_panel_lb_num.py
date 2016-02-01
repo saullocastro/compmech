@@ -20,8 +20,8 @@ def test_panel_fkG_num():
 
         p.Nxx = -1.
 
-        p.m = 11
-        p.n = 12
+        p.m = 8
+        p.n = 9
         p.nx = 9
         p.ny = 9
 
@@ -48,10 +48,10 @@ def test_panel_fkG_num():
         p.static(silent=True)
 
         p.lb(silent=True)
-        assert np.isclose(p.eigvals[0], 4.506284, atol=0.1, rtol=0)
+        assert np.isclose(p.eigvals[0], 4.52909113495, atol=0.1, rtol=0)
 
         p.lb(silent=True, c=p.analysis.cs[0])
-        assert np.isclose(p.eigvals[0], 4.4375669, atol=0.1, rtol=0)
+        assert np.isclose(p.eigvals[0], 4.433932238, atol=0.1, rtol=0)
 
 
 if __name__ == '__main__':
