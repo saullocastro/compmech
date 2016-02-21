@@ -110,6 +110,11 @@ def configuration(parent_package='', top_path=None):
                 '../../C/src/bardell_integral_fxixifxixi_12.c',
                 ],
             install_dir=config.package_path)
+    config.add_installed_library('bardell_c0c1',
+            sources=[
+                '../../C/src/bardell_integral_ff_c0c1.c',
+                ],
+            install_dir=config.package_path)
     config.add_installed_library('bardell_functions',
             sources=['../../C/src/bardell_functions.c'],
             install_dir=config.package_path)

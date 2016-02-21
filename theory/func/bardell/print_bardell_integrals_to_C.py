@@ -11,6 +11,7 @@ from compmech.conecyl.sympytools import mprint_as_sparse, pow2mult, star2Cpow
 var('x1t, x1r, x2t, x2r')
 var('y1t, y1r, y2t, y2r')
 var('xi1, xi2')
+var('c0, c1')
 
 subs = {
        }
@@ -29,6 +30,7 @@ header_c = """
 """
 printstr_full = header_c
 printstr_12 = header_c
+printstr_c0c1 = header_c
 
 header_h = """
 #if defined(_WIN32) || defined(__WIN32__)
@@ -39,7 +41,7 @@ header_h = """
 """
 printstr_full_h = header_h
 printstr_12_h = header_h
-
+printstr_c0c1_h = header_h
 
 
 for i, filepath in enumerate(
@@ -57,6 +59,12 @@ for i, filepath in enumerate(
         if '_12' in filepath:
             name = '_'.join(names[1:3])
             printstr += 'EXPORTIT double integral_%s(double xi1, double xi2, int i, int j,\n' % name
+            printstr += '                   double x1t, double x1r, double x2t, double x2r,\n'
+            printstr += '                   double y1t, double y1r, double y2t, double y2r) {\n'
+
+        elif '_c0c1' in filepath:
+            name = '_'.join(names[1:3])
+            printstr += 'EXPORTIT double integral_%s(double c0, double c1, int i, int j,\n' % name
             printstr += '                   double x1t, double x1r, double x2t, double x2r,\n'
             printstr += '                   double y1t, double y1r, double y2t, double y2r) {\n'
 
@@ -101,9 +109,14 @@ for i, filepath in enumerate(
 
         if '_12' in filepath:
             printstr_12_h += printstr_h
-            filepath = r'..\..\..\C\src\bardell_12_%s.c' % name[:-3]
+            filepath = r'..\..\..\C\src\bardell_integral_%s_12.c' % name[:-3]
             with open(filepath, 'w') as g:
                 g.write(printstr_12 + printstr)
+        elif '_c0c1' in filepath:
+            printstr_c0c1_h += printstr_h
+            filepath = r'..\..\..\C\src\bardell_integral_%s_c0c1.c' % name[:-5]
+            with open(filepath, 'w') as g:
+                g.write(printstr_c0c1 + printstr)
         else:
             printstr_full += printstr
             printstr_full_h += printstr_h
@@ -117,3 +130,6 @@ with open(r'..\..\..\C\src\bardell.c', 'w') as g:
 
 with open(r'..\..\..\compmech\include\bardell_12.h', 'w') as g:
     g.write(printstr_12_h)
+
+with open(r'..\..\..\compmech\include\bardell_c0c1.h', 'w') as g:
+    g.write(printstr_c0c1_h)
