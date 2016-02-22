@@ -28,4 +28,17 @@ db = {
                     'e_num': 6,
                     'num1': 3,
                     },
+    'tstiff2d_clt_donnell_bardell': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': False,
+                    'field_base': cpanel_clt_donnell_bardell_field,
+                    'field_flange': plate_clt_donnell_bardell_field,
+                    'matrices_base': cpanel_clt_donnell_bardell,
+                    'matrices_flange': plate_clt_donnell_bardell,
+                    'connections': tstiff2d_clt_donnell_bardell,
+                    'dofs': 3,
+                    'e_num': 6,
+                    'num1': 3,
+                    },
     }
