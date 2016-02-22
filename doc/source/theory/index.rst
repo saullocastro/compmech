@@ -18,5 +18,6 @@ The details about each implemented module are given below:
    aero/index.rst
    conecyl/index.rst
    fem/index.rst
-   meshfree/index.rst
    func/index.rst
+   integrate/index.rst
+   meshfree/index.rst
