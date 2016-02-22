@@ -5,7 +5,7 @@ from ast import literal_eval
 import numpy as np
 import sympy
 from sympy import pi, sin, cos, var
-from sympy.printing import print_ccode
+from sympy.printing import ccode
 
 from compmech.conecyl.sympytools import mprint_as_sparse, pow2mult
 
@@ -99,7 +99,7 @@ for i, filepath in enumerate(
                     printstr += '    case %d:\n' % i
                     printstr += '        switch(j) {\n'
                 printstr += '        case %d:\n' % j
-                printstr += '            return %s;\n' % print_ccode(matrix[i, j].evalf())
+                printstr += '            return %s;\n' % ccode(matrix[i, j].evalf())
         printstr += '        default:\n'
         printstr += '            return 0.;\n'
         printstr += '        }\n'

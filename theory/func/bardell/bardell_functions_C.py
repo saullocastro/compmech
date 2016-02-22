@@ -1,7 +1,7 @@
 from __future__ import division
 import numpy as np
 from sympy import var, factorial, factorial2, sympify, diff
-from sympy.printing import print_ccode
+from sympy.printing import ccode
 
 nmax = 30
 
@@ -35,9 +35,9 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
     for i in range(len(u)):
         const = consts.get(i)
         if const is None:
-            f.write('    f[%d] = %s;\n' % (i, print_ccode(u[i])))
+            f.write('    f[%d] = %s;\n' % (i, ccode(u[i])))
         else:
-            f.write('    f[%d] = %s*(%s);\n' % (i, const, print_ccode(u[i])))
+            f.write('    f[%d] = %s*(%s);\n' % (i, const, ccode(u[i])))
     f.write('}\n')
 
     f.write('\n\n')
@@ -46,9 +46,9 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
     for i in range(len(u)):
         const = consts.get(i)
         if const is None:
-            f.write('    fxi[%d] = %s;\n' % (i, print_ccode(diff(u[i], xi))))
+            f.write('    fxi[%d] = %s;\n' % (i, ccode(diff(u[i], xi))))
         else:
-            f.write('    fxi[%d] = %s*(%s);\n' % (i, const, print_ccode(diff(u[i], xi))))
+            f.write('    fxi[%d] = %s*(%s);\n' % (i, const, ccode(diff(u[i], xi))))
     f.write('}\n')
 
     f.write('\n\n')
@@ -60,9 +60,9 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
         const = consts.get(i)
         f.write('    case %d:\n' % i)
         if const is None:
-            f.write('        return %s;\n' % print_ccode(u[i]))
+            f.write('        return %s;\n' % ccode(u[i]))
         else:
-            f.write('        return %s*(%s);\n' % (const, print_ccode(u[i])))
+            f.write('        return %s*(%s);\n' % (const, ccode(u[i])))
     f.write('    }\n')
     f.write('}\n')
 
@@ -74,9 +74,9 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
         const = consts.get(i)
         f.write('    case %d:\n' % i)
         if const is None:
-            f.write('        return %s;\n' % print_ccode(diff(u[i], xi)))
+            f.write('        return %s;\n' % ccode(diff(u[i], xi)))
         else:
-            f.write('        return %s*(%s);\n' % (const, print_ccode(diff(u[i], xi))))
+            f.write('        return %s*(%s);\n' % (const, ccode(diff(u[i], xi))))
     f.write('    }\n')
     f.write('}\n')
 
@@ -88,9 +88,9 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
         const = consts.get(i)
         f.write('    case %d:\n' % i)
         if const is None:
-            f.write('        return %s;\n' % print_ccode(diff(u[i], xi, xi)))
+            f.write('        return %s;\n' % ccode(diff(u[i], xi, xi)))
         else:
-            f.write('        return %s*(%s);\n' % (const, print_ccode(diff(u[i], xi, xi))))
+            f.write('        return %s*(%s);\n' % (const, ccode(diff(u[i], xi, xi))))
     f.write('    }\n')
     f.write('}\n')
 
