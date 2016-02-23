@@ -13,6 +13,10 @@ This module has all stiffener's formulations used along other classes.
 .. autoclass:: BladeStiff2D
     :members:
 
+.. autoclass:: TStiff2D
+    :members:
 
 """
-from stiffener import BladeStiff1D, BladeStiff2D
+from bladestiff1d import BladeStiff1D
+from bladestiff2d import BladeStiff2D
+from tstiff2d import TStiff2D
