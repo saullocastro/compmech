@@ -80,52 +80,53 @@ def fk0(double a, double b, double r, double alpharad,
     k0c = np.zeros((fdim,), dtype=INT)
     k0v = np.zeros((fdim,), dtype=DOUBLE)
 
-    D11 = F[3,3]
-    D12 = F[3,4]
-    D16 = F[3,5]
-    D22 = F[4,4]
-    D26 = F[4,5]
-    D66 = F[5,5]
+    with nogil:
+        D11 = F[3,3]
+        D12 = F[3,4]
+        D16 = F[3,5]
+        D22 = F[4,4]
+        D26 = F[4,5]
+        D66 = F[5,5]
 
-    # k0
-    c = -1
-    for i in range(m):
-        for k in range(m):
+        # k0
+        c = -1
+        for i in range(m):
+            for k in range(m):
 
-            fAwxixifBwxixi = integral_fxixifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBwxixi = integral_ffxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxixifBw = integral_ffxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBwxixi = integral_fxifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxixifBwxi = integral_fxifxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxixifBwxixi = integral_fxixifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBwxixi = integral_ffxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxixifBw = integral_ffxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxifBwxixi = integral_fxifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxixifBwxi = integral_fxifxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(n):
-                for l in range(n):
+                for j in range(n):
+                    for l in range(n):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    gAwetaetagBwetaeta = integral_fxixifxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBwetaeta = integral_ffxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetaetagBw = integral_ffxixi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBwetaeta = integral_fxifxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetaetagBweta = integral_fxifxixi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBweta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetaetagBwetaeta = integral_fxixifxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBwetaeta = integral_ffxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetaetagBw = integral_ffxixi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetagBwetaeta = integral_fxifxixi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetaetagBweta = integral_fxifxixi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBweta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-                    c += 1
-                    k0r[c] = row+0
-                    k0c[c] = col+0
-                    k0v[c] += 4*D11*b*fAwxixifBwxixi*gAwgBw/(a*a*a) + 4*D12*(fAwfBwxixi*gAwetaetagBw + fAwxixifBw*gAwgBwetaeta)/(a*b) + 8*D16*(fAwxifBwxixi*gAwetagBw + fAwxixifBwxi*gAwgBweta)/(a*a) + 4*D22*a*fAwfBw*gAwetaetagBwetaeta/(b*b*b) + 8*D26*(fAwfBwxi*gAwetaetagBweta + fAwxifBw*gAwetagBwetaeta)/(b*b) + 16*D66*fAwxifBwxi*gAwetagBweta/(a*b)
+                        c += 1
+                        k0r[c] = row+0
+                        k0c[c] = col+0
+                        k0v[c] += 4*D11*b*fAwxixifBwxixi*gAwgBw/(a*a*a) + 4*D12*(fAwfBwxixi*gAwetaetagBw + fAwxixifBw*gAwgBwetaeta)/(a*b) + 8*D16*(fAwxifBwxixi*gAwetagBw + fAwxixifBwxi*gAwgBweta)/(a*a) + 4*D22*a*fAwfBw*gAwetaetagBwetaeta/(b*b*b) + 8*D26*(fAwfBwxi*gAwetaetagBweta + fAwxifBw*gAwetagBwetaeta)/(b*b) + 16*D66*fAwxifBwxi*gAwetagBweta/(a*b)
 
     k0 = coo_matrix((k0v, (k0r, k0c)), shape=(size, size))
 
@@ -161,55 +162,56 @@ def fk0y1y2(double y1, double y2, double a, double b, double r,
     k0y1y2c = np.zeros((fdim,), dtype=INT)
     k0y1y2v = np.zeros((fdim,), dtype=DOUBLE)
 
-    D11 = F[3,3]
-    D12 = F[3,4]
-    D16 = F[3,5]
-    D22 = F[4,4]
-    D26 = F[4,5]
-    D66 = F[5,5]
+    with nogil:
+        D11 = F[3,3]
+        D12 = F[3,4]
+        D16 = F[3,5]
+        D22 = F[4,4]
+        D26 = F[4,5]
+        D66 = F[5,5]
 
-    eta1 = 2*y1/b - 1.
-    eta2 = 2*y2/b - 1.
+        eta1 = 2*y1/b - 1.
+        eta2 = 2*y2/b - 1.
 
-    # k0y1y2
-    c = -1
-    for j in range(n):
-        for l in range(n):
+        # k0y1y2
+        c = -1
+        for j in range(n):
+            for l in range(n):
 
-            gAwetaetagBwetaeta = integral_fxixifxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBwetaeta = integral_ffxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetaetagBw = integral_ffxixi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBwetaeta = integral_fxifxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetaetagBweta = integral_fxifxixi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBweta = integral_ffxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBw = integral_ffxi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetaetagBwetaeta = integral_fxixifxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwgBwetaeta = integral_ffxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetaetagBw = integral_ffxixi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetagBwetaeta = integral_fxifxixi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetaetagBweta = integral_fxifxixi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwgBweta = integral_ffxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetagBw = integral_ffxi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-            for i in range(m):
-                for k in range(m):
+                for i in range(m):
+                    for k in range(m):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    fAwxixifBwxixi = integral_fxixifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwfBwxixi = integral_ffxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxixifBw = integral_ffxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxifBwxixi = integral_fxifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxixifBwxi = integral_fxifxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxixifBwxixi = integral_fxixifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwfBwxixi = integral_ffxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxixifBw = integral_ffxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxifBwxixi = integral_fxifxixi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxixifBwxi = integral_fxifxixi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-                    c += 1
-                    k0y1y2r[c] = row+0
-                    k0y1y2c[c] = col+0
-                    k0y1y2v[c] += 4*D11*b*fAwxixifBwxixi*gAwgBw/(a*a*a) + 4*D12*(fAwfBwxixi*gAwetaetagBw + fAwxixifBw*gAwgBwetaeta)/(a*b) + 8*D16*(fAwxifBwxixi*gAwetagBw + fAwxixifBwxi*gAwgBweta)/(a*a) + 4*D22*a*fAwfBw*gAwetaetagBwetaeta/(b*b*b) + 8*D26*(fAwfBwxi*gAwetaetagBweta + fAwxifBw*gAwetagBwetaeta)/(b*b) + 16*D66*fAwxifBwxi*gAwetagBweta/(a*b)
+                        c += 1
+                        k0y1y2r[c] = row+0
+                        k0y1y2c[c] = col+0
+                        k0y1y2v[c] += 4*D11*b*fAwxixifBwxixi*gAwgBw/(a*a*a) + 4*D12*(fAwfBwxixi*gAwetaetagBw + fAwxixifBw*gAwgBwetaeta)/(a*b) + 8*D16*(fAwxifBwxixi*gAwetagBw + fAwxixifBwxi*gAwgBweta)/(a*a) + 4*D22*a*fAwfBw*gAwetaetagBwetaeta/(b*b*b) + 8*D26*(fAwfBwxi*gAwetaetagBweta + fAwxifBw*gAwetagBwetaeta)/(b*b) + 16*D66*fAwxifBwxi*gAwetagBweta/(a*b)
 
     k0y1y2 = coo_matrix((k0y1y2v, (k0y1y2r, k0y1y2c)), shape=(size, size))
 
@@ -235,35 +237,36 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
     kG0c = np.zeros((fdim,), dtype=INT)
     kG0v = np.zeros((fdim,), dtype=DOUBLE)
 
-    # kG0
-    c = -1
-    for i in range(m):
-        for k in range(m):
+    with nogil:
+        # kG0
+        c = -1
+        for i in range(m):
+            for k in range(m):
 
-            fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(n):
-                for l in range(n):
+                for j in range(n):
+                    for l in range(n):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwgBweta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBweta = integral_ffxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-                    c += 1
-                    kG0r[c] = row+0
-                    kG0c[c] = col+0
-                    kG0v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
+                        c += 1
+                        kG0r[c] = row+0
+                        kG0c[c] = col+0
+                        kG0v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
 
     kG0 = coo_matrix((kG0v, (kG0r, kG0c)), shape=(size, size))
 
@@ -290,38 +293,39 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
     kG0y1y2c = np.zeros((fdim,), dtype=INT)
     kG0y1y2v = np.zeros((fdim,), dtype=DOUBLE)
 
-    eta1 = 2*y1/b - 1.
-    eta2 = 2*y2/b - 1.
+    with nogil:
+        eta1 = 2*y1/b - 1.
+        eta2 = 2*y2/b - 1.
 
-    # kG0y1y2
-    c = -1
-    for j in range(n):
-        for l in range(n):
+        # kG0y1y2
+        c = -1
+        for j in range(n):
+            for l in range(n):
 
-            gAwetagBw = integral_ffxi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwgBweta = integral_ffxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetagBw = integral_ffxi_12(eta1, eta2, l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwgBweta = integral_ffxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-            for i in range(m):
-                for k in range(m):
+                for i in range(m):
+                    for k in range(m):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwfBwxi = integral_ffxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-                    c += 1
-                    kG0y1y2r[c] = row+0
-                    kG0y1y2c[c] = col+0
-                    kG0y1y2v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
+                        c += 1
+                        kG0y1y2r[c] = row+0
+                        kG0y1y2c[c] = col+0
+                        kG0y1y2v[c] += Nxx*b*fAwxifBwxi*gAwgBw/a + Nxy*(fAwfBwxi*gAwetagBw + fAwxifBw*gAwgBweta) + Nyy*a*fAwfBw*gAwetagBweta/b
 
     kG0y1y2 = coo_matrix((kG0y1y2v, (kG0y1y2r, kG0y1y2c)), shape=(size, size))
 
@@ -351,31 +355,32 @@ def fkM(double mu, double d, double h,
     kMc = np.zeros((fdim,), dtype=INT)
     kMv = np.zeros((fdim,), dtype=DOUBLE)
 
-    # kM
-    c = -1
-    for i in range(m):
-        for k in range(m):
+    with nogil:
+        # kM
+        c = -1
+        for i in range(m):
+            for k in range(m):
 
-            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-            fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(n):
-                for l in range(n):
+                for j in range(n):
+                    for l in range(n):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                    gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetagBweta = integral_fxifxi(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-                    c += 1
-                    kMr[c] = row+0
-                    kMc[c] = col+0
-                    kMv[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
+                        c += 1
+                        kMr[c] = row+0
+                        kMc[c] = col+0
+                        kMv[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
 
     kM = coo_matrix((kMv, (kMr, kMc)), shape=(size, size))
 
@@ -406,34 +411,35 @@ def fkMy1y2(double y1, double y2, double mu, double d, double h,
     kMy1y2c = np.zeros((fdim,), dtype=INT)
     kMy1y2v = np.zeros((fdim,), dtype=DOUBLE)
 
-    eta1 = 2*y1/b - 1.
-    eta2 = 2*y2/b - 1.
+    with nogil:
+        eta1 = 2*y1/b - 1.
+        eta2 = 2*y2/b - 1.
 
-    # kMy1y2
-    c = -1
-    for j in range(n):
-        for l in range(n):
+        # kMy1y2
+        c = -1
+        for j in range(n):
+            for l in range(n):
 
-            gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-            gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-            for i in range(m):
-                for k in range(m):
+                for i in range(m):
+                    for k in range(m):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                    fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-                    c += 1
-                    kMy1y2r[c] = row+0
-                    kMy1y2c[c] = col+0
-                    kMy1y2v[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
+                        c += 1
+                        kMy1y2r[c] = row+0
+                        kMy1y2c[c] = col+0
+                        kMy1y2v[c] += 0.25*a*b*h*mu*(fAwfBw*gAwgBw + 4*fAwfBw*gAwetagBweta*((d*d) + 0.0833333333333333*(h*h))/(b*b) + 4*fAwxifBwxi*gAwgBw*((d*d) + 0.0833333333333333*(h*h))/(a*a))
 
     kMy1y2 = coo_matrix((kMy1y2v, (kMy1y2r, kMy1y2c)), shape=(size, size))
 
@@ -456,29 +462,30 @@ def fkAx(double beta, double gamma, double a, double b, int m, int n,
     kAxc = np.zeros((fdim,), dtype=INT)
     kAxv = np.zeros((fdim,), dtype=DOUBLE)
 
-    # kAx
-    c = -1
-    for i in range(m):
-        for k in range(m):
+    with nogil:
+        # kAx
+        c = -1
+        for i in range(m):
+            for k in range(m):
 
-            fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(n):
-                for l in range(n):
+                for j in range(n):
+                    for l in range(n):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-                    c += 1
-                    kAxr[c] = row+0
-                    kAxc[c] = col+0
-                    kAxv[c] += -0.5*b*beta*fAwxifBw*gAwgBw
+                        c += 1
+                        kAxr[c] = row+0
+                        kAxc[c] = col+0
+                        kAxv[c] += -0.5*b*beta*fAwxifBw*gAwgBw
 
     kAx = coo_matrix((kAxv, (kAxr, kAxc)), shape=(size, size))
 
@@ -501,29 +508,30 @@ def fkAy(double beta, double a, double b, int m, int n,
     kAyc = np.zeros((fdim,), dtype=INT)
     kAyv = np.zeros((fdim,), dtype=DOUBLE)
 
-    # kAy
-    c = -1
-    for i in range(m):
-        for k in range(m):
+    with nogil:
+        # kAy
+        c = -1
+        for i in range(m):
+            for k in range(m):
 
-            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(n):
-                for l in range(n):
+                for j in range(n):
+                    for l in range(n):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetagBw = integral_ffxi(l, j, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-                    c += 1
-                    kAyr[c] = row+0
-                    kAyc[c] = col+0
-                    kAyv[c] += -0.5*a*beta*fAwfBw*gAwetagBw
+                        c += 1
+                        kAyr[c] = row+0
+                        kAyc[c] = col+0
+                        kAyv[c] += -0.5*a*beta*fAwfBw*gAwetagBw
 
     kAy = coo_matrix((kAyv, (kAyr, kAyc)), shape=(size, size))
 
@@ -546,30 +554,32 @@ def fcA(double aeromu, double a, double b, int m, int n,
     cAc = np.zeros((fdim,), dtype=INT)
     cAv = np.zeros((fdim,), dtype=DOUBLE)
 
-    # cA
-    c = -1
-    for i in range(m):
-        for k in range(m):
+    with nogil:
+        # cA
+        c = -1
+        for i in range(m):
+            for k in range(m):
 
-            fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-            for j in range(n):
-                for l in range(n):
+                for j in range(n):
+                    for l in range(n):
 
-                    row = row0 + num*(j*m + i)
-                    col = col0 + num*(l*m + k)
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
 
-                    #NOTE symmetry
-                    if row > col:
-                        continue
+                        #NOTE symmetry
+                        if row > col:
+                            continue
 
-                    gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBw = integral_ff(j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-                    c += 1
-                    cAr[c] = row+0
-                    cAc[c] = col+0
-                    cAv[c] += -0.25*a*aeromu*b*fAwfBw*gAwgBw
+                        c += 1
+                        cAr[c] = row+0
+                        cAc[c] = col+0
+                        cAv[c] += -0.25*a*aeromu*b*fAwfBw*gAwgBw
 
     cA = coo_matrix((cAv, (cAr, cAc)), shape=(size, size))
 
     return cA
+

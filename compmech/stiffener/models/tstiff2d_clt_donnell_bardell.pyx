@@ -13,15 +13,15 @@ cimport numpy as np
 
 cdef extern from 'bardell.h':
     double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                       double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r)
+                         double y1t, double y1r, double y2t, double y2r) nogil
 
 cdef extern from 'bardell_functions.h':
     double calc_f(int i, double xi, double xi1t, double xi1r,
-                  double xi2t, double xi2r)
+                  double xi2t, double xi2r) nogil
     double calc_fxi(int i, double xi, double xi1t, double xi1r,
-                    double xi2t, double xi2r)
+                    double xi2t, double xi2r) nogil
 
 cdef extern from 'bardell_12.h':
     double integral_ff_12(double eta1, double eta2, int i, int j,
@@ -133,7 +133,7 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
           double w1tyb, double w1ryb, double w2tyb, double w2ryb,
           int size, int row0, int col0):
     cdef int i, j, k1, l1, c, row, col
-    cdef double xi1, xi2, eta1, eta2
+    cdef double xi1, xi2, eta1, eta2, c0, c1
 
     cdef np.ndarray[cINT, ndim=1] kCpbr, kCpbc
     cdef np.ndarray[cDOUBLE, ndim=1] kCpbv
@@ -149,7 +149,7 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
     fdim = 3*m*n*m1*n1
 
     c0 = -2*eta1/(eta2 - eta1) - 1
-    c1 = 2*eta/(eta2 - eta1)
+    c1 = 2/(eta2 - eta1)
 
     kCpbr = np.zeros((fdim,), dtype=INT)
     kCpbc = np.zeros((fdim,), dtype=INT)
@@ -213,7 +213,7 @@ def fkCbbpbx1x2(double x1, double x2, double kt, double kr,
     cdef np.ndarray[cDOUBLE, ndim=1] kCbbpbv
 
     cdef double pAupBu, pAvpBv, pAwpBw
-    cdef double qAu, qBu, qAv, qBv, qAw, qBw, qAweta, qBweta
+    cdef double qAuqBu, qAvqBv, qAwqBw, qAwetaqBweta
 
     xi1 = 2*x1/a - 1.
     xi2 = 2*x2/a - 1.
@@ -279,8 +279,8 @@ def fkCbbbf(double kt, double kr, double a, double bb,
     cdef np.ndarray[cINT, ndim=1] kCbbbfr, kCbbbfc
     cdef np.ndarray[cDOUBLE, ndim=1] kCbbbfv
 
-    cdef double pAuqBu, pAvqBw, pAwqBv, pAwqBw
-    cdef double gAu, gAv, gAw, gAweta, sBu, sBv, sBw, sBweta
+    cdef double pAupBu, pAvpBv, pAwpBw
+    cdef double qAu, qAv, qAw, qAweta, qBu, qBv, qBw, qBweta
 
     cdef double eta = 0. # connection at the middle of the stiffener's base
 
@@ -297,11 +297,10 @@ def fkCbbbf(double kt, double kr, double a, double bb,
             for k1 in range(m1):
 
                 pAupBu = integral_ff(i1, k1, u1txb, u1rxb, u2txb, u2rxb, u1txb, u1rxb, u2txb, u2rxb)
-                pAvpBw = integral_ff(i1, k1, v1txb, v1rxb, v2txb, v2rxb, w1txb, w1rxb, w2txb, w2rxb)
-                pAwpBv = integral_ff(i1, k1, w1txb, w1rxb, w2txb, w2rxb, v1txb, v1rxb, v2txb, v2rxb)
+                pAvpBv = integral_ff(i1, k1, v1txb, v1rxb, v2txb, v2rxb, v1txb, v1rxb, v2txb, v2rxb)
                 pAwpBw = integral_ff(i1, k1, w1txb, w1rxb, w2txb, w2rxb, w1txb, w1rxb, w2txb, w2rxb)
 
-                for j1 in range(n):
+                for j1 in range(n1):
                     qAu = calc_f(j1, eta, u1tyb, u1ryb, u2tyb, u2ryb)
                     qAv = calc_f(j1, eta, v1tyb, v1ryb, v2tyb, v2ryb)
                     qAw = calc_f(j1, eta, w1tyb, w1ryb, w2tyb, w2ryb)
@@ -339,7 +338,7 @@ def fkCbbbf(double kt, double kr, double a, double bb,
     return kCbbbf
 
 
-def fkCbf(double kt, double kr, double a, double b, double bf,
+def fkCbf(double kt, double kr, double a, double bb, double bf,
           int m1, int n1, int m2, int n2,
           double u1txb, double u1rxb, double u2txb, double u2rxb,
           double v1txb, double v1rxb, double v2txb, double v2rxb,
