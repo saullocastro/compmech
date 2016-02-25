@@ -6,8 +6,10 @@ Used to configure the main parameters for each implemented model.
 
 """
 from models import *
-from compmech.panel.models import (plate_clt_donnell_bardell_field,
-                                   cpanel_clt_donnell_bardell_field)
+from compmech.panel.models import (cpanel_clt_donnell_bardell,
+                                   cpanel_clt_donnell_bardell_field,
+                                   plate_clt_donnell_bardell,
+                                   plate_clt_donnell_bardell_field)
 db = {
     'bladestiff1d_clt_donnell_bardell': {
                     'linear static': True,
