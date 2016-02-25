@@ -148,8 +148,10 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
 
     fdim = 3*m*n*m1*n1
 
-    c0 = -2*eta1/(eta2 - eta1) - 1
-    c1 = 2/(eta2 - eta1)
+    # integrating along eta' from -1 to +1
+    # and eta is related to eta' doing eta' = c0 + c1*eta
+    c0 = 0.5*(eta1 + eta2)
+    c1 = 0.5*(eta2 - eta1)
 
     kCpbr = np.zeros((fdim,), dtype=INT)
     kCpbc = np.zeros((fdim,), dtype=INT)
@@ -175,9 +177,9 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
                         #if row > col:
                             #continue
 
-                        gAuqBu = integral_ff_c0c1(c0, c1, j, l1, u1ty, u1ry, u2ty, u2ry, u1tyb, u1ryb, u2tyb, u2ryb)
-                        gAvqBv = integral_ff_c0c1(c0, c1, j, l1, v1ty, v1ry, v2ty, v2ry, v1tyb, v1ryb, v2tyb, v2ryb)
-                        gAwqBw = integral_ff_c0c1(c0, c1, j, l1, w1ty, w1ry, w2ty, w2ry, w1tyb, w1ryb, w2tyb, w2ryb)
+                        gAuqBu = integral_ff_c0c1(c0, c1, l1, j, u1tyb, u1ryb, u2tyb, u2ryb, u1ty, u1ry, u2ty, u2ry)
+                        gAvqBv = integral_ff_c0c1(c0, c1, l1, j, v1tyb, v1ryb, v2tyb, v2ryb, v1ty, v1ry, v2ty, v2ry)
+                        gAwqBw = integral_ff_c0c1(c0, c1, l1, j, w1tyb, w1ryb, w2tyb, w2ryb, w1ty, w1ry, w2ty, w2ry)
 
                         c += 1
                         kCpbr[c] = row+0

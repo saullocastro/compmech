@@ -5,7 +5,6 @@ import numpy as np
 from numpy import deg2rad
 
 import modelDB
-import compmech.panel.modelDB as panmodelDB
 from compmech.logger import msg, warn
 from compmech.composite import laminate
 
@@ -391,8 +390,8 @@ class TStiff2D(object):
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
 
-        panmod = panmodelDB.db[self.panel1.model]['matrices']
-        mod = modelDB.db[self.model]['matrices']
+        modelb = modelDB.db[self.model]['matrices_base']
+        modelf = modelDB.db[self.model]['matrices_flange']
 
         bay = self.bay
         a = bay.a
@@ -406,28 +405,26 @@ class TStiff2D(object):
 
         kM = 0.
 
-        if self.blam is not None:
-            # stiffener pad-up
-            y1 = self.ys - self.bb/2.
-            y2 = self.ys + self.bb/2.
-            kM += panmod.fkMy1y2(y1, y2, self.mu, self.db, self.hb, a, b, m, n,
-                          bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                          bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                          bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                          bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                          bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                          bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                          size, 0, 0)
+        # stiffener pad-up
+        y1 = self.ys - self.bb/2.
+        y2 = self.ys + self.bb/2.
+        kM += modelb.fkM(self.mu, self.db, self.hb, a, b, m, n,
+                      bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                      bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                      bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                      bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                      bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                      bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                      size, 0, 0)
 
-        if self.flam is not None:
-            kM += mod.fkMf(self.mu, self.hf, a, bf, 0., m1, n1,
-                           self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
-                           self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
-                           self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
-                           self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
-                           self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
-                           self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
-                           size, row0, col0)
+        kM += modelf.fkMf(self.mu, self.hf, a, bf, 0., m1, n1,
+                       self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
+                       self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
+                       self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
+                       self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
+                       self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
+                       self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
+                       size, row0, col0)
 
         if finalize:
             assert np.any(np.isnan(kM.data)) == False
