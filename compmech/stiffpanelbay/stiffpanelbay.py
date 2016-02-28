@@ -45,6 +45,7 @@ class StiffPanelBay(Panel):
       Controlled by the parameter ``flow``
     - ``bladestiff1ds`` contains the :class:`.BladeStiff1D` stiffeners
     - ``bladestiff2ds`` contains the :class:`.BladeStiff2D` stiffeners
+    - ``tstiff2ds`` contains the :class:`.TStiff2D` stiffeners
 
     """
     def __init__(self):
@@ -75,8 +76,10 @@ class StiffPanelBay(Panel):
         self.panels = []
 
         # stiffeners
+        self.stiffeners = []
         self.bladestiff1ds = []
         self.bladestiff2ds = []
+        self.tstiff2ds = []
 
         # geometry
         self.a = None
@@ -166,6 +169,11 @@ class StiffPanelBay(Panel):
             s.kM = None
             s.kG0 = None
 
+        for s in self.tstiff2ds:
+            s.k0 = None
+            s.kM = None
+            s.kG0 = None
+
         gc.collect()
 
 
@@ -195,14 +203,14 @@ class StiffPanelBay(Panel):
         for s in self.bladestiff2ds:
             s._rebuild()
 
+        for s in self.tstiff2ds:
+            s._rebuild()
 
-    def _default_field(self, xs, ys, gridx, gridy, si=None):
+
+    def _default_field(self, xs, a, ys, b, gridx, gridy):
         if xs is None or ys is None:
-            xs = linspace(0., self.a, gridx)
-            if si is None:
-                ys = linspace(0., self.b, gridy)
-            else: # stiffeners 2D
-                ys = linspace(0., self.bladestiff2ds[si].bf, gridy)
+            xs = linspace(0., a, gridx)
+            ys = linspace(0., b, gridy)
             xs, ys = np.meshgrid(xs, ys, copy=False)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
@@ -349,6 +357,7 @@ class StiffPanelBay(Panel):
             setattr(s, k, v)
 
         self.bladestiff1ds.append(s)
+        self.stiffeners.append(s)
 
 
     def add_bladestiff2d(self, ys, mu=None, bb=None, bstack=None,
@@ -455,6 +464,112 @@ class StiffPanelBay(Panel):
             setattr(s, k, v)
 
         self.bladestiff2ds.append(s)
+        self.stiffeners.append(s)
+
+
+    def add_tstiff2d(self, ys, mu=None, bb=None, bstack=None,
+            bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
+            bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
+            flaminaprop=None, **kwargs):
+        """Add a new TStiff2D to the current panel bay
+
+        Parameters
+        ----------
+        ys : float
+            Stiffener position.
+        mu : float, optional
+            Stiffener's material density. If not given the bay density will be
+            used.
+        bb : float, optional
+            Stiffener base width.
+        bstack : list, optional
+            Stacking sequence for the stiffener base laminate.
+        bplyts : list, optional
+            Thicknesses for each stiffener base ply.
+        bplyt : float, optional
+            Unique thickness for all stiffener base plies.
+        blaminaprops : list, optional
+            Lamina properties for each stiffener base ply.
+        blaminaprop : float, optional
+            Unique lamina properties for all stiffener base plies.
+        bf : float
+            Stiffener flange width.
+        fstack : list, optional
+            Stacking sequence for the stiffener flange laminate.
+        fplyts : list, optional
+            Thicknesses for each stiffener flange ply.
+        fplyt : float, optional
+            Unique thickness for all stiffener flange plies.
+        flaminaprops : list, optional
+            Lamina properties for each stiffener flange ply.
+        flaminaprop : float, optional
+            Unique lamina properties for all stiffener flange plies.
+
+        Notes
+        -----
+        Additional parameters can be passed using the ``kwargs``.
+
+        """
+        if mu is None:
+            mu = self.mu
+
+        if bstack is None or fstack is None:
+            raise ValueError('bstack or fstack must be defined!')
+
+        if bplyts is None:
+            if bplyt is None:
+                raise ValueError('bplyts or bplyt must be defined!')
+            else:
+                bplyts = [bplyt for _ in bstack]
+        if blaminaprops is None:
+            if blaminaprop is None:
+                raise ValueError('blaminaprops or blaminaprop must be defined!')
+            else:
+                blaminaprops = [blaminaprop for _ in bstack]
+
+        if fplyts is None:
+            if fplyt is None:
+                raise ValueError('fplyts or fplyt must be defined!')
+            else:
+                fplyts = [fplyt for _ in fstack]
+        if flaminaprops is None:
+            if flaminaprop is None:
+                raise ValueError('flaminaprops or flaminaprop must be defined!')
+            else:
+                flaminaprops = [flaminaprop for _ in fstack]
+
+        if len(self.panels) == 0:
+            raise RuntimeError('The panels must be added before the stiffeners')
+
+        # finding panel1 and panel2
+        panel1 = None
+        panel2 = None
+
+        for p in self.panels:
+            if p.y2 == ys:
+                panel1 = p
+            if p.y1 == ys:
+                panel2 = p
+            if np.isclose(ys, 0):
+                if np.isclose(p.y1, ys):
+                    panel1 = panel2 = p
+            if np.isclose(ys, self.b):
+                if np.isclose(p.y2, ys):
+                    panel1 = panel2 = p
+
+        if panel1 is None or panel2 is None:
+            raise RuntimeError('panel1 and panel2 could not be found!')
+
+        s = TStiff2D(bay=self, mu=mu, panel1=panel1, panel2=panel2, ys=ys,
+                bb=bb, bf=bf, bstack=bstack, bplyts=bplyts,
+                blaminaprops=blaminaprops, fstack=fstack, fplyts=fplyts,
+                flaminaprops=flaminaprops)
+
+        for k, v in kwargs.items():
+            setattr(s, k, v)
+
+        self.tstiff2ds.append(s)
+        self.stiffeners.append(s)
 
 
     def add_panel(self, y1, y2, stack=None, plyts=None, plyt=None,
@@ -568,15 +683,29 @@ class StiffPanelBay(Panel):
             #TODO summing up coo_matrix objects may be slow!
             k0 += s.k0
 
-        # contributions from bladestiff2ds
         row0 = num*m*n
         col0 = num*m*n
+
+        # contributions from bladestiff2ds
         for i, s in enumerate(self.bladestiff2ds):
             num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
-                s_1 = bay.bladestiff2ds[i-1]
+                s_1 = self.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
+            s.calc_k0(size=size, row0=row0, col0=col0, silent=True,
+                      finalize=False)
+            #TODO summing up coo_matrix objects may be slow!
+            k0 += s.k0
+
+        # contributions from tstiff2ds
+        for i, s in enumerate(self.tstiff2ds):
+            num1 = stiffmDB.db[s.model]['num1']
+            num2 = stiffmDB.db[s.model]['num2']
+            if i > 0:
+                s_1 = self.tstiff2ds[i-1]
+                row0 += num1*s_1.m1*s_1.n1 + num2*s_1.m2*s_1.n2
+                col0 += num1*s_1.m1*s_1.n1 + num2*s_1.m2*s_1.n2
             s.calc_k0(size=size, row0=row0, col0=col0, silent=True,
                       finalize=False)
             #TODO summing up coo_matrix objects may be slow!
@@ -624,15 +753,29 @@ class StiffPanelBay(Panel):
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
 
-        # contributions from bladestiff2ds
         row0 = num*m*n
         col0 = num*m*n
+
+        # contributions from bladestiff2ds
         for i, s in enumerate(self.bladestiff2ds):
             num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
-                s_1 = bay.bladestiff2ds[i-1]
+                s_1 = self.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
+            s.calc_kG0(size=size, row0=row0, col0=col0, silent=True,
+                       finalize=False, c=c)
+            #TODO summing up coo_matrix objects may be slow!
+            kG0 += s.kG0
+
+        # contributions from tstiff2ds
+        for i, s in enumerate(self.tstiff2ds):
+            num1 = stiffmDB.db[s.model]['num1']
+            num2 = stiffmDB.db[s.model]['num2']
+            if i > 0:
+                s_1 = self.tstiff2ds[i-1]
+                row0 += num1*s_1.m1*s_1.n1 + num2*s_1.m2*s_1.n2
+                col0 += num1*s_1.m1*s_1.n1 + num2*s_1.m2*s_1.n2
             s.calc_kG0(size=size, row0=row0, col0=col0, silent=True,
                        finalize=False, c=c)
             #TODO summing up coo_matrix objects may be slow!
@@ -677,15 +820,29 @@ class StiffPanelBay(Panel):
             #TODO summing up coo_matrix objects may be slow!
             kM += s.kM
 
-        # contributions from bladestiff2ds
         row0 = num*m*n
         col0 = num*m*n
+
+        # contributions from bladestiff2ds
         for i, s in enumerate(self.bladestiff2ds):
             num1 = stiffmDB.db[s.model]['num1']
             if i > 0:
                 s_1 = self.bladestiff2ds[i-1]
                 row0 += num1*s_1.m1*s_1.n1
                 col0 += num1*s_1.m1*s_1.n1
+            s.calc_kM(size=size, row0=row0, col0=col0, silent=True,
+                    finalize=False)
+            #TODO summing up coo_matrix objects may be slow!
+            kM += s.kM
+
+        # contributions from tstiff2ds
+        for i, s in enumerate(self.tstiff2ds):
+            num1 = stiffmDB.db[s.model]['num1']
+            num2 = stiffmDB.db[s.model]['num2']
+            if i > 0:
+                s_1 = self.tstiff2ds[i-1]
+                row0 += num1*s_1.m1*s_1.n1 + num2*s_1.m2*s_1.n2
+                col0 += num1*s_1.m1*s_1.n1 + num2*s_1.m2*s_1.n2
             s.calc_kM(size=size, row0=row0, col0=col0, silent=True,
                     finalize=False)
             #TODO summing up coo_matrix objects may be slow!
@@ -843,12 +1000,13 @@ class StiffPanelBay(Panel):
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
 
-        xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
         m = self.m
         n = self.n
         a = self.a
         b = self.b
         model = self.model
+
+        xs, ys, xshape, tshape = self._default_field(xs, a, ys, b, gridx, gridy)
 
         if c.shape[0] == self.get_size():
             num = panmDB.db[self.model]['num']
@@ -911,8 +1069,6 @@ class StiffPanelBay(Panel):
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
 
-        xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy,
-                si=si)
         a = self.a
         model = self.bladestiff2ds[si].model
 
@@ -923,6 +1079,9 @@ class StiffPanelBay(Panel):
         m1 = self.bladestiff2ds[si].m1
         n1 = self.bladestiff2ds[si].n1
         bf = self.bladestiff2ds[si].bf
+
+        xs, ys, xshape, tshape = self._default_field(xs, a, ys, bf, gridx, gridy)
+
         if si > 0:
             s_1 = self.bladestiff2ds[si-1]
             num1 = stiffmDB.db[s_1.model]['num1']

@@ -149,7 +149,7 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
     fdim = 3*m*n*m1*n1
 
     # integrating along eta' from -1 to +1
-    # and eta is related to eta' doing eta' = c0 + c1*eta
+    # and eta is related to eta' doing eta = c0 + c1*eta'
     c0 = 0.5*(eta1 + eta2)
     c1 = 0.5*(eta2 - eta1)
 
