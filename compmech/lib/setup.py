@@ -1,5 +1,6 @@
 from __future__ import division, print_function, absolute_import
 
+import sys
 import os
 from distutils.sysconfig import get_python_lib
 from os.path import basename, dirname, realpath, extsep, join
@@ -59,7 +60,10 @@ def compile(config, src):
 
 def link(config, instlib):
     objs = ''
-    libdir = join(get_python_lib(), 'compmech', 'lib')
+    if 'install' in sys.argv:
+        libdir = join(get_python_lib(), 'compmech', 'lib')
+    else:
+        libdir = realpath(config.package_path)
     try:
         os.makedirs(libdir)
     except:
