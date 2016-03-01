@@ -35,10 +35,10 @@ class TStiff2D(object):
         self.panel1 = panel1
         self.panel2 = panel2
         self.model = 'tstiff2d_clt_donnell_bardell'
-        self.m1 = 14
-        self.n1 = 11
-        self.m2 = 14
-        self.n2 = 11
+        self.m1 = 12
+        self.n1 = 9
+        self.m2 = 11
+        self.n2 = 10
         self.mu = mu
         self.ys = ys
         self.bb = bb
@@ -50,8 +50,8 @@ class TStiff2D(object):
         self.x1 = None
         self.x2 = None
 
-        self.kt = 1.e8
-        self.kr = 1.e8
+        self.kt = 1.e10
+        self.kr = 1.e10
 
         self.Nxx = None
         self.Nxy = None
@@ -156,13 +156,21 @@ class TStiff2D(object):
         modelb = modelDB.db[self.model]['matrices_base']
         modelf = modelDB.db[self.model]['matrices_flange']
         conn = modelDB.db[self.model]['connections']
+        num1 = modelDB.db[self.model]['num1']
 
         bay = self.bay
         a = bay.a
         b = bay.b
+        bb = self.bb
+        bf = self.bf
+        ys = self.ys
         r = bay.r
         m = bay.m
         n = bay.n
+        m1 = self.m1
+        n1 = self.n1
+        m2 = self.m2
+        n2 = self.n2
         alphadeg = self.panel1.alphadeg
         alphadeg = alphadeg if alphadeg is not None else 0.
         alpharad = deg2rad(alphadeg)
@@ -175,8 +183,8 @@ class TStiff2D(object):
         #     row0 and col0 define where the stiffener's base matrix starts
         #     row1 and col1 define where the stiffener's flange matrix starts
 
-        row1 = row0 + 3*self.m1*self.n1
-        col1 = col0 + 3*self.m1*self.n1
+        row1 = row0 + num1*self.m1*self.n1
+        col1 = col0 + num1*self.m1*self.n1
 
         k0 = 0.
 
@@ -187,9 +195,9 @@ class TStiff2D(object):
         # default is to have no unbouded region
         x1 = self.x1 if self.x1 is not None else a/2.
         x2 = self.x2 if self.x2 is not None else a/2.
-        y1 = self.ys - self.bb/2.
-        y2 = self.ys + self.bb/2.
-        k0 += modelb.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m, n,
+        y1 = ys - self.bb/2.
+        y2 = ys + self.bb/2.
+        k0 += modelb.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m1, n1,
                              bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                              bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                              bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -202,7 +210,7 @@ class TStiff2D(object):
         Ff = self.flam.ABD
 
         # stiffener flange
-        k0 += modelf.fk0(a, b, r, alpharad, Ff, m, n,
+        k0 += modelf.fk0(a, b, r, alpharad, Ff, m2, n2,
                          bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                          bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                          bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -346,16 +354,20 @@ class TStiff2D(object):
         msg('Calculating kG0... ', level=2, silent=silent)
 
         modelf = modelDB.db[self.model]['matrices_flange']
+        num1 = modelDB.db[self.model]['num1']
 
         bay = self.bay
         a = bay.a
+        r = bay.r
+        alphadeg = bay.alphadeg if bay.alphadeg is not None else 0.
+        alpharad = deg2rad(alphadeg)
 
         # NOTE
         #     row0 and col0 define where the stiffener's base matrix starts
         #     row1 and col1 define where the stiffener's flange matrix starts
 
-        row1 = row0 + 3*self.m1*self.n1
-        col1 = col0 + 3*self.m1*self.n1
+        row1 = row0 + num1*self.m1*self.n1
+        col1 = col0 + num1*self.m1*self.n1
 
         kG0 = 0.
 
@@ -365,7 +377,7 @@ class TStiff2D(object):
         # stiffener flange
         Nxx = self.Nxx if self.Nxx is not None else 0.
         Nxy = self.Nxy if self.Nxy is not None else 0.
-        kG0 += modelf.fkG0(Nxx, 0., Nxy, a, self.bf, self.m2, self.n2,
+        kG0 += modelf.fkG0(Nxx, 0., Nxy, a, self.bf, r, alpharad, self.m2, self.n2,
                          self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
                          self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
                          size, row1, col1)

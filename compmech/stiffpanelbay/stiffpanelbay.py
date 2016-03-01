@@ -22,7 +22,8 @@ from compmech.constants import DOUBLE
 from compmech.sparse import (make_symmetric, make_skew_symmetric,
                              remove_null_cols)
 from compmech.panel import Panel, modelDB as panmDB
-from compmech.stiffener import BladeStiff1D, BladeStiff2D, modelDB as stiffmDB
+from compmech.stiffener import (BladeStiff1D, BladeStiff2D, TStiff2D,
+                                modelDB as stiffmDB)
 
 
 def load(name):
@@ -249,6 +250,11 @@ class StiffPanelBay(Panel):
         for s in self.bladestiff2ds:
             num1 = stiffmDB.db[s.model]['num1']
             self.size += num1*s.m1*s.n1
+
+        for s in self.tstiff2ds:
+            num1 = stiffmDB.db[s.model]['num1']
+            num2 = stiffmDB.db[s.model]['num2']
+            self.size += num1*s.m1*s.n1 + num2*s.m2*s.n2
 
         return self.size
 
@@ -514,7 +520,7 @@ class StiffPanelBay(Panel):
             mu = self.mu
 
         if bstack is None or fstack is None:
-            raise ValueError('bstack or fstack must be defined!')
+            raise ValueError('bstack and fstack must be defined!')
 
         if bplyts is None:
             if bplyt is None:
