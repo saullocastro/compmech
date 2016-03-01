@@ -441,7 +441,7 @@ def fkCff(double kt, double kr, double a, double bf, int m2, int n2,
     cdef double rAurBu, rAvrBv, rAwrBw
     cdef double sAu, sBu, sAv, sBv, sAw, sBw, sAweta, sBweta
 
-    fdim = 5*m2*n2*m2*n2
+    fdim = 3*m2*n2*m2*n2
 
     kCffr = np.zeros((fdim,), dtype=INT)
     kCffc = np.zeros((fdim,), dtype=INT)

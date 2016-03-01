@@ -426,7 +426,7 @@ def fkCff(double kt, double kr, double a, double bf, int m1, int n1,
     cdef double rAurBu, rAvrBv, rAwrBw
     cdef double sAu, sBu, sAv, sBv, sAw, sBw, sAweta, sBweta
 
-    fdim = 5*m1*n1*m1*n1
+    fdim = 3*m1*n1*m1*n1
 
     kCffr = np.zeros((fdim,), dtype=INT)
     kCffc = np.zeros((fdim,), dtype=INT)
@@ -534,9 +534,9 @@ def fkCsf(double kt, double kr, double ys, double a, double b, double bf,
                         row = row0 + num1*(j*m + i)
                         col = col0 + num1*(l1*m1 + k1)
 
-                        #NOTE symmetry
-                        if row > col:
-                            continue
+                        #NOTE symmetry not applicable here
+                        #if row > col:
+                            #continue
 
                         sBu = calc_f(l1, -1., u1tyf, u1ryf, u2tyf, u2ryf)
                         sBv = calc_f(l1, -1., v1tyf, v1ryf, v2tyf, v2ryf)
