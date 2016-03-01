@@ -43,6 +43,7 @@ INT = np.int64
 
 cdef int num = 3
 cdef int num1 = 3
+cdef int num2 = 3
 cdef double pi = 3.141592653589793
 
 
@@ -94,9 +95,9 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                         if row > col:
                             continue
 
-                        gAugBu = integral_ff_12(y1, y2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-                        gAvgBv = integral_ff_12(y1, y2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-                        gAwgBw = integral_ff_12(y1, y2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAugBu = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                        gAvgBv = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                        gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                         c += 1
                         kCppr[c] = row+0
@@ -170,7 +171,7 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
                 for j in range(n):
                     for l1 in range(n1):
 
-                        row = row0 + num1*(j*m + i)
+                        row = row0 + num*(j*m + i)
                         col = col0 + num1*(l1*m1 + k1)
 
                         #NOTE symmetry not applicable here
@@ -232,22 +233,22 @@ def fkCbbpbx1x2(double x1, double x2, double kt, double kr,
         for i1 in range(m1):
             for k1 in range(m1):
 
-                pAupBu = integral_ff(i1, k1, u1txb, u1rxb, u2txb, u2rxb, u1txb, u1rxb, u2txb, u2rxb)
-                pAvpBv = integral_ff(i1, k1, v1txb, v1rxb, v2txb, v2rxb, v1txb, v1rxb, v2txb, v2rxb)
-                pAwpBw = integral_ff(i1, k1, w1txb, w1rxb, w2txb, w2rxb, w1txb, w1rxb, w2txb, w2rxb)
+                pAupBu = integral_ff_12(xi1, xi2, i1, k1, u1txb, u1rxb, u2txb, u2rxb, u1txb, u1rxb, u2txb, u2rxb)
+                pAvpBv = integral_ff_12(xi1, xi2, i1, k1, v1txb, v1rxb, v2txb, v2rxb, v1txb, v1rxb, v2txb, v2rxb)
+                pAwpBw = integral_ff_12(xi1, xi2, i1, k1, w1txb, w1rxb, w2txb, w2rxb, w1txb, w1rxb, w2txb, w2rxb)
 
                 for j1 in range(n1):
                     for l1 in range(n1):
-                        row = row0 + num*(j1*m1 + i1)
-                        col = col0 + num*(l1*m1 + k1)
+                        row = row0 + num1*(j1*m1 + i1)
+                        col = col0 + num1*(l1*m1 + k1)
 
                         #NOTE symmetry
                         if row > col:
                             continue
 
-                        qAuqBu = integral_ff_12(xi1, xi2, j1, l1, u1tyb, u1ryb, u2tyb, u2ryb, u1tyb, u1ryb, u2tyb, u2ryb)
-                        qAvqBv = integral_ff_12(xi1, xi2, j1, l1, v1tyb, v1ryb, v2tyb, v2ryb, v1tyb, v1ryb, v2tyb, v2ryb)
-                        qAwqBw = integral_ff_12(xi1, xi2, j1, l1, w1tyb, w1ryb, w2tyb, w2ryb, w1tyb, w1ryb, w2tyb, w2ryb)
+                        qAuqBu = integral_ff(j1, l1, u1tyb, u1ryb, u2tyb, u2ryb, u1tyb, u1ryb, u2tyb, u2ryb)
+                        qAvqBv = integral_ff(j1, l1, v1tyb, v1ryb, v2tyb, v2ryb, v1tyb, v1ryb, v2tyb, v2ryb)
+                        qAwqBw = integral_ff(j1, l1, w1tyb, w1ryb, w2tyb, w2ryb, w1tyb, w1ryb, w2tyb, w2ryb)
 
                         c += 1
                         kCbbpbr[c] = row+0
@@ -391,7 +392,7 @@ def fkCbf(double kt, double kr, double a, double bb, double bf,
                     for l2 in range(n2):
 
                         row = row0 + num1*(j1*m1 + i1)
-                        col = col0 + num1*(l2*m2 + k2)
+                        col = col0 + num2*(l2*m2 + k2)
 
                         #NOTE symmetry not applicable here
                         #if row > col:
@@ -466,8 +467,8 @@ def fkCff(double kt, double kr, double a, double bf, int m2, int n2,
 
                     for l2 in range(n2):
 
-                        row = row0 + num1*(j2*m2 + i2)
-                        col = col0 + num1*(l2*m2 + k2)
+                        row = row0 + num2*(j2*m2 + i2)
+                        col = col0 + num2*(l2*m2 + k2)
 
                         #NOTE symmetry
                         if row > col:
