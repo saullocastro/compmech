@@ -57,7 +57,7 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
           double w1ty, double w1ry, double w2ty, double w2ry,
           int size, int row0, int col0):
     cdef int i, k, j, l, c, row, col
-    cdef double xi1, xi2, eta1, eta2
+    cdef double xi1, xi2, eta1, eta2, c1
 
     cdef np.ndarray[cINT, ndim=1] kCppr, kCppc
     cdef np.ndarray[cDOUBLE, ndim=1] kCppv
@@ -69,6 +69,8 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
     xi2 = 2*x2/a - 1.
     eta1 = 2*y1/b - 1.
     eta2 = 2*y2/b - 1.
+
+    c1 = 0.5*(eta2 - eta1)
 
     fdim = 3*m*n*m*n
 
@@ -102,15 +104,15 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                         c += 1
                         kCppr[c] = row+0
                         kCppc[c] = col+0
-                        kCppv[c] += 0.25*a*b*fAufBu*gAugBu*kt
+                        kCppv[c] += 0.25*a*b*fAufBu*gAugBu*kt/c1
                         c += 1
                         kCppr[c] = row+1
                         kCppc[c] = col+1
-                        kCppv[c] += 0.25*a*b*fAvfBv*gAvgBv*kt
+                        kCppv[c] += 0.25*a*b*fAvfBv*gAvgBv*kt/c1
                         c += 1
                         kCppr[c] = row+2
                         kCppc[c] = col+2
-                        kCppv[c] += 0.25*a*b*fAwfBw*gAwgBw*kt
+                        kCppv[c] += 0.25*a*b*fAwfBw*gAwgBw*kt/c1
 
     kCpp = coo_matrix((kCppv, (kCppr, kCppc)), shape=(size, size))
 
@@ -185,15 +187,15 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
                         c += 1
                         kCpbr[c] = row+0
                         kCpbc[c] = col+0
-                        kCpbv[c] += -0.25*a*b*fAupBu*gAuqBu*kt
+                        kCpbv[c] += -0.25*a*bb*fAupBu*gAuqBu*kt
                         c += 1
                         kCpbr[c] = row+1
                         kCpbc[c] = col+1
-                        kCpbv[c] += -0.25*a*b*fAvpBv*gAvqBv*kt
+                        kCpbv[c] += -0.25*a*bb*fAvpBv*gAvqBv*kt
                         c += 1
                         kCpbr[c] = row+2
                         kCpbc[c] = col+2
-                        kCpbv[c] += -0.25*a*b*fAwpBw*gAwqBw*kt
+                        kCpbv[c] += -0.25*a*bb*fAwpBw*gAwqBw*kt
 
     kCpb = coo_matrix((kCpbv, (kCpbr, kCpbc)), shape=(size, size))
 
@@ -201,7 +203,7 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
 
 
 def fkCbbpbx1x2(double x1, double x2, double kt, double kr,
-        double ys, double a, double b, int m1, int n1,
+        double ys, double a, double bb, int m1, int n1,
         double u1txb, double u1rxb, double u2txb, double u2rxb,
         double v1txb, double v1rxb, double v2txb, double v2rxb,
         double w1txb, double w1rxb, double w2txb, double w2rxb,
@@ -253,15 +255,15 @@ def fkCbbpbx1x2(double x1, double x2, double kt, double kr,
                         c += 1
                         kCbbpbr[c] = row+0
                         kCbbpbc[c] = col+0
-                        kCbbpbv[c] += 0.25*a*b*kt*pAupBu*qAuqBu
+                        kCbbpbv[c] += 0.25*a*bb*kt*pAupBu*qAuqBu
                         c += 1
                         kCbbpbr[c] = row+1
                         kCbbpbc[c] = col+1
-                        kCbbpbv[c] += 0.25*a*b*kt*pAvpBv*qAvqBv
+                        kCbbpbv[c] += 0.25*a*bb*kt*pAvpBv*qAvqBv
                         c += 1
                         kCbbpbr[c] = row+2
                         kCbbpbc[c] = col+2
-                        kCbbpbv[c] += 0.25*a*b*kt*pAwpBw*qAwqBw
+                        kCbbpbv[c] += 0.25*a*bb*kt*pAwpBw*qAwqBw
 
     kCbbpb = coo_matrix((kCbbpbv, (kCbbpbr, kCbbpbc)), shape=(size, size))
 
