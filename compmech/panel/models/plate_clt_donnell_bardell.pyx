@@ -938,4 +938,3 @@ def fcA(double aeromu, double a, double b, int m, int n,
     cA = coo_matrix((cAv, (cAr, cAc)), shape=(size, size))
 
     return cA
-

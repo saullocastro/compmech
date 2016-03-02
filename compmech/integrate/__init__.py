@@ -11,7 +11,4 @@ functions.
 
 It would be nice to integrate this into SciPy one day...
 
-.. currentmodule:: compmech.integrate
-
-
 """
