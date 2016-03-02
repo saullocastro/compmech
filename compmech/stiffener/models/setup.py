@@ -46,6 +46,15 @@ def configuration(parent_package='', top_path=None):
                      libraries=['bardell_functions', 'bardell'],
                      library_dirs=[lib])
 
+    config.add_extension('tstiff2d_clt_donnell_bardell',
+                     ['tstiff2d_clt_donnell_bardell.pyx'],
+                     extra_compile_args=args_linear,
+                     runtime_library_dirs=runtime_library_dirs,
+                     include_dirs=[include],
+                     libraries=['bardell_functions', 'bardell',
+                         'bardell_12', 'bardell_c0c1'],
+                     library_dirs=[lib])
+
     for ext in config.ext_modules:
         for src in ext.sources:
             cythonize(src)

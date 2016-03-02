@@ -25,7 +25,7 @@ def configuration(parent_package='',top_path=None):
     p = Popen('python ' +
               os.path.join(os.path.realpath(config.package_path),
                            './lib/setup.py') +
-              ' build_ext --inplace clean', shell=True)
+              ' install --inplace clean', shell=True)
     p.wait()
     ###################################################
 

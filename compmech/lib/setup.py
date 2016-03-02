@@ -1,5 +1,6 @@
 from __future__ import division, print_function, absolute_import
 
+import sys
 import os
 from distutils.sysconfig import get_python_lib
 from os.path import basename, dirname, realpath, extsep, join
@@ -59,7 +60,10 @@ def compile(config, src):
 
 def link(config, instlib):
     objs = ''
-    libdir = join(get_python_lib(), 'compmech', 'lib')
+    if 'install' in sys.argv:
+        libdir = join(get_python_lib(), 'compmech', 'lib')
+    else:
+        libdir = realpath(config.package_path)
     try:
         os.makedirs(libdir)
     except:
@@ -102,12 +106,17 @@ def configuration(parent_package='', top_path=None):
             install_dir=config.package_path)
     config.add_installed_library('bardell_12',
             sources=[
-                '../../C/src/bardell_12_integral_ff.c',
-                '../../C/src/bardell_12_integral_ffxi.c',
-                '../../C/src/bardell_12_integral_ffxixi.c',
-                '../../C/src/bardell_12_integral_fxifxi.c',
-                '../../C/src/bardell_12_integral_fxifxixi.c',
-                '../../C/src/bardell_12_integral_fxixifxixi.c',
+                '../../C/src/bardell_integral_ff_12.c',
+                '../../C/src/bardell_integral_ffxi_12.c',
+                '../../C/src/bardell_integral_ffxixi_12.c',
+                '../../C/src/bardell_integral_fxifxi_12.c',
+                '../../C/src/bardell_integral_fxifxixi_12.c',
+                '../../C/src/bardell_integral_fxixifxixi_12.c',
+                ],
+            install_dir=config.package_path)
+    config.add_installed_library('bardell_c0c1',
+            sources=[
+                '../../C/src/bardell_integral_ff_c0c1.c',
                 ],
             install_dir=config.package_path)
     config.add_installed_library('bardell_functions',

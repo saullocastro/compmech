@@ -9,6 +9,7 @@ CLPT (:mod:`compmech.stiffener.models`)
 modules = [
           'bladestiff1d_clt_donnell_bardell',
           'bladestiff2d_clt_donnell_bardell',
+          'tstiff2d_clt_donnell_bardell',
           ]
 
 for module in modules:

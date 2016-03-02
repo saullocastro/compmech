@@ -1,0 +1,14 @@
+# kCbb_11
+# kCbb_11_num=3
+c += 1
+kCbbr[c] = row+0
+kCbbc[c] = col+0
+kCbbv[c] += 0.25*a*b*kt*pAu*pBu*qAu*qBu + 0.5*a*kt*pAu*pBu*qAu*qBu
+c += 1
+kCbbr[c] = row+1
+kCbbc[c] = col+1
+kCbbv[c] += 0.25*a*b*kt*pAv*pBv*qAv*qBv + 0.5*a*kt*pAv*pBv*qAv*qBv
+c += 1
+kCbbr[c] = row+2
+kCbbc[c] = col+2
+kCbbv[c] += 0.25*a*b*kt*pAw*pBw*qAw*qBw + 0.5*a*kt*(pAw*pBw*qAw*qBw + 4*kr*pAw*pBw*qAweta*qBweta/((bb*bb)*kt))

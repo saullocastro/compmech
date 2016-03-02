@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     87045,       1983]
-NotebookOptionsPosition[     86776,       1969]
-NotebookOutlinePosition[     87142,       1985]
-CellTagsIndexPosition[     87099,       1982]
+NotebookDataLength[     88113,       2005]
+NotebookOptionsPosition[     87844,       1991]
+NotebookOutlinePosition[     88210,       2007]
+CellTagsIndexPosition[     88167,       2004]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1360,7 +1360,23 @@ Cell[BoxData[{
        RowBox[{"f", ",", "xi", ",", "xi"}], "]"}], ",", 
       RowBox[{"D", "[", 
        RowBox[{"g", ",", "xi", ",", "xi"}], "]"}]}], "]"}]}], ";"}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "for", " ", "integrations", " ", "with", " ", "xi", " ", "domains", " ", 
+    "linearly", " ", "dependent", " ", "for", " ", "the", " ", "two", " ", 
+    "functions"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ffc0c1", "=", 
+   RowBox[{"Outer", "[", 
+    RowBox[{"Times", ",", "f", ",", 
+     RowBox[{"ReplaceAll", "[", 
+      RowBox[{"g", ",", 
+       RowBox[{"{", 
+        RowBox[{"xi", "\[Rule]", 
+         RowBox[{"c0", "+", 
+          RowBox[{"c1", "*", "xi"}]}]}], "}"}]}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"size", "=", 
@@ -1382,8 +1398,9 @@ Cell[BoxData[{
    RowBox[{"{", 
     RowBox[{
     "ff", ",", "ffxi", ",", "ffxixi", ",", "fxifxi", ",", "fxifxixi", ",", 
-     "fxixifxixi", ",", "ff", ",", "ffxi", ",", "ffxixi", ",", "fxifxi", ",", 
-     "fxifxixi", ",", "fxixifxixi"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+     "fxixifxixi", ",", "\[IndentingNewLine]", "ff", ",", "ffxi", ",", 
+     "ffxixi", ",", "fxifxi", ",", "fxifxixi", ",", "fxixifxixi", ",", 
+     "\[IndentingNewLine]", "ffc0c1"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"names", "=", 
@@ -1394,8 +1411,9 @@ Cell[BoxData[{
       "\"\<fxixifxixi.txt\>\"", ",", "\[IndentingNewLine]", 
       "\"\<ff_12.txt\>\"", ",", "\"\<ffxi_12.txt\>\"", ",", 
       "\"\<ffxixi_12.txt\>\"", ",", "\"\<fxifxi_12.txt\>\"", ",", 
-      "\"\<fxifxixi_12.txt\>\"", ",", "\"\<fxixifxixi_12.txt\>\""}], "}"}]}], 
-   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+      "\"\<fxifxixi_12.txt\>\"", ",", "\"\<fxixifxixi_12.txt\>\"", ",", 
+      "\[IndentingNewLine]", "\"\<ff_c0c1.txt\>\""}], "\[IndentingNewLine]", 
+     "}"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"For", "[", 
@@ -1965,7 +1983,11 @@ Cell[BoxData[{
    3.6573982486611657`*^9, 3.657398311684914*^9}, {3.6574018640622997`*^9, 
    3.6574018649529376`*^9}, 3.6574025542511754`*^9, {3.6574031878876095`*^9, 
    3.657403266296213*^9}, {3.6577162015885367`*^9, 3.6577162551414995`*^9}, 
-   3.6577163177659597`*^9}]
+   3.6577163177659597`*^9, {3.6649933868676915`*^9, 3.6649933907180586`*^9}, {
+   3.664993426242948*^9, 3.664993530698536*^9}, {3.664993689804243*^9, 
+   3.664993746203331*^9}, {3.664993925365245*^9, 3.664993933369735*^9}, {
+   3.664993972173921*^9, 3.664994055758705*^9}, {3.664995130274191*^9, 
+   3.664995155106744*^9}, 3.664995391765452*^9, 3.6650471430966263`*^9}]
 },
 WindowSize->{1520, 727},
 WindowMargins->{{0, Automatic}, {Automatic, 5}},
@@ -1984,7 +2006,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 86215, 1947, 3292, "Input"]
+Cell[557, 20, 87283, 1969, 3392, "Input"]
 }
 ]
 *)
