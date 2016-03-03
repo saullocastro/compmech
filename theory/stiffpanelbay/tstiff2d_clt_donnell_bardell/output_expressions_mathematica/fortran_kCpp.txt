@@ -1,3 +1,6 @@
-List(List((a*bb*fAu*fBu*gAu*gBu*kt)/(4.*c1),0,0),
-  List(0,(a*bb*fAv*fBv*gAv*gBv*kt)/(4.*c1),0),
-  List(0,0,(a*bb*fAw*fBw*gAw*gBw*kt)/(4.*c1)))
+List(List((a*b*fAu*fBu*gAu*gBu*kt)/(4.*c1),0,
+   (b*dpb*fAu*fBwxi*gAu*gBw*kt)/(2.*c1)),
+  List(0,(a*b*fAv*fBv*gAv*gBv*kt)/(4.*c1),
+   (a*dpb*fAv*fBw*gAv*gBweta*kt)/(2.*c1)),
+  List(0,0,(a*b*(fAw*fBw*gAw*gBw + (4*dpb**2*fAwxi*fBwxi*gAw*gBw)/a**2 + 
+        (4*dpb**2*fAw*fBw*gAweta*gBweta)/b**2)*kt)/(4.*c1)))
