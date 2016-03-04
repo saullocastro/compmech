@@ -12,10 +12,12 @@ cimport numpy as np
 
 
 cdef extern from 'bardell.h':
-    double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
-    double integral_ffxi(int i, int j, double x1t, double x1r, double x2t, double x2r,
-                         double y1t, double y1r, double y2t, double y2r) nogil
+    double integral_ff(int i, int j,
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
+    double integral_ffxi(int i, int j,
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
 
 cdef extern from 'bardell_functions.h':
     double calc_f(int i, double xi, double xi1t, double xi1r,
@@ -25,19 +27,22 @@ cdef extern from 'bardell_functions.h':
 
 cdef extern from 'bardell_12.h':
     double integral_ff_12(double eta1, double eta2, int i, int j,
-                          double x1t, double x1r, double x2t, double x2r,
-                          double y1t, double y1r, double y2t, double y2r) nogil
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
     double integral_ffxi_12(double eta1, double eta2, int i, int j,
-                       double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
     double integral_fxifxi_12(double eta1, double eta2, int i, int j,
-                       double x1t, double x1r, double x2t, double x2r,
-                       double y1t, double y1r, double y2t, double y2r) nogil
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
 
 cdef extern from 'bardell_c0c1.h':
     double integral_ff_c0c1(double c0, double c1, int i, int j,
-                            double x1t, double x1r, double x2t, double x2r,
-                            double y1t, double y1r, double y2t, double y2r) nogil
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
+    double integral_ffxi_c0c1(double c0, double c1, int i, int j,
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
 
 ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
@@ -65,8 +70,8 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
     cdef np.ndarray[cINT, ndim=1] kCppr, kCppc
     cdef np.ndarray[cDOUBLE, ndim=1] kCppv
 
-    cdef double fAufBu, fAufBwxi, fAvfBv, fAwfBw, fAwxifBwxi
-    cdef double gAugBu, gAvgBv, gAvgBweta, gAwgBw, gAwetagBweta
+    cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwfBw, fAwxifBwxi
+    cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBw, gAwetagBweta
 
     xi1 = 2*x1/a - 1.
     xi2 = 2*x2/a - 1.
@@ -90,6 +95,7 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                 fAufBu = integral_ff_12(xi1, xi2, i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
                 fAufBwxi = integral_ffxi_12(xi1, xi2, i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
                 fAvfBv = integral_ff_12(xi1, xi2, i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+                fAvfBw = integral_ff_12(xi1, xi2, i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
                 fAwfBw = integral_ff_12(xi1, xi2, i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
                 fAwxifBwxi = integral_fxifxi_12(xi1, xi2, i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
@@ -103,6 +109,7 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                             continue
 
                         gAugBu = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                        gAugBw = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
                         gAvgBv = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
                         gAvgBweta = integral_ffxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
                         gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
