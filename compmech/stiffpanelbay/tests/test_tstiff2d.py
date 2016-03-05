@@ -30,7 +30,7 @@ def test_lb():
 
     spb.lb(silent=True)
 
-    assert np.isclose(spb.eigvals[0].real, 10.4538107538, atol=0.1, rtol=0)
+    assert np.isclose(spb.eigvals[0].real, 7.3794832121, atol=0.1, rtol=0)
 
 
 #def test_freq_Stiffener1D():
