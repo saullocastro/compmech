@@ -1,5 +1,5 @@
 # kCpp_11
-# kCpp_11_num=5
+# kCpp_11_num=7
 c += 1
 kCppr[c] = row+0
 kCppc[c] = col+0
@@ -16,6 +16,14 @@ c += 1
 kCppr[c] = row+1
 kCppc[c] = col+2
 kCppv[c] += 0.5*a*dpb*fAv*fBw*gAv*gBweta*kt/c1
+c += 1
+kCppr[c] = row+2
+kCppc[c] = col+0
+kCppv[c] += 0.5*b*dpb*fAwxi*fBu*gAw*gBu*kt/c1
+c += 1
+kCppr[c] = row+2
+kCppc[c] = col+1
+kCppv[c] += 0.5*a*dpb*fAw*fBv*gAweta*gBv*kt/c1
 c += 1
 kCppr[c] = row+2
 kCppc[c] = col+2

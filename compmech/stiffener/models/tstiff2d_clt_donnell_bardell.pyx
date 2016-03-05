@@ -70,8 +70,8 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
     cdef np.ndarray[cINT, ndim=1] kCppr, kCppc
     cdef np.ndarray[cDOUBLE, ndim=1] kCppv
 
-    cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwfBw, fAwxifBwxi
-    cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBw, gAwetagBweta
+    cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwfBv, fAwfBw, fAwxifBu, fAwxifBwxi
+    cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBu, gAwgBw, gAwetagBv, gAwetagBweta
 
     xi1 = 2*x1/a - 1.
     xi2 = 2*x2/a - 1.
@@ -80,7 +80,7 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
 
     c1 = 0.5*(eta2 - eta1)
 
-    fdim = 5*m*n*m*n
+    fdim = 7*m*n*m*n
 
     kCppr = np.zeros((fdim,), dtype=INT)
     kCppc = np.zeros((fdim,), dtype=INT)
@@ -96,7 +96,9 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                 fAufBwxi = integral_ffxi_12(xi1, xi2, i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
                 fAvfBv = integral_ff_12(xi1, xi2, i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
                 fAvfBw = integral_ff_12(xi1, xi2, i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwfBv = integral_ff_12(xi1, xi2, i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
                 fAwfBw = integral_ff_12(xi1, xi2, i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                fAwxifBu = integral_ffxi_12(xi1, xi2, k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
                 fAwxifBwxi = integral_fxifxi_12(xi1, xi2, i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
                 for j in range(n):
@@ -112,7 +114,9 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                         gAugBw = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
                         gAvgBv = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
                         gAvgBweta = integral_ffxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwgBu = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
                         gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        gAwetagBv = integral_ffxi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
                         gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
                         c += 1
@@ -131,6 +135,14 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                         kCppr[c] = row+1
                         kCppc[c] = col+2
                         kCppv[c] += 0.5*a*dpb*fAvfBw*gAvgBweta*kt/c1
+                        c += 1
+                        kCppr[c] = row+2
+                        kCppc[c] = col+0
+                        kCppv[c] += 0.5*b*dpb*fAwxifBu*gAwgBu*kt/c1
+                        c += 1
+                        kCppr[c] = row+2
+                        kCppc[c] = col+1
+                        kCppv[c] += 0.5*a*dpb*fAwfBv*gAwetagBv*kt/c1
                         c += 1
                         kCppr[c] = row+2
                         kCppc[c] = col+2

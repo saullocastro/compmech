@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     56108,       1068]
-NotebookOptionsPosition[     55783,       1052]
-NotebookOutlinePosition[     56205,       1070]
-CellTagsIndexPosition[     56162,       1067]
+NotebookDataLength[     56860,       1090]
+NotebookOptionsPosition[     56495,       1073]
+NotebookOutlinePosition[     56917,       1091]
+CellTagsIndexPosition[     56874,       1088]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -279,8 +279,24 @@ Cell[BoxData[{
       RowBox[{
        RowBox[{
         RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wAxi", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", "/", "a"}], ")"}], "*", "dpb"}], "\[IndentingNewLine]", 
+      "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
          RowBox[{"{", "vA", "}"}], "]"}], ".", 
         RowBox[{"{", "wBeta", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", "/", "b"}], ")"}], "*", "dpb"}], "\[IndentingNewLine]", 
+      "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wAeta", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB", "}"}]}], "*", 
        RowBox[{"(", 
         RowBox[{"2", "/", "b"}], ")"}], "*", "dpb"}], "\[IndentingNewLine]", 
       "+", 
@@ -1048,11 +1064,16 @@ Cell[BoxData[{
    3.6658586998005304`*^9, 3.665858706888776*^9}, {3.666028500287612*^9, 
    3.66602854337737*^9}, {3.6660286005840197`*^9, 3.6660286889064465`*^9}, {
    3.66602875771447*^9, 3.6660289484236126`*^9}, {3.666028989230996*^9, 
-   3.6660289975790944`*^9}, 3.66602939338018*^9}]
+   3.6660289975790944`*^9}, 3.66602939338018*^9, {3.666167593925926*^9, 
+   3.666167645604035*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6661695074810305`*^9, 3.666169509528839*^9}, 
+   3.666170126946135*^9}]
 },
 Evaluator->"Local 2",
 WindowSize->{751, 727},
-WindowMargins->{{Automatic, 1}, {Automatic, 6}},
+WindowMargins->{{Automatic, 1}, {Automatic, 5}},
 CellContext->Notebook,
 Magnification->0.8999999761581421,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
@@ -1069,7 +1090,8 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 55222, 1030, 2150, "Input"]
+Cell[557, 20, 55811, 1047, 2190, "Input"],
+Cell[56371, 1069, 120, 2, 29, "Input"]
 }
 ]
 *)
