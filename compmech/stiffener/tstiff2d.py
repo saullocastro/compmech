@@ -50,8 +50,8 @@ class TStiff2D(object):
         self.x1 = None
         self.x2 = None
 
-        self.kt = 1.e10
-        self.kr = 1.e10
+        self.kt = 1.e8
+        self.kr = 1.e8
 
         self.Nxx = None
         self.Nxy = None
@@ -209,6 +209,8 @@ class TStiff2D(object):
         kr = self.kr
         Ff = self.flam.ABD
 
+        dpb = sum(self.bplyts)/2. + sum(self.fplyts)/2.
+
         # stiffener flange
         k0 += modelf.fk0(a, b, r, alpharad, Ff, m2, n2,
                          bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
@@ -221,7 +223,7 @@ class TStiff2D(object):
 
         # connectivity panel-base
         k0 += conn.fkCppx1x2y1y2(0, x1, y1, y2,
-                                 kt, a, b, m, n,
+                                 kt, a, b, dpb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -230,7 +232,7 @@ class TStiff2D(object):
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
                                  size, 0, 0)
         k0 += conn.fkCppx1x2y1y2(x2, a, y1, y2,
-                                 kt, a, b, m, n,
+                                 kt, a, b, dpb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -240,7 +242,7 @@ class TStiff2D(object):
                                  size, 0, 0)
 
         k0 += conn.fkCpbx1x2y1y2(0, x1, y1, y2,
-                                 kt, a, b, bb,
+                                 kt, a, b, bb, dpb,
                                  m, n, m1, n1,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
@@ -256,7 +258,7 @@ class TStiff2D(object):
                              self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                                  size, 0, col0)
         k0 += conn.fkCpbx1x2y1y2(x2, a, y1, y2,
-                                 kt, a, b, bb,
+                                 kt, a, b, bb, dpb,
                                  m, n, m1, n1,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,

@@ -8,8 +8,8 @@ from sympy import pi, sin, cos, var
 
 from compmech.conecyl.sympytools import mprint_as_sparse
 
-var('fAu, gAu, fAv, gAv, fAw, gAw')
-var('fBu, gBu, fBv, gBv, fBw, gBw')
+var('fAu, gAu, fAv, gAv, fAw, fAwxi, gAw, gAweta')
+var('fBu, gBu, fBv, gBv, fBw, fBwxi, gBw, gBweta')
 
 var('pAu, qAu, pAv, qAv, pAw, qAw, qAweta')
 var('pBu, qBu, pBv, qBv, pBw, qBw, qBweta')
@@ -17,7 +17,7 @@ var('pBu, qBu, pBv, qBv, pBw, qBw, qBweta')
 var('rAu, sAu, rAv, sAv, rAw, sAw, sAweta')
 var('rBu, sBu, rBv, sBv, rBw, sBw, sBweta')
 
-var('kt, kr, a, b, bb, bf, c1')
+var('kt, kr, a, b, bb, bf, c1, dpb')
 
 subs = {
        }
