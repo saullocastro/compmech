@@ -1120,7 +1120,7 @@ class StiffPanelBay(Panel):
              cbar_title='', cbar_fontsize=10,
              aspect='equal', clean=True, dpi=400,
              texts=[], xs=None, ys=None, gridx=300, gridy=300,
-             num_levels=400, vecmin=None, vecmax=None):
+             num_levels=400, vecmin=None, vecmax=None, silent=False):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1205,6 +1205,8 @@ class StiffPanelBay(Panel):
             field.
         vecmax : float, optional
             Maximum value for the contour scale.
+        silent : bool, optional
+            A boolean to tell whether the msg messages should be printed.
 
         Returns
         -------
@@ -1213,7 +1215,7 @@ class StiffPanelBay(Panel):
             if needed.
 
         """
-        msg('Plotting contour...')
+        msg('Plotting contour...', silent=silent)
 
         ubkp, vbkp, wbkp, phixbkp, phiybkp = (self.u, self.v, self.w,
                                               self.phix, self.phiy)
@@ -1221,7 +1223,7 @@ class StiffPanelBay(Panel):
         import matplotlib.pyplot as plt
         import matplotlib
 
-        msg('Computing field variables...', level=1)
+        msg('Computing field variables...', level=1, silent=silent)
         displs = ['u', 'v', 'w', 'phix', 'phiy']
 
         if vec in displs:
@@ -1231,7 +1233,7 @@ class StiffPanelBay(Panel):
             raise ValueError(
                     '{0} is not a valid vec parameter value!'.format(vec))
 
-        msg('Finished!', level=1)
+        msg('Finished!', level=1, silent=silent)
 
         Xs = self.Xs
         Ys = self.Ys
@@ -1334,7 +1336,7 @@ class StiffPanelBay(Panel):
         if phiybkp is not None:
             self.phiy = phiybkp
 
-        msg('finished!')
+        msg('finished!', silent=silent)
 
         return ax
 
@@ -1348,7 +1350,7 @@ class StiffPanelBay(Panel):
              cbar_title='', cbar_fontsize=10,
              aspect='equal', clean=True, dpi=400,
              texts=[], xs=None, ys=None, gridx=300, gridy=300,
-             num_levels=400, vecmin=None, vecmax=None):
+             num_levels=400, vecmin=None, vecmax=None, silent=False):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1435,6 +1437,8 @@ class StiffPanelBay(Panel):
             field.
         vecmax : float, optional
             Maximum value for the contour scale.
+        silent : bool, optional
+            A boolean to tell whether the msg messages should be printed.
 
         Returns
         -------
@@ -1443,7 +1447,7 @@ class StiffPanelBay(Panel):
             if needed.
 
         """
-        msg('Plotting contour...')
+        msg('Plotting contour...', silent=silent)
 
         ubkp, vbkp, wbkp, phixbkp, phiybkp = (self.u, self.v, self.w,
                                               self.phix, self.phiy)
@@ -1451,7 +1455,7 @@ class StiffPanelBay(Panel):
         import matplotlib.pyplot as plt
         import matplotlib
 
-        msg('Computing field variables...', level=1)
+        msg('Computing field variables...', level=1, silent=silent)
         displs = ['u', 'v', 'w', 'phix', 'phiy']
 
         if vec in displs:
@@ -1462,7 +1466,7 @@ class StiffPanelBay(Panel):
             raise ValueError(
                     '{0} is not a valid vec parameter value!'.format(vec))
 
-        msg('Finished!', level=1)
+        msg('Finished!', level=1, silent=silent)
 
         Xs = self.Xs
         Ys = self.Ys
@@ -1568,7 +1572,7 @@ class StiffPanelBay(Panel):
         if phiybkp is not None:
             self.phiy = phiybkp
 
-        msg('finished!')
+        msg('finished!', silent=silent)
 
         return ax
 
