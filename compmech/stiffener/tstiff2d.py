@@ -53,8 +53,10 @@ class TStiff2D(object):
         self.kt = 1.e8
         self.kr = 1.e8
 
-        self.Nxx = None
-        self.Nxy = None
+        self.Nxxb = None
+        self.Nxyb = None
+        self.Nxxf = None
+        self.Nxyf = None
 
         self.bstack = bstack
         self.bplyts = bplyts
@@ -354,6 +356,7 @@ class TStiff2D(object):
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
+        modelb = modelDB.db[self.model]['matrices_base']
         modelf = modelDB.db[self.model]['matrices_flange']
         num1 = modelDB.db[self.model]['num1']
 
@@ -373,12 +376,19 @@ class TStiff2D(object):
         kG0 = 0.
 
         # stiffener base
-        #TODO include kG0 for pad-up (Nxx load that arrives there)
+        Nxxb = self.Nxxb if self.Nxxb is not None else 0.
+        Nxyb = self.Nxyb if self.Nxyb is not None else 0.
+        kG0 += modelb.fkG0(Nxxb, 0., Nxyb, a, self.bb, r, alpharad,
+                         self.m1, self.n1,
+                         self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
+                         self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                         size, row0, col0)
 
         # stiffener flange
-        Nxx = self.Nxx if self.Nxx is not None else 0.
-        Nxy = self.Nxy if self.Nxy is not None else 0.
-        kG0 += modelf.fkG0(Nxx, 0., Nxy, a, self.bf, r, alpharad, self.m2, self.n2,
+        Nxxf = self.Nxxf if self.Nxxf is not None else 0.
+        Nxyf = self.Nxyf if self.Nxyf is not None else 0.
+        kG0 += modelf.fkG0(Nxxf, 0., Nxyf, a, self.bf, r, alpharad,
+                         self.m2, self.n2,
                          self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
                          self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
                          size, row1, col1)
