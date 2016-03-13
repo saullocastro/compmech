@@ -24,7 +24,7 @@ db = {
                     'linear static': True,
                     'linear buckling': True,
                     'non-linear static': False,
-                    'field': plate_clt_donnell_bardell_field,
+                    'field_flange': plate_clt_donnell_bardell_field,
                     'matrices': bladestiff2d_clt_donnell_bardell,
                     'dofs': 3,
                     'e_num': 6,

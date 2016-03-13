@@ -45,7 +45,8 @@ class TStiff2D(object):
         self.hb = 0.
         self.bf = bf
         self.hf = 0.
-        self.forces = []
+        self.forces_base = []
+        self.forces_flange = []
 
         self.x1 = None
         self.x2 = None
@@ -71,17 +72,17 @@ class TStiff2D(object):
         self.kM = None
         self.kG0 = None
 
-        self.u1txb = 0.
+        self.u1txb = 1.
         self.u1rxb = 1.
-        self.u2txb = 0.
+        self.u2txb = 1.
         self.u2rxb = 1.
-        self.v1txb = 0.
+        self.v1txb = 1.
         self.v1rxb = 1.
-        self.v2txb = 0.
+        self.v2txb = 1.
         self.v2rxb = 1.
-        self.w1txb = 0.
+        self.w1txb = 1.
         self.w1rxb = 1.
-        self.w2txb = 0.
+        self.w2txb = 1.
         self.w2rxb = 1.
 
         self.u1tyb = 1.
@@ -200,12 +201,12 @@ class TStiff2D(object):
         y1 = ys - self.bb/2.
         y2 = ys + self.bb/2.
         k0 += modelb.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m1, n1,
-                             bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                             bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                             bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                             bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                             bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                             bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                             self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
+                             self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
+                             self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
+                             self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
+                             self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
+                             self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                              size, row0, col0)
         kt = self.kt
         kr = self.kr
@@ -215,12 +216,12 @@ class TStiff2D(object):
 
         # stiffener flange
         k0 += modelf.fk0(a, b, r, alpharad, Ff, m2, n2,
-                         bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                         bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                         bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                         bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                         bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                         bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                         self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
+                         self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
+                         self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
+                         self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
+                         self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
+                         self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
                          size, row1, col1)
 
         # connectivity panel-base
