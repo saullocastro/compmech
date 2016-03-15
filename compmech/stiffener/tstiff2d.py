@@ -4,7 +4,8 @@ import gc
 import numpy as np
 from numpy import deg2rad
 
-import modelDB
+import modelDB as stiffmDB
+import compmech.panel.modelDB as panelmDB
 from compmech.logger import msg, warn
 from compmech.composite import laminate
 
@@ -18,7 +19,7 @@ class TStiff2D(object):
 
                  || --> flange       |
                  ||                  |-> stiffener
-               ======  --> padup     |
+               ======  --> base      |
       =========================  --> panels
          Panel1      Panel2
 
@@ -139,7 +140,6 @@ class TStiff2D(object):
         self.flam.calc_equivalent_modulus()
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
         hb = sum(self.bplyts)
-        self.db = abs(-h/2.-hb/2.)
         self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                         laminaprops=self.blaminaprops,
                                         offset=(-h/2.-hb/2.))
@@ -156,10 +156,10 @@ class TStiff2D(object):
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
-        modelb = modelDB.db[self.model]['matrices_base']
-        modelf = modelDB.db[self.model]['matrices_flange']
-        conn = modelDB.db[self.model]['connections']
-        num1 = modelDB.db[self.model]['num1']
+        modelb = panelmDB.db[self.panel1.model]['matrices']
+        modelf = stiffmDB.db[self.model]['matrices_flange']
+        conn = stiffmDB.db[self.model]['connections']
+        num1 = stiffmDB.db[self.model]['num1']
 
         bay = self.bay
         a = bay.a
@@ -167,14 +167,14 @@ class TStiff2D(object):
         bb = self.bb
         bf = self.bf
         ys = self.ys
-        r = bay.r
+        r = bay.r if bay.r is not None else 0.
         m = bay.m
         n = bay.n
         m1 = self.m1
         n1 = self.n1
         m2 = self.m2
         n2 = self.n2
-        alphadeg = self.panel1.alphadeg
+        alphadeg = bay.alphadeg
         alphadeg = alphadeg if alphadeg is not None else 0.
         alpharad = deg2rad(alphadeg)
 
@@ -191,7 +191,7 @@ class TStiff2D(object):
 
         k0 = 0.
 
-        #TODO add contribution from Nxx_cte from flange and padup
+        #TODO add contribution from Nxx_cte from flange and base
 
         # stiffener base
         Fsb = self.blam.ABD
@@ -357,9 +357,9 @@ class TStiff2D(object):
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
-        modelb = modelDB.db[self.model]['matrices_base']
-        modelf = modelDB.db[self.model]['matrices_flange']
-        num1 = modelDB.db[self.model]['num1']
+        modelb = panelmDB.db[self.panel1.model]['matrices']
+        modelf = stiffmDB.db[self.model]['matrices_flange']
+        num1 = stiffmDB.db[self.model]['num1']
 
         bay = self.bay
         a = bay.a
@@ -414,8 +414,9 @@ class TStiff2D(object):
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
 
-        modelb = modelDB.db[self.model]['matrices_base']
-        modelf = modelDB.db[self.model]['matrices_flange']
+        modelb = panelmDB.db[self.panel1.model]['matrices']
+        modelf = stiffmDB.db[self.model]['matrices_flange']
+        num1 = stiffmDB.db[self.model]['num1']
 
         bay = self.bay
         a = bay.a
@@ -425,30 +426,40 @@ class TStiff2D(object):
 
         m1 = self.m1
         n1 = self.n1
+        m2 = self.m2
+        n2 = self.n2
         bf = self.bf
+
+        r = bay.r if bay.r is not None else 0.
+        alphadeg = bay.alphadeg
+        alphadeg = alphadeg if alphadeg is not None else 0.
+        alpharad = deg2rad(alphadeg)
+
+        row1 = row0 + num1*self.m1*self.n1
+        col1 = col0 + num1*self.m1*self.n1
 
         kM = 0.
 
-        # stiffener pad-up
-        y1 = self.ys - self.bb/2.
-        y2 = self.ys + self.bb/2.
-        kM += modelb.fkM(self.mu, self.db, self.hb, a, b, m, n,
-                      bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                      bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                      bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                      bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                      bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                      bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                      size, 0, 0)
+        print 'DEBUG', bay.r, modelb
+        # stiffener base
+        kM += modelb.fkM(self.mu, 0., self.hb, a, b, r, alpharad, m1, n1,
+                      self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
+                      self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
+                      self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
+                      self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
+                      self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
+                      self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                      size, row0, col0)
 
-        kM += modelf.fkMf(self.mu, self.hf, a, bf, 0., m1, n1,
+        # stiffener flange
+        kM += modelf.fkM(self.mu, 0., self.hf, a, bf, r, alpharad, m2, n2,
                        self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
                        self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
                        self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
                        self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
                        self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
                        self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
-                       size, row0, col0)
+                       size, row1, col1)
 
         if finalize:
             assert np.any(np.isnan(kM.data)) == False

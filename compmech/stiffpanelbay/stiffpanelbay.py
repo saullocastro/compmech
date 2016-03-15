@@ -21,7 +21,7 @@ from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
 from compmech.sparse import (make_symmetric, make_skew_symmetric,
                              remove_null_cols)
-from compmech.panel import Panel, modelDB as panmDB
+from compmech.panel import Panel, modelDB as panelmDB
 from compmech.stiffener import (BladeStiff1D, BladeStiff2D, TStiff2D,
                                 modelDB as stiffmDB)
 
@@ -244,7 +244,7 @@ class StiffPanelBay(Panel):
             The size of the stiffness matrices.
 
         """
-        num = panmDB.db[self.model]['num']
+        num = panelmDB.db[self.model]['num']
         self.size = num*self.m*self.n
 
         for s in self.bladestiff2ds:
@@ -688,7 +688,7 @@ class StiffPanelBay(Panel):
         r = self.r
         m = self.m
         n = self.n
-        num = panmDB.db[self.model]['num']
+        num = panelmDB.db[self.model]['num']
         size = self.get_size()
 
         k0 = 0.
@@ -760,7 +760,7 @@ class StiffPanelBay(Panel):
         b = self.b
         m = self.m
         n = self.n
-        num = panmDB.db[self.model]['num']
+        num = panelmDB.db[self.model]['num']
         size = self.get_size()
 
         kG0 = 0.
@@ -830,7 +830,7 @@ class StiffPanelBay(Panel):
         b = self.b
         m = self.m
         n = self.n
-        num = panmDB.db[self.model]['num']
+        num = panelmDB.db[self.model]['num']
         size = self.get_size()
 
         kM = 0.
@@ -901,7 +901,7 @@ class StiffPanelBay(Panel):
         r = self.r
         m = self.m
         n = self.n
-        num = panmDB.db[self.model]['num']
+        num = panelmDB.db[self.model]['num']
         size = self.get_size()
 
         if self.beta is None:
@@ -954,7 +954,7 @@ class StiffPanelBay(Panel):
         r = self.r
         m = self.m
         n = self.n
-        num = panmDB.db[self.model]['num']
+        num = panelmDB.db[self.model]['num']
         size = self.get_size()
 
         if self.beta is None:
@@ -1043,12 +1043,12 @@ class StiffPanelBay(Panel):
         xs, ys, xshape, tshape = self._default_field(xs, a, ys, b, gridx, gridy)
 
         if c.shape[0] == self.get_size():
-            num = panmDB.db[self.model]['num']
+            num = panelmDB.db[self.model]['num']
             c = c[:num*self.m*self.n]
         else:
             raise ValueError('c is the full vector of Ritz constants')
 
-        fuvw = panmDB.db[model]['field'].fuvw
+        fuvw = panelmDB.db[model]['field'].fuvw
         us, vs, ws, phixs, phiys = fuvw(c, m, n, a, b, xs, ys,
                 self.out_num_cores)
 
@@ -1110,7 +1110,7 @@ class StiffPanelBay(Panel):
         if isinstance(stiff, BladeStiff1D):
             raise RuntimeError('Use plot_skin for BladeStiff1D')
 
-        num = panmDB.db[self.model]['num']
+        num = panelmDB.db[self.model]['num']
         row_init = num*self.m*self.n
         row_final = num*self.m*self.n
 
@@ -1164,7 +1164,11 @@ class StiffPanelBay(Panel):
 
         xs, ys, xshape, tshape = self._default_field(xs, self.a, ys, b, gridx, gridy)
 
-        fuvw = stiffmDB.db[s.model]['field_' + region.lower()].fuvw
+        if region.lower() == 'flange':
+            fuvw = stiffmDB.db[s.model]['field_flange'].fuvw
+        elif region.lower() == 'base':
+            fuvw = panelmDB.db[s.panel1.model]['field'].fuvw
+
         us, vs, ws, phixs, phiys = fuvw(c, mfield, nfield, self.a, b, xs, ys,
                 self.out_num_cores)
 
@@ -1679,8 +1683,8 @@ class StiffPanelBay(Panel):
 
         """
         msg('Calculating external forces...', level=2, silent=silent)
-        num = panmDB.db[self.model]['num']
-        fg = panmDB.db[self.model]['field'].fg
+        num = panelmDB.db[self.model]['num']
+        fg = panelmDB.db[self.model]['field'].fg
 
         # punctual forces on skin
         size = num*self.m*self.n
@@ -1726,7 +1730,7 @@ class StiffPanelBay(Panel):
             size = num1*m1*n1
             g_stiffener = np.zeros((3, size), dtype=DOUBLE)
             fext_base = np.zeros(size, dtype=DOUBLE)
-            fg_base = stiffmDB.db[s.model]['field_base'].fg
+            fg_base = panelmDB.db[s.panel1.model]['field'].fg
             for i, force in enumerate(s.forces_base):
                 xb, yb, fx, fy, fz = force
                 fg_base(g_stiffener, m1, n1, xb, yb, self.a, bb)

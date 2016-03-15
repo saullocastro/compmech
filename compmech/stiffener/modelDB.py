@@ -34,9 +34,9 @@ db = {
                     'linear static': True,
                     'linear buckling': True,
                     'non-linear static': False,
-                    'field_base': cpanel_clt_donnell_bardell_field,
+                    #'field_base': None, # must be defined at runtime
                     'field_flange': plate_clt_donnell_bardell_field,
-                    'matrices_base': cpanel_clt_donnell_bardell,
+                    #'matrices_base': None, # must be defined at runtime
                     'matrices_flange': plate_clt_donnell_bardell,
                     'connections': tstiff2d_clt_donnell_bardell,
                     'dofs': 3,
