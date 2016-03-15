@@ -40,7 +40,7 @@ def test_dynamic_with_TStiff2D():
                 filename='stiff_flange.png', colorbar=True)
 
 
-def test_dynamic_with_damaged_TStiff2D():
+def __test_dynamic_with_damaged_TStiff2D():
     print('Testing dynamic analysis with damaged TStiff2D')
     spb = StiffPanelBay()
     spb.a = 2.
