@@ -296,8 +296,10 @@ class TStiff2D(object):
                                self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                                size, row0, col0)
 
+        eta_conn_base = 0.
         k0 += conn.fkCbbbf(kt, kr, a, bb,
                            m1, n1,
+                           eta_conn_base,
                            self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                            self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                            self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -306,8 +308,10 @@ class TStiff2D(object):
                            self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                            size, row0, col0)
 
+        eta_conn_flange = -1.
         k0 += conn.fkCbf(kt, kr, a, bb, bf,
                          m1, n1, m2, n2,
+                         eta_conn_base, eta_conn_flange,
                          self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                          self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                          self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -323,6 +327,7 @@ class TStiff2D(object):
                          size, row0, col1)
 
         k0 += conn.fkCff(kt, kr, a, bf, m2, n2,
+                         eta_conn_flange,
                          self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
                          self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
                          self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
@@ -363,7 +368,7 @@ class TStiff2D(object):
 
         bay = self.bay
         a = bay.a
-        r = bay.r
+        r = bay.r if bay.r is not None else 0.
         alphadeg = bay.alphadeg if bay.alphadeg is not None else 0.
         alpharad = deg2rad(alphadeg)
 
@@ -440,7 +445,6 @@ class TStiff2D(object):
 
         kM = 0.
 
-        print 'DEBUG', bay.r, modelb
         # stiffener base
         kM += modelb.fkM(self.mu, 0., self.hb, a, b, r, alpharad, m1, n1,
                       self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
