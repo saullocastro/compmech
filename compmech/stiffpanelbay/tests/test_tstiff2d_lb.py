@@ -14,10 +14,10 @@ def test_lb():
     spb.model = 'plate_clt_donnell_bardell'
     spb.m = 16
     spb.n = 14
-    spb.r = 1000000000000.
 
-    spb.add_panel(y1=0, y2=spb.b/2., plyt=spb.plyt, Nxx=-10.)
-    spb.add_panel(y1=spb.b/2., y2=spb.b, plyt=spb.plyt, Nxx=-10.)
+    Nxx = -100.
+    spb.add_panel(y1=0, y2=spb.b/2., plyt=spb.plyt, Nxx=Nxx)
+    spb.add_panel(y1=spb.b/2., y2=spb.b, plyt=spb.plyt, Nxx=Nxx)
 
     bb = spb.b/10.
     spb.add_tstiff2d(ys=spb.b/2., bf=bb/2, bb=bb,
@@ -25,12 +25,12 @@ def test_lb():
                      fplyt=spb.plyt*1., flaminaprop=spb.laminaprop,
                      bstack=[0, 90, 90, 0]*1,
                      bplyt=spb.plyt*1., blaminaprop=spb.laminaprop,
-                     m1=15, n1=15, m2=14, n2=13,
+                     m1=16, n1=15, m2=14, n2=13,
                      x1=0.448*spb.a, x2=0.9*spb.a)
 
     spb.lb(silent=True)
 
-    assert np.isclose(spb.eigvals[0].real, 7.3794832121, atol=0.1, rtol=0)
+    assert np.isclose(spb.eigvals[0]*Nxx, -73.7598313566, atol=0.1, rtol=0)
 
 
 #def test_freq_Stiffener1D():
