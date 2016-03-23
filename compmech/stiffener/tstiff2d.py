@@ -298,8 +298,7 @@ class TStiff2D(object):
 
         eta_conn_base = 0.
         k0 += conn.fkCbbbf(kt, kr, a, bb,
-                           m1, n1,
-                           eta_conn_base,
+                           m1, n1, eta_conn_base,
                            self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                            self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                            self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
