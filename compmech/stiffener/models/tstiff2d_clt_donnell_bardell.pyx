@@ -320,8 +320,7 @@ def fkCbbpbx1x2(double x1, double x2, double kt, double kr,
 
 
 def fkCbbbf(double kt, double kr, double a, double bb,
-          int m1, int n1,
-          double eta_conn_base,
+          int m1, int n1, double eta_conn_base,
           double u1txb, double u1rxb, double u2txb, double u2rxb,
           double v1txb, double v1rxb, double v2txb, double v2rxb,
           double w1txb, double w1rxb, double w2txb, double w2rxb,
