@@ -1,0 +1,14 @@
+# kCp1p2_11
+# kCp1p2_11_num=3
+c += 1
+kCp1p2r[c] = row+0
+kCp1p2c[c] = col+0
+kCp1p2v[c] += 0.5*a*f1Au*f2Bu*g1Au*g2Bu*kt
+c += 1
+kCp1p2r[c] = row+1
+kCp1p2c[c] = col+1
+kCp1p2v[c] += 0.5*a*f1Av*f2Bv*g1Av*g2Bv*kt
+c += 1
+kCp1p2r[c] = row+2
+kCp1p2c[c] = col+2
+kCp1p2v[c] += 0.5*a*kt*(f1Aw*f2Bw*g1Aw*g2Bw + f1Aw*f2Bw*g1Aweta*g2Bweta*kr/kt + f1Awxi*f2Bwxi*g1Aw*g2Bw*kr/kt)

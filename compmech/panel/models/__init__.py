@@ -27,6 +27,7 @@ Fourth part:
 
 """
 modules = [
+          'connect_panels',
           'cpanel_clt_donnell_bardell_field',
           'cpanel_clt_donnell_bardell',
           #'kpanel_clt_donnell_bardell_field',
