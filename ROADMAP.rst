@@ -10,7 +10,12 @@ Version 0.5.5
   option to connect two panels using displacement and rotation compatibility
   such that in overall the bay can be modeled using less terms. This could be
   called a finite-semi-analytical approach, where the assembly is accomplished
-  using proper connection matrices and a penalizing approach
+  using proper connection matrices and a penalizing approach. Additional
+  expected improvements are:
+  -- improved numerical stability
+  -- considerably faster integration of all structural matrices (will prevent
+  using the much bigger look-up tables associated with bardell_12 or
+  bardell_c0c1
 
 Version 0.5.6
 -------------
