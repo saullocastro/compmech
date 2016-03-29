@@ -5,6 +5,12 @@ Version 0.5.5
   geometrically non-linear analyses)
 - tests for integrate module
 - T, Z and I 2D stiffeners
+- extra assembly options for stiffpanelbay. Before each panel was modeled as
+  the integration between y1 and y2 at a given bay region. Now there is the
+  option to connect two panels using displacement and rotation compatibility
+  such that in overall the bay can be modeled using less terms. This could be
+  called a finite-semi-analytical approach, where the assembly is accomplished
+  using proper connection matrices and a penalizing approach
 
 Version 0.5.6
 -------------
