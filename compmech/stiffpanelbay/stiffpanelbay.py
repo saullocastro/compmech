@@ -898,7 +898,7 @@ class StiffPanelBay(Panel):
         model = self.model
         a = self.a
         b = self.b
-        r = self.r
+        r = self.r if self.r is not None else 0.
         m = self.m
         n = self.n
         num = panelmDB.db[self.model]['num']
@@ -909,11 +909,14 @@ class StiffPanelBay(Panel):
                 raise ValueError('Mach number must be >= 1')
             elif self.Mach == 1:
                 self.Mach = 1.0001
-            M = self.Mach
-            beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
-            gamma = beta*1./(2.*self.r*(M**2 - 1)**0.5)
+            Mach = self.Mach
+            beta = self.rho_air * self.V**2 / (Mach**2 - 1)**0.5
+            if r != 0.:
+                gamma = beta*1./(2.*self.r*(Mach**2 - 1)**0.5)
+            else:
+                gamma = 0.
             ainf = self.speed_sound
-            aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
+            aeromu = beta/(Mach*ainf)*(Mach**2 - 2)/(Mach**2 - 1)
         else:
             beta = self.beta
             gamma = self.gamma if self.gamma is not None else 0.
@@ -921,12 +924,22 @@ class StiffPanelBay(Panel):
 
         # contributions from panels
         #TODO summing up coo_matrix objects may be slow!
+        #FIXME this only works if the first panel represent the full
+        #      stiffpanelbay domain (mainly integration interval, boundary
+        #      conditions)
         p = self.panels[0]
-        #TODO if the initialization of panel is correct, the line below is
-        #     unnecessary
+        #FIXME the initialization below lookd terrible
+        #      we should move as quick as possible to the strategy of using
+        #      classes more to carry data, avoiding these intrincated methods
+        #      shared among classes... (calc_k0, calc_kG0 etc)
         p.flow = self.flow
+        p.Mach = self.Mach
+        p.rho_air = self.rho_air
+        p.speed_sound = self.speed_sound
+        p.size = self.size
+        p.V = self.V
+        p.r = self.r
         p.calc_kA(silent=silent, finalize=False)
-
         kA = p.kA
 
         assert np.any(np.isnan(kA.data)) == False
@@ -962,11 +975,11 @@ class StiffPanelBay(Panel):
                 raise ValueError('Mach number must be >= 1')
             elif self.Mach == 1:
                 self.Mach = 1.0001
-            M = self.Mach
-            beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
-            gamma = beta*1./(2.*self.r*(M**2 - 1)**0.5)
+            Mach = self.Mach
+            beta = self.rho_air * self.V**2 / (Mach**2 - 1)**0.5
+            gamma = beta*1./(2.*self.r*(Mach**2 - 1)**0.5)
             ainf = self.speed_sound
-            aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
+            aeromu = beta/(Mach*ainf)*(Mach**2 - 2)/(Mach**2 - 1)
         else:
             beta = self.beta
             gamma = self.gamma if self.gamma is not None else 0.
