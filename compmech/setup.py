@@ -42,6 +42,7 @@ def configuration(parent_package='',top_path=None):
     config.add_subpackage('panel')
     config.add_subpackage('stiffener')
     config.add_subpackage('stiffpanelbay')
+    config.add_data_dir('stiffpanelbay')
     config.add_subpackage('symbolic')
 
     config.make_config_py()
