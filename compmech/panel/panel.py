@@ -624,15 +624,20 @@ class Panel(object):
         r = self.r if self.r is not None else 0.
 
         if self.beta is None:
-            if self.Mach < 1:
+            if self.Mach is None:
+                raise ValueError('Mach number cannot be a NoneValue')
+            elif self.Mach < 1:
                 raise ValueError('Mach number must be >= 1')
             elif self.Mach == 1:
                 self.Mach = 1.0001
-            M = self.Mach
-            beta = self.rho_air * self.V**2 / (M**2 - 1)**0.5
-            gamma = beta*1./(2.*self.r*(M**2 - 1)**0.5)
+            Mach = self.Mach
+            beta = self.rho_air * self.V**2 / (Mach**2 - 1)**0.5
+            if r != 0.:
+                gamma = beta*1./(2.*r*(Mach**2 - 1)**0.5)
+            else:
+                gamma = 0.
             ainf = self.speed_sound
-            aeromu = beta/(M*ainf)*(M**2 - 2)/(M**2 - 1)
+            aeromu = beta/(Mach*ainf)*(Mach**2 - 2)/(Mach**2 - 1)
         else:
             beta = self.beta
             gamma = self.gamma if self.gamma is not None else 0.
@@ -978,7 +983,8 @@ class Panel(object):
     def calc_betacr(self, atype=2,
                     beta1=1.e4, beta2=1.e5, rho_air=0.3, Mach=2.,
                     modes=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
-                    num=5, silent=False, TOL=0.001, reduced_dof=False):
+                    num=5, silent=False, TOL=0.001, reduced_dof=False,
+                    sparse_solver=False):
         r"""Calculate the critical aerodynamic pressure coefficient
 
         Parameters
@@ -996,9 +1002,9 @@ class Panel(object):
         TOL: float, optional
             Convergence criterion.
         reduced_dof : bool, optional
-            Considers only the contributions of `v` and `w` to the stiffness
-            matrix and accelerates the run. Only effective when
-            ``sparse_solver=False``.
+            See :meth:`.Panel.freq` for more details.
+        sparse_solver : bool, optional
+            See :meth:`.Panel.freq` for more details.
 
         Returns
         -------
@@ -1040,8 +1046,8 @@ class Panel(object):
 
             for i, beta in enumerate(betas):
                 self.V = ((Mach**2 - 1)**0.5*beta/rho_air)**0.5
-                self.freq(atype=atype, sparse_solver=False, silent=True,
-                          reduced_dof=reduced_dof)
+                self.freq(atype=atype, sparse_solver=sparse_solver,
+                        silent=True, reduced_dof=reduced_dof)
                 for j, mode in enumerate(modes):
                     eigvals_imag[i, j] = self.eigvals[mode].imag
 
