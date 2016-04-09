@@ -939,7 +939,7 @@ class StiffPanelBay(Panel):
         p.size = self.size
         p.V = self.V
         p.r = self.r
-        p.calc_kA(silent=silent, finalize=False)
+        p.calc_kA(silent=True, finalize=False)
         kA = p.kA
 
         assert np.any(np.isnan(kA.data)) == False
