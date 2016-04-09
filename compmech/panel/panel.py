@@ -739,6 +739,7 @@ class Panel(object):
         self.calc_kG0(silent=silent, c=c)
 
         if calc_kA:
+            raise NotImplementedError('kA requires non-Hermitian eigen solver')
             self.calc_kA(silent=silent)
             kA = self.kA
         else:
@@ -881,15 +882,15 @@ class Panel(object):
         if sparse_solver:
             msg('eigs() solver...', level=3, silent=silent)
             sizebkp = M.shape[0]
-            M, K, used_cols = remove_null_cols(M, K, silent=silent,
+            K, M, used_cols = remove_null_cols(K, M, silent=silent,
                     level=3)
-            eigvals, peigvecs = eigs(A=M, k=k, which='SM', M=K, tol=tol,
+            eigvals, peigvecs = eigs(A=K, k=k, which='LM', M=M, tol=tol,
                                      sigma=-1.)
             eigvecs = np.zeros((sizebkp, self.num_eigvalues),
                                dtype=peigvecs.dtype)
             eigvecs[used_cols, :] = peigvecs
 
-            eigvals = np.sqrt(1./eigvals) # omega^2 to omega, in rad/s
+            eigvals = np.sqrt(eigvals) # omega^2 to omega, in rad/s
 
         else:
             msg('eig() solver...', level=3, silent=silent)
@@ -978,109 +979,6 @@ class Panel(object):
         for eigval in eigvals[:self.num_eigvalues_print]:
             msg('{0} rad/s'.format(eigval), level=2, silent=silent)
         self.analysis.last_analysis = 'freq'
-
-
-    def calc_betacr(self, atype=2,
-                    beta1=1.e4, beta2=1.e5, rho_air=0.3, Mach=2.,
-                    modes=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
-                    num=5, silent=False, TOL=0.001, reduced_dof=False,
-                    sparse_solver=False):
-        r"""Calculate the critical aerodynamic pressure coefficient
-
-        Parameters
-        ----------
-        atype : int, optional
-            See :meth:`.Panel.freq` for more details.
-        rho_air : float, optional
-            Air density.
-        Mach : float, optional
-            Mach number.
-        modes : tuple, optional
-            The modes that should be monitored.
-        num : int, optional
-            Number of points to search for each iteration.
-        TOL: float, optional
-            Convergence criterion.
-        reduced_dof : bool, optional
-            See :meth:`.Panel.freq` for more details.
-        sparse_solver : bool, optional
-            See :meth:`.Panel.freq` for more details.
-
-        Returns
-        -------
-        betacr : float
-            The critical ``beta``.
-
-        """
-        #TODO
-        # - use a linear or parabolic interpolation to estimate new_beta1
-        msg('Flutter calculation...', level=1, silent=silent)
-        if self.speed_sound is None:
-            self.speed_sound = 1.
-        new_beta1 = 1.e6
-        new_beta2 = -1e6
-        eigvals_imag = np.zeros((num, len(modes)))
-        if max(modes) > self.num_eigvalues-1:
-            self.num_eigvalues = max(modes)+1
-
-        count = 0
-
-        # storing original values
-        beta_bkp = self.beta
-        gamma_bkp = self.gamma
-        Mach_bkp = self.Mach
-        V_bkp = self.V
-        rho_air_bkp = self.rho_air
-
-        self.beta = None
-        self.gamma = None
-        self.Mach = Mach
-        self.rho_air = rho_air
-
-        while True:
-            count += 1
-            betas = np.linspace(beta1, beta2, num)
-            msg('iteration %d:' % count, level=2, silent=silent)
-            msg('beta_min: %1.3f' % beta1, level=3, silent=silent)
-            msg('beta_max: %1.3f' % beta2, level=3, silent=silent)
-
-            for i, beta in enumerate(betas):
-                self.V = ((Mach**2 - 1)**0.5*beta/rho_air)**0.5
-                self.freq(atype=atype, sparse_solver=sparse_solver,
-                        silent=True, reduced_dof=reduced_dof)
-                for j, mode in enumerate(modes):
-                    eigvals_imag[i, j] = self.eigvals[mode].imag
-
-            check = np.where(eigvals_imag != 0.)
-            if not np.any(check):
-                beta1 = beta1/2.
-                beta2 = 2.*beta2
-                continue
-            if np.abs(eigvals_imag[check]).min() < TOL:
-                break
-            if 0 in check[0]:
-                new_beta1 = min(new_beta1, 0.5*betas[check[0][0]])
-                new_beta2 = max(new_beta2, 1.5*betas[check[0][-1]])
-            elif check[0].min() > 0:
-                new_beta1 = betas[check[0][0]-1]
-                new_beta2 = betas[check[0][0]]
-            else:
-                new_beta1 = min(new_beta1, beta1/2.)
-                new_beta2 = max(new_beta2, 2*beta2)
-
-            beta1 = new_beta1
-            beta2 = new_beta2
-
-        # recovering original values
-        self.beta = beta_bkp
-        self.gamma = gamma_bkp
-        self.Mach = Mach_bkp
-        self.V = V_bkp
-        self.rho_air = rho_air_bkp
-
-        msg('finished!', level=1, silent=silent)
-        msg('Number of analyses = %d' % (count*num), level=1, silent=silent)
-        return beta1
 
 
     def uvw(self, c, xs=None, ys=None, gridx=300, gridy=300):
