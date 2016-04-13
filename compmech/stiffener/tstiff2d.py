@@ -50,8 +50,8 @@ class TStiff2D(object):
         self.x1 = None
         self.x2 = None
 
-        self.kt = 1.e11
-        self.kr = 1.e11
+        self.kt = 1.e8
+        self.kr = 1.e8
 
         self.Nxxb = None
         self.Nxyb = None
