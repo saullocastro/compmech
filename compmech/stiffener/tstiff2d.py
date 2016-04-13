@@ -43,17 +43,15 @@ class TStiff2D(object):
         self.mu = mu
         self.ys = ys
         self.bb = bb
-        self.hb = 0.
         self.bf = bf
-        self.hf = 0.
         self.forces_base = []
         self.forces_flange = []
 
         self.x1 = None
         self.x2 = None
 
-        self.kt = 1.e8
-        self.kr = 1.e8
+        self.kt = 1.e11
+        self.kr = 1.e11
 
         self.Nxxb = None
         self.Nxyb = None
@@ -134,16 +132,11 @@ class TStiff2D(object):
         if self.bstack is None:
             raise ValueError('Base laminate must be defined!')
 
-        self.hf = sum(self.fplyts)
         self.flam = laminate.read_stack(self.fstack, plyts=self.fplyts,
                                         laminaprops=self.flaminaprops)
         self.flam.calc_equivalent_modulus()
-        h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
-        hb = sum(self.bplyts)
         self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
-                                        laminaprops=self.blaminaprops,
-                                        offset=(-h/2.-hb/2.))
-        self.hb = hb
+                                        laminaprops=self.blaminaprops)
 
         assert self.panel1.model == self.panel2.model
         assert self.panel1.r == self.panel2.r
@@ -180,7 +173,6 @@ class TStiff2D(object):
 
         m1 = self.m1
         n1 = self.n1
-        bf = self.bf
 
         # NOTE
         #     row0 and col0 define where the stiffener's base matrix starts
@@ -210,12 +202,12 @@ class TStiff2D(object):
                              size, row0, col0)
         kt = self.kt
         kr = self.kr
-        Ff = self.flam.ABD
+        Fsf = self.flam.ABD
 
         dpb = sum(self.bplyts)/2. + sum(self.fplyts)/2.
 
         # stiffener flange
-        k0 += modelf.fk0(a, b, r, alpharad, Ff, m2, n2,
+        k0 += modelf.fk0(a, b, r, alpharad, Fsf, m2, n2,
                          self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
                          self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
                          self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
@@ -423,15 +415,13 @@ class TStiff2D(object):
         num1 = stiffmDB.db[self.model]['num1']
 
         bay = self.bay
-        a = bay.a
-        b = bay.b
-        m = bay.m
-        n = bay.n
 
         m1 = self.m1
         n1 = self.n1
         m2 = self.m2
         n2 = self.n2
+        a = bay.a
+        bb = self.bb
         bf = self.bf
 
         r = bay.r if bay.r is not None else 0.
@@ -445,7 +435,7 @@ class TStiff2D(object):
         kM = 0.
 
         # stiffener base
-        kM += modelb.fkM(self.mu, 0., self.hb, a, b, r, alpharad, m1, n1,
+        kM += modelb.fkM(self.mu, 0., 0., a, bb, r, alpharad, m1, n1,
                       self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                       self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                       self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -455,7 +445,7 @@ class TStiff2D(object):
                       size, row0, col0)
 
         # stiffener flange
-        kM += modelf.fkM(self.mu, 0., self.hf, a, bf, r, alpharad, m2, n2,
+        kM += modelf.fkM(self.mu, 0., 0., a, bf, r, alpharad, m2, n2,
                        self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
                        self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
                        self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
