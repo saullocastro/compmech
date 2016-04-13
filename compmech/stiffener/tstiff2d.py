@@ -434,8 +434,11 @@ class TStiff2D(object):
 
         kM = 0.
 
+        hb = sum(self.bplyts)
+        hf = sum(self.fplyts)
+
         # stiffener base
-        kM += modelb.fkM(self.mu, 0., 0., a, bb, r, alpharad, m1, n1,
+        kM += modelb.fkM(self.mu, 0., hb, a, bb, r, alpharad, m1, n1,
                       self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                       self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                       self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -445,7 +448,7 @@ class TStiff2D(object):
                       size, row0, col0)
 
         # stiffener flange
-        kM += modelf.fkM(self.mu, 0., 0., a, bf, r, alpharad, m2, n2,
+        kM += modelf.fkM(self.mu, 0., hf, a, bf, r, alpharad, m2, n2,
                        self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
                        self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
                        self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
