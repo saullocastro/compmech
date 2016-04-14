@@ -25,13 +25,22 @@ cdef extern from 'bardell_functions.h':
     double calc_fxi(int i, double xi, double xi1t, double xi1r,
                     double xi2t, double xi2r)
 
+cdef extern from 'bardell_c0c1.h':
+    double integral_ff_c0c1(double c0, double c1, int i, int j,
+                   double x1t, double x1r, double x2t, double x2r,
+                   double y1t, double y1r, double y2t, double y2r)
+
 def test():
-    print integral_ff(1, 1, 1., 1., 1., 1., 1., 1., 1., 1.)
     print integral_ffxi(1, 1, 1., 1., 1., 1., 1., 1., 1., 1.)
     print integral_fxifxi(1, 1, 1., 1., 1., 1., 1., 1., 1., 1.)
     print integral_ffxixi(1, 1, 1., 1., 1., 1., 1., 1., 1., 1.)
     print integral_fxifxixi(1, 1, 1., 1., 1., 1., 1., 1., 1., 1.)
     print integral_fxixifxixi(1, 1, 1., 1., 1., 1., 1., 1., 1., 1.)
+
+    print integral_ff(1, 1, 1., 1., 1., 1., 1., 1., 1., 1.)
+    print integral_ff_c0c1(0., 1., 1, 1, 1., 1., 1., 1., 1., 1., 1., 1.)
+    print integral_ff(1, 2, 1., 1., 1., 1., 1., 1., 1., 1.)
+    print integral_ff_c0c1(0., 1., 1, 2, 1., 1., 1., 1., 1., 1., 1., 1.)
 
     print calc_f(1, 0.5, 1., 1., 1., 1.)
     print calc_fxi(1, 0.5, 1., 1., 1., 1.)
