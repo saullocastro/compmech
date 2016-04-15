@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     56860,       1090]
-NotebookOptionsPosition[     56495,       1073]
-NotebookOutlinePosition[     56917,       1091]
-CellTagsIndexPosition[     56874,       1088]
+NotebookDataLength[     56766,       1084]
+NotebookOptionsPosition[     56401,       1067]
+NotebookOutlinePosition[     56823,       1085]
+CellTagsIndexPosition[     56780,       1082]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -238,19 +238,11 @@ Cell[BoxData[{
     RowBox[{"connection", " ", "panel"}], "-", 
     RowBox[{"base", " ", "integrated", " ", "over", " ", 
      RowBox[{"xi", "'"}], " ", "and", " ", 
-     RowBox[{"eta", "'"}]}]}], "*)"}], "\[IndentingNewLine]", 
-  "\[IndentingNewLine]", 
-  RowBox[{"(*", "  ", 
-   RowBox[{
-    RowBox[{"deta", "'"}], " ", "=", " ", 
-    RowBox[{
-     RowBox[{"1", "/", "c1"}], " ", "*", " ", "deta"}]}], " ", 
-   "*)"}]}], "\[IndentingNewLine]", 
+     RowBox[{"eta", "'"}]}]}], "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"kCpp", "=", 
    RowBox[{
-    RowBox[{"(", 
-     RowBox[{"1", "/", "c1"}], ")"}], "*", 
     RowBox[{"(", 
      RowBox[{"a", " ", 
       RowBox[{"b", "/", "4"}]}], ")"}], "*", "kt", 
@@ -324,10 +316,10 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{"kCpb", "=", 
    RowBox[{
-    RowBox[{"-", 
-     RowBox[{"(", 
-      RowBox[{"a", " ", 
-       RowBox[{"bb", "/", "4"}]}], ")"}]}], "*", "kt", 
+    RowBox[{"-", "c1"}], 
+    RowBox[{"(", 
+     RowBox[{"a", " ", 
+      RowBox[{"b", "/", "4"}]}], ")"}], "*", "kt", 
     RowBox[{"(", " ", "\[IndentingNewLine]", "     ", 
      RowBox[{
       RowBox[{
@@ -361,10 +353,10 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{"kCbbpb", "=", 
-    RowBox[{
+    RowBox[{"c1", 
      RowBox[{"(", 
       RowBox[{"a", " ", 
-       RowBox[{"bb", "/", "4"}]}], ")"}], "*", "kt", 
+       RowBox[{"b", "/", "4"}]}], ")"}], "*", "kt", 
      RowBox[{"(", " ", "\[IndentingNewLine]", "     ", 
       RowBox[{
        RowBox[{
@@ -1065,7 +1057,9 @@ Cell[BoxData[{
    3.66602854337737*^9}, {3.6660286005840197`*^9, 3.6660286889064465`*^9}, {
    3.66602875771447*^9, 3.6660289484236126`*^9}, {3.666028989230996*^9, 
    3.6660289975790944`*^9}, 3.66602939338018*^9, {3.666167593925926*^9, 
-   3.666167645604035*^9}}],
+   3.666167645604035*^9}, {3.6696733447234755`*^9, 3.66967336704379*^9}, {
+   3.6696735026281137`*^9, 3.669673508823384*^9}, {3.6696745156967487`*^9, 
+   3.669674516973898*^9}}],
 
 Cell[BoxData[""], "Input",
  CellChangeTimes->{{3.6661695074810305`*^9, 3.666169509528839*^9}, 
@@ -1090,8 +1084,8 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 55811, 1047, 2190, "Input"],
-Cell[56371, 1069, 120, 2, 29, "Input"]
+Cell[557, 20, 55717, 1041, 2170, "Input"],
+Cell[56277, 1063, 120, 2, 29, "Input"]
 }
 ]
 *)
