@@ -238,7 +238,7 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
                         c += 1
                         kCpbr[c] = row+2
                         kCpbc[c] = col+1
-                        kCpbv[c] += -0.5*c1*a*b*dpb*fAwpBv*gAwetaqBv*kt/b
+                        kCpbv[c] += -0.5*c1*a*dpb*fAwpBv*gAwetaqBv*kt
                         c += 1
                         kCpbr[c] = row+2
                         kCpbc[c] = col+2
