@@ -200,8 +200,6 @@ class TStiff2D(object):
                              self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
                              self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                              size, row0, col0)
-        kt = self.kt
-        kr = self.kr
         Fsf = self.flam.ABD
 
         dpb = sum(self.bplyts)/2. + sum(self.fplyts)/2.
@@ -216,9 +214,86 @@ class TStiff2D(object):
                          self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
                          size, row1, col1)
 
-        # connectivity panel-base
-        k0 += conn.fkCppx1x2y1y2(0, x1, y1, y2,
-                                 kt, a, b, dpb, m, n,
+        if x1 != x2:
+            # connectivity panel-base
+            ktpb = self.kt/((a - x2 + x1)*(y2 - y1))
+            krpb = self.kr/((a - x2 + x1)*(y2 - y1))
+            k0 += conn.fkCppx1x2y1y2(0, x1, y1, y2,
+                                     ktpb, a, b, dpb, m, n,
+                                     bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                                     bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                                     bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                                     bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                                     bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                                     bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                                     size, 0, 0)
+            k0 += conn.fkCppx1x2y1y2(x2, a, y1, y2,
+                                     ktpb, a, b, dpb, m, n,
+                                     bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                                     bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                                     bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                                     bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                                     bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                                     bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                                     size, 0, 0)
+
+            k0 += conn.fkCpbx1x2y1y2(0, x1, y1, y2,
+                                     ktpb, a, b, dpb,
+                                     m, n, m1, n1,
+                                     bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                                     bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                                     bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                                     bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                                     bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                                     bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                                 self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
+                                 self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
+                                 self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
+                                 self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
+                                 self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
+                                 self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                                     size, 0, col0)
+            k0 += conn.fkCpbx1x2y1y2(x2, a, y1, y2,
+                                     ktpb, a, b, dpb,
+                                     m, n, m1, n1,
+                                     bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                                     bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                                     bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                                     bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                                     bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                                     bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                                 self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
+                                 self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
+                                 self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
+                                 self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
+                                 self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
+                                 self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                                     size, 0, col0)
+
+            k0 += conn.fkCbbpbx1x2(0, x1, y1, y2,
+                                   ktpb, krpb, a, b, m1, n1,
+                                   self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
+                                   self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
+                                   self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
+                                   self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
+                                   self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
+                                   self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                                   size, row0, col0)
+            k0 += conn.fkCbbpbx1x2(x2, a, y1, y2,
+                                   ktpb, krpb, a, b, m1, n1,
+                                   self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
+                                   self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
+                                   self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
+                                   self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
+                                   self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
+                                   self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                                   size, row0, col0)
+        else:
+            # connectivity panel-base
+            ktpb = self.kt/(a*(y2 - y1))
+            krpb = self.kr/(a*(y2 - y1))
+            k0 += conn.fkCppy1y2(y1, y2,
+                                 ktpb, a, b, dpb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -226,18 +301,9 @@ class TStiff2D(object):
                                  bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
                                  size, 0, 0)
-        k0 += conn.fkCppx1x2y1y2(x2, a, y1, y2,
-                                 kt, a, b, dpb, m, n,
-                                 bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                                 bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                                 bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                                 bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                                 bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                                 bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                                 size, 0, 0)
 
-        k0 += conn.fkCpbx1x2y1y2(0, x1, y1, y2,
-                                 kt, a, b, dpb,
+            k0 += conn.fkCpby1y2(y1, y2,
+                                 ktpb, a, b, dpb,
                                  m, n, m1, n1,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
@@ -245,41 +311,16 @@ class TStiff2D(object):
                                  bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
                                  bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                             self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                             self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                             self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                             self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                             self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                             self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
-                                 size, 0, col0)
-        k0 += conn.fkCpbx1x2y1y2(x2, a, y1, y2,
-                                 kt, a, b, dpb,
-                                 m, n, m1, n1,
-                                 bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                                 bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                                 bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                                 bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                                 bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                                 bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                             self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                             self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                             self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                             self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                             self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                             self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
-                                 size, 0, col0)
+                                 self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
+                                 self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
+                                 self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
+                                 self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
+                                 self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
+                                 self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                                     size, 0, col0)
 
-        k0 += conn.fkCbbpbx1x2(0, x1, y1, y2,
-                               kt, kr, a, b, m1, n1,
-                               self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                               self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                               self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                               self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                               self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                               self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
-                               size, row0, col0)
-        k0 += conn.fkCbbpbx1x2(x2, a, y1, y2,
-                               kt, kr, a, b, m1, n1,
+            k0 += conn.fkCbbpb(y1, y2,
+                               ktpb, krpb, a, b, m1, n1,
                                self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                                self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                                self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -288,8 +329,11 @@ class TStiff2D(object):
                                self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                                size, row0, col0)
 
+        # connectivity base-flange
+        ktbf = self.kt/a
+        krbf = self.kr/a
         eta_conn_base = 0.
-        k0 += conn.fkCbbbf(kt, kr, a, bb,
+        k0 += conn.fkCbbbf(ktbf, krbf, a, bb,
                            m1, n1, eta_conn_base,
                            self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                            self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
@@ -300,7 +344,7 @@ class TStiff2D(object):
                            size, row0, col0)
 
         eta_conn_flange = -1.
-        k0 += conn.fkCbf(kt, kr, a, bb, bf,
+        k0 += conn.fkCbf(ktbf, krbf, a, bb, bf,
                          m1, n1, m2, n2,
                          eta_conn_base, eta_conn_flange,
                          self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
@@ -317,7 +361,7 @@ class TStiff2D(object):
                          self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
                          size, row0, col1)
 
-        k0 += conn.fkCff(kt, kr, a, bf, m2, n2,
+        k0 += conn.fkCff(ktbf, krbf, a, bf, m2, n2,
                          eta_conn_flange,
                          self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
                          self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
