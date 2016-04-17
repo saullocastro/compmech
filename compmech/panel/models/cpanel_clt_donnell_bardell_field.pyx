@@ -12,6 +12,8 @@ from cython.parallel import prange
 cdef extern from 'bardell_functions.h':
     double calc_vec_f(double *f, double xi, double xi1t, double xi1r,
                   double xi2t, double xi2r) nogil
+    double calc_vec_fxi(double *f, double xi, double xi1t, double xi1r,
+                  double xi2t, double xi2r) nogil
 
 DOUBLE = np.float64
 ctypedef np.double_t cDOUBLE
@@ -53,11 +55,11 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int n1, double a, double b,
         cfuvw(&c[0], m1, n1, a, b, &xs_core[i,0],
               &ys_core[i,0], size_core, &us[i,0], &vs[i,0], &ws[i,0])
 
-        #cfwx(&c[0], m1, n1, &xs_core[i,0], &ys_core[i,0],
-             #size_core, a, b, &phixs[i,0])
+        cfwx(&c[0], m1, n1, a, b, &xs_core[i,0], &ys_core[i,0],
+             size_core, &phixs[i,0])
 
-        #cfwy(&c[0], m1, n1, &xs_core[i,0], &ys_core[i,0],
-             #size_core, a, b, &phiys[i,0])
+        cfwy(&c[0], m1, n1, a, b, &xs_core[i,0], &ys_core[i,0],
+             size_core, &phiys[i,0])
 
     phixs *= -1.
     phiys *= -1.
@@ -99,6 +101,72 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
         us[i] = u
         vs[i] = v
         ws[i] = w
+
+    free(fxi)
+    free(feta)
+
+
+cdef void cfwx(double *c, int m1, int n1, double a, double b, double *xs,
+        double *ys, int size, double *wxs) nogil:
+    cdef int i1, j1, col, i
+    cdef double x, y, wx, xi, eta
+    cdef double *fxi
+    cdef double *feta
+
+    fxi = <double *>malloc(nmax * sizeof(double *))
+    feta = <double *>malloc(nmax * sizeof(double *))
+
+    for i in range(size):
+        x = xs[i]
+        y = ys[i]
+
+        xi = (2*x - a)/a
+        eta = (2*y - b)/b
+
+        calc_vec_fxi(fxi, xi, 1., 1., 1., 1.)
+        calc_vec_f(feta, eta, 1., 1., 1., 1.)
+
+        wx = 0
+
+        for i1 in range(m1):
+            for j1 in range(n1):
+                col = num1*(j1*m1 + i1)
+                wx += c[col+2]*fxi[i1]*feta[j1]
+
+        wxs[i] = wx
+
+    free(fxi)
+    free(feta)
+
+
+cdef void cfwy(double *c, int m1, int n1, double a, double b, double *xs,
+        double *ys, int size, double *wys) nogil:
+    cdef int i1, j1, col, i
+    cdef double x, y, wy, xi, eta
+    cdef double *fxi
+    cdef double *feta
+
+    fxi = <double *>malloc(nmax * sizeof(double *))
+    feta = <double *>malloc(nmax * sizeof(double *))
+
+    for i in range(size):
+        x = xs[i]
+        y = ys[i]
+
+        xi = (2*x - a)/a
+        eta = (2*y - b)/b
+
+        calc_vec_f(fxi, xi, 1., 1., 1., 1.)
+        calc_vec_fxi(feta, eta, 1., 1., 1., 1.)
+
+        wy = 0
+
+        for i1 in range(m1):
+            for j1 in range(n1):
+                col = num1*(j1*m1 + i1)
+                wy += c[col+2]*fxi[i1]*feta[j1]
+
+        wys[i] = wy
 
     free(fxi)
     free(feta)
