@@ -20,3 +20,11 @@ IMPORTIT double integral_ff_c0c1(double c0, double c1, int i, int j,
                    double y1t, double y1r, double y2t, double y2r);
 #endif /** BARDELL_FF_C0C1_H */
 
+
+#ifndef BARDELL_FXIFXI_C0C1_H
+#define BARDELL_FXIFXI_C0C1_H
+IMPORTIT double integral_fxifxi_c0c1(double c0, double c1, int i, int j,
+                   double x1t, double x1r, double x2t, double x2r,
+                   double y1t, double y1r, double y2t, double y2r);
+#endif /** BARDELL_FXIFXI_C0C1_H */
+
