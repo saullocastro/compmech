@@ -79,8 +79,8 @@ cdef void cfuvw(double *c, int m1, int n1, double a, double b, double *xs,
         x = xs[i]
         y = ys[i]
 
-        xi = (2*x - a)/a
-        eta = (2*y - b)/b
+        xi = 2*x/a - 1.
+        eta = 2*y/b - 1.
 
         calc_vec_f(fxi, xi, 1., 1., 1., 1.)
         calc_vec_f(feta, eta, 1., 1., 1., 1.)
@@ -113,8 +113,8 @@ cdef void cfg(double[:,::1] g, int m1, int n1,
     fxi = <double *>malloc(nmax * sizeof(double *))
     feta = <double *>malloc(nmax * sizeof(double *))
 
-    xi = (2*x - a)/a
-    eta = (2*y - b)/b
+    xi = 2*x/a - 1.
+    eta = 2*y/b - 1.
 
     calc_vec_f(fxi, xi, 1., 1., 1., 1.)
     calc_vec_f(feta, eta, 1., 1., 1., 1.)
