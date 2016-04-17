@@ -880,6 +880,9 @@ class Panel(object):
         msg('Eigenvalue solver... ', level=2, silent=silent)
         k = min(self.num_eigvalues, M.shape[0]-2)
         if sparse_solver:
+            if damping:
+                raise NotImplementedError('Damping with sparse_solver not implemented!')
+
             msg('eigs() solver...', level=3, silent=silent)
             sizebkp = M.shape[0]
             K, M, used_cols = remove_null_cols(K, M, silent=silent,
