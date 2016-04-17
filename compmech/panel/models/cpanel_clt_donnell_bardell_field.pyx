@@ -31,11 +31,11 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int n1, double a, double b,
 
     size = xs.shape[0]
     add_size = num_cores - (size % num_cores)
-    if add_size==num_cores:
+    if add_size == num_cores:
         add_size=0
     new_size = size + add_size
 
-    if (size % num_cores)!=0:
+    if (size % num_cores) != 0:
         xs_core = np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1)
         ys_core = np.hstack((ys, np.zeros(add_size))).reshape(num_cores, -1)
     else:
