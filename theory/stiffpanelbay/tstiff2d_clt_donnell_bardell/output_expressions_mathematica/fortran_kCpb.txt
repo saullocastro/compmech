@@ -1,4 +1,7 @@
-List(List(-(a*b*c1*fAu*gAu*kt*pBu*qBu)/4.,0,0),
-  List(0,-(a*b*c1*fAv*gAv*kt*pBv*qBv)/4.,0),
-  List(-(b*c1*dpb*fAwxi*gAw*kt*pBu*qBu)/2.,
-   -(a*c1*dpb*fAw*gAweta*kt*pBv*qBv)/2.,-(a*b*c1*fAw*gAw*kt*pBw*qBw)/4.))
+List(List(-(a*b*c1*fAu*gAu*kt*pBu*qBu)/4.,0,
+   (b*c1*fAu*gAu*hb*kt*pBwxi*qBw)/4.),
+  List(0,-(a*b*c1*fAv*gAv*kt*pBv*qBv)/4.,
+   (a*b*c1*fAv*gAv*hb*kt*pBw*qBweta)/(4.*bb)),
+  List(-(b*c1*fAwxi*gAw*h*kt*pBu*qBu)/4.,-(a*c1*fAw*gAweta*h*kt*pBv*qBv)/4.,
+   -(a*b*c1*kt*(fAw*gAw*pBw*qBw - (fAwxi*gAw*h*hb*pBwxi*qBw)/(a*b) - 
+         (fAw*gAweta*h*hb*pBw*qBweta)/(b*bb)))/4.))
