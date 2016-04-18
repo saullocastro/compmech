@@ -129,7 +129,7 @@ class BladeStiff2D(object):
         bay = self.bay
         a = bay.a
         b = bay.b
-        r = bay.r
+        r = bay.r if bay.r is not None else 0.
         m = bay.m
         n = bay.n
         alphadeg = self.panel1.alphadeg
@@ -276,8 +276,12 @@ class BladeStiff2D(object):
         bay = self.bay
         a = bay.a
         b = bay.b
+        r = bay.r if bay.r is not None else 0.
         m = bay.m
         n = bay.n
+        alphadeg = self.panel1.alphadeg
+        alphadeg = alphadeg if alphadeg is not None else 0.
+        alpharad = deg2rad(alphadeg)
 
         m1 = self.m1
         n1 = self.n1
@@ -289,7 +293,8 @@ class BladeStiff2D(object):
             # stiffener pad-up
             y1 = self.ys - self.bb/2.
             y2 = self.ys + self.bb/2.
-            kM += panmod.fkMy1y2(y1, y2, self.mu, self.db, self.hb, a, b, m, n,
+            kM += panmod.fkMy1y2(y1, y2, self.mu, self.db, self.hb,
+                          a, b, r, alpharad, m, n,
                           bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                           bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                           bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
