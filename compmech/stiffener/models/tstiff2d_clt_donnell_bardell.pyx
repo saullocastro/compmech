@@ -801,7 +801,7 @@ def fkCff(double kt, double kr, double a, double bf, int m2, int n2,
                         c += 1
                         kCffr[c] = row+2
                         kCffc[c] = col+2
-                        kCffv[c] += 0.5*a*kt*(rAwrBw*sAw*sBw + 4*kr*rAwrBw*sAweta*sBweta/((bf*bf)*kt))
+                        kCffv[c] += 0.5*a*(kt*rAwrBw*sAw*sBw + 4*kr*rAwrBw*sAweta*sBweta/(bf*bf))
 
     kCff = coo_matrix((kCffv, (kCffr, kCffc)), shape=(size, size))
 
