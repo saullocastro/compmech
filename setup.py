@@ -139,25 +139,12 @@ def setup_package():
     if len(sys.argv) >= 2 and ('--help' in sys.argv[1:] or
             sys.argv[1] in ('--help-commands', 'egg_info', '--version',
                             'clean')):
-        # For these actions, NumPy is not required.
-        #
-        # They are required to succeed without Numpy for example when
-        # pip is used to install Scipy when Numpy is not yet present in
-        # the system.
-        try:
-            from setuptools import setup
-        except ImportError:
-            from distutils.core import setup
+        from setuptools import setup
 
         FULLVERSION, GIT_REVISION = get_version_info()
         metadata['version'] = FULLVERSION
     else:
-        if (len(sys.argv) >= 2 and sys.argv[1] == 'bdist_wheel') or (
-                    'develop' in sys.argv):
-            # bdist_wheel needs setuptools
-            import setuptools
-
-        from numpy.distutils.core import setup
+        from setuptools import setup
 
         cwd = os.path.abspath(os.path.dirname(__file__))
 
