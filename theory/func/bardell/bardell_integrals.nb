@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     89327,       2039]
-NotebookOptionsPosition[     89058,       2025]
-NotebookOutlinePosition[     89424,       2041]
-CellTagsIndexPosition[     89381,       2038]
+NotebookDataLength[     89878,       2054]
+NotebookOptionsPosition[     89608,       2040]
+NotebookOutlinePosition[     89975,       2056]
+CellTagsIndexPosition[     89932,       2053]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1391,6 +1391,19 @@ Cell[BoxData[{
           RowBox[{"c1", "*", "xi"}]}]}], "}"}]}], "]"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
+  RowBox[{"fxifc0c1", "=", 
+   RowBox[{"Outer", "[", 
+    RowBox[{"Times", ",", 
+     RowBox[{"D", "[", 
+      RowBox[{"f", ",", "xi"}], "]"}], ",", 
+     RowBox[{"ReplaceAll", "[", 
+      RowBox[{"g", ",", 
+       RowBox[{"{", 
+        RowBox[{"xi", "\[Rule]", 
+         RowBox[{"c0", "+", 
+          RowBox[{"c1", "*", "xi"}]}]}], "}"}]}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
   RowBox[{"fxifxic0c1", "=", 
    RowBox[{"Outer", "[", 
     RowBox[{"Times", ",", 
@@ -1428,7 +1441,7 @@ Cell[BoxData[{
     "ff", ",", "ffxi", ",", "ffxixi", ",", "fxifxi", ",", "fxifxixi", ",", 
      "fxixifxixi", ",", "\[IndentingNewLine]", "ff", ",", "ffxi", ",", 
      "ffxixi", ",", "fxifxi", ",", "fxifxixi", ",", "fxixifxixi", ",", 
-     "\[IndentingNewLine]", "ffc0c1", ",", " ", "ffxic0c1", ",", " ", 
+     "\[IndentingNewLine]", "ffc0c1", ",", "ffxic0c1", ",", "fxifc0c1", ",", 
      "fxifxic0c1"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -1442,8 +1455,8 @@ Cell[BoxData[{
       "\"\<ffxixi_12.txt\>\"", ",", "\"\<fxifxi_12.txt\>\"", ",", 
       "\"\<fxifxixi_12.txt\>\"", ",", "\"\<fxixifxixi_12.txt\>\"", ",", 
       "\[IndentingNewLine]", "\"\<ff_c0c1.txt\>\"", ",", 
-      "\"\<ffxi_c0c1.txt\>\"", ",", " ", "\"\<fxifxi_c0c1.txt\>\""}], 
-     "\[IndentingNewLine]", "}"}]}], ";"}], 
+      "\"\<ffxi_c0c1.txt\>\"", ",", "\"\<fxif_c0c1.txt\>\"", ",", " ", 
+      "\"\<fxifxi_c0c1.txt\>\""}], "\[IndentingNewLine]", "}"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -2021,10 +2034,12 @@ Cell[BoxData[{
    3.664995155106744*^9}, 3.664995391765452*^9, 3.6650471430966263`*^9, {
    3.6660302469795876`*^9, 3.666030264639262*^9}, {3.666046447941435*^9, 
    3.6660464776326237`*^9}, {3.6699101397595234`*^9, 
-   3.6699102321806273`*^9}, {3.6699110018021927`*^9, 3.6699110054573207`*^9}}]
+   3.6699102321806273`*^9}, {3.6699110018021927`*^9, 
+   3.6699110054573207`*^9}, {3.6700132152240925`*^9, 
+   3.6700133185127563`*^9}, {3.6700142534021683`*^9, 3.6700142571543045`*^9}}]
 },
-WindowSize->{1520, 727},
-WindowMargins->{{0, Automatic}, {Automatic, 5}},
+WindowSize->{766, 792},
+WindowMargins->{{-7, Automatic}, {-7, Automatic}},
 CellContext->Notebook,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
@@ -2040,7 +2055,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 88497, 2003, 3432, "Input"]
+Cell[557, 20, 89047, 2018, 5792, "Input"]
 }
 ]
 *)
