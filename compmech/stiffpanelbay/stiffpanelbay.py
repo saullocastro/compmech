@@ -216,15 +216,15 @@ class StiffPanelBay(Panel):
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
         xshape = xs.shape
-        tshape = ys.shape
-        if xshape != tshape:
+        yshape = ys.shape
+        if xshape != yshape:
             raise ValueError('Arrays xs and ys must have the same shape')
         self.Xs = xs
         self.Ys = ys
         xs = xs.ravel()
         ys = ys.ravel()
 
-        return xs, ys, xshape, tshape
+        return xs, ys, xshape, yshape
 
 
     def get_size(self):
@@ -1053,13 +1053,16 @@ class StiffPanelBay(Panel):
         b = self.b
         model = self.model
 
-        xs, ys, xshape, tshape = self._default_field(xs, a, ys, b, gridx, gridy)
+        if xs is None or ys is None:
+            xs, ys, xshape, yshape = self._default_field(xs, a, ys, b, gridx, gridy)
+        else:
+            xshape = xs.shape
 
         if c.shape[0] == self.get_size():
             num = panelmDB.db[self.model]['num']
             c = c[:num*self.m*self.n]
         else:
-            raise ValueError('c is the full vector of Ritz constants')
+            raise ValueError('c must be the full vector of Ritz constants')
 
         fuvw = panelmDB.db[model]['field'].fuvw
         us, vs, ws, phixs, phiys = fuvw(c, m, n, a, b, xs, ys,
@@ -1122,6 +1125,9 @@ class StiffPanelBay(Panel):
         stiff = self.stiffeners[si]
         if isinstance(stiff, BladeStiff1D):
             raise RuntimeError('Use plot_skin for BladeStiff1D')
+        if region.lower() == 'base' and isinstance(stiff, BladeStiff2D):
+            #TODO why this case isn't working?
+            raise RuntimeError('Use plot_skin for the base of BladeStiff2D')
 
         num = panelmDB.db[self.model]['num']
         row_init = num*self.m*self.n
@@ -1149,7 +1155,7 @@ class StiffPanelBay(Panel):
                 break
 
         if region.lower() == 'base':
-            b = stiff.bb
+            bstiff = stiff.bb
             if isinstance(stiff, BladeStiff2D):
                 mfield = self.m
                 nfield = self.n
@@ -1157,7 +1163,7 @@ class StiffPanelBay(Panel):
                 mfield = stiff.m1
                 nfield = stiff.n1
         elif region.lower() == 'flange':
-            b = stiff.bf
+            bstiff = stiff.bf
             if isinstance(stiff, BladeStiff2D):
                 mfield = stiff.m1
                 nfield = stiff.n1
@@ -1170,19 +1176,21 @@ class StiffPanelBay(Panel):
             raise ValueError('Invalid region')
 
         if c.shape[0] == self.get_size():
-            c = c[row_init:row_final]
+            c = c[row_init: row_final]
         else:
             raise ValueError('c must be the full vector of Ritz constants')
 
-
-        xs, ys, xshape, tshape = self._default_field(xs, self.a, ys, b, gridx, gridy)
+        if xs is None or ys is None:
+            xs, ys, xshape, yshape = self._default_field(xs, self.a, ys, bstiff, gridx, gridy)
+        else:
+            xshape = xs.shape
 
         if region.lower() == 'flange':
             fuvw = stiffmDB.db[s.model]['field_flange'].fuvw
         elif region.lower() == 'base':
             fuvw = panelmDB.db[s.panel1.model]['field'].fuvw
 
-        us, vs, ws, phixs, phiys = fuvw(c, mfield, nfield, self.a, b, xs, ys,
+        us, vs, ws, phixs, phiys = fuvw(c, mfield, nfield, self.a, bstiff, xs, ys,
                 self.out_num_cores)
 
         self.u = us.reshape(xshape)
