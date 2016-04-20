@@ -35,7 +35,7 @@ before_install:
   - sudo ln -s /run/shm /dev/shm
 
 install:
-  - conda create --name TestEnv python=$TRAVIS_PYTHON_VERSION atlas numpy scipy cython
+  - conda create --name TestEnv python=$TRAVIS_PYTHON_VERSION atlas numpy=1.10.4 scipy cython
   - source activate TestEnv
   - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
   - python setup.py install
