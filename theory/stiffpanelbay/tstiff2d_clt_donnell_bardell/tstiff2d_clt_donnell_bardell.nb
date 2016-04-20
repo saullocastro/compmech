@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     57319,       1092]
-NotebookOptionsPosition[     56952,       1075]
-NotebookOutlinePosition[     57376,       1093]
-CellTagsIndexPosition[     57333,       1090]
+NotebookDataLength[     57527,       1098]
+NotebookOptionsPosition[     57160,       1081]
+NotebookOutlinePosition[     57584,       1099]
+CellTagsIndexPosition[     57541,       1096]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -276,33 +276,37 @@ Cell[BoxData[{
          RowBox[{"{", "uA", "}"}], "]"}], ".", 
         RowBox[{"{", "wBxi", "}"}]}], "*", 
        RowBox[{"(", 
-        RowBox[{"dpb", "/", "a"}], ")"}]}], "\[IndentingNewLine]", "+", 
+        RowBox[{"2", 
+         RowBox[{"dpb", "/", "a"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
       RowBox[{
        RowBox[{
         RowBox[{"Transpose", "[", 
          RowBox[{"{", "wAxi", "}"}], "]"}], ".", 
         RowBox[{"{", "uB", "}"}]}], "*", 
        RowBox[{"(", 
-        RowBox[{"dpb", "/", "a"}], ")"}]}], "\[IndentingNewLine]", "+", 
+        RowBox[{"2", 
+         RowBox[{"dpb", "/", "a"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
       RowBox[{
        RowBox[{
         RowBox[{"Transpose", "[", 
          RowBox[{"{", "vA", "}"}], "]"}], ".", 
         RowBox[{"{", "wBeta", "}"}]}], "*", 
        RowBox[{"(", 
-        RowBox[{"dpb", "/", "b"}], ")"}]}], "\[IndentingNewLine]", "+", 
+        RowBox[{"2", 
+         RowBox[{"dpb", "/", "b"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
       RowBox[{
        RowBox[{
         RowBox[{"Transpose", "[", 
          RowBox[{"{", "wAeta", "}"}], "]"}], ".", 
         RowBox[{"{", "vB", "}"}]}], "*", 
        RowBox[{"(", 
-        RowBox[{"dpb", "/", "b"}], ")"}]}], "\[IndentingNewLine]", "+", 
+        RowBox[{"2", 
+         RowBox[{"dpb", "/", "b"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
       RowBox[{
        RowBox[{
         RowBox[{"Transpose", "[", 
          RowBox[{"{", "wAxi", "}"}], "]"}], ".", 
-        RowBox[{"{", "wBxi", "}"}]}], "*", 
+        RowBox[{"{", "wBxi", "}"}]}], "*", "4", 
        RowBox[{
         RowBox[{"(", 
          RowBox[{"dpb", "/", "a"}], ")"}], "^", "2"}]}], 
@@ -311,7 +315,7 @@ Cell[BoxData[{
        RowBox[{
         RowBox[{"Transpose", "[", 
          RowBox[{"{", "wAeta", "}"}], "]"}], ".", 
-        RowBox[{"{", "wBeta", "}"}]}], "*", 
+        RowBox[{"{", "wBeta", "}"}]}], "*", "4", 
        RowBox[{
         RowBox[{"(", 
          RowBox[{"dpb", "/", "b"}], ")"}], "^", "2"}]}]}], 
@@ -343,14 +347,16 @@ Cell[BoxData[{
          RowBox[{"{", "wAxi", "}"}], "]"}], ".", 
         RowBox[{"{", "uBb", "}"}]}], "*", 
        RowBox[{"(", 
-        RowBox[{"dpb", "/", "a"}], ")"}]}], "\[IndentingNewLine]", "+", 
+        RowBox[{"2", 
+         RowBox[{"dpb", "/", "a"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
       RowBox[{
        RowBox[{
         RowBox[{"Transpose", "[", 
          RowBox[{"{", "wAeta", "}"}], "]"}], ".", 
         RowBox[{"{", "vBb", "}"}]}], "*", 
        RowBox[{"(", 
-        RowBox[{"dpb", "/", "b"}], ")"}]}]}], "\[IndentingNewLine]", 
+        RowBox[{"2", 
+         RowBox[{"dpb", "/", "b"}]}], ")"}]}]}], "\[IndentingNewLine]", 
      ")"}]}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -1067,7 +1073,7 @@ Cell[BoxData[{
    3.669932880143398*^9, 3.6699328833422337`*^9}, {3.670012091555955*^9, 
    3.6700122359819717`*^9}, {3.6700122932756033`*^9, 3.67001231952803*^9}, {
    3.6700123581805983`*^9, 3.6700124695716534`*^9}, {3.6701089564281435`*^9, 
-   3.6701090122279043`*^9}}],
+   3.6701090122279043`*^9}, {3.6701790468603907`*^9, 3.670179063119768*^9}}],
 
 Cell[BoxData[""], "Input",
  CellChangeTimes->{{3.6661695074810305`*^9, 3.666169509528839*^9}, 
@@ -1092,8 +1098,8 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 56268, 1049, 2210, "Input"],
-Cell[56828, 1071, 120, 2, 29, "Input"]
+Cell[557, 20, 56476, 1055, 2210, "Input"],
+Cell[57036, 1077, 120, 2, 29, "Input"]
 }
 ]
 *)

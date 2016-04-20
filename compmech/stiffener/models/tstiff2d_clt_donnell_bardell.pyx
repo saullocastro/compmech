@@ -127,7 +127,7 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                         c += 1
                         kCppr[c] = row+0
                         kCppc[c] = col+2
-                        kCppv[c] += 0.25*b*dpb*fAufBwxi*gAugBw*kt
+                        kCppv[c] += 0.5*b*dpb*fAufBwxi*gAugBw*kt
                         c += 1
                         kCppr[c] = row+1
                         kCppc[c] = col+1
@@ -135,19 +135,19 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                         c += 1
                         kCppr[c] = row+1
                         kCppc[c] = col+2
-                        kCppv[c] += 0.25*a*dpb*fAvfBw*gAvgBweta*kt
+                        kCppv[c] += 0.5*a*dpb*fAvfBw*gAvgBweta*kt
                         c += 1
                         kCppr[c] = row+2
                         kCppc[c] = col+0
-                        kCppv[c] += 0.25*b*dpb*fAwxifBu*gAwgBu*kt
+                        kCppv[c] += 0.5*b*dpb*fAwxifBu*gAwgBu*kt
                         c += 1
                         kCppr[c] = row+2
                         kCppc[c] = col+1
-                        kCppv[c] += 0.25*a*dpb*fAwfBv*gAwetagBv*kt
+                        kCppv[c] += 0.5*a*dpb*fAwfBv*gAwetagBv*kt
                         c += 1
                         kCppr[c] = row+2
                         kCppc[c] = col+2
-                        kCppv[c] += 0.25*a*b*kt*(fAwfBw*gAwgBw + (dpb*dpb)*fAwfBw*gAwetagBweta/(b*b) + (dpb*dpb)*fAwxifBwxi*gAwgBw/(a*a))
+                        kCppv[c] += 0.25*a*b*kt*(fAwfBw*gAwgBw + 4*(dpb*dpb)*fAwfBw*gAwetagBweta/(b*b) + 4*(dpb*dpb)*fAwxifBwxi*gAwgBw/(a*a))
 
     kCpp = coo_matrix((kCppv, (kCppr, kCppc)), shape=(size, size))
 
@@ -234,11 +234,11 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
                         c += 1
                         kCpbr[c] = row+2
                         kCpbc[c] = col+0
-                        kCpbv[c] += -0.25*b*c1*dpb*fAwxipBu*gAwqBu*kt
+                        kCpbv[c] += -0.5*b*c1*dpb*fAwxipBu*gAwqBu*kt
                         c += 1
                         kCpbr[c] = row+2
                         kCpbc[c] = col+1
-                        kCpbv[c] += -0.25*a*c1*dpb*fAwpBv*gAwetaqBv*kt
+                        kCpbv[c] += -0.5*a*c1*dpb*fAwpBv*gAwetaqBv*kt
                         c += 1
                         kCpbr[c] = row+2
                         kCpbc[c] = col+2
