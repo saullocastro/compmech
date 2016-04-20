@@ -204,6 +204,7 @@ class TStiff2D(object):
 
         h = sum(self.panel1.plyts)/2.
         hb = sum(self.bplyts)/2.
+        dpb = h + hb
 
         # stiffener flange
         k0 += modelf.fk0(a, b, r, alpharad, Fsf, m2, n2,
@@ -219,7 +220,7 @@ class TStiff2D(object):
         ktpb = self.kt/((a - x2 + x1)*(y2 - y1))
         krpb = self.kr/((a - x2 + x1)*(y2 - y1))
         k0 += conn.fkCppx1x2y1y2(0, x1, y1, y2,
-                                 ktpb, a, b, h, m, n,
+                                 ktpb, a, b, dpb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -228,7 +229,7 @@ class TStiff2D(object):
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
                                  size, 0, 0)
         k0 += conn.fkCppx1x2y1y2(x2, a, y1, y2,
-                                 ktpb, a, b, h, m, n,
+                                 ktpb, a, b, dpb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -238,7 +239,7 @@ class TStiff2D(object):
                                  size, 0, 0)
 
         k0 += conn.fkCpbx1x2y1y2(0, x1, y1, y2,
-                                 ktpb, a, b, bb, h, hb,
+                                 ktpb, a, b, dpb,
                                  m, n, m1, n1,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
@@ -254,7 +255,7 @@ class TStiff2D(object):
                              self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                                  size, 0, col0)
         k0 += conn.fkCpbx1x2y1y2(x2, a, y1, y2,
-                                 ktpb, a, b, bb, h, hb,
+                                 ktpb, a, b, dpb,
                                  m, n, m1, n1,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
@@ -271,7 +272,7 @@ class TStiff2D(object):
                                  size, 0, col0)
 
         k0 += conn.fkCbbpbx1x2(0, x1, y1, y2,
-                               ktpb, krpb, a, b, bb, hb, m1, n1,
+                               ktpb, krpb, a, b, m1, n1,
                                self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                                self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                                self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -280,7 +281,7 @@ class TStiff2D(object):
                                self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                                size, row0, col0)
         k0 += conn.fkCbbpbx1x2(x2, a, y1, y2,
-                               ktpb, krpb, a, b, bb, hb, m1, n1,
+                               ktpb, krpb, a, b, m1, n1,
                                self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                                self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                                self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,

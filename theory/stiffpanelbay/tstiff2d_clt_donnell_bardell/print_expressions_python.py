@@ -17,7 +17,7 @@ var('pBu, qBu, pBv, qBv, pBw, pBwxi, qBw, qBweta')
 var('rAu, sAu, rAv, sAv, rAw, sAw, sAweta')
 var('rBu, sBu, rBv, sBv, rBw, sBw, sBweta')
 
-var('kt, kr, a, b, bb, bf, c1, h, hb')
+var('kt, kr, a, b, bb, bf, c1, dpb')
 
 subs = {
        }
