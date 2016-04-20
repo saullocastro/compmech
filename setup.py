@@ -19,11 +19,35 @@ if sys.version_info[0] < 3:
 else:
     import builtins
 
+DOCLINES = __doc__.split("\n")
+
+CLASSIFIERS = """\
+Development Status :: 4 - Beta
+Intended Audience :: Science/Research
+Intended Audience :: Developers
+License :: BSD Approved
+Programming Language :: FORTRAN
+Programming Language :: C
+Programming Language :: Python
+Topic :: Software Development
+Topic :: Scientific/Engineering
+Operating System :: Microsoft :: Windows
+Operating System :: Unix
+
+"""
+
 MAJOR = 0
 MINOR = 5
 MICRO = 5
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
+
+
+# BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
+# update it when the contents of directories change.
+if os.path.exists('MANIFEST'):
+    os.remove('MANIFEST')
+
 
 
 def write_version_py(filename='compmech/version.py'):
@@ -110,11 +134,7 @@ def setup_package():
     # We don't want to do that unconditionally, because we risk updating
     # an installed numpy which fails too often.  Just if it's not installed, we
     # may give it a try.  See gh-3379.
-    build_requires = []
-    try:
-        import numpy
-    except:
-        build_requires = ['numpy>=1.6.2', 'scipy>=0.14.0']
+    build_requires = ['numpy>=1.6.2', 'scipy>=0.14.0']
 
     FULLVERSION, GIT_REVISION = get_version_info()
 
@@ -136,45 +156,35 @@ def setup_package():
         install_requires=build_requires,
     )
 
+
     if len(sys.argv) >= 2 and ('--help' in sys.argv[1:] or
             sys.argv[1] in ('--help-commands', 'egg_info', '--version',
                             'clean')):
-        from setuptools import setup
+        # For these actions, NumPy is not required.
+        #
+        # They are required to succeed without Numpy for example when
+        # pip is used to install Scipy when Numpy is not yet present in
+        # the system.
+        try:
+            from setuptools import setup
+        except ImportError:
+            from distutils.core import setup
 
         FULLVERSION, GIT_REVISION = get_version_info()
         metadata['version'] = FULLVERSION
     else:
-        from setuptools import setup
+        if (len(sys.argv) >= 2 and sys.argv[1] in ('bdist_wheel', 'bdist_egg')) or (
+                    'develop' in sys.argv):
+            # bdist_wheel/bdist_egg needs setuptools
+            import setuptools
 
-        cwd = os.path.abspath(os.path.dirname(__file__))
+        from numpy.distutils.core import setup
 
         metadata['configuration'] = configuration
 
     setup(**metadata)
 
 if __name__ == '__main__':
-    DOCLINES = __doc__.split("\n")
-
-    CLASSIFIERS = """\
-    Development Status :: 4 - Beta
-    Intended Audience :: Science/Research
-    Intended Audience :: Developers
-    License :: BSD Approved
-    Programming Language :: FORTRAN
-    Programming Language :: C
-    Programming Language :: Python
-    Topic :: Software Development
-    Topic :: Scientific/Engineering
-    Operating System :: Microsoft :: Windows
-    Operating System :: Unix
-
-    """
-
-    # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
-    # update it when the contents of directories change.
-    if os.path.exists('MANIFEST'):
-        os.remove('MANIFEST')
-
     write_version_py()
 
     if os.name == 'nt' and os.environ.get('CONDA_DEFAULT_ENV') is None:
