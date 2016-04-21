@@ -202,9 +202,9 @@ class TStiff2D(object):
                              size, row0, col0)
         Fsf = self.flam.ABD
 
-        h = sum(self.panel1.plyts)/2.
-        hb = sum(self.bplyts)/2.
-        dpb = h + hb
+        h = sum(self.panel1.plyts)
+        hb = sum(self.bplyts)
+        dpb = (h + hb)/2.
 
         # stiffener flange
         k0 += modelf.fk0(a, b, r, alpharad, Fsf, m2, n2,
