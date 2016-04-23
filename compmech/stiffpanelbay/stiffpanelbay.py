@@ -1131,47 +1131,40 @@ class StiffPanelBay(Panel):
 
         num = panelmDB.db[self.model]['num']
         row_init = num*self.m*self.n
-        row_final = num*self.m*self.n
 
         # getting array position
         for i, s in enumerate(self.stiffeners):
             num1 = stiffmDB.db[s.model]['num1']
-            if i == 0:
-                if isinstance(s, BladeStiff2D):
-                    row_final += num1*s.m1*s.n1
-                elif isinstance(s, TStiff2D):
-                    num2 = stiffmDB.db[s.model]['num2']
-                    row_final += num1*s.m1*s.n1
             if i > 0:
                 s_1 = self.stiffeners[i-1]
                 if isinstance(s, BladeStiff2D):
                     row_init += num1*s_1.m1*s_1.n1
-                    row_final += num1*s.m1*s.n1
                 elif isinstance(s, TStiff2D):
-                    num2 = stiffmDB.db[s.model]['num2']
+                    num2 = stiffmDB.db[s_1.model]['num2']
                     row_init += num1*s_1.m1*s_1.n1 + num2*s_1.m2*s_1.n2
-                    row_final += num1*s.m1*s.n1
             if i == si:
                 break
 
+        num1 = stiffmDB.db[stiff.model]['num1']
+        num2 = stiffmDB.db[stiff.model]['num2']
         if region.lower() == 'base':
             bstiff = stiff.bb
-            if isinstance(stiff, BladeStiff2D):
-                mfield = self.m
-                nfield = self.n
-            elif isinstance(stiff, TStiff2D):
+            if isinstance(stiff, TStiff2D):
+                row_init = row_init
+                row_final = row_init + num1*s.m1*s.n1
                 mfield = stiff.m1
                 nfield = stiff.n1
+            else:
+                raise
         elif region.lower() == 'flange':
             bstiff = stiff.bf
-            if isinstance(stiff, BladeStiff2D):
-                mfield = stiff.m1
-                nfield = stiff.n1
-            elif isinstance(stiff, TStiff2D):
+            if isinstance(stiff, TStiff2D):
                 row_init += num1*s.m1*s.n1
-                row_final += num2*s.m2*s.n2
+                row_final = row_init + num2*s.m2*s.n2
                 mfield = stiff.m2
                 nfield = stiff.n2
+            else:
+                raise
         else:
             raise ValueError('Invalid region')
 
