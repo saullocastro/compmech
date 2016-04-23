@@ -104,7 +104,7 @@ class BladeStiff2D(object):
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
         if self.bstack is not None:
             hb = sum(self.bplyts)
-            self.db = abs(-h/2.-hb/2.)
+            self.dpb = h/2. + hb/2.
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
                                             offset=(-h/2.-hb/2.))
@@ -153,7 +153,7 @@ class BladeStiff2D(object):
                                  bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
                                  bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                                 size, row0, col0)
+                                 size, 0, 0)
 
         #TODO add contribution from Nxx_cte from flange and padup
         if self.flam is not None:
@@ -170,14 +170,14 @@ class BladeStiff2D(object):
                            size, row0, col0)
 
             # connectivity between skin-stiffener flange
-            k0 += mod.fkCff(kt, kr, a, bf, m1, n1,
-                            self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
-                            self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
-                            self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
-                            self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
-                            self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
-                            self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
-                            size, row0, col0)
+            k0 += mod.fkCss(kt, kr, self.ys, a, b, m, n,
+                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                            bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                            bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                            bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                            bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                            size, 0, 0)
             k0 += mod.fkCsf(kt, kr, self.ys, a, b, bf, m, n, m1, n1,
                             bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                             bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
@@ -192,14 +192,14 @@ class BladeStiff2D(object):
                             self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
                             self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
                             size, 0, col0)
-            k0 += mod.fkCss(kt, kr, self.ys, a, b, m, n,
-                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                            bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                            bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                            bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                            bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                            size, 0, 0)
+            k0 += mod.fkCff(kt, kr, a, bf, m1, n1,
+                            self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
+                            self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
+                            self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
+                            self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
+                            self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
+                            self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
+                            size, row0, col0)
 
         if finalize:
             assert np.any(np.isnan(k0.data)) == False
@@ -293,7 +293,7 @@ class BladeStiff2D(object):
             # stiffener pad-up
             y1 = self.ys - self.bb/2.
             y2 = self.ys + self.bb/2.
-            kM += panmod.fkMy1y2(y1, y2, self.mu, self.db, self.hb,
+            kM += panmod.fkMy1y2(y1, y2, self.mu, self.dpb, self.hb,
                           a, b, r, alpharad, m, n,
                           bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                           bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
