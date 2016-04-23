@@ -72,6 +72,7 @@ class BladeStiff1D(object):
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
         if self.bstack is not None:
             hb = sum(self.bplyts)
+            self.dpb = h/2. + hb/2.
             self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
                                             laminaprops=self.blaminaprops,
                                             offset=(-h/2.-hb/2.))
@@ -79,7 +80,7 @@ class BladeStiff1D(object):
             self.Asb = self.bb*self.hb
 
         #TODO check offset effect on curved panels
-        self.df = self.bf/2. + self.hb + h/2.
+        self.dbf = self.bf/2. + self.hb + h/2.
         self.Iyy = self.hf*self.bf**3/12.
         self.Jxx = self.hf*self.bf**3/12. + self.bf*self.hf**3/12.
 
@@ -124,7 +125,7 @@ class BladeStiff1D(object):
         b = bay.b
         m = self.panel1.m
         n = self.panel1.n
-        r = self.panel1.r
+        r = self.panel1.r if self.panel1.r is not None else 0.
         alphadeg = self.panel1.alphadeg
         alphadeg = alphadeg if alphadeg is not None else 0.
         alpharad = deg2rad(alphadeg)
@@ -144,7 +145,7 @@ class BladeStiff1D(object):
                                  size=size, row0=row0, col0=col0)
 
         if self.flam is not None:
-            k0 += mod.fk0f(ys, a, b, self.bf, self.df, self.E1, self.F1,
+            k0 += mod.fk0f(ys, a, b, self.bf, self.dbf, self.E1, self.F1,
                            self.S1, self.Jxx, m, n,
                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -231,16 +232,21 @@ class BladeStiff1D(object):
         ys = self.ys
         a = bay.a
         b = bay.b
+        r = self.panel1.r if self.panel1.r is not None else 0.
         m = self.panel1.m
         n = self.panel1.n
         mu = self.mu
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
+        alphadeg = self.panel1.alphadeg
+        alphadeg = alphadeg if alphadeg is not None else 0.
+        alpharad = deg2rad(alphadeg)
 
         kM = 0.
         if self.blam is not None:
             y1 = ys - self.bb/2.
             y2 = ys + self.bb/2.
-            kM += panmod.fkMy1y2(y1, y2, self.mu, self.db, self.hb, a, b, m, n,
+            kM += panmod.fkMy1y2(y1, y2, self.mu, self.dpb, self.hb,
+                          a, b, r, alpharad, m, n,
                           bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                           bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                           bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -251,7 +257,7 @@ class BladeStiff1D(object):
 
         if self.flam is not None:
             kM += mod.fkMf(ys, self.mu, h, self.hb, self.hf, a, b, self.bf,
-                           self.df, m, n,
+                           self.dbf, m, n,
                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                            bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,

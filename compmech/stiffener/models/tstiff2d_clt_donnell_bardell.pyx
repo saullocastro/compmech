@@ -55,7 +55,6 @@ INT = np.int64
 cdef int num = 3
 cdef int num1 = 3
 cdef int num2 = 3
-cdef double pi = 3.141592653589793
 
 
 def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
@@ -92,7 +91,6 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
         c = -1
         for i in range(m):
             for k in range(m):
-
                 fAufBu = integral_ff_12(xi1, xi2, i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
                 fAufBwxi = integral_ffxi_12(xi1, xi2, i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
                 fAvfBv = integral_ff_12(xi1, xi2, i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
@@ -200,7 +198,6 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
         c = -1
         for i in range(m):
             for k1 in range(m1):
-
                 fAupBu = integral_ff_12(xi1, xi2, i, k1, u1tx, u1rx, u2tx, u2rx, u1txb, u1rxb, u2txb, u2rxb)
                 fAvpBv = integral_ff_12(xi1, xi2, i, k1, v1tx, v1rx, v2tx, v2rx, v1txb, v1rxb, v2txb, v2rxb)
                 fAwpBw = integral_ff_12(xi1, xi2, i, k1, w1tx, w1rx, w2tx, w2rx, w1txb, w1rxb, w2txb, w2rxb)
@@ -209,7 +206,6 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
 
                 for j in range(n):
                     for l1 in range(n1):
-
                         row = row0 + num*(j*m + i)
                         col = col0 + num1*(l1*m1 + k1)
 
@@ -284,7 +280,6 @@ def fkCbbpbx1x2(double x1, double x2, double y1, double y2,
         c = -1
         for i1 in range(m1):
             for k1 in range(m1):
-
                 pAupBu = integral_ff_12(xi1, xi2, i1, k1, u1txb, u1rxb, u2txb, u2rxb, u1txb, u1rxb, u2txb, u2rxb)
                 pAvpBv = integral_ff_12(xi1, xi2, i1, k1, v1txb, v1rxb, v2txb, v2rxb, v1txb, v1rxb, v2txb, v2rxb)
                 pAwpBw = integral_ff_12(xi1, xi2, i1, k1, w1txb, w1rxb, w2txb, w2rxb, w1txb, w1rxb, w2txb, w2rxb)
@@ -348,7 +343,6 @@ def fkCbbbf(double kt, double kr, double a, double bb,
         c = -1
         for i1 in range(m1):
             for k1 in range(m1):
-
                 pAupBu = integral_ff(i1, k1, u1txb, u1rxb, u2txb, u2rxb, u1txb, u1rxb, u2txb, u2rxb)
                 pAvpBv = integral_ff(i1, k1, v1txb, v1rxb, v2txb, v2rxb, v1txb, v1rxb, v2txb, v2rxb)
                 pAwpBw = integral_ff(i1, k1, w1txb, w1rxb, w2txb, w2rxb, w1txb, w1rxb, w2txb, w2rxb)
@@ -360,7 +354,6 @@ def fkCbbbf(double kt, double kr, double a, double bb,
                     qAweta = calc_fxi(j1, eta_conn_base, w1tyb, w1ryb, w2tyb, w2ryb)
 
                     for l1 in range(n1):
-
                         row = row0 + num1*(j1*m1 + i1)
                         col = col0 + num1*(l1*m1 + k1)
 
@@ -384,7 +377,7 @@ def fkCbbbf(double kt, double kr, double a, double bb,
                         c += 1
                         kCbbbfr[c] = row+2
                         kCbbbfc[c] = col+2
-                        kCbbbfv[c] += 0.5*a*kt*(pAwpBw*qAw*qBw + 4*kr*pAwpBw*qAweta*qBweta/((bb*bb)*kt))
+                        kCbbbfv[c] += 0.5*a*(kt*pAwpBw*qAw*qBw + 4*kr*pAwpBw*qAweta*qBweta/(bb*bb))
 
     kCbbbf = coo_matrix((kCbbbfv, (kCbbbfr, kCbbbfc)), shape=(size, size))
 
@@ -426,7 +419,6 @@ def fkCbf(double kt, double kr, double a, double bb, double bf,
         c = -1
         for i1 in range(m1):
             for k2 in range(m2):
-
                 pAurBu = integral_ff(i1, k2, u1txb, u1rxb, u2txb, u2rxb, u1txf, u1rxf, u2txf, u2rxf)
                 pAvrBw = integral_ff(i1, k2, v1txb, v1rxb, v2txb, v2rxb, w1txf, w1rxf, w2txf, w2rxf)
                 pAwrBv = integral_ff(i1, k2, w1txb, w1rxb, w2txb, w2rxb, v1txf, v1rxf, v2txf, v2rxf)
@@ -439,7 +431,6 @@ def fkCbf(double kt, double kr, double a, double bb, double bf,
                     qAweta = calc_fxi(j1, eta_conn_base, w1tyb, w1ryb, w2tyb, w2ryb)
 
                     for l2 in range(n2):
-
                         row = row0 + num1*(j1*m1 + i1)
                         col = col0 + num2*(l2*m2 + k2)
 
@@ -504,7 +495,6 @@ def fkCff(double kt, double kr, double a, double bf, int m2, int n2,
         c = -1
         for i2 in range(m2):
             for k2 in range(m2):
-
                 rAurBu = integral_ff(i2, k2, u1txf, u1rxf, u2txf, u2rxf, u1txf, u1rxf, u2txf, u2rxf)
                 rAvrBv = integral_ff(i2, k2, v1txf, v1rxf, v2txf, v2rxf, v1txf, v1rxf, v2txf, v2rxf)
                 rAwrBw = integral_ff(i2, k2, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
@@ -516,7 +506,6 @@ def fkCff(double kt, double kr, double a, double bf, int m2, int n2,
                     sAweta = calc_fxi(j2, eta_conn_flange, w1tyf, w1ryf, w2tyf, w2ryf)
 
                     for l2 in range(n2):
-
                         row = row0 + num2*(j2*m2 + i2)
                         col = col0 + num2*(l2*m2 + k2)
 
@@ -540,7 +529,7 @@ def fkCff(double kt, double kr, double a, double bf, int m2, int n2,
                         c += 1
                         kCffr[c] = row+2
                         kCffc[c] = col+2
-                        kCffv[c] += 0.5*a*kt*(rAwrBw*sAw*sBw + 4*kr*rAwrBw*sAweta*sBweta/((bf*bf)*kt))
+                        kCffv[c] += 0.5*a*(kt*rAwrBw*sAw*sBw + 4*kr*rAwrBw*sAweta*sBweta/(bf*bf))
 
     kCff = coo_matrix((kCffv, (kCffr, kCffc)), shape=(size, size))
 
