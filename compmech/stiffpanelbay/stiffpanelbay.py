@@ -1146,7 +1146,6 @@ class StiffPanelBay(Panel):
                 break
 
         num1 = stiffmDB.db[stiff.model]['num1']
-        num2 = stiffmDB.db[stiff.model]['num2']
         if region.lower() == 'base':
             bstiff = stiff.bb
             if isinstance(stiff, TStiff2D):
@@ -1159,12 +1158,15 @@ class StiffPanelBay(Panel):
         elif region.lower() == 'flange':
             bstiff = stiff.bf
             if isinstance(stiff, TStiff2D):
+                num2 = stiffmDB.db[stiff.model]['num2']
                 row_init += num1*s.m1*s.n1
                 row_final = row_init + num2*s.m2*s.n2
                 mfield = stiff.m2
                 nfield = stiff.n2
-            else:
-                raise
+            elif isinstance(s, BladeStiff2D):
+                row_final = row_init + num1*s.m1*s.n1
+                mfield = stiff.m1
+                nfield = stiff.n1
         else:
             raise ValueError('Invalid region')
 
