@@ -31,11 +31,12 @@ class TStiff2D(object):
 
     """
     def __init__(self, bay, mu, panel1, panel2, ys, bb, bf, bstack, bplyts,
-            blaminaprops, fstack, fplyts, flaminaprops):
+            blaminaprops, fstack, fplyts, flaminaprops,
+            model='tstiff2d_clt_donnell_bardell'):
         self.bay = bay
         self.panel1 = panel1
         self.panel2 = panel2
-        self.model = 'tstiff2d_clt_donnell_bardell'
+        self.model = model
         self.m1 = 12
         self.n1 = 9
         self.m2 = 11
@@ -52,6 +53,8 @@ class TStiff2D(object):
 
         self.kt = 1.e8
         self.kr = 1.e8
+        self.eta_conn_base = 0.
+        self.eta_conn_flange = -1.
 
         self.Nxxb = None
         self.Nxyb = None
@@ -135,8 +138,12 @@ class TStiff2D(object):
         self.flam = laminate.read_stack(self.fstack, plyts=self.fplyts,
                                         laminaprops=self.flaminaprops)
         self.flam.calc_equivalent_modulus()
+        h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
+        hb = sum(self.bplyts)
+        self.dpb = h/2. + hb/2.
         self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
-                                        laminaprops=self.blaminaprops)
+                                        laminaprops=self.blaminaprops,
+                                        offset=0.)
 
         assert self.panel1.model == self.panel2.model
         assert self.panel1.r == self.panel2.r
@@ -177,7 +184,6 @@ class TStiff2D(object):
         # NOTE
         #     row0 and col0 define where the stiffener's base matrix starts
         #     row1 and col1 define where the stiffener's flange matrix starts
-
         row1 = row0 + num1*self.m1*self.n1
         col1 = col0 + num1*self.m1*self.n1
 
@@ -200,13 +206,9 @@ class TStiff2D(object):
                              self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
                              self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                              size, row0, col0)
-        Fsf = self.flam.ABD
-
-        h = sum(self.panel1.plyts)
-        hb = sum(self.bplyts)
-        dpb = (h + hb)/2.
 
         # stiffener flange
+        Fsf = self.flam.ABD
         k0 += modelf.fk0(a, b, r, alpharad, Fsf, m2, n2,
                          self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
                          self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
@@ -217,8 +219,10 @@ class TStiff2D(object):
                          size, row1, col1)
 
         # connectivity panel-base
+        dpb = self.dpb
         ktpb = self.kt/((a - x2 + x1)*(y2 - y1))
         krpb = self.kr/((a - x2 + x1)*(y2 - y1))
+
         k0 += conn.fkCppx1x2y1y2(0, x1, y1, y2,
                                  ktpb, a, b, dpb, m, n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
@@ -293,9 +297,8 @@ class TStiff2D(object):
         # connectivity base-flange
         ktbf = self.kt/a
         krbf = self.kr/a
-        eta_conn_base = 0.
         k0 += conn.fkCbbbf(ktbf, krbf, a, bb,
-                           m1, n1, eta_conn_base,
+                           m1, n1, self.eta_conn_base,
                            self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                            self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                            self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -304,10 +307,9 @@ class TStiff2D(object):
                            self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                            size, row0, col0)
 
-        eta_conn_flange = -1.
         k0 += conn.fkCbf(ktbf, krbf, a, bb, bf,
                          m1, n1, m2, n2,
-                         eta_conn_base, eta_conn_flange,
+                         self.eta_conn_base, self.eta_conn_flange,
                          self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                          self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                          self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -323,7 +325,7 @@ class TStiff2D(object):
                          size, row0, col1)
 
         k0 += conn.fkCff(ktbf, krbf, a, bf, m2, n2,
-                         eta_conn_flange,
+                         self.eta_conn_flange,
                          self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
                          self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
                          self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
