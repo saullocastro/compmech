@@ -13,7 +13,7 @@ var('f1Bu, g1Bu, f1Bv, g1Bv, f1Bw, f1Bwxi, g1Bw, g1Bweta')
 var('f2Au, g2Au, f2Av, g2Av, f2Aw, f2Awxi, g2Aw, g2Aweta')
 var('f2Bu, g2Bu, f2Bv, g2Bv, f2Bw, f2Bwxi, g2Bw, g2Bweta')
 
-var('kt, kr, a')
+var('kt, kr, a1, a2, b1, b2, c1, dsb')
 
 subs = {
        }

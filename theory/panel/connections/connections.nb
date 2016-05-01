@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     49485,        860]
-NotebookOptionsPosition[     49122,        843]
-NotebookOutlinePosition[     49544,        861]
-CellTagsIndexPosition[     49501,        858]
+NotebookDataLength[     65715,       1315]
+NotebookOptionsPosition[     65388,       1299]
+NotebookOutlinePosition[     65812,       1317]
+CellTagsIndexPosition[     65769,       1314]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -188,10 +188,10 @@ Cell[BoxData[{
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"kCp1p1", "=", 
+   RowBox[{"kCSSxcte11", "=", 
     RowBox[{
      RowBox[{"(", 
-      RowBox[{"a", "/", "2"}], ")"}], "*", "kt", 
+      RowBox[{"b1", "/", "2"}], ")"}], "*", "kt", 
      RowBox[{"(", " ", "\[IndentingNewLine]", "      ", 
       RowBox[{
        RowBox[{
@@ -209,22 +209,22 @@ Cell[BoxData[{
        RowBox[{
         RowBox[{
          RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAxi1", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBxi1", "}"}]}], "*", 
-        RowBox[{"kr", "/", "kt"}]}], "\[IndentingNewLine]", "+", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAeta1", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBeta1", "}"}]}], "*", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "a1"}], ")"}], "wAxi1"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "a1"}], ")"}], "wBxi1"}], "}"}]}], "*", 
         RowBox[{"kr", "/", "kt"}]}]}], "\[IndentingNewLine]", ")"}]}]}], 
    ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"kCp1p2", "=", 
+   RowBox[{"kCSSxcte12", "=", 
     RowBox[{
      RowBox[{"(", 
-      RowBox[{"a", "/", "2"}], ")"}], "*", "kt", 
+      RowBox[{"b1", "/", "2"}], ")"}], "*", "kt", 
      RowBox[{"(", " ", "\[IndentingNewLine]", "      ", 
       RowBox[{
        RowBox[{
@@ -242,22 +242,22 @@ Cell[BoxData[{
        RowBox[{
         RowBox[{
          RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAxi1", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBxi2", "}"}]}], "*", 
-        RowBox[{"kr", "/", "kt"}]}], "\[IndentingNewLine]", "+", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAeta1", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBeta2", "}"}]}], "*", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "a1"}], ")"}], "wAxi1"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "a2"}], ")"}], "wBxi2"}], "}"}]}], "*", 
         RowBox[{"kr", "/", "kt"}]}]}], "\[IndentingNewLine]", ")"}]}]}], 
    ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"kCp2p2", "=", 
+   RowBox[{"kCSSxcte22", "=", 
     RowBox[{
      RowBox[{"(", 
-      RowBox[{"a", "/", "2"}], ")"}], "*", "kt", 
+      RowBox[{"b1", "/", "2"}], ")"}], "*", "kt", 
      RowBox[{"(", " ", "\[IndentingNewLine]", "      ", 
       RowBox[{
        RowBox[{
@@ -275,51 +275,504 @@ Cell[BoxData[{
        RowBox[{
         RowBox[{
          RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAxi2", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBxi2", "}"}]}], "*", 
-        RowBox[{"kr", "/", "kt"}]}], "\[IndentingNewLine]", "+", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"Transpose", "[", 
-          RowBox[{"{", "wAeta2", "}"}], "]"}], ".", 
-         RowBox[{"{", "wBeta2", "}"}]}], "*", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "a2"}], ")"}], "wAxi2"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "a2"}], ")"}], "wBxi2"}], "}"}]}], "*", 
         RowBox[{"kr", "/", "kt"}]}]}], "\[IndentingNewLine]", ")"}]}]}], 
    ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"s", " ", "=", " ", 
-   RowBox[{"OpenWrite", "[", "\"\<fortran_kCp1p1.txt\>\"", "]"}]}], 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSSxcte11.txt\>\"", "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
    RowBox[{"s", ",", 
-    RowBox[{"FortranForm", "[", "kCp1p1", "]"}]}], "]"}], 
+    RowBox[{"FortranForm", "[", "kCSSxcte11", "]"}]}], "]"}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"s", " ", "=", " ", 
-   RowBox[{"OpenWrite", "[", "\"\<fortran_kCp1p2.txt\>\"", "]"}]}], 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSSxcte12.txt\>\"", "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
    RowBox[{"s", ",", 
-    RowBox[{"FortranForm", "[", "kCp1p2", "]"}]}], "]"}], 
+    RowBox[{"FortranForm", "[", "kCSSxcte12", "]"}]}], "]"}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"s", " ", "=", " ", 
-   RowBox[{"OpenWrite", "[", "\"\<fortran_kCp2p2.txt\>\"", "]"}]}], 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSSxcte22.txt\>\"", "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Write", "[", 
    RowBox[{"s", ",", 
-    RowBox[{"FortranForm", "[", "kCp2p2", "]"}]}], "]"}], 
+    RowBox[{"FortranForm", "[", "kCSSxcte22", "]"}]}], "]"}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]"}], "Input",
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"kCSSycte11", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"a1", "/", "2"}], ")"}], "*", "kt", 
+     RowBox[{"(", " ", "\[IndentingNewLine]", "      ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "uA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB1", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "vA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB1", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "wB1", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "b1"}], ")"}], "wAeta1"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "b1"}], ")"}], "wBeta1"}], "}"}]}], "*", 
+        RowBox[{"kr", "/", "kt"}]}]}], "\[IndentingNewLine]", ")"}]}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"kCSSycte12", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"a1", "/", "2"}], ")"}], "*", "kt", 
+     RowBox[{"(", " ", "\[IndentingNewLine]", "      ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "uA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "vA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "wB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "b1"}], ")"}], "wAeta1"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "b2"}], ")"}], "wBeta2"}], "}"}]}], "*", 
+        RowBox[{"kr", "/", "kt"}]}]}], "\[IndentingNewLine]", ")"}]}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"kCSSycte22", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"a1", "/", "2"}], ")"}], "*", "kt", 
+     RowBox[{"(", " ", "\[IndentingNewLine]", "      ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "uA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "vA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "wB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "b2"}], ")"}], "wAeta2"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "b2"}], ")"}], "wBeta2"}], "}"}]}], "*", 
+        RowBox[{"kr", "/", "kt"}]}]}], "\[IndentingNewLine]", ")"}]}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSSycte11.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCSSycte11", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSSycte12.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCSSycte12", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSSycte22.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCSSycte22", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Connection", " ", "between", " ", 
+    RowBox[{"stiffener", "'"}], "s", " ", "base", " ", "and", " ", "flange"}],
+    "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"kCBFycte11", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"a1", "/", "2"}], ")"}], "*", "kt", 
+     RowBox[{"(", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "uA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB1", "}"}]}], "\[IndentingNewLine]", "+", " ", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "vA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB1", "}"}]}], "\[IndentingNewLine]", "+", " ", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "wB1", "}"}]}], "\[IndentingNewLine]", "  ", "+", 
+       RowBox[{
+        RowBox[{"kr", " ", "/", "kt"}], "*", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "b1"}], ")"}], "wAeta1"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "b1"}], ")"}], "wBeta1"}], "}"}]}]}]}], 
+      ")"}]}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"kCBFycte12", "=", 
+    RowBox[{
+     RowBox[{"-", 
+      RowBox[{"(", 
+       RowBox[{"a1", "/", "2"}], ")"}]}], "*", "kt", 
+     RowBox[{"(", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", " ", 
+         RowBox[{"{", "uA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB2", "}"}]}], "\[IndentingNewLine]", "+", " ", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "vA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "wB2", "}"}]}], "\[IndentingNewLine]", "-", " ", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"kr", "/", "kt"}], "*", " ", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "b1"}], ")"}], "wAeta1"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "b2"}], ")"}], "wBeta2"}], "}"}]}]}]}], 
+      ")"}]}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"kCBFycte22", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"a1", "/", "2"}], ")"}], "*", "kt", 
+     RowBox[{"(", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "uA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB2", "}"}]}], "\[IndentingNewLine]", "+", " ", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "vA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB2", "}"}]}], "\[IndentingNewLine]", "+", " ", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "wB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"kr", "/", "kt"}], "*", " ", 
+        RowBox[{
+         RowBox[{"Transpose", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"2", "/", "b2"}], ")"}], "wAeta2"}], "}"}], "]"}], ".", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"2", "/", "b2"}], ")"}], "wBeta2"}], "}"}]}]}]}], 
+      ")"}]}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCBFycte11.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCBFycte11", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCBFycte12.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCBFycte12", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCBFycte22.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCBFycte22", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Connection", " ", "between", " ", "panel", " ", "skin", " ", "and", " ", 
+    RowBox[{"stiffener", "'"}], "s", " ", "base"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"connection", " ", "panel"}], "-", 
+    RowBox[{"base", " ", "integrated", " ", "over", " ", 
+     RowBox[{"xi", "'"}], " ", "and", " ", 
+     RowBox[{"eta", "'"}]}]}], "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"kCSB11", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"a1", " ", 
+      RowBox[{"b1", "/", "4"}]}], ")"}], "*", "kt", 
+    RowBox[{"(", " ", "\[IndentingNewLine]", "      ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", "uA1", "}"}], "]"}], ".", 
+       RowBox[{"{", "uB1", "}"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", "vA1", "}"}], "]"}], ".", 
+       RowBox[{"{", "vB1", "}"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", "wA1", "}"}], "]"}], ".", 
+       RowBox[{"{", "wB1", "}"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "uA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "wBxi1", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "a1"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wAxi1", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB1", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "a1"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "vA1", "}"}], "]"}], ".", 
+        RowBox[{"{", "wBeta1", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "b1"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wAeta1", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB1", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "b1"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wAxi1", "}"}], "]"}], ".", 
+        RowBox[{"{", "wBxi1", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "a1"}]}], ")"}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "a1"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wAeta1", "}"}], "]"}], ".", 
+        RowBox[{"{", "wBeta1", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "b1"}]}], ")"}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "b1"}]}], ")"}]}]}], "\[IndentingNewLine]", 
+     ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"kCSB12", "=", 
+   RowBox[{
+    RowBox[{"-", "c1"}], "*", 
+    RowBox[{"(", 
+     RowBox[{"a1", " ", 
+      RowBox[{"b1", "/", "4"}]}], ")"}], "*", "kt", 
+    RowBox[{"(", " ", "\[IndentingNewLine]", "     ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Transpose", "[", " ", 
+        RowBox[{"{", "uA1", "}"}], "]"}], ".", 
+       RowBox[{"{", "uB2", "}"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", "vA1", "}"}], "]"}], ".", 
+       RowBox[{"{", "vB2", "}"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", "wA1", "}"}], "]"}], ".", 
+       RowBox[{"{", "wB2", "}"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wAxi1", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB2", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "a1"}]}], ")"}]}], "\[IndentingNewLine]", "+", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wAeta1", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB2", "}"}]}], "*", 
+       RowBox[{"(", 
+        RowBox[{"2", 
+         RowBox[{"dsb", "/", "b1"}]}], ")"}]}]}], "\[IndentingNewLine]", 
+     ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"kCSB22", "=", 
+    RowBox[{"c1", 
+     RowBox[{"(", 
+      RowBox[{"a1", " ", 
+       RowBox[{"b1", "/", "4"}]}], ")"}], "*", "kt", 
+     RowBox[{"(", " ", "\[IndentingNewLine]", "     ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "uA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "uB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "vA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "vB2", "}"}]}], "\[IndentingNewLine]", "+", 
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", "wA2", "}"}], "]"}], ".", 
+        RowBox[{"{", "wB2", "}"}]}]}], "\[IndentingNewLine]", ")"}]}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSB11.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCSB11", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSB12.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCSB12", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s", " ", "=", " ", 
+   RowBox[{"OpenWrite", "[", "\"\<fortran_kCSB22.txt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Write", "[", 
+   RowBox[{"s", ",", 
+    RowBox[{"FortranForm", "[", "kCSB22", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]"}], "Input",
  CellChangeTimes->{{3.5988751343024645`*^9, 3.598875149345325*^9}, {
    3.5988753108685637`*^9, 3.5988754321825027`*^9}, {3.598875479589214*^9, 
    3.5988755888094606`*^9}, 3.598875669691087*^9, {3.5988757097403774`*^9, 
@@ -835,17 +1288,20 @@ Cell[BoxData[{
    3.6660289975790944`*^9}, 3.66602939338018*^9, {3.666167593925926*^9, 
    3.666167645604035*^9}, {3.6675891466115265`*^9, 3.667589460545357*^9}, {
    3.667589490917839*^9, 3.6675895979189825`*^9}, {3.6675896859102635`*^9, 
-   3.667589827590796*^9}, {3.667590040085862*^9, 3.6675900414123*^9}}],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{{3.6661695074810305`*^9, 3.666169509528839*^9}, 
-   3.666170126946135*^9}]
+   3.667589827590796*^9}, {3.667590040085862*^9, 3.6675900414123*^9}, {
+   3.6710989443459806`*^9, 3.6710989649854927`*^9}, {3.6710990952707424`*^9, 
+   3.6710991985106397`*^9}, {3.671099231915928*^9, 3.671099387595976*^9}, {
+   3.6710994198151817`*^9, 3.671099439738205*^9}, {3.6710997731473823`*^9, 
+   3.67109979320829*^9}, {3.6710998353997345`*^9, 3.6711001450060773`*^9}, {
+   3.6711001988330307`*^9, 3.671100298471678*^9}, {3.671100330121264*^9, 
+   3.6711003544862037`*^9}, {3.671100527370593*^9, 3.671100586286659*^9}, 
+   3.6711006732810345`*^9, {3.6711223997932334`*^9, 3.671122432799306*^9}}]
 },
 Evaluator->"Local 2",
-WindowSize->{751, 727},
-WindowMargins->{{Automatic, 1}, {Automatic, 5}},
+WindowSize->{751, 792},
+WindowMargins->{{1, Automatic}, {-7, Automatic}},
 CellContext->Notebook,
-Magnification->0.8999999761581421,
+Magnification->1.2000000476837158`,
 FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
 StyleDefinitions->"Default.nb"
 ]
@@ -860,8 +1316,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 48438, 817, 1450, "Input"],
-Cell[48998, 839, 120, 2, 29, "Input"]
+Cell[557, 20, 64827, 1277, 3832, "Input"]
 }
 ]
 *)

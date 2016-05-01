@@ -30,14 +30,6 @@ def configuration(parent_package='', top_path=None):
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']
 
-    config.add_extension('connect_panels',
-              sources=['connect_panels.pyx'],
-              extra_compile_args=args_linear,
-              runtime_library_dirs=runtime_library_dirs,
-              include_dirs=[include],
-              libraries=['bardell', 'bardell_functions'],
-              library_dirs=[lib])
-
     config.add_extension('kpanel_clt_donnell_bardell',
               sources=['kpanel_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
