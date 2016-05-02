@@ -44,7 +44,8 @@ class Panel(object):
 
     """
     def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
-            stack=None, plyt=None, laminaprop=None):
+            stack=None, plyt=None, laminaprop=None, m=11, n=11, mu=None,
+            offset=0.):
         self.a = a
         self.b = b
         self.y1 = y1
@@ -54,7 +55,7 @@ class Panel(object):
         self.stack = stack
         self.plyt = plyt
         self.laminaprop = laminaprop
-        self.d = 0.
+        self.offset = offset
 
         self.name = ''
         self.bay = None
@@ -64,8 +65,8 @@ class Panel(object):
         self.K = 5/6. # in case of First-order Shear Deformation Theory
 
         # approximation series
-        self.m = 11
-        self.n = 11
+        self.m = m
+        self.n = n
 
         # numerical integration
         self.nx = 160
@@ -114,7 +115,7 @@ class Panel(object):
         self.w2ry = 1.
 
         # material
-        self.mu = None
+        self.mu = mu
         self.plyts = None
         self.laminaprops = None
 
@@ -573,7 +574,7 @@ class Panel(object):
 
         h = sum(self.plyts)
         if y1 is not None and y2 is not None:
-            kM = matrices.fkMy1y2(y1, y2, self.mu, self.d, h,
+            kM = matrices.fkMy1y2(y1, y2, self.mu, self.offset, h,
                                   self.a, self.b, r, alpharad, self.m, self.n,
                                   self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                                   self.v1tx, self.v1rx, self.v2tx, self.v2rx,
@@ -583,7 +584,7 @@ class Panel(object):
                                   self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                                   size, row0, col0)
         else:
-            kM = matrices.fkM(self.mu, self.d, h,
+            kM = matrices.fkM(self.mu, self.offset, h,
                               self.a, self.b, r, alpharad, self.m, self.n,
                               self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                               self.v1tx, self.v1rx, self.v2tx, self.v2rx,
@@ -604,6 +605,8 @@ class Panel(object):
         gc.collect()
 
         msg('finished!', level=2, silent=silent)
+
+        return kM
 
 
     def calc_kA(self, silent=False, finalize=True):

@@ -30,16 +30,18 @@ INT = np.int64
 cdef int num = 3
 
 
-def fkCSSxcte11(double kt, double kr, double a1, double b1,
-          int m1, int n1, double xcte1,
-          double u1tx1, double u1rx1, double u2tx1, double u2rx1,
-          double v1tx1, double v1rx1, double v2tx1, double v2rx1,
-          double w1tx1, double w1rx1, double w2tx1, double w2rx1,
-          double u1ty1, double u1ry1, double u2ty1, double u2ry1,
-          double v1ty1, double v1ry1, double v2ty1, double v2ry1,
-          double w1ty1, double w1ry1, double w2ty1, double w2ry1,
-          int size, int row0, int col0):
+def fkCSSxcte11(double kt, double kr, object p1,
+                double xcte1,
+                int size, int row0, int col0):
     cdef int i1, k1, j1, l1, c, row, col
+    cdef int m1, n1
+    cdef double a1, b1
+    cdef double u1tx1, u1rx1, u2tx1, u2rx1
+    cdef double v1tx1, v1rx1, v2tx1, v2rx1
+    cdef double w1tx1, w1rx1, w2tx1, w2rx1
+    cdef double u1ty1, u1ry1, u2ty1, u2ry1
+    cdef double v1ty1, v1ry1, v2ty1, v2ry1
+    cdef double w1ty1, w1ry1, w2ty1, w2ry1
 
     cdef np.ndarray[cINT, ndim=1] kCSSxcte11r, kCSSxcte11c
     cdef np.ndarray[cDOUBLE, ndim=1] kCSSxcte11v
@@ -47,6 +49,17 @@ def fkCSSxcte11(double kt, double kr, double a1, double b1,
     cdef double xicte1
     cdef double f1Au, f1Bu, f1Av, f1Bv, f1Aw, f1Bw, f1Awxi, f1Bwxi
     cdef double g1Aug1Bu, g1Avg1Bv, g1Awg1Bw
+
+    a1 = p1.a
+    b1 = p1.b
+    m1 = p1.m
+    n1 = p1.n
+    u1tx1 = p1.u1tx ; u1rx1 = p1.u1rx ; u2tx1 = p1.u2tx ; u2rx1 = p1.u2rx
+    v1tx1 = p1.v1tx ; v1rx1 = p1.v1rx ; v2tx1 = p1.v2tx ; v2rx1 = p1.v2rx
+    w1tx1 = p1.w1tx ; w1rx1 = p1.w1rx ; w2tx1 = p1.w2tx ; w2rx1 = p1.w2rx
+    u1ty1 = p1.u1ty ; u1ry1 = p1.u1ry ; u2ty1 = p1.u2ty ; u2ry1 = p1.u2ry
+    v1ty1 = p1.v1ty ; v1ry1 = p1.v1ry ; v2ty1 = p1.v2ty ; v2ry1 = p1.v2ry
+    w1ty1 = p1.w1ty ; w1ry1 = p1.w1ry ; w2ty1 = p1.w2ty ; w2ry1 = p1.w2ry
 
     xicte1 = 2*xcte1/a1 - 1.
 
@@ -101,23 +114,18 @@ def fkCSSxcte11(double kt, double kr, double a1, double b1,
     return kCSSxcte11
 
 
-def fkCSSxcte12(double kt, double kr, double a1, double a2, double b1, double b2,
-          int m1, int n1, int m2, int n2,
-          double xcte1, double xcte2,
-          double u1tx1, double u1rx1, double u2tx1, double u2rx1,
-          double v1tx1, double v1rx1, double v2tx1, double v2rx1,
-          double w1tx1, double w1rx1, double w2tx1, double w2rx1,
-          double u1ty1, double u1ry1, double u2ty1, double u2ry1,
-          double v1ty1, double v1ry1, double v2ty1, double v2ry1,
-          double w1ty1, double w1ry1, double w2ty1, double w2ry1,
-          double u1tx2, double u1rx2, double u2tx2, double u2rx2,
-          double v1tx2, double v1rx2, double v2tx2, double v2rx2,
-          double w1tx2, double w1rx2, double w2tx2, double w2rx2,
-          double u1ty2, double u1ry2, double u2ty2, double u2ry2,
-          double v1ty2, double v1ry2, double v2ty2, double v2ry2,
-          double w1ty2, double w1ry2, double w2ty2, double w2ry2,
-          int size, int row0, int col0):
+def fkCSSxcte12(double kt, double kr, object p1, object p2,
+                double xcte1, double xcte2,
+                int size, int row0, int col0):
     cdef int i1, k2, j1, l2, c, row, col
+    cdef int m1, n1, m2, n2
+    cdef double a1, a2, b1, b2
+    cdef double u1tx1, u1rx1, u2tx1, u2rx1, u1tx2, u1rx2, u2tx2, u2rx2
+    cdef double v1tx1, v1rx1, v2tx1, v2rx1, v1tx2, v1rx2, v2tx2, v2rx2
+    cdef double w1tx1, w1rx1, w2tx1, w2rx1, w1tx2, w1rx2, w2tx2, w2rx2
+    cdef double u1ty1, u1ry1, u2ty1, u2ry1, u1ty2, u1ry2, u2ty2, u2ry2
+    cdef double v1ty1, v1ry1, v2ty1, v2ry1, v1ty2, v1ry2, v2ty2, v2ry2
+    cdef double w1ty1, w1ry1, w2ty1, w2ry1, w1ty2, w1ry2, w2ty2, w2ry2
 
     cdef np.ndarray[cINT, ndim=1] kCSSxcte12r, kCSSxcte12c
     cdef np.ndarray[cDOUBLE, ndim=1] kCSSxcte12v
@@ -125,6 +133,28 @@ def fkCSSxcte12(double kt, double kr, double a1, double a2, double b1, double b2
     cdef double xicte1, xicte2
     cdef double g1Aug2Bu, g1Avg2Bv, g1Awg2Bw
     cdef double f1Au, f2Bu, f1Av, f2Bv, f1Aw, f2Bw, f1Awxi, f2Bwxi
+
+    a1 = p1.a
+    b1 = p1.b
+    a2 = p2.a
+    b2 = p2.b
+    m1 = p1.m
+    n1 = p1.n
+    m2 = p2.m
+    n2 = p2.n
+    u1tx1 = p1.u1tx ; u1rx1 = p1.u1rx ; u2tx1 = p1.u2tx ; u2rx1 = p1.u2rx
+    v1tx1 = p1.v1tx ; v1rx1 = p1.v1rx ; v2tx1 = p1.v2tx ; v2rx1 = p1.v2rx
+    w1tx1 = p1.w1tx ; w1rx1 = p1.w1rx ; w2tx1 = p1.w2tx ; w2rx1 = p1.w2rx
+    u1ty1 = p1.u1ty ; u1ry1 = p1.u1ry ; u2ty1 = p1.u2ty ; u2ry1 = p1.u2ry
+    v1ty1 = p1.v1ty ; v1ry1 = p1.v1ry ; v2ty1 = p1.v2ty ; v2ry1 = p1.v2ry
+    w1ty1 = p1.w1ty ; w1ry1 = p1.w1ry ; w2ty1 = p1.w2ty ; w2ry1 = p1.w2ry
+
+    u1tx2 = p2.u1tx ; u1rx2 = p2.u1rx ; u2tx2 = p2.u2tx ; u2rx2 = p2.u2rx
+    v1tx2 = p2.v1tx ; v1rx2 = p2.v1rx ; v2tx2 = p2.v2tx ; v2rx2 = p2.v2rx
+    w1tx2 = p2.w1tx ; w1rx2 = p2.w1rx ; w2tx2 = p2.w2tx ; w2rx2 = p2.w2rx
+    u1ty2 = p2.u1ty ; u1ry2 = p2.u1ry ; u2ty2 = p2.u2ty ; u2ry2 = p2.u2ry
+    v1ty2 = p2.v1ty ; v1ry2 = p2.v1ry ; v2ty2 = p2.v2ty ; v2ry2 = p2.v2ry
+    w1ty2 = p2.w1ty ; w1ry2 = p2.w1ry ; w2ty2 = p2.w2ty ; w2ry2 = p2.w2ry
 
     xicte1 = 2*xcte1/a1 - 1.
     xicte2 = 2*xcte2/a2 - 1.
@@ -180,16 +210,18 @@ def fkCSSxcte12(double kt, double kr, double a1, double a2, double b1, double b2
     return kCSSxcte12
 
 
-def fkCSSxcte22(double kt, double kr, double a2, double b1, double b2,
-          int m2, int n2, double xcte2,
-          double u1tx2, double u1rx2, double u2tx2, double u2rx2,
-          double v1tx2, double v1rx2, double v2tx2, double v2rx2,
-          double w1tx2, double w1rx2, double w2tx2, double w2rx2,
-          double u1ty2, double u1ry2, double u2ty2, double u2ry2,
-          double v1ty2, double v1ry2, double v2ty2, double v2ry2,
-          double w1ty2, double w1ry2, double w2ty2, double w2ry2,
-          int size, int row0, int col0):
+def fkCSSxcte22(double kt, double kr, object p1, object p2,
+                double xcte2,
+                int size, int row0, int col0):
     cdef int i2, k2, j2, l2, c, row, col
+    cdef int m2, n2
+    cdef double b1, a2, b2
+    cdef double u1tx2, u1rx2, u2tx2, u2rx2
+    cdef double v1tx2, v1rx2, v2tx2, v2rx2
+    cdef double w1tx2, w1rx2, w2tx2, w2rx2
+    cdef double u1ty2, u1ry2, u2ty2, u2ry2
+    cdef double v1ty2, v1ry2, v2ty2, v2ry2
+    cdef double w1ty2, w1ry2, w2ty2, w2ry2
 
     cdef np.ndarray[cINT, ndim=1] kCSSxcte22r, kCSSxcte22c
     cdef np.ndarray[cDOUBLE, ndim=1] kCSSxcte22v
@@ -197,6 +229,18 @@ def fkCSSxcte22(double kt, double kr, double a2, double b1, double b2,
     cdef double xicte2
     cdef double f2Au, f2Bu, f2Av, f2Bv, f2Aw, f2Bw, f2Awxi, f2Bwxi
     cdef double g2Aug2Bu, g2Avg2Bv, g2Awg2Bw
+
+    b1 = p1.b
+    a2 = p2.a
+    b2 = p2.b
+    m2 = p2.m
+    n2 = p2.n
+    u1tx2 = p2.u1tx ; u1rx2 = p2.u1rx ; u2tx2 = p2.u2tx ; u2rx2 = p2.u2rx
+    v1tx2 = p2.v1tx ; v1rx2 = p2.v1rx ; v2tx2 = p2.v2tx ; v2rx2 = p2.v2rx
+    w1tx2 = p2.w1tx ; w1rx2 = p2.w1rx ; w2tx2 = p2.w2tx ; w2rx2 = p2.w2rx
+    u1ty2 = p2.u1ty ; u1ry2 = p2.u1ry ; u2ty2 = p2.u2ty ; u2ry2 = p2.u2ry
+    v1ty2 = p2.v1ty ; v1ry2 = p2.v1ry ; v2ty2 = p2.v2ty ; v2ry2 = p2.v2ry
+    w1ty2 = p2.w1ty ; w1ry2 = p2.w1ry ; w2ty2 = p2.w2ty ; w2ry2 = p2.w2ry
 
     xicte2 = 2*xcte2/a2 - 1.
 
