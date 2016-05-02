@@ -152,6 +152,101 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
     return kCpp
 
 
+def fkCpp_pt(np.ndarray[cDOUBLE, ndim=1] xi1s,
+             np.ndarray[cDOUBLE, ndim=1] eta1s,
+          double kt, double a, double b, double dpb, int m, int n,
+          double u1tx, double u1rx, double u2tx, double u2rx,
+          double v1tx, double v1rx, double v2tx, double v2rx,
+          double w1tx, double w1rx, double w2tx, double w2rx,
+          double u1ty, double u1ry, double u2ty, double u2ry,
+          double v1ty, double v1ry, double v2ty, double v2ry,
+          double w1ty, double w1ry, double w2ty, double w2ry,
+          int size, int row0, int col0):
+    cdef int i, k, j, l, c, row, col
+    cdef double xi1, eta1, xi, eta
+
+    cdef np.ndarray[cINT, ndim=1] kCppr, kCppc
+    cdef np.ndarray[cDOUBLE, ndim=1] kCppv
+
+    cdef double fAu, fAv, fAw, fAwxi
+    cdef double fBu, fBv, fBw, fBwxi
+    cdef double gAu, gAv, gAw, gAweta
+    cdef double gBu, gBv, gBw, gBweta
+
+    fdim = 7*m*n*m*n
+
+    kCppr = np.zeros((fdim,), dtype=INT)
+    kCppc = np.zeros((fdim,), dtype=INT)
+    kCppv = np.zeros((fdim,), dtype=DOUBLE)
+
+    with nogil:
+        # kCpp
+        c = -1
+        for i in range(m):
+            fAu = calc_f(i, xi, u1tx, u1rx, u2tx, u2rx)
+            fAv = calc_f(i, xi, v1tx, v1rx, v2tx, v2rx)
+            fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+            fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+
+            for k in range(m):
+                fBu = calc_f(k, xi, u1tx, u1rx, u2tx, u2rx)
+                fBv = calc_f(k, xi, v1tx, v1rx, v2tx, v2rx)
+                fBw = calc_f(k, xi, w1tx, w1rx, w2tx, w2rx)
+                fBwxi = calc_fxi(k, xi, w1tx, w1rx, w2tx, w2rx)
+
+                for j in range(n):
+                    gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
+                    gAv = calc_f(j, eta, v1ty, v1ry, v2ty, v2ry)
+                    gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                    gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+
+                    for l in range(n):
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(l*m + k)
+
+                        #NOTE symmetry
+                        if row > col:
+                            continue
+
+                        gBu = calc_f(l, eta, u1ty, u1ry, u2ty, u2ry)
+                        gBv = calc_f(l, eta, v1ty, v1ry, v2ty, v2ry)
+                        gBw = calc_f(l, eta, w1ty, w1ry, w2ty, w2ry)
+                        gBweta = calc_fxi(l, eta, w1ty, w1ry, w2ty, w2ry)
+
+                        c += 1
+                        kCppr[c] = row+0
+                        kCppc[c] = col+0
+                        kCppv[c] += fAu*fBu*gAu*gBu*kt
+                        c += 1
+                        kCppr[c] = row+0
+                        kCppc[c] = col+2
+                        kCppv[c] += 2*dpb*fAu*fBwxi*gAu*gBw*kt/a
+                        c += 1
+                        kCppr[c] = row+1
+                        kCppc[c] = col+1
+                        kCppv[c] += fAv*fBv*gAv*gBv*kt
+                        c += 1
+                        kCppr[c] = row+1
+                        kCppc[c] = col+2
+                        kCppv[c] += 2*dpb*fAv*fBw*gAv*gBweta*kt/b
+                        c += 1
+                        kCppr[c] = row+2
+                        kCppc[c] = col+0
+                        kCppv[c] += 2*dpb*fAwxi*fBu*gAw*gBu*kt/a
+                        c += 1
+                        kCppr[c] = row+2
+                        kCppc[c] = col+1
+                        kCppv[c] += 2*dpb*fAw*fBv*gAweta*gBv*kt/b
+                        c += 1
+                        kCppr[c] = row+2
+                        kCppc[c] = col+2
+                        kCppv[c] += kt*(fAw*fBw*gAw*gBw + 4*(dpb*dpb)*fAw*fBw*gAweta*gBweta/(b*b) + 4*(dpb*dpb)*fAwxi*fBwxi*gAw*gBw/(a*a))
+
+    kCpp = coo_matrix((kCppv, (kCppr, kCppc)), shape=(size, size))
+
+    return kCpp
+
+
 def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
           double kt, double a, double b, double dpb,
           int m, int n, int m1, int n1,
@@ -245,8 +340,98 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
     return kCpb
 
 
+def fkCpb_pt(double xi, double eta, double xi1, double eta1,
+          double kt, double a, double b, double dpb,
+          int m, int n, int m1, int n1,
+          double u1tx, double u1rx, double u2tx, double u2rx,
+          double v1tx, double v1rx, double v2tx, double v2rx,
+          double w1tx, double w1rx, double w2tx, double w2rx,
+          double u1ty, double u1ry, double u2ty, double u2ry,
+          double v1ty, double v1ry, double v2ty, double v2ry,
+          double w1ty, double w1ry, double w2ty, double w2ry,
+          double u1txb, double u1rxb, double u2txb, double u2rxb,
+          double v1txb, double v1rxb, double v2txb, double v2rxb,
+          double w1txb, double w1rxb, double w2txb, double w2rxb,
+          double u1tyb, double u1ryb, double u2tyb, double u2ryb,
+          double v1tyb, double v1ryb, double v2tyb, double v2ryb,
+          double w1tyb, double w1ryb, double w2tyb, double w2ryb,
+          int size, int row0, int col0):
+    cdef int i, j, k1, l1, c, row, col
+
+    cdef np.ndarray[cINT, ndim=1] kCpbr, kCpbc
+    cdef np.ndarray[cDOUBLE, ndim=1] kCpbv
+
+    cdef double fAu, fAv, fAw, fAwxi
+    cdef double pBu, pBv, pBw
+    cdef double gAu, gAv, gAw, gAweta
+    cdef double qBu, qBv, qBw
+
+    fdim = 5*m*n*m1*n1
+
+    kCpbr = np.zeros((fdim,), dtype=INT)
+    kCpbc = np.zeros((fdim,), dtype=INT)
+    kCpbv = np.zeros((fdim,), dtype=DOUBLE)
+
+    with nogil:
+        # kCpb
+        c = -1
+        for i in range(m):
+            fAu = calc_f(i, xi, u1tx, u1rx, u2tx, u2rx)
+            fAv = calc_f(i, xi, v1tx, v1rx, v2tx, v2rx)
+            fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+            fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+
+            for k1 in range(m1):
+                pBu = calc_f(k1, xi1, u1txb, u1rxb, u2txb, u2rxb)
+                pBv = calc_f(k1, xi1, v1txb, v1rxb, v2txb, v2rxb)
+                pBw = calc_f(k1, xi1, w1txb, w1rxb, w2txb, w2rxb)
+
+                for j in range(n):
+                    gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
+                    gAv = calc_f(j, eta, v1ty, v1ry, v2ty, v2ry)
+                    gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                    gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+
+                    for l1 in range(n1):
+                        row = row0 + num*(j*m + i)
+                        col = col0 + num1*(l1*m1 + k1)
+
+                        #NOTE symmetry not applicable here
+                        #if row > col:
+                            #continue
+
+                        qBu = calc_f(l1, eta1, u1tyb, u1ryb, u2tyb, u2ryb)
+                        qBv = calc_f(l1, eta1, v1tyb, v1ryb, v2tyb, v2ryb)
+                        qBw = calc_f(l1, eta1, w1tyb, w1ryb, w2tyb, w2ryb)
+
+                        c += 1
+                        kCpbr[c] = row+0
+                        kCpbc[c] = col+0
+                        kCpbv[c] += -fAu*pBu*gAu*qBu*kt
+                        c += 1
+                        kCpbr[c] = row+1
+                        kCpbc[c] = col+1
+                        kCpbv[c] += -fAv*pBv*gAv*qBv*kt
+                        c += 1
+                        kCpbr[c] = row+2
+                        kCpbc[c] = col+0
+                        kCpbv[c] += -dpb*fAwxi*pBu*gAw*qBu*kt/a
+                        c += 1
+                        kCpbr[c] = row+2
+                        kCpbc[c] = col+1
+                        kCpbv[c] += -2*dpb*fAw*pBv*gAweta*qBv*kt/b
+                        c += 1
+                        kCpbr[c] = row+2
+                        kCpbc[c] = col+2
+                        kCpbv[c] += -fAw*pBw*gAw*qBw*kt
+
+    kCpb = coo_matrix((kCpbv, (kCpbr, kCpbc)), shape=(size, size))
+
+    return kCpb
+
+
 def fkCbbpbx1x2(double x1, double x2, double y1, double y2,
-        double kt, double kr, double a, double b, int m1, int n1,
+        double kt, double a, double b, int m1, int n1,
         double u1txb, double u1rxb, double u2txb, double u2rxb,
         double v1txb, double v1rxb, double v2txb, double v2rxb,
         double w1txb, double w1rxb, double w2txb, double w2rxb,
@@ -309,6 +494,79 @@ def fkCbbpbx1x2(double x1, double x2, double y1, double y2,
                         kCbbpbr[c] = row+2
                         kCbbpbc[c] = col+2
                         kCbbpbv[c] += 0.25*a*b*c1*kt*pAwpBw*qAwqBw
+
+    kCbbpb = coo_matrix((kCbbpbv, (kCbbpbr, kCbbpbc)), shape=(size, size))
+
+    return kCbbpb
+
+
+def fkCbbpb_pt(double xi1, double eta1,
+        double kt, double a, double b, int m1, int n1,
+        double u1txb, double u1rxb, double u2txb, double u2rxb,
+        double v1txb, double v1rxb, double v2txb, double v2rxb,
+        double w1txb, double w1rxb, double w2txb, double w2rxb,
+        double u1tyb, double u1ryb, double u2tyb, double u2ryb,
+        double v1tyb, double v1ryb, double v2tyb, double v2ryb,
+        double w1tyb, double w1ryb, double w2tyb, double w2ryb,
+        int size, int row0, int col0):
+    cdef int i1, k1, j1, l1, c, row, col
+
+    cdef np.ndarray[cINT, ndim=1] kCbbpbr, kCbbpbc
+    cdef np.ndarray[cDOUBLE, ndim=1] kCbbpbv
+
+    cdef double pAu, pAv, pAw
+    cdef double qAu, qAv, qAw
+    cdef double pBu, pBv, pBw
+    cdef double qBu, qBv, qBw
+
+    fdim = 3*m1*n1*m1*n1
+
+    kCbbpbr = np.zeros((fdim,), dtype=INT)
+    kCbbpbc = np.zeros((fdim,), dtype=INT)
+    kCbbpbv = np.zeros((fdim,), dtype=DOUBLE)
+
+    with nogil:
+        # kCbbpb
+        c = -1
+        for i1 in range(m1):
+            pAu = calc_f(i1, xi1, u1txb, u1rxb, u2txb, u2rxb)
+            pAv = calc_f(i1, xi1, v1txb, v1rxb, v2txb, v2rxb)
+            pAw = calc_f(i1, xi1, w1txb, w1rxb, w2txb, w2rxb)
+
+            for k1 in range(m1):
+                pBu = calc_f(k1, xi1, u1txb, u1rxb, u2txb, u2rxb)
+                pBv = calc_f(k1, xi1, v1txb, v1rxb, v2txb, v2rxb)
+                pBw = calc_f(k1, xi1, w1txb, w1rxb, w2txb, w2rxb)
+
+                for j1 in range(n1):
+                    qAu = calc_f(j1, eta1, u1tyb, u1ryb, u2tyb, u2ryb)
+                    qAv = calc_f(j1, eta1, v1tyb, v1ryb, v2tyb, v2ryb)
+                    qAw = calc_f(j1, eta1, w1tyb, w1ryb, w2tyb, w2ryb)
+
+                    for l1 in range(n1):
+                        row = row0 + num1*(j1*m1 + i1)
+                        col = col0 + num1*(l1*m1 + k1)
+
+                        #NOTE symmetry
+                        if row > col:
+                            continue
+
+                        qBu = calc_f(l1, eta1, u1tyb, u1ryb, u2tyb, u2ryb)
+                        qBv = calc_f(l1, eta1, v1tyb, v1ryb, v2tyb, v2ryb)
+                        qBw = calc_f(l1, eta1, w1tyb, w1ryb, w2tyb, w2ryb)
+
+                        c += 1
+                        kCbbpbr[c] = row+0
+                        kCbbpbc[c] = col+0
+                        kCbbpbv[c] += kt*pAu*pBu*qAu*qBu
+                        c += 1
+                        kCbbpbr[c] = row+1
+                        kCbbpbc[c] = col+1
+                        kCbbpbv[c] += kt*pAv*pBv*qAv*qBv
+                        c += 1
+                        kCbbpbr[c] = row+2
+                        kCbbpbc[c] = col+2
+                        kCbbpbv[c] += kt*pAw*pBw*qAw*qBw
 
     kCbbpb = coo_matrix((kCbbpbv, (kCbbpbr, kCbbpbc)), shape=(size, size))
 
@@ -534,3 +792,75 @@ def fkCff(double kt, double kr, double a, double bf, int m2, int n2,
     kCff = coo_matrix((kCffv, (kCffr, kCffc)), shape=(size, size))
 
     return kCff
+
+
+def fkCffxcte(double kt, double kr, double a, double bf, int m2, int n2,
+          double xcte,
+          double u1txf, double u1rxf, double u2txf, double u2rxf,
+          double v1txf, double v1rxf, double v2txf, double v2rxf,
+          double w1txf, double w1rxf, double w2txf, double w2rxf,
+          double u1tyf, double u1ryf, double u2tyf, double u2ryf,
+          double v1tyf, double v1ryf, double v2tyf, double v2ryf,
+          double w1tyf, double w1ryf, double w2tyf, double w2ryf,
+          int size, int row0, int col0):
+    cdef int i2, k2, j2, l2, c, row, col
+
+    cdef np.ndarray[cINT, ndim=1] kCffxcter, kCffxctec
+    cdef np.ndarray[cDOUBLE, ndim=1] kCffxctev
+
+    cdef double xi
+    cdef double rAu, rBu, rAv, rBv, rAw, rBw
+    cdef double sAusBu, sAvsBv, sAwsBw
+
+    fdim = 3*m2*n2*m2*n2
+
+    kCffxcter = np.zeros((fdim,), dtype=INT)
+    kCffxctec = np.zeros((fdim,), dtype=INT)
+    kCffxctev = np.zeros((fdim,), dtype=DOUBLE)
+
+    xi = 2*xcte/a - 1.
+
+    with nogil:
+
+        # kCffxcte
+        c = -1
+        for j2 in range(n2):
+            for l2 in range(n2):
+                sAusBu = integral_ff(j2, l2, u1txf, u1rxf, u2txf, u2rxf, u1txf, u1rxf, u2txf, u2rxf)
+                sAvsBv = integral_ff(j2, l2, v1txf, v1rxf, v2txf, v2rxf, v1txf, v1rxf, v2txf, v2rxf)
+                sAwsBw = integral_ff(j2, l2, w1txf, w1rxf, w2txf, w2rxf, w1txf, w1rxf, w2txf, w2rxf)
+
+                for i2 in range(m2):
+                    rAu = calc_f(i2, xi, u1tyf, u1ryf, u2tyf, u2ryf)
+                    rAv = calc_f(i2, xi, v1tyf, v1ryf, v2tyf, v2ryf)
+                    rAw = calc_f(i2, xi, w1tyf, w1ryf, w2tyf, w2ryf)
+
+                    for k2 in range(m2):
+
+                        row = row0 + num2*(j2*m2 + i2)
+                        col = col0 + num2*(l2*m2 + k2)
+
+                        #NOTE symmetry
+                        if row > col:
+                            continue
+
+                        rBu = calc_f(k2, xi, u1tyf, u1ryf, u2tyf, u2ryf)
+                        rBv = calc_f(k2, xi, v1tyf, v1ryf, v2tyf, v2ryf)
+                        rBw = calc_f(k2, xi, w1tyf, w1ryf, w2tyf, w2ryf)
+
+                        c += 1
+                        kCffxcter[c] = row+0
+                        kCffxctec[c] = col+0
+                        kCffxctev[c] += 0.5*bf*kt*rAu*rBu*sAusBu
+                        c += 1
+                        kCffxcter[c] = row+1
+                        kCffxctec[c] = col+1
+                        kCffxctev[c] += 0.5*bf*kt*rAv*rBv*sAvsBv
+                        c += 1
+                        kCffxcter[c] = row+2
+                        kCffxctec[c] = col+2
+                        kCffxctev[c] += 0.5*bf*kt*rAw*rBw*sAwsBw
+
+    kCffxcte = coo_matrix((kCffxctev, (kCffxcter, kCffxctec)), shape=(size, size))
+
+    return kCffxcte
