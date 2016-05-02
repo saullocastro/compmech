@@ -9,3 +9,4 @@ Analysis Module (:mod:`compmech.analysis`)
     :members:
 """
 from analysis import Analysis
+from freq import freq
