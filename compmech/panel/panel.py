@@ -45,7 +45,7 @@ class Panel(object):
     """
     def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
             stack=None, plyt=None, laminaprop=None, m=11, n=11, mu=None,
-            offset=0.):
+            offset=0., x0=None, y0=None):
         self.a = a
         self.b = b
         self.y1 = y1
@@ -56,6 +56,9 @@ class Panel(object):
         self.plyt = plyt
         self.laminaprop = laminaprop
         self.offset = offset
+        # assembly
+        self.x0 = x0
+        self.y0 = y0
 
         self.name = ''
         self.bay = None
@@ -1306,7 +1309,7 @@ class Panel(object):
         return self.analysis.cs
 
 
-    def plot(self, c, invert_y=False, plot_type=1, vec='w',
+    def plot(self, c, invert_y=False, vec='w',
              deform_u=False, deform_u_sf=100.,
              filename='',
              ax=None, figsize=(3.5, 2.), save=True,
@@ -1315,7 +1318,8 @@ class Panel(object):
              cbar_title='', cbar_fontsize=10,
              aspect='equal', clean=True, dpi=400,
              texts=[], xs=None, ys=None, gridx=300, gridy=300,
-             num_levels=400, vecmin=None, vecmax=None):
+             num_levels=400, vecmin=None, vecmax=None, plotoffsetxs=0.,
+             plotoffsetys=0.):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1335,19 +1339,7 @@ class Panel(object):
         deform_u_sf : float, optional
             The scaling factor used to deform the contour.
         invert_y : bool, optional
-            Inverts the `y` axis of the plot. It may be used to match
-            the coordinate system of the finite element models created
-            using the ``desicos.abaqus`` module.
-        plot_type : int, optional
-            For cylinders only ``4`` and ``5`` are valid.
-            For cones all the following types can be used:
-
-            - ``1``: concave up (with ``invert_y=False``) (default)
-            - ``2``: concave down (with ``invert_y=False``)
-            - ``3``: stretched closed
-            - ``4``: stretched opened (`r \times y` vs. `a`)
-            - ``5``: stretched opened (`y` vs. `a`)
-
+            Inverts the `y` axis of the plot.
         save : bool, optional
             Flag telling whether the contour should be saved to an image file.
         dpi : int, optional
@@ -1435,8 +1427,8 @@ class Panel(object):
                     '{0} is not a valid vec parameter value!'.format(vec))
         msg('Finished!', level=1)
 
-        Xs = self.Xs
-        Ys = self.Ys
+        Xs = self.Xs + plotoffsetxs
+        Ys = self.Ys + plotoffsetys
 
         if vecmin is None:
             vecmin = field.min()
@@ -1456,8 +1448,8 @@ class Panel(object):
             else:
                 raise ValueError('ax must be an Axes object')
 
-        x = Ys
-        y = Xs
+        x = Ys # in matplotlib x goes vertically (axis=0)
+        y = Xs # and y goes horizontally (axis=1)
 
         if deform_u:
             if vec in displs:
