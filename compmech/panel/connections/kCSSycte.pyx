@@ -198,15 +198,15 @@ def fkCSSycte12(double kt, double kr, object p1, object p2,
                         c += 1
                         kCSSycte12r[c] = row+0
                         kCSSycte12c[c] = col+0
-                        kCSSycte12v[c] += 0.5*a1*f1Auf2Bu*g1Au*g2Bu*kt
+                        kCSSycte12v[c] += -0.5*a1*f1Auf2Bu*g1Au*g2Bu*kt
                         c += 1
                         kCSSycte12r[c] = row+1
                         kCSSycte12c[c] = col+1
-                        kCSSycte12v[c] += 0.5*a1*f1Avf2Bv*g1Av*g2Bv*kt
+                        kCSSycte12v[c] += -0.5*a1*f1Avf2Bv*g1Av*g2Bv*kt
                         c += 1
                         kCSSycte12r[c] = row+2
                         kCSSycte12c[c] = col+2
-                        kCSSycte12v[c] += 0.5*a1*kt*(f1Awf2Bw*g1Aw*g2Bw + 4*f1Awf2Bw*g1Aweta*g2Bweta*kr/(b1*b2*kt))
+                        kCSSycte12v[c] += -0.5*a1*kt*(f1Awf2Bw*g1Aw*g2Bw + 4*f1Awf2Bw*g1Aweta*g2Bweta*kr/(b1*b2*kt))
 
     kCSSycte12 = coo_matrix((kCSSycte12v, (kCSSycte12r, kCSSycte12c)), shape=(size, size))
 

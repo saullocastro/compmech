@@ -2,7 +2,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 
 import compmech.panel.connections as connections
-from compmech.panel import Panel
+from compmech.panel import Panel, PanelAssembly
 from compmech.composite import laminate
 from compmech.sparse import make_symmetric
 from compmech.analysis import freq
@@ -31,8 +31,8 @@ aup = (a - deffect)/2.
 alow = (a - deffect)/2.
 bleft = b - ys - bb/2.
 bright = ys - bb/2.
-m = 8
-n = 8
+m = 6
+n = 6
 # skin panels
 p01 = Panel(x0=alow+deffect, y0=ys+bb/2., a=aup, b=bleft, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
 p02 = Panel(x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
@@ -174,7 +174,7 @@ conn = [
     dict(p1=p01, p2=p04, func='SSxcte', xcte1=0, xcte2=p04.a),
     dict(p1=p02, p2=p03, func='SSycte', ycte1=0, ycte2=p03.b),
     dict(p1=p02, p2=p05, func='SSxcte', xcte1=0, xcte2=p05.a),
-    dict(p1=p03, p2=p06, func='SSxcte', xcte1=0, xcte2=p05.a),
+    dict(p1=p03, p2=p06, func='SSxcte', xcte1=0, xcte2=p06.a),
     dict(p1=p04, p2=p05, func='SSycte', ycte1=0, ycte2=p05.b),
     dict(p1=p04, p2=p07, func='SSxcte', xcte1=0, xcte2=p07.a),
     dict(p1=p05, p2=p06, func='SSycte', ycte1=0, ycte2=p06.b),
@@ -185,7 +185,7 @@ conn = [
 
     # skin-base
     dict(p1=p02, p2=p10, func='SB'),
-    #dict(p1=p05, p2=p12, func='SB'), # deffect
+    dict(p1=p05, p2=p12, func='SB'), # deffect
     dict(p1=p08, p2=p14, func='SB'),
 
     # base-base
@@ -205,6 +205,8 @@ conn = [
 panels = [p01, p02, p03, p04, p05, p06, p07, p08, p09,
         p10, p11, p12, p13, p14, p15]
 skin = [p01, p02, p03, p04, p05, p06, p07, p08, p09]
+base = [p10, p12, p14]
+flange = [p11, p13, p15]
 
 size = sum([3*p.m*p.n for p in panels])
 
@@ -283,8 +285,19 @@ print eigvals[:5]/np.pi/2
 import matplotlib.pyplot as plt
 ax = plt.gca()
 mode = 0
-#skin = [p01, p02, p03]
-for p in skin:
-    c = eigvecs[:, mode][p.row_start: p.row_end]
-    p.plot(c, ax=ax, plotoffsetxs=p.x0, plotoffsetys=p.y0, clean=False, aspect='equal', invert_y=False)
-plt.savefig('test.png', bbox_inches='tight')
+
+askin = PanelAssembly(skin, None)
+askin.plot(eigvecs[:, mode], colorbar=True, clean=False, aspect='auto',
+        filename='skin.png')
+abase = PanelAssembly(base, None)
+abase.plot(eigvecs[:, mode], colorbar=True, clean=False, aspect='auto',
+        filename='base.png')
+aflange = PanelAssembly(flange, None)
+aflange.plot(eigvecs[:, mode], colorbar=True, clean=False, aspect='auto',
+        filename='flange.png')
+
+
+#for p in skin:
+    #c = eigvecs[:, mode][p.row_start: p.row_end]
+    #p.plot(c, ax=ax, plotoffsetxs=p.x0, plotoffsetys=p.y0, clean=False, aspect='equal', invert_y=False)
+#plt.savefig('test.png', bbox_inches='tight')

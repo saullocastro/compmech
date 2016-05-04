@@ -10,3 +10,4 @@ Semi-analytical Models for Panels (:mod:`compmech.panel`)
 
 """
 from panel import Panel
+from assembly import PanelAssembly
