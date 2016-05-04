@@ -18,8 +18,8 @@ ys = b/2.
 deffect_a = 0.4
 
 deffect = deffect_a * a
-kt = 1.e9
-kr = 1.e9
+kt = 1.e13
+kr = 1.e13
 mu = 1.3e3
 plyt = 0.125e-3
 laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
@@ -34,27 +34,27 @@ bright = ys - bb/2.
 m = 6
 n = 6
 # skin panels
-p01 = Panel(x0=alow+deffect, y0=ys+bb/2., a=aup, b=bleft, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-p02 = Panel(x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-p03 = Panel(x0=alow+deffect, y0=0,        a=aup, b=bright, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p01 = Panel(group='skin', x0=alow+deffect, y0=ys+bb/2., a=aup, b=bleft, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p02 = Panel(group='skin', x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p03 = Panel(group='skin', x0=alow+deffect, y0=0,        a=aup, b=bright, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
 # deffect
-p04 = Panel(x0=alow, y0=ys+bb/2., a=deffect, b=bleft, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-p05 = Panel(x0=alow, y0=ys-bb/2., a=deffect, b=bb, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-p06 = Panel(x0=alow, y0=0,        a=deffect, b=bright, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p04 = Panel(group='skin', x0=alow, y0=ys+bb/2., a=deffect, b=bleft, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p05 = Panel(group='skin', x0=alow, y0=ys-bb/2., a=deffect, b=bb, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p06 = Panel(group='skin', x0=alow, y0=0,        a=deffect, b=bright, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
 #
-p07 = Panel(x0=0, y0=ys+bb/2., a=alow, b=bleft, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-p08 = Panel(x0=0, y0=ys-bb/2., a=alow, b=bb, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-p09 = Panel(x0=0, y0=0,        a=alow, b=bright, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p07 = Panel(group='skin', x0=0, y0=ys+bb/2., a=alow, b=bleft, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p08 = Panel(group='skin', x0=0, y0=ys-bb/2., a=alow, b=bb, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+p09 = Panel(group='skin', x0=0, y0=0,        a=alow, b=bright, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
 
 # stiffeners
-p10 = Panel(x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, m=m, n=n, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-p11 = Panel(x0=alow+deffect, y0=0,        a=aup, b=bf, m=m, n=n, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+p10 = Panel(group='base', x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, m=m, n=n, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
+p11 = Panel(group='flange', x0=alow+deffect, y0=0,        a=aup, b=bf, m=m, n=n, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
 # deffect
-p12 = Panel(x0=alow, y0=ys-bb/2., a=deffect, b=bb, m=m, n=n, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-p13 = Panel(x0=alow, y0=0,        a=deffect, b=bf, m=m, n=n, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+p12 = Panel(group='base', x0=alow, y0=ys-bb/2., a=deffect, b=bb, m=m, n=n, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
+p13 = Panel(group='flange', x0=alow, y0=0,        a=deffect, b=bf, m=m, n=n, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
 #
-p14 = Panel(x0=0, y0=ys-bb/2., a=alow, b=bb, m=m, n=n, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-p15 = Panel(x0=0, y0=0,        a=alow, b=bf, m=m, n=n, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+p14 = Panel(group='base', x0=0, y0=ys-bb/2., a=alow, b=bb, m=m, n=n, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
+p15 = Panel(group='flange', x0=0, y0=0,        a=alow, b=bf, m=m, n=n, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
 
 # boundary conditions
 p01.u1tx = 1 ; p01.u1rx = 1 ; p01.u2tx = 0 ; p01.u2rx = 1
@@ -185,7 +185,7 @@ conn = [
 
     # skin-base
     dict(p1=p02, p2=p10, func='SB'),
-    dict(p1=p05, p2=p12, func='SB'), # deffect
+    #dict(p1=p05, p2=p12, func='SB'), # deffect
     dict(p1=p08, p2=p14, func='SB'),
 
     # base-base
@@ -286,15 +286,13 @@ import matplotlib.pyplot as plt
 ax = plt.gca()
 mode = 0
 
-askin = PanelAssembly(skin, None)
-askin.plot(eigvecs[:, mode], colorbar=True, clean=False, aspect='auto',
-        filename='skin.png')
-abase = PanelAssembly(base, None)
-abase.plot(eigvecs[:, mode], colorbar=True, clean=False, aspect='auto',
-        filename='base.png')
-aflange = PanelAssembly(flange, None)
-aflange.plot(eigvecs[:, mode], colorbar=True, clean=False, aspect='auto',
-        filename='flange.png')
+assy = PanelAssembly(panels, None)
+assy.plot(eigvecs[:, mode], 'skin', colorbar=True, clean=False, aspect='auto',
+        identify=True, show_boundaries=True)
+assy.plot(eigvecs[:, mode], 'base', colorbar=True, clean=False, aspect='auto',
+        identify=True, show_boundaries=True)
+assy.plot(eigvecs[:, mode], 'flange', colorbar=True, clean=False, aspect='auto',
+        identify=True, show_boundaries=True)
 
 
 #for p in skin:

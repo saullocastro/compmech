@@ -18,8 +18,9 @@ class PanelAssembly(object):
         return self.size
 
 
-    def plot(self, c, invert_y=False, vec='w', filename='', ax=None,
+    def plot(self, c, group, invert_y=False, vec='w', filename='', ax=None,
             figsize=(3.5, 2.), save=True, title='',
+            identify=False, show_boundaries=False, boundary_line='--k',
             colorbar=False, cbar_nticks=2, cbar_format=None, cbar_title='',
             cbar_fontsize=10, aspect='equal', clean=True, dpi=400, texts=[],
             xs=None, ys=None, gridx=100, gridy=100, num_levels=400,
@@ -110,7 +111,7 @@ class PanelAssembly(object):
         strains = ['exx', 'eyy', 'gxy', 'kxx', 'kyy', 'kxy', 'gyz', 'gxz']
         stresses = ['Nxx', 'Nyy', 'Nxy', 'Mxx', 'Myy', 'Mxy', 'Qy', 'Qx']
         if vec in displs:
-            res = self.uvw(c, gridx=gridx, gridy=gridy)
+            res = self.uvw(c, group, gridx=gridx, gridy=gridy)
             field = np.array(res[vec])
         elif vec in strains:
             raise NotImplementedError('Strains not implemented')
@@ -143,13 +144,25 @@ class PanelAssembly(object):
             ax.invert_yaxis()
         ax.invert_xaxis()
 
+        count = -1
         for i, panel in enumerate(self.panels):
-            xplot = res['y'][i] + panel.y0
-            yplot = res['x'][i] + panel.x0
-            field = res[vec][i]
+            if panel.group != group:
+                continue
+            count += 1
+            xplot = res['y'][count] + panel.y0
+            yplot = res['x'][count] + panel.x0
+            field = res[vec][count]
             contour = ax.contourf(xplot, yplot, field, levels=levels)
-            ax.text(xplot.mean(), yplot.mean(), 'P {0:02d}'.format(i+1),
-                    transform=ax.transData, ha='center')
+            if identify:
+                ax.text(xplot.mean(), yplot.mean(), 'P {0:02d}'.format(i+1),
+                        transform=ax.transData, ha='center')
+            if show_boundaries:
+                x1, x2 = xplot.min(), xplot.max()
+                y1, y2 = yplot.min(), yplot.max()
+                ax.plot((x1, x2), (y1, y1), boundary_line)
+                ax.plot((x1, x2), (y2, y2), boundary_line)
+                ax.plot((x1, x1), (y1, y2), boundary_line)
+                ax.plot((x2, x2), (y1, y2), boundary_line)
 
         if colorbar:
             from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -188,7 +201,7 @@ class PanelAssembly(object):
 
         if save:
             if not filename:
-                filename = 'test.png'
+                filename = group + '.png'
             fig.savefig(filename, transparent=True,
                         bbox_inches='tight', pad_inches=0.05, dpi=dpi)
             plt.close()
@@ -198,7 +211,7 @@ class PanelAssembly(object):
         return ax
 
 
-    def uvw(self, c, gridx=100, gridy=100):
+    def uvw(self, c, group, gridx=100, gridy=100):
         r"""Calculates the displacement field
 
         For a given full set of Ritz constants ``c``, the displacement
@@ -245,6 +258,8 @@ class PanelAssembly(object):
 
         res = dict(x=[], y=[], u=[], v=[], w=[], phix=[], phiy=[])
         for panel in self.panels:
+            if panel.group != group:
+                continue
             cpanel = c[panel.col_start: panel.col_end]
             cpanel = np.ascontiguousarray(cpanel, dtype=DOUBLE)
             m = panel.m

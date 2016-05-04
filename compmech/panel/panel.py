@@ -45,7 +45,7 @@ class Panel(object):
     """
     def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
             stack=None, plyt=None, laminaprop=None, m=11, n=11, mu=None,
-            offset=0., x0=None, y0=None):
+            offset=0., x0=None, y0=None, group=None):
         self.a = a
         self.b = b
         self.y1 = y1
@@ -57,6 +57,7 @@ class Panel(object):
         self.laminaprop = laminaprop
         self.offset = offset
         # assembly
+        self.group = group
         self.x0 = x0
         self.y0 = y0
 
