@@ -3,7 +3,7 @@ from numpy import linspace
 
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
-import modelDB
+import compmech.panel.modelDB as modelDB
 
 class PanelAssembly(object):
     def __init__(self, panels, connectivity):
