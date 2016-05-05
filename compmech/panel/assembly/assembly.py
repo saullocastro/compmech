@@ -23,7 +23,7 @@ class PanelAssembly(object):
             identify=False, show_boundaries=False, boundary_line='--k',
             colorbar=False, cbar_nticks=2, cbar_format=None, cbar_title='',
             cbar_fontsize=10, aspect='equal', clean=True, dpi=400, texts=[],
-            xs=None, ys=None, gridx=100, gridy=100, num_levels=400,
+            xs=None, ys=None, gridx=50, gridy=50, num_levels=400,
             vecmin=None, vecmax=None):
         r"""Contour plot for a Ritz constants vector.
 
@@ -211,7 +211,7 @@ class PanelAssembly(object):
         return ax
 
 
-    def uvw(self, c, group, gridx=100, gridy=100):
+    def uvw(self, c, group, gridx=50, gridy=50):
         r"""Calculates the displacement field
 
         For a given full set of Ritz constants ``c``, the displacement

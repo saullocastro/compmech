@@ -13,7 +13,7 @@ def tstiff2d_1stiff(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
     """TODO
     """
     deffect = deffect_a * a
-    has_deffect = True if deffect > 0 else True
+    has_deffect = True if deffect > 0 else False
     kt = 1.e13
     kr = 1.e13
     deffect = 0.33*a if deffect == 0 else deffect # to avoid weird domains
