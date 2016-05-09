@@ -45,7 +45,8 @@ class Panel(object):
     """
     def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
             stack=None, plyt=None, laminaprop=None, m=11, n=11, mu=None,
-            offset=0., x0=None, y0=None, group=None):
+            offset=0., x0=None, y0=None, group=None, Nxx=None, Nyy=None,
+            Nxy=None):
         self.a = a
         self.b = b
         self.y1 = y1
@@ -73,16 +74,16 @@ class Panel(object):
         self.n = n
 
         # numerical integration
-        self.nx = 160
-        self.ny = 160
+        self.nx = 10
+        self.ny = 10
         self.ni_num_cores = cpu_count()//2
         self.ni_method = 'trapz2d'
         self.c0 = None
 
         # loads
-        self.Nxx = None
-        self.Nyy = None
-        self.Nxy = None
+        self.Nxx = Nxx
+        self.Nyy = Nyy
+        self.Nxy = Nxy
         self.Nxx_cte = None
         self.Nyy_cte = None
         self.Nxy_cte = None
@@ -492,8 +493,35 @@ class Panel(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
-            c=None):
+            c=None, nx=None, ny=None):
         """Calculate the linear geometric stiffness matrix
+
+        When using ``c``:
+
+        - if you pass ``row0`` and ``col0`` the size of ``c``
+        should be the size of the whole assembly
+        - if ``row0=0`` and ``col0=0`` the size of ``c`` should be the size of
+          the individual panel
+
+
+        Parameters
+        ----------
+        size : int, optional
+            Size of the output squared sparse matrix (if the panel is used in
+            an assembly this must be the size of the assembly). If ``None`` it
+            will consider only the degrees-of-freedom of the individual panel.
+        row0 and col0: int, optional
+            Offset to populate the output sparse matrix (useful when
+            assemblying panels).
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+        finalize : bool, optional
+            Asserts validity of output data and makes the output matrix
+            symmetric, should be ``False`` when assemblying.
+        c : array-like, optional
+            This must be the result of a static analysis, used to numerically
+            compute `$K_G$` based on the actual membrane-stress state.
+
         """
         msg('Calculating kG0... ', level=2, silent=silent)
 
@@ -537,7 +565,10 @@ class Panel(object):
                            size, row0, col0)
         else:
             if y1 is not None or y2 is not None:
-                raise NotImplementedError('Only y1=0, y2=b in implemented!')
+                raise NotImplementedError('Only y1=0, y2=b is implemented!')
+            c = np.ascontiguousarray(c, dtype=DOUBLE)
+            nx = self.nx if nx is None else nx
+            ny = self.ny if ny is None else ny
             kG0 = matrices.fkG_num(c, F, a, b, r,
                        alpharad, self.m, self.n,
                        self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -546,7 +577,7 @@ class Panel(object):
                        self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                        self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                        self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                       size, row0, col0, self.nx, self.ny)
+                       size, row0, col0, nx, ny)
 
         if finalize:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
@@ -558,6 +589,8 @@ class Panel(object):
         gc.collect()
 
         msg('finished!', level=2, silent=silent)
+
+        return kG0
 
 
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
