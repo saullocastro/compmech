@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.sparse.linalg import eigs, eigsh
+from scipy.sparse.linalg import eigs
 from scipy.linalg import eig
 
 from compmech.logger import msg, warn
@@ -52,12 +52,17 @@ def freq(K, M, tol=0, sparse_solver=True, silent=False,
     msg('Running frequency analysis...', silent=silent)
 
     msg('Eigenvalue solver... ', level=2, silent=silent)
+
     k = min(num_eigvalues, M.shape[0]-2)
     if sparse_solver:
         msg('eigs() solver...', level=3, silent=silent)
         sizebkp = M.shape[0]
         K, M, used_cols = remove_null_cols(K, M, silent=silent,
                 level=3)
+        #NOTE Looking for better performance with symmetric matrices, I tried
+        #     using compmech.sparse.is_symmetric and eigsh, but it seems not
+        #     to improve speed (I did not try passing only half of the sparse
+        #     matrices to the solver)
         eigvals, peigvecs = eigs(A=K, k=k, which='LM', M=M, tol=tol,
                                  sigma=-1.)
         eigvecs = np.zeros((sizebkp, num_eigvalues), dtype=peigvecs.dtype)
@@ -81,6 +86,8 @@ def freq(K, M, tol=0, sparse_solver=True, silent=False,
             take = np.column_stack((i[1::3], i[2::3])).flatten()
             M = M[:, take][take, :]
             K = K[:, take][take, :]
+        #TODO did not try using eigh when input is symmetric to see if there
+        #     will be speed improvements
         eigvals, peigvecs = eig(a=-M, b=K)
         eigvecs = np.zeros((sizebkp, K.shape[0]),
                            dtype=peigvecs.dtype)
