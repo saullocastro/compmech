@@ -5,12 +5,15 @@ import compmech.panel.connections as connections
 from compmech.panel import Panel
 from compmech.panel.assembly import PanelAssembly
 from compmech.composite import laminate
-from compmech.sparse import make_symmetric
-from compmech.analysis import freq
+from compmech.sparse import make_symmetric, make_skew_symmetric
+from compmech.analysis import freq, lb, static
 
-def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
-        stack_skin, stack_base, stack_flange, r=None, m=8, n=8, kt=1.e12,
-        kr=1.e12, mb=None, nb=None, mf=None, nf=None):
+def tstiff2d_1stiff_flutter(a, b, ys, bb, bf, deffect_a, mu, plyt,
+        laminaprop, stack_skin, stack_base, stack_flange,
+        air_speed=None, rho_air=None, Mach=None, speed_sound=None, flow='x',
+        Nxx_skin=None, Nxx_base=None, Nxx_flange=None, run_static_case=True,
+        r=None, m=8, n=8,
+        kt=1.e12, kr=1.e12, mb=None, nb=None, mf=None, nf=None):
     """Panel + T Stiffener with possible deffect at middle
 
     The panel assembly looks like::
@@ -22,14 +25,15 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
         |   p01   | p02 |   p03   |
         |         |     |         |
         |_________|_____|_________|
-        |   p04   | p05 |   p06   |
-        |_________|_____|_________|
-        |         |     |         |
-        |         |     |         |
+        |   p04   | p05 |   p06   |      /\  x
+        |_________|_____|_________|       |
+        |         |     |         |       |
+        |         |     |         |       |
         |   p07   | p08 |   p09   |
         |         |     |         |
         |         |     |         |
         |_________|_____|_________|
+               loaded edge
 
                   base            flange
                    _____           _____
@@ -46,6 +50,7 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
                   |     |         |     |
                   |     |         |     |
                   |_____|         |_____|
+               loaded edge     loaded edge
 
     Parameters
     ----------
@@ -72,33 +77,33 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
     mf = m if mf is None else mf
     nf = n if nf is None else nf
     # skin panels
-    p01 = Panel(group='skin', x0=alow+deffect, y0=ys+bb/2., a=aup, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p02 = Panel(group='skin', x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p03 = Panel(group='skin', x0=alow+deffect, y0=0,        a=aup, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p01 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+deffect, y0=ys+bb/2., a=aup, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
+    p02 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
+    p03 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+deffect, y0=0, a=aup, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
     # deffect
-    p04 = Panel(group='skin', x0=alow, y0=ys+bb/2., a=deffect, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p05 = Panel(group='skin', x0=alow, y0=ys-bb/2., a=deffect, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p06 = Panel(group='skin', x0=alow, y0=0,        a=deffect, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p04 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys+bb/2., a=deffect, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
+    p05 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys-bb/2., a=deffect, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
+    p06 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=0, a=deffect, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
     #
-    p07 = Panel(group='skin', x0=0, y0=ys+bb/2., a=alow, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p08 = Panel(group='skin', x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p09 = Panel(group='skin', x0=0, y0=0,        a=alow, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p07 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=ys+bb/2., a=alow, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
+    p08 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
+    p09 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=0, a=alow, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, rho_air=rho_air, speed_sound=speed_sound, Mach=Mach, V=air_speed, flow=flow)
 
     # stiffeners
-    p10 = Panel(group='base', x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-    p11 = Panel(group='flange', x0=alow+deffect, y0=0,        a=aup, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+    p10 = Panel(group='base', Nxx=Nxx_base, x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
+    p11 = Panel(group='flange', Nxx=Nxx_flange, x0=alow+deffect, y0=0,        a=aup, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
     # deffect
-    p12 = Panel(group='base', x0=alow, y0=ys-bb/2., a=deffect, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-    p13 = Panel(group='flange', x0=alow, y0=0,        a=deffect, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+    p12 = Panel(group='base', Nxx=Nxx_base, x0=alow, y0=ys-bb/2., a=deffect, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
+    p13 = Panel(group='flange', Nxx=Nxx_flange, x0=alow, y0=0,        a=deffect, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
     #
-    p14 = Panel(group='base', x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-    p15 = Panel(group='flange', x0=0, y0=0,        a=alow, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+    p14 = Panel(group='base', Nxx=Nxx_base, x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
+    p15 = Panel(group='flange', Nxx=Nxx_flange, x0=0, y0=0,        a=alow, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
 
     # boundary conditions
     p01.u1tx = 1 ; p01.u1rx = 1 ; p01.u2tx = 0 ; p01.u2rx = 1
     p01.v1tx = 1 ; p01.v1rx = 1 ; p01.v2tx = 0 ; p01.v2rx = 1
     p01.w1tx = 1 ; p01.w1rx = 1 ; p01.w2tx = 0 ; p01.w2rx = 1
-    p01.u1ty = 1 ; p01.u1ry = 1 ; p01.u2ty = 0 ; p01.u2ry = 1
+    p01.u1ty = 1 ; p01.u1ry = 1 ; p01.u2ty = 1 ; p01.u2ry = 1
     p01.v1ty = 1 ; p01.v1ry = 1 ; p01.v2ty = 0 ; p01.v2ry = 1
     p01.w1ty = 1 ; p01.w1ry = 1 ; p01.w2ty = 0 ; p01.w2ry = 1
 
@@ -112,14 +117,14 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
     p03.u1tx = 1 ; p03.u1rx = 1 ; p03.u2tx = 0 ; p03.u2rx = 1
     p03.v1tx = 1 ; p03.v1rx = 1 ; p03.v2tx = 0 ; p03.v2rx = 1
     p03.w1tx = 1 ; p03.w1rx = 1 ; p03.w2tx = 0 ; p03.w2rx = 1
-    p03.u1ty = 0 ; p03.u1ry = 1 ; p03.u2ty = 1 ; p03.u2ry = 1
+    p03.u1ty = 1 ; p03.u1ry = 1 ; p03.u2ty = 1 ; p03.u2ry = 1
     p03.v1ty = 0 ; p03.v1ry = 1 ; p03.v2ty = 1 ; p03.v2ry = 1
     p03.w1ty = 0 ; p03.w1ry = 1 ; p03.w2ty = 1 ; p03.w2ry = 1
 
     p04.u1tx = 1 ; p04.u1rx = 1 ; p04.u2tx = 1 ; p04.u2rx = 1
     p04.v1tx = 1 ; p04.v1rx = 1 ; p04.v2tx = 1 ; p04.v2rx = 1
     p04.w1tx = 1 ; p04.w1rx = 1 ; p04.w2tx = 1 ; p04.w2rx = 1
-    p04.u1ty = 1 ; p04.u1ry = 1 ; p04.u2ty = 0 ; p04.u2ry = 1
+    p04.u1ty = 1 ; p04.u1ry = 1 ; p04.u2ty = 1 ; p04.u2ry = 1
     p04.v1ty = 1 ; p04.v1ry = 1 ; p04.v2ty = 0 ; p04.v2ry = 1
     p04.w1ty = 1 ; p04.w1ry = 1 ; p04.w2ty = 0 ; p04.w2ry = 1
 
@@ -133,28 +138,28 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
     p06.u1tx = 1 ; p06.u1rx = 1 ; p06.u2tx = 1 ; p06.u2rx = 1
     p06.v1tx = 1 ; p06.v1rx = 1 ; p06.v2tx = 1 ; p06.v2rx = 1
     p06.w1tx = 1 ; p06.w1rx = 1 ; p06.w2tx = 1 ; p06.w2rx = 1
-    p06.u1ty = 0 ; p06.u1ry = 1 ; p06.u2ty = 1 ; p06.u2ry = 1
+    p06.u1ty = 1 ; p06.u1ry = 1 ; p06.u2ty = 1 ; p06.u2ry = 1
     p06.v1ty = 0 ; p06.v1ry = 1 ; p06.v2ty = 1 ; p06.v2ry = 1
     p06.w1ty = 0 ; p06.w1ry = 1 ; p06.w2ty = 1 ; p06.w2ry = 1
 
-    p07.u1tx = 0 ; p07.u1rx = 1 ; p07.u2tx = 1 ; p07.u2rx = 1
+    p07.u1tx = 1 ; p07.u1rx = 1 ; p07.u2tx = 1 ; p07.u2rx = 1
     p07.v1tx = 0 ; p07.v1rx = 1 ; p07.v2tx = 1 ; p07.v2rx = 1
     p07.w1tx = 0 ; p07.w1rx = 1 ; p07.w2tx = 1 ; p07.w2rx = 1
-    p07.u1ty = 1 ; p07.u1ry = 1 ; p07.u2ty = 0 ; p07.u2ry = 1
+    p07.u1ty = 1 ; p07.u1ry = 1 ; p07.u2ty = 1 ; p07.u2ry = 1
     p07.v1ty = 1 ; p07.v1ry = 1 ; p07.v2ty = 0 ; p07.v2ry = 1
     p07.w1ty = 1 ; p07.w1ry = 1 ; p07.w2ty = 0 ; p07.w2ry = 1
 
-    p08.u1tx = 0 ; p08.u1rx = 1 ; p08.u2tx = 1 ; p08.u2rx = 1
+    p08.u1tx = 1 ; p08.u1rx = 1 ; p08.u2tx = 1 ; p08.u2rx = 1
     p08.v1tx = 0 ; p08.v1rx = 1 ; p08.v2tx = 1 ; p08.v2rx = 1
     p08.w1tx = 0 ; p08.w1rx = 1 ; p08.w2tx = 1 ; p08.w2rx = 1
     p08.u1ty = 1 ; p08.u1ry = 1 ; p08.u2ty = 1 ; p08.u2ry = 1
     p08.v1ty = 1 ; p08.v1ry = 1 ; p08.v2ty = 1 ; p08.v2ry = 1
     p08.w1ty = 1 ; p08.w1ry = 1 ; p08.w2ty = 1 ; p08.w2ry = 1
 
-    p09.u1tx = 0 ; p09.u1rx = 1 ; p09.u2tx = 1 ; p09.u2rx = 1
+    p09.u1tx = 1 ; p09.u1rx = 1 ; p09.u2tx = 1 ; p09.u2rx = 1
     p09.v1tx = 0 ; p09.v1rx = 1 ; p09.v2tx = 1 ; p09.v2rx = 1
     p09.w1tx = 0 ; p09.w1rx = 1 ; p09.w2tx = 1 ; p09.w2rx = 1
-    p09.u1ty = 0 ; p09.u1ry = 1 ; p09.u2ty = 1 ; p09.u2ry = 1
+    p09.u1ty = 1 ; p09.u1ry = 1 ; p09.u2ty = 1 ; p09.u2ry = 1
     p09.v1ty = 0 ; p09.v1ry = 1 ; p09.v2ty = 1 ; p09.v2ry = 1
     p09.w1ty = 0 ; p09.w1ry = 1 ; p09.w2ty = 1 ; p09.w2ry = 1
 
@@ -199,7 +204,7 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
     p14.w1ty = 1 ; p14.w1ry = 1 ; p14.w2ty = 1 ; p14.w2ry = 1
 
     # flange low
-    p15.u1tx = 0 ; p15.u1rx = 1 ; p15.u2tx = 1 ; p15.u2rx = 1
+    p15.u1tx = 1 ; p15.u1rx = 1 ; p15.u2tx = 1 ; p15.u2rx = 1
     p15.v1tx = 0 ; p15.v1rx = 1 ; p15.v2tx = 1 ; p15.v2rx = 1
     p15.w1tx = 0 ; p15.w1rx = 1 ; p15.w2tx = 1 ; p15.w2rx = 1
     p15.u1ty = 1 ; p15.u1ry = 1 ; p15.u2ty = 1 ; p15.u2ry = 1
@@ -243,19 +248,22 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
     panels = [p01, p02, p03, p04, p05, p06, p07, p08, p09,
             p10, p11, p12, p13, p14, p15]
     skin = [p01, p02, p03, p04, p05, p06, p07, p08, p09]
-    base = [p10, p12, p14]
-    flange = [p11, p13, p15]
+
+    assy = PanelAssembly(panels, None)
 
     size = sum([3*p.m*p.n for p in panels])
 
     k0 = 0
     kM = 0
+    kG = 0
 
     row0 = 0
     col0 = 0
     for p in panels:
         k0 += p.calc_k0(row0=row0, col0=col0, size=size, silent=True, finalize=False)
         kM += p.calc_kM(row0=row0, col0=col0, size=size, silent=True, finalize=False)
+        if not run_static_case:
+            kG += p.calc_kG0(row0=row0, col0=col0, size=size, silent=True, finalize=False)
         p.row_start = row0
         p.col_start = col0
         row0 += 3*p.m*p.n
@@ -315,10 +323,51 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
     assert np.any(np.isinf(kM.data)) == False
     kM = csr_matrix(make_symmetric(kM))
 
-    eigvals, eigvecs = freq(k0, kM, tol=0, sparse_solver=True, silent=True,
+    c = None
+    if (run_static_case and not
+            (Nxx_skin is None and Nxx_base is None and Nxx_flange is None)):
+        fext = np.zeros(size)
+        for p in [p07, p08, p09, p14, p15]:
+            Nforces = 100
+            fx = p.Nxx*p.b/(Nforces-1.)
+            for i in range(Nforces):
+                y = i*p.b/(Nforces-1.)
+                if i == 0 or i == (Nforces - 1):
+                    p.add_force(0, y, fx/2., 0, 0)
+                else:
+                    p.add_force(0, y, fx, 0, 0)
+            fext[p.col_start: p.col_end] = p.calc_fext(silent=True)
+
+        incs, cs = static(k0, -fext, silent=True)
+        c = cs[0]
+        kG = 0
+        for p in panels:
+            kG += p.calc_kG0(c=c, size=size, row0=p.row_start, col0=p.col_start,
+                    silent=True, finalize=False, nx=10, ny=10)
+
+    if kG is not 0:
+        assert np.any(np.isnan(kG.data)) == False
+        assert np.any(np.isinf(kG.data)) == False
+        kG = csr_matrix(make_symmetric(kG))
+
+    kA = 0
+    for p in skin:
+        # TODO the current  has somewhat hiden settings
+        #     check this strategy:
+        #     - define module aerodynamics
+        #     - function calc_kA inside a module piston_theory
+        #     - pass piston_theory parameters and compute kA
+        kA += p.calc_kA(size=size, row0=p.row_start, col0=p.col_start, silent=True, finalize=False)
+
+    assert np.any(np.isnan(kA.data)) == False
+    assert np.any(np.isinf(kA.data)) == False
+    kA = csr_matrix(make_skew_symmetric(kA))
+
+    eigvals, eigvecs = freq((k0 + kG + kA), kM, tol=0, sparse_solver=True, silent=True,
              sort=True, reduced_dof=False,
              num_eigvalues=25, num_eigvalues_print=5)
 
-    assy = PanelAssembly(panels, None)
-
-    return assy, eigvals, eigvecs
+    if run_static_case:
+        return assy, c, eigvals, eigvecs
+    else:
+        return assy, eigvals, eigvecs

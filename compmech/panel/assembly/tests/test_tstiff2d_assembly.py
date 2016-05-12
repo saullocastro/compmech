@@ -1,14 +1,14 @@
 import numpy as np
 
-from compmech.panel.assembly.tstiff2d_assembly import tstiff2d_1stiff
+from compmech.panel.assembly import tstiff2d_1stiff_freq
 
 
-def test_tstiff2d_1stiff():
+def test_tstiff2d_1stiff_freq():
     b = 1.
     bb = b/5.
     bf = bb/2.
     ys = b/2.
-    assy, eigvals, eigvecs = tstiff2d_1stiff(
+    assy, eigvals, eigvecs = tstiff2d_1stiff_freq(
         b=b,
         bb=bb,
         bf=bf,

@@ -12,7 +12,7 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
         laminaprop, stack_skin, stack_base, stack_flange,
         Nxx_skin, Nxx_base, Nxx_flange, run_static_case=True,
         r=None, m=8, n=8,
-        kt=1.e13, kr=1.e13, mb=None, nb=None, mf=None, nf=None):
+        kt=1.e12, kr=1.e12, mb=None, nb=None, mf=None, nf=None):
     """Panel + T Stiffener with possible deffect at middle
 
     The panel assembly looks like::
