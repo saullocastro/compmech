@@ -45,8 +45,7 @@ class Panel(object):
     """
     def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
             stack=None, plyt=None, laminaprop=None, m=11, n=11, mu=None,
-            offset=0., x0=None, y0=None, group=None, Nxx=None, Nyy=None,
-            Nxy=None):
+            offset=0., **kwargs):
         self.a = a
         self.b = b
         self.y1 = y1
@@ -58,9 +57,9 @@ class Panel(object):
         self.laminaprop = laminaprop
         self.offset = offset
         # assembly
-        self.group = group
-        self.x0 = x0
-        self.y0 = y0
+        self.group = None
+        self.x0 = None
+        self.y0 = None
 
         self.name = ''
         self.bay = None
@@ -81,9 +80,9 @@ class Panel(object):
         self.c0 = None
 
         # loads
-        self.Nxx = Nxx
-        self.Nyy = Nyy
-        self.Nxy = Nxy
+        self.Nxx = None
+        self.Nyy = None
+        self.Nxy = None
         self.Nxx_cte = None
         self.Nyy_cte = None
         self.Nxy_cte = None
@@ -152,6 +151,9 @@ class Panel(object):
         self.increments = None
         self.eigvecs = None
         self.eigvals = None
+
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
         self._clear_matrices()
 
@@ -646,7 +648,7 @@ class Panel(object):
         return kM
 
 
-    def calc_kA(self, silent=False, finalize=True):
+    def calc_kA(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         """Calculate the aerodynamic matrix using the linear piston theory
         """
         msg('Calculating kA... ', level=2, silent=silent)
@@ -657,6 +659,9 @@ class Panel(object):
         b = self.b
         m = self.m
         n = self.n
+
+        if size is None:
+            size = self.get_size()
 
         if 'kpanel' in self.model:
             raise NotImplementedError('Conical panels not supported')
@@ -688,13 +693,13 @@ class Panel(object):
                     beta, gamma, a, b, m, n,
                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                    self.size, 0, 0)
+                    size, row0, col0)
         elif self.flow.lower() == 'y':
             kA = mod.fkAy(
                     beta, a, b, m, n,
                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                    self.size, 0, 0)
+                    size, row0, col0)
         else:
             raise ValueError('Invalid flow value, must be x or y')
 
@@ -709,6 +714,8 @@ class Panel(object):
         gc.collect()
 
         msg('finished!', level=2, silent=silent)
+
+        return kA
 
 
     def calc_cA(self, aeromu, silent=False, finalize=True):
