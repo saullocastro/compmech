@@ -29,6 +29,7 @@ Fourth part:
 modules = [
           'cpanel_clt_donnell_bardell_field',
           'cpanel_clt_donnell_bardell',
+          'cpanel_clt_donnell_bardell_num',
           #'kpanel_clt_donnell_bardell_field',
           'kpanel_clt_donnell_bardell',
           'plate_clt_donnell_bardell_field',
