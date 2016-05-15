@@ -9,8 +9,9 @@ from compmech.sparse import make_symmetric
 from compmech.analysis import freq
 
 def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
-        stack_skin, stack_base, stack_flange, r=None, m=8, n=8, kt=1.e12,
-        kr=1.e12, mb=None, nb=None, mf=None, nf=None):
+        stack_skin, stack_base, stack_flange,
+        r=None, kt=None, kr=None,
+        m=8, n=8, mb=None, nb=None, mf=None, nf=None):
     """Panel + T Stiffener with possible deffect at middle
 
     The panel assembly looks like::
@@ -58,10 +59,16 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
 
 
     """
+    if kt is None and r is None:
+        kt = 1.e12
+    if kt is None and r is not None:
+        kt = 1.e10
+    if kr is None and r is None:
+        kr = 1.e12
+    if kr is None and r is not None:
+        kr = 1.e10
     deffect = deffect_a * a
     has_deffect = True if deffect > 0 else False
-    kt = kt
-    kr = kr
     deffect = 0.33*a if deffect == 0 else deffect # to avoid weird domains
     aup = (a - deffect)/2.
     alow = (a - deffect)/2.
