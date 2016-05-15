@@ -141,21 +141,30 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
     p06.v1ty = 0 ; p06.v1ry = 1 ; p06.v2ty = 1 ; p06.v2ry = 1
     p06.w1ty = 0 ; p06.w1ry = 1 ; p06.w2ty = 1 ; p06.w2ry = 1
 
-    p07.u1tx = 1 ; p07.u1rx = 1 ; p07.u2tx = 1 ; p07.u2rx = 1
+    if run_static_case:
+        p07.u1tx = 1 ; p07.u1rx = 1 ; p07.u2tx = 1 ; p07.u2rx = 1
+    else:
+        p07.u1tx = 0 ; p07.u1rx = 1 ; p07.u2tx = 1 ; p07.u2rx = 1
     p07.v1tx = 0 ; p07.v1rx = 1 ; p07.v2tx = 1 ; p07.v2rx = 1
     p07.w1tx = 0 ; p07.w1rx = 1 ; p07.w2tx = 1 ; p07.w2rx = 1
     p07.u1ty = 1 ; p07.u1ry = 1 ; p07.u2ty = 1 ; p07.u2ry = 1
     p07.v1ty = 1 ; p07.v1ry = 1 ; p07.v2ty = 0 ; p07.v2ry = 1
     p07.w1ty = 1 ; p07.w1ry = 1 ; p07.w2ty = 0 ; p07.w2ry = 1
 
-    p08.u1tx = 1 ; p08.u1rx = 1 ; p08.u2tx = 1 ; p08.u2rx = 1
+    if run_static_case:
+        p08.u1tx = 1 ; p08.u1rx = 1 ; p08.u2tx = 1 ; p08.u2rx = 1
+    else:
+        p08.u1tx = 0 ; p08.u1rx = 1 ; p08.u2tx = 1 ; p08.u2rx = 1
     p08.v1tx = 0 ; p08.v1rx = 1 ; p08.v2tx = 1 ; p08.v2rx = 1
     p08.w1tx = 0 ; p08.w1rx = 1 ; p08.w2tx = 1 ; p08.w2rx = 1
     p08.u1ty = 1 ; p08.u1ry = 1 ; p08.u2ty = 1 ; p08.u2ry = 1
     p08.v1ty = 1 ; p08.v1ry = 1 ; p08.v2ty = 1 ; p08.v2ry = 1
     p08.w1ty = 1 ; p08.w1ry = 1 ; p08.w2ty = 1 ; p08.w2ry = 1
 
-    p09.u1tx = 1 ; p09.u1rx = 1 ; p09.u2tx = 1 ; p09.u2rx = 1
+    if run_static_case:
+        p09.u1tx = 1 ; p09.u1rx = 1 ; p09.u2tx = 1 ; p09.u2rx = 1
+    else:
+        p09.u1tx = 0 ; p09.u1rx = 1 ; p09.u2tx = 1 ; p09.u2rx = 1
     p09.v1tx = 0 ; p09.v1rx = 1 ; p09.v2tx = 1 ; p09.v2rx = 1
     p09.w1tx = 0 ; p09.w1rx = 1 ; p09.w2tx = 1 ; p09.w2rx = 1
     p09.u1ty = 1 ; p09.u1ry = 1 ; p09.u2ty = 1 ; p09.u2ry = 1
@@ -203,7 +212,10 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
     p14.w1ty = 1 ; p14.w1ry = 1 ; p14.w2ty = 1 ; p14.w2ry = 1
 
     # flange low
-    p15.u1tx = 1 ; p15.u1rx = 1 ; p15.u2tx = 1 ; p15.u2rx = 1
+    if run_static_case:
+        p15.u1tx = 1 ; p15.u1rx = 1 ; p15.u2tx = 1 ; p15.u2rx = 1
+    else:
+        p15.u1tx = 0 ; p15.u1rx = 1 ; p15.u2tx = 1 ; p15.u2rx = 1
     p15.v1tx = 0 ; p15.v1rx = 1 ; p15.v2tx = 1 ; p15.v2rx = 1
     p15.w1tx = 0 ; p15.w1rx = 1 ; p15.w2tx = 1 ; p15.w2rx = 1
     p15.u1ty = 1 ; p15.u1ry = 1 ; p15.u2ty = 1 ; p15.u2ry = 1
