@@ -61,7 +61,7 @@ class Panel(object):
         self.x0 = None
         self.y0 = None
 
-        self.name = ''
+        self.name = 'panel'
         self.bay = None
 
         # model
@@ -178,12 +178,6 @@ class Panel(object):
 
 
     def _rebuild(self):
-        if not self.name:
-            try:
-                self.name = os.path.basename(__main__.__file__).split('.py')[0]
-            except AttributeError:
-                warn('Panel name unchanged')
-
         if self.model is None:
             if self.r is None and self.alphadeg is None:
                 self.model = 'plate_clt_donnell_bardell'
