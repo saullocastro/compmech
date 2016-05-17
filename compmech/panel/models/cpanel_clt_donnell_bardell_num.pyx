@@ -405,5 +405,3 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
     kG = coo_matrix((kGv, (kGr, kGc)), shape=(size, size))
 
     return kG
-
-
