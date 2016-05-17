@@ -310,6 +310,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
                 eta = etas[pty]
                 alpha = weightsxi[ptx]*weightseta[pty]
 
+                # Reading laminate constitutive data
                 if one_F_each_point == 1:
                     for i in range(6):
                         for j in range(6):
@@ -330,9 +331,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
                 B26 = F[1*6 + 5]
                 B66 = F[2*6 + 5]
 
-
-                # Nxx, Nyy and Nxy
-
+                # Calculating strain components
                 exx = 0.
                 eyy = 0.
                 gxy = 0.
@@ -366,6 +365,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
                         kyy += -cs[row+2]*(2/b)*fAw*gAwetaeta
                         kxy += -2*cs[row+2]*(2/a)*fAwxi*(2/b)*gAweta
 
+                # Calculating membrane stress components
                 Nxx = A11*exx + A12*eyy + A16*gxy + B11*kxx + B12*kyy + B16*kxy
                 Nyy = A12*exx + A22*eyy + A26*gxy + B12*kxx + B22*kyy + B26*kxy
                 Nxy = A16*exx + A26*eyy + A66*gxy + B16*kxx + B26*kyy + B66*kxy
