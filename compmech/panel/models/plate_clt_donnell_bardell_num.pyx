@@ -31,7 +31,217 @@ INT = np.int64
 cdef int num = 3
 
 
-def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
+def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
+        double a, double b, double r, double alpharad,
+        object Finput, int m, int n,
+        double u1tx, double u1rx, double u2tx, double u2rx,
+        double v1tx, double v1rx, double v2tx, double v2rx,
+        double w1tx, double w1rx, double w2tx, double w2rx,
+        double u1ty, double u1ry, double u2ty, double u2ry,
+        double v1ty, double v1ry, double v2ty, double v2ry,
+        double w1ty, double w1ry, double w2ty, double w2ry,
+        int size, int row0, int col0, int nx, int ny):
+    cdef int i, j, k, l, c, row, col, ptx, pty
+    cdef double A11, A12, A16, A22, A26, A66
+    cdef double B11, B12, B16, B22, B26, B66
+    cdef double D11, D12, D16, D22, D26, D66
+
+    cdef np.ndarray[cINT, ndim=1] kLr, kLc
+    cdef np.ndarray[cDOUBLE, ndim=1] kLv
+
+    cdef double fAu, fAuxi, fAv, fAvxi, fAw, fAwxi, fAwxixi
+    cdef double fBu, fBuxi, fBv, fBvxi, fBw, fBwxi, fBwxixi
+    cdef double gAu, gAueta, gAv, gAveta, gAw, gAweta, gAwetaeta
+    cdef double gBu, gBueta, gBv, gBveta, gBw, gBweta, gBwetaeta
+    cdef double xi, eta, alpha
+    cdef double wxi, weta
+
+    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
+
+    # F as 4-D matrix, must be [nx, ny, 6, 6], when there is one ABD[6, 6] for
+    # each of the nx * ny integration points
+    cdef double F[6 * 6]
+    cdef np.ndarray[cDOUBLE, ndim=4] Fnxny
+
+    cdef int one_F_each_point = 0
+
+    Finput = np.asarray(Finput, dtype=DOUBLE)
+    if Finput.shape == (nx, ny, 6, 6):
+        Fnxny = np.ascontiguousarray(Finput)
+        one_F_each_point = 1
+    elif Finput.shape == (6, 6):
+        # creating dummy 4-D array that is not used
+        Fnxny = np.empty(shape=(0, 0, 0, 0), dtype=DOUBLE)
+        # using a constant F for all integration domain
+        Finput = np.ascontiguousarray(Finput)
+        for i in range(6):
+            for j in range(6):
+                F[i*6 + j] = Finput[i, j]
+    else:
+        raise ValueError('Invalid shape for Finput!')
+
+    fdim = 9*m*m*n*n
+
+    xis = np.zeros(nx, dtype=DOUBLE)
+    weightsxi = np.zeros(nx, dtype=DOUBLE)
+    etas = np.zeros(ny, dtype=DOUBLE)
+    weightseta = np.zeros(ny, dtype=DOUBLE)
+
+    leggauss_quad(nx, &xis[0], &weightsxi[0])
+    leggauss_quad(ny, &etas[0], &weightseta[0])
+
+    kLr = np.zeros((fdim,), dtype=INT)
+    kLc = np.zeros((fdim,), dtype=INT)
+    kLv = np.zeros((fdim,), dtype=DOUBLE)
+
+    with nogil:
+        for ptx in range(nx):
+            for pty in range(ny):
+                xi = xis[ptx]
+                eta = etas[pty]
+                alpha = weightsxi[ptx]*weightseta[pty]
+
+                wxi = 0
+                weta = 0
+                for i in range(m):
+                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    for j in range(n):
+                        #TODO put these in a lookup vector
+                        gAw = calc_f(j, eta, w1tx, w1rx, w2tx, w2rx)
+                        gAweta = calc_fxi(j, eta, w1tx, w1rx, w2tx, w2rx)
+
+                        row = row0 + num*(j*m + i)
+
+                        wxi = cs[row+2]*fAwxi*gAw
+                        weta = cs[row+2]*fAw*gAweta
+
+                if one_F_each_point == 1:
+                    for i in range(6):
+                        for j in range(6):
+                            #TODO could assume symmetry
+                            F[i*6 + j] = Fnxny[ptx, pty, i, j]
+
+                A11 = F[0*6 + 0]
+                A12 = F[0*6 + 1]
+                A16 = F[0*6 + 2]
+                A22 = F[1*6 + 1]
+                A26 = F[1*6 + 2]
+                A66 = F[2*6 + 2]
+
+                B11 = F[0*6 + 3]
+                B12 = F[0*6 + 4]
+                B16 = F[0*6 + 5]
+                B22 = F[1*6 + 4]
+                B26 = F[1*6 + 5]
+                B66 = F[2*6 + 5]
+
+                D11 = F[3*6 + 3]
+                D12 = F[3*6 + 4]
+                D16 = F[3*6 + 5]
+                D22 = F[4*6 + 4]
+                D26 = F[4*6 + 5]
+                D66 = F[5*6 + 5]
+
+                # kL
+                c = -1
+                for i in range(m):
+                    fAu = calc_f(i, xi, u1tx, u1rx, u2tx, u2rx)
+                    fAuxi = calc_fxi(i, xi, u1tx, u1rx, u2tx, u2rx)
+                    fAv = calc_f(i, xi, v1tx, v1rx, v2tx, v2rx)
+                    fAvxi = calc_fxi(i, xi, v1tx, v1rx, v2tx, v2rx)
+                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxixi = calc_fxixi(i, xi, w1tx, w1rx, w2tx, w2rx)
+
+                    for k in range(m):
+                        fBu = calc_f(k, xi, u1tx, u1rx, u2tx, u2rx)
+                        fBuxi = calc_fxi(k, xi, u1tx, u1rx, u2tx, u2rx)
+                        fBv = calc_f(k, xi, v1tx, v1rx, v2tx, v2rx)
+                        fBvxi = calc_fxi(k, xi, v1tx, v1rx, v2tx, v2rx)
+                        fBw = calc_f(k, xi, w1tx, w1rx, w2tx, w2rx)
+                        fBwxi = calc_fxi(k, xi, w1tx, w1rx, w2tx, w2rx)
+                        fBwxixi = calc_fxixi(k, xi, w1tx, w1rx, w2tx, w2rx)
+
+
+                        for j in range(n):
+                            gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
+                            gAueta = calc_fxi(j, eta, u1ty, u1ry, u2ty, u2ry)
+                            gAv = calc_f(j, eta, v1ty, v1ry, v2ty, v2ry)
+                            gAveta = calc_fxi(j, eta, v1ty, v1ry, v2ty, v2ry)
+                            gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                            gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                            gAwetaeta = calc_fxixi(j, eta, w1ty, w1ry, w2ty, w2ry)
+
+                            for l in range(n):
+
+                                row = row0 + num*(j*m + i)
+                                col = col0 + num*(l*m + k)
+
+                                #NOTE symmetry assumption True if no follower forces are used
+                                if row > col:
+                                    continue
+
+                                gBu = calc_f(l, eta, u1ty, u1ry, u2ty, u2ry)
+                                gBueta = calc_fxi(l, eta, u1ty, u1ry, u2ty, u2ry)
+                                gBv = calc_f(l, eta, v1ty, v1ry, v2ty, v2ry)
+                                gBveta = calc_fxi(l, eta, v1ty, v1ry, v2ty, v2ry)
+                                gBw = calc_f(l, eta, w1ty, w1ry, w2ty, w2ry)
+                                gBweta = calc_fxi(l, eta, w1ty, w1ry, w2ty, w2ry)
+                                gBwetaeta = calc_fxixi(l, eta, w1ty, w1ry, w2ty, w2ry)
+
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+0
+                                    kLc[c] = col+0
+                                kLv[c] += A11*b*fAuxi*fBuxi*gAu*gBu/a + A16*(fAu*fBuxi*gAueta*gBu + fAuxi*fBu*gAu*gBueta) + A66*a*fAu*fBu*gAueta*gBueta/b
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+0
+                                    kLc[c] = col+1
+                                kLv[c] += A12*fAuxi*fBv*gAu*gBveta + A16*b*fAuxi*fBvxi*gAu*gBv/a + A26*a*fAu*fBv*gAueta*gBveta/b + A66*fAu*fBvxi*gAueta*gBv
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+0
+                                    kLc[c] = col+2
+                                kLv[c] += 2*A11*b*fAuxi*fBwxi*gAu*gBw*wxi/(a*a) + 2*A12*fAuxi*fBw*gAu*gBweta*weta/b + 2*A16*(fAu*fBwxi*gAueta*gBw*wxi + fAuxi*gAu*(fBw*gBweta*wxi + fBwxi*gBw*weta))/a + 2*A26*a*fAu*fBw*gAueta*gBweta*weta/(b*b) + 2*A66*fAu*gAueta*(fBw*gBweta*wxi + fBwxi*gBw*weta)/b - 2*B11*b*fAuxi*fBwxixi*gAu*gBw/(a*a) - 2*B12*fAuxi*fBw*gAu*gBwetaeta/b - 2*B16*(fAu*fBwxixi*gAueta*gBw + 2*fAuxi*fBwxi*gAu*gBweta)/a - 2*B26*a*fAu*fBw*gAueta*gBwetaeta/(b*b) - 4*B66*fAu*fBwxi*gAueta*gBweta/b
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+1
+                                    kLc[c] = col+0
+                                kLv[c] += A12*fAv*fBuxi*gAveta*gBu + A16*b*fAvxi*fBuxi*gAv*gBu/a + A26*a*fAv*fBu*gAveta*gBueta/b + A66*fAvxi*fBu*gAv*gBueta
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+1
+                                    kLc[c] = col+1
+                                kLv[c] += A22*a*fAv*fBv*gAveta*gBveta/b + A26*(fAv*fBvxi*gAveta*gBv + fAvxi*fBv*gAv*gBveta) + A66*b*fAvxi*fBvxi*gAv*gBv/a
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+1
+                                    kLc[c] = col+2
+                                kLv[c] += 2*A12*fAv*fBwxi*gAveta*gBw*wxi/a + 2*A16*b*fAvxi*fBwxi*gAv*gBw*wxi/(a*a) + 2*A22*a*fAv*fBw*gAveta*gBweta*weta/(b*b) + 2*A26*(fAv*gAveta*(fBw*gBweta*wxi + fBwxi*gBw*weta) + fAvxi*fBw*gAv*gBweta*weta)/b + 2*A66*fAvxi*gAv*(fBw*gBweta*wxi + fBwxi*gBw*weta)/a - 2*B12*fAv*fBwxixi*gAveta*gBw/a - 2*B16*b*fAvxi*fBwxixi*gAv*gBw/(a*a) - 2*B22*a*fAv*fBw*gAveta*gBwetaeta/(b*b) - 2*B26*(2*fAv*fBwxi*gAveta*gBweta + fAvxi*fBw*gAv*gBwetaeta)/b - 4*B66*fAvxi*fBwxi*gAv*gBweta/a
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+2
+                                    kLc[c] = col+0
+                                kLv[c] += 2*A11*b*fAwxi*fBuxi*gAw*gBu*wxi/(a*a) + 2*A12*fAw*fBuxi*gAweta*gBu*weta/b + 2*A16*(fAw*fBuxi*gAweta*gBu*wxi + fAwxi*gAw*(fBu*gBueta*wxi + fBuxi*gBu*weta))/a + 2*A26*a*fAw*fBu*gAweta*gBueta*weta/(b*b) + 2*A66*fBu*gBueta*(fAw*gAweta*wxi + fAwxi*gAw*weta)/b - 2*B11*b*fAwxixi*fBuxi*gAw*gBu/(a*a) - 2*B12*fAw*fBuxi*gAwetaeta*gBu/b - 2*B16*(2*fAwxi*fBuxi*gAweta*gBu + fAwxixi*fBu*gAw*gBueta)/a - 2*B26*a*fAw*fBu*gAwetaeta*gBueta/(b*b) - 4*B66*fAwxi*fBu*gAweta*gBueta/b
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+2
+                                    kLc[c] = col+1
+                                kLv[c] += 2*A12*fAwxi*fBv*gAw*gBveta*wxi/a + 2*A16*b*fAwxi*fBvxi*gAw*gBv*wxi/(a*a) + 2*A22*a*fAw*fBv*gAweta*gBveta*weta/(b*b) + 2*A26*(fAw*gAweta*(fBv*gBveta*wxi + fBvxi*gBv*weta) + fAwxi*fBv*gAw*gBveta*weta)/b + 2*A66*fBvxi*gBv*(fAw*gAweta*wxi + fAwxi*gAw*weta)/a - 2*B12*fAwxixi*fBv*gAw*gBveta/a - 2*B16*b*fAwxixi*fBvxi*gAw*gBv/(a*a) - 2*B22*a*fAw*fBv*gAwetaeta*gBveta/(b*b) - 2*B26*(fAw*fBvxi*gAwetaeta*gBv + 2*fAwxi*fBv*gAweta*gBveta)/b - 4*B66*fAwxi*fBvxi*gAweta*gBv/a
+                                c += 1
+                                if ptx == 0 and pty == 0:
+                                    kLr[c] = row+2
+                                    kLc[c] = col+2
+                                kLv[c] += 4*A11*b*fAwxi*fBwxi*gAw*gBw*(wxi*wxi)/(a*a*a) + 4*A12*weta*wxi*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta)/(a*b) + 4*A16*wxi*(fAw*fBwxi*gAweta*gBw*wxi + fAwxi*gAw*(fBw*gBweta*wxi + 2*fBwxi*gBw*weta))/(a*a) + 4*A22*a*fAw*fBw*gAweta*gBweta*(weta*weta)/(b*b*b) + 4*A26*weta*(fAw*gAweta*(2*fBw*gBweta*wxi + fBwxi*gBw*weta) + fAwxi*fBw*gAw*gBweta*weta)/(b*b) + 4*A66*(fAw*gAweta*wxi + fAwxi*gAw*weta)*(fBw*gBweta*wxi + fBwxi*gBw*weta)/(a*b) - 4*B11*b*gAw*gBw*wxi*(fAwxi*fBwxixi + fAwxixi*fBwxi)/(a*a*a) - 4*B12*(fAw*gBw*(fBwxi*gAwetaeta*wxi + fBwxixi*gAweta*weta) + fBw*gAw*(fAwxi*gBwetaeta*wxi + fAwxixi*gBweta*weta))/(a*b) - 4*B16*(fAw*fBwxixi*gAweta*gBw*wxi + fAwxi*(2*fBwxi*gAw*gBweta*wxi + 2*fBwxi*gAweta*gBw*wxi + fBwxixi*gAw*gBw*weta) + fAwxixi*gAw*(fBw*gBweta*wxi + fBwxi*gBw*weta))/(a*a) - 4*B22*a*fAw*fBw*weta*(gAweta*gBwetaeta + gAwetaeta*gBweta)/(b*b*b) - 4*B26*(fAw*(fBw*wxi*(gAweta*gBwetaeta + gAwetaeta*gBweta) + fBwxi*weta*(2*gAweta*gBweta + gAwetaeta*gBw)) + fAwxi*fBw*weta*(gAw*gBwetaeta + 2*gAweta*gBweta))/(b*b) - 8*B66*(fAw*fBwxi*gAweta*gBweta*wxi + fAwxi*(fBw*gAweta*gBweta*wxi + fBwxi*weta*(gAw*gBweta + gAweta*gBw)))/(a*b) + 4*D11*b*fAwxixi*fBwxixi*gAw*gBw/(a*a*a) + 4*D12*(fAw*fBwxixi*gAwetaeta*gBw + fAwxixi*fBw*gAw*gBwetaeta)/(a*b) + 8*D16*(fAwxi*fBwxixi*gAweta*gBw + fAwxixi*fBwxi*gAw*gBweta)/(a*a) + 4*D22*a*fAw*fBw*gAwetaeta*gBwetaeta/(b*b*b) + 8*D26*(fAw*fBwxi*gAwetaeta*gBweta + fAwxi*fBw*gAweta*gBwetaeta)/(b*b) + 16*D66*fAwxi*fBwxi*gAweta*gBweta/(a*b)
+
+    kL = coo_matrix((kLv, (kLr, kLc)), shape=(size, size))
+
+    return kL
+
+
+def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
             double a, double b, double r, double alpharad, int m, int n,
             double u1tx, double u1rx, double u2tx, double u2rx,
             double u1ty, double u1ry, double u2ty, double u2ry,
@@ -55,23 +265,29 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
     cdef double B11, B12, B16, B22, B26, B66
     cdef double Nxx, Nyy, Nxy
 
-    cdef double *css
-
     cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
 
-    A11 = F[0,0]
-    A12 = F[0,1]
-    A16 = F[0,2]
-    A22 = F[1,1]
-    A26 = F[1,2]
-    A66 = F[2,2]
+    # F as 4-D matrix, must be [nx, ny, 6, 6], when there is one ABD[6, 6] for
+    # each of the nx * ny integration points
+    cdef double F[6 * 6]
+    cdef np.ndarray[cDOUBLE, ndim=4] Fnxny
 
-    B11 = F[0,3]
-    B12 = F[0,4]
-    B16 = F[0,5]
-    B22 = F[1,4]
-    B26 = F[1,5]
-    B66 = F[2,5]
+    cdef int one_F_each_point = 0
+
+    Finput = np.asarray(Finput, dtype=DOUBLE)
+    if Finput.shape == (nx, ny, 6, 6):
+        Fnxny = np.ascontiguousarray(Finput)
+        one_F_each_point = 1
+    elif Finput.shape == (6, 6):
+        # creating dummy 4-D array that is not used
+        Fnxny = np.empty(shape=(0, 0, 0, 0), dtype=DOUBLE)
+        # using a constant F for all integration domain
+        Finput = np.ascontiguousarray(Finput)
+        for i in range(6):
+            for j in range(6):
+                F[i*6 + j] = Finput[i, j]
+    else:
+        raise ValueError('Invalid shape for Finput!')
 
     fdim = 1*m*m*n*n
 
@@ -94,6 +310,27 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                 eta = etas[pty]
                 alpha = weightsxi[ptx]*weightseta[pty]
 
+                if one_F_each_point == 1:
+                    for i in range(6):
+                        for j in range(6):
+                            #TODO could assume symmetry
+                            F[i*6 + j] = Fnxny[ptx, pty, i, j]
+
+                A11 = F[0*6 + 0]
+                A12 = F[0*6 + 1]
+                A16 = F[0*6 + 2]
+                A22 = F[1*6 + 1]
+                A26 = F[1*6 + 2]
+                A66 = F[2*6 + 2]
+
+                B11 = F[0*6 + 3]
+                B12 = F[0*6 + 4]
+                B16 = F[0*6 + 5]
+                B22 = F[1*6 + 4]
+                B26 = F[1*6 + 5]
+                B66 = F[2*6 + 5]
+
+
                 # Nxx, Nyy and Nxy
 
                 exx = 0.
@@ -111,6 +348,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
                     fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
                     fAwxixi = calc_fxixi(i, xi, w1tx, w1rx, w2tx, w2rx)
                     for j in range(n):
+                        #TODO put these in a lookup vector
                         gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
                         gAv = calc_f(j, eta, v1ty, v1ry, v2ty, v2ry)
                         gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
@@ -167,5 +405,3 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, np.ndarray[cDOUBLE, ndim=2] F,
     kG = coo_matrix((kGv, (kGr, kGc)), shape=(size, size))
 
     return kG
-
-

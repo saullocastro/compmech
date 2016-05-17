@@ -396,12 +396,49 @@ class Panel(object):
         return F
 
 
+    def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
+            c=None, nx=None, ny=None, Fnxny=None):
+        """Calculate the constitutive stiffness matrix
 
-    def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
-        """Calculate the linear constitutive stiffness matrix
+        If ``c`` is not given it calculates the linear constitutive stiffness
+        matrix, otherwise the large displacement linear constitutive stiffness
+        matrix is calculated.
+
+        In assemblies of semi-analytical models the sparse matrices that are
+        calculated may have the ``size`` of the assembled global model, and the
+        current constitutive matrix being calculated starts at position
+        ``row0`` and ``col0``.
+
+        Parameters
+        ----------
+        size : int
+            The size of the calculated sparse matrices.
+        row0 and col0: int or None, optional
+            Offset to populate the output sparse matrix (useful when
+            assemblying panels).
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+        finalize : bool, optional
+            Asserts validity of output data and makes the output matrix
+            symmetric, should be ``False`` when assemblying.
+        c : array-like or None, optional
+            This must be the result of a static analysis, used to compute the
+            non-linear term based on the actual displacement field.
+        nx and ny : int or None, optional
+            Number of integration points along `x` and `y`, respectively, for
+            the Legendre-Gauss quadrature rule applied in the numerical
+            integration. Only used when ``c`` is given.
+        Fnxny : 4-D array-like or None, optional
+            The constitutive relations for the laminate at each integration
+            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
+            classical laminated plate theory models.
+
         """
         self._rebuild()
-        msg('Calculating k0... ', level=2, silent=silent)
+        if c is None:
+            msg('Calculating k0... ', level=2, silent=silent)
+        else:
+            msg('Calculating kL... ', level=2, silent=silent)
 
         if size is None:
             size = self.get_size()
@@ -432,6 +469,9 @@ class Panel(object):
         alpharad = np.deg2rad(alphadeg)
 
         if y1 is not None and y2 is not None:
+            if c is not None:
+                raise NotImplementedError(
+                'Partial domain from y1 to y2 not implemented for kL')
             k0 = matrices.fk0y1y2(y1, y2, a, b, r, alpharad, self.F,
                      self.m, self.n,
                      self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -442,15 +482,32 @@ class Panel(object):
                      self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                      size, row0, col0)
         else:
-            k0 = matrices.fk0(a, b, r, alpharad, self.F,
-                     self.m, self.n,
-                     self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                     self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                     self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                     self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                     size, row0, col0)
+            if c is None:
+                k0 = matrices.fk0(a, b, r, alpharad, self.F,
+                         self.m, self.n,
+                         self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                         self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                         self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                         self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                         self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                         self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                         size, row0, col0)
+            else:
+                matrices_num = modelDB.db[self.model]['matrices_num']
+                nx = self.nx if nx is None else nx
+                ny = self.ny if ny is None else ny
+                #NOTE the consistence checks for Fnxny are done within the .pyx
+                #     files
+                Fnxny = self.F is Fnxny is None else Fnxny
+                k0 = matrices_num.fkL_num(c, a, b, r, alpharad,
+                         self.F, self.m, self.n,
+                         self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                         self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                         self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                         self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                         self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                         self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                         size, row0, col0, nx, ny)
 
         Nxx_cte = self.Nxx_cte if self.Nxx_cte is not None else 0.
         Nyy_cte = self.Nyy_cte if self.Nyy_cte is not None else 0.
@@ -489,7 +546,7 @@ class Panel(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
-            c=None, nx=None, ny=None):
+            c=None, nx=None, ny=None, Fnxny=None):
         """Calculate the linear geometric stiffness matrix
 
         When using ``c``:
@@ -506,7 +563,7 @@ class Panel(object):
             Size of the output squared sparse matrix (if the panel is used in
             an assembly this must be the size of the assembly). If ``None`` it
             will consider only the degrees-of-freedom of the individual panel.
-        row0 and col0: int, optional
+        row0 and col0: int or None, optional
             Offset to populate the output sparse matrix (useful when
             assemblying panels).
         silent : bool, optional
@@ -514,9 +571,17 @@ class Panel(object):
         finalize : bool, optional
             Asserts validity of output data and makes the output matrix
             symmetric, should be ``False`` when assemblying.
-        c : array-like, optional
+        c : array-like or None, optional
             This must be the result of a static analysis, used to numerically
             compute `$K_G$` based on the actual membrane-stress state.
+        nx and ny : int or None, optional
+            Number of integration points along `x` and `y`, respectively, for
+            the Legendre-Gauss quadrature rule applied in the numerical
+            integration. Only used when ``c`` is given.
+        Fnxny : 4-D array-like or None, optional
+            The constitutive relations for the laminate at each integration
+            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
+            classical laminated plate theory models.
 
         """
         msg('Calculating kG0... ', level=2, silent=silent)
@@ -565,7 +630,8 @@ class Panel(object):
             c = np.ascontiguousarray(c, dtype=DOUBLE)
             nx = self.nx if nx is None else nx
             ny = self.ny if ny is None else ny
-            kG0 = matrices.fkG_num(c, F, a, b, r,
+            Fnxny = F is Fnxny is None else Fnxny
+            kG0 = matrices.fkG_num(c, Fnxny, a, b, r,
                        alpharad, self.m, self.n,
                        self.u1tx, self.u1rx, self.u2tx, self.u2rx,
                        self.u1ty, self.u1ry, self.u2ty, self.u2ry,
