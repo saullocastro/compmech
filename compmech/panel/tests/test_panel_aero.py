@@ -29,19 +29,6 @@ def test_panel_aero():
             p.Nxx = -60.
             p.Nyy = -5.
 
-            # testing calc_betacr method
-            betacr = p.calc_betacr(atype=atype, silent=True)
-            if atype == 1:
-                if not model.endswith('_w'):
-                    assert np.isclose(betacr, 128.7466, atol=0.1, rtol=0)
-                else:
-                    assert np.isclose(betacr, 137.15657, atol=0.1, rtol=0)
-            elif atype == 2:
-                if not model.endswith('_w'):
-                    assert np.isclose(betacr, 678.0031, atol=0.1, rtol=0)
-                else:
-                    assert np.isclose(betacr, 651.2838, atol=0.1, rtol=0)
-
             # testing commong methodology based on betastar
             if atype == 1:
                 betasstar = np.linspace(150, 350, 40)
