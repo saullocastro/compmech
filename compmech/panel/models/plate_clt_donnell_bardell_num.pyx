@@ -143,11 +143,6 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
                 D26 = F[4*6 + 5]
                 D66 = F[5*6 + 5]
 
-
-                with gil:
-                    print 'DEBUG', A11, A12, A16, A22, A26, A66
-                    print 'DEBUG', B11, B12, B16, B22, B26, B66
-
                 # kL
                 c = -1
                 for i in range(m):

@@ -469,7 +469,7 @@ class Panel(object):
         alpharad = np.deg2rad(alphadeg)
 
         if y1 is not None and y2 is not None:
-            if c is not None:
+            if c is not None or Fnxny is not None:
                 raise NotImplementedError(
                 'Partial domain from y1 to y2 not implemented for kL')
             k0 = matrices.fk0y1y2(y1, y2, a, b, r, alpharad, self.F,
@@ -482,7 +482,7 @@ class Panel(object):
                      self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                      size, row0, col0)
         else:
-            if c is None:
+            if c is None and Fnxny is None:
                 k0 = matrices.fk0(a, b, r, alpharad, self.F,
                          self.m, self.n,
                          self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -498,7 +498,11 @@ class Panel(object):
                 ny = self.ny if ny is None else ny
                 #NOTE the consistence checks for Fnxny are done within the .pyx
                 #     files
-                Fnxny = self.F is Fnxny is None else Fnxny
+                Fnxny = self.F if Fnxny is None else Fnxny
+                if c is None:
+                    # Empty c if the interest is only on the heterogeneous
+                    # laminate properties
+                    c = np.zeros(self.size, dtype=DOUBLE)
                 k0 = matrices_num.fkL_num(c, a, b, r, alpharad,
                          self.F, self.m, self.n,
                          self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -630,7 +634,7 @@ class Panel(object):
             c = np.ascontiguousarray(c, dtype=DOUBLE)
             nx = self.nx if nx is None else nx
             ny = self.ny if ny is None else ny
-            Fnxny = F is Fnxny is None else Fnxny
+            Fnxny = F if Fnxny is None else Fnxny
             kG0 = matrices.fkG_num(c, Fnxny, a, b, r,
                        alpharad, self.m, self.n,
                        self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -804,7 +808,7 @@ class Panel(object):
 
 
     def lb(self, tol=0, sparse_solver=True, calc_kA=False, silent=False,
-            c=None):
+           nx=None, ny=None, c=None, ckL=None, Fnxny=None):
         """Performs a linear buckling analysis
 
         The following parameters will affect the linear buckling analysis:
@@ -830,6 +834,20 @@ class Panel(object):
             A boolean to tell whether the log messages should be printed.
         c : array-like, optional
             A set of Ritz constants that will be use to compute KG.
+        ckL : array-like, optional
+            A set of Ritz constants that will be use to compute KL.
+        nx and ny : int or None, optional
+            Number of integration points along `x` and `y`, respectively, for
+            the Legendre-Gauss quadrature rule applied in the numerical
+            integration.
+        Fnxny : 4-D array-like or None, optional
+            The constitutive relations for the laminate at each integration
+            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
+            classical laminated plate theory models.
+        Fnxny : 4-D array-like or None, optional
+            The constitutive relations for the laminate at each integration
+            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
+            classical laminated plate theory models.
 
         Notes
         -----
@@ -842,8 +860,13 @@ class Panel(object):
 
         msg('Eigenvalue solver... ', level=2, silent=silent)
 
-        self.calc_k0(silent=silent)
-        self.calc_kG0(silent=silent, c=c)
+        nx = self.nx if nx is None else nx
+        ny = self.ny if ny is None else ny
+        self.calc_kG0(silent=silent, c=c, nx=nx, ny=ny, Fnxny=Fnxny)
+        if ckL is None:
+            self.calc_k0(silent=silent)
+        else:
+            self.calc_k0(silent=silent, c=ckL, nx=nx, ny=ny, Fnxny=Fnxny)
 
         if calc_kA:
             raise NotImplementedError('kA requires non-Hermitian eigen solver')
