@@ -613,8 +613,6 @@ class Panel(object):
         Nyy = self.Nyy if self.Nyy is not None else 0.
         Nxy = self.Nxy if self.Nxy is not None else 0.
 
-        F = self._get_lam_F()
-
         if c is None:
             if y1 is not None and y2 is not None:
                 kG0 = matrices.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r,
@@ -634,7 +632,8 @@ class Panel(object):
             c = np.ascontiguousarray(c, dtype=DOUBLE)
             nx = self.nx if nx is None else nx
             ny = self.ny if ny is None else ny
-            Fnxny = F if Fnxny is None else Fnxny
+            if Fnxny is None:
+                Fnxny = self._get_lam_F()
             kG0 = matrices.fkG_num(c, Fnxny, a, b, r,
                        alpharad, self.m, self.n,
                        self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -862,11 +861,11 @@ class Panel(object):
 
         nx = self.nx if nx is None else nx
         ny = self.ny if ny is None else ny
-        self.calc_kG0(silent=silent, c=c, nx=nx, ny=ny, Fnxny=Fnxny)
         if ckL is None:
             self.calc_k0(silent=silent)
         else:
             self.calc_k0(silent=silent, c=ckL, nx=nx, ny=ny, Fnxny=Fnxny)
+        self.calc_kG0(silent=silent, c=c, nx=nx, ny=ny, Fnxny=Fnxny)
 
         if calc_kA:
             raise NotImplementedError('kA requires non-Hermitian eigen solver')
