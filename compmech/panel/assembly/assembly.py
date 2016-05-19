@@ -5,6 +5,7 @@ from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
 import compmech.panel.modelDB as modelDB
 
+
 class PanelAssembly(object):
     def __init__(self, panels, connectivity):
         self.panels = panels
