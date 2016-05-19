@@ -10,8 +10,7 @@ from compmech.analysis import freq
 
 def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
         stack_skin, stack_base, stack_flange,
-        r=None, kt=None, kr=None,
-        m=8, n=8, mb=None, nb=None, mf=None, nf=None):
+        r=None, m=8, n=8, mb=None, nb=None, mf=None, nf=None):
     """Panel + T Stiffener with possible deffect at middle
 
     The panel assembly looks like::
@@ -59,14 +58,6 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
 
 
     """
-    if kt is None and r is None:
-        kt = 1.e12
-    if kt is None and r is not None:
-        kt = 1.e10
-    if kr is None and r is None:
-        kr = 1.e12
-    if kr is None and r is not None:
-        kr = 1.e10
     deffect = deffect_a * a
     has_deffect = True if deffect > 0 else False
     deffect = 0.33*a if deffect == 0 else deffect # to avoid weird domains
@@ -276,6 +267,10 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
         p1 = connecti['p1']
         p2 = connecti['p2']
         if connecti['func'] == 'SSycte':
+            # kt = A22/t
+            # kr = D22/t
+            kt = (p1.lam.ABD[1, 1] + p2.lam.ABD[1, 1])/(p1.lam.t + p2.lam.t)
+            kr = (p1.lam.ABD[4, 4] + p2.lam.ABD[4, 4])/(p1.lam.t + p2.lam.t)
             k0 += connections.kCSSycte.fkCSSycte11(
                     kt, kr, p1, connecti['ycte1'],
                     size, p1.row_start, col0=p1.col_start)
@@ -286,6 +281,10 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
                     kt, kr, p1, p2, connecti['ycte2'],
                     size, p2.row_start, col0=p2.col_start)
         elif connecti['func'] == 'SSxcte':
+            # kt = A11/t
+            # kr = D11/t
+            kt = (p1.lam.ABD[0, 0] + p2.lam.ABD[0, 0])/(p1.lam.t + p2.lam.t)
+            kr = (p1.lam.ABD[3, 3] + p2.lam.ABD[3, 3])/(p1.lam.t + p2.lam.t)
             k0 += connections.kCSSxcte.fkCSSxcte11(
                     kt, kr, p1, connecti['xcte1'],
                     size, p1.row_start, col0=p1.col_start)
@@ -296,6 +295,8 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
                     kt, kr, p1, p2, connecti['xcte2'],
                     size, p2.row_start, col0=p2.col_start)
         elif connecti['func'] == 'SB':
+            # kt = max(A11_p1, A11_p2)/min(t_p1, t_p2)
+            kt = max(p1.lam.ABD[0, 0], p2.lam.ABD[0, 0])/min(p1.lam.t, p2.lam.t)
             dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
             k0 += connections.kCSB.fkCSB11(kt, dsb, p1,
                     size, p1.row_start, col0=p1.col_start)
@@ -304,6 +305,10 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, deffect_a, mu, plyt, laminaprop,
             k0 += connections.kCSB.fkCSB22(kt, p1, p2,
                     size, p2.row_start, col0=p2.col_start)
         elif connecti['func'] == 'BFycte':
+            # kt = A22/t
+            # kr = D22/t
+            kt = (p1.lam.ABD[1, 1] + p2.lam.ABD[1, 1])/(p1.lam.t + p2.lam.t)
+            kr = (p1.lam.ABD[4, 4] + p2.lam.ABD[4, 4])/(p1.lam.t + p2.lam.t)
             k0 += connections.kCBFycte.fkCBFycte11(
                     kt, kr, p1, connecti['ycte1'],
                     size, p1.row_start, col0=p1.col_start)
