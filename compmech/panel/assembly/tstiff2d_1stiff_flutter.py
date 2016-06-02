@@ -302,8 +302,9 @@ def tstiff2d_1stiff_flutter(a, b, ys, bb, bf, deffect_a, mu, plyt,
                     kt, kr, p1, p2, connecti['xcte2'],
                     size, p2.row_start, col0=p2.col_start)
         elif connecti['func'] == 'SB':
-            # kt = max(A11_p1, A11_p2)/min(t_p1, t_p2)
-            kt = max(p1.lam.ABD[0, 0], p2.lam.ABD[0, 0])/min(p1.lam.t, p2.lam.t)
+            # kt = max(A11_p1, A11_p2)/(min(t_p1, t_p2) * min(a, b))
+            den = min(p1.lam.t, p2.lam.t) * min(a, b)
+            kt = max(p1.lam.ABD[0, 0], p2.lam.ABD[0, 0])/den
             dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
             k0 += connections.kCSB.fkCSB11(kt, dsb, p1,
                     size, p1.row_start, col0=p1.col_start)
