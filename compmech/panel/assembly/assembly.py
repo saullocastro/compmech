@@ -21,11 +21,12 @@ class PanelAssembly(object):
 
     def plot(self, c, group, invert_y=False, vec='w', filename='', ax=None,
             figsize=(3.5, 2.), save=True, title='',
-            identify=False, show_boundaries=False, boundary_line='--k',
+            identify=False, show_boundaries=False,
+            boundary_line='--k', boundary_linewidth=1.,
             colorbar=False, cbar_nticks=2, cbar_format=None, cbar_title='',
             cbar_fontsize=10, aspect='equal', clean=True, dpi=400, texts=[],
             xs=None, ys=None, gridx=50, gridy=50, num_levels=400,
-            vecmin=None, vecmax=None):
+            vecmin=None, vecmax=None, calc_data_only=False):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -59,6 +60,15 @@ class PanelAssembly(object):
             The figure size given by ``(width, height)``.
         title : str, optional
             If any string is given a title is added to the contour plot.
+        indentify : bool, optional
+            If domains should be identified. If yes, the name of each panel is
+            used.
+        show_boundaries : bool, optional
+            If boundaries between domains should be drawn.
+        boundary_line : str, optional
+            Matplotlib string to define line type and color.
+        boundary_linewidth : float, optional
+            Matplotlib float to define line width.
         colorbar : bool, optional
             If a colorbar should be added to the contour plot.
         cbar_nticks : int, optional
@@ -94,12 +104,16 @@ class PanelAssembly(object):
             field.
         vecmax : float, optional
             Maximum value for the contour scale.
+        calc_data_only : bool, optional
+            If only calculated data should be returned.
 
         Returns
         -------
         ax : matplotlib.axes.Axes
             The Matplotlib object that can be used to modify the current plot
             if needed.
+        data : dict
+            Data calculated during the plotting procedure.
 
         """
         msg('Plotting contour...')
@@ -127,6 +141,11 @@ class PanelAssembly(object):
             vecmin = field.min()
         if vecmax is None:
             vecmax = field.max()
+
+        data = dict(vecmin=vecmin, vecmax=vecmax)
+
+        if calc_data_only:
+            return None, data
 
         levels = linspace(vecmin, vecmax, num_levels)
 
@@ -160,10 +179,10 @@ class PanelAssembly(object):
             if show_boundaries:
                 x1, x2 = xplot.min(), xplot.max()
                 y1, y2 = yplot.min(), yplot.max()
-                ax.plot((x1, x2), (y1, y1), boundary_line)
-                ax.plot((x1, x2), (y2, y2), boundary_line)
-                ax.plot((x1, x1), (y1, y2), boundary_line)
-                ax.plot((x2, x2), (y1, y2), boundary_line)
+                ax.plot((x1, x2), (y1, y1), boundary_line, lw=boundary_linewidth)
+                ax.plot((x1, x2), (y2, y2), boundary_line, lw=boundary_linewidth)
+                ax.plot((x1, x1), (y1, y2), boundary_line, lw=boundary_linewidth)
+                ax.plot((x2, x2), (y1, y2), boundary_line, lw=boundary_linewidth)
 
         if colorbar:
             from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -209,7 +228,7 @@ class PanelAssembly(object):
 
         msg('finished!')
 
-        return ax
+        return ax, data
 
 
     def uvw(self, c, group, gridx=50, gridy=50):
