@@ -7,9 +7,19 @@ import compmech.panel.modelDB as modelDB
 
 
 class PanelAssembly(object):
-    def __init__(self, panels, connectivity):
+    r"""Class for Panel Assemblies
+
+    This class has some useful methods that will help plotting output for
+    different panel groups within the assembly and so forth.
+
+    Parameters
+    ----------
+    panels : iterable
+        A list, tuple etc of :class:`.Panel` objects.
+
+    """
+    def __init__(self, panels):
         self.panels = panels
-        self.connectivity = connectivity
         self.size = None
         self.out_num_cores = 4
 

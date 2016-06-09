@@ -8,11 +8,12 @@ from compmech.composite import laminate
 from compmech.sparse import make_symmetric
 from compmech.analysis import freq, lb, static
 
+
 def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
         laminaprop, stack_skin, stack_base, stack_flange,
         Nxx_skin, Nxx_base, Nxx_flange, run_static_case=True,
         r=None, m=8, n=8, mb=None, nb=None, mf=None, nf=None):
-    """Panel + T Stiffener with possible deffect at middle
+    r"""T-Stiffened panel with possible debonding deffect at the middle
 
     The panel assembly looks like::
 
@@ -54,11 +55,48 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
     ----------
 
     a : float
-        Panel length.
+        Total length of the assembly.
     b : float
-        Panel width.
-    TODO add other parameters
-
+        Total width of the assembly.
+    ys : float
+        Position of the stiffener along `y`.
+    bb : float
+        Stiffener's base width.
+    bf : float
+        Stiffener's flange width.
+    deffect_a : float
+        Debonding deffect/assembly length ratio.
+    mu : float
+        Material density.
+    plyt : float
+        Ply thickness.
+    laminaprop : list or tuple
+        Orthotropic lamina properties: `E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}`.
+    stack_skin : list or tuple
+        Stacking sequence for the skin.
+    stack_base : list or tuple
+        Stacking sequence for the stiffener's base.
+    stack_flange : list or tuple
+        Stacking sequence for the stiffener's flange.
+    Nxx_skin : float
+        Skin load distributed at the assembly edge at `x=0`.
+    Nxx_base : float
+        Stiffener's base load distributed at the assembly edge at `x=0`.
+    Nxx_flange : float
+        Stiffener's flange load distributed at the assembly edge at `x=0`.
+    run_static_case : bool, optional
+        If True a static analysis is run before the linear buckling analysis
+        to compute the real membrane stress state along the domain, otherwise
+        it is assumed constant values of `N_{xx}` for all components.
+    r : float or None, optional
+        Radius of the stiffened panel.
+    m, n : int, optional
+        Number of terms of the approximation function for the skin.
+    mb, nb : int, optional
+        Number of terms of the approximation function for the stiffener's base.
+    mf, nf : int, optional
+        Number of terms of the approximation function for the stiffener's
+        flange.
 
     """
     deffect = deffect_a * a
