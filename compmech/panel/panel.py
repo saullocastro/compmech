@@ -35,17 +35,45 @@ def load(name):
 class Panel(object):
     r"""General Panel class
 
+    It works for both flat plates, cylindrical and conical panels. The right
+    model is selected according to parameters ``r`` (radius) and ``alphadeg``
+    (semi-vertex angle).
+
     The approximation functions for the displacement fields are built using
     :ref:`Bardell's functions <theory_func_bardell>`.
 
-    It will select the proper model according to the `r` (radius) and
-    `alphadeg` (semi-vertex angle).
-
+    Parameters
+    ----------
+    a : float, optional
+        Length (along the `x` coordinate).
+    b : float, optional
+        Width (along the `y` coordinate).
+    r : float, optional
+        Radius for cylindrical panels.
+    alphadeg : float, optional
+        Semi-vertex angle for conical panels.
+    stack : list or tuple, optional
+        A sequence representing the angles for each ply.
+    plyt : float, optional
+        Ply thickness.
+    laminaprop : list or tuple, optional
+        Orthotropic lamina properties: `E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}`.
+    mu : float, optional
+        Material density.
+    m, n : int, optional
+        Number of terms for the approximation functions along `x` and `y`,
+        respectively.
+    offset : float, optional
+        Laminate offset about panel mid-surface. The offset is measured along
+        the normal (`z`) axis.
+    y1, y2 : float, optional
+        Define the lower and upper limit along `y` for panel with incomplete
+        domains.
 
     """
-    def __init__(self, a=None, b=None, y1=None, y2=None, r=None, alphadeg=None,
-            stack=None, plyt=None, laminaprop=None, m=11, n=11, mu=None,
-            offset=0., **kwargs):
+    def __init__(self, a=None, b=None, r=None, alphadeg=None,
+            stack=None, plyt=None, laminaprop=None, mu=None, m=11, n=11,
+            offset=0., y1=None, y2=None, **kwargs):
         self.a = a
         self.b = b
         self.y1 = y1
