@@ -16,7 +16,6 @@ from scipy.linalg import eig, eigh
 from numpy import linspace
 
 import compmech.composite.laminate as laminate
-from compmech.analysis import Analysis
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
 from compmech.sparse import (make_symmetric, make_skew_symmetric,
@@ -33,7 +32,7 @@ def load(name):
         return cPickle.load(open(name + '.StiffPanelBay', 'rb'))
 
 
-class StiffPanelBay(Panel):
+class StiffPanelBay(object):
     r"""Stiffened Panel Bay
 
     Can be used for supersonic Aeroelastic studies with the Piston Theory.
@@ -124,19 +123,8 @@ class StiffPanelBay(Panel):
         self.Mach = None
         self.V = None
 
-        # eigenvalue analysis
-        self.num_eigvalues = 25
-        self.num_eigvalues_print = 5
-
         # output queries
         self.out_num_cores = cpu_count()
-
-        # analysis
-        self.analysis = Analysis(self.calc_fext, self.calc_k0, None, None)
-
-        # outputs
-        self.eigvecs = None
-        self.eigvals = None
 
         self._clear_matrices()
 
@@ -1198,15 +1186,12 @@ class StiffPanelBay(Panel):
 
 
     def plot_skin(self, c, invert_y=False, plot_type=1, vec='w',
-             deform_u=False, deform_u_sf=100.,
-             filename='',
-             ax=None, figsize=(3.5, 2.), save=True,
-             add_title=False, title='',
-             colorbar=False, cbar_nticks=2, cbar_format=None,
-             cbar_title='', cbar_fontsize=10,
-             aspect='equal', clean=True, dpi=400,
-             texts=[], xs=None, ys=None, gridx=300, gridy=300,
-             num_levels=400, vecmin=None, vecmax=None, silent=False):
+            deform_u=False, deform_u_sf=100., filename='', ax=None,
+            figsize=(3.5, 2.), save=True, title='', colorbar=False,
+            cbar_nticks=2, cbar_format=None, cbar_title='', cbar_fontsize=10,
+            aspect='equal', clean=True, dpi=400, texts=[], xs=None, ys=None,
+            gridx=300, gridy=300, num_levels=400, vecmin=None, vecmax=None,
+            silent=False):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1251,11 +1236,8 @@ class StiffPanelBay(Panel):
             When ``ax`` is given, the contour plot will be created inside it.
         figsize : tuple, optional
             The figure size given by ``(width, height)``.
-        add_title : bool, optional
-            If a title should be added to the figure.
         title : str, optional
-            If any string is given ``add_title`` will be ignored and the given
-            title added to the contour plot.
+            If any string is given it is added as title to the contour plot.
         colorbar : bool, optional
             If a colorbar should be added to the contour plot.
         cbar_nticks : int, optional
@@ -1378,15 +1360,6 @@ class StiffPanelBay(Panel):
         if title != '':
             ax.set_title(str(title))
 
-        elif add_title:
-            if self.analysis.last_analysis == 'static':
-                ax.set_title('$m, n={0}, {1}$'.format(self.m, self.n))
-
-            elif self.analysis.last_analysis == 'lb':
-                ax.set_title(
-       r'$m, n={0}, {1}$, $\lambda_{{CR}}={4:1.3e}$'.format(
-            self.m, self.n, self.eigvals[0]))
-
         fig.tight_layout()
         ax.set_aspect(aspect)
 
@@ -1427,16 +1400,13 @@ class StiffPanelBay(Panel):
         return ax
 
 
-    def plot_stiffener(self, c, si, region='flange', invert_y=False, plot_type=1, vec='w',
-             deform_u=False, deform_u_sf=100.,
-             filename='',
-             ax=None, figsize=(3.5, 2.), save=True,
-             add_title=False, title='',
-             colorbar=False, cbar_nticks=2, cbar_format=None,
-             cbar_title='', cbar_fontsize=10,
-             aspect='equal', clean=True, dpi=400,
-             texts=[], xs=None, ys=None, gridx=300, gridy=300,
-             num_levels=400, vecmin=None, vecmax=None, silent=False):
+    def plot_stiffener(self, c, si, region='flange', invert_y=False,
+            plot_type=1, vec='w', deform_u=False, deform_u_sf=100.,
+            filename='', ax=None, figsize=(3.5, 2.), save=True, title='',
+            colorbar=False, cbar_nticks=2, cbar_format=None, cbar_title='',
+            cbar_fontsize=10, aspect='equal', clean=True, dpi=400, texts=[],
+            xs=None, ys=None, gridx=300, gridy=300, num_levels=400,
+            vecmin=None, vecmax=None, silent=False):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1485,11 +1455,8 @@ class StiffPanelBay(Panel):
             When ``ax`` is given, the contour plot will be created inside it.
         figsize : tuple, optional
             The figure size given by ``(width, height)``.
-        add_title : bool, optional
-            If a title should be added to the figure.
         title : str, optional
-            If any string is given ``add_title`` will be ignored and the given
-            title added to the contour plot.
+            If any string is given it is added as title to the contour plot.
         colorbar : bool, optional
             If a colorbar should be added to the contour plot.
         cbar_nticks : int, optional
@@ -1613,17 +1580,6 @@ class StiffPanelBay(Panel):
 
         if title != '':
             ax.set_title(str(title))
-
-        elif add_title:
-            m1 = self.bladestiff2ds[si].m1
-            n1 = self.bladestiff2ds[si].n1
-            if self.analysis.last_analysis == 'static':
-                ax.set_title('$m_1, n_1={0}, {1}$'.format(m1, n1))
-
-            elif self.analysis.last_analysis == 'lb':
-                ax.set_title(
-       r'$m_1, n_1={0}, {1}$, $\lambda_{{CR}}={4:1.3e}$'.format(
-            m1, n1, self.eigvals[0]))
 
         fig.tight_layout()
         ax.set_aspect(aspect)
@@ -1769,26 +1725,3 @@ class StiffPanelBay(Panel):
         msg('finished!', level=2, silent=silent)
 
         return fext
-
-
-    def static(self, silent=False):
-        """Static analysis for cones and cylinders
-
-        The analysis can be linear or geometrically non-linear. See
-        :class:`.Analysis` for further details about the parameters
-        controlling the non-linear analysis.
-
-        Parameters
-        ----------
-        silent : bool, optional
-            A boolean to tell whether the msg messages should be printed.
-
-        Returns
-        -------
-        c : np.ndarray
-            The Ritz constants.
-
-        """
-        self._rebuild()
-        self.analysis.static(NLgeom=False, silent=silent)
-        return self.analysis.cs
