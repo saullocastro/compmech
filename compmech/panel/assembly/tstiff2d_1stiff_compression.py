@@ -9,11 +9,11 @@ from compmech.sparse import make_symmetric
 from compmech.analysis import freq, lb, static
 
 
-def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
+def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
         laminaprop, stack_skin, stack_base, stack_flange,
         Nxx_skin, Nxx_base, Nxx_flange, run_static_case=True,
         r=None, m=8, n=8, mb=None, nb=None, mf=None, nf=None):
-    r"""T-Stiffened panel with possible debonding deffect at the middle
+    r"""T-Stiffened panel with possible debonding defect at the middle
 
     The panel assembly looks like::
 
@@ -64,8 +64,8 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
         Stiffener's base width.
     bf : float
         Stiffener's flange width.
-    deffect_a : float
-        Debonding deffect/assembly length ratio.
+    defect_a : float
+        Debonding defect/assembly length ratio.
     mu : float
         Material density.
     plyt : float
@@ -99,11 +99,11 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
         flange.
 
     """
-    deffect = deffect_a * a
-    has_deffect = True if deffect > 0 else False
-    deffect = 0.33*a if deffect == 0 else deffect # to avoid weird domains
-    aup = (a - deffect)/2.
-    alow = (a - deffect)/2.
+    defect = defect_a * a
+    has_defect = True if defect > 0 else False
+    defect = 0.33*a if defect == 0 else defect # to avoid weird domains
+    aup = (a - defect)/2.
+    alow = (a - defect)/2.
     bleft = b - ys - bb/2.
     bright = ys - bb/2.
     mb = m if mb is None else mb
@@ -111,24 +111,24 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
     mf = m if mf is None else mf
     nf = n if nf is None else nf
     # skin panels
-    p01 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+deffect, y0=ys+bb/2., a=aup, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p02 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p03 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+deffect, y0=0,        a=aup, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    # deffect
-    p04 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys+bb/2., a=deffect, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p05 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys-bb/2., a=deffect, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p06 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=0,        a=deffect, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p01 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=ys+bb/2., a=aup, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p02 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=ys-bb/2., a=aup, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p03 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=0,        a=aup, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    # defect
+    p04 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys+bb/2., a=defect, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p05 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys-bb/2., a=defect, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p06 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=0,        a=defect, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
     #
     p07 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=ys+bb/2., a=alow, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
     p08 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
     p09 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=0,        a=alow, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
 
     # stiffeners
-    p10 = Panel(group='base', Nxx=Nxx_base, x0=alow+deffect, y0=ys-bb/2., a=aup, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-    p11 = Panel(group='flange', Nxx=Nxx_flange, x0=alow+deffect, y0=0,        a=aup, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
-    # deffect
-    p12 = Panel(group='base', Nxx=Nxx_base, x0=alow, y0=ys-bb/2., a=deffect, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-    p13 = Panel(group='flange', Nxx=Nxx_flange, x0=alow, y0=0,        a=deffect, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+    p10 = Panel(group='base', Nxx=Nxx_base, x0=alow+defect, y0=ys-bb/2., a=aup, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
+    p11 = Panel(group='flange', Nxx=Nxx_flange, x0=alow+defect, y0=0,        a=aup, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+    # defect
+    p12 = Panel(group='base', Nxx=Nxx_base, x0=alow, y0=ys-bb/2., a=defect, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
+    p13 = Panel(group='flange', Nxx=Nxx_flange, x0=alow, y0=0,        a=defect, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
     #
     p14 = Panel(group='base', Nxx=Nxx_base, x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
     p15 = Panel(group='flange', Nxx=Nxx_flange, x0=0, y0=0,        a=alow, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
@@ -274,7 +274,7 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
 
         # skin-base
         dict(p1=p02, p2=p10, func='SB'),
-        dict(p1=p05, p2=p12, func='SB', has_deffect=has_deffect), # deffect
+        dict(p1=p05, p2=p12, func='SB', has_defect=has_defect), # defect
         dict(p1=p08, p2=p14, func='SB'),
 
         # base-base
@@ -294,7 +294,7 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
     panels = [p01, p02, p03, p04, p05, p06, p07, p08, p09,
             p10, p11, p12, p13, p14, p15]
 
-    assy = PanelAssembly(panels, None)
+    assy = PanelAssembly(panels)
 
     size = sum([3*p.m*p.n for p in panels])
 
@@ -316,7 +316,7 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, deffect_a, mu, plyt,
         p.col_end = col0
 
     for connecti in conn:
-        if connecti.get('has_deffect'): # connecting if there is no deffect
+        if connecti.get('has_defect'): # connecting if there is no defect
             continue
         p1 = connecti['p1']
         p2 = connecti['p2']
