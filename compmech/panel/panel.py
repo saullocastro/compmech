@@ -1464,7 +1464,7 @@ class Panel(object):
              deform_u=False, deform_u_sf=100.,
              filename='',
              ax=None, figsize=(3.5, 2.), save=True,
-             add_title=False, title='',
+             title='',
              colorbar=False, cbar_nticks=2, cbar_format=None,
              cbar_title='', cbar_fontsize=10,
              aspect='equal', clean=True, dpi=400,
@@ -1502,11 +1502,8 @@ class Panel(object):
             When ``ax`` is given, the contour plot will be created inside it.
         figsize : tuple, optional
             The figure size given by ``(width, height)``.
-        add_title : bool, optional
-            If a title should be added to the figure.
         title : str, optional
-            If any string is given ``add_title`` will be ignored and the given
-            title added to the contour plot.
+            If any string is given it is added as title to the contour plot.
         colorbar : bool, optional
             If a colorbar should be added to the contour plot.
         cbar_nticks : int, optional
@@ -1634,15 +1631,6 @@ class Panel(object):
 
         if title != '':
             ax.set_title(str(title))
-
-        elif add_title:
-            if self.analysis.last_analysis == 'static':
-                ax.set_title('$m_1, n_1={0}, {1}$'.format(self.m, self.n))
-
-            elif self.analysis.last_analysis == 'lb':
-                ax.set_title(
-       r'$m_1, n_1={0}, {1}$, $\lambda_{{CR}}={4:1.3e}$'.format(self.m,
-           self.n, self.eigvals[0]))
 
         fig.tight_layout()
         ax.set_aspect(aspect)
