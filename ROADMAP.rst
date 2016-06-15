@@ -4,6 +4,7 @@ Version 0.6.0
 - pass the laminate class instead of plyt etc
 - enhance analysis.freq to support damping
   -- then remove lb, freq and static from Panel
+- remove support to integrate from x1 to x2 in TStiff2D
 
 Version 0.6.1
 -------------
