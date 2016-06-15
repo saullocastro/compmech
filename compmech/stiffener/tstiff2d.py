@@ -37,10 +37,10 @@ class TStiff2D(object):
         self.panel1 = panel1
         self.panel2 = panel2
         self.model = model
-        self.m1 = 12
-        self.n1 = 9
-        self.m2 = 11
-        self.n2 = 10
+        self.m1 = 15
+        self.n1 = 12
+        self.m2 = 15
+        self.n2 = 12
         self.mu = mu
         self.ys = ys
         self.bb = bb
@@ -48,11 +48,6 @@ class TStiff2D(object):
         self.forces_base = []
         self.forces_flange = []
 
-        self.x1 = None
-        self.x2 = None
-
-        self.kt = 1.e8
-        self.kr = 1.e8
         self.eta_conn_base = 0.
         self.eta_conn_flange = -1.
 
@@ -130,6 +125,20 @@ class TStiff2D(object):
 
 
     def _rebuild(self):
+        a = None
+        b = None
+        if self.panel1 is not None:
+            a = self.panel1.a
+            b = self.panel1.b
+        elif self.panel2 is not None:
+            a = self.panel2.a
+            b = self.panel2.b
+        if a is not None and b is not None:
+            if a / b > 10.:
+                if self.m1 <= 15 and self.m2 <= 15:
+                    raise RuntimeError('For a/b > 10. use m1 and m2 > 15')
+                else:
+                    warn('For a/b > 10. be sure to check convergence for m1 and m2')
         if self.fstack is None:
             raise ValueError('Flange laminate must be defined!')
         if self.bstack is None:
@@ -194,8 +203,11 @@ class TStiff2D(object):
         # stiffener base
         Fsb = self.blam.ABD
         # default is to have no unbouded region
-        x1 = self.x1 if self.x1 is not None else a/2.
-        x2 = self.x2 if self.x2 is not None else a/2.
+
+        #TODO remove from Cython the capability to run with debonding defect
+        x1 = a/2.
+        x2 = a/2.
+
         y1 = ys - self.bb/2.
         y2 = ys + self.bb/2.
         k0 += modelb.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m1, n1,
@@ -220,8 +232,8 @@ class TStiff2D(object):
 
         # connectivity panel-base
         dpb = self.dpb
-        ktpb = self.kt/((a - x2 + x1)*(y2 - y1))
-        krpb = self.kr/((a - x2 + x1)*(y2 - y1))
+        den = min(self.panel1.lam.t, self.panel2.lam.t, self.bplyts[0]) * min(a, b)
+        ktpb = max(self.panel1.lam.ABD[0, 0], self.blam.ABD[0, 0])/den
 
         k0 += conn.fkCppx1x2y1y2(0, x1, y1, y2,
                                  ktpb, a, b, dpb, m, n,
@@ -276,7 +288,7 @@ class TStiff2D(object):
                                  size, 0, col0)
 
         k0 += conn.fkCbbpbx1x2(0, x1, y1, y2,
-                               ktpb, krpb, a, b, m1, n1,
+                               ktpb, a, b, m1, n1,
                                self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                                self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                                self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -285,7 +297,7 @@ class TStiff2D(object):
                                self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
                                size, row0, col0)
         k0 += conn.fkCbbpbx1x2(x2, a, y1, y2,
-                               ktpb, krpb, a, b, m1, n1,
+                               ktpb, a, b, m1, n1,
                                self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
                                self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
                                self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
@@ -295,8 +307,8 @@ class TStiff2D(object):
                                size, row0, col0)
 
         # connectivity base-flange
-        ktbf = self.kt/a
-        krbf = self.kr/a
+        ktbf = (self.blam.ABD[1, 1] + self.flam.ABD[1, 1])/(self.blam.t + self.flam.t)
+        krbf = (self.blam.ABD[4, 4] + self.flam.ABD[4, 4])/(self.blam.t + self.flam.t)
         k0 += conn.fkCbbbf(ktbf, krbf, a, bb,
                            m1, n1, self.eta_conn_base,
                            self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
