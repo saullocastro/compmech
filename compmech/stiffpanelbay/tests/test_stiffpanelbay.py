@@ -1,6 +1,7 @@
 import numpy as np
 
 from compmech.stiffpanelbay import StiffPanelBay
+from compmech.analysis import freq, lb
 
 
 def test_freq_models():
@@ -34,11 +35,13 @@ def test_freq_models():
         spb.add_panel(0, spb.b/2., plyt=spb.plyt)
         spb.add_panel(spb.b/2., spb.b, plyt=spb.plyt)
 
-        spb.freq(sparse_solver=True, silent=True)
+        k0 = spb.calc_k0(silent=True)
+        M = spb.calc_kM(silent=True)
+        eigvals, eigvecs = freq(k0, M, silent=True)
 
         ref = [85.12907802-0.j, 134.16422850-0.j, 206.77295186-0.j,
                 216.45992453-0.j, 252.24546171-0.j]
-        assert np.allclose(spb.eigvals[:5]/2/np.pi, ref, atol=0.1, rtol=0)
+        assert np.allclose(eigvals[:5]/2/np.pi, ref, atol=0.1, rtol=0)
 
 
 def test_lb_Stiffener1D():
@@ -60,9 +63,11 @@ def test_lb_Stiffener1D():
     spb.add_bladestiff1d(ys=spb.b/2., Fx=0., bf=0.05, fstack=[0, 90, 90, 0],
             fplyt=spb.plyt, flaminaprop=spb.laminaprop)
 
-    spb.lb(silent=True)
+    k0 = spb.calc_k0(silent=True)
+    kG = spb.calc_kG0(silent=True)
+    eigvals, eigvecs = lb(k0, kG, silent=True)
 
-    assert np.isclose(spb.eigvals[0].real, 297.54633, atol=0.1, rtol=0)
+    assert np.isclose(eigvals[0].real, 297.54633, atol=0.1, rtol=0)
 
 
 def test_lb_Stiffener2D():
@@ -85,15 +90,17 @@ def test_lb_Stiffener2D():
                         fstack=[0, 90, 90, 0],
                         fplyt=spb.plyt, flaminaprop=spb.laminaprop)
 
-    spb.lb(silent=True)
+    k0 = spb.calc_k0(silent=True)
+    kG = spb.calc_kG0(silent=True)
+    eigvals, eigvecs = lb(k0, kG, silent=True)
 
-    assert np.isclose(spb.eigvals[0].real, 301.0825234, atol=0.1, rtol=0)
+    assert np.isclose(eigvals[0].real, 301.0825234, atol=0.1, rtol=0)
 
 
 def test_freq_Stiffener1D():
     print('Testing frequency analysis for StiffPanelBay with a 1D Stiffener')
     spb = StiffPanelBay()
-    spb.a = 1.
+    spb.a = 2.
     spb.b = 0.5
     spb.stack = [0, 90, 90, 0]
     spb.plyt = 1e-3*0.125
@@ -109,9 +116,11 @@ def test_freq_Stiffener1D():
     spb.add_bladestiff1d(ys=spb.b/2., Fx=0., bf=0.08, fstack=[0, 90, 90, 0]*5,
             fplyt=spb.plyt, flaminaprop=spb.laminaprop)
 
-    spb.freq(silent=True, atype=4)
+    k0 = spb.calc_k0(silent=True)
+    M = spb.calc_kM(silent=True)
+    eigvals, eigvecs = freq(k0, M, silent=True, num_eigvalues=10)
 
-    assert np.isclose(spb.eigvals[0].real, 81.9342, atol=0.1, rtol=0)
+    assert np.isclose(eigvals[0].real, 79.5906673583, atol=0.1, rtol=0)
 
 
 def test_freq_Stiffener2D():
@@ -134,10 +143,11 @@ def test_freq_Stiffener2D():
                         fstack=[0, 90, 90, 0]*5, fplyt=spb.plyt,
                         flaminaprop=spb.laminaprop)
 
-    spb.freq(silent=True, atype=4)
+    k0 = spb.calc_k0(silent=True)
+    M = spb.calc_kM(silent=True)
+    eigvals, eigvecs = freq(k0, M, silent=True)
 
-    print spb.eigvals[0].real
-    assert np.isclose(spb.eigvals[0].real, 138.5183, atol=0.1, rtol=0)
+    assert np.isclose(eigvals[0].real, 138.5183, atol=0.1, rtol=0)
 
 
 def test_Lee_and_Lee_table4():
@@ -175,9 +185,11 @@ def test_Lee_and_Lee_table4():
         spb.add_panel(y1=spb.b/2., y2=spb.b)
         spb.add_bladestiff1d(mu=spb.mu, ys=spb.b/2., bb=0., bf=bf,
                       fstack=fstack, fplyt=plyt, flaminaprop=spb.laminaprop)
-        spb.freq(atype=4, silent=True, reduced_dof=False)
+        k0 = spb.calc_k0(silent=True)
+        M = spb.calc_kM(silent=True)
+        eigvals, eigvecs = freq(k0, M, silent=True)
 
-        assert np.isclose(spb.eigvals[0].real/2/np.pi, value, atol=0.1, rtol=0)
+        assert np.isclose(eigvals[0].real/2/np.pi, value, atol=0.1, rtol=0)
 
 
 if __name__ == '__main__':
