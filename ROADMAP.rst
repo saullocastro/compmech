@@ -1,13 +1,10 @@
-Version 0.6.0
+Version 0.6.1
 -------------
 - create a boundary class with w1tx etc
 - pass the laminate class instead of plyt etc
+- remove support to integrate from x1 to x2 in TStiff2D
 - enhance analysis.freq to support damping
   -- then remove lb, freq and static from Panel
-- remove support to integrate from x1 to x2 in TStiff2D
-
-Version 0.6.1
--------------
 - using the Bardell's strategy, perhaps move code from Mathematica to
   SymPy
 - check why plate lb with reduced_dof=True is not the same as plate_w
