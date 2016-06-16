@@ -835,8 +835,11 @@ class Panel(object):
 
 
     def lb(self, tol=0, sparse_solver=True, calc_kA=False, silent=False,
-           nx=None, ny=None, c=None, ckL=None, Fnxny=None):
+           nx=10, ny=10, c=None, ckL=None, Fnxny=None):
         """Performs a linear buckling analysis
+
+        .. note:: This will be deprecated soon, use
+                  :func:`.compmech.analysis.lb`.
 
         The following parameters will affect the linear buckling analysis:
 
@@ -867,10 +870,6 @@ class Panel(object):
             Number of integration points along `x` and `y`, respectively, for
             the Legendre-Gauss quadrature rule applied in the numerical
             integration.
-        Fnxny : 4-D array-like or None, optional
-            The constitutive relations for the laminate at each integration
-            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
-            classical laminated plate theory models.
         Fnxny : 4-D array-like or None, optional
             The constitutive relations for the laminate at each integration
             point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
@@ -955,6 +954,9 @@ class Panel(object):
     def freq(self, atype=4, tol=0, sparse_solver=True, silent=False,
              sort=True, damping=False, reduced_dof=False):
         """Performs a natural frequency analysis
+
+        .. note:: This will be deprecated soon, use
+                  :func:`.compmech.analysis.freq`.
 
         The following parameters of the will affect the linear buckling
         analysis:
@@ -1404,6 +1406,9 @@ class Panel(object):
 
     def static(self, NLgeom=False, silent=False):
         """Static analysis for cones and cylinders
+
+        .. note:: This will be deprecated soon, use
+                  :func:`.compmech.analysis.static`.
 
         The analysis can be linear or geometrically non-linear. See
         :class:`.Analysis` for further details about the parameters
