@@ -63,6 +63,8 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
             f.write('        return %s;\n' % ccode(u[i]))
         else:
             f.write('        return %s*(%s);\n' % (const, ccode(u[i])))
+    f.write('    default:\n')
+    f.write('        return 0.;\n')
     f.write('    }\n')
     f.write('}\n')
 
@@ -77,6 +79,8 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
             f.write('        return %s;\n' % ccode(diff(u[i], xi)))
         else:
             f.write('        return %s*(%s);\n' % (const, ccode(diff(u[i], xi))))
+    f.write('    default:\n')
+    f.write('        return 0.;\n')
     f.write('    }\n')
     f.write('}\n')
 
@@ -91,20 +95,8 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
             f.write('        return %s;\n' % ccode(diff(u[i], xi, xi)))
         else:
             f.write('        return %s*(%s);\n' % (const, ccode(diff(u[i], xi, xi))))
-    f.write('    }\n')
-    f.write('}\n')
-
-    f.write('\n\n')
-    f.write('EXPORTIT double calc_fxixi(int i, double xi,\n' +
-            '           double xi1t, double xi1r, double xi2t, double xi2r) {\n')
-    f.write('    switch(i) {\n')
-    for i in range(len(u)):
-        const = consts.get(i)
-        f.write('    case %d:\n' % i)
-        if const is None:
-            f.write('        return %s;\n' % star2Cpow(str(diff(u[i], xi, xi))))
-        else:
-            f.write('        return %s*(%s);\n' % (const, star2Cpow(str(diff(u[i], xi, xi)))))
+    f.write('    default:\n')
+    f.write('        return 0.;\n')
     f.write('    }\n')
     f.write('}\n')
 
