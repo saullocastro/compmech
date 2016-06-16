@@ -1,6 +1,7 @@
 import numpy as np
 
 from compmech.panel import Panel
+from compmech.analysis import lb
 
 
 def test_panel_lb():
@@ -23,19 +24,23 @@ def test_panel_lb():
         p.r = 1.e8
         p.alphadeg = 0.
         p.Nxx = -1
-        p.lb(silent=True)
+        k0 = p.calc_k0(silent=True)
+        kG0 = p.calc_kG0(silent=True)
+        eigvals, eigvecs = lb(k0, kG0, silent=True)
         if '_w' in model:
-            assert np.isclose(p.eigvals[0], 88.47696, atol=0.1, rtol=0)
+            assert np.isclose(eigvals[0], 88.47696, atol=0.1, rtol=0)
         else:
-            assert np.isclose(p.eigvals[0], 85.2912, atol=0.1, rtol=0)
+            assert np.isclose(eigvals[0], 85.2912, atol=0.1, rtol=0)
 
         p.Nxx = 0
         p.Nyy = -1
-        p.lb(silent=True)
+        k0 = p.calc_k0(silent=True)
+        kG0 = p.calc_kG0(silent=True)
+        eigvals, eigvecs = lb(k0, kG0, silent=True)
         if '_w' in model:
-            assert np.isclose(p.eigvals[0], 26.45882, atol=0.1, rtol=0)
+            assert np.isclose(eigvals[0], 26.45882, atol=0.1, rtol=0)
         else:
-            assert np.isclose(p.eigvals[0], 25.17562, atol=0.1, rtol=0)
+            assert np.isclose(eigvals[0], 25.17562, atol=0.1, rtol=0)
 
         # ssfs
         p = Panel()
@@ -51,20 +56,24 @@ def test_panel_lb():
         p.r = 1.e8
         p.alphadeg = 0.
         p.Nxx = -1
-        p.lb(silent=True)
+        k0 = p.calc_k0(silent=True)
+        kG0 = p.calc_kG0(silent=True)
+        eigvals, eigvecs = lb(k0, kG0, silent=True)
         if '_w' in model:
-            assert np.isclose(p.eigvals[0], 17.14427, atol=0.1, rtol=0)
+            assert np.isclose(eigvals[0], 17.14427, atol=0.1, rtol=0)
         else:
-            assert np.isclose(p.eigvals[0], 15.842356, atol=0.1, rtol=0)
+            assert np.isclose(eigvals[0], 15.842356, atol=0.1, rtol=0)
 
         p.bc_sfss()
         p.Nxx = 0
         p.Nyy = -1
-        p.lb(silent=True)
+        k0 = p.calc_k0(silent=True)
+        kG0 = p.calc_kG0(silent=True)
+        eigvals, eigvecs = lb(k0, kG0, silent=True)
         if '_w' in model:
-            assert np.isclose(p.eigvals[0], 15.809986, atol=0.1, rtol=0)
+            assert np.isclose(eigvals[0], 15.809986, atol=0.1, rtol=0)
         else:
-            assert np.isclose(p.eigvals[0], 13.9421988, atol=0.1, rtol=0)
+            assert np.isclose(eigvals[0], 13.9421988, atol=0.1, rtol=0)
 
 
 if __name__ == '__main__':

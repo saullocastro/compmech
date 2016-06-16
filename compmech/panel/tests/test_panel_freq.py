@@ -1,6 +1,7 @@
 import numpy as np
 
 from compmech.panel import Panel
+from compmech.analysis import freq
 
 
 def test_panel_freq():
@@ -8,9 +9,9 @@ def test_panel_freq():
                   'plate_clt_donnell_bardell_w',
                   'cpanel_clt_donnell_bardell',
                   'kpanel_clt_donnell_bardell']:
-        for atype in [3, 4]:
-            print('Frequency Analysis, atype={0}, model={1}'.format(
-                  atype, model))
+        for prestress in [True, False]:
+            print('Frequency Analysis, prestress={0}, model={1}'.format(
+                  prestress, model))
             p = Panel()
             p.model = model
             p.bc_ssss()
@@ -26,26 +27,29 @@ def test_panel_freq():
             p.n = 12
             p.Nxx = -60.
             p.Nyy = -5.
-            p.freq(sparse_solver=True, reduced_dof=False, silent=True,
-                   atype=atype)
-            if atype == 3:
+            k0 = p.calc_k0(silent=True)
+            M = p.calc_kM(silent=True)
+            if prestress:
+                kG0 = p.calc_kG0(silent=True)
+                k0 += kG0
+            eigvals, eigvecs = freq(k0, M, sparse_solver=True, reduced_dof=False, silent=True)
+            if prestress:
                 if '_w' in model:
-                    assert np.isclose(p.eigvals[0], 19.9272, atol=0.1, rtol=0)
+                    assert np.isclose(eigvals[0], 19.9272, rtol=0.001)
                 else:
-                    assert np.isclose(p.eigvals[0], 17.85875, atol=0.1, rtol=0)
-            elif atype == 4:
+                    assert np.isclose(eigvals[0], 17.85875, rtol=0.001)
+            else:
                 if '_w' in model:
-                    assert np.isclose(p.eigvals[0], 40.37281, atol=0.1, rtol=0)
+                    assert np.isclose(eigvals[0], 40.37281, rtol=0.001)
                 else:
-                    assert np.isclose(p.eigvals[0], 39.31476, atol=0.1, rtol=0)
+                    assert np.isclose(eigvals[0], 39.31476, rtol=0.001)
 
 
 def test_reduced_dof_freq_plate():
     models = ['plate_clt_donnell_bardell',
               'cpanel_clt_donnell_bardell']
     for model in models:
-        atype = 3
-        print('Test reduced_dof solver, atype={0}, model={1}'.format(atype, model))
+        print('Test reduced_dof solver, prestress=True, model={0}'.format(model))
         p = Panel()
         p.model = model
         p.bc_ssss()
@@ -61,13 +65,15 @@ def test_reduced_dof_freq_plate():
         p.n = 12
         p.Nxx = -60.
         p.Nyy = -5.
-        p.freq(sparse_solver=True, reduced_dof=False, silent=True,
-               atype=atype)
-        reduced_false = p.eigvals[0]
-        p.freq(sparse_solver=True, reduced_dof=True, silent=True,
-               atype=atype)
-        reduced_true = p.eigvals[0]
-        assert np.isclose(reduced_false, reduced_true, atol=0.0001)
+        k0 = p.calc_k0(silent=True)
+        M = p.calc_kM(silent=True)
+        kG0 = p.calc_kG0(silent=True)
+        k0 += kG0
+        eigvals, eigvecs = freq(k0, M, sparse_solver=True, reduced_dof=False, silent=True)
+        reduced_false = eigvals[0]
+        freq(k0, M, sparse_solver=True, reduced_dof=True, silent=True)
+        reduced_true = eigvals[0]
+        assert np.isclose(reduced_false, reduced_true, rtol=0.001)
 
 
 if __name__ == '__main__':
