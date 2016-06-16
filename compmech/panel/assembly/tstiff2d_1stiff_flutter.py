@@ -13,7 +13,11 @@ def tstiff2d_1stiff_flutter(a, b, ys, bb, bf, defect_a, mu, plyt,
         air_speed=None, rho_air=None, Mach=None, speed_sound=None, flow='x',
         Nxx_skin=None, Nxx_base=None, Nxx_flange=None, run_static_case=True,
         r=None, m=8, n=8, mb=None, nb=None, mf=None, nf=None):
-    """Panel + T Stiffener with possible defect at middle
+    r"""Flutter of T-Stiffened Panel with possible defect at middle
+
+    For more details about each parameter and the aerodynamic formulation see
+    Ref. [castro2016FlutterPanel]_ .
+
 
     The panel assembly looks like::
 
@@ -55,11 +59,66 @@ def tstiff2d_1stiff_flutter(a, b, ys, bb, bf, defect_a, mu, plyt,
     ----------
 
     a : float
-        Panel length.
+        Total length of the assembly (along `x`).
     b : float
-        Panel width.
-    TODO add other parameters
+        Total width of the assembly (along `y`).
+    ys : float
+        Position of the stiffener along `y`.
+    bb : float
+        Stiffener's base width.
+    bf : float
+        Stiffener's flange width.
+    defect_a : float
+        Debonding defect/assembly length ratio.
+    mu : float
+        Material density.
+    plyt : float
+        Ply thickness.
+    laminaprop : list or tuple
+        Orthotropic lamina properties: `E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}`.
+    stack_skin : list or tuple
+        Stacking sequence for the skin.
+    stack_base : list or tuple
+        Stacking sequence for the stiffener's base.
+    stack_flange : list or tuple
+        Stacking sequence for the stiffener's flange.
+    air_speed : float
+        Airflow speed.
+    rho_air : float
+        Air density.
+    Mach : float
+        Mach number.
+    speed_sound : float
+        Speed of sound.
+    flow : "x" or "y"
+        Direction of airflow.
+    Nxx_skin : float
+        Skin load distributed at the assembly edge at `x=0`.
+    Nxx_base : float
+        Stiffener's base load distributed at the assembly edge at `x=0`.
+    Nxx_flange : float
+        Stiffener's flange load distributed at the assembly edge at `x=0`.
+    run_static_case : bool, optional
+        If True a static analysis is run before the linear buckling analysis
+        to compute the real membrane stress state along the domain, otherwise
+        it is assumed constant values of `N_{xx}` for all components.
+    r : float or None, optional
+        Radius of the stiffened panel.
+    m, n : int, optional
+        Number of terms of the approximation function for the skin.
+    mb, nb : int, optional
+        Number of terms of the approximation function for the stiffener's base.
+    mf, nf : int, optional
+        Number of terms of the approximation function for the stiffener's
+        flange.
 
+    Examples
+    --------
+
+    The following example is one of the test cases:
+
+    .. literalinclude:: ../../../../compmech/panel/assembly/tests/test_tstiff2d_assembly.py
+        :pyobject: test_tstiff2d_1stiff_flutter
 
     """
     defect = defect_a * a

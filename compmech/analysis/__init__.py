@@ -7,6 +7,13 @@ Analysis Module (:mod:`compmech.analysis`)
 
 .. autoclass:: Analysis
     :members:
+
+.. autofunction:: freq
+
+.. autofunction:: lb
+
+.. autofunction:: static
+
 """
 from analysis import Analysis
 from freq import freq

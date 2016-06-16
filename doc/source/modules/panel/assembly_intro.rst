@@ -6,4 +6,5 @@ Assembly of Semi-Analytical Models
 
     assembly.rst
     assembly_functions.rst
+    assembly_example_to_create.rst
 

@@ -7,12 +7,17 @@ Interpolate (:mod:`compmech.interpolate`)
 This module includes some interpolation utilities that will be used in other
 modules.
 
+.. autofunction:: inv_weighted
+
+.. autofunction:: interp
+
 """
 from collections import Iterable
 
 import numpy as np
 
 from compmech.logger import msg, warn
+
 
 def inv_weighted(data, mesh, num_sub, col, ncp=5, power_parameter=2):
     r"""Interpolates the values taken at one group of points into
@@ -159,12 +164,16 @@ def inv_weighted(data, mesh, num_sub, col, ncp=5, power_parameter=2):
 
     return ans
 
+
 def interp(x, xp, fp, left=None, right=None, period=None):
     """
     One-dimensional linear interpolation
 
     Returns the one-dimensional piecewise linear interpolant to a function
     with given values at discrete data-points.
+
+    .. note:: This function has been incorporated in NumPy >= 1.10.0 and will be soon
+              removed from here.
 
     Parameters
     ----------

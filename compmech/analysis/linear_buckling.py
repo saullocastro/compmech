@@ -7,20 +7,20 @@ from compmech.sparse import remove_null_cols
 
 def lb(K, KG, tol=0, sparse_solver=True, silent=False,
        num_eigvalues=25, num_eigvalues_print=5):
-    """Performs a linear buckling analysis
+    """Linear Buckling Analysis
 
-    The following parameters will affect the linear buckling analysis:
-
-    =======================    =====================================
-    parameter                  description
-    =======================    =====================================
-    ``num_eigvalues``        Number of eigenvalues to be extracted
-    ``num_eigvalues_print``    Number of eigenvalues to print after
-                               the analysis is completed
-    =======================    =====================================
+    It can also be used for more general eigenvalue analyzes if `K` is the
+    tangent stiffness matrix of a given load state.
 
     Parameters
     ----------
+    K : sparse_matrix
+        Stiffness matrix. Should include all constant terms of the initial
+        stress stiffness matrix, aerodynamic matrix and so forth when
+        applicable.
+    KG : sparse_matrix
+        Initial stress stiffness matrix that multiplies the load multiplcator
+        `\lambda` of the eigenvalue problem.
     tol : float, optional
         A float tolerance passsed to the eigenvalue solver.
     sparse_solver : bool, optional

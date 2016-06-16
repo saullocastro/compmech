@@ -1,5 +1,5 @@
-Assembly Functions
-------------------
+Functions using Assemblies of Flat Plates and Panels
+----------------------------------------------------
 
 .. autofunction:: compmech.panel.assembly.tstiff2d_1stiff_compression.tstiff2d_1stiff_compression
 

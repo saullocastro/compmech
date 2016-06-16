@@ -9,10 +9,7 @@ from compmech.sparse import remove_null_cols
 def freq(K, M, tol=0, sparse_solver=True, silent=False,
          sort=True, reduced_dof=False,
          num_eigvalues=25, num_eigvalues_print=5):
-    """Performs a natural frequency analysis
-
-    The following parameters of the will affect the linear buckling
-    analysis:
+    """Frequency Analysis
 
     Parameters
     ----------

@@ -13,7 +13,7 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
         laminaprop, stack_skin, stack_base, stack_flange,
         Nxx_skin, Nxx_base, Nxx_flange, run_static_case=True,
         r=None, m=8, n=8, mb=None, nb=None, mf=None, nf=None):
-    r"""T-Stiffened panel with possible debonding defect at the middle
+    r"""Linear Buckling of T-Stiffened panel with debonding defect
 
     The panel assembly looks like::
 
@@ -55,9 +55,9 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
     ----------
 
     a : float
-        Total length of the assembly.
+        Total length of the assembly (along `x`).
     b : float
-        Total width of the assembly.
+        Total width of the assembly (along `y`).
     ys : float
         Position of the stiffener along `y`.
     bb : float
@@ -97,6 +97,14 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
     mf, nf : int, optional
         Number of terms of the approximation function for the stiffener's
         flange.
+
+    Examples
+    --------
+
+    The following example is one of the test cases:
+
+    .. literalinclude:: ../../../../compmech/panel/assembly/tests/test_tstiff2d_assembly.py
+        :pyobject: test_tstiff2d_1stiff_compression
 
     """
     defect = defect_a * a
