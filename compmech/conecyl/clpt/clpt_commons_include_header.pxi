@@ -21,11 +21,20 @@ ctypedef void *cfstraintype(double *c, double sina, double cosa, double tLA,
                             double *c0, int m0, int n0, int funcnum,
                             double *es) nogil
 
-cdef int i0 = 0
-cdef int j0 = 1
-cdef int num0 = 3
-cdef int num1 = 3
-cdef int num2 = 6
-cdef int e_num = 6
-cdef int castro = 0
-cdef double pi=3.141592653589793
+cdef int i0
+cdef int j0
+cdef int num0
+cdef int num1
+cdef int num2
+cdef int e_num
+cdef int castro
+cdef double pi
+
+i0 = 0
+j0 = 1
+num0 = 3
+num1 = 3
+num2 = 6
+e_num = 6
+castro = 0
+pi=3.141592653589793
