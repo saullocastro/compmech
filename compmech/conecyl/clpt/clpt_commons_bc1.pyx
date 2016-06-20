@@ -4,10 +4,10 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-include 'clpt_commons_include_header.pyx'
-include 'clpt_commons_include_fstrain.pyx'
-include 'clpt_commons_include_fuvw.pyx'
-include 'clpt_commons_include_cfN.pyx'
+include 'clpt_commons_include_header.pxi'
+include 'clpt_commons_include_fstrain.pxi'
+include 'clpt_commons_include_fuvw.pxi'
+include 'clpt_commons_include_cfN.pxi'
 
 cdef void cfuvw(double *c, int m1, int m2, int n2, double r2, double L,
                 double *xs, double *ts, int size,

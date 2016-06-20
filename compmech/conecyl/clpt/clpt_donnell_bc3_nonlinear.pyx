@@ -4,7 +4,7 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-include 'clpt_nonlinear_header.pyx'
+include 'clpt_nonlinear_header.pxi'
 
 from compmech.conecyl.clpt.clpt_commons_bc3 cimport cfwx, cfwt, cfN
 

@@ -1,1 +1,1 @@
-include 'clpt_commons_include.pxd'
+include 'clpt_commons_include.pxi'
