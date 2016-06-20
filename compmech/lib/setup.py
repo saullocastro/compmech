@@ -140,7 +140,10 @@ def configuration(parent_package='', top_path=None):
                 compile(config, src)
             link(config, instlib)
         else:
-            p = Pool(cpu_count()-1)
+            ncpus = cpu_count()
+            if ncpus > 1:
+                ncpus = ncpus // 2
+            p = Pool(ncpus)
             partial_compile = partial(compile, config)
             p.map(partial_compile, instlib[1]['sources'])
             p.close()
