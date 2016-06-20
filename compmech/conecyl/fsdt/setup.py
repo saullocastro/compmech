@@ -79,9 +79,7 @@ def configuration(parent_package='', top_path=None):
               ['fsdt_donnell_bcn_nonlinear.pyx'],
               extra_compile_args=args_nonlinear)
 
-    for ext in config.ext_modules:
-        for src in ext.sources:
-            cythonize(src)
+    cythonize(config.ext_modules)
 
     config.make_config_py()
 

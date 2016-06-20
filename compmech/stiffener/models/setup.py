@@ -55,9 +55,7 @@ def configuration(parent_package='', top_path=None):
                          'bardell_12', 'bardell_c0c1'],
                      library_dirs=[lib])
 
-    for ext in config.ext_modules:
-        for src in ext.sources:
-            cythonize(src)
+    cythonize(config.ext_modules)
 
     config.make_config_py()
 

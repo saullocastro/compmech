@@ -104,9 +104,7 @@ def configuration(parent_package='', top_path=None):
               libraries=['bardell_functions'],
               library_dirs=[lib])
 
-    for ext in config.ext_modules:
-        for src in ext.sources:
-            cythonize(src)
+    cythonize(config.ext_modules)
 
     config.make_config_py()
 

@@ -135,9 +135,7 @@ def configuration(parent_package='', top_path=None):
                        '../imperfections/mgi.pyx',
                        '../../integrate/integratev.pyx'])
 
-    for ext in config.ext_modules:
-        for src in ext.sources:
-            cythonize(src)
+    cythonize(config.ext_modules)
 
     config.make_config_py()
 
