@@ -120,8 +120,10 @@ def configuration(parent_package='', top_path=None):
                        delegate_options_to_subpackages=True,
                        quiet=True)
 
+    config.add_data_files(('compmech', 'LICENSE'))
+    config.add_data_files(('compmech', 'README.rst'))
+
     config.add_subpackage('compmech')
-    config.add_data_files(('compmech', '*.txt'))
 
     config.get_version('compmech/__version__.py')
 
