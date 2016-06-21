@@ -29,7 +29,7 @@ def configuration(parent_package='',top_path=None):
               ' install --inplace clean', shell=True)
     p.wait()
     ###################################################
-    if 'Python27' in get_python_lib():
+    if '27' in get_python_lib() or 2.7 in get_python_lib():
         pyversion = '2.7'
     else:
         raise NotImplementedError('Setup not ready for this Python version!')
