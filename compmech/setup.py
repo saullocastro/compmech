@@ -1,6 +1,7 @@
 from __future__ import division, print_function, absolute_import
 
 import os
+from os.path import join, realpath
 from distutils.sysconfig import get_python_lib
 from subprocess import Popen
 import shutil
@@ -14,19 +15,37 @@ def configuration(parent_package='',top_path=None):
     #NOTE include and lib must be the first to install
     # include
     print('Copying include files...')
-    includedir = os.path.join(get_python_lib(), 'compmech', 'include')
+    includedir = join(get_python_lib(), 'compmech', 'include')
     if os.path.isdir(includedir):
         shutil.rmtree(includedir)
-    shutil.copytree(os.path.join(os.path.realpath(config.package_path),
+    shutil.copytree(join(realpath(config.package_path),
                     'include'), includedir)
 
     # lib
     print('Building shared libraries...')
     p = Popen('python ' +
-              os.path.join(os.path.realpath(config.package_path),
+              join(realpath(config.package_path),
                            './lib/setup.py') +
               ' install --inplace clean', shell=True)
     p.wait()
+    ###################################################
+    if 'Python27' in get_python_lib():
+        pyversion = '2.7'
+    else:
+        raise NotImplementedError('Setup not ready for this Python version!')
+    libplatdir = join(realpath(top_path), 'build', 'lib.' + os.environ['PLAT']
+            + '-' + pyversion)
+
+    libplatinclude = join(libplatdir, 'compmech', 'include')
+    if os.path.isdir(libplatinclude):
+        shutil.rmtree(libplatinclude)
+    shutil.copytree(includedir, libplatinclude)
+
+    libplatlib = join(libplatdir, 'compmech', 'lib')
+    if os.path.isdir(libplatlib):
+        shutil.rmtree(libplatlib)
+    libdir = join(get_python_lib(), 'compmech', 'lib')
+    shutil.copytree(libdir, libplatlib)
     ###################################################
 
     config.add_subpackage('analysis')
