@@ -25,12 +25,14 @@ CLASSIFIERS = """\
 Development Status :: 4 - Beta
 Intended Audience :: Science/Research
 Intended Audience :: Developers
-License :: BSD Approved
-Programming Language :: FORTRAN
+Intended Audience :: Education
+License :: OSI Approved :: BSD License
+Programming Language :: Fortran
 Programming Language :: C
 Programming Language :: Python
-Topic :: Software Development
 Topic :: Scientific/Engineering
+Topic :: Scientific/Engineering :: Mathematics
+Topic :: Software Development
 Operating System :: Microsoft :: Windows
 Operating System :: Unix
 
