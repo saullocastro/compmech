@@ -38,9 +38,9 @@ Operating System :: Unix
 """
 
 MAJOR = 0
-MINOR = 6
-MICRO = 5
-ISRELEASED = True
+MINOR = 7
+MICRO = 0
+ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
@@ -143,8 +143,8 @@ def setup_package():
 
     metadata = dict(
         name='compmech',
-        maintainer='CompMech Developers',
-        maintainer_email='compmech.project@gmail.com ',
+        maintainer='Saullo G. P. Castro',
+        maintainer_email='castrosaullo@gmail.com',
         version=FULLVERSION,
         description=DOCLINES[0],
         long_description='\n'.join(DOCLINES[2:]),
