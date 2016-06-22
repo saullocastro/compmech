@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Analysis Module (compmech.analysis) &mdash; CompMech 0.5.5.dev0+08244a6 documentation</title>
+    <title>Analysis Module (compmech.analysis) &mdash; CompMech 0.6.5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.5.5.dev0+08244a6',
+        VERSION:     '0.6.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.5.5.dev0+08244a6 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
     <link rel="up" title="Modules" href="../index.html" />
-    <link rel="next" title="Composite Module (compmech.composite)" href="../composite/index.html" />
     <link rel="prev" title="Modules" href="../index.html" /> 
   </head>
   <body role="document">
@@ -38,18 +37,12 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../composite/index.html" title="Composite Module (compmech.composite)"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
           <a href="../index.html" title="Modules"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
       </ul>
     </div>  
@@ -201,6 +194,9 @@ Required for non-linear analysis.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.analysis.Analysis.static" title="compmech.analysis.Analysis.static"><code class="xref py py-obj docutils literal"><span class="pre">static</span></code></a>([NLgeom,&nbsp;silent])</td>
+<td>General solver for static analyses</td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
@@ -229,6 +225,149 @@ be performed.</p>
 
 </dd></dl>
 
+<dl class="function">
+<dt id="compmech.analysis.freq">
+<code class="descclassname">compmech.analysis.</code><code class="descname">freq</code><span class="sig-paren">(</span><em>K</em>, <em>M</em>, <em>tol=0</em>, <em>sparse_solver=True</em>, <em>silent=False</em>, <em>sort=True</em>, <em>reduced_dof=False</em>, <em>num_eigvalues=25</em>, <em>num_eigvalues_print=5</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/analysis/freq.html#freq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.analysis.freq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frequency Analysis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>K</strong> : sparse_matrix</p>
+<blockquote>
+<div><p>Stiffness matrix. Should include initial stress stiffness matrix,
+aerodynamic matrix and so forth when applicable.</p>
+</div></blockquote>
+<p><strong>M</strong> : sparse_matrix</p>
+<blockquote>
+<div><p>Mass matrix.</p>
+</div></blockquote>
+<p><strong>tol</strong> : float, optional</p>
+<blockquote>
+<div><p>A tolerance value passed to <code class="docutils literal"><span class="pre">scipy.sparse.linalg.eigs</span></code>.</p>
+</div></blockquote>
+<p><strong>sparse_solver</strong> : bool, optional</p>
+<blockquote>
+<div><p>Tells if solver <code class="xref py py-func docutils literal"><span class="pre">scipy.linalg.eig()</span></code> or
+<code class="xref py py-func docutils literal"><span class="pre">scipy.sparse.linalg.eigs()</span></code> should be used.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is recommended <code class="docutils literal"><span class="pre">sparse_solver=False</span></code>, because it
+was verified that the sparse solver becomes unstable
+for some cases, though the sparse solver is faster.</p>
+</div>
+</div></blockquote>
+<p><strong>silent</strong> : bool, optional</p>
+<blockquote>
+<div><p>A boolean to tell whether the log messages should be printed.</p>
+</div></blockquote>
+<p><strong>sort</strong> : bool, optional</p>
+<blockquote>
+<div><p>Sort the output eigenvalues and eigenmodes.</p>
+</div></blockquote>
+<p><strong>reduced_dof</strong> : bool, optional</p>
+<blockquote>
+<div><p>Considers only the contributions of <img class="math" src="../../_images/math/285ea4ce424ca59373b740d721f3b288c454e3a3.png" alt="v"/> and <img class="math" src="../../_images/math/e71c6ccb3d0ab335b8cad21bcf3111f465752cd3.png" alt="w"/> to the stiffness
+matrix and accelerates the run. Only effective when
+<code class="docutils literal"><span class="pre">sparse_solver=False</span></code>.</p>
+</div></blockquote>
+<p><strong>num_eigvalues</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of calculated eigenvalues.</p>
+</div></blockquote>
+<p><strong>num_eigvalues_print</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of eigenvalues to print.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The extracted eigenvalues are stored in the <code class="docutils literal"><span class="pre">eigvals</span></code> parameter and</p>
+<p class="last">the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the <code class="docutils literal"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="compmech.analysis.lb">
+<code class="descclassname">compmech.analysis.</code><code class="descname">lb</code><span class="sig-paren">(</span><em>K</em>, <em>KG</em>, <em>tol=0</em>, <em>sparse_solver=True</em>, <em>silent=False</em>, <em>num_eigvalues=25</em>, <em>num_eigvalues_print=5</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/analysis/linear_buckling.html#lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.analysis.lb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear Buckling Analysis</p>
+<p>It can also be used for more general eigenvalue analyzes if <img class="math" src="../../_images/math/af5e2c374ff74e0ec0b535fe68fcf63babcc2600.png" alt="K"/> is the
+tangent stiffness matrix of a given load state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>K</strong> : sparse_matrix</p>
+<blockquote>
+<div><p>Stiffness matrix. Should include all constant terms of the initial
+stress stiffness matrix, aerodynamic matrix and so forth when
+applicable.</p>
+</div></blockquote>
+<p><strong>KG</strong> : sparse_matrix</p>
+<blockquote>
+<div><p>Initial stress stiffness matrix that multiplies the load multiplcator
+<img class="math" src="../../_images/math/36c6cfbcb3f2012e7df66272346c724e18d464cc.png" alt="\lambda"/> of the eigenvalue problem.</p>
+</div></blockquote>
+<p><strong>tol</strong> : float, optional</p>
+<blockquote>
+<div><p>A float tolerance passsed to the eigenvalue solver.</p>
+</div></blockquote>
+<p><strong>sparse_solver</strong> : bool, optional</p>
+<blockquote>
+<div><p>Tells if solver <code class="xref py py-func docutils literal"><span class="pre">scipy.linalg.eigh()</span></code> or
+<code class="xref py py-func docutils literal"><span class="pre">scipy.sparse.linalg.eigsh()</span></code> should be used.</p>
+</div></blockquote>
+<p><strong>silent</strong> : bool, optional</p>
+<blockquote>
+<div><p>A boolean to tell whether the log messages should be printed.</p>
+</div></blockquote>
+<p><strong>num_eigvalues</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of calculated eigenvalues.</p>
+</div></blockquote>
+<p><strong>num_eigvalues_print</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Number of eigenvalues to print.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The extracted eigenvalues are stored in the <code class="docutils literal"><span class="pre">eigvals</span></code> parameter
+of the <code class="docutils literal"><span class="pre">Panel</span></code> object and the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the
+<code class="docutils literal"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="compmech.analysis.static">
+<code class="descclassname">compmech.analysis.</code><code class="descname">static</code><span class="sig-paren">(</span><em>K</em>, <em>fext</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/analysis/static.html#static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.analysis.static" title="Permalink to this definition">¶</a></dt>
+<dd><p>Static Analyses</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>K</strong> : sparse_matrix</p>
+<blockquote>
+<div><p>Stiffness matrix. Should include initial stress stiffness matrix,
+aerodynamic matrix and so forth when applicable.</p>
+</div></blockquote>
+<p><strong>fext</strong> : array-like</p>
+<blockquote>
+<div><p>Vector of external loads.</p>
+</div></blockquote>
+<p><strong>silent</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>A boolean to tell whether the log messages should be printed.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -243,9 +382,6 @@ be performed.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
                         title="previous chapter">Modules</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../composite/index.html"
-                        title="next chapter">Composite Module (<code class="docutils literal"><span class="pre">compmech.composite</span></code>)</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -256,14 +392,11 @@ be performed.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -277,25 +410,19 @@ be performed.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../composite/index.html" title="Composite Module (compmech.composite)"
-             >next</a> |</li>
-        <li class="right" >
           <a href="../index.html" title="Modules"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jan 25, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cubic element of the Serendipity family &mdash; CompMech 0.5.5.dev0+08244a6 documentation</title>
+    <title>Cubic element of the Serendipity family &mdash; CompMech 0.6.5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.5.5.dev0+08244a6',
+        VERSION:     '0.6.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.5.5.dev0+08244a6 documentation" href="../../index.html" /> 
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -35,12 +35,9 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -63,15 +60,15 @@ the displacement field vector <img class="math" src="../../_images/math/9604ceff
 </div>
 <p>The variables of <img class="math" src="../../_images/math/9604ceff8959a2a9aed9cda1716554358510c677.png" alt="\{u\}"/> are interpolated using:</p>
 <div class="math">
-<p><img src="../../_images/math/fff38e56e4bb56934caec3c93d4fa808a6d6e73a.png" alt="\{u\} = \sum_{i=1}^{i=12}{h_i \{u_i\}}"/></p>
+<p><img src="../../_images/math/aaebf741fdf7c673311ce3b1a67a93d1f2b57d51.png" alt="\{u\} = \sum_{i=1}^{i=12}{h_i \{u_i\}}"/></p>
 </div><p>where <img class="math" src="../../_images/math/a7aa752c1b5cb22c33d8977f1086239d6ece9a10.png" alt="h_i"/> and <img class="math" src="../../_images/math/cc22b8bb1ba2a96586088d6954e1f59b49bb7ef7.png" alt="\{u_i\}"/> represent the interpolation and the displacement
 vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c2dadadbbd299ea5de.png" alt="n_i"/>. The interpolation function for the corner nodes are:</p>
 <div class="math">
-<p><img src="../../_images/math/42201093252e53aea38bbca0dcd0174165812706.png" alt="h_{1,\cdots,4} = \frac{1}{32}(1 + \xi\cdot\xi_{1,\cdots,4})
+<p><img src="../../_images/math/f447ab3482c3a2f575d59eecb4bb8cd3435aef67.png" alt="h_{1,\cdots,4} = \frac{1}{32}(1 + \xi\cdot\xi_{1,\cdots,4})
          (1 + \eta\cdot\eta_{1,\cdots,4})[-10 + 9\cdot(\xi^2 + \eta^2)]"/></p>
 </div><p>and for the middle nodes are:</p>
 <div class="math">
-<p><img src="../../_images/math/19cbe9efdd756dd3acf39aaebcf9d9b440752d54.png" alt="h_{5,\cdots,12}  = \frac{9}{32}(1 + \xi\cdot\xi_{5,\cdots,12})
+<p><img src="../../_images/math/45fee1454637848c9767998cb2967bdd03f6503d.png" alt="h_{5,\cdots,12}  = \frac{9}{32}(1 + \xi\cdot\xi_{5,\cdots,12})
                        (1-\eta^2)(1+9\cdot\eta\cdot\eta_{5,\cdots,12})"/></p>
 </div><p>The coordinates for each node</p>
 </div>
@@ -95,14 +92,11 @@ vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -116,18 +110,15 @@ vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jan 25, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

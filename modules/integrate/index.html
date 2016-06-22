@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Integrate &lt;compmech.integrate&gt; &mdash; CompMech 0.6.5 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.6.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
+    <link rel="up" title="Modules" href="../index.html" />
+    <link rel="next" title="Interpolate (compmech.interpolate)" href="../interpolate/index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../interpolate/index.html" title="Interpolate (compmech.interpolate)"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-compmech.integrate"><span id="module-integrate"></span></span><div class="section" id="integrate-compmech-integrate">
+<h1>Integrate &lt;<a class="reference internal" href="#module-compmech.integrate" title="compmech.integrate"><code class="xref py py-mod docutils literal"><span class="pre">compmech.integrate</span></code></a>&gt;<a class="headerlink" href="#integrate-compmech-integrate" title="Permalink to this headline">¶</a></h1>
+<p>Brings together many convenient algorithms for numerical integration
+that are not available in SciPy, such as the integration of vector valued
+functions.</p>
+<p>It would be nice to integrate this into SciPy one day.</p>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Below you can see how to use the available Cython functions.</p>
+<p>Integration of scalar functions:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">isclose</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">compmech.integrate.integrate</span> <span class="k">import</span> <span class="p">(</span><span class="n">trapz2d_points</span><span class="p">,</span> <span class="n">simps2d_points</span><span class="p">,</span>
+                                          <span class="n">python_trapz_quad</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">test_integrate_sinsin</span><span class="p">():</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="mi">4</span><span class="o">/</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> <span class="n">betas</span> <span class="o">=</span> <span class="n">trapz2d_points</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> <span class="n">betas</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">isclose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> <span class="n">betas</span> <span class="o">=</span> <span class="n">simps2d_points</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> <span class="n">betas</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">isclose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.00001</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">test_integrate_sinsin_using_trapz_quad</span><span class="p">():</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="mi">4</span><span class="o">/</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">ny</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">xis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">weightsxi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">etas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">weightseta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="n">python_trapz_quad</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">xis</span><span class="p">,</span> <span class="n">weightsxi</span><span class="p">)</span>
+    <span class="n">python_trapz_quad</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">etas</span><span class="p">,</span> <span class="n">weightseta</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="mf">0.</span>
+
+    <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">weightxi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xis</span><span class="p">,</span> <span class="n">weightsxi</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">eta</span><span class="p">,</span> <span class="n">weighteta</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">etas</span><span class="p">,</span> <span class="n">weightseta</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="n">weightxi</span><span class="o">*</span><span class="n">weighteta</span><span class="o">*</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">xi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">eta</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">*=</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span>
+
+    <span class="k">assert</span> <span class="n">isclose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_integrate_sinsin</span><span class="p">()</span>
+    <span class="n">test_integrate_sinsin_using_trapz_quad</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Integration of vector-valued functions:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyximport</span><span class="p">;</span> <span class="n">pyximport</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">compmech.integrate.integratev</span> <span class="k">import</span> <span class="n">_test_integratev</span>
+
+
+<span class="k">def</span> <span class="nf">test_integratev_trapz2d</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;trapz2d&#39;</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_test_integratev</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">9</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span>
+            <span class="n">atol</span><span class="o">=</span><span class="mf">1.e-3</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">test_integratev_simps2d</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;simps2d&#39;</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">_test_integratev</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">9</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span>
+            <span class="n">atol</span><span class="o">=</span><span class="mf">1.e-4</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_integratev_trapz2d</span><span class="p">()</span>
+    <span class="n">test_integratev_simps2d</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Integrate &lt;<code class="docutils literal"><span class="pre">compmech.integrate</span></code>&gt;</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../interpolate/index.html"
+                        title="next chapter">Interpolate (<code class="docutils literal"><span class="pre">compmech.interpolate</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/integrate/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../interpolate/index.html" title="Interpolate (compmech.interpolate)"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+    </div>
+  </body>
+</html>

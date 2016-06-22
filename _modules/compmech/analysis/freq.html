@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compmech.analysis.freq &mdash; CompMech 0.6.5 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for compmech.analysis.freq</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">eigs</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">eig</span>
+
+<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="n">msg</span><span class="p">,</span> <span class="n">warn</span>
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="n">remove_null_cols</span>
+
+
+<div class="viewcode-block" id="freq"><a class="viewcode-back" href="../../../modules/analysis/index.html#compmech.analysis.freq">[docs]</a><span class="k">def</span> <span class="nf">freq</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+         <span class="n">sort</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">reduced_dof</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+         <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">num_eigvalues_print</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Frequency Analysis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    K : sparse_matrix</span>
+<span class="sd">        Stiffness matrix. Should include initial stress stiffness matrix,</span>
+<span class="sd">        aerodynamic matrix and so forth when applicable.</span>
+<span class="sd">    M : sparse_matrix</span>
+<span class="sd">        Mass matrix.</span>
+<span class="sd">    tol : float, optional</span>
+<span class="sd">        A tolerance value passed to ``scipy.sparse.linalg.eigs``.</span>
+<span class="sd">    sparse_solver : bool, optional</span>
+<span class="sd">        Tells if solver :func:`scipy.linalg.eig` or</span>
+<span class="sd">        :func:`scipy.sparse.linalg.eigs` should be used.</span>
+
+<span class="sd">        .. note:: It is recommended ``sparse_solver=False``, because it</span>
+<span class="sd">                  was verified that the sparse solver becomes unstable</span>
+<span class="sd">                  for some cases, though the sparse solver is faster.</span>
+<span class="sd">    silent : bool, optional</span>
+<span class="sd">        A boolean to tell whether the log messages should be printed.</span>
+<span class="sd">    sort : bool, optional</span>
+<span class="sd">        Sort the output eigenvalues and eigenmodes.</span>
+<span class="sd">    reduced_dof : bool, optional</span>
+<span class="sd">        Considers only the contributions of `v` and `w` to the stiffness</span>
+<span class="sd">        matrix and accelerates the run. Only effective when</span>
+<span class="sd">        ``sparse_solver=False``.</span>
+<span class="sd">    num_eigvalues : int, optional</span>
+<span class="sd">        Number of calculated eigenvalues.</span>
+<span class="sd">    num_eigvalues_print : int, optional</span>
+<span class="sd">        Number of eigenvalues to print.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The extracted eigenvalues are stored in the ``eigvals`` parameter and</span>
+<span class="sd">    the `i^{th}` eigenvector in the ``eigvecs[:, i-1]`` parameter.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Running frequency analysis...&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+    <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Eigenvalue solver... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">num_eigvalues</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sparse_solver</span><span class="p">:</span>
+        <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;eigs() solver...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+        <span class="n">sizebkp</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">K</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">used_cols</span> <span class="o">=</span> <span class="n">remove_null_cols</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="c1">#NOTE Looking for better performance with symmetric matrices, I tried</span>
+        <span class="c1">#     using compmech.sparse.is_symmetric and eigsh, but it seems not</span>
+        <span class="c1">#     to improve speed (I did not try passing only half of the sparse</span>
+        <span class="c1">#     matrices to the solver)</span>
+        <span class="n">eigvals</span><span class="p">,</span> <span class="n">peigvecs</span> <span class="o">=</span> <span class="n">eigs</span><span class="p">(</span><span class="n">A</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;LM&#39;</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span>
+                                 <span class="n">sigma</span><span class="o">=-</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sizebkp</span><span class="p">,</span> <span class="n">num_eigvalues</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">peigvecs</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">eigvecs</span><span class="p">[</span><span class="n">used_cols</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">peigvecs</span>
+
+        <span class="n">eigvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">eigvals</span><span class="p">)</span> <span class="c1"># omega^2 to omega, in rad/s</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;eig() solver...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+        <span class="n">sizebkp</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">col_sum</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">check</span> <span class="o">=</span> <span class="n">col_sum</span> <span class="o">!=</span> <span class="mi">0</span>
+        <span class="n">used_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="n">check</span><span class="p">]</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:,</span> <span class="n">check</span><span class="p">][</span><span class="n">check</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">K</span><span class="p">[:,</span> <span class="n">check</span><span class="p">][</span><span class="n">check</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="k">if</span> <span class="n">reduced_dof</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">take</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">3</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">::</span><span class="mi">3</span><span class="p">]))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:,</span> <span class="n">take</span><span class="p">][</span><span class="n">take</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">K</span><span class="p">[:,</span> <span class="n">take</span><span class="p">][</span><span class="n">take</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="c1">#TODO did not try using eigh when input is symmetric to see if there</span>
+        <span class="c1">#     will be speed improvements</span>
+        <span class="n">eigvals</span><span class="p">,</span> <span class="n">peigvecs</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">a</span><span class="o">=-</span><span class="n">M</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">K</span><span class="p">)</span>
+        <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sizebkp</span><span class="p">,</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                           <span class="n">dtype</span><span class="o">=</span><span class="n">peigvecs</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">eigvecs</span><span class="p">[</span><span class="n">check</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">peigvecs</span>
+        <span class="n">eigvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="n">eigvals</span><span class="p">)</span> <span class="c1"># -1/omega^2 to omega, in rad/s</span>
+        <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvals</span>
+
+    <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+        <span class="n">sort_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">lexsort</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">eigvals</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                               <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">eigvals</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">sort_ind</span><span class="p">]</span>
+        <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">sort_ind</span><span class="p">]</span>
+
+        <span class="n">higher_zero</span> <span class="o">=</span> <span class="n">eigvals</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="mf">1e-6</span>
+
+        <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">higher_zero</span><span class="p">]</span>
+        <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">higher_zero</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse_solver</span> <span class="ow">and</span> <span class="n">reduced_dof</span><span class="p">:</span>
+        <span class="n">new_eigvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">eigvecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">eigvecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">eigvecs</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">new_eigvecs</span><span class="p">[</span><span class="n">take</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eigvecs</span>
+        <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">new_eigvecs</span>
+
+
+    <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+    <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;first {0} eigenvalues:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_eigvalues_print</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">eigval</span> <span class="ow">in</span> <span class="n">eigvals</span><span class="p">[:</span><span class="n">num_eigvalues_print</span><span class="p">]:</span>
+        <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;{0} rad/s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">eigval</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+    </div>
+  </body>
+</html>

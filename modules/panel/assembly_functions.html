@@ -1,0 +1,637 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Functions using Assemblies of Flat Plates and Panels &mdash; CompMech 0.6.5 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.6.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
+    <link rel="up" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" />
+    <link rel="next" title="Example to Create a Panel Assembly" href="assembly_example_to_create.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="assembly_example_to_create.html" title="Example to Create a Panel Assembly"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="assembly_intro.html" accesskey="U">Assembly of Semi-Analytical Models</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="functions-using-assemblies-of-flat-plates-and-panels">
+<h1>Functions using Assemblies of Flat Plates and Panels<a class="headerlink" href="#functions-using-assemblies-of-flat-plates-and-panels" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="compmech.panel.assembly.tstiff2d_1stiff_compression.tstiff2d_1stiff_compression">
+<code class="descclassname">compmech.panel.assembly.tstiff2d_1stiff_compression.</code><code class="descname">tstiff2d_1stiff_compression</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>defect_a</em>, <em>mu</em>, <em>plyt</em>, <em>laminaprop</em>, <em>stack_skin</em>, <em>stack_base</em>, <em>stack_flange</em>, <em>Nxx_skin</em>, <em>Nxx_base</em>, <em>Nxx_flange</em>, <em>run_static_case=True</em>, <em>r=None</em>, <em>m=8</em>, <em>n=8</em>, <em>mb=None</em>, <em>nb=None</em>, <em>mf=None</em>, <em>nf=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/tstiff2d_1stiff_compression.html#tstiff2d_1stiff_compression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.tstiff2d_1stiff_compression.tstiff2d_1stiff_compression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear Buckling of T-Stiffened panel with debonding defect</p>
+<p>The panel assembly looks like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">skin</span>
+ <span class="n">_________</span> <span class="n">_____</span> <span class="n">_________</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>   <span class="n">p01</span>   <span class="o">|</span> <span class="n">p02</span> <span class="o">|</span>   <span class="n">p03</span>   <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>
+<span class="o">|</span>   <span class="n">p04</span>   <span class="o">|</span> <span class="n">p05</span> <span class="o">|</span>   <span class="n">p06</span>   <span class="o">|</span>      <span class="o">/</span>\  <span class="n">x</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>   <span class="n">p07</span>   <span class="o">|</span> <span class="n">p08</span> <span class="o">|</span>   <span class="n">p09</span>   <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>
+       <span class="n">loaded</span> <span class="n">edge</span>
+
+          <span class="n">base</span>            <span class="n">flange</span>
+           <span class="n">_____</span>           <span class="n">_____</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span> <span class="n">p10</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p11</span> <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+          <span class="o">|</span> <span class="n">p12</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p13</span> <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span> <span class="n">p14</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p15</span> <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+       <span class="n">loaded</span> <span class="n">edge</span>     <span class="n">loaded</span> <span class="n">edge</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : float</p>
+<blockquote>
+<div><p>Total length of the assembly (along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>).</p>
+</div></blockquote>
+<p><strong>b</strong> : float</p>
+<blockquote>
+<div><p>Total width of the assembly (along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>).</p>
+</div></blockquote>
+<p><strong>ys</strong> : float</p>
+<blockquote>
+<div><p>Position of the stiffener along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+</div></blockquote>
+<p><strong>bb</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s base width.</p>
+</div></blockquote>
+<p><strong>bf</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s flange width.</p>
+</div></blockquote>
+<p><strong>defect_a</strong> : float</p>
+<blockquote>
+<div><p>Debonding defect/assembly length ratio.</p>
+</div></blockquote>
+<p><strong>mu</strong> : float</p>
+<blockquote>
+<div><p>Material density.</p>
+</div></blockquote>
+<p><strong>plyt</strong> : float</p>
+<blockquote>
+<div><p>Ply thickness.</p>
+</div></blockquote>
+<p><strong>laminaprop</strong> : list or tuple</p>
+<blockquote>
+<div><p>Orthotropic lamina properties: <img class="math" src="../../_images/math/4cfe776bc9ce20038d7eb49036c0658bc6518039.png" alt="E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}"/>.</p>
+</div></blockquote>
+<p><strong>stack_skin</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the skin.</p>
+</div></blockquote>
+<p><strong>stack_base</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the stiffener&#8217;s base.</p>
+</div></blockquote>
+<p><strong>stack_flange</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the stiffener&#8217;s flange.</p>
+</div></blockquote>
+<p><strong>Nxx_skin</strong> : float</p>
+<blockquote>
+<div><p>Skin load distributed at the assembly edge at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/>.</p>
+</div></blockquote>
+<p><strong>Nxx_base</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s base load distributed at the assembly edge at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/>.</p>
+</div></blockquote>
+<p><strong>Nxx_flange</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s flange load distributed at the assembly edge at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/>.</p>
+</div></blockquote>
+<p><strong>run_static_case</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True a static analysis is run before the linear buckling analysis
+to compute the real membrane stress state along the domain, otherwise
+it is assumed constant values of <img class="math" src="../../_images/math/64bd555ddece9a006eef1287d4712f13fd9af4e0.png" alt="N_{xx}"/> for all components.</p>
+</div></blockquote>
+<p><strong>r</strong> : float or None, optional</p>
+<blockquote>
+<div><p>Radius of the stiffened panel.</p>
+</div></blockquote>
+<p><strong>m, n</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of terms of the approximation function for the skin.</p>
+</div></blockquote>
+<p><strong>mb, nb</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of terms of the approximation function for the stiffener&#8217;s base.</p>
+</div></blockquote>
+<p><strong>mf, nf</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Number of terms of the approximation function for the stiffener&#8217;s
+flange.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The following example is one of the test cases:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_tstiff2d_1stiff_compression</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing assembly function: tstiff2d_1stiff_compression&#39;</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">bb</span> <span class="o">=</span> <span class="n">b</span><span class="o">/</span><span class="mf">5.</span>
+    <span class="n">bf</span> <span class="o">=</span> <span class="n">bb</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">b</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">tstiff2d_1stiff_compression</span><span class="p">(</span>
+        <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span>
+        <span class="n">bb</span><span class="o">=</span><span class="n">bb</span><span class="p">,</span>
+        <span class="n">bf</span><span class="o">=</span><span class="n">bf</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
+        <span class="n">ys</span><span class="o">=</span><span class="n">ys</span><span class="p">,</span>
+        <span class="n">defect_a</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="mf">1.3e3</span><span class="p">,</span>
+        <span class="n">plyt</span><span class="o">=</span><span class="mf">0.125e-3</span><span class="p">,</span>
+        <span class="n">laminaprop</span><span class="o">=</span><span class="p">(</span><span class="mf">142.5e9</span><span class="p">,</span> <span class="mf">8.7e9</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">),</span>
+        <span class="n">stack_skin</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="n">stack_base</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">stack_flange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+        <span class="n">mb</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">mf</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">nf</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">run_static_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">Nxx_skin</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
+        <span class="n">Nxx_base</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
+        <span class="n">Nxx_flange</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">142.65057725</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="n">assy</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">tstiff2d_1stiff_compression</span><span class="p">(</span>
+        <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span>
+        <span class="n">bb</span><span class="o">=</span><span class="n">bb</span><span class="p">,</span>
+        <span class="n">bf</span><span class="o">=</span><span class="n">bf</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
+        <span class="n">ys</span><span class="o">=</span><span class="n">ys</span><span class="p">,</span>
+        <span class="n">defect_a</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="mf">1.3e3</span><span class="p">,</span>
+        <span class="n">plyt</span><span class="o">=</span><span class="mf">0.125e-3</span><span class="p">,</span>
+        <span class="n">laminaprop</span><span class="o">=</span><span class="p">(</span><span class="mf">142.5e9</span><span class="p">,</span> <span class="mf">8.7e9</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">),</span>
+        <span class="n">stack_skin</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="n">stack_base</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">stack_flange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+        <span class="n">mb</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">mf</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">nf</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">run_static_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">Nxx_skin</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
+        <span class="n">Nxx_base</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
+        <span class="n">Nxx_flange</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">114.76990872</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="compmech.panel.assembly.tstiff2d_1stiff_flutter.tstiff2d_1stiff_flutter">
+<code class="descclassname">compmech.panel.assembly.tstiff2d_1stiff_flutter.</code><code class="descname">tstiff2d_1stiff_flutter</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>defect_a</em>, <em>mu</em>, <em>plyt</em>, <em>laminaprop</em>, <em>stack_skin</em>, <em>stack_base</em>, <em>stack_flange</em>, <em>air_speed=None</em>, <em>rho_air=None</em>, <em>Mach=None</em>, <em>speed_sound=None</em>, <em>flow='x'</em>, <em>Nxx_skin=None</em>, <em>Nxx_base=None</em>, <em>Nxx_flange=None</em>, <em>run_static_case=True</em>, <em>r=None</em>, <em>m=8</em>, <em>n=8</em>, <em>mb=None</em>, <em>nb=None</em>, <em>mf=None</em>, <em>nf=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/tstiff2d_1stiff_flutter.html#tstiff2d_1stiff_flutter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.tstiff2d_1stiff_flutter.tstiff2d_1stiff_flutter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flutter of T-Stiffened Panel with possible defect at middle</p>
+<p>For more details about each parameter and the aerodynamic formulation see
+Ref. <a class="reference internal" href="../../theory/ref.html#castro2016flutterpanel" id="id1">[castro2016FlutterPanel]</a> .</p>
+<p>The panel assembly looks like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">skin</span>
+ <span class="n">_________</span> <span class="n">_____</span> <span class="n">_________</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>   <span class="n">p01</span>   <span class="o">|</span> <span class="n">p02</span> <span class="o">|</span>   <span class="n">p03</span>   <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>
+<span class="o">|</span>   <span class="n">p04</span>   <span class="o">|</span> <span class="n">p05</span> <span class="o">|</span>   <span class="n">p06</span>   <span class="o">|</span>      <span class="o">/</span>\  <span class="n">x</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>   <span class="n">p07</span>   <span class="o">|</span> <span class="n">p08</span> <span class="o">|</span>   <span class="n">p09</span>   <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>
+       <span class="n">loaded</span> <span class="n">edge</span>
+
+          <span class="n">base</span>            <span class="n">flange</span>
+           <span class="n">_____</span>           <span class="n">_____</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span> <span class="n">p10</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p11</span> <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+          <span class="o">|</span> <span class="n">p12</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p13</span> <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span> <span class="n">p14</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p15</span> <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+       <span class="n">loaded</span> <span class="n">edge</span>     <span class="n">loaded</span> <span class="n">edge</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : float</p>
+<blockquote>
+<div><p>Total length of the assembly (along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>).</p>
+</div></blockquote>
+<p><strong>b</strong> : float</p>
+<blockquote>
+<div><p>Total width of the assembly (along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>).</p>
+</div></blockquote>
+<p><strong>ys</strong> : float</p>
+<blockquote>
+<div><p>Position of the stiffener along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+</div></blockquote>
+<p><strong>bb</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s base width.</p>
+</div></blockquote>
+<p><strong>bf</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s flange width.</p>
+</div></blockquote>
+<p><strong>defect_a</strong> : float</p>
+<blockquote>
+<div><p>Debonding defect/assembly length ratio.</p>
+</div></blockquote>
+<p><strong>mu</strong> : float</p>
+<blockquote>
+<div><p>Material density.</p>
+</div></blockquote>
+<p><strong>plyt</strong> : float</p>
+<blockquote>
+<div><p>Ply thickness.</p>
+</div></blockquote>
+<p><strong>laminaprop</strong> : list or tuple</p>
+<blockquote>
+<div><p>Orthotropic lamina properties: <img class="math" src="../../_images/math/4cfe776bc9ce20038d7eb49036c0658bc6518039.png" alt="E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}"/>.</p>
+</div></blockquote>
+<p><strong>stack_skin</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the skin.</p>
+</div></blockquote>
+<p><strong>stack_base</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the stiffener&#8217;s base.</p>
+</div></blockquote>
+<p><strong>stack_flange</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the stiffener&#8217;s flange.</p>
+</div></blockquote>
+<p><strong>air_speed</strong> : float</p>
+<blockquote>
+<div><p>Airflow speed.</p>
+</div></blockquote>
+<p><strong>rho_air</strong> : float</p>
+<blockquote>
+<div><p>Air density.</p>
+</div></blockquote>
+<p><strong>Mach</strong> : float</p>
+<blockquote>
+<div><p>Mach number.</p>
+</div></blockquote>
+<p><strong>speed_sound</strong> : float</p>
+<blockquote>
+<div><p>Speed of sound.</p>
+</div></blockquote>
+<p><strong>flow</strong> : &#8220;x&#8221; or &#8220;y&#8221;</p>
+<blockquote>
+<div><p>Direction of airflow.</p>
+</div></blockquote>
+<p><strong>Nxx_skin</strong> : float</p>
+<blockquote>
+<div><p>Skin load distributed at the assembly edge at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/>.</p>
+</div></blockquote>
+<p><strong>Nxx_base</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s base load distributed at the assembly edge at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/>.</p>
+</div></blockquote>
+<p><strong>Nxx_flange</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s flange load distributed at the assembly edge at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/>.</p>
+</div></blockquote>
+<p><strong>run_static_case</strong> : bool, optional</p>
+<blockquote>
+<div><p>If True a static analysis is run before the linear buckling analysis
+to compute the real membrane stress state along the domain, otherwise
+it is assumed constant values of <img class="math" src="../../_images/math/64bd555ddece9a006eef1287d4712f13fd9af4e0.png" alt="N_{xx}"/> for all components.</p>
+</div></blockquote>
+<p><strong>r</strong> : float or None, optional</p>
+<blockquote>
+<div><p>Radius of the stiffened panel.</p>
+</div></blockquote>
+<p><strong>m, n</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of terms of the approximation function for the skin.</p>
+</div></blockquote>
+<p><strong>mb, nb</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of terms of the approximation function for the stiffener&#8217;s base.</p>
+</div></blockquote>
+<p><strong>mf, nf</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Number of terms of the approximation function for the stiffener&#8217;s
+flange.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The following example is one of the test cases:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_tstiff2d_1stiff_flutter</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing assembly function: tstiff2d_1stiff_flutter&#39;</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">bb</span> <span class="o">=</span> <span class="n">b</span><span class="o">/</span><span class="mf">5.</span>
+    <span class="n">bf</span> <span class="o">=</span> <span class="n">bb</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">b</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">tstiff2d_1stiff_flutter</span><span class="p">(</span>
+        <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span>
+        <span class="n">bb</span><span class="o">=</span><span class="n">bb</span><span class="p">,</span>
+        <span class="n">bf</span><span class="o">=</span><span class="n">bf</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
+        <span class="n">ys</span><span class="o">=</span><span class="n">ys</span><span class="p">,</span>
+        <span class="n">defect_a</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="mf">1.3e3</span><span class="p">,</span>
+        <span class="n">plyt</span><span class="o">=</span><span class="mf">0.125e-3</span><span class="p">,</span>
+        <span class="n">laminaprop</span><span class="o">=</span><span class="p">(</span><span class="mf">142.5e9</span><span class="p">,</span> <span class="mf">8.7e9</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">),</span>
+        <span class="n">stack_skin</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="n">stack_base</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">stack_flange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+        <span class="n">mb</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">mf</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">nf</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+        <span class="n">air_speed</span><span class="o">=</span><span class="mf">800.</span><span class="p">,</span>
+        <span class="n">rho_air</span><span class="o">=</span><span class="mf">1500.</span><span class="p">,</span>
+        <span class="n">Mach</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+        <span class="n">speed_sound</span><span class="o">=</span><span class="mf">343.</span><span class="p">,</span>
+        <span class="n">run_static_case</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1423.254820</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="compmech.panel.assembly.tstiff2d_1stiff_freq.tstiff2d_1stiff_freq">
+<code class="descclassname">compmech.panel.assembly.tstiff2d_1stiff_freq.</code><code class="descname">tstiff2d_1stiff_freq</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>defect_a</em>, <em>mu</em>, <em>plyt</em>, <em>laminaprop</em>, <em>stack_skin</em>, <em>stack_base</em>, <em>stack_flange</em>, <em>r=None</em>, <em>m=8</em>, <em>n=8</em>, <em>mb=None</em>, <em>nb=None</em>, <em>mf=None</em>, <em>nf=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/tstiff2d_1stiff_freq.html#tstiff2d_1stiff_freq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.tstiff2d_1stiff_freq.tstiff2d_1stiff_freq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frequency T-Stiffened Panel with possible defect at middle</p>
+<p>For more details about each parameter and the aerodynamic formulation see
+Ref. <a class="reference internal" href="../../theory/ref.html#castro2016flutterpanel" id="id2">[castro2016FlutterPanel]</a> .</p>
+<p>The panel assembly looks like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">skin</span>
+ <span class="n">_________</span> <span class="n">_____</span> <span class="n">_________</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>   <span class="n">p01</span>   <span class="o">|</span> <span class="n">p02</span> <span class="o">|</span>   <span class="n">p03</span>   <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>
+<span class="o">|</span>   <span class="n">p04</span>   <span class="o">|</span> <span class="n">p05</span> <span class="o">|</span>   <span class="n">p06</span>   <span class="o">|</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>   <span class="n">p07</span>   <span class="o">|</span> <span class="n">p08</span> <span class="o">|</span>   <span class="n">p09</span>   <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>
+<span class="o">|</span><span class="n">_________</span><span class="o">|</span><span class="n">_____</span><span class="o">|</span><span class="n">_________</span><span class="o">|</span>
+
+          <span class="n">base</span>            <span class="n">flange</span>
+           <span class="n">_____</span>           <span class="n">_____</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span> <span class="n">p10</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p11</span> <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+          <span class="o">|</span> <span class="n">p12</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p13</span> <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span> <span class="n">p14</span> <span class="o">|</span>         <span class="o">|</span> <span class="n">p15</span> <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span>     <span class="o">|</span>         <span class="o">|</span>     <span class="o">|</span>
+          <span class="o">|</span><span class="n">_____</span><span class="o">|</span>         <span class="o">|</span><span class="n">_____</span><span class="o">|</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : float</p>
+<blockquote>
+<div><p>Total length of the assembly (along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>).</p>
+</div></blockquote>
+<p><strong>b</strong> : float</p>
+<blockquote>
+<div><p>Total width of the assembly (along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>).</p>
+</div></blockquote>
+<p><strong>ys</strong> : float</p>
+<blockquote>
+<div><p>Position of the stiffener along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+</div></blockquote>
+<p><strong>bb</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s base width.</p>
+</div></blockquote>
+<p><strong>bf</strong> : float</p>
+<blockquote>
+<div><p>Stiffener&#8217;s flange width.</p>
+</div></blockquote>
+<p><strong>defect_a</strong> : float</p>
+<blockquote>
+<div><p>Debonding defect/assembly length ratio.</p>
+</div></blockquote>
+<p><strong>mu</strong> : float</p>
+<blockquote>
+<div><p>Material density.</p>
+</div></blockquote>
+<p><strong>plyt</strong> : float</p>
+<blockquote>
+<div><p>Ply thickness.</p>
+</div></blockquote>
+<p><strong>laminaprop</strong> : list or tuple</p>
+<blockquote>
+<div><p>Orthotropic lamina properties: <img class="math" src="../../_images/math/4cfe776bc9ce20038d7eb49036c0658bc6518039.png" alt="E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}"/>.</p>
+</div></blockquote>
+<p><strong>stack_skin</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the skin.</p>
+</div></blockquote>
+<p><strong>stack_base</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the stiffener&#8217;s base.</p>
+</div></blockquote>
+<p><strong>stack_flange</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the stiffener&#8217;s flange.</p>
+</div></blockquote>
+<p><strong>r</strong> : float or None, optional</p>
+<blockquote>
+<div><p>Radius of the stiffened panel.</p>
+</div></blockquote>
+<p><strong>m, n</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of terms of the approximation function for the skin.</p>
+</div></blockquote>
+<p><strong>mb, nb</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of terms of the approximation function for the stiffener&#8217;s base.</p>
+</div></blockquote>
+<p><strong>mf, nf</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>Number of terms of the approximation function for the stiffener&#8217;s
+flange.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The following example is one of the test cases:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_tstiff2d_1stiff_freq</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing assembly function: tstiff2d_1stiff_freq&#39;</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">bb</span> <span class="o">=</span> <span class="n">b</span><span class="o">/</span><span class="mf">5.</span>
+    <span class="n">bf</span> <span class="o">=</span> <span class="n">bb</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">b</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">tstiff2d_1stiff_freq</span><span class="p">(</span>
+        <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span>
+        <span class="n">bb</span><span class="o">=</span><span class="n">bb</span><span class="p">,</span>
+        <span class="n">bf</span><span class="o">=</span><span class="n">bf</span><span class="p">,</span>
+        <span class="n">a</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
+        <span class="n">ys</span><span class="o">=</span><span class="n">ys</span><span class="p">,</span>
+        <span class="n">defect_a</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="mf">1.3e3</span><span class="p">,</span>
+        <span class="n">plyt</span><span class="o">=</span><span class="mf">0.125e-3</span><span class="p">,</span>
+        <span class="n">laminaprop</span><span class="o">=</span><span class="p">(</span><span class="mf">142.5e9</span><span class="p">,</span> <span class="mf">8.7e9</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">),</span>
+        <span class="n">stack_skin</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="n">stack_base</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">stack_flange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+        <span class="n">mb</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">mf</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">nf</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">48.35762006</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="assembly_example_to_create.html"
+                        title="next chapter">Example to Create a Panel Assembly</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/panel/assembly_functions.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="assembly_example_to_create.html" title="Example to Create a Panel Assembly"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+    </div>
+  </body>
+</html>

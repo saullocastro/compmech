@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Assembly of Plate and Panel Models (compmech.panel.assembly) &mdash; CompMech 0.6.5 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.6.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
+    <link rel="up" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" />
+    <link rel="prev" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="assembly_intro.html" title="Assembly of Semi-Analytical Models"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="assembly_intro.html" accesskey="U">Assembly of Semi-Analytical Models</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-compmech.panel.assembly"></span><div class="section" id="assembly-of-plate-and-panel-models-compmech-panel-assembly">
+<h1>Assembly of Plate and Panel Models (<a class="reference internal" href="#module-compmech.panel.assembly" title="compmech.panel.assembly"><code class="xref py py-mod docutils literal"><span class="pre">compmech.panel.assembly</span></code></a>)<a class="headerlink" href="#assembly-of-plate-and-panel-models-compmech-panel-assembly" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="compmech.panel.assembly.PanelAssembly">
+<em class="property">class </em><code class="descclassname">compmech.panel.assembly.</code><code class="descname">PanelAssembly</code><span class="sig-paren">(</span><em>panels</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/assembly.html#PanelAssembly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.PanelAssembly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for Panel Assemblies</p>
+<p>This class has some useful methods that will help plotting output for
+different panel groups within the assembly and so forth.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>panels</strong> : iterable</p>
+<blockquote class="last">
+<div><p>A list, tuple etc of <a class="reference internal" href="panel.html#compmech.panel.panel.Panel" title="compmech.panel.panel.Panel"><code class="xref py py-class docutils literal"><span class="pre">Panel</span></code></a> objects.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_size</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.assembly.PanelAssembly.plot" title="compmech.panel.assembly.PanelAssembly.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(c,&nbsp;group[,&nbsp;invert_y,&nbsp;vec,&nbsp;filename,&nbsp;...])</td>
+<td>Contour plot for a Ritz constants vector.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.assembly.PanelAssembly.uvw" title="compmech.panel.assembly.PanelAssembly.uvw"><code class="xref py py-obj docutils literal"><span class="pre">uvw</span></code></a>(c,&nbsp;group[,&nbsp;gridx,&nbsp;gridy])</td>
+<td>Calculates the displacement field</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="compmech.panel.assembly.PanelAssembly.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>c</em>, <em>group</em>, <em>invert_y=False</em>, <em>vec='w'</em>, <em>filename=''</em>, <em>ax=None</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>title=''</em>, <em>identify=False</em>, <em>show_boundaries=False</em>, <em>boundary_line='--k'</em>, <em>boundary_linewidth=1.0</em>, <em>colorbar=False</em>, <em>cbar_nticks=2</em>, <em>cbar_format=None</em>, <em>cbar_title=''</em>, <em>cbar_fontsize=10</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=400</em>, <em>texts=[]</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=50</em>, <em>gridy=50</em>, <em>num_levels=400</em>, <em>vecmin=None</em>, <em>vecmax=None</em>, <em>calc_data_only=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/assembly.html#PanelAssembly.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.PanelAssembly.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contour plot for a Ritz constants vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : np.ndarray</p>
+<blockquote>
+<div><p>The Ritz constants that will be used to compute the field contour.</p>
+</div></blockquote>
+<p><strong>group</strong> : str</p>
+<blockquote>
+<div><p>A group to plot. Each panel in <code class="docutils literal"><span class="pre">panels</span></code> should contain an
+attribute <code class="docutils literal"><span class="pre">group</span></code>, which is used to identify which entities
+should be plotted together.</p>
+</div></blockquote>
+<p><strong>vec</strong> : str, optional</p>
+<blockquote>
+<div><p>Can be one of the components:</p>
+<ul class="simple">
+<li>Displacement: <code class="docutils literal"><span class="pre">'u'</span></code>, <code class="docutils literal"><span class="pre">'v'</span></code>, <code class="docutils literal"><span class="pre">'w'</span></code>, <code class="docutils literal"><span class="pre">'phix'</span></code>, <code class="docutils literal"><span class="pre">'phiy'</span></code></li>
+<li>Strain: <code class="docutils literal"><span class="pre">'exx'</span></code>, <code class="docutils literal"><span class="pre">'eyy'</span></code>, <code class="docutils literal"><span class="pre">'gxy'</span></code>, <code class="docutils literal"><span class="pre">'kxx'</span></code>, <code class="docutils literal"><span class="pre">'kyy'</span></code>,
+<code class="docutils literal"><span class="pre">'kxy'</span></code>, <code class="docutils literal"><span class="pre">'gyz'</span></code>, <code class="docutils literal"><span class="pre">'gxz'</span></code></li>
+<li>Stress: <code class="docutils literal"><span class="pre">'Nxx'</span></code>, <code class="docutils literal"><span class="pre">'Nyy'</span></code>, <code class="docutils literal"><span class="pre">'Nxy'</span></code>, <code class="docutils literal"><span class="pre">'Mxx'</span></code>, <code class="docutils literal"><span class="pre">'Myy'</span></code>,
+<code class="docutils literal"><span class="pre">'Mxy'</span></code>, <code class="docutils literal"><span class="pre">'Qy'</span></code>, <code class="docutils literal"><span class="pre">'Qx'</span></code></li>
+</ul>
+</div></blockquote>
+<p><strong>invert_y</strong> : bool, optional</p>
+<blockquote>
+<div><p>Inverts the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> axis of the plot.</p>
+</div></blockquote>
+<p><strong>save</strong> : bool, optional</p>
+<blockquote>
+<div><p>Flag telling whether the contour should be saved to an image file.</p>
+</div></blockquote>
+<p><strong>dpi</strong> : int, optional</p>
+<blockquote>
+<div><p>Resolution of the saved file in dots per inch.</p>
+</div></blockquote>
+<p><strong>filename</strong> : str, optional</p>
+<blockquote>
+<div><p>The file name for the generated image file. If no value is given,
+the <img class="math" src="../../_images/math/86ce084fee7aaac111b4c85576e5c0b49483efe0.png" alt="name"/> parameter of the <code class="docutils literal"><span class="pre">Panel</span></code> object will be used.</p>
+</div></blockquote>
+<p><strong>ax</strong> : AxesSubplot, optional</p>
+<blockquote>
+<div><p>When <code class="docutils literal"><span class="pre">ax</span></code> is given, the contour plot will be created inside it.</p>
+</div></blockquote>
+<p><strong>figsize</strong> : tuple, optional</p>
+<blockquote>
+<div><p>The figure size given by <code class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></code>.</p>
+</div></blockquote>
+<p><strong>title</strong> : str, optional</p>
+<blockquote>
+<div><p>If any string is given a title is added to the contour plot.</p>
+</div></blockquote>
+<p><strong>indentify</strong> : bool, optional</p>
+<blockquote>
+<div><p>If domains should be identified. If yes, the name of each panel is
+used.</p>
+</div></blockquote>
+<p><strong>show_boundaries</strong> : bool, optional</p>
+<blockquote>
+<div><p>If boundaries between domains should be drawn.</p>
+</div></blockquote>
+<p><strong>boundary_line</strong> : str, optional</p>
+<blockquote>
+<div><p>Matplotlib string to define line type and color.</p>
+</div></blockquote>
+<p><strong>boundary_linewidth</strong> : float, optional</p>
+<blockquote>
+<div><p>Matplotlib float to define line width.</p>
+</div></blockquote>
+<p><strong>colorbar</strong> : bool, optional</p>
+<blockquote>
+<div><p>If a colorbar should be added to the contour plot.</p>
+</div></blockquote>
+<p><strong>cbar_nticks</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of ticks added to the colorbar.</p>
+</div></blockquote>
+<p><strong>cbar_format</strong> : [ None | format string | Formatter object ], optional</p>
+<blockquote>
+<div><p>See the <code class="docutils literal"><span class="pre">matplotlib.pyplot.colorbar</span></code> documentation.</p>
+</div></blockquote>
+<p><strong>cbar_fontsize</strong> : int, optional</p>
+<blockquote>
+<div><p>Fontsize of the colorbar labels.</p>
+</div></blockquote>
+<p><strong>cbar_title</strong> : str, optional</p>
+<blockquote>
+<div><p>Colorbar title. If <code class="docutils literal"><span class="pre">cbar_title</span> <span class="pre">==</span> <span class="pre">''</span></code> no title is added.</p>
+</div></blockquote>
+<p><strong>aspect</strong> : str, optional</p>
+<blockquote>
+<div><p>String that will be passed to the <code class="docutils literal"><span class="pre">AxesSubplot.set_aspect()</span></code>
+method.</p>
+</div></blockquote>
+<p><strong>clean</strong> : bool, optional</p>
+<blockquote>
+<div><p>Clean axes ticks, grids, spines etc.</p>
+</div></blockquote>
+<p><strong>xs</strong> : np.ndarray, optional</p>
+<blockquote>
+<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
+</div></blockquote>
+<p><strong>ys</strong> : np.ndarray, optional</p>
+<blockquote>
+<div><p>The <code class="docutils literal"><span class="pre">y</span></code> positions where to calculate the displacement field.
+Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
+</div></blockquote>
+<p><strong>gridx</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+displacement field.</p>
+</div></blockquote>
+<p><strong>gridy</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of points along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+displacement field.</p>
+</div></blockquote>
+<p><strong>num_levels</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of contour levels (higher values make the contour smoother).</p>
+</div></blockquote>
+<p><strong>vecmin</strong> : float, optional</p>
+<blockquote>
+<div><p>Minimum value for the contour scale (useful to compare with other
+results). If not specified it will be taken from the calculated
+field.</p>
+</div></blockquote>
+<p><strong>vecmax</strong> : float, optional</p>
+<blockquote>
+<div><p>Maximum value for the contour scale.</p>
+</div></blockquote>
+<p><strong>calc_data_only</strong> : bool, optional</p>
+<blockquote>
+<div><p>If only calculated data should be returned.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ax</strong> : matplotlib.axes.Axes</p>
+<blockquote>
+<div><p>The Matplotlib object that can be used to modify the current plot
+if needed.</p>
+</div></blockquote>
+<p><strong>data</strong> : dict</p>
+<blockquote class="last">
+<div><p>Data calculated during the plotting procedure.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.panel.assembly.PanelAssembly.uvw">
+<code class="descname">uvw</code><span class="sig-paren">(</span><em>c</em>, <em>group</em>, <em>gridx=50</em>, <em>gridy=50</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/assembly.html#PanelAssembly.uvw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.PanelAssembly.uvw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the displacement field</p>
+<p>For a given full set of Ritz constants <code class="docutils literal"><span class="pre">c</span></code>, the displacement
+field is calculated and stored in the parameters
+<code class="docutils literal"><span class="pre">u</span></code>, <code class="docutils literal"><span class="pre">v</span></code>, <code class="docutils literal"><span class="pre">w</span></code>, <code class="docutils literal"><span class="pre">phix</span></code>, <code class="docutils literal"><span class="pre">phiy</span></code> of the <code class="docutils literal"><span class="pre">Panel</span></code> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : float</p>
+<blockquote>
+<div><p>The full set of Ritz constants</p>
+</div></blockquote>
+<p><strong>group</strong> : str</p>
+<blockquote>
+<div><p>A group to plot. Each panel in <code class="docutils literal"><span class="pre">panels</span></code> should contain an
+attribute <code class="docutils literal"><span class="pre">group</span></code>, which is used to identify which entities
+should be plotted together.</p>
+</div></blockquote>
+<p><strong>gridx</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+displacement field.</p>
+</div></blockquote>
+<p><strong>gridy</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of points along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+displacement field.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : tuple</p>
+<blockquote class="last">
+<div><p>A tuple of <code class="docutils literal"><span class="pre">np.ndarrays</span></code> containing
+<code class="docutils literal"><span class="pre">(xs,</span> <span class="pre">ys,</span> <span class="pre">u,</span> <span class="pre">v,</span> <span class="pre">w,</span> <span class="pre">phix,</span> <span class="pre">phiy)</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The returned values <code class="docutils literal"><span class="pre">u`</span></code>, <code class="docutils literal"><span class="pre">v</span></code>, <code class="docutils literal"><span class="pre">w</span></code>, <code class="docutils literal"><span class="pre">phix</span></code>, <code class="docutils literal"><span class="pre">phiy</span></code> are
+stored as parameters with the same name in the <code class="docutils literal"><span class="pre">Panel</span></code> object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="assembly_intro.html"
+                        title="previous chapter">Assembly of Semi-Analytical Models</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/panel/assembly.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="assembly_intro.html" title="Assembly of Semi-Analytical Models"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2014 Saullo G. P. Castro.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+    </div>
+  </body>
+</html>

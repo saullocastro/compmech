@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Approximation Functions Used in Various Models &mdash; CompMech 0.5.5.dev0+08244a6 documentation</title>
+    <title>Approximation Functions Used in Various Models &mdash; CompMech 0.6.5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.5.5.dev0+08244a6',
+        VERSION:     '0.6.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,10 +25,10 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.5.5.dev0+08244a6 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
     <link rel="up" title="Theory, Implementation and Tutorials" href="../index.html" />
     <link rel="next" title="Bardell’s Hierarchical Functions" href="bardell.html" />
-    <link rel="prev" title="Meshfree Methods" href="../meshfree/index.html" /> 
+    <link rel="prev" title="Element Stiffness Matrix" href="../fem/elem_stiff_matrix.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,18 +38,15 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="bardell.html" title="Bardell’s Hierarchical Functions"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../meshfree/index.html" title="Meshfree Methods"
+          <a href="../fem/elem_stiff_matrix.html" title="Element Stiffness Matrix"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Theory, Implementation and Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -66,7 +63,12 @@ functions, it became convenient to create a section dedicated to this topic.</p>
 <p>The following functions are discussed:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="bardell.html">Bardell&#8217;s Hierarchical Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bardell.html">Bardell&#8217;s Hierarchical Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bardell.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bardell.html#generating-bardell-s-functions">Generating Bardell&#8217;s functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bardell.html#implemented-modules">Implemented modules</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="ref.html">References</a></li>
 </ul>
 </div>
@@ -82,8 +84,8 @@ functions, it became convenient to create a section dedicated to this topic.</p>
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../meshfree/index.html"
-                        title="previous chapter">Meshfree Methods</a></p>
+  <p class="topless"><a href="../fem/elem_stiff_matrix.html"
+                        title="previous chapter">Element Stiffness Matrix</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="bardell.html"
                         title="next chapter">Bardell&#8217;s Hierarchical Functions</a></p>
@@ -97,14 +99,11 @@ functions, it became convenient to create a section dedicated to this topic.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -118,25 +117,22 @@ functions, it became convenient to create a section dedicated to this topic.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="bardell.html" title="Bardell’s Hierarchical Functions"
              >next</a> |</li>
         <li class="right" >
-          <a href="../meshfree/index.html" title="Meshfree Methods"
+          <a href="../fem/elem_stiff_matrix.html" title="Element Stiffness Matrix"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jan 25, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

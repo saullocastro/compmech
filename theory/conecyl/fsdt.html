@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FSDT - First-order Shear Deformation Theory &mdash; CompMech 0.5.5.dev0+08244a6 documentation</title>
+    <title>FSDT - First-order Shear Deformation Theory &mdash; CompMech 0.6.5 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.5.5.dev0+08244a6',
+        VERSION:     '0.6.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.5.5.dev0+08244a6 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
     <link rel="up" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
     <link rel="next" title="Boundary conditions" href="bcs.html" />
     <link rel="prev" title="CLPT - Classical Laminated Plate Theory" href="clpt.html" /> 
@@ -38,9 +38,6 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
@@ -49,7 +46,7 @@
         <li class="right" >
           <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
@@ -67,14 +64,14 @@
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>For the FSDT the displacement field components are:</p>
 <div class="math">
-<p><img src="../../_images/math/591f891e2ca51b472bc1679e814932f40ad4e232.png" alt="u, v, w, \phi_x, \phi_t"/></p>
+<p><img src="../../_images/math/6a4516744ac906a7575664621ea7592017f9079a.png" alt="u, v, w, \phi_x, \phi_t"/></p>
 </div><p>The displacement field is approximated similarly to the
-<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><span>CLPT</span></a>, but here <img class="math" src="../../_images/math/8debdf841bb9645a2eb811c2d53ab8116ffe284e.png" alt="\phi_x"/> and <img class="math" src="../../_images/math/d25e7b8b0e679e79ff2ffbb51e0af864af42ac68.png" alt="\phi_\theta"/>
+<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><span class="std std-ref">CLPT</span></a>, but here <img class="math" src="../../_images/math/8debdf841bb9645a2eb811c2d53ab8116ffe284e.png" alt="\phi_x"/> and <img class="math" src="../../_images/math/d25e7b8b0e679e79ff2ffbb51e0af864af42ac68.png" alt="\phi_\theta"/>
 are independent variables, relaxing the approximation.</p>
 <p>For the <code class="docutils literal"><span class="pre">ConeCyl</span></code> implementations, the approximation functions are
 separated into three components:</p>
 <div class="math">
-<p><img src="../../_images/math/8c928df4aa40a1c24f894459ff32adaf4587fcef.png" alt="u = u_0 + u_1 + u_2\\
+<p><img src="../../_images/math/6d663741abfec29fef9da3416f1c26a4dc663f3d.png" alt="u = u_0 + u_1 + u_2\\
 
 \vdots
 
@@ -91,12 +88,12 @@ along the edges.</p>
 (clamped) and another value (up to simply supported),
 by using elastic stiffnesses for the corresponding degrees of freedom. The
 elastic stiffnesses are implemented for the FSDT in the same manner described
-for the <a class="reference internal" href="clpt.html#elastic-constraints"><span>CLPT</span></a>.</p>
+for the <a class="reference internal" href="clpt.html#elastic-constraints"><span class="std std-ref">CLPT</span></a>.</p>
 </div>
 <div class="section" id="models">
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
 <p>The <strong>recommended models</strong>, according to the
-<a class="reference internal" href="bcs.html#boundary-conditions"><span>desired boundary condition</span></a> , are:</p>
+<a class="reference internal" href="bcs.html#boundary-conditions"><span class="std std-ref">desired boundary condition</span></a> , are:</p>
 <ul class="simple">
 <li>SS1- or CC1-type: <a class="reference internal" href="#fsdt-donnell-bc1">fsdt_donnell_bc1</a></li>
 <li>SS2- or CC2-type: <a class="reference internal" href="#fsdt-donnell-bc2">fsdt_donnell_bc2</a></li>
@@ -104,7 +101,7 @@ for the <a class="reference internal" href="clpt.html#elastic-constraints"><span
 <li>SS4- or CC4-type: <a class="reference internal" href="#fsdt-donnell-bc4">fsdt_donnell_bc4</a></li>
 </ul>
 <p>Note that the <a class="reference internal" href="#fsdt-donnell-bc4">fsdt_donnell_bc4</a> model can be used to simulate all the other
-types of boundary condition, which is allowed by the use of <a class="reference internal" href="clpt.html#elastic-constraints"><span>elastic
+types of boundary condition, which is allowed by the use of <a class="reference internal" href="clpt.html#elastic-constraints"><span class="std std-ref">elastic
 constraints</span></a>.</p>
 <p>A more general model, the <a class="reference internal" href="#fsdt-donnell-bcn">fsdt_donnell_bcn</a> (or the counterpart
 <a class="reference internal" href="#fsdt-sanders-bcn">fsdt_sanders_bcn</a>) has been proposed and despite it has the largest
@@ -122,7 +119,7 @@ been used in comparative studies:</p>
 <span id="id1"></span><h3>fsdt_donnell_bc1<a class="headerlink" href="#fsdt-donnell-bc1" title="Permalink to this headline">¶</a></h3>
 <p>SS1- and CC1-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/f096864e03a718983003230ddf26c26ecc308d6b.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/6b5da94b9446c0c5c9cae7a6b55655e508e99913.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -163,7 +160,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 <span id="id2"></span><h3>fsdt_donnell_bc2<a class="headerlink" href="#fsdt-donnell-bc2" title="Permalink to this headline">¶</a></h3>
 <p>SS2- and CC2-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/c9bc6365ea426d6ac26c1bf11543cba2ffb3ac37.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/c658a0897be46d49e4819e9c9c06e4840dca8c83.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -204,7 +201,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 <span id="id3"></span><h3>fsdt_donnell_bc3<a class="headerlink" href="#fsdt-donnell-bc3" title="Permalink to this headline">¶</a></h3>
 <p>SS3- and CC3-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/cfdfe043db88b3cb3006b7f042ddfa5b1b4f7a85.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/9435ccda6ceaba2c07b381edc0b8e2622c4b13dc.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -245,7 +242,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 <span id="id4"></span><h3>fsdt_donnell_bc4<a class="headerlink" href="#fsdt-donnell-bc4" title="Permalink to this headline">¶</a></h3>
 <p>SS4- and CC4-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/048e04b439146833f1296aa76f84c5b1f7a5fa90.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/0a66e45d846f70e80a4c6dbdb9ef7d982ccb6fc9.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -287,7 +284,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 <p>The current attempt adds more flexibility in <img class="math" src="../../_images/math/71eed5bb74cb59bc5e3499732da96fbf51e3b22a.png" alt="v,w,\phi_\theta"/>.
 The resulting approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/47f06fa70d847da0cba59d0e352879ab339936dc.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/f0064062c6ace9cdb7d95300b4293c5789f3bb7f.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -326,7 +323,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 </div>
 <div class="section" id="fsdt-sanders-bcn">
 <span id="id6"></span><h3>fsdt_sanders_bcn<a class="headerlink" href="#fsdt-sanders-bcn" title="Permalink to this headline">¶</a></h3>
-<p>Counterpart of <a class="reference internal" href="#fsdt-donnell-bcn"><span>fsdt_donnell_bcn</span></a> using the Sanders non-linear equations.</p>
+<p>Counterpart of <a class="reference internal" href="#fsdt-donnell-bcn"><span class="std std-ref">fsdt_donnell_bcn</span></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
 <div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
@@ -345,7 +342,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 of boundary conditions. Uses the Donnell&#8217;s equations and
 the approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/2c1a0d162af1c141cabd8501844dcdfc480e9ca3.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/937d7b80578d8d02d7b2d436ac2590b7620dfd20.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -382,7 +379,7 @@ for more details). This model was developed to simulate the SS3- and
 CC3-types of boundary condition. Uses the Donnell&#8217;s
 equations and the approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/c5aab3c5d7d7c301abfd0b0013083e46624908c2.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/91e35ed5bb88ccd829a903d88be64fbf82955f0c.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -420,7 +417,7 @@ CC2-types of boundary condition. Such models seem to be originally
 proposed by Khdeir et al. (1989) (see <a class="reference internal" href="ref.html#khdeir1989" id="id15">[khdeir1989]</a>).
 Uses the Donnell&#8217;s equations and the approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/2f3c7d0b2b3b3b6d9f5534713a98b52404355a95.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/286ceefc1558ebb7adf70db9f0b51cf7c49dab6f.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -494,14 +491,11 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -515,9 +509,6 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
@@ -526,7 +517,7 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
         <li class="right" >
           <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
@@ -534,8 +525,8 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jan 25, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

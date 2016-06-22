@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Following the latest source &mdash; CompMech 0.5.5.dev0+08244a6 documentation</title>
+    <title>Following the latest source &mdash; CompMech 0.6.5 documentation</title>
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.5.5.dev0+08244a6',
+        VERSION:     '0.6.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="CompMech 0.5.5.dev0+08244a6 documentation" href="../index.html" />
+    <link rel="top" title="CompMech 0.6.5 documentation" href="../index.html" />
     <link rel="up" title="Contributing to CompMech" href="index.html" />
     <link rel="next" title="Git for development" href="git_development.html" />
     <link rel="prev" title="Introduction" href="git_intro.html" /> 
@@ -38,9 +38,6 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
@@ -49,7 +46,7 @@
         <li class="right" >
           <a href="git_intro.html" title="Introduction"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Contributing to CompMech</a> &raquo;</li> 
       </ul>
     </div>  
@@ -64,31 +61,31 @@
 <p>These are the instructions if you just want to follow the latest
 <em>NumPy</em> source, but you don&#8217;t need to do any development for now.
 If you do want to contribute a patch (excellent!) or do more extensive
-NumPy development, see <a class="reference internal" href="development_workflow.html#development-workflow"><span>Development workflow</span></a>.</p>
+NumPy development, see <a class="reference internal" href="development_workflow.html#development-workflow"><span class="std std-ref">Development workflow</span></a>.</p>
 <p>The steps are:</p>
 <ul class="simple">
-<li><a class="reference internal" href="git_intro.html#install-git"><span>Install git</span></a></li>
+<li><a class="reference internal" href="git_intro.html#install-git"><span class="std std-ref">Install git</span></a></li>
 <li>get local copy of the git repository from <a class="reference external" href="https://github.com/numpy">Github</a></li>
 <li>update local copy from time to time</li>
 </ul>
 <div class="section" id="get-the-local-copy-of-the-code">
 <h2>Get the local copy of the code<a class="headerlink" href="#get-the-local-copy-of-the-code" title="Permalink to this headline">¶</a></h2>
 <p>From the command line:</p>
-<div class="highlight-python"><div class="highlight"><pre>git clone git://github.com/numpy/numpy.git
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">numpy</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 <p>You now have a copy of the code tree in the new <code class="docutils literal"><span class="pre">numpy</span></code> directory.
 If this doesn&#8217;t work you can try the alternative read-only url:</p>
-<div class="highlight-python"><div class="highlight"><pre>git clone https://github.com/numpy/numpy.git
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">numpy</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="updating-the-code">
 <h2>Updating the code<a class="headerlink" href="#updating-the-code" title="Permalink to this headline">¶</a></h2>
 <p>From time to time you may want to pull down the latest code.  Do this with:</p>
-<div class="highlight-python"><div class="highlight"><pre>cd numpy
-git fetch
-git merge --ff-only
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">numpy</span>
+<span class="n">git</span> <span class="n">fetch</span>
+<span class="n">git</span> <span class="n">merge</span> <span class="o">--</span><span class="n">ff</span><span class="o">-</span><span class="n">only</span>
 </pre></div>
 </div>
 <p>The tree in <code class="docutils literal"><span class="pre">numpy</span></code> will now have the latest changes from the initial
@@ -130,14 +127,11 @@ repository.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -151,9 +145,6 @@ repository.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
@@ -162,14 +153,14 @@ repository.</p>
         <li class="right" >
           <a href="git_intro.html" title="Introduction"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.5.5.dev0+08244a6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jan 25, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Last updated on Jun 21, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>
