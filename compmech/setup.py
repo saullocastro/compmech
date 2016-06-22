@@ -29,10 +29,11 @@ def configuration(parent_package='',top_path=None):
               ' install --inplace clean', shell=True)
     p.wait()
     ###################################################
-    if '27' in get_python_lib() or 2.7 in get_python_lib():
+    if '27' in get_python_lib() or '2.7' in get_python_lib():
         pyversion = '2.7'
     else:
-        raise NotImplementedError('Setup not ready for this Python version!')
+        raise NotImplementedError('Setup not ready for this Python version: {0}'.
+                format(get_python_lib()))
     libplatdir = join(realpath(top_path), 'build', 'lib.' + os.environ['PLAT']
             + '-' + pyversion)
 
