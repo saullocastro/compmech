@@ -49,6 +49,9 @@ def configuration(parent_package='',top_path=None):
     shutil.copytree(libdir, libplatlib)
     ###################################################
 
+    config.add_data_dir('include')
+    config.add_data_dir('lib')
+
     config.add_subpackage('analysis')
     config.add_subpackage('composite')
 
