@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 """CompMech: Computational Mechanics in Python
 
-This repository was built with the intention to become a collection of
-theories and implementations on the field of Mechanics.
-
-This setup is based on SciPy's setup.
+Collection of theories and implementations on the field of Computational
+Mechanics, currently almost exclusively on Solid Mechanics and simple
+fluid-structure interaction with the panel flutter analyzes available.
 
 """
 import os
@@ -40,7 +39,7 @@ Operating System :: Unix
 
 MAJOR = 0
 MINOR = 6
-MICRO = 1
+MICRO = 5
 ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 

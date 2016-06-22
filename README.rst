@@ -7,8 +7,9 @@
 Computational Mechanics (compmech)
 ==================================
 
-This repository was built with the intention to become a collection of
-theories and implementations on the field of Mechanics.
+Collection of theories and implementations on the field of Computational
+Mechanics, currently almost exclusively on Solid Mechanics and simple
+fluid-structure interaction with the panel flutter analyzes available.
 
 Documentation
 -------------
