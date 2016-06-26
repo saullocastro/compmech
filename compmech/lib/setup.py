@@ -22,6 +22,15 @@ def in_travis_ci():
     else:
         return True
 
+def dynamic_lib_exists(path, libname):
+    if (os.path.isfile(join(path, libname + '.dll'))
+    or os.path.isfile(join(path, 'lib' + libname + '.dll'))
+    or os.path.isfile(join(path, libname + '.so'))
+    or os.path.isfile(join(path, 'lib' + libname + '.so'))):
+        return True
+    else:
+        return False
+
 
 def create_dlls(config, install_dir):
     tmp = config.get_build_temp_dir()
@@ -68,13 +77,13 @@ def configuration(parent_package='', top_path=None):
     if in_appveyor_ci() or in_travis_ci():
         extra_args = ['-O0']
 
-    if not os.path.isfile(join(install_dir, 'bardell.dll')):
+    if not dynamic_lib_exists(install_dir, 'bardell'):
         config.add_installed_library('bardell',
                 sources=['./src/bardell.c'],
                 install_dir=install_dir,
                 build_info={'extra_compiler_args': extra_args})
 
-    if not os.path.isfile(join(install_dir, 'bardell_12.dll')):
+    if not dynamic_lib_exists(install_dir, 'bardell_12'):
         config.add_installed_library('bardell_12',
                 sources=[
                     './src/bardell_integral_ff_12.c',
@@ -87,7 +96,7 @@ def configuration(parent_package='', top_path=None):
                 install_dir=install_dir,
                 build_info={'extra_compiler_args': extra_args})
 
-    if not os.path.isfile(join(install_dir, 'bardell_c0c1.dll')):
+    if not dynamic_lib_exists(install_dir, 'bardell_c0c1'):
         config.add_installed_library('bardell_c0c1',
                 sources=[
                     './src/bardell_integral_ff_c0c1.c',
@@ -98,13 +107,13 @@ def configuration(parent_package='', top_path=None):
                     ],
                 install_dir=install_dir)
 
-    if not os.path.isfile(join(install_dir, 'bardell_functions.dll')):
+    if not dynamic_lib_exists(install_dir, 'bardell_functions'):
         config.add_installed_library('bardell_functions',
                 sources=['./src/bardell_functions.c'],
                 install_dir=install_dir,
                 build_info={'extra_compiler_args': extra_args})
 
-    if not os.path.isfile(join(install_dir, 'legendre_gauss_quadrature.dll')):
+    if not dynamic_lib_exists(install_dir, 'legendre_gauss_quadrature'):
         config.add_installed_library('legendre_gauss_quadrature',
                 sources=['./src/legendre_gauss_quadrature.c'],
                 install_dir=install_dir,
