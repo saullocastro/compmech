@@ -11,18 +11,22 @@ environment:
       - PYTHON_VERSION: 2.7
         PYTHON_ARCH: 32
         MINICONDA: C:\Miniconda
+        VSTOOLS: VS90COMNTOOLS
 
       - PYTHON_VERSION: 2.7
         PYTHON_ARCH: 64
         MINICONDA: C:\Miniconda-x64
+        VSTOOLS: VS90COMNTOOLS
 
       - PYTHON_VERSION: 3.4
         PYTHON_ARCH: 32
         MINICONDA: C:\Miniconda3
+        VSTOOLS: VS100COMNTOOLS
 
       - PYTHON_VERSION: 3.4
         PYTHON_ARCH: 64
         MINICONDA: C:\Miniconda3-x64
+        VSTOOLS: VS100COMNTOOLS
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
