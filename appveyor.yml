@@ -40,7 +40,7 @@ install:
   - conda info -a
   - conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython
   - activate testenv
-  - %VCVARS%
+  - call %VCVARS%
   - set DISTUTILS_USE_SDK=1
   - python setup.py install
   #- "CALL %CMD_IN_ENV% python setup.py install"
