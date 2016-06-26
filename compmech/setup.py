@@ -30,9 +30,6 @@ def configuration(parent_package='',top_path=None):
     if 'install' in sys.argv:
         p = Popen('python ' + join(setuppath) + ' install',
             shell=True)
-    else:
-        p = Popen('python ' + join(setuppath) + ' build_ext --inplace clean',
-            shell=True)
     p.wait()
     #_________________________________________________
 

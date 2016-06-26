@@ -22,61 +22,6 @@ def in_travis_ci():
     else:
         return True
 
-def configuration(parent_package='', top_path=None):
-    from numpy.distutils.misc_util import Configuration
-
-    if 'install' in sys.argv:
-        install_dir = join(get_python_lib(), 'compmech', 'lib')
-    else:
-        install_dir = join(config.package_path)
-
-    config = Configuration('lib', parent_package, top_path)
-
-    extra_args = []
-    if in_appveyor_ci() or in_travis_ci():
-        extra_args = ['-O0']
-
-    config.add_installed_library('bardell',
-            sources=['./src/bardell.c'],
-            install_dir=install_dir,
-            build_info={'extra_compiler_args': extra_args})
-
-    config.add_installed_library('bardell_12',
-            sources=[
-                './src/bardell_integral_ff_12.c',
-                './src/bardell_integral_ffxi_12.c',
-                './src/bardell_integral_ffxixi_12.c',
-                './src/bardell_integral_fxifxi_12.c',
-                './src/bardell_integral_fxifxixi_12.c',
-                './src/bardell_integral_fxixifxixi_12.c',
-                ],
-            install_dir=install_dir,
-            build_info={'extra_compiler_args': extra_args})
-
-    config.add_installed_library('bardell_c0c1',
-            sources=[
-                './src/bardell_integral_ff_c0c1.c',
-                './src/bardell_integral_ffxi_c0c1.c',
-                './src/bardell_integral_fxif_c0c1.c',
-                './src/bardell_integral_fxifxi_c0c1.c',
-                './src/bardell_integral_fxixifxixi_c0c1.c',
-                ],
-            install_dir=install_dir)
-
-    config.add_installed_library('bardell_functions',
-            sources=['./src/bardell_functions.c'],
-            install_dir=install_dir,
-            build_info={'extra_compiler_args': extra_args})
-
-    config.add_installed_library('legendre_gauss_quadrature',
-            sources=['./src/legendre_gauss_quadrature.c'],
-            install_dir=install_dir,
-            build_info={'extra_compiler_args': extra_args})
-
-    config.make_config_py()
-
-    return config, install_dir
-
 
 def create_dlls(config, install_dir):
     tmp = config.get_build_temp_dir()
@@ -110,6 +55,64 @@ def create_dlls(config, install_dir):
         p.wait()
         if p.returncode != 0:
             raise RuntimeError('LINK error with: {0}'.format(libpath))
+
+
+def configuration(parent_package='', top_path=None):
+    from numpy.distutils.misc_util import Configuration
+
+    install_dir = join(get_python_lib(), 'compmech', 'lib')
+
+    config = Configuration('lib', parent_package, top_path)
+
+    extra_args = []
+    if in_appveyor_ci() or in_travis_ci():
+        extra_args = ['-O0']
+
+    if not os.path.isfile(join(install_dir, 'bardell.dll')):
+        config.add_installed_library('bardell',
+                sources=['./src/bardell.c'],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
+
+    if not os.path.isfile(join(install_dir, 'bardell_12.dll')):
+        config.add_installed_library('bardell_12',
+                sources=[
+                    './src/bardell_integral_ff_12.c',
+                    './src/bardell_integral_ffxi_12.c',
+                    './src/bardell_integral_ffxixi_12.c',
+                    './src/bardell_integral_fxifxi_12.c',
+                    './src/bardell_integral_fxifxixi_12.c',
+                    './src/bardell_integral_fxixifxixi_12.c',
+                    ],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
+
+    if not os.path.isfile(join(install_dir, 'bardell_c0c1.dll')):
+        config.add_installed_library('bardell_c0c1',
+                sources=[
+                    './src/bardell_integral_ff_c0c1.c',
+                    './src/bardell_integral_ffxi_c0c1.c',
+                    './src/bardell_integral_fxif_c0c1.c',
+                    './src/bardell_integral_fxifxi_c0c1.c',
+                    './src/bardell_integral_fxixifxixi_c0c1.c',
+                    ],
+                install_dir=install_dir)
+
+    if not os.path.isfile(join(install_dir, 'bardell_functions.dll')):
+        config.add_installed_library('bardell_functions',
+                sources=['./src/bardell_functions.c'],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
+
+    if not os.path.isfile(join(install_dir, 'legendre_gauss_quadrature.dll')):
+        config.add_installed_library('legendre_gauss_quadrature',
+                sources=['./src/legendre_gauss_quadrature.c'],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
+
+    config.make_config_py()
+
+    return config, install_dir
 
 
 if __name__ == '__main__':
