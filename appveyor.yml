@@ -42,23 +42,17 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython
+  - conda create -q -n testenv python=%PYTHON_VERSION% atlas numpy scipy pytest cython libpython
   - activate testenv
   - echo Environment Variables in testenv:
   - set
-  #FIXME next lines are a workaround due to a buggy environment in conda
-  - echo Current directory is %CD%
-  - dir
-  - cd MinGW
-  - cd *-mingw*%FLAGMINGW%
-  - cd lib
-  - copy libmsvcr90d.a %CONDA_DEFAULT_ENV%\libs
-  - cd %APPVEYOR_BUILD_FOLDER%
-
   - "CALL %CMD_IN_ENV% python setup.py install"
-  # removing local libraries to be sure the installation is correct
+  # removing local libraries to be sure the installation was correct
   - del /s *.dll
+  - del /s *.so
   - del /s *.h
 
 test_script:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - set
   - py.test --cache-clear
