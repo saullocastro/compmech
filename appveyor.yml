@@ -46,6 +46,7 @@ install:
   - cd *-mingw
   - dir
   - cd lib
+  - dir C:\Libraries
   - copy libmsvcr90d.a %DEFAULT_ENV%\libs
   - cd %APPVEYOR_BUILD_FOLDER%
   - set
