@@ -27,10 +27,12 @@ def configuration(parent_package='', top_path=None):
 
     config = Configuration('lib', parent_package, top_path)
 
+    extra_args = []
     if sys.version_info[0] == 2:
-        extra_args = ['/Od']
-    else:
-        extra_args = []
+        if os.name == 'nt':
+            extra_args = ['/Od']
+        else:
+            extra_args = ['-O0']
 
     config.add_installed_library('bardell',
             sources=['./src/bardell.c'],
