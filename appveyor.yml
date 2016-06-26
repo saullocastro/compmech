@@ -43,7 +43,8 @@ install:
   - dir
   - cd MinGW
   - dir
-  - cd *-mingw
+  - dir lib
+  - cd mingw%PYTHON_ARCH%
   - dir
   - cd lib
   - dir C:\Libraries
