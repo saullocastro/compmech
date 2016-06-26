@@ -7,7 +7,7 @@ from distutils.sysconfig import get_python_lib
 from subprocess import Popen
 
 #TODO not working... but seems promising
-import setup_patch
+#import setup_patch
 
 
 def in_appveyor_ci():
