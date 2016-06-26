@@ -44,6 +44,6 @@ script:
   # activating the TestEnv is not setting this environment variable
   - export PYTHONPATH=/home/travis/miniconda/envs/TestEnv/lib/python${TRAVIS_PYTHON_VERSION}/site-packages:$PYTHONPATH
   #- ls -la  ../../../virtualenv/python2.7.9/lib/python2.7/site-packages
-  - echo Environment Variables for py.test:
+  # useful to get all environment variables
   - set
   - py.test --cache-clear
