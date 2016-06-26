@@ -50,3 +50,4 @@ def generate_a_pyrex_source(self, base, ext_name, source, extension):
     return target_file
 
 build_src.build_src.generate_a_pyrex_source = generate_a_pyrex_source
+

@@ -110,12 +110,12 @@ for i, filepath in enumerate(
 
         if '_12' in filepath:
             printstr_12_h += printstr_h
-            filepath = r'..\..\..\C\src\bardell_integral_%s_12.c' % name[:-3]
+            filepath = r'..\..\..\compmech\lib\src\bardell_integral_%s_12.c' % name[:-3]
             with open(filepath, 'w') as g:
                 g.write(printstr_12 + printstr)
         elif '_c0c1' in filepath:
             printstr_c0c1_h += printstr_h
-            filepath = r'..\..\..\C\src\bardell_integral_%s_c0c1.c' % name[:-5]
+            filepath = r'..\..\..\compmech\lib\src\bardell_integral_%s_c0c1.c' % name[:-5]
             with open(filepath, 'w') as g:
                 g.write(printstr_c0c1 + printstr)
         else:
@@ -126,7 +126,7 @@ for i, filepath in enumerate(
 with open(r'..\..\..\compmech\include\bardell.h', 'w') as g:
     g.write(printstr_full_h)
 
-with open(r'..\..\..\C\src\bardell.c', 'w') as g:
+with open(r'..\..\..\compmech\lib\src\bardell.c', 'w') as g:
     g.write(printstr_full)
 
 with open(r'..\..\..\compmech\include\bardell_12.h', 'w') as g:

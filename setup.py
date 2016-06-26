@@ -39,8 +39,8 @@ Operating System :: Unix
 """
 
 MAJOR = 0
-MINOR = 7
-MICRO = 0
+MINOR = 6
+MICRO = 6
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
@@ -49,7 +49,6 @@ VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 # update it when the contents of directories change.
 if os.path.exists('MANIFEST'):
     os.remove('MANIFEST')
-
 
 
 def write_version_py(filename='compmech/version.py'):
