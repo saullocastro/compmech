@@ -105,7 +105,8 @@ def configuration(parent_package='', top_path=None):
                     './src/bardell_integral_fxifxi_c0c1.c',
                     './src/bardell_integral_fxixifxixi_c0c1.c',
                     ],
-                install_dir=install_dir)
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
 
     if not dynamic_lib_exists(install_dir, 'bardell_functions'):
         config.add_installed_library('bardell_functions',
