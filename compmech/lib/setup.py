@@ -74,7 +74,9 @@ def configuration(parent_package='', top_path=None):
     config = Configuration('lib', parent_package, top_path)
 
     extra_args = []
-    if in_appveyor_ci() or in_travis_ci():
+    if in_appveyor_ci():
+        extra_args = ['/Od']
+    elif in_travis_ci():
         extra_args = ['-O0']
 
     if not dynamic_lib_exists(install_dir, 'bardell'):

@@ -46,6 +46,7 @@ install:
   - activate testenv
   - call "%VCVARS%" %PLATFORM%
   - set DISTUTILS_USE_SDK=1
+  - set PATH=C:\MinGW\lib;C:\MinGW\mingw32\lib;C:\MinGW\mingw32\bin;%PATH%
   - set
   - python setup.py install
   #- "CALL %CMD_IN_ENV% python setup.py install"
