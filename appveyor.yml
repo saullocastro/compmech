@@ -44,10 +44,10 @@ install:
   - cd MinGW
   - dir
   - dir lib
-  - cd mingw%PYTHON_ARCH%
+  - cd mingw32
   - dir
   - dir lib
-  - set PATH=C:\MinGW\lib;C:\MinGW\mingw%PYTHON_ARCH%\lib;C:\MinGW\mingw%PYTHON_ARCH%\bin;%PATH%
+  - set PATH=C:\MinGW\lib;C:\MinGW\mingw32\lib;C:\MinGW\mingw32\bin;%PATH%
   - cd %APPVEYOR_BUILD_FOLDER%
   - set
   - "CALL %CMD_IN_ENV% python setup.py install"
