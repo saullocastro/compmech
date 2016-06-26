@@ -298,5 +298,5 @@ if __name__=='__main__':
                   [4., 4.],
                   [5., 5.]])
 
-    print inv_weighted(a, b, num_sub=1, col=1, ncp=10)
+    print(inv_weighted(a, b, num_sub=1, col=1, ncp=10))
 

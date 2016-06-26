@@ -1,11 +1,9 @@
-from __future__ import division
+from __future__ import division, absolute_import
 import gc
 import os
-import sys
 import traceback
-from collections import Iterable
 import time
-import cPickle
+import pickle
 import __main__
 
 import numpy as np
@@ -21,14 +19,14 @@ from compmech.logger import msg, warn, error
 from compmech.sparse import remove_null_cols, make_symmetric
 from compmech.constants import DOUBLE
 import modelDB
-from modelDB import get_model
+from .modelDB import get_model
 
 
 def load(name):
     if '.ConeCyl' in name:
-        cc = cPickle.load(open(name, 'rb'))
+        cc = pickle.load(open(name, 'rb'))
     else:
-        cc = cPickle.load(open(name + '.ConeCyl', 'rb'))
+        cc = pickle.load(open(name + '.ConeCyl', 'rb'))
     cc.analysis.calc_fext = cc.calc_fext
     cc.analysis.calc_k0 = cc.calc_k0
     cc.analysis.calc_fint = cc.calc_fint
@@ -922,7 +920,7 @@ class ConeCyl(object):
             eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues, which='SM',
                                      M=M, tol=tol, sigma=1.,
                                      mode='cayley')
-        except Exception, e:
+        except Exception as e:
             warn(str(e), level=3)
             size22 = M.shape[0]
             M, A, used_cols = remove_null_cols(M, A)
@@ -1040,7 +1038,7 @@ class ConeCyl(object):
             eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues, which='SM',
                                      M=M, tol=tol, sigma=1.,
                                      mode='cayley')
-        except Exception, e:
+        except Exception as e:
             warn(str(e), level=3)
             size22 = M.shape[0]
             M, A, used_cols = remove_null_cols(M, A)
@@ -2447,7 +2445,7 @@ class ConeCyl(object):
 
 
     def save(self):
-        """Save the ``ConeCyl`` object using ``cPickle``
+        """Save the ``ConeCyl`` object using ``pickle``
 
         Notes
         -----
@@ -2464,5 +2462,5 @@ class ConeCyl(object):
         self._clear_matrices()
 
         with open(name, 'wb') as f:
-            cPickle.dump(self, f, protocol=cPickle.HIGHEST_PROTOCOL)
+            pickle.dump(self, f, protocol=pickle.HIGHEST_PROTOCOL)
 

@@ -6,34 +6,42 @@ from distutils.sysconfig import get_python_lib
 from subprocess import Popen
 import shutil
 
+import setup_patch
+
 
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('compmech', parent_package, top_path)
 
+    pythonlib = get_python_lib()
+
     ###################################################
     #NOTE include and lib must be the first to install
     # include
     print('Copying include files...')
-    includedir = join(get_python_lib(), 'compmech', 'include')
+    includedir = join(pythonlib, 'compmech', 'include')
     if os.path.isdir(includedir):
         shutil.rmtree(includedir)
     shutil.copytree(join(realpath(config.package_path),
                     'include'), includedir)
 
     # lib
-    print('Building shared libraries...')
-    p = Popen('python ' +
-              join(realpath(config.package_path),
-                           './lib/setup.py') +
-              ' install --inplace clean', shell=True)
-    p.wait()
+    #TMP while debuging
+    if False:
+        print('Building shared libraries...')
+        p = Popen('python ' +
+                  join(realpath(config.package_path),
+                               './lib/setup.py') +
+                  ' install', shell=True)
+        p.wait()
     ###################################################
-    if '27' in get_python_lib() or '2.7' in get_python_lib():
+    if '27' in pythonlib or '2.7' in pythonlib:
         pyversion = '2.7'
+    elif '35' in pythonlib or '3.5' in pythonlib:
+        pyversion = '3.5'
     else:
         raise NotImplementedError('Setup not ready for this Python version: {0}'.
-                format(get_python_lib()))
+                format(pythonlib))
     libplatdir = join(realpath(top_path), 'build', 'lib.' + os.environ['PLAT']
             + '-' + pyversion)
 
@@ -45,7 +53,7 @@ def configuration(parent_package='',top_path=None):
     libplatlib = join(libplatdir, 'compmech', 'lib')
     if os.path.isdir(libplatlib):
         shutil.rmtree(libplatlib)
-    libdir = join(get_python_lib(), 'compmech', 'lib')
+    libdir = join(pythonlib, 'compmech', 'lib')
     shutil.copytree(libdir, libplatlib)
     ###################################################
 

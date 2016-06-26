@@ -16,4 +16,6 @@ Main features:
     :members:
 
 """
-from stiffpanelbay import (load, StiffPanelBay)
+from __future__ import absolute_import
+
+from .stiffpanelbay import (load, StiffPanelBay)

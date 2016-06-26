@@ -5,7 +5,10 @@ Used to configure the main parameters for each implemented model.
 
 
 """
-from models import *
+from __future__ import absolute_import
+
+from . models import *
+
 
 db = {
     'kpanel_clt_donnell_bardell': {

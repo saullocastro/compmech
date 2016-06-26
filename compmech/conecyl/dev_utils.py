@@ -175,8 +175,8 @@ def convergence_nx_nt():
         cc.m1 = cc.m2 = cc.n2 = n
         for nt in [60, 80, 100, 120]:
             cc.nx = cc.nt = nt
-            print cProfile.runctx('curves = cc.SPLA(PLs, NLgeom=True)',
-                              globals(), locals(), 'tester.prof')
+            print(cProfile.runctx('curves = cc.SPLA(PLs, NLgeom=True)',
+                              globals(), locals(), 'tester.prof'))
 
 
 def test0():

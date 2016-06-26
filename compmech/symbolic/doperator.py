@@ -58,7 +58,7 @@ def mydiff(expr, *variables):
 
 def evaluateMul(expr):
     end = 0
-    if expr.args <> ():
+    if expr.args != ():
         if isinstance(expr.args[-1], D):
             return Zero()
     for i in range(len(expr.args)-1+end, -1, -1):

@@ -1,10 +1,10 @@
-from __future__ import division
+from __future__ import division, absolute_import
 import gc
 
 import numpy as np
 from numpy import deg2rad
 
-import modelDB as stiffmDB
+from . import modelDB as stiffmDB
 import compmech.panel.modelDB as panelmDB
 from compmech.logger import msg, warn
 from compmech.composite import laminate

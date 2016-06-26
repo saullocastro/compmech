@@ -3,7 +3,7 @@ import numpy as np
 from libc.stdlib cimport malloc, free
 from cython.parallel import prange
 
-from compmech.conecyl.imperfections.mgi cimport cfw0x, cfw0t
+from ..imperfections.mgi cimport cfw0x, cfw0t
 
 DOUBLE = np.float64
 INT = np.int64

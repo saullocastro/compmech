@@ -6,7 +6,7 @@
 #cython: infer_types=False
 include 'clpt_nonlinear_header.pxi'
 
-from compmech.conecyl.clpt.clpt_commons_bc4 cimport cfwx, cfwt, cfN
+from .clpt_commons_bc4 cimport cfwx, cfwt, cfN
 
 
 cdef int NL_kinematics=0 # to use cfstrain_donnell in cfN

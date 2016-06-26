@@ -1,11 +1,11 @@
-from __future__ import division
+from __future__ import division, absolute_import
 import gc
 import os
 import sys
 import traceback
 from collections import Iterable
 import time
-import cPickle
+import pickle
 from multiprocessing import cpu_count
 import __main__
 
@@ -27,9 +27,9 @@ from compmech.stiffener import (BladeStiff1D, BladeStiff2D, TStiff2D,
 
 def load(name):
     if '.StiffPanelBay' in name:
-        return cPickle.load(open(name, 'rb'))
+        return pickle.load(open(name, 'rb'))
     else:
-        return cPickle.load(open(name + '.StiffPanelBay', 'rb'))
+        return pickle.load(open(name + '.StiffPanelBay', 'rb'))
 
 
 class StiffPanelBay(object):
@@ -1622,7 +1622,7 @@ class StiffPanelBay(object):
 
 
     def save(self):
-        """Save the :class:`StiffPanelBay` object using ``cPickle``
+        """Save the :class:`StiffPanelBay` object using ``pickle``
 
         Notes
         -----
@@ -1637,7 +1637,7 @@ class StiffPanelBay(object):
         self._clear_matrices()
 
         with open(name, 'wb') as f:
-            cPickle.dump(self, f, protocol=cPickle.HIGHEST_PROTOCOL)
+            pickle.dump(self, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 
     def calc_fext(self, silent=False):

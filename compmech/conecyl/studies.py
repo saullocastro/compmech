@@ -92,8 +92,8 @@ def mrs(cc, ns, sol, compare_theories):
             axcomp.plot(ns, comp_cost, 'k', label=lk.upper(),
                         ls=linestyles[i])
         else:
-            print 'MRS curve x', ns
-            print 'MRS curve y', mins
+            print('MRS curve x', ns)
+            print('MRS curve y', mins)
             axmrs.plot(ns, mins)
             axcomp.plot(ns, comp_cost)
     #axmrs.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))

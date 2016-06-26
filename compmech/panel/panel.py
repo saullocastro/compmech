@@ -1,13 +1,8 @@
-from __future__ import division
+from __future__ import division, absolute_import
+
 import gc
-import os
-import sys
-import traceback
-from collections import Iterable
-import time
-import cPickle
+import pickle
 from multiprocessing import cpu_count
-import __main__
 
 import numpy as np
 from scipy.sparse import csr_matrix
@@ -22,14 +17,14 @@ from compmech.constants import DOUBLE
 from compmech.sparse import (make_symmetric, remove_null_cols,
         make_skew_symmetric)
 
-import modelDB
+from . import modelDB
 
 
 def load(name):
     if '.Panel' in name:
-        return cPickle.load(open(name, 'rb'))
+        return pickle.load(open(name, 'rb'))
     else:
-        return cPickle.load(open(name + '.Panel', 'rb'))
+        return pickle.load(open(name + '.Panel', 'rb'))
 
 
 class Panel(object):
@@ -911,7 +906,7 @@ class Panel(object):
                 eigvals, eigvecs = eigsh(A=A, k=self.num_eigvalues,
                         which='SM', M=M, tol=tol, sigma=1., mode=mode)
                 msg('finished!', level=3, silent=silent)
-            except Exception, e:
+            except Exception as e:
                 warn(str(e), level=4, silent=silent)
                 msg('aborted!', level=3, silent=silent)
                 sizebkp = A.shape[0]
@@ -1678,7 +1673,7 @@ class Panel(object):
 
 
     def save(self):
-        """Save the ``Panel`` object using ``cPickle``
+        """Save the ``Panel`` object using ``pickle``
 
         Notes
         -----
@@ -1692,5 +1687,5 @@ class Panel(object):
         self._clear_matrices()
 
         with open(name, 'wb') as f:
-            cPickle.dump(self, f, protocol=cPickle.HIGHEST_PROTOCOL)
+            pickle.dump(self, f, protocol=pickle.HIGHEST_PROTOCOL)
 

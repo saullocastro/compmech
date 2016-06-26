@@ -16,15 +16,23 @@ def in_appveyor_ci():
         return True
 
 
+def hash_cleanup(hash_string):
+    hash_string = str(hash_string)
+    hash_string = hash_string.strip()
+    hash_string = hash_string.replace('"', '')
+    hash_string = hash_string.replace("'", "")
+    return hash_string
+
+
 def compile(config, src):
     if config.top_path.endswith('lib'):
         srcpath = join(realpath(config.package_path), src)
     else:
         srcpath = join(realpath(config.top_path), src)
     srcdir = dirname(srcpath)
-
     hashpath = srcpath + '.hashcode'
-    hash_new = hashlib.sha256(os.name + open(srcpath, 'rb').read()).digest()
+    with open(srcpath, 'rb') as srcfile:
+        hash_new = hash_cleanup(hashlib.sha256(srcfile.read()).digest())
 
     if os.name == 'nt' and not in_appveyor_ci():
         objext = 'obj'
@@ -37,8 +45,8 @@ def compile(config, src):
     if os.path.isfile(hashpath):
         if os.path.isfile(objpath):
             fsize = os.path.getsize(objpath)
-            if fsize > 1L:
-                hash_old = open(hashpath, 'rb').read().strip()
+            if fsize > 1:
+                hash_old = hash_cleanup(open(hashpath, 'rt').read())
                 if hash_old == hash_new:
                     needscompile = False
 
@@ -51,9 +59,9 @@ def compile(config, src):
             os.system('gcc -pthread -g -O3 -fPIC -g -c -Wall {0}'.format(basename(srcpath)))
         fsize = os.path.getsize(basename(srcpath))
         os.chdir(bkpdir)
-        if fsize > 1L:
+        if fsize > 1:
             with open(hashpath, 'wb') as f:
-                f.write(hash_new + '\n')
+                f.write((str(hash_new) + '\n').encode('utf-8'))
     else:
         print('Source {0} already compiled!'.format(srcpath))
 

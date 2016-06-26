@@ -84,7 +84,7 @@ def myfig(fig, small=True, marker=False):
                 continue
             attr(defaults[k])
     leg = fig.axes[0].legend()
-    if leg <> None:
+    if leg != None:
         leg.set_visible(True)
     pylab.ion()
     return fig

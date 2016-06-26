@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+
 import numpy as np
 from numpy import dot
 
 from compmech.sparse import solve
 from compmech.logger import msg
-from newton_raphson import _solver_NR
-from arc_length import _solver_arc_length
+from .newton_raphson import _solver_NR
+from .arc_length import _solver_arc_length
 
 class Analysis(object):
     r"""Class that embodies all data required for linear/non-linear analysis
