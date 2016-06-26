@@ -10,27 +10,19 @@ environment:
   matrix:
       - PYTHON_VERSION: 2.7
         PYTHON_ARCH: 32
-        WINDOWS_SDK_VERSION: "v7.0"
         MINICONDA: C:\Miniconda
-        FLAGMINGW: 32
 
       - PYTHON_VERSION: 2.7
         PYTHON_ARCH: 64
-        WINDOWS_SDK_VERSION: "v7.0"
         MINICONDA: C:\Miniconda-x64
-        FLAGMINGW: 64
 
       - PYTHON_VERSION: 3.4
         PYTHON_ARCH: 32
-        WINDOWS_SDK_VERSION: "v7.1"
         MINICONDA: C:\Miniconda3
-        FLAGMINGW: 32
 
       - PYTHON_VERSION: 3.4
         PYTHON_ARCH: 64
-        WINDOWS_SDK_VERSION: "v7.1"
         MINICONDA: C:\Miniconda3-x64
-        FLAGMINGW: 64
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -44,8 +36,10 @@ install:
   - conda info -a
   - conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython
   - activate testenv
+  - setenv /Release
   - echo Environment Variables in testenv:
   - set
+  - dir
   - "CALL %CMD_IN_ENV% python setup.py install"
   # removing local libraries to be sure the installation was correct
   - del /s *.dll
