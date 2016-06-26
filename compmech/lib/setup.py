@@ -6,7 +6,7 @@ from os.path import join, basename, extsep
 from distutils.sysconfig import get_python_lib
 from subprocess import Popen
 
-#TODO nor working... but seems promising
+#TODO not working... but seems promising
 import setup_patch
 
 
@@ -97,8 +97,6 @@ def create_dlls(config, install_dir):
                     objs, libpath, libpath_a), shell=True)
             else:
                 libpath = join(install_dir, instlib[0] + '.dll')
-                print('ATTEMPT TO LINK', 'link /DLL {0} /OUT:{1}'.format(objs,
-                    libpath))
                 p = Popen('link /DLL {0} /OUT:{1}'.format(objs, libpath),
                         shell=True)
         else:
@@ -107,7 +105,7 @@ def create_dlls(config, install_dir):
                     shell=True)
         p.wait()
         if p.returncode != 0:
-            print('FAILED TO LINK', libpath)
+            raise RuntimeError('LINK error with: {0}'.format(libpath))
 
 
 if __name__ == '__main__':

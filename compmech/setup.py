@@ -13,48 +13,28 @@ import setup_patch
 def configuration(parent_package='',top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('compmech', parent_package, top_path)
-    pythonlib = get_python_lib()
 
-    ###################################################
+    #_________________________________________________
+    #
     #NOTE include and lib must be the first to install
+    #_________________________________________________
     # include
-    includedir = join(pythonlib, 'compmech', 'include')
+    includedir = join(get_python_lib(), 'compmech', 'include')
     print('Copying include files to {0}'.format(includedir))
     if os.path.isdir(includedir):
         shutil.rmtree(includedir)
     shutil.copytree(join(realpath(config.package_path), 'include'), includedir)
-
     # lib
-    print('Building shared libraries...')
-    packagepath = realpath(config.package_path)
-    print('Running lib setup.py at {0}'.format(packagepath))
+    setuppath = join(realpath(config.package_path), './lib/setup.py')
+    print('Building shared libraries using {0}'.format(setuppath))
     if 'install' in sys.argv:
-        p = Popen('python ' + join(packagepath, './lib/setup.py') +
-                  ' install', shell=True)
+        p = Popen('python ' + join(setuppath) + ' install',
+            shell=True)
     else:
-        p = Popen('python ' + join(packagepath, './lib/setup.py') +
-              ' build_ext --inplace clean', shell=True)
+        p = Popen('python ' + join(setuppath) + ' build_ext --inplace clean',
+            shell=True)
     p.wait()
-    ###################################################
-    if '27' in pythonlib or '2.7' in pythonlib:
-        pyversion = '2.7'
-    elif '35' in pythonlib or '3.5' in pythonlib:
-        pyversion = '3.5'
-    else:
-        raise NotImplementedError('Setup not ready for this Python version: {0}'.
-                format(pythonlib))
-    libplatdir = join(realpath(top_path), 'build', 'lib.' + os.environ['PLAT']
-            + '-' + pyversion)
-
-    libplatinclude = join(libplatdir, 'compmech', 'include')
-
-    if os.path.isdir(libplatinclude):
-        shutil.rmtree(libplatinclude)
-    shutil.copytree(includedir, libplatinclude)
-    ###################################################
-
-    config.add_data_dir('include')
-    config.add_data_dir('lib')
+    #_________________________________________________
 
     config.add_subpackage('analysis')
     config.add_subpackage('composite')
