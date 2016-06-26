@@ -16,6 +16,11 @@ def in_appveyor_ci():
     else:
         return True
 
+def in_travis_ci():
+    if os.environ.get('TRAVIS_BUILD_ID') is None:
+        return False
+    else:
+        return True
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
@@ -28,7 +33,7 @@ def configuration(parent_package='', top_path=None):
     config = Configuration('lib', parent_package, top_path)
 
     extra_args = []
-    if sys.version_info[0] == 2:
+    if sys.version_info[0] == 2 or in_appveyor_ci() or in_travis_ci():
         if os.name == 'nt':
             extra_args = ['/Od']
         else:
