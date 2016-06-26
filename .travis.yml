@@ -45,5 +45,5 @@ script:
   - export PYTHONPATH=/home/travis/miniconda/envs/TestEnv/lib/python${TRAVIS_PYTHON_VERSION}/site-packages:$PYTHONPATH
   #- ls -la  ../../../virtualenv/python2.7.9/lib/python2.7/site-packages
   # useful to get all environment variables
-  - set
+  - python -c "import os;print('\n'.join(map(str, os.environ.items())))"
   - py.test --cache-clear
