@@ -47,7 +47,7 @@ install:
   - echo Environment Variables in testenv:
   - set
   #FIXME next lines are a workaround due to a buggy environment in conda
-  - echo Current directory is: %CD%
+  - echo Current directory is %CD%
   - dir
   - cd MinGW
   - cd *-mingw*%FLAGMINGW%
