@@ -11,22 +11,26 @@ environment:
       - PYTHON_VERSION: 2.7
         PYTHON_ARCH: 32
         MINICONDA: C:\Miniconda
-        VCVARS: "C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcvarsall.bat x86"
+        VCVARS: C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat
+        PLATFORM: x86
 
       - PYTHON_VERSION: 2.7
         PYTHON_ARCH: 64
         MINICONDA: C:\Miniconda-x64
-        VCVARS: "C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\vcvarsall.bat x86"
+        VCVARS: C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat
+        PLATFORM: x64
 
       - PYTHON_VERSION: 3.4
         PYTHON_ARCH: 32
         MINICONDA: C:\Miniconda3
-        VCVARS: "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\VC\\vcvarsall.bat x86"
+        VCVARS: C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat
+        PLATFORM: x86
 
       - PYTHON_VERSION: 3.4
         PYTHON_ARCH: 64
         MINICONDA: C:\Miniconda3-x64
-        VCVARS: "C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\VC\\vcvarsall.bat x64"
+        VCVARS: C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat
+        PLATFORM: x64
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -40,7 +44,7 @@ install:
   - conda info -a
   - conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy pytest cython libpython
   - activate testenv
-  - call "%VCVARS%"
+  - call "%VCVARS%" %PLATFORM%
   - set DISTUTILS_USE_SDK=1
   - set
   - python setup.py install
