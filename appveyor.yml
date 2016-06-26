@@ -46,9 +46,8 @@ install:
   - dir lib
   - cd mingw%PYTHON_ARCH%
   - dir
-  - cd lib
-  - dir C:\Libraries
-  - copy libmsvcr90d.a %DEFAULT_ENV%\libs
+  - dir lib
+  - set PATH=C:\MinGW\lib;C:\MinGW\mingw%PYTHON_ARCH%\lib;C:\MinGW\mingw%PYTHON_ARCH%\bin;%PATH%
   - cd %APPVEYOR_BUILD_FOLDER%
   - set
   - "CALL %CMD_IN_ENV% python setup.py install"
