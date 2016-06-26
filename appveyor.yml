@@ -42,10 +42,13 @@ install:
   - set DEFAULT_ENV=%CD%
   - dir
   - cd MinGW
-  - cd *-mingw*%PYTHON_ARCH%
+  - dir
+  - cd *-mingw
+  - dir
   - cd lib
   - copy libmsvcr90d.a %DEFAULT_ENV%\libs
   - cd %APPVEYOR_BUILD_FOLDER%
+  - set
   - "CALL %CMD_IN_ENV% python setup.py install"
   # removing local libraries to be sure the installation was correct
   - del /s *.dll
