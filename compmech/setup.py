@@ -30,7 +30,7 @@ def configuration(parent_package='',top_path=None):
     if 'install' in sys.argv:
         p = Popen('python ' + join(setuppath) + ' install',
             shell=True)
-    p.wait()
+        p.wait()
     #_________________________________________________
 
     config.add_subpackage('analysis')
@@ -53,6 +53,8 @@ def configuration(parent_package='',top_path=None):
 
     return config
 
+
 if __name__ == '__main__':
     from numpy.distutils.core import setup
-    setup(**configuration(top_path='').todict())
+    config = configuration(top_path='')
+    setup(**config.todict())

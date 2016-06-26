@@ -192,6 +192,7 @@ def setup_package():
 
     setup(**metadata)
 
+
 if __name__ == '__main__':
     write_version_py()
 

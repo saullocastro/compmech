@@ -62,7 +62,10 @@ test_script:
   - cd compmech\integrate
   - py.test --cache-clear
   - cd ..\panel\tests
-  - py.test --cache-clear
+  #TODO some tests will not run in AppVeyor
+  - py.test --cache-clear test_panel_aero.py
+  - py.test --cache-clear test_panel_freq.py
+  - py.test --cache-clear test_panel_lb.py
   - cd ..\assembly\tests
   - py.test --cache-clear
   - cd ..\..\..\stiffpanelbay
