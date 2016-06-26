@@ -34,7 +34,7 @@ def configuration(parent_package='', top_path=None):
 
     extra_args = []
     if sys.version_info[0] == 2 or in_appveyor_ci() or in_travis_ci():
-        if os.name == 'nt':
+        if os.name == 'nt' and not in_appveyor_ci():
             extra_args = ['/Od']
         else:
             extra_args = ['-O0']
