@@ -8,17 +8,17 @@ environment:
       CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\continuous-integration\\appveyor\\cmd_in_env.cmd"
 
   matrix:
-      - PYTHON_VERSION: 2.7
-        PYTHON_ARCH: 32
-        MINICONDA: C:\Miniconda
+      #- PYTHON_VERSION: 2.7
+      #  PYTHON_ARCH: 32
+      #  MINICONDA: C:\Miniconda
 
-      - PYTHON_VERSION: 2.7
-        PYTHON_ARCH: 64
-        MINICONDA: C:\Miniconda-x64
+      #- PYTHON_VERSION: 2.7
+      #  PYTHON_ARCH: 64
+      #  MINICONDA: C:\Miniconda-x64
 
-      - PYTHON_VERSION: 3.4
-        PYTHON_ARCH: 32
-        MINICONDA: C:\Miniconda3
+      #- PYTHON_VERSION: 3.4
+      #  PYTHON_ARCH: 32
+      #  MINICONDA: C:\Miniconda3
 
       - PYTHON_VERSION: 3.4
         PYTHON_ARCH: 64
@@ -59,14 +59,4 @@ install:
 test_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - set
-  - cd compmech\integrate
-  - py.test --cache-clear
-  - cd ..\panel\tests
-  #TODO some tests will not run in AppVeyor
-  - py.test --cache-clear test_panel_aero.py
-  - py.test --cache-clear test_panel_freq.py
-  - py.test --cache-clear test_panel_lb.py
-  - cd ..\assembly\tests
-  - py.test --cache-clear
-  - cd ..\..\..\stiffpanelbay
   - py.test --cache-clear
