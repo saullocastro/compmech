@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Legendre-Gauss Quadrature Points &mdash; CompMech 0.6.5 documentation</title>
+    <title>Legendre-Gauss Quadrature Points &mdash; CompMech 0.6.6 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.5',
+        VERSION:     '0.6.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.6 documentation" href="../../index.html" />
     <link rel="up" title="Numerical Integration Methods" href="index.html" />
     <link rel="next" title="References" href="ref.html" />
     <link rel="prev" title="Numerical Integration Methods" href="index.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="index.html" title="Numerical Integration Methods"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Numerical Integration Methods</a> &raquo;</li> 
       </ul>
@@ -64,7 +64,7 @@
 <h2>Code to generate points<a class="headerlink" href="#code-to-generate-points" title="Permalink to this headline">¶</a></h2>
 <p>The following Mathematica script, taken from <a class="reference internal" href="ref.html#pomax" id="id2">[pomax]</a> was used to generate the Legendre-Gauss
 quadrature points:</p>
-<div class="highlight-mathematica"><div class="highlight"><pre><span></span><span class="n">symboliclegendre</span><span class="p">[</span><span class="nv">n_</span><span class="p">,</span><span class="nv">x_</span><span class="p">]</span><span class="o">:=</span><span class="n">Solve</span><span class="p">[</span><span class="n">LegendreP</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+<div class="highlight-mathematica"><div class="highlight"><pre><span class="n">symboliclegendre</span><span class="p">[</span><span class="nv">n_</span><span class="p">,</span><span class="nv">x_</span><span class="p">]</span><span class="o">:=</span><span class="n">Solve</span><span class="p">[</span><span class="n">LegendreP</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
 <span class="n">legendreprime</span><span class="p">[</span><span class="nv">n_</span><span class="p">,</span><span class="nv">a_</span><span class="p">]</span><span class="o">:=</span><span class="n">D</span><span class="p">[</span><span class="n">LegendreP</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">],</span><span class="n">x</span><span class="p">]</span><span class="o">/.</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">a</span><span class="p">;</span><span class="w"></span>
 <span class="n">weights</span><span class="p">[</span><span class="nv">n_</span><span class="p">,</span><span class="nv">x_</span><span class="p">]</span><span class="o">:=</span><span class="mi">2</span><span class="o">/</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">legendreprime</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">]</span><span class="o">^</span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
 
@@ -160,15 +160,15 @@ quadrature points:</p>
         <li class="right" >
           <a href="index.html" title="Numerical Integration Methods"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Numerical Integration Methods</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 21, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Jun 26, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

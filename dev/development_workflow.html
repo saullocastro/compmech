@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Development workflow &mdash; CompMech 0.6.5 documentation</title>
+    <title>Development workflow &mdash; CompMech 0.6.6 documentation</title>
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.5',
+        VERSION:     '0.6.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="CompMech 0.6.5 documentation" href="../index.html" />
+    <link rel="top" title="CompMech 0.6.6 documentation" href="../index.html" />
     <link rel="up" title="Git for development" href="git_development.html" />
     <link rel="next" title="git resources" href="git_resources.html" />
     <link rel="prev" title="Git configuration" href="configure_git.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="configure_git.html" title="Git configuration"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="git_development.html" accesskey="U">Git for development</a> &raquo;</li> 
       </ul>
@@ -87,19 +87,19 @@ see <a class="reference internal" href="#rebasing-on-master"><span class="std st
 </li>
 <li><p class="first"><em>Core developers</em> (if you want to push changes without
 further review):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># First, either (i) rebase on upstream -- if you have only few commits</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># First, either (i) rebase on upstream -- if you have only few commits</span>
 <span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
 <span class="n">git</span> <span class="n">rebase</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
 
-<span class="c1"># or, (ii) merge to upstream -- if you have many related commits</span>
+<span class="c"># or, (ii) merge to upstream -- if you have many related commits</span>
 <span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
 <span class="n">git</span> <span class="n">merge</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">ff</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
 
-<span class="c1"># Recheck that what is there is sensible</span>
+<span class="c"># Recheck that what is there is sensible</span>
 <span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">oneline</span> <span class="o">--</span><span class="n">graph</span>
 <span class="n">git</span> <span class="n">log</span> <span class="o">-</span><span class="n">p</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span><span class="o">..</span>
 
-<span class="c1"># Finally, push branch to upstream master</span>
+<span class="c"># Finally, push branch to upstream master</span>
 <span class="n">git</span> <span class="n">push</span> <span class="n">upstream</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span><span class="p">:</span><span class="n">master</span>
 </pre></div>
 </div>
@@ -131,12 +131,12 @@ and <a class="reference external" href="http://mail.scipy.org/pipermail/ipython-
 <div class="section" id="making-a-new-feature-branch">
 <span id="id2"></span><h3>Making a new feature branch<a class="headerlink" href="#making-a-new-feature-branch" title="Permalink to this headline">¶</a></h3>
 <p>To update your master branch, use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
 <span class="n">git</span> <span class="n">merge</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span> <span class="o">--</span><span class="n">ff</span><span class="o">-</span><span class="n">only</span>
 </pre></div>
 </div>
 <p>To create a new branch and check it out, use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
 </pre></div>
 </div>
 <p>Generally, you will want to keep this branch also on your public <a class="reference external" href="http://github.com">github</a> fork
@@ -144,12 +144,12 @@ of <a class="reference external" href="http://compmech.github.io/compmech">CompM
 repo.  Generally (if you followed the instructions in these pages, and
 by default), git will have a link to your <a class="reference external" href="http://github.com">github</a> repo, called
 <code class="docutils literal"><span class="pre">origin</span></code>.  You push up to your own repo on <a class="reference external" href="http://github.com">github</a> with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span>
 </pre></div>
 </div>
 <p>In git &gt;= 1.7 you can ensure that the link is correctly set by using the
 <code class="docutils literal"><span class="pre">--set-upstream</span></code> option:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">upstream</span> <span class="n">origin</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">upstream</span> <span class="n">origin</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span>
 </pre></div>
 </div>
 <p>From now on <a class="reference external" href="http://git-scm.com/">git</a> will know that <code class="docutils literal"><span class="pre">my-new-feature</span></code> is related to the
@@ -159,11 +159,11 @@ by default), git will have a link to your <a class="reference external" href="ht
 <span id="editing-workflow"></span><h3>The editing workflow<a class="headerlink" href="#the-editing-workflow" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="overview">
 <h4>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># hack hack</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># hack hack</span>
 <span class="n">git</span> <span class="n">add</span> <span class="n">my_new_file</span>
-<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">am</span> <span class="s1">&#39;ENH: some message&#39;</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">am</span> <span class="s">&#39;ENH: some message&#39;</span>
 
-<span class="c1"># push the branch to your own Github repo</span>
+<span class="c"># push the branch to your own Github repo</span>
 <span class="n">git</span> <span class="n">push</span>
 </pre></div>
 </div>
@@ -175,18 +175,18 @@ by default), git will have a link to your <a class="reference external" href="ht
 </li>
 <li><p class="first">See which files have changed with <code class="docutils literal"><span class="pre">git</span> <span class="pre">status</span></code> (see <a class="reference external" href="http://www.kernel.org/pub/software/scm/git/docs/git-status.html">git status</a>).
 You&#8217;ll see a listing like this one:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># On branch my-new-feature</span>
-<span class="c1"># Changed but not updated:</span>
-<span class="c1">#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span>
-<span class="c1">#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span>
-<span class="c1">#</span>
-<span class="c1">#  modified:   README</span>
-<span class="c1">#</span>
-<span class="c1"># Untracked files:</span>
-<span class="c1">#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span>
-<span class="c1">#</span>
-<span class="c1">#  INSTALL</span>
-<span class="n">no</span> <span class="n">changes</span> <span class="n">added</span> <span class="n">to</span> <span class="n">commit</span> <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git add&quot;</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="s2">&quot;git commit -a&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># On branch my-new-feature</span>
+<span class="c"># Changed but not updated:</span>
+<span class="c">#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span>
+<span class="c">#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span>
+<span class="c">#</span>
+<span class="c">#  modified:   README</span>
+<span class="c">#</span>
+<span class="c"># Untracked files:</span>
+<span class="c">#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span>
+<span class="c">#</span>
+<span class="c">#  INSTALL</span>
+<span class="n">no</span> <span class="n">changes</span> <span class="n">added</span> <span class="n">to</span> <span class="n">commit</span> <span class="p">(</span><span class="n">use</span> <span class="s">&quot;git add&quot;</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="s">&quot;git commit -a&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -213,13 +213,13 @@ see <a class="reference external" href="http://www.gitready.com/beginner/2009/01
 <div class="section" id="writing-the-commit-message">
 <span id="id3"></span><h4>Writing the commit message<a class="headerlink" href="#writing-the-commit-message" title="Permalink to this headline">¶</a></h4>
 <p>Commit messages should be clear and follow a few basic rules.  Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ENH</span><span class="p">:</span> <span class="n">add</span> <span class="n">functionality</span> <span class="n">X</span> <span class="n">to</span> <span class="n">compmech</span><span class="o">.&lt;</span><span class="n">submodule</span><span class="o">&gt;.</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">ENH</span><span class="p">:</span> <span class="n">add</span> <span class="n">functionality</span> <span class="n">X</span> <span class="n">to</span> <span class="n">compmech</span><span class="o">.&lt;</span><span class="n">submodule</span><span class="o">&gt;.</span>
 
 <span class="n">The</span> <span class="n">first</span> <span class="n">line</span> <span class="n">of</span> <span class="n">the</span> <span class="n">commit</span> <span class="n">message</span> <span class="n">starts</span> <span class="k">with</span> <span class="n">a</span> <span class="n">capitalized</span> <span class="n">acronym</span>
 <span class="p">(</span><span class="n">options</span> <span class="n">listed</span> <span class="n">below</span><span class="p">)</span> <span class="n">indicating</span> <span class="n">what</span> <span class="nb">type</span> <span class="n">of</span> <span class="n">commit</span> <span class="n">this</span> <span class="ow">is</span><span class="o">.</span>  <span class="n">Then</span> <span class="n">a</span> <span class="n">blank</span>
-<span class="n">line</span><span class="p">,</span> <span class="n">then</span> <span class="n">more</span> <span class="n">text</span> <span class="k">if</span> <span class="n">needed</span><span class="o">.</span>  <span class="n">Lines</span> <span class="n">shouldn</span><span class="s1">&#39;t be longer than 80</span>
+<span class="n">line</span><span class="p">,</span> <span class="n">then</span> <span class="n">more</span> <span class="n">text</span> <span class="k">if</span> <span class="n">needed</span><span class="o">.</span>  <span class="n">Lines</span> <span class="n">shouldn</span><span class="s">&#39;t be longer than 80</span>
 <span class="n">characters</span><span class="o">.</span>  <span class="n">If</span> <span class="n">the</span> <span class="n">commit</span> <span class="ow">is</span> <span class="n">related</span> <span class="n">to</span> <span class="n">a</span> <span class="n">ticket</span><span class="p">,</span> <span class="n">indicate</span> <span class="n">that</span> <span class="k">with</span>
-<span class="s2">&quot;See #3456&quot;</span><span class="p">,</span> <span class="s2">&quot;See ticket 3456&quot;</span><span class="p">,</span> <span class="s2">&quot;Closes #3456&quot;</span> <span class="ow">or</span> <span class="n">similar</span><span class="o">.</span>
+<span class="s">&quot;See #3456&quot;</span><span class="p">,</span> <span class="s">&quot;See ticket 3456&quot;</span><span class="p">,</span> <span class="s">&quot;Closes #3456&quot;</span> <span class="ow">or</span> <span class="n">similar</span><span class="o">.</span>
 </pre></div>
 </div>
 <p>Describing the motivation for a change, the nature of a bug for bug fixes or
@@ -228,7 +228,7 @@ message.  Messages should be understandable without looking at the code
 changes.  A commit message like <code class="docutils literal"><span class="pre">MAINT:</span> <span class="pre">fixed</span> <span class="pre">another</span> <span class="pre">one</span></code> is an example of
 what not to do; the reader has to go look for context elsewhere.</p>
 <p>Standard acronyms to start the commit message with are:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">API</span><span class="p">:</span> <span class="n">an</span> <span class="p">(</span><span class="n">incompatible</span><span class="p">)</span> <span class="n">API</span> <span class="n">change</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">API</span><span class="p">:</span> <span class="n">an</span> <span class="p">(</span><span class="n">incompatible</span><span class="p">)</span> <span class="n">API</span> <span class="n">change</span>
 <span class="n">BLD</span><span class="p">:</span> <span class="n">change</span> <span class="n">related</span> <span class="n">to</span> <span class="n">building</span> <span class="n">compmech</span>
 <span class="n">BUG</span><span class="p">:</span> <span class="n">bug</span> <span class="n">fix</span>
 <span class="n">DEP</span><span class="p">:</span> <span class="n">deprecate</span> <span class="n">something</span><span class="p">,</span> <span class="ow">or</span> <span class="n">remove</span> <span class="n">a</span> <span class="n">deprecated</span> <span class="nb">object</span>
@@ -250,29 +250,29 @@ what not to do; the reader has to go look for context elsewhere.</p>
 github</a> repo. If you do not absolutely need to do this, try to avoid
 doing it, except perhaps when you are finished.</p>
 <p>First, it can be useful to update your master branch:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># go to the master branch</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># go to the master branch</span>
 <span class="n">git</span> <span class="n">checkout</span> <span class="n">master</span>
-<span class="c1"># pull changes from github</span>
+<span class="c"># pull changes from github</span>
 <span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
-<span class="c1"># update the master branch</span>
+<span class="c"># update the master branch</span>
 <span class="n">git</span> <span class="n">rebase</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
-<span class="c1"># push it to your Github repo</span>
+<span class="c"># push it to your Github repo</span>
 <span class="n">git</span> <span class="n">push</span>
 </pre></div>
 </div>
 <p>Then, the feature branch:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># go to the feature branch</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># go to the feature branch</span>
 <span class="n">git</span> <span class="n">checkout</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span>
-<span class="c1"># make a backup in case you mess up</span>
+<span class="c"># make a backup in case you mess up</span>
 <span class="n">git</span> <span class="n">branch</span> <span class="n">tmp</span> <span class="n">my</span><span class="o">-</span><span class="n">new</span><span class="o">-</span><span class="n">feature</span>
-<span class="c1"># rebase on master</span>
+<span class="c"># rebase on master</span>
 <span class="n">git</span> <span class="n">rebase</span> <span class="n">master</span>
 </pre></div>
 </div>
 <p>If you have made changes to files that have changed also upstream,
 this may generate merge conflicts that you need to resolve.
 Finally, remove the backup branch once the rebase succeeded:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">branch</span> <span class="o">-</span><span class="n">D</span> <span class="n">tmp</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">branch</span> <span class="o">-</span><span class="n">D</span> <span class="n">tmp</span>
 </pre></div>
 </div>
 <div class="section" id="recovering-from-mess-ups">
@@ -280,25 +280,25 @@ Finally, remove the backup branch once the rebase succeeded:</p>
 <p>Sometimes, you mess up merges or rebases. Luckily, in Git it is
 relatively straightforward to recover from such mistakes.</p>
 <p>If you mess up during a rebase:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">rebase</span> <span class="o">--</span><span class="n">abort</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">rebase</span> <span class="o">--</span><span class="n">abort</span>
 </pre></div>
 </div>
 <p>If you notice you messed up after the rebase:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># reset branch back to the saved point</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># reset branch back to the saved point</span>
 <span class="n">git</span> <span class="n">reset</span> <span class="o">--</span><span class="n">hard</span> <span class="n">tmp</span>
 </pre></div>
 </div>
 <p>If you forgot to make a backup branch:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># look at the reflog of the branch</span>
-<span class="n">git</span> <span class="n">reflog</span> <span class="n">show</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span><span class="o">-</span><span class="n">branch</span>
+<div class="highlight-default"><div class="highlight"><pre># look at the reflog of the branch
+git reflog show my-feature-branch
 
-<span class="mi">8630830</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span><span class="o">-</span><span class="n">branch</span><span class="o">@</span><span class="p">{</span><span class="mi">0</span><span class="p">}:</span> <span class="n">commit</span><span class="p">:</span> <span class="n">BUG</span><span class="p">:</span> <span class="n">io</span><span class="p">:</span> <span class="n">close</span> <span class="n">file</span> <span class="n">handles</span> <span class="n">immediately</span>
-<span class="mi">278</span><span class="n">dd2a</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span><span class="o">-</span><span class="n">branch</span><span class="o">@</span><span class="p">{</span><span class="mi">1</span><span class="p">}:</span> <span class="n">rebase</span> <span class="n">finished</span><span class="p">:</span> <span class="n">refs</span><span class="o">/</span><span class="n">heads</span><span class="o">/</span><span class="n">my</span><span class="o">-</span><span class="n">feature</span><span class="o">-</span><span class="n">branch</span> <span class="n">onto</span> <span class="mi">11</span><span class="n">ee694744f2552d</span>
-<span class="mi">26</span><span class="n">aa21a</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span><span class="o">-</span><span class="n">branch</span><span class="o">@</span><span class="p">{</span><span class="mi">2</span><span class="p">}:</span> <span class="n">commit</span><span class="p">:</span> <span class="n">BUG</span><span class="p">:</span> <span class="n">lib</span><span class="p">:</span> <span class="n">make</span> <span class="n">seek_gzip_factory</span> <span class="ow">not</span> <span class="n">leak</span> <span class="n">gzip</span> <span class="n">obj</span>
-<span class="o">...</span>
+8630830 my-feature-branch@{0}: commit: BUG: io: close file handles immediately
+278dd2a my-feature-branch@{1}: rebase finished: refs/heads/my-feature-branch onto 11ee694744f2552d
+26aa21a my-feature-branch@{2}: commit: BUG: lib: make seek_gzip_factory not leak gzip obj
+...
 
-<span class="c1"># reset the branch to where it was before the botched rebase</span>
-<span class="n">git</span> <span class="n">reset</span> <span class="o">--</span><span class="n">hard</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span><span class="o">-</span><span class="n">branch</span><span class="o">@</span><span class="p">{</span><span class="mi">2</span><span class="p">}</span>
+# reset the branch to where it was before the botched rebase
+git reset --hard my-feature-branch@{2}
 </pre></div>
 </div>
 <p>If you didn&#8217;t actually mess up but there are merge conflicts, you need to
@@ -368,14 +368,14 @@ them to <code class="docutils literal"><span class="pre">upstream</span></code> 
 <li><p class="first">First, merge or rebase on the target branch.</p>
 <ol class="loweralpha">
 <li><p class="first">Only a few commits: prefer rebasing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
 <span class="n">git</span> <span class="n">rebase</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="#rebasing-on-master"><span class="std std-ref">above</span></a>.</p>
 </li>
 <li><p class="first">Many related commits: consider creating a merge commit:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
 <span class="n">git</span> <span class="n">merge</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">ff</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
 </pre></div>
 </div>
@@ -383,13 +383,13 @@ them to <code class="docutils literal"><span class="pre">upstream</span></code> 
 </ol>
 </li>
 <li><p class="first">Check that what you are going to push looks sensible:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">log</span> <span class="o">-</span><span class="n">p</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span><span class="o">..</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">log</span> <span class="o">-</span><span class="n">p</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span><span class="o">..</span>
 <span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">oneline</span> <span class="o">--</span><span class="n">graph</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Push to upstream:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">upstream</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span><span class="o">-</span><span class="n">branch</span><span class="p">:</span><span class="n">master</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">push</span> <span class="n">upstream</span> <span class="n">my</span><span class="o">-</span><span class="n">feature</span><span class="o">-</span><span class="n">branch</span><span class="p">:</span><span class="n">master</span>
 </pre></div>
 </div>
 </li>
@@ -412,7 +412,7 @@ them to <code class="docutils literal"><span class="pre">upstream</span></code> 
 made several false starts you would like the posterity not to see.</p>
 <p>This can be done via <em>interactive rebasing</em>.</p>
 <p>Suppose that the commit history looks like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">oneline</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">oneline</span>
 <span class="n">eadc391</span> <span class="n">Fix</span> <span class="n">some</span> <span class="n">remaining</span> <span class="n">bugs</span>
 <span class="n">a815645</span> <span class="n">Modify</span> <span class="n">it</span> <span class="n">so</span> <span class="n">that</span> <span class="n">it</span> <span class="n">works</span>
 <span class="mi">2</span><span class="n">dec1ac</span> <span class="n">Fix</span> <span class="n">a</span> <span class="n">few</span> <span class="n">bugs</span> <span class="o">+</span> <span class="n">disable</span>
@@ -429,34 +429,34 @@ want to make the following changes:</p>
 <li>Combine the commits <code class="docutils literal"><span class="pre">2dec1ac</span></code>, <code class="docutils literal"><span class="pre">a815645</span></code>, <code class="docutils literal"><span class="pre">eadc391</span></code> into a single one.</li>
 </ul>
 <p>We do as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># make a backup of the current state</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># make a backup of the current state</span>
 <span class="n">git</span> <span class="n">branch</span> <span class="n">tmp</span> <span class="n">HEAD</span>
-<span class="c1"># interactive rebase</span>
+<span class="c"># interactive rebase</span>
 <span class="n">git</span> <span class="n">rebase</span> <span class="o">-</span><span class="n">i</span> <span class="mi">6</span><span class="n">ad92e5</span>
 </pre></div>
 </div>
 <p>This will open an editor with the following text in it:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pick</span> <span class="mi">13</span><span class="n">d7934</span> <span class="n">First</span> <span class="n">implementation</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">pick</span> <span class="mi">13</span><span class="n">d7934</span> <span class="n">First</span> <span class="n">implementation</span>
 <span class="n">pick</span> <span class="mi">2</span><span class="n">dec1ac</span> <span class="n">Fix</span> <span class="n">a</span> <span class="n">few</span> <span class="n">bugs</span> <span class="o">+</span> <span class="n">disable</span>
 <span class="n">pick</span> <span class="n">a815645</span> <span class="n">Modify</span> <span class="n">it</span> <span class="n">so</span> <span class="n">that</span> <span class="n">it</span> <span class="n">works</span>
 <span class="n">pick</span> <span class="n">eadc391</span> <span class="n">Fix</span> <span class="n">some</span> <span class="n">remaining</span> <span class="n">bugs</span>
 
-<span class="c1"># Rebase 6ad92e5..eadc391 onto 6ad92e5</span>
-<span class="c1">#</span>
-<span class="c1"># Commands:</span>
-<span class="c1">#  p, pick = use commit</span>
-<span class="c1">#  r, reword = use commit, but edit the commit message</span>
-<span class="c1">#  e, edit = use commit, but stop for amending</span>
-<span class="c1">#  s, squash = use commit, but meld into previous commit</span>
-<span class="c1">#  f, fixup = like &quot;squash&quot;, but discard this commit&#39;s log message</span>
-<span class="c1">#</span>
-<span class="c1"># If you remove a line here THAT COMMIT WILL BE LOST.</span>
-<span class="c1"># However, if you remove everything, the rebase will be aborted.</span>
-<span class="c1">#</span>
+<span class="c"># Rebase 6ad92e5..eadc391 onto 6ad92e5</span>
+<span class="c">#</span>
+<span class="c"># Commands:</span>
+<span class="c">#  p, pick = use commit</span>
+<span class="c">#  r, reword = use commit, but edit the commit message</span>
+<span class="c">#  e, edit = use commit, but stop for amending</span>
+<span class="c">#  s, squash = use commit, but meld into previous commit</span>
+<span class="c">#  f, fixup = like &quot;squash&quot;, but discard this commit&#39;s log message</span>
+<span class="c">#</span>
+<span class="c"># If you remove a line here THAT COMMIT WILL BE LOST.</span>
+<span class="c"># However, if you remove everything, the rebase will be aborted.</span>
+<span class="c">#</span>
 </pre></div>
 </div>
 <p>To achieve what we want, we will make the following changes to it:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="mi">13</span><span class="n">d7934</span> <span class="n">First</span> <span class="n">implementation</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">r</span> <span class="mi">13</span><span class="n">d7934</span> <span class="n">First</span> <span class="n">implementation</span>
 <span class="n">pick</span> <span class="mi">2</span><span class="n">dec1ac</span> <span class="n">Fix</span> <span class="n">a</span> <span class="n">few</span> <span class="n">bugs</span> <span class="o">+</span> <span class="n">disable</span>
 <span class="n">f</span> <span class="n">a815645</span> <span class="n">Modify</span> <span class="n">it</span> <span class="n">so</span> <span class="n">that</span> <span class="n">it</span> <span class="n">works</span>
 <span class="n">f</span> <span class="n">eadc391</span> <span class="n">Fix</span> <span class="n">some</span> <span class="n">remaining</span> <span class="n">bugs</span>
@@ -467,7 +467,7 @@ want to make the following changes:</p>
 save and quit the editor.</p>
 <p>Git will then immediately bring up an editor for editing the commit
 message. After revising it, we get the output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">detached</span> <span class="n">HEAD</span> <span class="mi">721</span><span class="n">fc64</span><span class="p">]</span> <span class="n">FOO</span><span class="p">:</span> <span class="n">First</span> <span class="n">implementation</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span><span class="n">detached</span> <span class="n">HEAD</span> <span class="mi">721</span><span class="n">fc64</span><span class="p">]</span> <span class="n">FOO</span><span class="p">:</span> <span class="n">First</span> <span class="n">implementation</span>
  <span class="mi">2</span> <span class="n">files</span> <span class="n">changed</span><span class="p">,</span> <span class="mi">199</span> <span class="n">insertions</span><span class="p">(</span><span class="o">+</span><span class="p">),</span> <span class="mi">66</span> <span class="n">deletions</span><span class="p">(</span><span class="o">-</span><span class="p">)</span>
 <span class="p">[</span><span class="n">detached</span> <span class="n">HEAD</span> <span class="mi">0</span><span class="n">f22701</span><span class="p">]</span> <span class="n">Fix</span> <span class="n">a</span> <span class="n">few</span> <span class="n">bugs</span> <span class="o">+</span> <span class="n">disable</span>
  <span class="mi">1</span> <span class="n">files</span> <span class="n">changed</span><span class="p">,</span> <span class="mi">79</span> <span class="n">insertions</span><span class="p">(</span><span class="o">+</span><span class="p">),</span> <span class="mi">61</span> <span class="n">deletions</span><span class="p">(</span><span class="o">-</span><span class="p">)</span>
@@ -475,7 +475,7 @@ message. After revising it, we get the output:</p>
 </pre></div>
 </div>
 <p>and the history looks now like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="n">f22701</span> <span class="n">Fix</span> <span class="n">a</span> <span class="n">few</span> <span class="n">bugs</span> <span class="o">+</span> <span class="n">disable</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="mi">0</span><span class="n">f22701</span> <span class="n">Fix</span> <span class="n">a</span> <span class="n">few</span> <span class="n">bugs</span> <span class="o">+</span> <span class="n">disable</span>
 <span class="mi">721</span><span class="n">fc64</span> <span class="n">ENH</span><span class="p">:</span> <span class="n">Sophisticated</span> <span class="n">feature</span>
 <span class="mi">6</span><span class="n">ad92e5</span> <span class="o">*</span> <span class="n">masked</span> <span class="ow">is</span> <span class="n">now</span> <span class="n">an</span> <span class="n">instance</span> <span class="n">of</span> <span class="n">a</span> <span class="n">new</span> <span class="nb">object</span><span class="p">,</span> <span class="n">MaskedConstant</span>
 </pre></div>
@@ -484,10 +484,10 @@ message. After revising it, we get the output:</p>
 </div>
 <div class="section" id="deleting-a-branch-on-github">
 <h3>Deleting a branch on <a class="reference external" href="http://github.com">github</a><a class="headerlink" href="#deleting-a-branch-on-github" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="n">master</span>
-<span class="c1"># delete branch locally</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">checkout</span> <span class="n">master</span>
+<span class="c"># delete branch locally</span>
 <span class="n">git</span> <span class="n">branch</span> <span class="o">-</span><span class="n">D</span> <span class="n">my</span><span class="o">-</span><span class="n">unwanted</span><span class="o">-</span><span class="n">branch</span>
-<span class="c1"># delete branch on github</span>
+<span class="c"># delete branch on github</span>
 <span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="p">:</span><span class="n">my</span><span class="o">-</span><span class="n">unwanted</span><span class="o">-</span><span class="n">branch</span>
 </pre></div>
 </div>
@@ -508,15 +508,15 @@ collaborator:</p>
 <div><img alt="../_images/pull_button.png" src="../_images/pull_button.png" />
 </div></blockquote>
 <p>Now all those people can do:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@githhub</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">your</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">name</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@githhub</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">your</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">name</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 <p>Remember that links starting with <code class="docutils literal"><span class="pre">git&#64;</span></code> use the ssh protocol and are
 read-write; links starting with <code class="docutils literal"><span class="pre">git://</span></code> are read-only.</p>
 <p>Your collaborators can then commit directly into that repo with the
 usual:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">am</span> <span class="s1">&#39;ENH - much better code&#39;</span>
-<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span> <span class="c1"># pushes directly into your repo</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">am</span> <span class="s">&#39;ENH - much better code&#39;</span>
+<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span> <span class="c"># pushes directly into your repo</span>
 </pre></div>
 </div>
 </div>
@@ -524,11 +524,11 @@ usual:</p>
 <h3>Exploring your repository<a class="headerlink" href="#exploring-your-repository" title="Permalink to this headline">¶</a></h3>
 <p>To see a graphical representation of the repository branches and
 commits:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gitk</span> <span class="o">--</span><span class="nb">all</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">gitk</span> <span class="o">--</span><span class="nb">all</span>
 </pre></div>
 </div>
 <p>To see a linear list of commits for this branch:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">log</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">log</span>
 </pre></div>
 </div>
 <p>You can also look at the <a class="reference external" href="http://github.com/blog/39-say-hello-to-the-network-graph-visualizer">network graph visualizer</a> for your <a class="reference external" href="http://github.com">github</a>
@@ -544,39 +544,39 @@ branch containing the backport.</p>
 <ol class="arabic">
 <li><p class="first">Assuming you already have a fork of CompMech on Github. We need to
 update it from upstream:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Add upstream.</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># Add upstream.</span>
 <span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">upstream</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">compmech</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span>
 
-<span class="c1"># Get the latest updates.</span>
+<span class="c"># Get the latest updates.</span>
 <span class="n">git</span> <span class="n">fetch</span> <span class="n">upstream</span>
 
-<span class="c1"># Make sure you are on master.</span>
+<span class="c"># Make sure you are on master.</span>
 <span class="n">git</span> <span class="n">checkout</span> <span class="n">master</span>
 
-<span class="c1"># Apply the updates locally.</span>
+<span class="c"># Apply the updates locally.</span>
 <span class="n">git</span> <span class="n">rebase</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
 
-<span class="c1"># Push the updated code to your github repo.</span>
+<span class="c"># Push the updated code to your github repo.</span>
 <span class="n">git</span> <span class="n">push</span> <span class="n">origin</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Next you need to make the branch you will work on. This needs to be
 based on the older version of CompMech (not master):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Make a new branch based on compmech/maintenance/1.8.x,</span>
-<span class="c1"># backport-3324 is our new name for the branch.</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># Make a new branch based on compmech/maintenance/1.8.x,</span>
+<span class="c"># backport-3324 is our new name for the branch.</span>
 <span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">backport</span><span class="o">-</span><span class="mi">3324</span> <span class="n">upstream</span><span class="o">/</span><span class="n">maintenance</span><span class="o">/</span><span class="mf">1.8</span><span class="o">.</span><span class="n">x</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Now you need to apply the changes from master to this branch using
 <a class="reference external" href="https://www.kernel.org/pub/software/scm/git/docs/git-cherry-pick.html">git cherry-pick</a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># This pull request included commits aa7a047 to c098283 (inclusive)</span>
-<span class="c1"># so you use the .. syntax (for a range of commits), the ^ makes the</span>
-<span class="c1"># range inclusive.</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># This pull request included commits aa7a047 to c098283 (inclusive)</span>
+<span class="c"># so you use the .. syntax (for a range of commits), the ^ makes the</span>
+<span class="c"># range inclusive.</span>
 <span class="n">git</span> <span class="n">cherry</span><span class="o">-</span><span class="n">pick</span> <span class="n">aa7a047</span><span class="o">^..</span><span class="n">c098283</span>
 <span class="o">...</span>
-<span class="c1"># Fix any conflicts, then if needed:</span>
+<span class="c"># Fix any conflicts, then if needed:</span>
 <span class="n">git</span> <span class="n">cherry</span><span class="o">-</span><span class="n">pick</span> <span class="o">--</span><span class="k">continue</span>
 </pre></div>
 </div>
@@ -587,7 +587,7 @@ use <a class="reference external" href="https://www.kernel.org/pub/software/scm/
 backported branch to make sure nothing gets screwed up.</p>
 </li>
 <li><p class="first">Push the new branch to your Github repository:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">backport</span><span class="o">-</span><span class="mi">3324</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">u</span> <span class="n">origin</span> <span class="n">backport</span><span class="o">-</span><span class="mi">3324</span>
 </pre></div>
 </div>
 </li>
@@ -686,15 +686,15 @@ make the pull request against master.</p>
         <li class="right" >
           <a href="configure_git.html" title="Git configuration"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="git_development.html" >Git for development</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 21, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Jun 26, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

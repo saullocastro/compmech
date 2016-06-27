@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.composite.lamina &mdash; CompMech 0.6.5 documentation</title>
+    <title>compmech.composite.lamina &mdash; CompMech 0.6.6 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.6.5',
+        VERSION:     '0.6.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.6.5 documentation" href="../../../index.html" />
+    <link rel="top" title="CompMech 0.6.6 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -49,18 +49,20 @@
           <div class="body" role="main">
             
   <h1>Source code for compmech.composite.lamina</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Composite Lamina Module (:mod:`compmech.composite.lamina`)</span>
 <span class="sd">==========================================================</span>
 
 <span class="sd">.. currentmodule:: compmech.composite.lamina</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">DOUBLE</span>
-<span class="kn">from</span> <span class="nn">matlamina</span> <span class="kn">import</span> <span class="n">MatLamina</span>
+<span class="kn">from</span> <span class="nn">.matlamina</span> <span class="kn">import</span> <span class="n">MatLamina</span>
 
 <div class="viewcode-block" id="Lamina"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.lamina.Lamina">[docs]</a><span class="k">class</span> <span class="nc">Lamina</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -100,7 +102,7 @@
         <span class="n">cost</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">thetarad</span><span class="p">)</span>
         <span class="n">sint</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">thetarad</span><span class="p">)</span>
         <span class="n">sin2t</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">thetarad</span><span class="p">)</span>
-        <span class="c1">#</span>
+        <span class="c">#</span>
         <span class="n">cos2</span>   <span class="o">=</span> <span class="n">cost</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">cos3</span>   <span class="o">=</span> <span class="n">cost</span><span class="o">**</span><span class="mi">3</span>
         <span class="n">cos4</span>   <span class="o">=</span> <span class="n">cost</span><span class="o">**</span><span class="mi">4</span>
@@ -112,8 +114,8 @@
             <span class="p">[[</span> <span class="n">cost</span><span class="p">,</span>  <span class="n">sint</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
              <span class="p">[</span><span class="o">-</span><span class="n">sint</span><span class="p">,</span>  <span class="n">cost</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
              <span class="p">[</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
-        <span class="c1">#STRESS</span>
-        <span class="c1">#to lamina</span>
+        <span class="c">#STRESS</span>
+        <span class="c">#to lamina</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[[</span>   <span class="n">cos2</span><span class="p">,</span>   <span class="n">sin2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>     <span class="n">sin2t</span><span class="p">],</span>
              <span class="p">[</span>   <span class="n">sin2</span><span class="p">,</span>   <span class="n">cos2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>    <span class="o">-</span><span class="n">sin2t</span><span class="p">],</span>
@@ -121,7 +123,7 @@
              <span class="p">[</span>      <span class="mi">0</span><span class="p">,</span>      <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="o">-</span><span class="n">sint</span><span class="p">,</span>         <span class="mi">0</span><span class="p">],</span>
              <span class="p">[</span>      <span class="mi">0</span><span class="p">,</span>      <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sint</span><span class="p">,</span>  <span class="n">cost</span><span class="p">,</span>         <span class="mi">0</span><span class="p">],</span>
              <span class="p">[</span><span class="o">-</span><span class="n">sincos</span><span class="p">,</span> <span class="n">sincos</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="n">cos2</span><span class="o">-</span><span class="n">sin2</span><span class="p">]],</span><span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
-        <span class="c1">#to laminate</span>
+        <span class="c">#to laminate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[[</span>  <span class="n">cos2</span><span class="p">,</span>    <span class="n">sin2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="o">-</span><span class="n">sin2t</span><span class="p">],</span>
              <span class="p">[</span>  <span class="n">sin2</span><span class="p">,</span>    <span class="n">cos2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>     <span class="n">sin2t</span><span class="p">],</span>
@@ -129,13 +131,13 @@
              <span class="p">[</span>     <span class="mi">0</span><span class="p">,</span>       <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="n">cost</span><span class="p">,</span> <span class="n">sint</span><span class="p">,</span>         <span class="mi">0</span><span class="p">],</span>
              <span class="p">[</span>     <span class="mi">0</span><span class="p">,</span>       <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">sint</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span>         <span class="mi">0</span><span class="p">],</span>
              <span class="p">[</span><span class="n">sincos</span><span class="p">,</span> <span class="o">-</span><span class="n">sincos</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">cos2</span><span class="o">-</span><span class="n">sin2</span><span class="p">]],</span><span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
-        <span class="c1"># STRAINS</span>
-        <span class="c1"># different from stress due to:</span>
-        <span class="c1">#     2*e12 = e6    2*e13 = e5    2*e23 = e4</span>
-        <span class="c1"># to laminate</span>
-        <span class="c1"># self.Rstrain = np.transpose(self.Tstress)</span>
-        <span class="c1"># to lamina</span>
-        <span class="c1"># self.Tstrain = np.transpose(self.Rstress)</span>
+        <span class="c"># STRAINS</span>
+        <span class="c"># different from stress due to:</span>
+        <span class="c">#     2*e12 = e6    2*e13 = e5    2*e23 = e4</span>
+        <span class="c"># to laminate</span>
+        <span class="c"># self.Rstrain = np.transpose(self.Tstress)</span>
+        <span class="c"># to lamina</span>
+        <span class="c"># self.Tstrain = np.transpose(self.Rstress)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="p">,</span> <span class="n">MatLamina</span><span class="p">):</span>
             <span class="n">e1</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="o">.</span><span class="n">e1</span>
             <span class="n">e2</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="o">.</span><span class="n">e2</span>
@@ -152,7 +154,7 @@
             <span class="n">g12</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="o">.</span><span class="n">g</span>
             <span class="n">g</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matobj</span><span class="o">.</span><span class="n">g</span>
 
-        <span class="c1"># plane stress</span>
+        <span class="c"># plane stress</span>
         <span class="n">q11</span>  <span class="o">=</span> <span class="n">e1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">nu12</span><span class="o">*</span><span class="n">nu21</span><span class="p">)</span>
         <span class="n">q12</span>  <span class="o">=</span> <span class="n">nu12</span><span class="o">*</span><span class="n">e2</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">nu12</span><span class="o">*</span><span class="n">nu21</span><span class="p">)</span>
         <span class="n">q22</span>  <span class="o">=</span> <span class="n">e2</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">nu12</span><span class="o">*</span><span class="n">nu21</span><span class="p">)</span>
@@ -178,9 +180,9 @@
                             <span class="p">[</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="n">q44L</span><span class="p">,</span> <span class="n">q45L</span><span class="p">],</span>
                             <span class="p">[</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="n">q45L</span><span class="p">,</span> <span class="n">q55L</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span></div>
 
-        <span class="c1">#TODO add the thermal coeficient terms when calculating the</span>
-        <span class="c1">#     stresses... to take into account eventual thermal expansions /</span>
-        <span class="c1">#     contractions</span>
+        <span class="c">#TODO add the thermal coeficient terms when calculating the</span>
+        <span class="c">#     stresses... to take into account eventual thermal expansions /</span>
+        <span class="c">#     contractions</span>
 
 </pre></div>
 
@@ -215,14 +217,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 21, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Jun 26, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

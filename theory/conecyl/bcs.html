@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Boundary conditions &mdash; CompMech 0.6.5 documentation</title>
+    <title>Boundary conditions &mdash; CompMech 0.6.6 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.5',
+        VERSION:     '0.6.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.6 documentation" href="../../index.html" />
     <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="FSDT - First-order Shear Deformation Theory" href="fsdt.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
@@ -100,16 +100,16 @@ boundary conditions.</p>
 <p>The analyst may set the boundary conditions specifying the parameter <code class="docutils literal"><span class="pre">bc</span></code>
 in the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object, using the same names specified in the
 tables above:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;fsdt_donnell_bc1&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s1">&#39;ss1&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s">&#39;fsdt_donnell_bc1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s">&#39;ss1&#39;</span>
 </pre></div>
 </div>
 <p>Setting a different boundary condition for the bottom and top edges is
 possible using a hyphen <code class="docutils literal"><span class="pre">-</span></code> or an underscore <code class="docutils literal"><span class="pre">_</span></code> to separate them,
 obtaining <code class="docutils literal"><span class="pre">'bcBot-bcTop'</span></code> or <code class="docutils literal"><span class="pre">bcBot_bcTop</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s1">&#39;ss1-cc1&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s1">&#39;ss1-ss2&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s">&#39;ss1-cc1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s">&#39;ss1-ss2&#39;</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -146,7 +146,7 @@ a model from another group is used.</p>
 <p>When no value is given to the parameter <code class="docutils literal"><span class="pre">bc</span></code> the model will run by
 default with the SS1 boundary conditions. The analyst must change
 the elastic stiffnesses by changing the following parameters:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">kuTop</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">kuBot</span>
@@ -223,15 +223,15 @@ will affect only models <a class="reference internal" href="clpt.html#clpt-donne
         <li class="right" >
           <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 21, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Jun 26, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

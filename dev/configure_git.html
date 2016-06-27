@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Git configuration &mdash; CompMech 0.6.5 documentation</title>
+    <title>Git configuration &mdash; CompMech 0.6.6 documentation</title>
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.5',
+        VERSION:     '0.6.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="CompMech 0.6.5 documentation" href="../index.html" />
+    <link rel="top" title="CompMech 0.6.6 documentation" href="../index.html" />
     <link rel="up" title="Git for development" href="git_development.html" />
     <link rel="next" title="Development workflow" href="development_workflow.html" />
     <link rel="prev" title="Getting started with Git development" href="development_setup.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="development_setup.html" title="Getting started with Git development"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="git_development.html" accesskey="U">Git for development</a> &raquo;</li> 
       </ul>
@@ -64,7 +64,7 @@
 <p>Your personal <a class="reference external" href="http://git-scm.com/">git</a> configurations are saved in the <code class="docutils literal"><span class="pre">.gitconfig</span></code> file in
 your home directory.
 Here is an example <code class="docutils literal"><span class="pre">.gitconfig</span></code> file:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">user</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span><span class="n">user</span><span class="p">]</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">Your</span> <span class="n">Name</span>
         <span class="n">email</span> <span class="o">=</span> <span class="n">you</span><span class="nd">@yourdomain</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
 
@@ -85,14 +85,14 @@ Here is an example <code class="docutils literal"><span class="pre">.gitconfig</
 </div>
 <p>You can edit this file directly or you can use the <code class="docutils literal"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span></code>
 command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="s2">&quot;Your Name&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="s">&quot;Your Name&quot;</span>
 <span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="n">you</span><span class="nd">@yourdomain</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
-<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">ci</span> <span class="s2">&quot;commit -a&quot;</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">ci</span> <span class="s">&quot;commit -a&quot;</span>
 <span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">co</span> <span class="n">checkout</span>
-<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">st</span> <span class="s2">&quot;status -a&quot;</span>
-<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">stat</span> <span class="s2">&quot;status -a&quot;</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">st</span> <span class="s">&quot;status -a&quot;</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">stat</span> <span class="s">&quot;status -a&quot;</span>
 <span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">br</span> <span class="n">branch</span>
-<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">wdiff</span> <span class="s2">&quot;diff --color-words&quot;</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">wdiff</span> <span class="s">&quot;diff --color-words&quot;</span>
 <span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">core</span><span class="o">.</span><span class="n">editor</span> <span class="n">vim</span>
 <span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">merge</span><span class="o">.</span><span class="n">summary</span> <span class="n">true</span>
 </pre></div>
@@ -107,13 +107,13 @@ or run the commands above.</p>
 <p>It is good practice to tell <a class="reference external" href="http://git-scm.com/">git</a> who you are, for labeling any changes
 you make to the code.  The simplest way to do this is from the command
 line:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="s2">&quot;Your Name&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="s">&quot;Your Name&quot;</span>
 <span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="n">you</span><span class="nd">@yourdomain</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
 </pre></div>
 </div>
 <p>This will write the settings into your git configuration file,  which
 should now contain a user section with your name and email:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">user</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span><span class="n">user</span><span class="p">]</span>
       <span class="n">name</span> <span class="o">=</span> <span class="n">Your</span> <span class="n">Name</span>
       <span class="n">email</span> <span class="o">=</span> <span class="n">you</span><span class="nd">@yourdomain</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
 </pre></div>
@@ -128,17 +128,17 @@ with your actual name and email address.</p>
 to <code class="docutils literal"><span class="pre">git</span> <span class="pre">co</span></code>.  Or you may want to alias <code class="docutils literal"><span class="pre">git</span> <span class="pre">diff</span> <span class="pre">--color-words</span></code>
 (which gives a nicely formatted output of the diff) to <code class="docutils literal"><span class="pre">git</span> <span class="pre">wdiff</span></code></p>
 <p>The following <code class="docutils literal"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span></code> commands:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">ci</span> <span class="s2">&quot;commit -a&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">ci</span> <span class="s">&quot;commit -a&quot;</span>
 <span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">co</span> <span class="n">checkout</span>
-<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">st</span> <span class="s2">&quot;status -a&quot;</span>
-<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">stat</span> <span class="s2">&quot;status -a&quot;</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">st</span> <span class="s">&quot;status -a&quot;</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">stat</span> <span class="s">&quot;status -a&quot;</span>
 <span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">br</span> <span class="n">branch</span>
-<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">wdiff</span> <span class="s2">&quot;diff --color-words&quot;</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">alias</span><span class="o">.</span><span class="n">wdiff</span> <span class="s">&quot;diff --color-words&quot;</span>
 </pre></div>
 </div>
 <p>will create an <code class="docutils literal"><span class="pre">alias</span></code> section in your <code class="docutils literal"><span class="pre">.gitconfig</span></code> file with contents
 like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">alias</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span><span class="n">alias</span><span class="p">]</span>
         <span class="n">ci</span> <span class="o">=</span> <span class="n">commit</span> <span class="o">-</span><span class="n">a</span>
         <span class="n">co</span> <span class="o">=</span> <span class="n">checkout</span>
         <span class="n">st</span> <span class="o">=</span> <span class="n">status</span> <span class="o">-</span><span class="n">a</span>
@@ -151,19 +151,19 @@ like this:</p>
 <div class="section" id="editor">
 <h3>Editor<a class="headerlink" href="#editor" title="Permalink to this headline">¶</a></h3>
 <p>You may also want to make sure that your editor of choice is used</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">core</span><span class="o">.</span><span class="n">editor</span> <span class="n">vim</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">core</span><span class="o">.</span><span class="n">editor</span> <span class="n">vim</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="merging">
 <h3>Merging<a class="headerlink" href="#merging" title="Permalink to this headline">¶</a></h3>
 <p>To enforce summaries when doing merges (<code class="docutils literal"><span class="pre">~/.gitconfig</span></code> file again):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">merge</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="p">[</span><span class="n">merge</span><span class="p">]</span>
    <span class="n">log</span> <span class="o">=</span> <span class="n">true</span>
 </pre></div>
 </div>
 <p>Or from the command line:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">merge</span><span class="o">.</span><span class="n">log</span> <span class="n">true</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">merge</span><span class="o">.</span><span class="n">log</span> <span class="n">true</span>
 </pre></div>
 </div>
 </div>
@@ -236,15 +236,15 @@ like this:</p>
         <li class="right" >
           <a href="development_setup.html" title="Getting started with Git development"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="git_development.html" >Git for development</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 21, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Jun 26, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

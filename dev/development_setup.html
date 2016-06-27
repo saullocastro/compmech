@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting started with Git development &mdash; CompMech 0.6.5 documentation</title>
+    <title>Getting started with Git development &mdash; CompMech 0.6.6 documentation</title>
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.5',
+        VERSION:     '0.6.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../about.html" />
-    <link rel="top" title="CompMech 0.6.5 documentation" href="../index.html" />
+    <link rel="top" title="CompMech 0.6.6 documentation" href="../index.html" />
     <link rel="up" title="Git for development" href="git_development.html" />
     <link rel="next" title="Git configuration" href="configure_git.html" />
     <link rel="prev" title="Git for development" href="git_development.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="git_development.html" title="Git for development"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="git_development.html" accesskey="U">Git for development</a> &raquo;</li> 
       </ul>
@@ -68,8 +68,8 @@ with the CompMech source code. If you have git already set up, skip to
 <li><p class="first"><a class="reference internal" href="git_intro.html#install-git"><span class="std std-ref">Install git</span></a>.</p>
 </li>
 <li><p class="first">Introduce yourself to Git:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="n">you</span><span class="nd">@yourdomain</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
-<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="s2">&quot;Your Name Comes Here&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="n">you</span><span class="nd">@yourdomain</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+<span class="n">git</span> <span class="n">config</span> <span class="o">--</span><span class="k">global</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="s">&quot;Your Name Comes Here&quot;</span>
 </pre></div>
 </div>
 </li>
@@ -107,7 +107,7 @@ your own forked copy of <a class="reference external" href="http://compmech.gith
 <p>First you follow the instructions for <a class="reference internal" href="#forking"><span class="std std-ref">Making your own copy (fork) of CompMech</span></a>.</p>
 <div class="section" id="overview">
 <h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">your</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">name</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">your</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">name</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span>
 <span class="n">cd</span> <span class="n">compmech</span>
 <span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">upstream</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">compmech</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
@@ -124,7 +124,7 @@ your own forked copy of <a class="reference external" href="http://compmech.gith
 <li><p class="first">Investigate.  Change directory to your new repo: <code class="docutils literal"><span class="pre">cd</span> <span class="pre">compmech</span></code>. Then
 <code class="docutils literal"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">-a</span></code> to show you all branches.  You&#8217;ll get something
 like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">master</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">*</span> <span class="n">master</span>
 <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">master</span>
 </pre></div>
 </div>
@@ -139,7 +139,7 @@ you can merge in changes from trunk.</p>
 </div>
 <div class="section" id="linking-your-repository-to-the-upstream-repo">
 <span id="linking-to-upstream"></span><h4>Linking your repository to the upstream repo<a class="headerlink" href="#linking-your-repository-to-the-upstream-repo" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">compmech</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">cd</span> <span class="n">compmech</span>
 <span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">upstream</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">compmech</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
@@ -151,7 +151,7 @@ main <a class="reference external" href="http://compmech.github.io/compmech">Com
 use it to merge into our own code.</p>
 <p>Just for your own satisfaction, show yourself that you now have a new
 &#8216;remote&#8217;, with <code class="docutils literal"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">-v</span> <span class="pre">show</span></code>, giving you something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">upstream</span>     <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">compmech</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span> <span class="p">(</span><span class="n">fetch</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">upstream</span>     <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">compmech</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span> <span class="p">(</span><span class="n">fetch</span><span class="p">)</span>
 <span class="n">upstream</span>     <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">compmech</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span> <span class="p">(</span><span class="n">push</span><span class="p">)</span>
 <span class="n">origin</span>       <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">your</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">name</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span> <span class="p">(</span><span class="n">fetch</span><span class="p">)</span>
 <span class="n">origin</span>       <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">your</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">name</span><span class="o">/</span><span class="n">compmech</span><span class="o">.</span><span class="n">git</span> <span class="p">(</span><span class="n">push</span><span class="p">)</span>
@@ -235,15 +235,15 @@ use it to merge into our own code.</p>
         <li class="right" >
           <a href="git_development.html" title="Git for development"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Contributing to CompMech</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="git_development.html" >Git for development</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 21, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Jun 26, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.composite.matlamina &mdash; CompMech 0.6.5 documentation</title>
+    <title>compmech.composite.matlamina &mdash; CompMech 0.6.6 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.6.5',
+        VERSION:     '0.6.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.6.5 documentation" href="../../../index.html" />
+    <link rel="top" title="CompMech 0.6.6 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -49,7 +49,7 @@
           <div class="body" role="main">
             
   <h1>Source code for compmech.composite.matlamina</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Composite Matlamina Module (:mod:`compmech.composite.matlamina`)</span>
 <span class="sd">================================================================</span>
 
@@ -153,10 +153,10 @@
 
 
     <span class="k">def</span> <span class="nf">rebuild</span> <span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1">#</span>
-        <span class="c1"># from references:</span>
-        <span class="c1">#   Reddy, J. N., Mechanics of laminated composite plates and shells.</span>
-        <span class="c1">#   Theory and analysis. Second Edition. CRC Press, 2004.</span>
+        <span class="c">#</span>
+        <span class="c"># from references:</span>
+        <span class="c">#   Reddy, J. N., Mechanics of laminated composite plates and shells.</span>
+        <span class="c">#   Theory and analysis. Second Edition. CRC Press, 2004.</span>
         <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e1</span>
         <span class="n">e2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e2</span>
         <span class="n">e3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e3</span>
@@ -184,12 +184,12 @@
              <span class="p">[</span>  <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">c55</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>
              <span class="p">[</span>  <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">c66</span><span class="p">]],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">DOUBLE</span><span class="p">)</span>
 
-        <span class="c1">#</span>
-        <span class="c1"># from references:</span>
-        <span class="c1">#   hansen_hvejsen_2007 page 43</span>
-        <span class="c1">#</span>
-        <span class="c1">#   Guerdal Z., R. T. Haftka and P. Hajela (1999), Design and</span>
-        <span class="c1">#   Optimization of Laminated Composite Materials, Wiley-Interscience.</span>
+        <span class="c">#</span>
+        <span class="c"># from references:</span>
+        <span class="c">#   hansen_hvejsen_2007 page 43</span>
+        <span class="c">#</span>
+        <span class="c">#   Guerdal Z., R. T. Haftka and P. Hajela (1999), Design and</span>
+        <span class="c">#   Optimization of Laminated Composite Materials, Wiley-Interscience.</span>
         <span class="n">den</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu21</span>
                  <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu13</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu31</span>
                  <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu23</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nu32</span>
@@ -208,16 +208,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">q44</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g12</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q55</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g23</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q66</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g13</span>
-        <span class="c1">#</span>
-        <span class="c1"># from reference:</span>
-        <span class="c1">#   Jones R. M. (1999), Mechanics of Composite Materials, second edn,</span>
-        <span class="c1">#   Taylor &amp; Francis, Inc., 325 Chestnut Street, Philadelphia,</span>
-        <span class="c1">#   PA 19106. ISBN 1-56032-712-X</span>
-        <span class="c1"># slightly changed to include the transverse shear terms u6 ans</span>
-        <span class="c1"># u7, taken from ABAQUS Example Problems Manual, vol1,</span>
-        <span class="c1"># example 1.2.2 Laminated composite shell: buckling of a</span>
-        <span class="c1"># cylindrical panel with a circular hole</span>
-        <span class="c1">#</span>
+        <span class="c">#</span>
+        <span class="c"># from reference:</span>
+        <span class="c">#   Jones R. M. (1999), Mechanics of Composite Materials, second edn,</span>
+        <span class="c">#   Taylor &amp; Francis, Inc., 325 Chestnut Street, Philadelphia,</span>
+        <span class="c">#   PA 19106. ISBN 1-56032-712-X</span>
+        <span class="c"># slightly changed to include the transverse shear terms u6 ans</span>
+        <span class="c"># u7, taken from ABAQUS Example Problems Manual, vol1,</span>
+        <span class="c"># example 1.2.2 Laminated composite shell: buckling of a</span>
+        <span class="c"># cylindrical panel with a circular hole</span>
+        <span class="c">#</span>
         <span class="n">u1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q44</span><span class="p">)</span> <span class="o">/</span> <span class="mf">8.</span>
         <span class="n">u2</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q22</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
         <span class="n">u3</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q11</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q22</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q12</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">q44</span><span class="p">)</span> <span class="o">/</span> <span class="mf">8.</span>
@@ -226,15 +226,15 @@
         <span class="n">u6</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q55</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">q66</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
         <span class="n">u7</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q55</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q66</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="p">[[</span><span class="n">u1</span><span class="p">,</span>  <span class="n">u2</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c1"># q11</span>
-             <span class="p">[</span><span class="n">u1</span><span class="p">,</span> <span class="o">-</span><span class="n">u2</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c1"># q22</span>
-             <span class="p">[</span><span class="n">u4</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c1"># q12</span>
-             <span class="p">[</span><span class="n">u6</span><span class="p">,</span>  <span class="n">u7</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c1"># q55</span>
-             <span class="p">[</span><span class="n">u6</span><span class="p">,</span> <span class="o">-</span><span class="n">u7</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c1"># q66</span>
-             <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="o">-</span><span class="n">u7</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c1"># q56</span>
-             <span class="p">[</span><span class="n">u5</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c1"># q44</span>
-             <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">u2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">],</span>                <span class="c1"># q14</span>
-             <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">u2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">u3</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>  <span class="c1"># q24</span>
+            <span class="p">[[</span><span class="n">u1</span><span class="p">,</span>  <span class="n">u2</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q11</span>
+             <span class="p">[</span><span class="n">u1</span><span class="p">,</span> <span class="o">-</span><span class="n">u2</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q22</span>
+             <span class="p">[</span><span class="n">u4</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q12</span>
+             <span class="p">[</span><span class="n">u6</span><span class="p">,</span>  <span class="n">u7</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q55</span>
+             <span class="p">[</span><span class="n">u6</span><span class="p">,</span> <span class="o">-</span><span class="n">u7</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q66</span>
+             <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="o">-</span><span class="n">u7</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q56</span>
+             <span class="p">[</span><span class="n">u5</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">u3</span><span class="p">,</span>   <span class="mi">0</span><span class="p">],</span>                <span class="c"># q44</span>
+             <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">u2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="n">u3</span><span class="p">],</span>                <span class="c"># q14</span>
+             <span class="p">[</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="n">u2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">u3</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>  <span class="c"># q24</span>
 
 
     <span class="k">def</span> <span class="nf">read_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{}):</span>
@@ -288,11 +288,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matlam</span> <span class="o">=</span> <span class="n">MatLamina</span><span class="p">()</span>
 
-    <span class="c1">#laminaProp = (e1, e2, nu12, g12, g13, g23, e3, nu13, nu23)</span>
+    <span class="c">#laminaProp = (e1, e2, nu12, g12, g13, g23, e3, nu13, nu23)</span>
     <span class="k">if</span> <span class="n">laminaprop</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">error</span><span class="p">(</span><span class="s1">&#39;laminaprop must be a tuple in the following format:</span><span class="se">\n\t</span><span class="s1">&#39;</span>
-              <span class="o">+</span><span class="s1">&#39;(e1, e2, nu12, g12, g13, g23, e3, nu13, nu23)&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">laminaprop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="c1">#ISOTROPIC</span>
+        <span class="n">error</span><span class="p">(</span><span class="s">&#39;laminaprop must be a tuple in the following format:</span><span class="se">\n\t</span><span class="s">&#39;</span>
+              <span class="o">+</span><span class="s">&#39;(e1, e2, nu12, g12, g13, g23, e3, nu13, nu23)&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">laminaprop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="c">#ISOTROPIC</span>
         <span class="n">e</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">nu</span> <span class="o">=</span> <span class="n">laminaprop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">e</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">nu</span><span class="p">))</span>
@@ -352,14 +352,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 21, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Jun 26, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

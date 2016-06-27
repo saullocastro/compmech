@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Integrate &lt;compmech.integrate&gt; &mdash; CompMech 0.6.5 documentation</title>
+    <title>Integrate &lt;compmech.integrate&gt; &mdash; CompMech 0.6.6 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.5',
+        VERSION:     '0.6.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,10 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.5 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.6 documentation" href="../../index.html" />
     <link rel="up" title="Modules" href="../index.html" />
-    <link rel="next" title="Interpolate (compmech.interpolate)" href="../interpolate/index.html" /> 
+    <link rel="next" title="Interpolate (compmech.interpolate)" href="../interpolate/index.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../conecyl/index.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -42,7 +43,10 @@
         <li class="right" >
           <a href="../interpolate/index.html" title="Interpolate (compmech.interpolate)"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="right" >
+          <a href="../conecyl/index.html" title="&lt;no title&gt;"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
       </ul>
     </div>  
@@ -63,7 +67,7 @@ functions.</p>
 <p>Below you can see how to use the available Cython functions.</p>
 <p>Integration of scalar functions:</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">isclose</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">isclose</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">compmech.integrate.integrate</span> <span class="k">import</span> <span class="p">(</span><span class="n">trapz2d_points</span><span class="p">,</span> <span class="n">simps2d_points</span><span class="p">,</span>
@@ -107,7 +111,7 @@ functions.</p>
     <span class="k">assert</span> <span class="n">isclose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">test_integrate_sinsin</span><span class="p">()</span>
     <span class="n">test_integrate_sinsin_using_trapz_quad</span><span class="p">()</span>
 </pre></div>
@@ -115,23 +119,23 @@ functions.</p>
 </div></blockquote>
 <p>Integration of vector-valued functions:</p>
 <blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyximport</span><span class="p">;</span> <span class="n">pyximport</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pyximport</span><span class="p">;</span> <span class="n">pyximport</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">compmech.integrate.integratev</span> <span class="k">import</span> <span class="n">_test_integratev</span>
 
 
-<span class="k">def</span> <span class="nf">test_integratev_trapz2d</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;trapz2d&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">test_integratev_trapz2d</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;trapz2d&#39;</span><span class="p">):</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">_test_integratev</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">9</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span>
             <span class="n">atol</span><span class="o">=</span><span class="mf">1.e-3</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">test_integratev_simps2d</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;simps2d&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">test_integratev_simps2d</span><span class="p">(</span><span class="n">nx</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;simps2d&#39;</span><span class="p">):</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">_test_integratev</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">9</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span>
             <span class="n">atol</span><span class="o">=</span><span class="mf">1.e-4</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">test_integratev_trapz2d</span><span class="p">()</span>
     <span class="n">test_integratev_simps2d</span><span class="p">()</span>
 </pre></div>
@@ -157,6 +161,9 @@ functions.</p>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../conecyl/index.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../interpolate/index.html"
                         title="next chapter">Interpolate (<code class="docutils literal"><span class="pre">compmech.interpolate</span></code>)</a></p>
@@ -193,14 +200,17 @@ functions.</p>
         <li class="right" >
           <a href="../interpolate/index.html" title="Interpolate (compmech.interpolate)"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.5 documentation</a> &raquo;</li>
+        <li class="right" >
+          <a href="../conecyl/index.html" title="&lt;no title&gt;"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2014 Saullo G. P. Castro.
-      Last updated on Jun 21, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Jun 26, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>
