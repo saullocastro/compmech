@@ -139,7 +139,7 @@ def configuration(parent_package='', top_path=None):
         config.add_data_dir(('compmech/lib', libdir))
         config.add_data_dir(('compmech/theory', 'theory'))
         config.add_data_dir(('compmech/doc', 'doc/build/html'))
-    elif 'bdist' == sys.argv[1]:
+    elif sys.argv[1] in ('bdist', 'sdist'):
         config.add_data_dir('compmech/include')
         config.add_data_dir('compmech/lib')
 
