@@ -3,18 +3,11 @@
 # setup.py files to include non-python files such as documentation,
 # data, etc files to distribution. Avoid using MANIFEST.in for that.
 #
-include LICENSE
-include README.rst
-include ROADMAP.rst
 include MANIFEST.in
-include setup.cfg
-include setup.py
 
-recursive-include C *
 recursive-include doc/build/html *
 
 recursive-include compmech *
-recursive-exclude compmech *.c
 
 recursive-include theory *
 recursive-exclude theory *.txt
@@ -31,4 +24,4 @@ global-exclude *.dll *.exp *.lib
 recursive-exclude */.cache *
 recursive-exclude */*/.cache *
 recursive-exclude */*/*/.cache *
-global-exclude  __config__.py
+global-exclude __config__.py

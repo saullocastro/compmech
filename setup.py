@@ -7,8 +7,10 @@ fluid-structure interaction with the panel flutter analyzes available.
 
 """
 import os
+from os.path import join
 import sys
 import subprocess
+from distutils.sysconfig import get_python_lib
 
 if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] > (3, 5):
     raise RuntimeError("Python version 2.7, 3.4 or 3.5 required.")
@@ -124,6 +126,22 @@ def configuration(parent_package='', top_path=None):
 
     config.add_data_files(('compmech', 'LICENSE'))
     config.add_data_files(('compmech', 'README.rst'))
+    config.add_data_files(('compmech', 'ROADMAP.rst'))
+    config.add_data_files(('compmech', 'MANIFEST.in'))
+    config.add_data_files(('compmech', 'setup.cfg'))
+    config.add_data_files(('compmech', 'setup.py'))
+
+    if 'bdist_wheel' in sys.argv[1:]:
+        includedir = join(get_python_lib(), 'compmech', 'include')
+        libdir = join(get_python_lib(), 'compmech', 'lib')
+        if not (os.path.isdir(includedir) and os.path.isdir(libdir)):
+            raise RuntimeError('Need to run first: python setup.py install')
+        config.add_data_dir(('compmech/include', includedir))
+        config.add_data_dir(('compmech/lib', libdir))
+        config.add_data_dir(('compmech/theory', 'theory'))
+    elif 'bdist' == sys.argv[1]:
+        config.add_data_dir('compmech/include')
+        config.add_data_dir('compmech/lib')
 
     config.add_subpackage('compmech')
 
@@ -138,8 +156,6 @@ def setup_package():
     # We don't want to do that unconditionally, because we risk updating
     # an installed numpy which fails too often.  Just if it's not installed, we
     # may give it a try.  See gh-3379.
-    build_requires = ['numpy>=1.6.2', 'scipy>=0.14.0']
-
     FULLVERSION, GIT_REVISION = get_version_info()
 
     metadata = dict(
@@ -159,9 +175,6 @@ def setup_package():
         cmdclass=cmdclass,
         classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
         platforms=['Windows', 'Linux'],
-        #test_suite='nose.collector',
-        setup_requires=build_requires,
-        install_requires=build_requires,
     )
 
 
@@ -178,7 +191,6 @@ def setup_package():
         except ImportError:
             from distutils.core import setup
 
-        FULLVERSION, GIT_REVISION = get_version_info()
         metadata['version'] = FULLVERSION
     else:
         if (len(sys.argv) >= 2 and sys.argv[1] in ('bdist_wheel', 'bdist_egg')) or (
