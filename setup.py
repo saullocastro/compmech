@@ -44,7 +44,7 @@ Operating System :: Unix
 MAJOR = 0
 MINOR = 6
 MICRO = 6
-ISRELEASED = False
+ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
@@ -127,7 +127,6 @@ def configuration(parent_package='', top_path=None):
     config.add_data_files(('compmech', 'LICENSE'))
     config.add_data_files(('compmech', 'README.rst'))
     config.add_data_files(('compmech', 'ROADMAP.rst'))
-    config.add_data_files(('compmech', 'MANIFEST.in'))
     config.add_data_files(('compmech', 'setup.cfg'))
     config.add_data_files(('compmech', 'setup.py'))
 
@@ -139,6 +138,7 @@ def configuration(parent_package='', top_path=None):
         config.add_data_dir(('compmech/include', includedir))
         config.add_data_dir(('compmech/lib', libdir))
         config.add_data_dir(('compmech/theory', 'theory'))
+        config.add_data_dir(('compmech/doc', 'doc/build/html'))
     elif 'bdist' == sys.argv[1]:
         config.add_data_dir('compmech/include')
         config.add_data_dir('compmech/lib')
