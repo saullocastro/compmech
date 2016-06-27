@@ -56,4 +56,6 @@ Imperfections (:mod:`compmech.conecyl.imperfections`)
    :members:
 
 """
-from conecyl import load, ConeCyl
+from __future__ import absolute_import
+
+from .conecyl import load, ConeCyl

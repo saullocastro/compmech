@@ -6,13 +6,7 @@
 #cython: infer_types=False
 include 'clpt_nonlinear_header.pxi'
 
-from compmech.conecyl.clpt.clpt_commons_bc1 cimport cfwx, cfwt, cfN
-
-
-cdef extern from "clpt_donnell_bc1_nonlinear_clean.h":
-    void cfk0L_clean(double *wxs, double *wts, double *w0xs, double *w0ts,
-                     int npts, double *xs, double *ts,
-                     double *out, double *alphas, double *betas, void *args) nogil
+from .clpt_commons_bc1 cimport cfwx, cfwt, cfN
 
 
 cdef int NL_kinematics=0 # to use cfstrain_donnell in cfN
@@ -1048,50 +1042,6 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     free(k0Lq_2_q15)
     free(k0Lq_2_q24)
     free(k0Lq_2_q25)
-
-
-cdef void cfk0L2(int npts, double *xs, double *ts, double *out,
-                 double *alphas, double *betas, void *args) nogil:
-    cdef int i1, k1, i2, j2, k2, l2
-    cdef int c, i, pos
-
-    cdef double r, x, t, alpha, beta
-
-    cdef double *coeffs
-    cdef double *c0
-    cdef double L
-    cdef int m0, n0, m1, m2, n2
-    cdef double wx, wt, w0x, w0t
-
-    cdef cc_attributes *args_in=<cc_attributes *>args
-
-    L = args_in.L[0]
-    m1 = args_in.m1[0]
-    m2 = args_in.m2[0]
-    n2 = args_in.n2[0]
-    coeffs = args_in.coeffs
-    c0 = args_in.c0
-    m0 = args_in.m0[0]
-    n0 = args_in.n0[0]
-
-
-    cdef double *wxs = <double *>malloc(npts * sizeof(double))
-    cdef double *wts = <double *>malloc(npts * sizeof(double))
-    cdef double *w0xs = <double *>malloc(npts * sizeof(double))
-    cdef double *w0ts = <double *>malloc(npts * sizeof(double))
-
-    cfwx(coeffs, m1, m2, n2, xs, ts, npts, L, wxs)
-    cfwt(coeffs, m1, m2, n2, xs, ts, npts, L, wts)
-    cfw0x(xs, ts, npts, c0, L, m0, n0, w0xs, funcnum)
-    cfw0t(xs, ts, npts, c0, L, m0, n0, w0ts, funcnum)
-
-    cfk0L_clean(wxs, wts, w0xs, w0ts, npts, xs, ts, out,
-                alphas, betas, args)
-
-    free(wxs)
-    free(wts)
-    free(w0xs)
-    free(w0ts)
 
 
 def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,

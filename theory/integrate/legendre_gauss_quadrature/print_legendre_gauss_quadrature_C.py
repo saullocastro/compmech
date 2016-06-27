@@ -16,7 +16,7 @@ with open(ppath) as pfile, open(wpath) as wfile:
 for v in out.values():
     v.sort(key=lambda x: float(x[0]))
 
-with open('../../../C/src/legendre_gauss_quadrature.c', 'wb') as f:
+with open('../../../compmech/lib/src/legendre_gauss_quadrature.c', 'wb') as f:
     f.write('// Legendre-Gauss Quadrature Points and Weights\n\n')
     f.write('#if defined(_WIN32) || defined(__WIN32__)\n')
     f.write('  #define EXPORTIT __declspec(dllexport)\n')

@@ -5,11 +5,13 @@ Composite Lamina Module (:mod:`compmech.composite.lamina`)
 .. currentmodule:: compmech.composite.lamina
 
 """
+from __future__ import division, absolute_import
+
 import numpy as np
 from numpy import cos, sin
 
 from compmech.constants import DOUBLE
-from matlamina import MatLamina
+from .matlamina import MatLamina
 
 class Lamina(object):
     """

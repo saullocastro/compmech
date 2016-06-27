@@ -5,7 +5,9 @@ Used to configure the main parameters for each implemented model.
 
 
 """
-from models import *
+from __future__ import absolute_import
+
+from . models import *
 from compmech.panel.models import (cpanel_clt_donnell_bardell,
                                    cpanel_clt_donnell_bardell_field,
                                    plate_clt_donnell_bardell,

@@ -2,11 +2,12 @@ from __future__ import division, print_function, absolute_import
 
 import sys
 import os
+from os.path import join, basename, extsep
 from distutils.sysconfig import get_python_lib
-from os.path import basename, dirname, realpath, extsep, join
-import hashlib
-from multiprocessing import Pool, cpu_count
-from functools import partial
+from subprocess import Popen
+
+#TODO not working... but seems promising
+#import setup_patch
 
 
 def in_appveyor_ci():
@@ -15,142 +16,117 @@ def in_appveyor_ci():
     else:
         return True
 
-
-def compile(config, src):
-    if config.top_path.endswith('lib'):
-        srcpath = join(realpath(config.package_path), src)
+def in_travis_ci():
+    if os.environ.get('TRAVIS_BUILD_ID') is None:
+        return False
     else:
-        srcpath = join(realpath(config.top_path), src)
-    srcdir = dirname(srcpath)
+        return True
 
-    hashpath = srcpath + '.hashcode'
-    hash_new = hashlib.sha256(os.name + open(srcpath, 'rb').read()).digest()
-
-    if os.name == 'nt' and not in_appveyor_ci():
-        objext = 'obj'
+def dynamic_lib_exists(path, libname):
+    if (os.path.isfile(join(path, libname + '.dll'))
+    or os.path.isfile(join(path, 'lib' + libname + '.dll'))
+    or os.path.isfile(join(path, libname + '.so'))
+    or os.path.isfile(join(path, 'lib' + libname + '.so'))):
+        return True
     else:
-        objext = 'o'
-    objpath = join(dirname(srcpath),
-                   basename(srcpath).split(extsep)[0] + '.' + objext)
-
-    needscompile = True
-    if os.path.isfile(hashpath):
-        if os.path.isfile(objpath):
-            fsize = os.path.getsize(objpath)
-            if fsize > 1L:
-                hash_old = open(hashpath, 'rb').read().strip()
-                if hash_old == hash_new:
-                    needscompile = False
-
-    if needscompile:
-        bkpdir = os.getcwd()
-        os.chdir(srcdir)
-        if os.name == 'nt' and not in_appveyor_ci():
-            os.system('cl /Ox /c {0}'.format(basename(srcpath)))
-        else:
-            os.system('gcc -pthread -g -O3 -fPIC -g -c -Wall {0}'.format(basename(srcpath)))
-        fsize = os.path.getsize(basename(srcpath))
-        os.chdir(bkpdir)
-        if fsize > 1L:
-            with open(hashpath, 'wb') as f:
-                f.write(hash_new + '\n')
-    else:
-        print('Source {0} already compiled!'.format(srcpath))
+        return False
 
 
-def link(config, instlib):
-    objs = ''
-    if 'install' in sys.argv:
-        libdir = join(get_python_lib(), 'compmech', 'lib')
-    else:
-        libdir = realpath(config.package_path)
-    try:
-        os.makedirs(libdir)
-    except:
-        pass
-
+def create_dlls(config, install_dir):
+    tmp = config.get_build_temp_dir()
+    # generating DLLs
     if os.name == 'nt' and not in_appveyor_ci():
         objext = 'obj'
     else:
         objext = 'o'
 
-    for src in instlib[1]['sources']:
-        if config.top_path.endswith('lib'):
-            srcpath = join(realpath(config.package_path), src)
-        else:
-            srcpath = join(realpath(config.top_path), src)
-        objs += srcpath.replace('.c', '.' + objext) + ' '
+    for instlib in config.libraries:
+        objs = ''
+        for src in instlib[1]['sources']:
+            binary = basename(src).split(extsep)[0] + extsep + objext
+            binary = join(tmp, 'compmech', 'lib', 'src', binary)
+            objs += binary + ' '
 
-    if os.name == 'nt':
-        if in_appveyor_ci():
-            libpath = join(libdir, 'lib' + instlib[0] + '.so')
-            libpath_a = libpath.replace('.so', '.a')
-            os.system('gcc -shared {0} -o {1} -Wl,--out-implib,{2}'.format(
-                objs, libpath, libpath_a))
+        if os.name == 'nt':
+            if in_appveyor_ci():
+                libpath = join(install_dir, 'lib' + instlib[0] + '.so')
+                libpath_a = libpath.replace('.so', '.a')
+                p = Popen('gcc -shared {0} -o {1} -Wl,--out-implib,{2}'.format(
+                    objs, libpath, libpath_a), shell=True)
+            else:
+                libpath = join(install_dir, instlib[0] + '.dll')
+                p = Popen('link /DLL {0} /OUT:{1}'.format(objs, libpath),
+                        shell=True)
         else:
-            libpath = join(libdir, instlib[0] + '.dll')
-            os.system('link /DLL {0} /OUT:{1}'.format(objs, libpath))
-    else:
-        libpath = join(libdir, 'lib' + instlib[0] + '.so')
-        os.system('gcc -shared -o {1} {0}'.format(objs, libpath))
+            libpath = join(install_dir, 'lib' + instlib[0] + '.so')
+            p = Popen('gcc -shared -o {1} {0}'.format(objs, libpath),
+                    shell=True)
+        p.wait()
+        if p.returncode != 0:
+            raise RuntimeError('LINK error with: {0}'.format(libpath))
 
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
 
+    install_dir = join(get_python_lib(), 'compmech', 'lib')
 
     config = Configuration('lib', parent_package, top_path)
 
-    config.add_installed_library('bardell',
-            sources=['../../C/src/bardell.c'],
-            install_dir=config.package_path)
-    config.add_installed_library('bardell_12',
-            sources=[
-                '../../C/src/bardell_integral_ff_12.c',
-                '../../C/src/bardell_integral_ffxi_12.c',
-                '../../C/src/bardell_integral_ffxixi_12.c',
-                '../../C/src/bardell_integral_fxifxi_12.c',
-                '../../C/src/bardell_integral_fxifxixi_12.c',
-                '../../C/src/bardell_integral_fxixifxixi_12.c',
-                ],
-            install_dir=config.package_path)
-    config.add_installed_library('bardell_c0c1',
-            sources=[
-                '../../C/src/bardell_integral_ff_c0c1.c',
-                '../../C/src/bardell_integral_ffxi_c0c1.c',
-                '../../C/src/bardell_integral_fxif_c0c1.c',
-                '../../C/src/bardell_integral_fxifxi_c0c1.c',
-                '../../C/src/bardell_integral_fxixifxixi_c0c1.c',
-                ],
-            install_dir=config.package_path)
-    config.add_installed_library('bardell_functions',
-            sources=['../../C/src/bardell_functions.c'],
-            install_dir=config.package_path)
+    extra_args = []
+    if in_appveyor_ci() or in_travis_ci():
+        extra_args = ['-O0']
 
-    config.add_installed_library('legendre_gauss_quadrature',
-            sources=['../../C/src/legendre_gauss_quadrature.c'],
-            install_dir=config.package_path)
+    if not dynamic_lib_exists(install_dir, 'bardell'):
+        config.add_installed_library('bardell',
+                sources=['./src/bardell.c'],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
 
-    config.options['ignore_setup_xxx_py'] = True
+    if not dynamic_lib_exists(install_dir, 'bardell_12'):
+        config.add_installed_library('bardell_12',
+                sources=[
+                    './src/bardell_integral_ff_12.c',
+                    './src/bardell_integral_ffxi_12.c',
+                    './src/bardell_integral_ffxixi_12.c',
+                    './src/bardell_integral_fxifxi_12.c',
+                    './src/bardell_integral_fxifxixi_12.c',
+                    './src/bardell_integral_fxixifxixi_12.c',
+                    ],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
+
+    if not dynamic_lib_exists(install_dir, 'bardell_c0c1'):
+        config.add_installed_library('bardell_c0c1',
+                sources=[
+                    './src/bardell_integral_ff_c0c1.c',
+                    './src/bardell_integral_ffxi_c0c1.c',
+                    './src/bardell_integral_fxif_c0c1.c',
+                    './src/bardell_integral_fxifxi_c0c1.c',
+                    './src/bardell_integral_fxixifxixi_c0c1.c',
+                    ],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
+
+    if not dynamic_lib_exists(install_dir, 'bardell_functions'):
+        config.add_installed_library('bardell_functions',
+                sources=['./src/bardell_functions.c'],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
+
+    if not dynamic_lib_exists(install_dir, 'legendre_gauss_quadrature'):
+        config.add_installed_library('legendre_gauss_quadrature',
+                sources=['./src/legendre_gauss_quadrature.c'],
+                install_dir=install_dir,
+                build_info={'extra_compiler_args': extra_args})
+
     config.make_config_py()
 
-    for instlib in config.libraries:
-        if in_appveyor_ci():
-            for src in instlib[1]['sources']:
-                compile(config, src)
-            link(config, instlib)
-        else:
-            ncpus = cpu_count()
-            if ncpus > 1:
-                ncpus = ncpus // 2
-            p = Pool(ncpus)
-            partial_compile = partial(compile, config)
-            p.map(partial_compile, instlib[1]['sources'])
-            p.close()
-            link(config, instlib)
+    return config, install_dir
 
-    return config
 
 if __name__ == '__main__':
     from numpy.distutils.core import setup
-    setup(**configuration(top_path='').todict())
+    config, install_dir = configuration(top_path='')
+    setup(**config.todict())
+    create_dlls(config, install_dir)

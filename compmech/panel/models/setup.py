@@ -15,8 +15,8 @@ def configuration(parent_package='', top_path=None):
         runtime_library_dirs = None
         if os.environ.get('CONDA_DEFAULT_ENV') is not None:
             #NOTE removing openmp to compile in MiniConda
-            args_linear = []
-            args_nonlinear = []
+            args_linear = ['-O0']
+            args_nonlinear = ['-O0']
         else:
             args_linear = ['/openmp']
             args_nonlinear = ['/openmp', '/fp:fast']
@@ -24,8 +24,8 @@ def configuration(parent_package='', top_path=None):
         runtime_library_dirs = [lib]
         if os.environ.get('CONDA_DEFAULT_ENV') is not None:
             #NOTE removing openmp to compile in MiniConda
-            args_linear = []
-            args_nonlinear = []
+            args_linear = ['-O0']
+            args_nonlinear = ['-O0']
         else:
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']

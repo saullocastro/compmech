@@ -52,7 +52,7 @@ def lb(K, KG, tol=0, sparse_solver=True, silent=False,
             eigvals, eigvecs = eigsh(A=KG, k=k,
                     which='SM', M=K, tol=tol, sigma=1., mode=mode)
             msg('finished!', level=3, silent=silent)
-        except Exception, e:
+        except Exception as e:
             warn(str(e), level=4, silent=silent)
             msg('aborted!', level=3, silent=silent)
             sizebkp = KG.shape[0]

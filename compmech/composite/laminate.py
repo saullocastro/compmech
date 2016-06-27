@@ -5,10 +5,12 @@ Composite Laminate Module (:mod:`compmech.composite.laminate`)
 .. currentmodule:: compmech.composite.laminate
 
 """
+from __future__ import division, absolute_import
+
 import numpy as np
 
-from lamina import Lamina
-from matlamina import read_laminaprop
+from .lamina import Lamina
+from .matlamina import read_laminaprop
 from compmech.constants import DOUBLE
 from compmech.logger import *
 

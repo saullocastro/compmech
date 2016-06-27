@@ -74,7 +74,7 @@ Connection of type::
        <----        <----
 
 """
-from kCBFycte import *
-from kCSB import *
-from kCSSxcte import *
-from kCSSycte import *
+from . kCBFycte import *
+from . kCSB import *
+from . kCSSxcte import *
+from . kCSSycte import *

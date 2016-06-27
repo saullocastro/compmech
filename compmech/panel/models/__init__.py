@@ -26,7 +26,12 @@ Fourth part:
 - empty - functions to calculate the stiffness matrices
 
 """
-modules = [
+from glob import glob
+from os.path import realpath, dirname, join
+import inspect
+import imp
+
+module_names = [
           'cpanel_clt_donnell_bardell_field',
           'cpanel_clt_donnell_bardell',
           'cpanel_clt_donnell_bardell_num',
@@ -39,10 +44,5 @@ modules = [
           'plate_clt_donnell_bardell_w',
           ]
 
-for module in modules:
-    try:
-        exec('from . import {0}'.format(module))
-    except:
-        print('WARNING - module {0} could not be imported!'.format(module))
-        exec('{0} = None'.format(module))
-        raise
+for module_name in module_names:
+    exec('from . import {0}'.format(module_name))

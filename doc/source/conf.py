@@ -45,7 +45,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'CompMech'
-copyright = '2012-2014 Saullo G. P. Castro'
+copyright = '2012-2016 Saullo G. P. Castro'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.

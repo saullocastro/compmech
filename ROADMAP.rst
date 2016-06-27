@@ -1,4 +1,4 @@
-Version 0.6.1
+Version 0.7.0
 -------------
 - create a boundary class with w1tx etc
 - pass the laminate class instead of plyt etc
@@ -10,7 +10,7 @@ Version 0.6.1
 - check why plate lb with reduced_dof=True is not the same as plate_w
 - reconsider reading bardell_12 from the C code and reuse in FORTRAN
 
-Version 0.7.0
+Version 0.8.0
 -------------
 - implement CI compilation and test for FORTRANs
 - improve the numerical stability of FORTRAN's eigensolver (cpanelbay)
