@@ -101,7 +101,7 @@ class MatLamina(object):
         self.u = None
 
 
-    def rebuild (self):
+    def rebuild(self):
         #
         # from references:
         #   Reddy, J. N., Mechanics of laminated composite plates and shells.

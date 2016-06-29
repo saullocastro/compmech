@@ -79,7 +79,8 @@ def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],
         ply.matobj = read_laminaprop(laminaprop)
         lam.plies.append(ply)
 
-    lam.rebuild()
+    lam_thick = sum([ply.t for ply in lam.plies])
+    lam.t = lam_thick
     lam.calc_constitutive_matrix()
 
     return lam
@@ -174,14 +175,6 @@ class Laminate(object):
         self.ABDE = None
 
 
-    def rebuild(self):
-        lam_thick = 0
-        for ply in self.plies:
-            ply.rebuild()
-            lam_thick += ply.t
-        self.t = lam_thick
-
-
     def calc_equivalent_modulus(self):
         """Calculates the equivalent laminate properties.
 
@@ -210,11 +203,9 @@ class Laminate(object):
         xiD1, xiD2, xiD3, xiD4 = 0, 0, 0, 0
         xiE1, xiE2, xiE3, xiE4 = 0, 0, 0, 0
 
-        lam_thick = 0
-
-        for ply in self.plies:
-            lam_thick += ply.t
+        lam_thick = sum([ply.t for ply in self.plies])
         self.t = lam_thick
+
         h0 = -lam_thick/2. + self.offset
         for ply in self.plies:
             hk_1 = h0
@@ -327,9 +318,7 @@ class Laminate(object):
         self.B_general = np.zeros([5,5], dtype=DOUBLE)
         self.D_general = np.zeros([5,5], dtype=DOUBLE)
 
-        lam_thick = 0
-        for ply in self.plies:
-            lam_thick += ply.t
+        lam_thick = sum([ply.t for ply in self.plies])
         self.t = lam_thick
 
         h0 = -lam_thick/2 + self.offset
