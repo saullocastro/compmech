@@ -405,3 +405,192 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
     kG = coo_matrix((kGv, (kGr, kGc)), shape=(size, size))
 
     return kG
+
+
+def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
+        double a, double b, double r, double alpharad,
+        object Finput, int m, int n,
+        double u1tx, double u1rx, double u2tx, double u2rx,
+        double v1tx, double v1rx, double v2tx, double v2rx,
+        double w1tx, double w1rx, double w2tx, double w2rx,
+        double u1ty, double u1ry, double u2ty, double u2ry,
+        double v1ty, double v1ry, double v2ty, double v2ry,
+        double w1ty, double w1ry, double w2ty, double w2ry,
+        int size, int row0, int col0, int nx, int ny):
+
+    cdef int i, j, c, col, ptx, pty
+    cdef double A11, A12, A16, A22, A26, A66
+    cdef double B11, B12, B16, B22, B26, B66
+    cdef double D11, D12, D16, D22, D26, D66
+    cdef double Nxx, Nyy, Nxy, Mxx, Myy, Mxy
+    cdef double exx, eyy, gxy, kxx, kyy, kxy
+
+    cdef double xi, eta, alpha
+    cdef double wxi, weta
+
+    cdef np.ndarray[cDOUBLE, ndim=1] fint
+
+    cdef double fAu, fAuxi, fAv, fAvxi, fAw, fAwxi, fAwxixi
+    cdef double fBu, fBuxi, fBv, fBvxi, fBw, fBwxi, fBwxixi
+    cdef double gAu, gAueta, gAv, gAveta, gAw, gAweta, gAwetaeta
+    cdef double gBu, gBueta, gBv, gBveta, gBw, gBweta, gBwetaeta
+
+    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
+
+    # F as 4-D matrix, must be [nx, ny, 6, 6], when there is one ABD[6, 6] for
+    # each of the nx * ny integration points
+    cdef double F[6 * 6]
+    cdef np.ndarray[cDOUBLE, ndim=4] Fnxny
+
+    cdef int one_F_each_point = 0
+
+    Finput = np.asarray(Finput, dtype=DOUBLE)
+    if Finput.shape == (nx, ny, 6, 6):
+        Fnxny = np.ascontiguousarray(Finput)
+        one_F_each_point = 1
+    elif Finput.shape == (6, 6):
+        # creating dummy 4-D array that is not used
+        Fnxny = np.empty(shape=(0, 0, 0, 0), dtype=DOUBLE)
+        # using a constant F for all integration domain
+        Finput = np.ascontiguousarray(Finput)
+        for i in range(6):
+            for j in range(6):
+                F[i*6 + j] = Finput[i, j]
+    else:
+        raise ValueError('Invalid shape for Finput!')
+
+    xis = np.zeros(nx, dtype=DOUBLE)
+    weightsxi = np.zeros(nx, dtype=DOUBLE)
+    etas = np.zeros(ny, dtype=DOUBLE)
+    weightseta = np.zeros(ny, dtype=DOUBLE)
+
+    leggauss_quad(nx, &xis[0], &weightsxi[0])
+    leggauss_quad(ny, &etas[0], &weightseta[0])
+
+    fint = np.zeros(num*m*n, dtype=DOUBLE)
+
+    with nogil:
+        for ptx in range(nx):
+            for pty in range(ny):
+                xi = xis[ptx]
+                eta = etas[pty]
+                alpha = weightsxi[ptx]*weightseta[pty]
+
+                wxi = 0
+                weta = 0
+                for i in range(m):
+                    #TODO save if buffer
+                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    for j in range(n):
+                        #TODO save if buffer
+                        gAw = calc_f(j, eta, w1tx, w1rx, w2tx, w2rx)
+                        gAweta = calc_fxi(j, eta, w1tx, w1rx, w2tx, w2rx)
+
+                        col = col0 + num*(j*m + i)
+
+                        wxi = cs[col+2]*fAwxi*gAw
+                        weta = cs[col+2]*fAw*gAweta
+
+                if one_F_each_point == 1:
+                    for i in range(6):
+                        for j in range(6):
+                            #TODO could assume symmetry
+                            F[i*6 + j] = Fnxny[ptx, pty, i, j]
+
+                A11 = F[0*6 + 0]
+                A12 = F[0*6 + 1]
+                A16 = F[0*6 + 2]
+                A22 = F[1*6 + 1]
+                A26 = F[1*6 + 2]
+                A66 = F[2*6 + 2]
+
+                B11 = F[0*6 + 3]
+                B12 = F[0*6 + 4]
+                B16 = F[0*6 + 5]
+                B22 = F[1*6 + 4]
+                B26 = F[1*6 + 5]
+                B66 = F[2*6 + 5]
+
+                D11 = F[3*6 + 3]
+                D12 = F[3*6 + 4]
+                D16 = F[3*6 + 5]
+                D22 = F[4*6 + 4]
+                D26 = F[4*6 + 5]
+                D66 = F[5*6 + 5]
+
+                # current strain state
+                exx = 0.
+                eyy = 0.
+                gxy = 0.
+                kxx = 0.
+                kyy = 0.
+                kxy = 0.
+
+                for i in range(m):
+                    #TODO save in buffer
+                    fAu = calc_f(i, xi, u1tx, u1rx, u2tx, u2rx)
+                    fAuxi = calc_fxi(i, xi, u1tx, u1rx, u2tx, u2rx)
+                    fAv = calc_f(i, xi, v1tx, v1rx, v2tx, v2rx)
+                    fAvxi = calc_fxi(i, xi, v1tx, v1rx, v2tx, v2rx)
+                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxixi = calc_fxixi(i, xi, w1tx, w1rx, w2tx, w2rx)
+
+                    for j in range(n):
+                        #TODO save in buffer
+                        gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
+                        gAueta = calc_fxi(j, eta, u1ty, u1ry, u2ty, u2ry)
+                        gAv = calc_f(j, eta, v1ty, v1ry, v2ty, v2ry)
+                        gAveta = calc_fxi(j, eta, v1ty, v1ry, v2ty, v2ry)
+                        gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        gAwetaeta = calc_fxixi(j, eta, w1ty, w1ry, w2ty, w2ry)
+
+                        col = col0 + num*(j*m + i)
+
+                        exx += cs[col+0]*(2/a)*fAuxi*gAu + 0.5*cs[col+2]*(2/a)*fAwxi*gAw*(2/a)*wxi
+                        eyy += cs[col+1]*(2/b)*fAv*gAveta + 1./r*cs[col+2]*fAw*gAw + 0.5*cs[col+2]*(2/b)*fAw*gAweta*(2/b)*weta
+                        gxy += cs[col+0]*(2/b)*fAu*gAueta + cs[col+1]*(2/a)*fAvxi*gAv + cs[col+2]*(2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)
+                        kxx += -cs[col+2]*(2/a*2/a)*fAwxixi*gAw
+                        kyy += -cs[col+2]*(2/b*2/b)*fAw*gAwetaeta
+                        kxy += -2*cs[col+2]*(2/a*2/b)*fAwxi*gAweta
+
+                # current stress state
+                Nxx = A11*exx + A12*eyy + A16*gxy + B11*kxx + B12*kyy + B16*kxy
+                Nyy = A12*exx + A22*eyy + A26*gxy + B12*kxx + B22*kyy + B26*kxy
+                Nxy = A16*exx + A26*eyy + A66*gxy + B16*kxx + B26*kyy + B66*kxy
+                Mxx = B11*exx + B12*eyy + B16*gxy + D11*kxx + D12*kyy + D16*kxy
+                Myy = B12*exx + B22*eyy + B26*gxy + D12*kxx + D22*kyy + D26*kxy
+                Mxy = B16*exx + B26*eyy + B66*gxy + D16*kxx + D26*kyy + D66*kxy
+
+                for i in range(m):
+                    fAu = calc_f(i, xi, u1tx, u1rx, u2tx, u2rx)
+                    fAuxi = calc_fxi(i, xi, u1tx, u1rx, u2tx, u2rx)
+                    fAv = calc_f(i, xi, v1tx, v1rx, v2tx, v2rx)
+                    fAvxi = calc_fxi(i, xi, v1tx, v1rx, v2tx, v2rx)
+                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxixi = calc_fxixi(i, xi, w1tx, w1rx, w2tx, w2rx)
+
+                    for j in range(n):
+                        gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
+                        gAueta = calc_fxi(j, eta, u1ty, u1ry, u2ty, u2ry)
+                        gAv = calc_f(j, eta, v1ty, v1ry, v2ty, v2ry)
+                        gAveta = calc_fxi(j, eta, v1ty, v1ry, v2ty, v2ry)
+                        gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        gAwetaeta = calc_fxixi(j, eta, w1ty, w1ry, w2ty, w2ry)
+
+                        col = col0 + num*(j*m + i)
+
+                        fint[col+0] += alpha*( (2/a)*fAuxi*gAu*Nxx + (2/b)*fAu*gAueta*Nxy )
+                        fint[col+1] += alpha*( (2/b)*fAv*gAveta*Nyy + (2/a)*fAvxi*gAv*Nxy )
+                        fint[col+2] += alpha*( (2/a)*fAwxi*gAw*(2/a)*wxi*Nxx
+                                + 1./r*fAw*gAw*Nyy + (2/b)*fAw*gAweta*(2/b)*weta*Nyy
+                                + (2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)*Nxy
+                                - (2/a*2/a)*fAwxixi*gAw*Mxx
+                                - (2/b*2/b)*fAw*gAwetaeta*Myy
+                                -2*(2/a*2/b)*fAwxi*gAweta*Mxy )
+
+    return fint

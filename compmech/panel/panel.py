@@ -427,6 +427,13 @@ class Panel(object):
         matrix, otherwise the large displacement linear constitutive stiffness
         matrix is calculated.
 
+        When using ``c``:
+
+        - if you pass ``row0`` and ``col0`` the size of ``c``
+        should be the size of the whole assembly
+        - if ``row0=0`` and ``col0=0`` the size of ``c`` should be the size of
+          the individual panel
+
         In assemblies of semi-analytical models the sparse matrices that are
         calculated may have the ``size`` of the assembled global model, and the
         current constitutive matrix being calculated starts at position
@@ -436,7 +443,7 @@ class Panel(object):
         ----------
         size : int
             The size of the calculated sparse matrices.
-        row0 and col0: int or None, optional
+        row0, col0: int or None, optional
             Offset to populate the output sparse matrix (useful when
             assemblying panels).
         silent : bool, optional
@@ -447,7 +454,7 @@ class Panel(object):
         c : array-like or None, optional
             This must be the result of a static analysis, used to compute the
             non-linear term based on the actual displacement field.
-        nx and ny : int or None, optional
+        nx, ny : int or None, optional
             Number of integration points along `x` and `y`, respectively, for
             the Legendre-Gauss quadrature rule applied in the numerical
             integration. Only used when ``c`` is given.
@@ -576,39 +583,7 @@ class Panel(object):
             c=None, nx=None, ny=None, Fnxny=None):
         """Calculate the linear geometric stiffness matrix
 
-        When using ``c``:
-
-        - if you pass ``row0`` and ``col0`` the size of ``c``
-        should be the size of the whole assembly
-        - if ``row0=0`` and ``col0=0`` the size of ``c`` should be the size of
-          the individual panel
-
-
-        Parameters
-        ----------
-        size : int, optional
-            Size of the output squared sparse matrix (if the panel is used in
-            an assembly this must be the size of the assembly). If ``None`` it
-            will consider only the degrees-of-freedom of the individual panel.
-        row0 and col0: int or None, optional
-            Offset to populate the output sparse matrix (useful when
-            assemblying panels).
-        silent : bool, optional
-            A boolean to tell whether the log messages should be printed.
-        finalize : bool, optional
-            Asserts validity of output data and makes the output matrix
-            symmetric, should be ``False`` when assemblying.
-        c : array-like or None, optional
-            This must be the result of a static analysis, used to numerically
-            compute `$K_G$` based on the actual membrane-stress state.
-        nx and ny : int or None, optional
-            Number of integration points along `x` and `y`, respectively, for
-            the Legendre-Gauss quadrature rule applied in the numerical
-            integration. Only used when ``c`` is given.
-        Fnxny : 4-D array-like or None, optional
-            The constitutive relations for the laminate at each integration
-            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
-            classical laminated plate theory models.
+        See :meth:`.Panel.calc_k0` for details on each parameter.
 
         """
         msg('Calculating kG0... ', level=2, silent=silent)
@@ -1397,6 +1372,10 @@ class Panel(object):
             fext += fpt.dot(g).ravel()
 
         return fext
+
+
+    def calc_fint(self, c, silent=False):
+        pass
 
 
     def static(self, NLgeom=False, silent=False):
