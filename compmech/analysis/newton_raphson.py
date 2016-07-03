@@ -57,7 +57,7 @@ def _solver_NR(run):
             if compute_kT or (run.kT_initial_state and step_num==1 and
                     iteration==1) or iter_NR==(run.compute_every_n-1):
                 iter_NR = 0
-                kT = run.calc_kT(c, inc=total)
+                kT = run.calc_kT(c=c, inc=total)
             else:
                 iter_NR += 1
                 if not modified_NR:
@@ -98,8 +98,8 @@ def _solver_NR(run):
                 while True:
                     c1 = c + eta1*delta_c
                     c2 = c + eta2*delta_c
-                    fint1 = run.calc_fint(c1, inc=total)
-                    fint2 = run.calc_fint(c2, inc=total)
+                    fint1 = run.calc_fint(c=c1, inc=total)
+                    fint2 = run.calc_fint(c=c2, inc=total)
                     R1 = fext - fint1
                     R2 = fext - fint2
                     s1 = delta_c.dot(R1)
@@ -142,7 +142,7 @@ def _solver_NR(run):
                 break
             if modified_NR:
                 msg('Updating kT...', level=1)
-                kT = run.calc_kT(c, inc=total)
+                kT = run.calc_kT(c=c, inc=total)
                 msg('kT updated!', level=1)
             compute_kT = False
             kT_last = kT
