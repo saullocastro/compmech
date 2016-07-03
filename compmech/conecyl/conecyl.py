@@ -12,13 +12,13 @@ from scipy.sparse.linalg import eigsh
 from scipy.optimize import leastsq
 from numpy import linspace, pi, cos, sin, tan, deg2rad
 
-from conecylDB import ccs, laminaprops
+from .conecylDB import ccs, laminaprops
 import compmech.composite.laminate as laminate
 from compmech.analysis import Analysis
 from compmech.logger import msg, warn, error
 from compmech.sparse import remove_null_cols, make_symmetric
 from compmech.constants import DOUBLE
-import modelDB
+from . import modelDB
 from .modelDB import get_model
 
 
@@ -644,7 +644,7 @@ class ConeCyl(object):
         return xs, ts, xshape, tshape
 
 
-    def _calc_linear_matrices(self, combined_load_case=None):
+    def _calc_linear_matrices(self, combined_load_case=None, silent=False):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2)
 
@@ -679,8 +679,8 @@ class ConeCyl(object):
 
         if 'clpt' in model:
             if self.F_reuse is not None:
-                msg('')
-                msg('Reusing F matrix...', level=2)
+                msg('', silent=silent)
+                msg('Reusing F matrix...', level=2, silent=silent)
                 F = self.F_reuse
             elif lam is not None:
                 F = lam.ABD
@@ -689,8 +689,8 @@ class ConeCyl(object):
 
         elif 'fsdt' in model:
             if self.F_reuse is not None:
-                msg('')
-                msg('Reusing F matrix...', level=2)
+                msg('', silent=silent)
+                msg('Reusing F matrix...', level=2, silent=silent)
                 F = self.F_reuse
             elif lam is not None:
                 F = lam.ABDE
@@ -699,8 +699,8 @@ class ConeCyl(object):
                 F = self.F
 
         if self.force_orthotropic_laminate:
-            msg('')
-            msg('Forcing orthotropic laminate...', level=2)
+            msg('', silent=silent)
+            msg('Forcing orthotropic laminate...', level=2, silent=silent)
             F[0, 2] = 0. # A16
             F[1, 2] = 0. # A26
             F[2, 0] = 0. # A61
@@ -790,9 +790,9 @@ class ConeCyl(object):
         msg('finished!', level=2)
 
 
-    def calc_k0(self):
+    def calc_k0(self, silent=False):
         if self.k0uu is None:
-            self._calc_linear_matrices()
+            self._calc_linear_matrices(silent=silent)
         return self.k0uu
 
 
@@ -1834,7 +1834,7 @@ class ConeCyl(object):
         import matplotlib.pyplot as plt
         import matplotlib
 
-        from plotutils import get_filename
+        from . plotutils import get_filename
 
         c = self.calc_full_c(c, inc=inc)
 
