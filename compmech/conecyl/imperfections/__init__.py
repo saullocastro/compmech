@@ -56,4 +56,6 @@ approximation series as described above, and finally,
    :members:
 
 """
-from imperfections import *
+from __future__ import absolute_import
+
+from . imperfections import *
