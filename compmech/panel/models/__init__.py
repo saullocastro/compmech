@@ -26,10 +26,7 @@ Fourth part:
 - empty - functions to calculate the stiffness matrices
 
 """
-from glob import glob
-from os.path import realpath, dirname, join
-import inspect
-import imp
+from __future__ import absolute_import
 
 module_names = [
           'cpanel_clt_donnell_bardell_field',

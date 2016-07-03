@@ -24,7 +24,7 @@ db = {
     'cpanel_clt_donnell_bardell': {
                     'linear static': True,
                     'linear buckling': True,
-                    'non-linear static': False,
+                    'non-linear static': True,
                     'field': cpanel_clt_donnell_bardell_field,
                     'matrices': cpanel_clt_donnell_bardell,
                     'matrices_num': cpanel_clt_donnell_bardell_num,
@@ -35,7 +35,7 @@ db = {
     'plate_clt_donnell_bardell': {
                     'linear static': True,
                     'linear buckling': True,
-                    'non-linear static': False,
+                    'non-linear static': True,
                     'field': plate_clt_donnell_bardell_field,
                     'matrices': plate_clt_donnell_bardell,
                     'matrices_num': plate_clt_donnell_bardell_num,

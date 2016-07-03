@@ -168,7 +168,7 @@ class Panel(object):
         self.out_num_cores = cpu_count()
 
         # analysis
-        self.analysis = Analysis(self.calc_fext, self.calc_k0, None, None)
+        self.analysis = Analysis(self.calc_fext, self.calc_k0, self.calc_fint, self.calc_k0)
 
         # outputs
         self.increments = None
@@ -420,7 +420,7 @@ class Panel(object):
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
-            c=None, nx=None, ny=None, Fnxny=None):
+            c=None, nx=None, ny=None, Fnxny=None, inc=None):
         """Calculate the constitutive stiffness matrix
 
         If ``c`` is not given it calculates the linear constitutive stiffness
@@ -1374,8 +1374,54 @@ class Panel(object):
         return fext
 
 
-    def calc_fint(self, c, silent=False):
-        pass
+    def calc_fint(self, c, size=None, row0=0, col0=0, silent=False, nx=None,
+            ny=None, Fnxny=None, fint=None, inc=None):
+        #TODO check if inc is really needed here... perhaps only when
+        #     prescribed displacements take place
+        msg('Calculating internal forces...', level=2, silent=silent)
+        model = self.model
+        if not model in modelDB.db.keys():
+            raise ValueError(
+                    '{0} is not a valid model option'.format(model))
+        matrices_num = modelDB.db[model].get('matrices_num')
+        if matrices_num is None:
+            raise ValuError('matrices_num not implemented for model {0}'.
+                    format(model))
+        calc_fint = getattr(matrices_num, 'calc_fint', None)
+        if calc_fint is None:
+            raise ValuError('calc_fint not implemented for model {0}'.
+                    format(model))
+
+        if size is None:
+            size = self.get_size()
+
+        a = self.a
+        b = self.b
+        r = self.r if self.r is not None else 0.
+        alphadeg = self.alphadeg if self.alphadeg is not None else 0.
+        alpharad = np.deg2rad(alphadeg)
+        m = self.m
+        n = self.n
+        nx = self.nx if nx is None else nx
+        ny = self.ny if ny is None else ny
+        Fnxny = self.F if Fnxny is None else Fnxny
+
+        if fint is None:
+            fint = np.zeros(size, dtype=DOUBLE)
+        calc_fint(fint, c, a, b, r, alpharad, Fnxny, m, n,
+                  self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+                  self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                  self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+                  self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+                  self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                  self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                  size, row0, col0, nx, ny)
+
+        gc.collect()
+
+        msg('finished!', level=2, silent=silent)
+
+        return -fint
 
 
     def static(self, NLgeom=False, silent=False):
@@ -1410,6 +1456,7 @@ class Panel(object):
         ``self.analysis.increments`` parameter.
 
         """
+        self._rebuild()
         if self.c0 is not None:
             self.analysis.kT_initial_state = True
         else:
@@ -1424,7 +1471,7 @@ class Panel(object):
             msg('________________________________________________',
                 silent=silent)
             raise
-        elif not NLgeom and not modelDB.db[self.model]['linear static']:
+        elif not NLgeom and not modelDB.db[self.model]['matrices']:
             msg('________________________________________________',
                 level=1, silent=silent)
             msg('', level=1, silent=silent)

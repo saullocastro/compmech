@@ -407,7 +407,8 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
     return kG
 
 
-def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
+def calc_fint(np.ndarray[cDOUBLE, ndim=1] fint,
+        np.ndarray[cDOUBLE, ndim=1] cs,
         double a, double b, double r, double alpharad,
         object Finput, int m, int n,
         double u1tx, double u1rx, double u2tx, double u2rx,
@@ -427,8 +428,6 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
 
     cdef double xi, eta, alpha
     cdef double wxi, weta
-
-    cdef np.ndarray[cDOUBLE, ndim=1] fint
 
     cdef double fAu, fAuxi, fAv, fAvxi, fAw, fAwxi, fAwxixi
     cdef double fBu, fBuxi, fBv, fBvxi, fBw, fBwxi, fBwxixi
@@ -466,8 +465,6 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
 
     leggauss_quad(nx, &xis[0], &weightsxi[0])
     leggauss_quad(ny, &etas[0], &weightseta[0])
-
-    fint = np.zeros(num*m*n, dtype=DOUBLE)
 
     with nogil:
         for ptx in range(nx):
@@ -584,13 +581,12 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
 
                         col = col0 + num*(j*m + i)
 
-                        fint[col+0] += alpha*( (2/a)*fAuxi*gAu*Nxx + (2/b)*fAu*gAueta*Nxy )
-                        fint[col+1] += alpha*( (2/b)*fAv*gAveta*Nyy + (2/a)*fAvxi*gAv*Nxy )
-                        fint[col+2] += alpha*( (2/a)*fAwxi*gAw*(2/a)*wxi*Nxx
+                        fint[col+0] += alpha*( a*b/4 * (2/a)*fAuxi*gAu*Nxx + (2/b)*fAu*gAueta*Nxy )
+                        fint[col+1] += alpha*( a*b/4 * (2/b)*fAv*gAveta*Nyy + (2/a)*fAvxi*gAv*Nxy )
+                        fint[col+2] += alpha*( a*b/4 * (2/a)*fAwxi*gAw*(2/a)*wxi*Nxx
                                 + 1./r*fAw*gAw*Nyy + (2/b)*fAw*gAweta*(2/b)*weta*Nyy
                                 + (2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)*Nxy
                                 - (2/a*2/a)*fAwxixi*gAw*Mxx
                                 - (2/b*2/b)*fAw*gAwetaeta*Myy
                                 -2*(2/a*2/b)*fAwxi*gAweta*Mxy )
 
-    return fint
