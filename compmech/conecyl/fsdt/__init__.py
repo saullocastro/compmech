@@ -11,6 +11,8 @@ strain and the stress fields for all models using the FSDT kinematic
 assumption.
 
 """
+from __future__ import absolute_import
+
 modules = [
           'fsdt_commons_bc1',
           'fsdt_commons_bc2',

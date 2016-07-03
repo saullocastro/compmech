@@ -5,11 +5,10 @@ Used to configure the main parameters for each implemented model.
 
 
 """
-import numpy as np
-from scipy.sparse import coo_matrix
+from __future__ import absolute_import
 
-from clpt import *
-from fsdt import *
+from . clpt import *
+from . fsdt import *
 
 db = {
     'clpt_donnell_bc1': {
