@@ -79,8 +79,7 @@ def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],
         ply.matobj = read_laminaprop(laminaprop)
         lam.plies.append(ply)
 
-    lam_thick = sum([ply.t for ply in lam.plies])
-    lam.t = lam_thick
+    lam.rebuild()
     lam.calc_constitutive_matrix()
 
     return lam
@@ -173,6 +172,14 @@ class Laminate(object):
         self.E = None
         self.ABD = None
         self.ABDE = None
+
+
+    def rebuild(self):
+        lam_thick = 0
+        for ply in self.plies:
+            ply.rebuild()
+            lam_thick += ply.t
+        self.t = lam_thick
 
 
     def calc_equivalent_modulus(self):
