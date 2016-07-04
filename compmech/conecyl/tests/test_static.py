@@ -6,13 +6,13 @@ from compmech.conecyl import ConeCyl
 def test_static():
     wmin_ref = [
             ['clpt_donnell_bc1', -0.0512249327106],
-            ['clpt_donnell_bc2', -0.0104494223857],
+            ['clpt_donnell_bc2', -0.0500855846496],
             ['clpt_donnell_bc3', -0.0509280039584],
-            ['clpt_donnell_bc4', -0.0104423789402],
+            ['clpt_donnell_bc4', -0.0498127720591],
             ['fsdt_donnell_bc1', -0.0516948646563],
-            ['fsdt_donnell_bc2', -0.01048277484],
+            ['fsdt_donnell_bc2', -0.0505316013923],
             ['fsdt_donnell_bc3', -0.0513959737413],
-            ['fsdt_donnell_bc4', -0.0104756892015],
+            ['fsdt_donnell_bc4', -0.0502561654612],
             ]
 
     for model, wmin in wmin_ref:
@@ -32,6 +32,7 @@ def test_static():
             cc.add_force(0., thetadeg, -15., 0, 0, increment=True)
         cs = cc.static()
         cc.uvw(cs[0])
+        print(cc.w.min(), wmin)
         assert np.isclose(cc.w.min(), wmin, rtol=0.01)
 
 
@@ -67,4 +68,4 @@ def test_NL_static():
 
 if __name__ == '__main__':
     test_static()
-    test_NL_static()
+    #test_NL_static()
