@@ -38,11 +38,11 @@ def test_static():
 
 def test_NL_static():
     wmin_ref = [
-            ['clpt_donnell_bc1', -0.0477604792756],
-            ['clpt_donnell_bc2', -0.0466197517352],
-            ['clpt_donnell_bc3', -0.047461024091],
-            ['clpt_donnell_bc4', -0.0463451053441],
-            ['fsdt_donnell_bc1', -0.0463340957349],
+            ['clpt_donnell_bc1', -0.012689461685834305],
+            ['clpt_donnell_bc2', -0.011741560192200845],
+            ['clpt_donnell_bc3', -0.012634776822892537],
+            ['clpt_donnell_bc4', -0.011499181513525969],
+            ['fsdt_donnell_bc1', -0.012621439862441628],
             ]
 
     for model, wmin in wmin_ref:
@@ -63,10 +63,9 @@ def test_NL_static():
         cc.analysis.initialInc = 0.5
         cs = cc.static(NLgeom=True)
         cc.uvw(cs[0])
-        print(model, cc.w.min())
-        #assert np.isclose(cc.w.min(), wmin, rtol=0.01)
+        assert np.isclose(cc.w.min(), wmin, rtol=0.01)
 
 
 if __name__ == '__main__':
     test_static()
-    #test_NL_static()
+    test_NL_static()
