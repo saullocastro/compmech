@@ -1204,10 +1204,10 @@ class ConeCyl(object):
             The full set of Ritz constants
         xs : np.ndarray
             The `x` positions where to calculate the displacement field.
-            Default is ``None`` and the method ``_default_field`` is used.
+            Default is ``None`` and method ``_default_field`` is used.
         ts : np.ndarray
             The ``theta`` positions where to calculate the displacement field.
-            Default is ``None`` and the method ``_default_field`` is used.
+            Default is ``None`` and method ``_default_field`` is used.
         gridx : int
             Number of points along the `x` axis where to calculate the
             displacement field.
@@ -1803,10 +1803,10 @@ class ConeCyl(object):
             Clean axes ticks, grids, spines etc.
         xs : np.ndarray, optional
             The `x` positions where to calculate the displacement field.
-            Default is ``None`` and the method ``_default_field`` is used.
+            Default is ``None`` and method ``_default_field`` is used.
         ts : np.ndarray, optional
             The ``theta`` positions where to calculate the displacement field.
-            Default is ``None`` and the method ``_default_field`` is used.
+            Default is ``None`` and method ``_default_field`` is used.
         gridx : int, optional
             Number of points along the `x` axis where to calculate the
             displacement field.
