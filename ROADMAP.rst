@@ -1,3 +1,9 @@
+Version 0.6.7
+-------------
+- fix compatibility with Python 3 for conecyl
+- tests for conecyl
+- non-linear static analysis for Panel
+
 Version 0.7.0
 -------------
 - create a boundary class with w1tx etc
