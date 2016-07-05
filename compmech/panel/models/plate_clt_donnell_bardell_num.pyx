@@ -466,28 +466,14 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] fint,
     leggauss_quad(nx, &xis[0], &weightsxi[0])
     leggauss_quad(ny, &etas[0], &weightseta[0])
 
+    fint *= 0
+
     with nogil:
         for ptx in range(nx):
             for pty in range(ny):
                 xi = xis[ptx]
                 eta = etas[pty]
                 alpha = weightsxi[ptx]*weightseta[pty]
-
-                wxi = 0
-                weta = 0
-                for i in range(m):
-                    #TODO save if buffer
-                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
-                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
-                    for j in range(n):
-                        #TODO save if buffer
-                        gAw = calc_f(j, eta, w1tx, w1rx, w2tx, w2rx)
-                        gAweta = calc_fxi(j, eta, w1tx, w1rx, w2tx, w2rx)
-
-                        col = col0 + num*(j*m + i)
-
-                        wxi = cs[col+2]*fAwxi*gAw
-                        weta = cs[col+2]*fAw*gAweta
 
                 if one_F_each_point == 1:
                     for i in range(6):
@@ -515,6 +501,23 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] fint,
                 D22 = F[4*6 + 4]
                 D26 = F[4*6 + 5]
                 D66 = F[5*6 + 5]
+
+                wxi = 0
+                weta = 0
+                for i in range(m):
+                    #TODO save if buffer
+                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                    for j in range(n):
+                        #TODO save if buffer
+                        gAw = calc_f(j, eta, w1tx, w1rx, w2tx, w2rx)
+                        gAweta = calc_fxi(j, eta, w1tx, w1rx, w2tx, w2rx)
+
+                        col = col0 + num*(j*m + i)
+
+                        wxi += cs[col+2]*fAwxi*gAw
+                        weta += cs[col+2]*fAw*gAweta
+
 
                 # current strain state
                 exx = 0.
@@ -548,7 +551,7 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] fint,
 
                         exx += cs[col+0]*(2/a)*fAuxi*gAu + 0.5*cs[col+2]*(2/a)*fAwxi*gAw*(2/a)*wxi
                         eyy += cs[col+1]*(2/b)*fAv*gAveta + 0.5*cs[col+2]*(2/b)*fAw*gAweta*(2/b)*weta
-                        gxy += cs[col+0]*(2/b)*fAu*gAueta + cs[col+1]*(2/a)*fAvxi*gAv + cs[col+2]*(2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)
+                        gxy += cs[col+0]*(2/b)*fAu*gAueta + cs[col+1]*(2/a)*fAvxi*gAv + 0.5*cs[col+2]*(2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)
                         kxx += -cs[col+2]*(2/a*2/a)*fAwxixi*gAw
                         kyy += -cs[col+2]*(2/b*2/b)*fAw*gAwetaeta
                         kxy += -2*cs[col+2]*(2/a*2/b)*fAwxi*gAweta
@@ -581,12 +584,8 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] fint,
 
                         col = col0 + num*(j*m + i)
 
-                        fint[col+0] += alpha*( a*b/4 * (2/a)*fAuxi*gAu*Nxx + (2/b)*fAu*gAueta*Nxy )
-                        fint[col+1] += alpha*( a*b/4 * (2/b)*fAv*gAveta*Nyy + (2/a)*fAvxi*gAv*Nxy )
-                        fint[col+2] += alpha*( a*b/4 * (2/a)*fAwxi*gAw*(2/a)*wxi*Nxx
-                                + (2/b)*fAw*gAweta*(2/b)*weta*Nyy
-                                + (2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)*Nxy
-                                - (2/a*2/a)*fAwxixi*gAw*Mxx
-                                - (2/b*2/b)*fAw*gAwetaeta*Myy
-                                -2*(2/a*2/b)*fAwxi*gAweta*Mxy )
+                        fint[col+0] += alpha*( 0.25*a*b*(2*Nxx*fAuxi*gAu/a + 2*Nxy*fAu*gAueta/b) )
+                        fint[col+1] += alpha*( 0.25*a*b*(2*Nxy*fAvxi*gAv/a + 2*Nyy*fAv*gAveta/b) )
+                        fint[col+2] += alpha*( 0.25*a*b*(-4*Mxx*fAwxixi*gAw/(a*a) - 8*Mxy*fAwxi*gAweta/(a*b) - 4*Myy*fAw*gAwetaeta/(b*b) + 4*Nxx*fAwxi*gAw*wxi/(a*a) + 4*Nxy*(fAw*gAweta*wxi + fAwxi*gAw*weta)/(a*b) + 4*Nyy*fAw*gAweta*weta/(b*b)) )
+
 
