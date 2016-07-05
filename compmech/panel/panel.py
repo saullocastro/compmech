@@ -1421,7 +1421,7 @@ class Panel(object):
 
         msg('finished!', level=2, silent=silent)
 
-        return -fint
+        return fint
 
 
     def static(self, NLgeom=False, silent=False):
