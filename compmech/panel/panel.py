@@ -96,8 +96,8 @@ class Panel(object):
         self.n = n
 
         # numerical integration
-        self.nx = 10
-        self.ny = 10
+        self.nx = m
+        self.ny = n
         self.ni_num_cores = cpu_count()//2
         self.ni_method = 'trapz2d'
         self.c0 = None
@@ -168,7 +168,7 @@ class Panel(object):
         self.out_num_cores = cpu_count()
 
         # analysis
-        self.analysis = Analysis(self.calc_fext, self.calc_k0, self.calc_fint, self.calc_k0)
+        self.analysis = Analysis(self.calc_fext, self.calc_k0, self.calc_fint, self.calc_kT)
 
         # outputs
         self.increments = None
@@ -533,6 +533,7 @@ class Panel(object):
                     # Empty c if the interest is only on the heterogeneous
                     # laminate properties
                     c = np.zeros(self.size, dtype=DOUBLE)
+                c = np.ascontiguousarray(c, dtype=DOUBLE)
                 k0 = matrices_num.fkL_num(c, a, b, r, alpharad,
                          self.F, self.m, self.n,
                          self.u1tx, self.u1rx, self.u2tx, self.u2rx,
@@ -635,10 +636,10 @@ class Panel(object):
             kG0 = matrices.fkG_num(c, Fnxny, a, b, r,
                        alpharad, self.m, self.n,
                        self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                       self.u1ty, self.u1ry, self.u2ty, self.u2ry,
                        self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                       self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                        self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                       self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                       self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                        self.w1ty, self.w1ry, self.w2ty, self.w2ry,
                        size, row0, col0, nx, ny)
 
@@ -654,6 +655,18 @@ class Panel(object):
         msg('finished!', level=2, silent=silent)
 
         return kG0
+
+
+    def calc_kT(self, size=None, row0=0, col0=0, silent=False, finalize=True,
+            c=None, nx=None, ny=None, Fnxny=None, inc=None):
+        kL = self.calc_k0(size=size, row0=row0, col0=col0, silent=silent, finalize=finalize,
+            c=c, nx=nx, ny=ny, Fnxny=Fnxny, inc=inc)
+        kG = self.calc_kG0(size=size, row0=row0, col0=col0, silent=silent, finalize=finalize,
+            c=c, nx=nx, ny=ny, Fnxny=Fnxny)
+        kT = kL + kG
+        self.kT = kT
+
+        return kT
 
 
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
@@ -1374,10 +1387,9 @@ class Panel(object):
         return fext
 
 
-    def calc_fint(self, c, size=None, row0=0, col0=0, silent=False, nx=None,
-            ny=None, Fnxny=None, fint=None, inc=None):
-        #TODO check if inc is really needed here... perhaps only when
-        #     prescribed displacements take place
+    def calc_fint(self, c, size=None, col0=0, silent=False, nx=None,
+            ny=None, Fnxny=None, inc=None):
+        #TODO inc not needed here; otherwise with prescribed displacements
         msg('Calculating internal forces...', level=2, silent=silent)
         model = self.model
         if not model in modelDB.db.keys():
@@ -1406,16 +1418,15 @@ class Panel(object):
         ny = self.ny if ny is None else ny
         Fnxny = self.F if Fnxny is None else Fnxny
 
-        if fint is None:
-            fint = np.zeros(size, dtype=DOUBLE)
-        calc_fint(fint, c, a, b, r, alpharad, Fnxny, m, n,
+        c = np.ascontiguousarray(c, dtype=DOUBLE)
+        fint = calc_fint(c, a, b, r, alpharad, Fnxny, m, n,
                   self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                  self.u1ty, self.u1ry, self.u2ty, self.u2ry,
                   self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                  self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                   self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+                  self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+                  self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                   self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                  size, row0, col0, nx, ny)
+                  size, col0, nx, ny)
 
         gc.collect()
 
@@ -1457,10 +1468,8 @@ class Panel(object):
 
         """
         self._rebuild()
-        if self.c0 is not None:
-            self.analysis.kT_initial_state = True
-        else:
-            self.analysis.kT_initial_state = False
+        self.analysis.kT_initial_state = True
+        self.analysis.compute_every_n = 1
 
         if NLgeom and not modelDB.db[self.model]['non-linear static']:
             msg('________________________________________________',
