@@ -54,8 +54,8 @@ def _solver_NR(run):
                 warn('Maximum number of iterations achieved!', level=2)
                 break
 
-            if compute_kT or (run.kT_initial_state and step_num==1 and
-                    iteration==1) or iter_NR==(run.compute_every_n-1):
+            if compute_kT or (run.kT_initial_state and step_num == 1 and
+                    iteration == 1) or iter_NR==(run.compute_every_n-1):
                 iter_NR = 0
                 kT = run.calc_kT(c=c, inc=total)
             else:
