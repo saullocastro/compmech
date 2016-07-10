@@ -51,7 +51,7 @@ def test_panel_fkG_num():
         assert np.isclose(p.eigvals[0], 4.52909113495, atol=0.01, rtol=0)
 
         p.lb(silent=True, c=p.analysis.cs[0])
-        assert np.isclose(p.eigvals[0], 4.433932238, atol=0.01, rtol=0)
+        assert np.isclose(p.eigvals[0], 4.5345057669315239, atol=0.01, rtol=0)
 
 
 def test_panel_fkG_num_Fnxny():
@@ -104,13 +104,13 @@ def test_panel_fkG_num_Fnxny():
         ny = 9
         Fnxny = p.F
         p.lb(silent=True, c=c, Fnxny=Fnxny, nx=nx, ny=ny)
-        assert np.isclose(p.eigvals[0], 4.433932238, atol=0.01, rtol=0)
+        assert np.isclose(p.eigvals[0], 4.532851973656947, atol=0.01, rtol=0)
 
         nx = 12
         ny = 10
         Fnxny = np.array([[p.F]*ny]*nx)
         p.lb(silent=True, c=c, Fnxny=Fnxny, nx=nx, ny=ny)
-        assert np.isclose(p.eigvals[0], 4.433932238, atol=0.01, rtol=0)
+        assert np.isclose(p.eigvals[0], 4.532851973656947, atol=0.01, rtol=0)
 
 
 #TODO  test_panel_fkG_num_ckL()
