@@ -1395,9 +1395,9 @@ class Panel(object):
                self.u1ty, self.u1ry, self.u2ty, self.u2ry,
                self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                self.w1ty, self.w1ry, self.w2ty, self.w2ry)
-            if dofs == 3:
+            if dofs == 3: #CLT
                 fpt = np.array([[fx, fy, fz]])*inc
-            elif dofs == 5:
+            elif dofs == 5: #FSDT
                 fpt = np.array([[fx, fy, fz, 0, 0]])*inc
             fext += fpt.dot(g).ravel()
 
