@@ -49,7 +49,7 @@ def test_fint():
     m = 6
     n = 6
     for model in ['plate_clt_donnell_bardell',
-                  #'cpanel_clt_donnell_bardell'
+                  'cpanel_clt_donnell_bardell'
                   ]:
         p = Panel()
         p.model = model
@@ -60,8 +60,8 @@ def test_fint():
         p.u1ty = 1
         p.u2ty = 1
         p.a = 2.
-        p.b = 0.5
-        p.r = 1.e9
+        p.b = 1.
+        p.r = 1.e5
         p.stack = [0, 90, -45, +45]
         p.plyt = 1e-3*0.125
         p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
@@ -77,104 +77,14 @@ def test_fint():
             p.forces_inc.append([0., y, P/(npts-1.), 0, 0])
         p.forces_inc[0][2] /= 2.
         p.forces_inc[-1][2] /= 2.
+        p.forces.append([p.a/2., p.b/2., 0, 0, 0.001])
 
-        if False:
-            fext = p.calc_fext(silent=True)
-            k0 = p.calc_k0(silent=True)
-            c = solve(k0, fext)
-            fint = p.calc_fint(c=c)
-            kT = p.calc_kT(c=c, silent=True)
+        p.static(NLgeom=True, silent=True)
 
-            np.savetxt('debug_fint_from_kT.txt', kT*c)
-            np.savetxt('debug_fint.txt', fint)
-            np.savetxt('debug_fext.txt', fext)
-
-        else:
-            p.analysis.line_search = False
-            p.static(NLgeom=True)
-
-
-
-
-
-
-def test():
-    #p.plot(cs[0], filename='linear_static.png', colorbar=True)
-
-    fext = p.calc_fext()
-
-    c = solve(k0, fext)
-    kL = p.calc_k0(c=c)
-    kG = p.calc_kG0(c=c)
-    kT = kL + kG
-
-    print('k0.sum()', k0.sum())
-    print('kT.sum()', kT.sum())
-
-    print('fext.sum()', fext.sum())
-
-    fint = p.calc_fint(c=c)
-    #fint = p.calc_kT(c=c)*c
-    print('fint.sum()', fint.sum())
-
-    np.savetxt('debug_fint.txt', fint)
-    np.savetxt('debug_fext.txt', fext)
-
-    R = -fint + fext
-    print('error.sum()', R.sum())
-    dc = solve(kT, R)
-    c += dc
-
-    #fint = p.calc_kT(c=c)*c
-    fint = p.calc_fint(c=c)
-    print('dc.sum()', dc.sum())
-    print('fint.sum()', fint.sum())
-
-    R = -fint + fext
-
-    print('\nerror.sum()', R.sum())
-    dc = solve(kT, R)
-    c += dc
-    print('c.sum()', c.sum())
-    print('dc.sum()', dc.sum())
-
-    #fint = p.calc_kT(c=c)*c
-    fint = p.calc_fint(c=c)
-    print('fint.sum()', fint.sum())
-    R = -fint + fext
-    print('\nerror.sum()', R.sum())
-    dc = solve(kT, R)
-    c += dc
-    print('c.sum()', c.sum())
-    print('dc.sum()', dc.sum())
-
-    #fint = p.calc_kT(c=c)*c
-    fint = p.calc_fint(c=c)
-    print('fint.sum()', fint.sum())
-    R = -fint + fext
-    print('\nerror.sum()', R.sum())
-    dc = solve(kT, R)
-    c += dc
-    print('c.sum()', c.sum())
-    print('dc.sum()', dc.sum())
-
-    #fint = p.calc_kT(c=c)*c
-    fint = p.calc_fint(c=c)
-    print('fint.sum()', fint.sum())
-    R = -fint + fext
-    print('\nerror.sum()', R.sum())
-
-
-    if False:
-        p.analysis.initialInc = 0.5
-        p.analysis.line_search = False
-        c = p.static(NLgeom=True, silent=True)
-
-    print(c)
-
-    p.plot(c, filename='non_linear_analysis.png', colorbar=True)
+        p.uvw(p.analysis.cs[0])
+        assert np.isclose(p.w.max(), 0.000144768080125, rtol=0.001)
 
 
 if __name__ == '__main__':
-    #test_kT()
+    test_kT()
     test_fint()
