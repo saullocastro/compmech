@@ -141,7 +141,7 @@ class Analysis(object):
             self.maxInc = max(self.initialInc, self.maxInc)
             msg('Started Non-Linear Static Analysis', silent=silent)
             if self.NL_method is 'NR':
-                _solver_NR(self)
+                _solver_NR(self, silent=silent)
             elif self.NL_method is 'arc_length':
                 _solver_arc_length(self)
             else:
