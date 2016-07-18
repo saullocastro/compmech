@@ -40,7 +40,7 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
         double u1ty, double u1ry, double u2ty, double u2ry,
         double v1ty, double v1ry, double v2ty, double v2ry,
         double w1ty, double w1ry, double w2ty, double w2ry,
-        int size, int row0, int col0, int nx, int ny):
+        int size, int row0, int col0, int nx, int ny, int NLgeom=0):
     cdef int i, j, k, l, c, row, col, ptx, pty
     cdef double A11, A12, A16, A22, A26, A66
     cdef double B11, B12, B16, B22, B26, B66
@@ -103,18 +103,20 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
 
                 wxi = 0
                 weta = 0
-                for i in range(m):
-                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
-                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                if NLgeom == 1:
                     for j in range(n):
                         #TODO put these in a lookup vector
                         gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
                         gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        for i in range(m):
+                            #TODO put these in a lookup vector
+                            fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                            fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
 
-                        row = row0 + num*(j*m + i)
+                            col = col0 + num*(j*m + i)
 
-                        wxi += cs[row+2]*fAwxi*gAw
-                        weta += cs[row+2]*fAw*gAweta
+                            wxi += cs[col+2]*fAwxi*gAw
+                            weta += cs[col+2]*fAw*gAweta
 
                 if one_F_each_point == 1:
                     for i in range(6):
@@ -162,7 +164,6 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
                         fBw = calc_f(k, xi, w1tx, w1rx, w2tx, w2rx)
                         fBwxi = calc_fxi(k, xi, w1tx, w1rx, w2tx, w2rx)
                         fBwxixi = calc_fxixi(k, xi, w1tx, w1rx, w2tx, w2rx)
-
 
                         for j in range(n):
                             gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
@@ -249,7 +250,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
             double u1ty, double u1ry, double u2ty, double u2ry,
             double v1ty, double v1ry, double v2ty, double v2ry,
             double w1ty, double w1ry, double w2ty, double w2ry,
-            int size, int row0, int col0, int nx, int ny):
+            int size, int row0, int col0, int nx, int ny, int NLgeom=0):
     cdef int i, k, j, l, c, row, col, ptx, pty
     cdef double xi, eta, x, y, alpha
 
@@ -333,18 +334,19 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
 
                 wxi = 0
                 weta = 0
-                for j in range(n):
-                    #TODO put these in a lookup vector
-                    gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
-                    gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
-                    for i in range(m):
-                        fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
-                        fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                if NLgeom == 1:
+                    for j in range(n):
+                        #TODO put these in a lookup vector
+                        gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        for i in range(m):
+                            fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                            fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
 
-                        row = row0 + num*(j*m + i)
+                            col = col0 + num*(j*m + i)
 
-                        wxi += cs[row+2]*fAwxi*gAw
-                        weta += cs[row+2]*fAw*gAweta
+                            wxi += cs[col+2]*fAwxi*gAw
+                            weta += cs[col+2]*fAw*gAweta
 
                 # Calculating strain components
                 exx = 0.
@@ -372,14 +374,18 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
                         fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
                         fAwxixi = calc_fxixi(i, xi, w1tx, w1rx, w2tx, w2rx)
 
-                        row = row0 + num*(j*m + i)
+                        col = col0 + num*(j*m + i)
 
-                        exx += cs[row+0]*(2/a)*fAuxi*gAu
-                        eyy += cs[row+1]*fAv*(2/b)*gAveta + 1/r*cs[row+2]*fAw*gAw
-                        gxy += cs[row+0]*fAu*(2/b)*gAueta + cs[row+1]*(2/a)*fAvxi*gAv
-                        kxx += -cs[row+2]*(2/a)*(2/a)*fAwxixi*gAw
-                        kyy += -cs[row+2]*(2/b)*fAw*gAwetaeta
-                        kxy += -2*cs[row+2]*(2/a)*fAwxi*(2/b)*gAweta
+                        exx += cs[col+0]*(2/a)*fAuxi*gAu
+                        eyy += cs[col+1]*fAv*(2/b)*gAveta + 1/r*cs[col+2]*fAw*gAw
+                        gxy += cs[col+0]*fAu*(2/b)*gAueta + cs[col+1]*(2/a)*fAvxi*gAv
+                        kxx += -cs[col+2]*(2/a*2/a)*fAwxixi*gAw
+                        kyy += -cs[col+2]*(2/b*2/b)*fAw*gAwetaeta
+                        kxy += -2*cs[col+2]*(2/a)*fAwxi*(2/b)*gAweta
+
+                exx += 0.5*(2/a)*(2/a)*wxi*wxi
+                eyy += 0.5*(2/b)*(2/b)*weta*weta
+                gxy += (2/a*2/b)*wxi*weta
 
                 # Calculating membrane stress components
                 Nxx = A11*exx + A12*eyy + A16*gxy + B11*kxx + B12*kyy + B16*kxy
@@ -412,7 +418,6 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
                                     continue
 
                                 c += 1
-
                                 if ptx == 0 and pty == 0:
                                     kGr[c] = row+2
                                     kGc[c] = col+2
@@ -432,7 +437,7 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
         double u1ty, double u1ry, double u2ty, double u2ry,
         double v1ty, double v1ry, double v2ty, double v2ry,
         double w1ty, double w1ry, double w2ty, double w2ry,
-        int size, int row0, int col0, int nx, int ny):
+        int size, int col0, int nx, int ny):
 
     cdef int i, j, c, col, ptx, pty
     cdef double A11, A12, A16, A22, A26, A66
@@ -563,12 +568,16 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
 
                         col = col0 + num*(j*m + i)
 
-                        exx += cs[col+0]*(2/a)*fAuxi*gAu + 0.5*cs[col+2]*(2/a)*fAwxi*gAw*(2/a)*wxi
-                        eyy += cs[col+1]*(2/b)*fAv*gAveta + 1./r*cs[col+2]*fAw*gAw + 0.5*cs[col+2]*(2/b)*fAw*gAweta*(2/b)*weta
-                        gxy += cs[col+0]*(2/b)*fAu*gAueta + cs[col+1]*(2/a)*fAvxi*gAv + cs[col+2]*(2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)
+                        exx += cs[col+0]*(2/a)*fAuxi*gAu
+                        eyy += cs[col+1]*(2/b)*fAv*gAveta + 1./r*cs[col+2]*fAw*gAw
+                        gxy += cs[col+0]*(2/b)*fAu*gAueta + cs[col+1]*(2/a)*fAvxi*gAv
                         kxx += -cs[col+2]*(2/a*2/a)*fAwxixi*gAw
                         kyy += -cs[col+2]*(2/b*2/b)*fAw*gAwetaeta
                         kxy += -2*cs[col+2]*(2/a*2/b)*fAwxi*gAweta
+
+                exx += 0.5*(2/a)*(2/a)*wxi*wxi
+                eyy += 0.5*(2/b)*(2/b)*weta*weta
+                gxy += (2/a)*(2/b)*wxi*weta
 
                 # current stress state
                 Nxx = A11*exx + A12*eyy + A16*gxy + B11*kxx + B12*kyy + B16*kxy
@@ -578,33 +587,27 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
                 Myy = B12*exx + B22*eyy + B26*gxy + D12*kxx + D22*kyy + D26*kxy
                 Mxy = B16*exx + B26*eyy + B66*gxy + D16*kxx + D26*kyy + D66*kxy
 
-                for i in range(m):
-                    fAu = calc_f(i, xi, u1tx, u1rx, u2tx, u2rx)
-                    fAuxi = calc_fxi(i, xi, u1tx, u1rx, u2tx, u2rx)
-                    fAv = calc_f(i, xi, v1tx, v1rx, v2tx, v2rx)
-                    fAvxi = calc_fxi(i, xi, v1tx, v1rx, v2tx, v2rx)
-                    fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
-                    fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
-                    fAwxixi = calc_fxixi(i, xi, w1tx, w1rx, w2tx, w2rx)
-
-                    for j in range(n):
-                        gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
-                        gAueta = calc_fxi(j, eta, u1ty, u1ry, u2ty, u2ry)
-                        gAv = calc_f(j, eta, v1ty, v1ry, v2ty, v2ry)
-                        gAveta = calc_fxi(j, eta, v1ty, v1ry, v2ty, v2ry)
-                        gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
-                        gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
-                        gAwetaeta = calc_fxixi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                for j in range(n):
+                    gAu = calc_f(j, eta, u1ty, u1ry, u2ty, u2ry)
+                    gAueta = calc_fxi(j, eta, u1ty, u1ry, u2ty, u2ry)
+                    gAv = calc_f(j, eta, v1ty, v1ry, v2ty, v2ry)
+                    gAveta = calc_fxi(j, eta, v1ty, v1ry, v2ty, v2ry)
+                    gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                    gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                    gAwetaeta = calc_fxixi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                    for i in range(m):
+                        fAu = calc_f(i, xi, u1tx, u1rx, u2tx, u2rx)
+                        fAuxi = calc_fxi(i, xi, u1tx, u1rx, u2tx, u2rx)
+                        fAv = calc_f(i, xi, v1tx, v1rx, v2tx, v2rx)
+                        fAvxi = calc_fxi(i, xi, v1tx, v1rx, v2tx, v2rx)
+                        fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                        fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                        fAwxixi = calc_fxixi(i, xi, w1tx, w1rx, w2tx, w2rx)
 
                         col = col0 + num*(j*m + i)
 
-                        fint[col+0] += alpha*( a*b/4 * (2/a)*fAuxi*gAu*Nxx + (2/b)*fAu*gAueta*Nxy )
-                        fint[col+1] += alpha*( a*b/4 * (2/b)*fAv*gAveta*Nyy + (2/a)*fAvxi*gAv*Nxy )
-                        fint[col+2] += alpha*( a*b/4 * (2/a)*fAwxi*gAw*(2/a)*wxi*Nxx
-                                + 1./r*fAw*gAw*Nyy + (2/b)*fAw*gAweta*(2/b)*weta*Nyy
-                                + (2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)*Nxy
-                                - (2/a*2/a)*fAwxixi*gAw*Mxx
-                                - (2/b*2/b)*fAw*gAwetaeta*Myy
-                                -2*(2/a*2/b)*fAwxi*gAweta*Mxy )
+                        fint[col+0] += alpha*( 0.25*a*b * ((2/a)*fAuxi*gAu*Nxx + (2/b)*fAu*gAueta*Nxy) )
+                        fint[col+1] += alpha*( 0.25*a*b * ((2/b)*fAv*gAveta*Nyy + (2/a)*fAvxi*gAv*Nxy) )
+                        fint[col+2] += alpha*( 0.25*a*b * ((2/a)*fAwxi*gAw*(2/a)*wxi*Nxx + 1./r*fAw*gAw*Nyy + (2/b)*fAw*gAweta*(2/b)*weta*Nyy + (2/a*2/b)*(fAwxi*gAw*weta + wxi*fAw*gAweta)*Nxy - (2/a*2/a)*fAwxixi*gAw*Mxx - (2/b*2/b)*fAw*gAwetaeta*Myy -2*(2/a*2/b)*fAwxi*gAweta*Mxy) )
 
     return fint
