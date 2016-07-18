@@ -132,7 +132,7 @@ def _solver_NR(run):
                     inc_new = min(factor*inc, run.maxInc, (1.-total)/2)
                 else:
                     inc_new = min(factor*inc, run.maxInc, 1.-total)
-                msg('Changing time increment from {0} to {1}'.format(
+                msg('Changing time increment from {0:1.9f} to {1:1.9f}'.format(
                     inc, inc_new), level=1)
                 inc = inc_new
                 total += inc
