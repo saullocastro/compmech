@@ -40,7 +40,7 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
         double u1ty, double u1ry, double u2ty, double u2ry,
         double v1ty, double v1ry, double v2ty, double v2ry,
         double w1ty, double w1ry, double w2ty, double w2ry,
-        int size, int row0, int col0, int nx, int ny):
+        int size, int row0, int col0, int nx, int ny, int NLgeom=0):
     cdef int i, j, k, l, c, row, col, ptx, pty
     cdef double A11, A12, A16, A22, A26, A66
     cdef double B11, B12, B16, B22, B26, B66
@@ -103,19 +103,20 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
 
                 wxi = 0
                 weta = 0
-                for j in range(n):
-                    #TODO put these in a lookup vector
-                    gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
-                    gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
-                    for i in range(m):
+                if NLgeom == 1:
+                    for j in range(n):
                         #TODO put these in a lookup vector
-                        fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
-                        fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                        gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        for i in range(m):
+                            #TODO put these in a lookup vector
+                            fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                            fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
 
-                        col = col0 + num*(j*m + i)
+                            col = col0 + num*(j*m + i)
 
-                        wxi += cs[col+2]*fAwxi*gAw
-                        weta += cs[col+2]*fAw*gAweta
+                            wxi += cs[col+2]*fAwxi*gAw
+                            weta += cs[col+2]*fAw*gAweta
 
                 if one_F_each_point == 1:
                     for i in range(6):
@@ -249,7 +250,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
             double u1ty, double u1ry, double u2ty, double u2ry,
             double v1ty, double v1ry, double v2ty, double v2ry,
             double w1ty, double w1ry, double w2ty, double w2ry,
-            int size, int row0, int col0, int nx, int ny):
+            int size, int row0, int col0, int nx, int ny, int NLgeom=0):
     cdef int i, k, j, l, c, row, col, ptx, pty
     cdef double xi, eta, x, y, alpha
 
@@ -333,18 +334,19 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
 
                 wxi = 0
                 weta = 0
-                for j in range(n):
-                    #TODO put these in a lookup vector
-                    gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
-                    gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
-                    for i in range(m):
-                        fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
-                        fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
+                if NLgeom == 1:
+                    for j in range(n):
+                        #TODO put these in a lookup vector
+                        gAw = calc_f(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        gAweta = calc_fxi(j, eta, w1ty, w1ry, w2ty, w2ry)
+                        for i in range(m):
+                            fAw = calc_f(i, xi, w1tx, w1rx, w2tx, w2rx)
+                            fAwxi = calc_fxi(i, xi, w1tx, w1rx, w2tx, w2rx)
 
-                        col = col0 + num*(j*m + i)
+                            col = col0 + num*(j*m + i)
 
-                        wxi += cs[col+2]*fAwxi*gAw
-                        weta += cs[col+2]*fAw*gAweta
+                            wxi += cs[col+2]*fAwxi*gAw
+                            weta += cs[col+2]*fAw*gAweta
 
                 # Calculating strain components
                 exx = 0.
@@ -609,5 +611,3 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
                         fint[col+2] += alpha*( 0.25*a*b*(-4*Mxx*fAwxixi*gAw/(a*a) - 8*Mxy*fAwxi*gAweta/(a*b) - 4*Myy*fAw*gAwetaeta/(b*b) + 4*Nxx*fAwxi*gAw*wxi/(a*a) + 4*Nxy*(fAw*gAweta*wxi + fAwxi*gAw*weta)/(a*b) + 4*Nyy*fAw*gAweta*weta/(b*b)) )
 
     return fint
-
-
