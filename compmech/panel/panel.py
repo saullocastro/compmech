@@ -364,7 +364,7 @@ class Panel(object):
         if xs is None or ys is None:
             xs = linspace(0, self.a, gridx)
             ys = linspace(0, self.b, gridy)
-            xs, ys = np.meshgrid(xs, ys, copy=False)
+            xs, ys = np.meshgrid(xs, ys, copy=True)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
         xshape = xs.shape
@@ -420,7 +420,7 @@ class Panel(object):
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
-            c=None, nx=None, ny=None, Fnxny=None, inc=None):
+            c=None, nx=None, ny=None, Fnxny=None, inc=None, NLgeom=False):
         """Calculate the constitutive stiffness matrix
 
         If ``c`` is not given it calculates the linear constitutive stiffness
@@ -462,6 +462,9 @@ class Panel(object):
             The constitutive relations for the laminate at each integration
             point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
             classical laminated plate theory models.
+        NLgeom : bool, optional
+            Flag to indicate if geometrically non-linearities should be
+            considered.
 
         """
         self._rebuild()
@@ -542,7 +545,7 @@ class Panel(object):
                          self.u1ty, self.u1ry, self.u2ty, self.u2ry,
                          self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                          self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                         size, row0, col0, nx, ny)
+                         size, row0, col0, nx, ny, NLgeom=int(NLgeom))
 
         Nxx_cte = self.Nxx_cte if self.Nxx_cte is not None else 0.
         Nyy_cte = self.Nyy_cte if self.Nyy_cte is not None else 0.
@@ -581,13 +584,16 @@ class Panel(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
-            c=None, nx=None, ny=None, Fnxny=None):
+            c=None, nx=None, ny=None, Fnxny=None, NLgeom=False):
         """Calculate the linear geometric stiffness matrix
 
         See :meth:`.Panel.calc_k0` for details on each parameter.
 
         """
-        msg('Calculating kG0... ', level=2, silent=silent)
+        if c is None:
+            msg('Calculating kG0... ', level=2, silent=silent)
+        else:
+            msg('Calculating kG... ', level=2, silent=silent)
 
         if size is None:
             size = self.get_size()
@@ -641,7 +647,7 @@ class Panel(object):
                        self.u1ty, self.u1ry, self.u2ty, self.u2ry,
                        self.v1ty, self.v1ry, self.v2ty, self.v2ry,
                        self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                       size, row0, col0, nx, ny)
+                       size, row0, col0, nx, ny, NLgeom=int(NLgeom))
 
         if finalize:
             assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
@@ -660,9 +666,9 @@ class Panel(object):
     def calc_kT(self, size=None, row0=0, col0=0, silent=False, finalize=True,
             c=None, nx=None, ny=None, Fnxny=None, inc=None):
         kL = self.calc_k0(size=size, row0=row0, col0=col0, silent=silent, finalize=finalize,
-            c=c, nx=nx, ny=ny, Fnxny=Fnxny, inc=inc)
+            c=c, nx=nx, ny=ny, Fnxny=Fnxny, inc=inc, NLgeom=True)
         kG = self.calc_kG0(size=size, row0=row0, col0=col0, silent=silent, finalize=finalize,
-            c=c, nx=nx, ny=ny, Fnxny=Fnxny)
+            c=c, nx=nx, ny=ny, Fnxny=Fnxny, NLgeom=True)
         kT = kL + kG
         self.kT = kT
 
@@ -1172,8 +1178,7 @@ class Panel(object):
         model = self.model
 
         fuvw = modelDB.db[model]['field'].fuvw
-        us, vs, ws, phixs, phiys = fuvw(c, m, n, a, b, xs, ys,
-                self.out_num_cores)
+        us, vs, ws, phixs, phiys = fuvw(c, self, xs, ys, self.out_num_cores)
 
         self.u = us.reshape(xshape)
         self.v = vs.reshape(xshape)
@@ -1367,7 +1372,13 @@ class Panel(object):
         # non-incrementable punctual forces
         for i, force in enumerate(self.forces):
             x, y, fx, fy, fz = force
-            fg(g, m, n, x, y, a, b)
+            fg(g, m, n, x, y, a, b,
+               self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+               self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+               self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+               self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+               self.w1ty, self.w1ry, self.w2ty, self.w2ry)
             if dofs == 3:
                 fpt = np.array([[fx, fy, fz]])
             elif dofs == 5:
@@ -1377,7 +1388,13 @@ class Panel(object):
         # incrementable punctual forces
         for i, force in enumerate(self.forces_inc):
             x, y, fx, fy, fz = force
-            fg(g, m, n, x, y, a, b)
+            fg(g, m, n, x, y, a, b,
+               self.u1tx, self.u1rx, self.u2tx, self.u2rx,
+               self.v1tx, self.v1rx, self.v2tx, self.v2rx,
+               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
+               self.u1ty, self.u1ry, self.u2ty, self.u2ry,
+               self.v1ty, self.v1ry, self.v2ty, self.v2ry,
+               self.w1ty, self.w1ry, self.w2ty, self.w2ry)
             if dofs == 3:
                 fpt = np.array([[fx, fy, fz]])*inc
             elif dofs == 5:
@@ -1468,8 +1485,9 @@ class Panel(object):
 
         """
         self._rebuild()
-        self.analysis.kT_initial_state = True
-        self.analysis.compute_every_n = 1
+        self.analysis.line_search = False
+        self.analysis.kT_initial_state = False
+        self.analysis.compute_every_n = 6
 
         if NLgeom and not modelDB.db[self.model]['non-linear static']:
             msg('________________________________________________',
