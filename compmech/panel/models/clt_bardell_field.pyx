@@ -55,11 +55,11 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, object p,
     new_size = size + add_size
 
     if (size % num_cores) != 0:
-        xs_core = np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1)
-        ys_core = np.hstack((ys, np.zeros(add_size))).reshape(num_cores, -1)
-    else:
-        xs_core = xs.reshape(num_cores, -1)
-        ys_core = ys.reshape(num_cores, -1)
+        xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
+        ys_core = np.ascontiguousarray(np.hstack((ys, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
+    else:                              
+        xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
+        ys_core = np.ascontiguousarray(ys.reshape(num_cores, -1), dtype=DOUBLE)
 
     size_core = xs_core.shape[1]
 
@@ -227,14 +227,19 @@ cdef void cfwy(double *c, int m, int n, double a, double b, double *xs,
     free(gweta)
 
 
-def fg(double[:,::1] g, int m, int n,
-       double x, double y, double a, double b,
-       double u1tx, double u1rx, double u2tx, double u2rx,
-       double v1tx, double v1rx, double v2tx, double v2rx,
-       double w1tx, double w1rx, double w2tx, double w2rx,
-       double u1ty, double u1ry, double u2ty, double u2ry,
-       double v1ty, double v1ry, double v2ty, double v2ry,
-       double w1ty, double w1ry, double w2ty, double w2ry):
+def fg(double[:,::1] g, double x, double y, object p):
+    if p.__class__.__name__ != 'Panel':
+        raise ValueError('A Panel object must be passed')
+    a = p.a
+    b = p.b
+    m = p.m
+    n = p.n
+    u1tx = p.u1tx ; u1rx = p.u1rx ; u2tx = p.u2tx ; u2rx = p.u2rx
+    v1tx = p.v1tx ; v1rx = p.v1rx ; v2tx = p.v2tx ; v2rx = p.v2rx
+    w1tx = p.w1tx ; w1rx = p.w1rx ; w2tx = p.w2tx ; w2rx = p.w2rx
+    u1ty = p.u1ty ; u1ry = p.u1ry ; u2ty = p.u2ty ; u2ry = p.u2ry
+    v1ty = p.v1ty ; v1ry = p.v1ry ; v2ty = p.v2ty ; v2ry = p.v2ry
+    w1ty = p.w1ty ; w1ry = p.w1ry ; w2ty = p.w2ty ; w2ry = p.w2ry
     cfg(g, m, n, x, y, a, b,
         u1tx, u1rx, u2tx, u2rx,
         v1tx, v1rx, v2tx, v2rx,
