@@ -59,7 +59,7 @@ class StiffPanelBay(object):
         self.forces_skin = []
         self.flow = 'x'
         self.bc = None
-        self.model = 'cpanel_clt_donnell_bardell'
+        self.model = None
         self.stack = []
         self.laminaprop = None
         self.laminaprops = []
@@ -166,12 +166,6 @@ class StiffPanelBay(object):
 
 
     def _rebuild(self):
-        if not self.name:
-            try:
-                self.name = os.path.basename(__main__.__file__).split('.py')[0]
-            except AttributeError:
-                warn('StiffPanelBay name unchanged')
-
         if self.a is None:
             raise ValueError('The length a must be specified')
 
