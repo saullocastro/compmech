@@ -373,8 +373,8 @@ class Panel(object):
             raise ValueError('Arrays xs and ys must have the same shape')
         self.Xs = xs
         self.Ys = ys
-        xs = xs.ravel()
-        ys = ys.ravel()
+        xs = np.ascontiguousarray(xs.ravel(), dtype=DOUBLE)
+        ys = np.ascontiguousarray(ys.ravel(), dtype=DOUBLE)
 
         return xs, ys, xshape, tshape
 
@@ -1372,13 +1372,7 @@ class Panel(object):
         # non-incrementable punctual forces
         for i, force in enumerate(self.forces):
             x, y, fx, fy, fz = force
-            fg(g, m, n, x, y, a, b,
-               self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-               self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-               self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-               self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-               self.w1ty, self.w1ry, self.w2ty, self.w2ry)
+            fg(g, x, y, self)
             if dofs == 3:
                 fpt = np.array([[fx, fy, fz]])
             elif dofs == 5:
@@ -1388,13 +1382,7 @@ class Panel(object):
         # incrementable punctual forces
         for i, force in enumerate(self.forces_inc):
             x, y, fx, fy, fz = force
-            fg(g, m, n, x, y, a, b,
-               self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-               self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-               self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-               self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-               self.w1ty, self.w1ry, self.w2ty, self.w2ry)
+            fg(g, x, y, self)
             if dofs == 3: #CLT
                 fpt = np.array([[fx, fy, fz]])*inc
             elif dofs == 5: #FSDT
