@@ -174,7 +174,6 @@ def fk0(double a, double b, double r, double alpharad,
                 fAwxifBw = integral_ffxi(k, i, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
                 fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
-
                 for j in range(n):
                     for l in range(n):
 
