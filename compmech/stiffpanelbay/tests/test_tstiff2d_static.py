@@ -26,7 +26,7 @@ def test_static_with_TStiff2D():
                      fplyt=spb.plyt*1., flaminaprop=spb.laminaprop,
                      bstack=[0, 90, 90, 0]*4,
                      bplyt=spb.plyt*1., blaminaprop=spb.laminaprop,
-                     m1=14, n1=13, m2=13, n2=12)
+                     mb=14, nb=13, mf=13, nf=12)
 
     stiff.forces_flange.append([spb.a/2., bf, 0., 0., 1000.])
 
@@ -39,7 +39,7 @@ def test_static_with_TStiff2D():
     wflangemax = spb.uvw_stiffener(cs[0], 0, region='flange')[2].max()
     assert np.isclose(wpanelmin, -0.20065458461254079, atol=1.e-4)
     assert np.isclose(wbasemin, -0.14780427130999493, atol=1.e-4)
-    assert np.isclose(wflangemax, 0.70650437168934155, atol=1.e-4)
+    assert np.isclose(wflangemax, 0.70805623874922285, atol=1.e-4)
     spb.plot_skin(cs[0], filename='tmp_test_tstiff2d_skin.png', colorbar=True, vec='w', clean=False)
     spb.plot_stiffener(cs[0], si=0, region='base', filename='tmp_test_tstiff2d_stiff_base.png',
             colorbar=True, vec='w', clean=False)

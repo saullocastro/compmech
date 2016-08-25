@@ -10,6 +10,8 @@ def test_static_with_BladeStiff2D():
     spb = StiffPanelBay()
     spb.a = 2.
     spb.b = 1.
+    spb.m = 12
+    spb.n = 13
     spb.stack = [0, +45, -45, 90, -45, +45, 0]
     spb.plyt = 1e-3*0.125
     spb.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
@@ -25,7 +27,7 @@ def test_static_with_BladeStiff2D():
                      bstack=[0, 90, 90, 0]*4,
                      bplyt=spb.plyt*1., blaminaprop=spb.laminaprop,
                      mf=17, nf=16)
-    stiff.flange.forces.append([stiff.flange.a/2., stiff.flange, 0., 0., 1000.])
+    stiff.flange.forces.append([stiff.flange.a/2., stiff.flange.b, 0., 0., 1000.])
 
     spb.calc_k0()
     fext = spb.calc_fext()
@@ -33,8 +35,8 @@ def test_static_with_BladeStiff2D():
 
     wpanelmin = spb.uvw_skin(cs[0])[2].min()
     wflangemax = spb.uvw_stiffener(cs[0], 0, region='flange')[2].max()
-    assert np.isclose(wpanelmin, -0.11932426404, atol=1.e-6)
-    assert np.isclose(wflangemax, 4.29278723868, atol=1.e-2)
+    assert np.isclose(wpanelmin, -0.27085039816333117, atol=1.e-6)
+    assert np.isclose(wflangemax, 0.28813881055867618, atol=1.e-2)
     spb.plot_skin(cs[0], filename='tmp_test_bladestiff2d_static_skin.png', colorbar=True, vec='w', clean=False)
     spb.plot_stiffener(cs[0], si=0, region='flange',
             filename='tmp_test_bladestiff2d_stiff_static_flange.png', colorbar=True, clean=False)
