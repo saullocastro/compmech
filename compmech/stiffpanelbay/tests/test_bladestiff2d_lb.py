@@ -28,7 +28,7 @@ def test_lb_without_defect():
                      fplyt=spb.plyt*1., flaminaprop=spb.laminaprop,
                      bstack=[0, 90, 90, 0]*4,
                      bplyt=spb.plyt*1., blaminaprop=spb.laminaprop,
-                     m1=17, n1=16)
+                     mf=17, nf=16)
 
     spb.calc_k0()
     spb.calc_kG0()
@@ -37,6 +37,6 @@ def test_lb_without_defect():
     calc = eigvals[0]*Nxx
 
     spb.plot_skin(eigvecs[:, 0], filename='tmp_test_bladestiff2d_lb_skin.png', colorbar=True, vec='w', clean=False)
-    assert np.isclose(calc, -400.94515645, atol=0.001)
+    assert np.isclose(calc, -1085.4231209121331, atol=0.0001)
 
 

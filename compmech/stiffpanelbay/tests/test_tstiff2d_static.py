@@ -37,9 +37,9 @@ def test_static_with_TStiff2D():
     wpanelmin = spb.uvw_skin(cs[0])[2].min()
     wbasemin = spb.uvw_stiffener(cs[0], 0, region='base')[2].min()
     wflangemax = spb.uvw_stiffener(cs[0], 0, region='flange')[2].max()
-    assert np.isclose(wpanelmin, -0.20109544080149616, atol=1.e-4)
+    assert np.isclose(wpanelmin, -0.20065458461254079, atol=1.e-4)
     assert np.isclose(wbasemin, -0.14780427130999493, atol=1.e-4)
-    assert np.isclose(wflangemax, 0.70863541832677113, atol=1.e-4)
+    assert np.isclose(wflangemax, 0.70650437168934155, atol=1.e-4)
     spb.plot_skin(cs[0], filename='tmp_test_tstiff2d_skin.png', colorbar=True, vec='w', clean=False)
     spb.plot_stiffener(cs[0], si=0, region='base', filename='tmp_test_tstiff2d_stiff_base.png',
             colorbar=True, vec='w', clean=False)

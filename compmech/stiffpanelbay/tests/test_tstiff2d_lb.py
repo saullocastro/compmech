@@ -30,7 +30,7 @@ def test_lb():
                          fplyt=spb.plyt*1., flaminaprop=spb.laminaprop,
                          bstack=[0, 90, 90, 0]*8,
                          bplyt=spb.plyt*1., blaminaprop=spb.laminaprop,
-                         m1=15, n1=10, m2=15, n2=10, Nxxb=Nxx, Nxxf=Nxx)
+                         mb=15, nb=10, mf=15, nf=10, Nxxb=Nxx, Nxxf=Nxx)
 
         spb.calc_k0()
         spb.calc_kG0()

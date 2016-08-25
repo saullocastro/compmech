@@ -24,7 +24,7 @@ def test_static_with_BladeStiff2D():
                      fplyt=spb.plyt*1., flaminaprop=spb.laminaprop,
                      bstack=[0, 90, 90, 0]*4,
                      bplyt=spb.plyt*1., blaminaprop=spb.laminaprop,
-                     m1=17, n1=16)
+                     mf=17, nf=16)
     stiff.flange.forces.append([stiff.flange.a/2., stiff.flange, 0., 0., 1000.])
 
     spb.calc_k0()
