@@ -26,7 +26,7 @@ db = {
                     'linear static': True,
                     'linear buckling': True,
                     'non-linear static': False,
-                    'matrices': bladestiff2d_clt_donnell_bardell,
+                    'connections': bladestiff2d_clt_donnell_bardell,
                     },
     'tstiff2d_clt_donnell_bardell': {
                     'linear static': True,

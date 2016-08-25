@@ -9,6 +9,7 @@ from compmech.panel import Panel
 from compmech.logger import msg, warn
 from compmech.composite import laminate
 from compmech.panel.connections import fkCBFycte11, fkCBFycte12, fkCBFycte22
+from .modelDB import db
 
 class BladeStiff2D(object):
     r"""Blade Stiffener using 2D Formulation for Flange
@@ -131,8 +132,6 @@ class BladeStiff2D(object):
             Fsb = self.blam.ABD
             y1 = self.ys - self.bb/2.
             y2 = self.ys + self.bb/2.
-
-            print('DEBUG', y1, y2, a, b, r, alpharad, Fsb, bay.m, bay.n)
             k0 += basemod.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, bay.m, bay.n,
                                  1, 1, 1, 1,
                                  1, 1, 1, 1,
@@ -156,17 +155,37 @@ class BladeStiff2D(object):
                            size, row0, col0)
 
             # connectivity between skin-stiffener flange
-            ycte1 = self.ys
-            ycte2 = 0.
-            flam = self.flange.lam
-            blam = self.blam
-            if blam is None:
-                blam = self.panel1.lam
-            ktbf = (blam.ABD[1, 1] + flam.ABD[1, 1])/(blam.t + flam.t)
-            krbf = (blam.ABD[4, 4] + flam.ABD[4, 4])/(blam.t + flam.t)
-            k0 += fkCBFycte11(ktbf, krbf, bay, ycte1, size, 0, 0)
-            k0 += fkCBFycte12(ktbf, krbf, bay, self.flange, ycte1, ycte2, size, 0, col0)
-            k0 += fkCBFycte22(ktbf, krbf, bay, self.flange, ycte2, size, row0, col0)
+            mod = db['bladestiff2d_clt_donnell_bardell']['connections']
+            k0 += mod.fkCss(kt, kr, self.ys, a, b, bay.m, bay.n,
+                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                            bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                            bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                            bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                            bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                            size, 0, 0)
+            k0 += mod.fkCsf(kt, kr, self.ys, a, b, bf, bay.m, bay.n, self.flange.m, self.flange.n,
+                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
+                            bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
+                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
+                            bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
+                            bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
+                            bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
+                            self.flange.u1tx, self.flange.u1rx, self.flange.u2tx, self.flange.u2rx,
+                            self.flange.v1tx, self.flange.v1rx, self.flange.v2tx, self.flange.v2rx,
+                            self.flange.w1tx, self.flange.w1rx, self.flange.w2tx, self.flange.w2rx,
+                            self.flange.u1ty, self.flange.u1ry, self.flange.u2ty, self.flange.u2ry,
+                            self.flange.v1ty, self.flange.v1ry, self.flange.v2ty, self.flange.v2ry,
+                            self.flange.w1ty, self.flange.w1ry, self.flange.w2ty, self.flange.w2ry,
+                            size, 0, col0)
+            k0 += mod.fkCff(kt, kr, a, bf, self.flange.m, self.flange.n,
+                            self.flange.u1tx, self.flange.u1rx, self.flange.u2tx, self.flange.u2rx,
+                            self.flange.v1tx, self.flange.v1rx, self.flange.v2tx, self.flange.v2rx,
+                            self.flange.w1tx, self.flange.w1rx, self.flange.w2tx, self.flange.w2rx,
+                            self.flange.u1ty, self.flange.u1ry, self.flange.u2ty, self.flange.u2ry,
+                            self.flange.v1ty, self.flange.v1ry, self.flange.v2ty, self.flange.v2ry,
+                            self.flange.w1ty, self.flange.w1ry, self.flange.w2ty, self.flange.w2ry,
+                            size, row0, col0)
 
         if finalize:
             assert np.any(np.isnan(k0.data)) == False
