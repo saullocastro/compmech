@@ -147,10 +147,6 @@ class BladeStiff2D(object):
         if self.flange.lam is not None:
             F = self.flange.lam.ABD
             bf = self.flange.b
-            print ('DEBUG')
-            print(a, bf, F, self.flange.m, self.flange.n, size, row0, col0)
-            print(self.flange.get_size())
-            print(self.flange.model)
             k0 += flangemod.fk0(a, bf, 0., 0., F, self.flange.m, self.flange.n,
                            self.flange.u1tx, self.flange.u1rx, self.flange.u2tx, self.flange.u2rx,
                            self.flange.v1tx, self.flange.v1rx, self.flange.v2tx, self.flange.v2rx,
