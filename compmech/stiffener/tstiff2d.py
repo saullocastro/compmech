@@ -5,9 +5,11 @@ import numpy as np
 from numpy import deg2rad
 
 from . import modelDB as stiffmDB
+from compmech.panel import Panel
 import compmech.panel.modelDB as panelmDB
 from compmech.logger import msg, warn
 from compmech.composite import laminate
+from compmech.panel.connections import fkCBFycte11, fkCBFycte12, fkCBFycte22
 
 
 class TStiff2D(object):
@@ -32,19 +34,15 @@ class TStiff2D(object):
     """
     def __init__(self, bay, mu, panel1, panel2, ys, bb, bf, bstack, bplyts,
             blaminaprops, fstack, fplyts, flaminaprops,
-            model='tstiff2d_clt_donnell_bardell'):
+            model='tstiff2d_clt_donnell_bardell', m1=15, n1=12, m2=15, n2=12):
         self.bay = bay
         self.panel1 = panel1
         self.panel2 = panel2
         self.model = model
-        self.m1 = 15
-        self.n1 = 12
-        self.m2 = 15
-        self.n2 = 12
-        self.mu = mu
+        self.base = Panel(m=m1, n=n1, b=bb, a=bay.a, model=bay.model)
+        self.flange = Panel(m=m2, n=n2, b=bf, a=bay.a, model='plate_clt_donnell_bardell')
         self.ys = ys
-        self.bb = bb
-        self.bf = bf
+        self.mu = mu
         self.forces_base = []
         self.forces_flange = []
 
@@ -69,57 +67,57 @@ class TStiff2D(object):
         self.kM = None
         self.kG0 = None
 
-        self.u1txb = 1.
-        self.u1rxb = 1.
-        self.u2txb = 1.
-        self.u2rxb = 1.
-        self.v1txb = 1.
-        self.v1rxb = 1.
-        self.v2txb = 1.
-        self.v2rxb = 1.
-        self.w1txb = 1.
-        self.w1rxb = 1.
-        self.w2txb = 1.
-        self.w2rxb = 1.
+        self.base.u1tx = 1.
+        self.base.u1rx = 1.
+        self.base.u2tx = 1.
+        self.base.u2rx = 1.
+        self.base.v1tx = 1.
+        self.base.v1rx = 1.
+        self.base.v2tx = 1.
+        self.base.v2rx = 1.
+        self.base.w1tx = 1.
+        self.base.w1rx = 1.
+        self.base.w2tx = 1.
+        self.base.w2rx = 1.
 
-        self.u1tyb = 1.
-        self.u1ryb = 1.
-        self.u2tyb = 1.
-        self.u2ryb = 1.
-        self.v1tyb = 1.
-        self.v1ryb = 1.
-        self.v2tyb = 1.
-        self.v2ryb = 1.
-        self.w1tyb = 1.
-        self.w1ryb = 1.
-        self.w2tyb = 1.
-        self.w2ryb = 1.
+        self.base.u1ty = 1.
+        self.base.u1ry = 1.
+        self.base.u2ty = 1.
+        self.base.u2ry = 1.
+        self.base.v1ty = 1.
+        self.base.v1ry = 1.
+        self.base.v2ty = 1.
+        self.base.v2ry = 1.
+        self.base.w1ty = 1.
+        self.base.w1ry = 1.
+        self.base.w2ty = 1.
+        self.base.w2ry = 1.
 
-        self.u1txf = 0.
-        self.u1rxf = 1.
-        self.u2txf = 0.
-        self.u2rxf = 1.
-        self.v1txf = 0.
-        self.v1rxf = 1.
-        self.v2txf = 0.
-        self.v2rxf = 1.
-        self.w1txf = 0.
-        self.w1rxf = 1.
-        self.w2txf = 0.
-        self.w2rxf = 1.
+        self.flange.u1tx = 0.
+        self.flange.u1rx = 1.
+        self.flange.u2tx = 0.
+        self.flange.u2rx = 1.
+        self.flange.v1tx = 0.
+        self.flange.v1rx = 1.
+        self.flange.v2tx = 0.
+        self.flange.v2rx = 1.
+        self.flange.w1tx = 0.
+        self.flange.w1rx = 1.
+        self.flange.w2tx = 0.
+        self.flange.w2rx = 1.
 
-        self.u1tyf = 1.
-        self.u1ryf = 1.
-        self.u2tyf = 1.
-        self.u2ryf = 1.
-        self.v1tyf = 1.
-        self.v1ryf = 1.
-        self.v2tyf = 1.
-        self.v2ryf = 1.
-        self.w1tyf = 1.
-        self.w1ryf = 1.
-        self.w2tyf = 1.
-        self.w2ryf = 1.
+        self.flange.u1ty = 1.
+        self.flange.u1ry = 1.
+        self.flange.u2ty = 1.
+        self.flange.u2ry = 1.
+        self.flange.v1ty = 1.
+        self.flange.v1ry = 1.
+        self.flange.v2ty = 1.
+        self.flange.v2ry = 1.
+        self.flange.w1ty = 1.
+        self.flange.w1ry = 1.
+        self.flange.w2ty = 1.
+        self.flange.w2ry = 1.
 
         self._rebuild()
 
@@ -135,10 +133,10 @@ class TStiff2D(object):
             b = self.panel2.b
         if a is not None and b is not None:
             if a / b > 10.:
-                if self.m1 <= 15 and self.m2 <= 15:
-                    raise RuntimeError('For a/b > 10. use m1 and m2 > 15')
+                if self.base.m <= 15 and self.flange.m <= 15:
+                    raise RuntimeError('For a/b > 10. use base.m and flange.m > 15')
                 else:
-                    warn('For a/b > 10. be sure to check convergence for m1 and m2')
+                    warn('For a/b > 10. be sure to check convergence for base.m and flange.m')
         if self.fstack is None:
             raise ValueError('Flange laminate must be defined!')
         if self.bstack is None:
@@ -165,36 +163,26 @@ class TStiff2D(object):
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
-        modelb = panelmDB.db[self.panel1.model]['matrices']
-        modelf = stiffmDB.db[self.model]['matrices_flange']
+        modelb = panelmDB.db[self.base.model]['matrices']
+        modelf = panelmDB.db[self.flange.model]['matrices']
         conn = stiffmDB.db[self.model]['connections']
-        num1 = stiffmDB.db[self.model]['num1']
+        num1 = panelmDB.db[self.base.model]['num']
 
         bay = self.bay
         a = bay.a
         b = bay.b
-        bb = self.bb
-        bf = self.bf
         ys = self.ys
         r = bay.r if bay.r is not None else 0.
-        m = bay.m
-        n = bay.n
-        m1 = self.m1
-        n1 = self.n1
-        m2 = self.m2
-        n2 = self.n2
         alphadeg = bay.alphadeg
         alphadeg = alphadeg if alphadeg is not None else 0.
         alpharad = deg2rad(alphadeg)
 
-        m1 = self.m1
-        n1 = self.n1
 
         # NOTE
         #     row0 and col0 define where the stiffener's base matrix starts
         #     row1 and col1 define where the stiffener's flange matrix starts
-        row1 = row0 + num1*self.m1*self.n1
-        col1 = col0 + num1*self.m1*self.n1
+        row1 = row0 + num1*self.base.m*self.base.n
+        col1 = col0 + num1*self.base.m*self.base.n
 
         k0 = 0.
 
@@ -208,26 +196,26 @@ class TStiff2D(object):
         x1 = a/2.
         x2 = a/2.
 
-        y1 = ys - self.bb/2.
-        y2 = ys + self.bb/2.
-        k0 += modelb.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m1, n1,
-                             self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                             self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                             self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                             self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                             self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                             self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+        y1 = ys - self.base.b/2.
+        y2 = ys + self.base.b/2.
+        k0 += modelb.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, self.base.m, self.base.n,
+                             self.base.u1tx, self.base.u1rx, self.base.u2tx, self.base.u2rx,
+                             self.base.v1tx, self.base.v1rx, self.base.v2tx, self.base.v2rx,
+                             self.base.w1tx, self.base.w1rx, self.base.w2tx, self.base.w2rx,
+                             self.base.u1ty, self.base.u1ry, self.base.u2ty, self.base.u2ry,
+                             self.base.v1ty, self.base.v1ry, self.base.v2ty, self.base.v2ry,
+                             self.base.w1ty, self.base.w1ry, self.base.w2ty, self.base.w2ry,
                              size, row0, col0)
 
         # stiffener flange
         Fsf = self.flam.ABD
-        k0 += modelf.fk0(a, b, r, alpharad, Fsf, m2, n2,
-                         self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
-                         self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
-                         self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
-                         self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
-                         self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
-                         self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
+        k0 += modelf.fk0(a, b, r, alpharad, Fsf, self.flange.m, self.flange.n,
+                         self.flange.u1tx, self.flange.u1rx, self.flange.u2tx, self.flange.u2rx,
+                         self.flange.v1tx, self.flange.v1rx, self.flange.v2tx, self.flange.v2rx,
+                         self.flange.w1tx, self.flange.w1rx, self.flange.w2tx, self.flange.w2rx,
+                         self.flange.u1ty, self.flange.u1ry, self.flange.u2ty, self.flange.u2ry,
+                         self.flange.v1ty, self.flange.v1ry, self.flange.v2ty, self.flange.v2ry,
+                         self.flange.w1ty, self.flange.w1ry, self.flange.w2ty, self.flange.w2ry,
                          size, row1, col1)
 
         # connectivity panel-base
@@ -236,7 +224,7 @@ class TStiff2D(object):
         ktpb = max(self.panel1.lam.ABD[0, 0], self.blam.ABD[0, 0])/den
 
         k0 += conn.fkCppx1x2y1y2(0, x1, y1, y2,
-                                 ktpb, a, b, dpb, m, n,
+                                 ktpb, a, b, dpb, bay.m, bay.n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -245,7 +233,7 @@ class TStiff2D(object):
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
                                  size, 0, 0)
         k0 += conn.fkCppx1x2y1y2(x2, a, y1, y2,
-                                 ktpb, a, b, dpb, m, n,
+                                 ktpb, a, b, dpb, bay.m, bay.n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -256,95 +244,64 @@ class TStiff2D(object):
 
         k0 += conn.fkCpbx1x2y1y2(0, x1, y1, y2,
                                  ktpb, a, b, dpb,
-                                 m, n, m1, n1,
+                                 bay.m, bay.n, self.base.m, self.base.n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
                                  bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
                                  bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                             self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                             self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                             self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                             self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                             self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                             self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                                 self.base.u1tx, self.base.u1rx, self.base.u2tx, self.base.u2rx,
+                                 self.base.v1tx, self.base.v1rx, self.base.v2tx, self.base.v2rx,
+                                 self.base.w1tx, self.base.w1rx, self.base.w2tx, self.base.w2rx,
+                                 self.base.u1ty, self.base.u1ry, self.base.u2ty, self.base.u2ry,
+                                 self.base.v1ty, self.base.v1ry, self.base.v2ty, self.base.v2ry,
+                                 self.base.w1ty, self.base.w1ry, self.base.w2ty, self.base.w2ry,
                                  size, 0, col0)
         k0 += conn.fkCpbx1x2y1y2(x2, a, y1, y2,
                                  ktpb, a, b, dpb,
-                                 m, n, m1, n1,
+                                 bay.m, bay.n, self.base.m, self.base.n,
                                  bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                                  bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                                  bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
                                  bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
                                  bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
                                  bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                             self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                             self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                             self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                             self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                             self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                             self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                                 self.base.u1tx, self.base.u1rx, self.base.u2tx, self.base.u2rx,
+                                 self.base.v1tx, self.base.v1rx, self.base.v2tx, self.base.v2rx,
+                                 self.base.w1tx, self.base.w1rx, self.base.w2tx, self.base.w2rx,
+                                 self.base.u1ty, self.base.u1ry, self.base.u2ty, self.base.u2ry,
+                                 self.base.v1ty, self.base.v1ry, self.base.v2ty, self.base.v2ry,
+                                 self.base.w1ty, self.base.w1ry, self.base.w2ty, self.base.w2ry,
                                  size, 0, col0)
 
         k0 += conn.fkCbbpbx1x2(0, x1, y1, y2,
-                               ktpb, a, b, m1, n1,
-                               self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                               self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                               self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                               self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                               self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                               self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                               ktpb, a, b, self.base.m, self.base.n,
+                               self.base.u1tx, self.base.u1rx, self.base.u2tx, self.base.u2rx,
+                               self.base.v1tx, self.base.v1rx, self.base.v2tx, self.base.v2rx,
+                               self.base.w1tx, self.base.w1rx, self.base.w2tx, self.base.w2rx,
+                               self.base.u1ty, self.base.u1ry, self.base.u2ty, self.base.u2ry,
+                               self.base.v1ty, self.base.v1ry, self.base.v2ty, self.base.v2ry,
+                               self.base.w1ty, self.base.w1ry, self.base.w2ty, self.base.w2ry,
                                size, row0, col0)
         k0 += conn.fkCbbpbx1x2(x2, a, y1, y2,
-                               ktpb, a, b, m1, n1,
-                               self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                               self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                               self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                               self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                               self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                               self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+                               ktpb, a, b, self.base.m, self.base.n,
+                               self.base.u1tx, self.base.u1rx, self.base.u2tx, self.base.u2rx,
+                               self.base.v1tx, self.base.v1rx, self.base.v2tx, self.base.v2rx,
+                               self.base.w1tx, self.base.w1rx, self.base.w2tx, self.base.w2rx,
+                               self.base.u1ty, self.base.u1ry, self.base.u2ty, self.base.u2ry,
+                               self.base.v1ty, self.base.v1ry, self.base.v2ty, self.base.v2ry,
+                               self.base.w1ty, self.base.w1ry, self.base.w2ty, self.base.w2ry,
                                size, row0, col0)
 
         # connectivity base-flange
         ktbf = (self.blam.ABD[1, 1] + self.flam.ABD[1, 1])/(self.blam.t + self.flam.t)
         krbf = (self.blam.ABD[4, 4] + self.flam.ABD[4, 4])/(self.blam.t + self.flam.t)
-        k0 += conn.fkCbbbf(ktbf, krbf, a, bb,
-                           m1, n1, self.eta_conn_base,
-                           self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                           self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                           self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                           self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                           self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                           self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
-                           size, row0, col0)
-
-        k0 += conn.fkCbf(ktbf, krbf, a, bb, bf,
-                         m1, n1, m2, n2,
-                         self.eta_conn_base, self.eta_conn_flange,
-                         self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                         self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                         self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                         self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                         self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                         self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
-                         self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
-                         self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
-                         self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
-                         self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
-                         self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
-                         self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
-                         size, row0, col1)
-
-        k0 += conn.fkCff(ktbf, krbf, a, bf, m2, n2,
-                         self.eta_conn_flange,
-                         self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
-                         self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
-                         self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
-                         self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
-                         self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
-                         self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
-                         size, row1, col1)
+        ycte1 = (self.eta_conn_base+1)/2.*self.base.b
+        ycte2 = (self.eta_conn_flange+1)/2.*self.flange.b
+        k0 += fkCBFycte11(ktbf, krbf, self.base, ycte1, size, row0, col0)
+        k0 += fkCBFycte12(ktbf, krbf, self.base, self.flange, ycte1, ycte2, size, row0, col1)
+        k0 += fkCBFycte22(ktbf, krbf, self.base, self.flange, ycte2, size, row1, col1)
 
         if finalize:
             assert np.any(np.isnan(k0.data)) == False
@@ -372,9 +329,9 @@ class TStiff2D(object):
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
-        modelb = panelmDB.db[self.panel1.model]['matrices']
-        modelf = stiffmDB.db[self.model]['matrices_flange']
-        num1 = stiffmDB.db[self.model]['num1']
+        modelb = panelmDB.db[self.base.model]['matrices']
+        modelf = panelmDB.db[self.flange.model]['matrices']
+        num1 = panelmDB.db[self.base.model]['num']
 
         bay = self.bay
         a = bay.a
@@ -386,27 +343,27 @@ class TStiff2D(object):
         #     row0 and col0 define where the stiffener's base matrix starts
         #     row1 and col1 define where the stiffener's flange matrix starts
 
-        row1 = row0 + num1*self.m1*self.n1
-        col1 = col0 + num1*self.m1*self.n1
+        row1 = row0 + num1*self.base.m*self.base.n
+        col1 = col0 + num1*self.base.m*self.base.n
 
         kG0 = 0.
 
         # stiffener base
         Nxxb = self.Nxxb if self.Nxxb is not None else 0.
         Nxyb = self.Nxyb if self.Nxyb is not None else 0.
-        kG0 += modelb.fkG0(Nxxb, 0., Nxyb, a, self.bb, r, alpharad,
-                         self.m1, self.n1,
-                         self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                         self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+        kG0 += modelb.fkG0(Nxxb, 0., Nxyb, a, self.base.b, r, alpharad,
+                         self.base.m, self.base.n,
+                         self.base.w1tx, self.base.w1rx, self.base.w2tx, self.base.w2rx,
+                         self.base.w1ty, self.base.w1ry, self.base.w2ty, self.base.w2ry,
                          size, row0, col0)
 
         # stiffener flange
         Nxxf = self.Nxxf if self.Nxxf is not None else 0.
         Nxyf = self.Nxyf if self.Nxyf is not None else 0.
-        kG0 += modelf.fkG0(Nxxf, 0., Nxyf, a, self.bf, r, alpharad,
-                         self.m2, self.n2,
-                         self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
-                         self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
+        kG0 += modelf.fkG0(Nxxf, 0., Nxyf, a, self.flange.b, r, alpharad,
+                         self.flange.m, self.flange.n,
+                         self.flange.w1tx, self.flange.w1rx, self.flange.w2tx, self.flange.w2rx,
+                         self.flange.w1ty, self.flange.w1ry, self.flange.w2ty, self.flange.w2ry,
                          size, row1, col1)
 
         if finalize:
@@ -429,27 +386,20 @@ class TStiff2D(object):
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
 
-        modelb = panelmDB.db[self.panel1.model]['matrices']
-        modelf = stiffmDB.db[self.model]['matrices_flange']
-        num1 = stiffmDB.db[self.model]['num1']
+        modelb = panelmDB.db[self.base.model]['matrices']
+        modelf = panelmDB.db[self.flange.model]['matrices']
+        num1 = panelmDB.db[self.base.model]['num']
 
         bay = self.bay
-
-        m1 = self.m1
-        n1 = self.n1
-        m2 = self.m2
-        n2 = self.n2
         a = bay.a
-        bb = self.bb
-        bf = self.bf
 
         r = bay.r if bay.r is not None else 0.
         alphadeg = bay.alphadeg
         alphadeg = alphadeg if alphadeg is not None else 0.
         alpharad = deg2rad(alphadeg)
 
-        row1 = row0 + num1*self.m1*self.n1
-        col1 = col0 + num1*self.m1*self.n1
+        row1 = row0 + num1*self.base.m*self.base.n
+        col1 = col0 + num1*self.base.m*self.base.n
 
         kM = 0.
 
@@ -457,24 +407,24 @@ class TStiff2D(object):
         hf = sum(self.fplyts)
 
         # stiffener base
-        kM += modelb.fkM(self.mu, 0., hb, a, bb, r, alpharad, m1, n1,
-                      self.u1txb, self.u1rxb, self.u2txb, self.u2rxb,
-                      self.v1txb, self.v1rxb, self.v2txb, self.v2rxb,
-                      self.w1txb, self.w1rxb, self.w2txb, self.w2rxb,
-                      self.u1tyb, self.u1ryb, self.u2tyb, self.u2ryb,
-                      self.v1tyb, self.v1ryb, self.v2tyb, self.v2ryb,
-                      self.w1tyb, self.w1ryb, self.w2tyb, self.w2ryb,
+        kM += modelb.fkM(self.mu, 0., hb, a, self.base.b, r, alpharad, self.base.m, self.base.n,
+                      self.base.u1tx, self.base.u1rx, self.base.u2tx, self.base.u2rx,
+                      self.base.v1tx, self.base.v1rx, self.base.v2tx, self.base.v2rx,
+                      self.base.w1tx, self.base.w1rx, self.base.w2tx, self.base.w2rx,
+                      self.base.u1ty, self.base.u1ry, self.base.u2ty, self.base.u2ry,
+                      self.base.v1ty, self.base.v1ry, self.base.v2ty, self.base.v2ry,
+                      self.base.w1ty, self.base.w1ry, self.base.w2ty, self.base.w2ry,
                       size, row0, col0)
 
         # stiffener flange
-        kM += modelf.fkM(self.mu, 0., hf, a, bf, r, alpharad, m2, n2,
-                       self.u1txf, self.u1rxf, self.u2txf, self.u2rxf,
-                       self.v1txf, self.v1rxf, self.v2txf, self.v2rxf,
-                       self.w1txf, self.w1rxf, self.w2txf, self.w2rxf,
-                       self.u1tyf, self.u1ryf, self.u2tyf, self.u2ryf,
-                       self.v1tyf, self.v1ryf, self.v2tyf, self.v2ryf,
-                       self.w1tyf, self.w1ryf, self.w2tyf, self.w2ryf,
-                       size, row1, col1)
+        kM += modelf.fkM(self.mu, 0., hf, a, self.flange.b, r, alpharad, self.flange.m, self.flange.n,
+                      self.flange.u1tx, self.flange.u1rx, self.flange.u2tx, self.flange.u2rx,
+                      self.flange.v1tx, self.flange.v1rx, self.flange.v2tx, self.flange.v2rx,
+                      self.flange.w1tx, self.flange.w1rx, self.flange.w2tx, self.flange.w2rx,
+                      self.flange.u1ty, self.flange.u1ry, self.flange.u2ty, self.flange.u2ry,
+                      self.flange.v1ty, self.flange.v1ry, self.flange.v2ty, self.flange.v2ry,
+                      self.flange.w1ty, self.flange.w1ry, self.flange.w2ty, self.flange.w2ry,
+                      size, row1, col1)
 
         if finalize:
             assert np.any(np.isnan(kM.data)) == False
