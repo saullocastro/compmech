@@ -22,10 +22,16 @@ db = {
                     'e_num': 6,
                     'num1': 3,
                     },
+    'bladestiff2d_clt_donnell_bardell': {
+                    'linear static': True,
+                    'linear buckling': True,
+                    'non-linear static': False,
+                    'matrices': bladestiff2d_clt_donnell_bardell,
+                    },
     'tstiff2d_clt_donnell_bardell': {
                     'linear static': True,
                     'linear buckling': True,
                     'non-linear static': False,
                     'connections': tstiff2d_clt_donnell_bardell,
-                    },
+                    r,
     }
