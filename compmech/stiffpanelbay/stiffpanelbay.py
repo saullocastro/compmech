@@ -359,7 +359,7 @@ class StiffPanelBay(object):
     def add_bladestiff2d(self, ys, mu=None, bb=None, bstack=None,
             bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
             bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
-            flaminaprop=None, **kwargs):
+            flaminaprop=None, mf=14, nf=11, **kwargs):
         """Add a new BladeStiff2D to the current panel bay
 
         Parameters
@@ -393,6 +393,10 @@ class StiffPanelBay(object):
             Lamina properties for each stiffener flange ply.
         flaminaprop : float, optional
             Unique lamina properties for all stiffener flange plies.
+        mf : int, optional
+            Number of approximation terms for flange, along `x`.
+        nf : int, optional
+            Number of approximation terms for flange, along `y`.
 
         Returns
         -------
@@ -458,7 +462,7 @@ class StiffPanelBay(object):
         s = BladeStiff2D(bay=self, mu=mu, panel1=panel1, panel2=panel2, ys=ys,
                 bb=bb, bf=bf, bstack=bstack, bplyts=bplyts,
                 blaminaprops=blaminaprops, fstack=fstack, fplyts=fplyts,
-                flaminaprops=flaminaprops)
+                flaminaprops=flaminaprops, mf=mf, nf=nf)
 
         for k, v in kwargs.items():
             setattr(s, k, v)
@@ -472,7 +476,7 @@ class StiffPanelBay(object):
     def add_tstiff2d(self, ys, mu=None, bb=None, bstack=None,
             bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
             bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
-            flaminaprop=None, **kwargs):
+            flaminaprop=None, mb=12, nb=13, mf=11, nf=12, **kwargs):
         """Add a new TStiff2D to the current panel bay
 
         Parameters
@@ -506,6 +510,14 @@ class StiffPanelBay(object):
             Lamina properties for each stiffener flange ply.
         flaminaprop : float, optional
             Unique lamina properties for all stiffener flange plies.
+        mb : int, optional
+            Number of approximation terms for base, along `x`.
+        nb : int, optional
+            Number of approximation terms for base, along `y`.
+        mf : int, optional
+            Number of approximation terms for flange, along `x`.
+        nf : int, optional
+            Number of approximation terms for flange, along `y`.
 
         Returns
         -------
@@ -569,7 +581,7 @@ class StiffPanelBay(object):
         s = TStiff2D(bay=self, mu=mu, panel1=panel1, panel2=panel2, ys=ys,
                 bb=bb, bf=bf, bstack=bstack, bplyts=bplyts,
                 blaminaprops=blaminaprops, fstack=fstack, fplyts=fplyts,
-                flaminaprops=flaminaprops)
+                flaminaprops=flaminaprops, mb=mb, nb=nb, mf=mf, nf=nf)
 
         for k, v in kwargs.items():
             setattr(s, k, v)
