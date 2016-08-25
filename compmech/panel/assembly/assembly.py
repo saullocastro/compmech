@@ -16,6 +16,9 @@ class PanelAssembly(object):
     This class has some useful methods that will help plotting output for
     different panel groups within the assembly and so forth.
 
+    For more details about the theory involved, see
+    [castro2017AssemblyModels]_.
+
     Parameters
     ----------
     panels : iterable

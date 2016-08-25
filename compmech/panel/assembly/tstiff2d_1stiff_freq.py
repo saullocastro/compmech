@@ -16,6 +16,9 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, defect_a, mu, plyt, laminaprop,
     For more details about each parameter and the aerodynamic formulation see
     Ref. [castro2016FlutterPanel]_ .
 
+    For more details about the theory involved on the assembly of panels, see
+    [castro2017AssemblyModels]_.
+
     The panel assembly looks like::
 
         skin
