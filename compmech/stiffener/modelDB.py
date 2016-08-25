@@ -33,5 +33,5 @@ db = {
                     'linear buckling': True,
                     'non-linear static': False,
                     'connections': tstiff2d_clt_donnell_bardell,
-                    r,
+                    },
     }
