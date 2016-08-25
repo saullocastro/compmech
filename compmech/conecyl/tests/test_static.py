@@ -33,6 +33,8 @@ def test_static():
         cs = cc.static()
         cc.uvw(cs[0])
         print(cc.w.min(), wmin)
+        print(cc.w.min(), wmin)
+        print(cc.w.min(), wmin)
         assert np.isclose(cc.w.min(), wmin, rtol=0.01)
 
 

@@ -14,7 +14,7 @@ cdef void cfuvw(double *c, int m1, int m2, int n2, double r2, double L,
                 double cosa, double tLA,
                 double *us, double *vs, double *ws) nogil:
     cdef int i1, i2, j2, col, i
-    cdef double sinbi, cosbi, sinbj, cosbj, x, t, u, v, w
+    cdef double sini1x, sini2x, cosi2x, sinj2t, cosj2t, x, t, u, v, w
 
     for i in range(size):
         x = xs[i]
@@ -24,26 +24,26 @@ cdef void cfuvw(double *c, int m1, int m2, int n2, double r2, double L,
         v = ((L-x)*r2/L)*c[1]
         w = 0
         for i1 in range(i0, m1+i0):
-            sinbi = sin(i1*pi*x/L)
+            sini1x = sin(i1*pi*x/L)
             col = (i1-i0)*num1 + num0
-            u += c[col+0]*sinbi
-            v += c[col+1]*sinbi
-            w += c[col+2]*sinbi
+            u += c[col+0]*sini1x
+            v += c[col+1]*sini1x
+            w += c[col+2]*sini1x
         for j2 in range(j0, n2+j0):
-            sinbj = sin(j2*t)
-            cosbj = cos(j2*t)
+            sinj2t = sin(j2*t)
+            cosj2t = cos(j2*t)
             for i2 in range(i0, m2+i0):
                 col = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
-                sinbi = sin(i2*pi*x/L)
-                cosbi = cos(i2*pi*x/L)
-                u += c[col+0]*sinbi*sinbj
-                u += c[col+1]*sinbi*cosbj
+                sini2x = sin(i2*pi*x/L)
+                cosi2x = cos(i2*pi*x/L)
+                u += c[col+0]*sini2x*sinj2t
+                u += c[col+1]*sini2x*cosj2t
 
-                v += c[col+2]*cosbi*sinbj
-                v += c[col+3]*cosbi*cosbj
+                v += c[col+2]*cosi2x*sinj2t
+                v += c[col+3]*cosi2x*cosj2t
 
-                w += c[col+4]*sinbi*sinbj
-                w += c[col+5]*sinbi*cosbj
+                w += c[col+4]*sini2x*sinj2t
+                w += c[col+5]*sini2x*cosj2t
 
         us[i] = u
         vs[i] = v
@@ -95,7 +95,7 @@ cdef void cfwx(double *c, int m1, int m2, int n2, double *xs, double *ts,
 
 cdef void cfwt(double *c, int m1, int m2, int n2, double *xs, double *ts,
                int size, double L, double *outwt) nogil:
-    cdef double sinbi, sinj2t, cosj2t, wt, x, t
+    cdef double sini2x, sinj2t, cosj2t, wt, x, t
     cdef int i2, j2, col, i
 
     for i in range(size):
@@ -107,9 +107,9 @@ cdef void cfwt(double *c, int m1, int m2, int n2, double *xs, double *ts,
             cosj2t = cos(j2*t)
             for i2 in range(i0, m2+i0):
                 col = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
-                sinbi = sin(i2*pi*x/L)
-                wt += sinbi*(j2*cosj2t)*c[col+4]
-                wt += sinbi*(-j2*sinj2t)*c[col+5]
+                sini2x = sin(i2*pi*x/L)
+                wt += sini2x*(j2*cosj2t)*c[col+4]
+                wt += sini2x*(-j2*sinj2t)*c[col+5]
         outwt[i] = wt
 
 def fg(double[:,::1] g, int m1, int m2, int n2,
@@ -118,34 +118,34 @@ def fg(double[:,::1] g, int m1, int m2, int n2,
 
 cdef cfg(double[:,::1] g, int m1, int m2, int n2,
            double r2, double x, double t, double L, double cosa, double tLA):
-    cdef double sinbi, cosbi, sinbj, cosbj
+    cdef double sini1x, sini2x, cosi2x, sinj2t, cosj2t
     cdef int i1, i2, j2, col
     g[0, 0] = (L-x)/(L*cosa)
     g[1, 1] = (L-x)*r2/L
     g[0, 2] = (L-x)/(L*cosa)*cos(t - tLA)
 
     for i1 in range(i0, m1+i0):
-        sinbi = sin(i1*pi*x/L)
+        sini1x = sin(i1*pi*x/L)
         col = (i1-i0)*num1 + num0
-        g[0, col+0] = sinbi
-        g[1, col+1] = sinbi
-        g[2, col+2] = sinbi
+        g[0, col+0] = sini1x
+        g[1, col+1] = sini1x
+        g[2, col+2] = sini1x
 
     for i2 in range(i0, m2+i0):
-        sinbi = sin(i2*pi*x/L)
-        cosbi = cos(i2*pi*x/L)
+        sini2x = sin(i2*pi*x/L)
+        cosi2x = cos(i2*pi*x/L)
         for j2 in range(j0, n2+j0):
             col = (i2-i0)*num2 + (j2-j0)*num2*m2 + num0 + num1*m1
-            sinbj = sin(j2*t)
-            cosbj = cos(j2*t)
-            g[0, col+0] = sinbi*sinbj
-            g[0, col+1] = sinbi*cosbj
+            sinj2t = sin(j2*t)
+            cosj2t = cos(j2*t)
+            g[0, col+0] = sini2x*sinj2t
+            g[0, col+1] = sini2x*cosj2t
 
-            g[1, col+2] = cosbi*sinbj
-            g[1, col+3] = cosbi*cosbj
+            g[1, col+2] = cosi2x*sinj2t
+            g[1, col+3] = cosi2x*cosj2t
 
-            g[2, col+4] = sinbi*sinbj
-            g[2, col+5] = sinbi*cosbj
+            g[2, col+4] = sini2x*sinj2t
+            g[2, col+5] = sini2x*cosj2t
 
 cdef void *cfstrain_donnell(double *c, double sina, double cosa, double tLA,
                             double *xs, double *ts, int size,

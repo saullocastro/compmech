@@ -58,7 +58,7 @@ cdef void cfv(double *c, int m1, int m2, int n2, double *xs, double *ts,
         x = xs[i]
         t = ts[i]
 
-        v = ((L-x)*r2/L)*c[1]
+        v = c[1]*((L-x)*r2/L)
         for i1 in range(i0, m1+i0):
             sini1x = sin(pi*i1*x/L)
             col = (i1-i0)*num1 + num0

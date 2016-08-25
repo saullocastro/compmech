@@ -24,11 +24,11 @@ def fstrain(np.ndarray[cDOUBLE, ndim=1] c,
     new_size = size + add_size
 
     if (size % num_cores)!=0:
-        xs_core = np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1)
-        ts_core = np.hstack((ts, np.zeros(add_size))).reshape(num_cores, -1)
-    else:
-        xs_core = xs.reshape(num_cores, -1)
-        ts_core = ts.reshape(num_cores, -1)
+        xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
+        ts_core = np.ascontiguousarray(np.hstack((ts, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
+    else:                              
+        xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
+        ts_core = np.ascontiguousarray(ts.reshape(num_cores, -1), dtype=DOUBLE)
 
     size_core = xs_core.shape[1]
 
