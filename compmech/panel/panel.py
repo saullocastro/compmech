@@ -1,5 +1,6 @@
 from __future__ import division, absolute_import
 
+import platform
 import gc
 import pickle
 from multiprocessing import cpu_count
@@ -1593,8 +1594,10 @@ class Panel(object):
         ubkp, vbkp, wbkp, phixbkp, phiybkp = (self.u, self.v, self.w,
                                               self.phix, self.phiy)
 
-        import matplotlib.pyplot as plt
         import matplotlib
+        if platform.system().lower() == 'linux':
+            matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
 
         msg('Computing field variables...', level=1)
         displs = ['u', 'v', 'w', 'phix', 'phiy']

@@ -1,3 +1,7 @@
+from __future__ import division, absolute_import
+
+import platform
+
 import numpy as np
 from numpy import linspace
 
@@ -128,8 +132,10 @@ class PanelAssembly(object):
         """
         msg('Plotting contour...')
 
-        import matplotlib.pyplot as plt
         import matplotlib
+        if platform.system().lower() == 'linux':
+            matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
 
         msg('Computing field variables...', level=1)
         displs = ['u', 'v', 'w', 'phix', 'phiy']
