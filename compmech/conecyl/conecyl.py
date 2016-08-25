@@ -1,4 +1,5 @@
 from __future__ import division, absolute_import
+import platform
 import gc
 import os
 import traceback
@@ -1838,8 +1839,10 @@ class ConeCyl(object):
         ubkp, vbkp, wbkp, phixbkp, phitbkp = (self.u, self.v, self.w,
                                               self.phix, self.phit)
 
-        import matplotlib.pyplot as plt
         import matplotlib
+        if platform.system().lower() == 'linux':
+            matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
 
         from . plotutils import get_filename
 
