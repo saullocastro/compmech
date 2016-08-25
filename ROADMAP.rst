@@ -3,6 +3,9 @@ Version 0.6.7
 - fix compatibility with Python 3 for conecyl
 - tests for conecyl
 - non-linear static analysis for Panel
+- pass panel object instead of w1tx, w2tx...
+- replaced bladestiff2d model with already existing panel models
+- replaced tstiff2d base-flange connectivity matrices by those in panel.connections
 
 Version 0.7.0
 -------------
