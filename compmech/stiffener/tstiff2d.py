@@ -34,13 +34,13 @@ class TStiff2D(object):
     """
     def __init__(self, bay, mu, panel1, panel2, ys, bb, bf, bstack, bplyts,
             blaminaprops, fstack, fplyts, flaminaprops,
-            model='tstiff2d_clt_donnell_bardell', m1=15, n1=12, m2=15, n2=12):
+            model='tstiff2d_clt_donnell_bardell', mb=15, nb=12, mf=15, nf=12):
         self.bay = bay
         self.panel1 = panel1
         self.panel2 = panel2
         self.model = model
-        self.base = Panel(m=m1, n=n1, b=bb, a=bay.a, model=bay.model)
-        self.flange = Panel(m=m2, n=n2, b=bf, a=bay.a, model='plate_clt_donnell_bardell')
+        self.base = Panel(m=mb, n=nb, b=bb, a=bay.a, model=bay.model)
+        self.flange = Panel(m=mf, n=nf, b=bf, a=bay.a, model='plate_clt_donnell_bardell')
         self.ys = ys
         self.mu = mu
         self.forces_base = []
@@ -166,7 +166,6 @@ class TStiff2D(object):
         modelb = panelmDB.db[self.base.model]['matrices']
         modelf = panelmDB.db[self.flange.model]['matrices']
         conn = stiffmDB.db[self.model]['connections']
-        num1 = panelmDB.db[self.base.model]['num']
 
         bay = self.bay
         a = bay.a
@@ -181,8 +180,8 @@ class TStiff2D(object):
         # NOTE
         #     row0 and col0 define where the stiffener's base matrix starts
         #     row1 and col1 define where the stiffener's flange matrix starts
-        row1 = row0 + num1*self.base.m*self.base.n
-        col1 = col0 + num1*self.base.m*self.base.n
+        row1 = row0 + self.base.get_size()
+        col1 = col0 + self.base.get_size()
 
         k0 = 0.
 
@@ -331,7 +330,6 @@ class TStiff2D(object):
 
         modelb = panelmDB.db[self.base.model]['matrices']
         modelf = panelmDB.db[self.flange.model]['matrices']
-        num1 = panelmDB.db[self.base.model]['num']
 
         bay = self.bay
         a = bay.a
@@ -343,8 +341,8 @@ class TStiff2D(object):
         #     row0 and col0 define where the stiffener's base matrix starts
         #     row1 and col1 define where the stiffener's flange matrix starts
 
-        row1 = row0 + num1*self.base.m*self.base.n
-        col1 = col0 + num1*self.base.m*self.base.n
+        row1 = row0 + self.base.get_size()
+        col1 = col0 + self.base.get_size()
 
         kG0 = 0.
 
@@ -388,7 +386,6 @@ class TStiff2D(object):
 
         modelb = panelmDB.db[self.base.model]['matrices']
         modelf = panelmDB.db[self.flange.model]['matrices']
-        num1 = panelmDB.db[self.base.model]['num']
 
         bay = self.bay
         a = bay.a
@@ -398,8 +395,8 @@ class TStiff2D(object):
         alphadeg = alphadeg if alphadeg is not None else 0.
         alpharad = deg2rad(alphadeg)
 
-        row1 = row0 + num1*self.base.m*self.base.n
-        col1 = col0 + num1*self.base.m*self.base.n
+        row1 = row0 + self.base.get_size()
+        col1 = col0 + self.base.get_size()
 
         kM = 0.
 
