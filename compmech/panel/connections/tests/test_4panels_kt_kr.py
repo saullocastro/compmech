@@ -54,20 +54,16 @@ def test_4panels_kt_kr():
     A22 = lam.ABD[1, 1]
     D11 = lam.ABD[3, 3]
     D22 = lam.ABD[4, 4]
-    kt13 = A11/lam.t
-    kt24 = A11/lam.t
-    kt12 = A22/lam.t
-    kt34 = A22/lam.t
-
-    kr13 = D11/lam.t
-    kr24 = D11/lam.t
-    kr12 = D22/lam.t
-    kr34 = D11/lam.t
 
     p01 = Panel(group='panels', x0=a3, y0=b2, a=a1, b=b1, r=r, m=m, n=n, plyt=plyt, stack=stack, laminaprop=laminaprop, mu=mu)
     p02 = Panel(group='panels', x0=a3, y0=0, a=a2, b=b2, r=r, m=m, n=n, plyt=plyt, stack=stack, laminaprop=laminaprop, mu=mu)
     p03 = Panel(group='panels', x0=0, y0=b2, a=a3, b=b3, r=r, m=m, n=n, plyt=plyt, stack=stack, laminaprop=laminaprop, mu=mu)
     p04 = Panel(group='panels', x0=0, y0=0, a=a4, b=b4, r=r, m=m, n=n, plyt=plyt, stack=stack, laminaprop=laminaprop, mu=mu)
+
+    kt13, kr13 = connections.calc_kt_kr(p01, p03, 'xcte')
+    kt24, kr24 = connections.calc_kt_kr(p02, p04, 'xcte')
+    kt12, kr12 = connections.calc_kt_kr(p01, p02, 'ycte')
+    kt34, kr34 = connections.calc_kt_kr(p03, p04, 'ycte')
 
     # boundary conditions
     p01.u1tx = 1 ; p01.u1rx = 1 ; p01.u2tx = 0 ; p01.u2rx = 1
