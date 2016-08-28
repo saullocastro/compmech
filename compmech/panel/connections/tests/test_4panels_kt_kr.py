@@ -37,9 +37,9 @@ def test_4panels_kt_kr():
 
     mu=1.3e3
 
-    r = 30.
-    m = 18
-    n = 18
+    r = 10.
+    m = 8
+    n = 8
 
     a1 = 1.5
     a2 = 1.5
@@ -158,12 +158,12 @@ def test_4panels_kt_kr():
              num_eigvalues=25, num_eigvalues_print=5)
 
     # Results for single panel
-    m = 26
-    n = 26
+    m = 15
+    n = 15
     singlepanel = Panel(a=(a1+a3), b=(b1+b2), r=r, m=m, n=n, plyt=plyt, stack=stack, laminaprop=laminaprop, mu=mu)
     singlepanel.freq(silent=True)
 
-    assert np.isclose(eigvals[0], singlepanel.eigvals[0], atol=0.01)
+    assert np.isclose(eigvals[0], singlepanel.eigvals[0], atol=0.1)
 
 
 if __name__ == '__main__':
