@@ -12,7 +12,6 @@ def test_panel_aero():
                   format(atype, model))
             p = Panel()
             p.model = model
-            p.bc_ssss()
             p.a = 1.
             p.b = 0.5
             p.r = 1.e8

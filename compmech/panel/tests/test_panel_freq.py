@@ -14,7 +14,6 @@ def test_panel_freq():
                   prestress, model))
             p = Panel()
             p.model = model
-            p.bc_ssss()
             p.a = 1.
             p.b = 0.5
             p.r = 1.e8
@@ -52,7 +51,6 @@ def test_reduced_dof_freq_plate():
         print('Test reduced_dof solver, prestress=True, model={0}'.format(model))
         p = Panel()
         p.model = model
-        p.bc_ssss()
         p.a = 1.
         p.b = 0.5
         p.r = 100.

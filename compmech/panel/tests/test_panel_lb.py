@@ -12,7 +12,6 @@ def test_panel_lb():
         print('Linear buckling for model {0}'.format(model))
         # ssss
         p = Panel()
-        p.bc_ssss()
         p.m = 12
         p.n = 13
         p.stack = [0, 90, -45, +45]
@@ -44,7 +43,11 @@ def test_panel_lb():
 
         # ssfs
         p = Panel()
-        p.bc_ssfs()
+        p.u2ty = 1
+        p.v2ty = 1
+        p.w2ty = 1
+        p.u2ry = 1
+        p.v2ry = 1
         p.m = 12
         p.n = 13
         p.stack = [0, 90, -45, +45]
@@ -64,7 +67,16 @@ def test_panel_lb():
         else:
             assert np.isclose(eigvals[0], 15.842356, atol=0.1, rtol=0)
 
-        p.bc_sfss()
+        p.u2tx = 1
+        p.v2tx = 1
+        p.w2tx = 1
+        p.u2rx = 1
+        p.v2rx = 1
+        p.u2ty = 0
+        p.v2ty = 0
+        p.w2ty = 0
+        p.u2ry = 0
+        p.v2ry = 0
         p.Nxx = 0
         p.Nyy = -1
         k0 = p.calc_k0(silent=True)

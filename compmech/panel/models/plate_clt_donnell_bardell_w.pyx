@@ -52,15 +52,12 @@ INT = np.int64
 cdef int num = 1
 
 
-def fk0(double a, double b, double r, double alpharad,
-        np.ndarray[cDOUBLE, ndim=2] F, int m, int n,
-        double u1tx, double u1rx, double u2tx, double u2rx,
-        double v1tx, double v1rx, double v2tx, double v2rx,
-        double w1tx, double w1rx, double w2tx, double w2rx,
-        double u1ty, double u1ry, double u2ty, double u2ry,
-        double v1ty, double v1ry, double v2ty, double v2ry,
-        double w1ty, double w1ry, double w2ty, double w2ry,
-        int size, int row0, int col0):
+def fk0(object panel, int size, int row0, int col0):
+    cdef double a, b
+    cdef np.ndarray[cDOUBLE, ndim=2] F
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
     cdef int i, j, k, l, c, row, col
     cdef double D11, D12, D16, D22, D26, D66
 
@@ -73,6 +70,16 @@ def fk0(double a, double b, double r, double alpharad,
     cdef double gAwetaetagBwetaeta, gAwgBwetaeta, gAwetaetagBw,
     cdef double gAwetagBwetaeta, gAwetaetagBweta, gAwgBw, gAwgBweta, gAwetagBw,
     cdef double gAwetagBweta
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    F = panel.lam.ABD
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*m*n*n
 
@@ -133,16 +140,14 @@ def fk0(double a, double b, double r, double alpharad,
     return k0
 
 
-def fk0y1y2(double y1, double y2, double a, double b, double r,
-        double alpharad, np.ndarray[cDOUBLE, ndim=2] F, int m, int n,
-        double u1tx, double u1rx, double u2tx, double u2rx,
-        double v1tx, double v1rx, double v2tx, double v2rx,
-        double w1tx, double w1rx, double w2tx, double w2rx,
-        double u1ty, double u1ry, double u2ty, double u2ry,
-        double v1ty, double v1ry, double v2ty, double v2ry,
-        double w1ty, double w1ry, double w2ty, double w2ry,
-        int size, int row0, int col0):
-    cdef int i, j, k, l, c, row, col
+def fk0y1y2(double y1, double y2, object panel, int size, int row0, int col0):
+    cdef double a, b
+    cdef np.ndarray[cDOUBLE, ndim=2] F
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
+
+    cdef int i, j, k, l, row, col, c
     cdef double eta1, eta2
     cdef double D11, D12, D16, D22, D26, D66
 
@@ -155,6 +160,16 @@ def fk0y1y2(double y1, double y2, double a, double b, double r,
     cdef double gAwetaetagBwetaeta, gAwgBwetaeta, gAwetaetagBw,
     cdef double gAwetagBwetaeta, gAwetaetagBweta, gAwgBw, gAwgBweta, gAwetagBw,
     cdef double gAwetagBweta
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    F = panel.lam.ABD
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*m*n*n
 
@@ -218,11 +233,13 @@ def fk0y1y2(double y1, double y2, double a, double b, double r,
     return k0y1y2
 
 
-def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
-         double r, double alpharad, int m, int n,
-         double w1tx, double w1rx, double w2tx, double w2rx,
-         double w1ty, double w1ry, double w2ty, double w2ry,
+def fkG0(double Nxx, double Nyy, double Nxy, object panel,
          int size, int row0, int col0):
+    cdef double a, b
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
+    
     cdef int i, k, j, l, c, row, col
 
     cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
@@ -230,6 +247,15 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
 
     cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
     cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*m*n*n
 
@@ -274,10 +300,12 @@ def fkG0(double Nxx, double Nyy, double Nxy, double a, double b,
 
 
 def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
-         double a, double b, double r, double alpharad, int m, int n,
-         double w1tx, double w1rx, double w2tx, double w2rx,
-         double w1ty, double w1ry, double w2ty, double w2ry,
-         int size, int row0, int col0):
+             object panel, int size, int row0, int col0):
+    cdef double a, b
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
+
     cdef int i, k, j, l, c, row, col
     cdef double eta1, eta2
 
@@ -287,7 +315,16 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
     cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
     cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
 
-    fdim = 1*m*m*n*n
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
+
+    fdim = 1*m*n*m*n
 
     kG0y1y2r = np.zeros((fdim,), dtype=INT)
     kG0y1y2c = np.zeros((fdim,), dtype=INT)
@@ -332,15 +369,12 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
     return kG0y1y2
 
 
-def fkM(double mu, double d, double h,
-        double a, double b, double r, double alpharad, int m, int n,
-        double u1tx, double u1rx, double u2tx, double u2rx,
-        double v1tx, double v1rx, double v2tx, double v2rx,
-        double w1tx, double w1rx, double w2tx, double w2rx,
-        double u1ty, double u1ry, double u2ty, double u2ry,
-        double v1ty, double v1ry, double v2ty, double v2ry,
-        double w1ty, double w1ry, double w2ty, double w2ry,
-        int size, int row0, int col0):
+def fkM(double d, object panel, int size, int row0, int col0):
+    cdef double a, b, mu, h
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
+
     cdef int i, k, j, l, c, row, col
 
     cdef np.ndarray[cINT, ndim=1] kMr, kMc
@@ -348,6 +382,17 @@ def fkM(double mu, double d, double h,
 
     cdef double fAwfBw, fAwxifBwxi
     cdef double gAwgBw, gAwetagBweta
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    mu = panel.mu
+    h = sum(panel.plyts)
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*n*m*n
 
@@ -387,15 +432,13 @@ def fkM(double mu, double d, double h,
     return kM
 
 
-def fkMy1y2(double y1, double y2, double mu, double d, double h,
-        double a, double b, double r, double alpharad, int m, int n,
-        double u1tx, double u1rx, double u2tx, double u2rx,
-        double v1tx, double v1rx, double v2tx, double v2rx,
-        double w1tx, double w1rx, double w2tx, double w2rx,
-        double u1ty, double u1ry, double u2ty, double u2ry,
-        double v1ty, double v1ry, double v2ty, double v2ry,
-        double w1ty, double w1ry, double w2ty, double w2ry,
-        int size, int row0, int col0):
+def fkMy1y2(double y1, double y2, double d, object panel,
+            int size, int row0, int col0):
+    cdef double a, b, mu, h
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
+
     cdef int i, k, j, l, c, row, col
     cdef double eta1, eta2
 
@@ -404,6 +447,17 @@ def fkMy1y2(double y1, double y2, double mu, double d, double h,
 
     cdef double fAwfBw, fAwxifBwxi
     cdef double gAwgBw, gAwetagBweta
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    mu = panel.mu
+    h = sum(panel.plyts)
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*n*m*n
 
@@ -446,15 +500,27 @@ def fkMy1y2(double y1, double y2, double mu, double d, double h,
     return kMy1y2
 
 
-def fkAx(double beta, double gamma, double a, double b, int m, int n,
-         double w1tx, double w1rx, double w2tx, double w2rx,
-         double w1ty, double w1ry, double w2ty, double w2ry,
+def fkAx(double beta, double gamma, object panel,
          int size, int row0, int col0):
+    cdef double a, b
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
+
     cdef int i, k, j, l, c, row, col
     cdef np.ndarray[cINT, ndim=1] kAxr, kAxc
     cdef np.ndarray[cDOUBLE, ndim=1] kAxv
 
     cdef double fAwxifBw, gAwgBw
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*n*m*n
 
@@ -492,15 +558,26 @@ def fkAx(double beta, double gamma, double a, double b, int m, int n,
     return kAx
 
 
-def fkAy(double beta, double a, double b, int m, int n,
-         double w1tx, double w1rx, double w2tx, double w2rx,
-         double w1ty, double w1ry, double w2ty, double w2ry,
-         int size, int row0, int col0):
+def fkAy(double beta, object panel, int size, int row0, int col0):
+    cdef double a, b
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
+
     cdef int i, k, j, l, c, row, col
     cdef np.ndarray[cINT, ndim=1] kAyr, kAyc
     cdef np.ndarray[cDOUBLE, ndim=1] kAyv
 
     cdef double fAwfBw, gAwetagBw
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*n*m*n
 
@@ -538,15 +615,26 @@ def fkAy(double beta, double a, double b, int m, int n,
     return kAy
 
 
-def fcA(double aeromu, double a, double b, int m, int n,
-        double w1tx, double w1rx, double w2tx, double w2rx,
-        double w1ty, double w1ry, double w2ty, double w2ry,
-        int size, int row0, int col0):
+def fcA(double aeromu, object panel, int size, int row0, int col0):
+    cdef double a, b
+    cdef int m, n
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double w1ty, w1ry, w2ty, w2ry
+
     cdef int i, k, j, l, c, row, col
     cdef np.ndarray[cINT, ndim=1] cAr, cAc
     cdef np.ndarray[cDOUBLE, ndim=1] cAv
 
     cdef double fAwfBw, gAwgBw
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    m = panel.m
+    n = panel.n
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*n*m*n
 

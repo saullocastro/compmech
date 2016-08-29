@@ -13,7 +13,6 @@ def test_kT():
                       'cpanel_clt_donnell_bardell']:
             p = Panel()
             p.model = model
-            p.bc_ssss()
             p.w1tx = 0
             p.u1tx = 1
             p.u1ty = 1
@@ -53,7 +52,6 @@ def test_fint():
                   ]:
         p = Panel()
         p.model = model
-        p.bc_ssss()
         p.w1tx = 0
         p.w1rx = 1
         p.u1tx = 1
@@ -80,6 +78,9 @@ def test_fint():
         p.forces.append([p.a/2., p.b/2., 0, 0, 0.001])
 
         p.static(NLgeom=True, silent=True)
+        c = p.analysis.cs[0]
+        p.plot(c, vec='w', filename='tmp_test_non_linear.png', colorbar=True)
+
 
         p.uvw(p.analysis.cs[0])
         assert np.isclose(p.w.max(), 0.000144768080125, rtol=0.001)

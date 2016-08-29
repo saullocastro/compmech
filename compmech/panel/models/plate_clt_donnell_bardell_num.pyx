@@ -31,16 +31,17 @@ INT = np.int64
 cdef int num = 3
 
 
-def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
-        double a, double b, double r, double alpharad,
-        object Finput, int m, int n,
-        double u1tx, double u1rx, double u2tx, double u2rx,
-        double v1tx, double v1rx, double v2tx, double v2rx,
-        double w1tx, double w1rx, double w2tx, double w2rx,
-        double u1ty, double u1ry, double u2ty, double u2ry,
-        double v1ty, double v1ry, double v2ty, double v2ry,
-        double w1ty, double w1ry, double w2ty, double w2ry,
+def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
         int size, int row0, int col0, int nx, int ny, int NLgeom=0):
+    cdef double a, b
+    cdef int m, n
+    cdef double u1tx, u1rx, u2tx, u2rx
+    cdef double v1tx, v1rx, v2tx, v2rx
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double u1ty, u1ry, u2ty, u2ry
+    cdef double v1ty, v1ry, v2ty, v2ry
+    cdef double w1ty, w1ry, w2ty, w2ry
+
     cdef int i, j, k, l, c, row, col, ptx, pty
     cdef double A11, A12, A16, A22, A26, A66
     cdef double B11, B12, B16, B22, B26, B66
@@ -79,6 +80,19 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
                 F[i*6 + j] = Finput[i, j]
     else:
         raise ValueError('Invalid shape for Finput!')
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    m = panel.m
+    n = panel.n
+    u1tx = panel.u1tx; u1rx = panel.u1rx; u2tx = panel.u2tx; u2rx = panel.u2rx
+    v1tx = panel.v1tx; v1rx = panel.v1rx; v2tx = panel.v2tx; v2rx = panel.v2rx
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    u1ty = panel.u1ty; u1ry = panel.u1ry; u2ty = panel.u2ty; u2ry = panel.u2ry
+    v1ty = panel.v1ty; v1ry = panel.v1ry; v2ty = panel.v2ty; v2ry = panel.v2ry
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 9*m*m*n*n
 
@@ -242,15 +256,17 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs,
     return kL
 
 
-def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
-            double a, double b, double r, double alpharad, int m, int n,
-            double u1tx, double u1rx, double u2tx, double u2rx,
-            double v1tx, double v1rx, double v2tx, double v2rx,
-            double w1tx, double w1rx, double w2tx, double w2rx,
-            double u1ty, double u1ry, double u2ty, double u2ry,
-            double v1ty, double v1ry, double v2ty, double v2ry,
-            double w1ty, double w1ry, double w2ty, double w2ry,
+def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
             int size, int row0, int col0, int nx, int ny, int NLgeom=0):
+    cdef double a, b
+    cdef int m, n
+    cdef double u1tx, u1rx, u2tx, u2rx
+    cdef double v1tx, v1rx, v2tx, v2rx
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double u1ty, u1ry, u2ty, u2ry
+    cdef double v1ty, v1ry, v2ty, v2ry
+    cdef double w1ty, w1ry, w2ty, w2ry
+
     cdef int i, k, j, l, c, row, col, ptx, pty
     cdef double xi, eta, x, y, alpha
 
@@ -289,6 +305,19 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
                 F[i*6 + j] = Finput[i, j]
     else:
         raise ValueError('Invalid shape for Finput!')
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    m = panel.m
+    n = panel.n
+    u1tx = panel.u1tx; u1rx = panel.u1rx; u2tx = panel.u2tx; u2rx = panel.u2rx
+    v1tx = panel.v1tx; v1rx = panel.v1rx; v2tx = panel.v2tx; v2rx = panel.v2rx
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    u1ty = panel.u1ty; u1ry = panel.u1ry; u2ty = panel.u2ty; u2ry = panel.u2ry
+    v1ty = panel.v1ty; v1ry = panel.v1ry; v2ty = panel.v2ty; v2ry = panel.v2ry
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     fdim = 1*m*m*n*n
 
@@ -428,16 +457,16 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput,
     return kG
 
 
-def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
-        double a, double b, double r, double alpharad,
-        object Finput, int m, int n,
-        double u1tx, double u1rx, double u2tx, double u2rx,
-        double v1tx, double v1rx, double v2tx, double v2rx,
-        double w1tx, double w1rx, double w2tx, double w2rx,
-        double u1ty, double u1ry, double u2ty, double u2ry,
-        double v1ty, double v1ry, double v2ty, double v2ry,
-        double w1ty, double w1ry, double w2ty, double w2ry,
+def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
         int size, int col0, int nx, int ny):
+    cdef double a, b
+    cdef int m, n
+    cdef double u1tx, u1rx, u2tx, u2rx
+    cdef double v1tx, v1rx, v2tx, v2rx
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double u1ty, u1ry, u2ty, u2ry
+    cdef double v1ty, v1ry, v2ty, v2ry
+    cdef double w1ty, w1ry, w2ty, w2ry
 
     cdef int i, j, c, col, ptx, pty
     cdef double A11, A12, A16, A22, A26, A66
@@ -477,6 +506,19 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs,
                 F[i*6 + j] = Finput[i, j]
     else:
         raise ValueError('Invalid shape for Finput!')
+
+    if not 'Panel' in panel.__class__.__name__:
+        raise ValueError('a Panel object must be given as input')
+    a = panel.a
+    b = panel.b
+    m = panel.m
+    n = panel.n
+    u1tx = panel.u1tx; u1rx = panel.u1rx; u2tx = panel.u2tx; u2rx = panel.u2rx
+    v1tx = panel.v1tx; v1rx = panel.v1rx; v2tx = panel.v2tx; v2rx = panel.v2rx
+    w1tx = panel.w1tx; w1rx = panel.w1rx; w2tx = panel.w2tx; w2rx = panel.w2rx
+    u1ty = panel.u1ty; u1ry = panel.u1ry; u2ty = panel.u2ty; u2ry = panel.u2ry
+    v1ty = panel.v1ty; v1ry = panel.v1ry; v2ty = panel.v2ty; v2ry = panel.v2ry
+    w1ty = panel.w1ty; w1ry = panel.w1ry; w2ty = panel.w2ty; w2ry = panel.w2ry
 
     xis = np.zeros(nx, dtype=DOUBLE)
     weightsxi = np.zeros(nx, dtype=DOUBLE)

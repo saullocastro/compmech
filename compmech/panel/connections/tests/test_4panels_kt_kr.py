@@ -163,7 +163,7 @@ def test_4panels_kt_kr():
     singlepanel = Panel(a=(a1+a3), b=(b1+b2), r=r, m=m, n=n, plyt=plyt, stack=stack, laminaprop=laminaprop, mu=mu)
     singlepanel.freq(silent=True)
 
-    assert np.isclose(eigvals[0], singlepanel.eigvals[0], atol=0.1)
+    assert np.isclose(eigvals[0], singlepanel.eigvals[0], atol=0.01, rtol=0.01)
 
 
 if __name__ == '__main__':

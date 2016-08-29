@@ -9,7 +9,6 @@ def test_panel_fkG_num():
         print('Checking fkG_num for model {0}'.format(model))
         # ssss
         p = Panel()
-        p.bc_ssss()
         p.a = 8.
         p.b = 4.
         p.r = 1.e8
@@ -48,7 +47,7 @@ def test_panel_fkG_num():
         p.static(silent=True)
 
         p.lb(silent=True)
-        assert np.isclose(p.eigvals[0], 4.52909113495, atol=0.01, rtol=0)
+        assert np.isclose(p.eigvals[0], 4.5290911349518277, atol=0.01, rtol=0)
 
         p.lb(silent=True, c=p.analysis.cs[0])
         assert np.isclose(p.eigvals[0], 4.5345057669315239, atol=0.01, rtol=0)
@@ -60,7 +59,6 @@ def test_panel_fkG_num_Fnxny():
         print('Checking fkG_num for model {0}'.format(model))
         # ssss
         p = Panel()
-        p.bc_ssss()
         p.a = 8.
         p.b = 4.
         p.r = 1.e8
@@ -98,7 +96,7 @@ def test_panel_fkG_num_Fnxny():
         c = p.analysis.cs[0]
 
         p.lb(silent=True)
-        assert np.isclose(p.eigvals[0], 4.52909113495, atol=0.01, rtol=0)
+        assert np.isclose(p.eigvals[0], 4.5290911349518801, atol=0.01, rtol=0)
 
         nx = 9
         ny = 9
