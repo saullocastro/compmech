@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.panel.panel &mdash; CompMech 0.6.6 documentation</title>
+    <title>compmech.panel.panel &mdash; CompMech 0.6.7 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.6.6',
+        VERSION:     '0.6.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.6.6 documentation" href="../../../index.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -51,6 +51,7 @@
   <h1>Source code for compmech.panel.panel</h1><div class="highlight"><pre>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 
+<span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">gc</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">cpu_count</span>
@@ -76,6 +77,15 @@
         <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.Panel&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">check_c</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;&quot;c&quot; must be a NumPy ndarray object&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;&quot;c&quot; must be a 1-D ndarray object&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">size</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;&quot;c&quot; must have the same size as the global stiffness matrix&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Panel"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel">[docs]</a><span class="k">class</span> <span class="nc">Panel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -140,15 +150,15 @@
 
         <span class="c"># model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">K</span> <span class="o">=</span> <span class="mi">5</span><span class="o">/</span><span class="mf">6.</span> <span class="c"># in case of First-order Shear Deformation Theory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fsdt_shear_correction</span> <span class="o">=</span> <span class="mi">5</span><span class="o">/</span><span class="mf">6.</span> <span class="c"># in case of First-order Shear Deformation Theory</span>
 
         <span class="c"># approximation series</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
 
         <span class="c"># numerical integration</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="mi">10</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="n">n</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ni_num_cores</span> <span class="o">=</span> <span class="n">cpu_count</span><span class="p">()</span><span class="o">//</span><span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ni_method</span> <span class="o">=</span> <span class="s">&#39;trapz2d&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c0</span> <span class="o">=</span> <span class="bp">None</span>
@@ -168,25 +178,26 @@
         <span class="c"># displacement at 4 edges is zero</span>
         <span class="c"># free to rotate at 4 edges (simply supported by default)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span> <span class="o">=</span> <span class="mf">1.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span> <span class="o">=</span> <span class="mf">1.</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span> <span class="o">=</span> <span class="mf">1.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span> <span class="o">=</span> <span class="mf">0.</span>
@@ -219,7 +230,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span> <span class="o">=</span> <span class="n">cpu_count</span><span class="p">()</span>
 
         <span class="c"># analysis</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="n">Analysis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="n">Analysis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_kT</span><span class="p">)</span>
 
         <span class="c"># outputs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">increments</span> <span class="o">=</span> <span class="bp">None</span>
@@ -279,118 +290,6 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;plyt must be defined&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">plyt</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="bp">False</span><span class="p">:</span>
-            <span class="k">def</span> <span class="nf">check_load</span><span class="p">(</span><span class="n">load</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">load</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                    <span class="n">check</span> <span class="o">=</span> <span class="bp">False</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">load</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">load</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                            <span class="k">assert</span> <span class="n">load</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">size</span>
-
-                            <span class="k">return</span> <span class="n">load</span>
-                    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">load</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-                        <span class="n">newload</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
-                        <span class="n">newload</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">load</span>
-
-                        <span class="k">return</span> <span class="n">newload</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">check</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid Nxx_cte input&#39;</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
-
-
-            <span class="c"># axial load</span>
-            <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Nxx_cte</span> <span class="o">=</span> <span class="n">check_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nxx_cte</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">check_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nxx</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-            <span class="c"># shear xt</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Nxy_cte</span> <span class="o">=</span> <span class="n">check_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nxy_cte</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Nxy</span> <span class="o">=</span> <span class="n">check_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nxy</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-            <span class="c"># circumferential load</span>
-            <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Nyy_cte</span> <span class="o">=</span> <span class="n">check_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nyy_cte</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Nyy</span> <span class="o">=</span> <span class="n">check_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nyy</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">bc_sfss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span> <span class="o">=</span> <span class="mf">1.</span>
-
-    <span class="k">def</span> <span class="nf">bc_ssfs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span> <span class="o">=</span> <span class="mf">1.</span>
-
-
-    <span class="k">def</span> <span class="nf">bc_ssss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span> <span class="o">=</span> <span class="mf">1.</span>
-
 
 <div class="viewcode-block" id="Panel.get_size"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.get_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculates the size of the stiffness matrices</span>
@@ -415,7 +314,7 @@
         <span class="k">if</span> <span class="n">xs</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">ys</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">xs</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">gridx</span><span class="p">)</span>
             <span class="n">ys</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">gridy</span><span class="p">)</span>
-            <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">))</span>
         <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">))</span>
         <span class="n">xshape</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">shape</span>
@@ -424,8 +323,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Arrays xs and ys must have the same shape&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Xs</span> <span class="o">=</span> <span class="n">xs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ys</span> <span class="o">=</span> <span class="n">ys</span>
-        <span class="n">xs</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-        <span class="n">ys</span> <span class="o">=</span> <span class="n">ys</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">ys</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">xshape</span><span class="p">,</span> <span class="n">tshape</span>
 
@@ -438,7 +337,7 @@
 
         <span class="k">elif</span> <span class="s">&#39;fsdt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">:</span>
             <span class="n">F</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABDE</span>
-            <span class="n">F</span><span class="p">[</span><span class="mi">6</span><span class="p">:,</span> <span class="mi">6</span><span class="p">:]</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">K</span>
+            <span class="n">F</span><span class="p">[</span><span class="mi">6</span><span class="p">:,</span> <span class="mi">6</span><span class="p">:]</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fsdt_shear_correction</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_orthotropic_laminate</span><span class="p">:</span>
             <span class="n">msg</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
@@ -471,12 +370,13 @@
 
 
 <div class="viewcode-block" id="Panel.calc_k0"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.calc_k0">[docs]</a>    <span class="k">def</span> <span class="nf">calc_k0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-            <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Fnxny</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+            <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Fnxny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the constitutive stiffness matrix</span>
 
 <span class="sd">        If ``c`` is not given it calculates the linear constitutive stiffness</span>
 <span class="sd">        matrix, otherwise the large displacement linear constitutive stiffness</span>
-<span class="sd">        matrix is calculated.</span>
+<span class="sd">        matrix is calculated. When using ``c``the size of ``c`` must be the</span>
+<span class="sd">        same as ``size``.</span>
 
 <span class="sd">        In assemblies of semi-analytical models the sparse matrices that are</span>
 <span class="sd">        calculated may have the ``size`` of the assembled global model, and the</span>
@@ -487,7 +387,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        size : int</span>
 <span class="sd">            The size of the calculated sparse matrices.</span>
-<span class="sd">        row0 and col0: int or None, optional</span>
+<span class="sd">        row0, col0: int or None, optional</span>
 <span class="sd">            Offset to populate the output sparse matrix (useful when</span>
 <span class="sd">            assemblying panels).</span>
 <span class="sd">        silent : bool, optional</span>
@@ -498,7 +398,7 @@
 <span class="sd">        c : array-like or None, optional</span>
 <span class="sd">            This must be the result of a static analysis, used to compute the</span>
 <span class="sd">            non-linear term based on the actual displacement field.</span>
-<span class="sd">        nx and ny : int or None, optional</span>
+<span class="sd">        nx, ny : int or None, optional</span>
 <span class="sd">            Number of integration points along `x` and `y`, respectively, for</span>
 <span class="sd">            the Legendre-Gauss quadrature rule applied in the numerical</span>
 <span class="sd">            integration. Only used when ``c`` is given.</span>
@@ -506,66 +406,41 @@
 <span class="sd">            The constitutive relations for the laminate at each integration</span>
 <span class="sd">            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using</span>
 <span class="sd">            classical laminated plate theory models.</span>
+<span class="sd">        NLgeom : bool, optional</span>
+<span class="sd">            Flag to indicate if geometrically non-linearities should be</span>
+<span class="sd">            considered.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating k0... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">check_c</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
             <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating kL... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
 
         <span class="n">matrices</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;matrices&#39;</span><span class="p">]</span>
 
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span>
-        <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
         <span class="n">alphadeg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphadeg</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphadeg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpharad</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">alphadeg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
 
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">lam</span> <span class="o">=</span> <span class="n">laminate</span><span class="o">.</span><span class="n">read_stack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plyts</span><span class="p">,</span>
+                                      <span class="n">laminaprops</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">laminaprops</span><span class="p">,</span>
+                                      <span class="n">offset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lam_F</span><span class="p">()</span>
 
-        <span class="n">stack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span>
-        <span class="n">plyts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plyts</span>
-        <span class="n">laminaprops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">laminaprops</span>
-
-        <span class="k">if</span> <span class="n">stack</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">lam</span> <span class="o">=</span> <span class="n">laminate</span><span class="o">.</span><span class="n">read_stack</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="n">plyts</span><span class="p">,</span>
-                                             <span class="n">laminaprops</span><span class="o">=</span><span class="n">laminaprops</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lam_F</span><span class="p">()</span>
-
-        <span class="n">alpharad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">alphadeg</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">y1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">Fnxny</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
                 <span class="s">&#39;Partial domain from y1 to y2 not implemented for kL&#39;</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fk0y1y2</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alpharad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span><span class="p">,</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span><span class="p">,</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span><span class="p">,</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span><span class="p">,</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                     <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+            <span class="n">k0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fk0y1y2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">Fnxny</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">k0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fk0</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alpharad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                         <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+                <span class="n">k0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fk0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">matrices_num</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;matrices_num&#39;</span><span class="p">]</span>
                 <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="k">if</span> <span class="n">nx</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">nx</span>
@@ -577,33 +452,23 @@
                     <span class="c"># Empty c if the interest is only on the heterogeneous</span>
                     <span class="c"># laminate properties</span>
                     <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
-                <span class="n">k0</span> <span class="o">=</span> <span class="n">matrices_num</span><span class="o">.</span><span class="n">fkL_num</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alpharad</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span><span class="p">,</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                         <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+                <span class="n">k0</span> <span class="o">=</span> <span class="n">matrices_num</span><span class="o">.</span><span class="n">fkL_num</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">Fnxny</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+                         <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">NLgeom</span><span class="p">))</span>
 
+        <span class="c">#TODO allow constant stress state to be obtained using static results,</span>
+        <span class="c">#     which would require just passing a &#39;c_cte&#39; used to calculate kG0</span>
         <span class="n">Nxx_cte</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nxx_cte</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nxx_cte</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
         <span class="n">Nyy_cte</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nyy_cte</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nyy_cte</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
         <span class="n">Nxy_cte</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nxy_cte</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nxy_cte</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
 
         <span class="k">if</span> <span class="n">Nxx_cte</span> <span class="o">!=</span> <span class="mf">0.</span> <span class="ow">or</span> <span class="n">Nyy_cte</span> <span class="o">!=</span> <span class="mf">0.</span> <span class="ow">or</span> <span class="n">Nxy_cte</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">y1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">k0</span> <span class="o">+=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG0y1y2</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">Nxx_cte</span><span class="p">,</span> <span class="n">Nyy_cte</span><span class="p">,</span> <span class="n">Nxy_cte</span><span class="p">,</span>
-                               <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alpharad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                               <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                               <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">k0</span> <span class="o">+=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG0y1y2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">,</span> <span class="n">Nxx_cte</span><span class="p">,</span> <span class="n">Nyy_cte</span><span class="p">,</span> <span class="n">Nxy_cte</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">k0</span> <span class="o">+=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG0</span><span class="p">(</span><span class="n">Nxx_cte</span><span class="p">,</span> <span class="n">Nyy_cte</span><span class="p">,</span> <span class="n">Nxy_cte</span><span class="p">,</span>
-                           <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alpharad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                           <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                           <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                           <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+                           <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
             <span class="c"># performing final checks for k0 and making symmetry</span>
@@ -624,64 +489,28 @@
 
 
 <div class="viewcode-block" id="Panel.calc_kG0"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.calc_kG0">[docs]</a>    <span class="k">def</span> <span class="nf">calc_kG0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-            <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Fnxny</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+            <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Fnxny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the linear geometric stiffness matrix</span>
 
-<span class="sd">        When using ``c``:</span>
-
-<span class="sd">        - if you pass ``row0`` and ``col0`` the size of ``c``</span>
-<span class="sd">        should be the size of the whole assembly</span>
-<span class="sd">        - if ``row0=0`` and ``col0=0`` the size of ``c`` should be the size of</span>
-<span class="sd">          the individual panel</span>
-
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        size : int, optional</span>
-<span class="sd">            Size of the output squared sparse matrix (if the panel is used in</span>
-<span class="sd">            an assembly this must be the size of the assembly). If ``None`` it</span>
-<span class="sd">            will consider only the degrees-of-freedom of the individual panel.</span>
-<span class="sd">        row0 and col0: int or None, optional</span>
-<span class="sd">            Offset to populate the output sparse matrix (useful when</span>
-<span class="sd">            assemblying panels).</span>
-<span class="sd">        silent : bool, optional</span>
-<span class="sd">            A boolean to tell whether the log messages should be printed.</span>
-<span class="sd">        finalize : bool, optional</span>
-<span class="sd">            Asserts validity of output data and makes the output matrix</span>
-<span class="sd">            symmetric, should be ``False`` when assemblying.</span>
-<span class="sd">        c : array-like or None, optional</span>
-<span class="sd">            This must be the result of a static analysis, used to numerically</span>
-<span class="sd">            compute `$K_G$` based on the actual membrane-stress state.</span>
-<span class="sd">        nx and ny : int or None, optional</span>
-<span class="sd">            Number of integration points along `x` and `y`, respectively, for</span>
-<span class="sd">            the Legendre-Gauss quadrature rule applied in the numerical</span>
-<span class="sd">            integration. Only used when ``c`` is given.</span>
-<span class="sd">        Fnxny : 4-D array-like or None, optional</span>
-<span class="sd">            The constitutive relations for the laminate at each integration</span>
-<span class="sd">            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using</span>
-<span class="sd">            classical laminated plate theory models.</span>
+<span class="sd">        See :meth:`.Panel.calc_k0` for details on each parameter.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating kG0... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
-
         <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating kG0... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
             <span class="n">matrices</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;matrices&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">check_c</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating kG... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
             <span class="n">matrices</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;matrices_num&#39;</span><span class="p">]</span>
 
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
         <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span>
         <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span>
         <span class="n">alphadeg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphadeg</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphadeg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
-        <span class="n">alpharad</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">alphadeg</span><span class="p">)</span>
-
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpharad</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">alphadeg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
 
         <span class="n">Nxx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nxx</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nxx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
         <span class="n">Nyy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nyy</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nyy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
@@ -689,17 +518,10 @@
 
         <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">y1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">kG0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG0y1y2</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">Nxx</span><span class="p">,</span> <span class="n">Nyy</span><span class="p">,</span> <span class="n">Nxy</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span>
-                           <span class="n">alpharad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                           <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                           <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
+                <span class="n">kG0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG0y1y2</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">Nxx</span><span class="p">,</span> <span class="n">Nyy</span><span class="p">,</span> <span class="n">Nxy</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
                            <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">kG0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG0</span><span class="p">(</span><span class="n">Nxx</span><span class="p">,</span> <span class="n">Nyy</span><span class="p">,</span> <span class="n">Nxy</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alpharad</span><span class="p">,</span>
-                           <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                           <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                           <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                           <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+                <span class="n">kG0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG0</span><span class="p">(</span><span class="n">Nxx</span><span class="p">,</span> <span class="n">Nyy</span><span class="p">,</span> <span class="n">Nxy</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">y1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Only y1=0, y2=b is implemented!&#39;</span><span class="p">)</span>
@@ -708,18 +530,12 @@
             <span class="n">ny</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="k">if</span> <span class="n">ny</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">ny</span>
             <span class="k">if</span> <span class="n">Fnxny</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">Fnxny</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lam_F</span><span class="p">()</span>
-            <span class="n">kG0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG_num</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">Fnxny</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span>
-                       <span class="n">alpharad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                       <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
+            <span class="n">kG0</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkG_num</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">Fnxny</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+                       <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">NLgeom</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">kG0</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">kG0</span><span class="o">.</span><span class="n">data</span><span class="p">)))</span> <span class="o">==</span> <span class="bp">False</span>
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">kG0</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">kG0</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
             <span class="n">kG0</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_symmetric</span><span class="p">(</span><span class="n">kG0</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">kG0</span> <span class="o">=</span> <span class="n">kG0</span>
@@ -732,6 +548,18 @@
         <span class="k">return</span> <span class="n">kG0</span></div>
 
 
+    <span class="k">def</span> <span class="nf">calc_kT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Fnxny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">kL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">col0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">finalize</span><span class="p">,</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="n">ny</span><span class="p">,</span> <span class="n">Fnxny</span><span class="o">=</span><span class="n">Fnxny</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">kG</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">col0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">finalize</span><span class="p">,</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="o">=</span><span class="n">ny</span><span class="p">,</span> <span class="n">Fnxny</span><span class="o">=</span><span class="n">Fnxny</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">kT</span> <span class="o">=</span> <span class="n">kL</span> <span class="o">+</span> <span class="n">kG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kT</span> <span class="o">=</span> <span class="n">kT</span>
+
+        <span class="k">return</span> <span class="n">kT</span>
+
+
 <div class="viewcode-block" id="Panel.calc_kM"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.calc_kM">[docs]</a>    <span class="k">def</span> <span class="nf">calc_kM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the mass matrix</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -741,34 +569,23 @@
 
         <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y1</span>
         <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
         <span class="n">alphadeg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphadeg</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphadeg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
-        <span class="n">alpharad</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">alphadeg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpharad</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">alphadeg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
 
         <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
 
+        <span class="c">#TODO allow a distribution of mu instead of constant value, at least allow a mu for each ply</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Attribute &quot;mu&quot; (density) must be defined&#39;</span><span class="p">)</span>
+
+
         <span class="n">h</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plyts</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">y1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">y2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">kM</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkMy1y2</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alpharad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                                  <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+            <span class="n">kM</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkMy1y2</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">kM</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">alpharad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">u1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2rx</span><span class="p">,</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">v1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2rx</span><span class="p">,</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">u1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">u2ry</span><span class="p">,</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">v1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2ry</span><span class="p">,</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                              <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+            <span class="n">kM</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">kM</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
@@ -790,20 +607,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating kA... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
 
-        <span class="n">matrices</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;matrices&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s">&#39;kpanel&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Conical panels not supported&#39;</span><span class="p">)</span>
 
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">matrices</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;matrices&#39;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="s">&#39;kpanel&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Conical panels not supported&#39;</span><span class="p">)</span>
-
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -814,8 +626,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span> <span class="o">=</span> <span class="mf">1.0001</span>
             <span class="n">Mach</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span>
             <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho_air</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">Mach</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
-            <span class="k">if</span> <span class="n">r</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
-                <span class="n">gamma</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">Mach</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
+                <span class="n">gamma</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="o">*</span><span class="p">(</span><span class="n">Mach</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.</span>
             <span class="n">ainf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_sound</span>
@@ -826,17 +638,9 @@
             <span class="n">aeromu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aeromu</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aeromu</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;x&#39;</span><span class="p">:</span>
-            <span class="n">kA</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkAx</span><span class="p">(</span>
-                    <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+            <span class="n">kA</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkAx</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;y&#39;</span><span class="p">:</span>
-            <span class="n">kA</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fkAy</span><span class="p">(</span>
-                    <span class="n">beta</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
+            <span class="n">kA</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fkAy</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid flow value, must be x or y&#39;</span><span class="p">)</span>
 
@@ -860,11 +664,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating cA... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
 
-        <span class="n">cA</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fcA</span><span class="p">(</span>
-                <span class="n">aeromu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">w1tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1rx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2rx</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">w1ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w1ry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w2ry</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">cA</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fcA</span><span class="p">(</span><span class="n">aeromu</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">cA</span> <span class="o">=</span> <span class="n">cA</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">+</span><span class="mi">1j</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
@@ -1228,15 +1028,8 @@
         <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
 
         <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">xshape</span><span class="p">,</span> <span class="n">tshape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_field</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">gridx</span><span class="p">,</span> <span class="n">gridy</span><span class="p">)</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
-
-        <span class="n">fuvw</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;field&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fuvw</span>
-        <span class="n">us</span><span class="p">,</span> <span class="n">vs</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">phixs</span><span class="p">,</span> <span class="n">phiys</span> <span class="o">=</span> <span class="n">fuvw</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span><span class="p">)</span>
+        <span class="n">fuvw</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;field&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fuvw</span>
+        <span class="n">us</span><span class="p">,</span> <span class="n">vs</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">phixs</span><span class="p">,</span> <span class="n">phiys</span> <span class="o">=</span> <span class="n">fuvw</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">us</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
@@ -1272,14 +1065,6 @@
 
         <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">xshape</span><span class="p">,</span> <span class="n">tshape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_field</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">gridx</span><span class="p">,</span> <span class="n">gridy</span><span class="p">)</span>
 
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
-        <span class="n">c0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c0</span>
-        <span class="n">m0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span>
-        <span class="n">n0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n0</span>
-        <span class="n">funcnum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">funcnum</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
         <span class="n">NL_kinematics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">fstrain</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;field&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fstrain</span>
@@ -1293,8 +1078,9 @@
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
                 <span class="s">&#39;{} is not a valid NL_kinematics option&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">NL_kinematics</span><span class="p">))</span>
 
-        <span class="n">es</span> <span class="o">=</span> <span class="n">fstrain</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span>
-                <span class="n">c0</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">int_NL_kinematics</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span><span class="p">)</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="n">fstrain</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c0</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">funcnum</span><span class="p">,</span> <span class="n">int_NL_kinematics</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">es</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">xshape</span> <span class="o">+</span> <span class="p">(</span><span class="n">e_num</span><span class="p">,)))</span></div>
 
@@ -1324,15 +1110,6 @@
 
         <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">xshape</span><span class="p">,</span> <span class="n">tshape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_field</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">gridx</span><span class="p">,</span> <span class="n">gridy</span><span class="p">)</span>
 
-        <span class="n">F</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
-        <span class="n">c0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c0</span>
-        <span class="n">m0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span>
-        <span class="n">n0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n0</span>
-        <span class="n">funcnum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">funcnum</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
         <span class="n">NL_kinematics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">fstress</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;field&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fstress</span>
@@ -1346,9 +1123,10 @@
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
                     <span class="s">&#39;{} is not a valid NL_kinematics option&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">NL_kinematics</span><span class="p">))</span>
+        <span class="n">Ns</span> <span class="o">=</span> <span class="n">fstress</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">c0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n0</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">funcnum</span><span class="p">,</span> <span class="n">int_NL_kinematics</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span><span class="p">)</span>
 
-        <span class="n">Ns</span> <span class="o">=</span> <span class="n">fstress</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span>
-                <span class="n">funcnum</span><span class="p">,</span> <span class="n">int_NL_kinematics</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Ns</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">xshape</span> <span class="o">+</span> <span class="p">(</span><span class="n">e_num</span><span class="p">,)))</span></div>
 
 
@@ -1407,30 +1185,24 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
         <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating external forces...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
 
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s">&#39;{} is not a valid model option&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>
-
         <span class="n">db</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span>
         <span class="n">num</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;num&#39;</span><span class="p">]</span>
         <span class="n">dofs</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;dofs&#39;</span><span class="p">]</span>
         <span class="n">fg</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;field&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fg</span>
 
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
-
         <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dofs</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
         <span class="n">fext</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
 
         <span class="c"># non-incrementable punctual forces</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">force</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forces</span><span class="p">):</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span> <span class="o">=</span> <span class="n">force</span>
-            <span class="n">fg</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+            <span class="n">fg</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">dofs</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">fpt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span><span class="p">]])</span>
             <span class="k">elif</span> <span class="n">dofs</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
@@ -1440,14 +1212,51 @@
         <span class="c"># incrementable punctual forces</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">force</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forces_inc</span><span class="p">):</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span> <span class="o">=</span> <span class="n">force</span>
-            <span class="n">fg</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">dofs</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">fg</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dofs</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="c">#CLT</span>
                 <span class="n">fpt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span><span class="p">]])</span><span class="o">*</span><span class="n">inc</span>
-            <span class="k">elif</span> <span class="n">dofs</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">dofs</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span> <span class="c">#FSDT</span>
                 <span class="n">fpt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span><span class="o">*</span><span class="n">inc</span>
             <span class="n">fext</span> <span class="o">+=</span> <span class="n">fpt</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">fext</span></div>
+
+
+    <span class="k">def</span> <span class="nf">calc_fint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">nx</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">ny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">Fnxny</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c">#TODO inc not needed here; otherwise with prescribed displacements</span>
+        <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Calculating internal forces...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s">&#39;{0} is not a valid model option&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>
+        <span class="n">matrices_num</span> <span class="o">=</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;matrices_num&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">matrices_num</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValuError</span><span class="p">(</span><span class="s">&#39;matrices_num not implemented for model {0}&#39;</span><span class="o">.</span>
+                    <span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>
+        <span class="n">calc_fint</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">matrices_num</span><span class="p">,</span> <span class="s">&#39;calc_fint&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">calc_fint</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValuError</span><span class="p">(</span><span class="s">&#39;calc_fint not implemented for model {0}&#39;</span><span class="o">.</span>
+                    <span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
+
+        <span class="n">alphadeg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphadeg</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphadeg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpharad</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">alphadeg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="mf">0.</span>
+        <span class="n">nx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="k">if</span> <span class="n">nx</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">nx</span>
+        <span class="n">ny</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="k">if</span> <span class="n">ny</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">ny</span>
+        <span class="n">Fnxny</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="k">if</span> <span class="n">Fnxny</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">Fnxny</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="n">fint</span> <span class="o">=</span> <span class="n">calc_fint</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">Fnxny</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">col0</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
+
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+        <span class="n">msg</span><span class="p">(</span><span class="s">&#39;finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fint</span>
 
 
 <div class="viewcode-block" id="Panel.static"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.static">[docs]</a>    <span class="k">def</span> <span class="nf">static</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -1482,10 +1291,10 @@
 <span class="sd">        ``self.analysis.increments`` parameter.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">kT_initial_state</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">kT_initial_state</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">line_search</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">kT_initial_state</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">compute_every_n</span> <span class="o">=</span> <span class="mi">6</span>
 
         <span class="k">if</span> <span class="n">NLgeom</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;non-linear static&#39;</span><span class="p">]:</span>
             <span class="n">msg</span><span class="p">(</span><span class="s">&#39;________________________________________________&#39;</span><span class="p">,</span>
@@ -1496,7 +1305,7 @@
             <span class="n">msg</span><span class="p">(</span><span class="s">&#39;________________________________________________&#39;</span><span class="p">,</span>
                 <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
             <span class="k">raise</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">NLgeom</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;linear static&#39;</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">NLgeom</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">modelDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s">&#39;matrices&#39;</span><span class="p">]:</span>
             <span class="n">msg</span><span class="p">(</span><span class="s">&#39;________________________________________________&#39;</span><span class="p">,</span>
                 <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
             <span class="n">msg</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
@@ -1603,8 +1412,10 @@
         <span class="n">ubkp</span><span class="p">,</span> <span class="n">vbkp</span><span class="p">,</span> <span class="n">wbkp</span><span class="p">,</span> <span class="n">phixbkp</span><span class="p">,</span> <span class="n">phiybkp</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span>
                                               <span class="bp">self</span><span class="o">.</span><span class="n">phix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span><span class="p">)</span>
 
-        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
         <span class="kn">import</span> <span class="nn">matplotlib</span>
+        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;linux&#39;</span><span class="p">:</span>
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;Agg&#39;</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
         <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Computing field variables...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">displs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;u&#39;</span><span class="p">,</span> <span class="s">&#39;v&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="s">&#39;phix&#39;</span><span class="p">,</span> <span class="s">&#39;phiy&#39;</span><span class="p">]</span>
@@ -1773,13 +1584,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Jun 26, 2016.
+      Last updated on Aug 29, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

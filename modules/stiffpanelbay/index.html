@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Stiffened Panel Bay (compmech.stiffpanelbay) &mdash; CompMech 0.6.6 documentation</title>
+    <title>Stiffened Panel Bay (compmech.stiffpanelbay) &mdash; CompMech 0.6.7 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.6',
+        VERSION:     '0.6.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.6 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../index.html" />
     <link rel="up" title="Modules" href="../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
       </ul>
     </div>  
@@ -206,7 +206,7 @@ used.</p>
 
 <dl class="method">
 <dt id="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d">
-<code class="descname">add_bladestiff2d</code><span class="sig-paren">(</span><em>ys</em>, <em>mu=None</em>, <em>bb=None</em>, <em>bstack=None</em>, <em>bplyts=None</em>, <em>bplyt=None</em>, <em>blaminaprops=None</em>, <em>blaminaprop=None</em>, <em>bf=None</em>, <em>fstack=None</em>, <em>fplyts=None</em>, <em>fplyt=None</em>, <em>flaminaprops=None</em>, <em>flaminaprop=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_bladestiff2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_bladestiff2d</code><span class="sig-paren">(</span><em>ys</em>, <em>mu=None</em>, <em>bb=None</em>, <em>bstack=None</em>, <em>bplyts=None</em>, <em>bplyt=None</em>, <em>blaminaprops=None</em>, <em>blaminaprop=None</em>, <em>bf=None</em>, <em>fstack=None</em>, <em>fplyts=None</em>, <em>fplyt=None</em>, <em>flaminaprops=None</em>, <em>flaminaprop=None</em>, <em>mf=14</em>, <em>nf=11</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_bladestiff2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new BladeStiff2D to the current panel bay</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -268,6 +268,14 @@ used.</p>
 <p><strong>flaminaprop</strong> : float, optional</p>
 <blockquote>
 <div><p>Unique lamina properties for all stiffener flange plies.</p>
+</div></blockquote>
+<p><strong>mf</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>.</p>
+</div></blockquote>
+<p><strong>nf</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -339,7 +347,7 @@ different model for each panel. It is recommended to defined
 
 <dl class="method">
 <dt id="compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d">
-<code class="descname">add_tstiff2d</code><span class="sig-paren">(</span><em>ys</em>, <em>mu=None</em>, <em>bb=None</em>, <em>bstack=None</em>, <em>bplyts=None</em>, <em>bplyt=None</em>, <em>blaminaprops=None</em>, <em>blaminaprop=None</em>, <em>bf=None</em>, <em>fstack=None</em>, <em>fplyts=None</em>, <em>fplyt=None</em>, <em>flaminaprops=None</em>, <em>flaminaprop=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_tstiff2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_tstiff2d</code><span class="sig-paren">(</span><em>ys</em>, <em>mu=None</em>, <em>bb=None</em>, <em>bstack=None</em>, <em>bplyts=None</em>, <em>bplyt=None</em>, <em>blaminaprops=None</em>, <em>blaminaprop=None</em>, <em>bf=None</em>, <em>fstack=None</em>, <em>fplyts=None</em>, <em>fplyt=None</em>, <em>flaminaprops=None</em>, <em>flaminaprop=None</em>, <em>mb=12</em>, <em>nb=13</em>, <em>mf=11</em>, <em>nf=12</em>, <em>Nxxf=0.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_tstiff2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new TStiff2D to the current panel bay</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -401,6 +409,22 @@ used.</p>
 <p><strong>flaminaprop</strong> : float, optional</p>
 <blockquote>
 <div><p>Unique lamina properties for all stiffener flange plies.</p>
+</div></blockquote>
+<p><strong>mb</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of approximation terms for base, along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>.</p>
+</div></blockquote>
+<p><strong>nb</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of approximation terms for base, along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+</div></blockquote>
+<p><strong>mf</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>.</p>
+</div></blockquote>
+<p><strong>nf</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -946,13 +970,13 @@ stored as parameters with the same name in the
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Jun 26, 2016.
+      Last updated on Aug 29, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

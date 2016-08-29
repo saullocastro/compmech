@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Semi-analytical Models for Panels (compmech.panel) &mdash; CompMech 0.6.6 documentation</title>
+    <title>Semi-analytical Models for Panels (compmech.panel) &mdash; CompMech 0.6.7 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.6',
+        VERSION:     '0.6.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.6 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../index.html" />
     <link rel="up" title="Flat Plates, Curved Panels and Assemblies" href="index.html" />
     <link rel="prev" title="Flat Plates, Curved Panels and Assemblies" href="index.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="index.html" title="Flat Plates, Curved Panels and Assemblies"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
       </ul>
@@ -129,20 +129,14 @@ domains.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.add_force" title="compmech.panel.panel.Panel.add_force"><code class="xref py py-obj docutils literal"><span class="pre">add_force</span></code></a>(x,&nbsp;y,&nbsp;fx,&nbsp;fy,&nbsp;fz[,&nbsp;cte])</td>
 <td>Add a punctual force with three components</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">bc_sfss</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">bc_ssfs</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">bc_ssss</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_cA" title="compmech.panel.panel.Panel.calc_cA"><code class="xref py py-obj docutils literal"><span class="pre">calc_cA</span></code></a>(aeromu[,&nbsp;silent,&nbsp;finalize])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_cA" title="compmech.panel.panel.Panel.calc_cA"><code class="xref py py-obj docutils literal"><span class="pre">calc_cA</span></code></a>(aeromu[,&nbsp;silent,&nbsp;finalize])</td>
 <td>Calculate the aerodynamic damping matrix using the piston theory</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fext" title="compmech.panel.panel.Panel.calc_fext"><code class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></code></a>([inc,&nbsp;silent])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fext" title="compmech.panel.panel.Panel.calc_fext"><code class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></code></a>([inc,&nbsp;silent])</td>
 <td>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">calc_fint</span></code>(c[,&nbsp;size,&nbsp;col0,&nbsp;silent,&nbsp;nx,&nbsp;ny,&nbsp;...])</td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_k0" title="compmech.panel.panel.Panel.calc_k0"><code class="xref py py-obj docutils literal"><span class="pre">calc_k0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;...])</td>
 <td>Calculate the constitutive stiffness matrix</td>
@@ -156,31 +150,34 @@ domains.</p>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_kM" title="compmech.panel.panel.Panel.calc_kM"><code class="xref py py-obj docutils literal"><span class="pre">calc_kM</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize])</td>
 <td>Calculate the mass matrix</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.freq" title="compmech.panel.panel.Panel.freq"><code class="xref py py-obj docutils literal"><span class="pre">freq</span></code></a>([atype,&nbsp;tol,&nbsp;sparse_solver,&nbsp;silent,&nbsp;...])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">calc_kT</span></code>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.freq" title="compmech.panel.panel.Panel.freq"><code class="xref py py-obj docutils literal"><span class="pre">freq</span></code></a>([atype,&nbsp;tol,&nbsp;sparse_solver,&nbsp;silent,&nbsp;...])</td>
 <td>Performs a natural frequency analysis</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.get_size" title="compmech.panel.panel.Panel.get_size"><code class="xref py py-obj docutils literal"><span class="pre">get_size</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.get_size" title="compmech.panel.panel.Panel.get_size"><code class="xref py py-obj docutils literal"><span class="pre">get_size</span></code></a>()</td>
 <td>Calculates the size of the stiffness matrices</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.lb" title="compmech.panel.panel.Panel.lb"><code class="xref py py-obj docutils literal"><span class="pre">lb</span></code></a>([tol,&nbsp;sparse_solver,&nbsp;calc_kA,&nbsp;silent,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.lb" title="compmech.panel.panel.Panel.lb"><code class="xref py py-obj docutils literal"><span class="pre">lb</span></code></a>([tol,&nbsp;sparse_solver,&nbsp;calc_kA,&nbsp;silent,&nbsp;...])</td>
 <td>Performs a linear buckling analysis</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.plot" title="compmech.panel.panel.Panel.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(c[,&nbsp;invert_y,&nbsp;vec,&nbsp;deform_u,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.plot" title="compmech.panel.panel.Panel.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(c[,&nbsp;invert_y,&nbsp;vec,&nbsp;deform_u,&nbsp;...])</td>
 <td>Contour plot for a Ritz constants vector.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.save" title="compmech.panel.panel.Panel.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.save" title="compmech.panel.panel.Panel.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>()</td>
 <td>Save the <code class="docutils literal"><span class="pre">Panel</span></code> object using <code class="docutils literal"><span class="pre">pickle</span></code></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.static" title="compmech.panel.panel.Panel.static"><code class="xref py py-obj docutils literal"><span class="pre">static</span></code></a>([NLgeom,&nbsp;silent])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.static" title="compmech.panel.panel.Panel.static"><code class="xref py py-obj docutils literal"><span class="pre">static</span></code></a>([NLgeom,&nbsp;silent])</td>
 <td>Static analysis for cones and cylinders</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.strain" title="compmech.panel.panel.Panel.strain"><code class="xref py py-obj docutils literal"><span class="pre">strain</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.strain" title="compmech.panel.panel.Panel.strain"><code class="xref py py-obj docutils literal"><span class="pre">strain</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
 <td>Calculates the strain field</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.stress" title="compmech.panel.panel.Panel.stress"><code class="xref py py-obj docutils literal"><span class="pre">stress</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.stress" title="compmech.panel.panel.Panel.stress"><code class="xref py py-obj docutils literal"><span class="pre">stress</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
 <td>Calculates the stress field</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.uvw" title="compmech.panel.panel.Panel.uvw"><code class="xref py py-obj docutils literal"><span class="pre">uvw</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.uvw" title="compmech.panel.panel.Panel.uvw"><code class="xref py py-obj docutils literal"><span class="pre">uvw</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
 <td>Calculates the displacement field</td>
 </tr>
 </tbody>
@@ -266,11 +263,12 @@ analysis.</p>
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.calc_k0">
-<code class="descname">calc_k0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em>, <em>nx=None</em>, <em>ny=None</em>, <em>Fnxny=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_k0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_k0" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calc_k0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em>, <em>nx=None</em>, <em>ny=None</em>, <em>Fnxny=None</em>, <em>inc=None</em>, <em>NLgeom=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_k0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_k0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the constitutive stiffness matrix</p>
 <p>If <code class="docutils literal"><span class="pre">c</span></code> is not given it calculates the linear constitutive stiffness
 matrix, otherwise the large displacement linear constitutive stiffness
-matrix is calculated.</p>
+matrix is calculated. When using <code class="docutils literal"><span class="pre">c``the</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">``c</span></code> must be the
+same as <code class="docutils literal"><span class="pre">size</span></code>.</p>
 <p>In assemblies of semi-analytical models the sparse matrices that are
 calculated may have the <code class="docutils literal"><span class="pre">size</span></code> of the assembled global model, and the
 current constitutive matrix being calculated starts at position
@@ -283,7 +281,7 @@ current constitutive matrix being calculated starts at position
 <blockquote>
 <div><p>The size of the calculated sparse matrices.</p>
 </div></blockquote>
-<p><strong>row0 and col0: int or None, optional</strong></p>
+<p><strong>row0, col0: int or None, optional</strong></p>
 <blockquote>
 <div><p>Offset to populate the output sparse matrix (useful when
 assemblying panels).</p>
@@ -302,17 +300,22 @@ symmetric, should be <code class="docutils literal"><span class="pre">False</spa
 <div><p>This must be the result of a static analysis, used to compute the
 non-linear term based on the actual displacement field.</p>
 </div></blockquote>
-<p><strong>nx and ny</strong> : int or None, optional</p>
+<p><strong>nx, ny</strong> : int or None, optional</p>
 <blockquote>
 <div><p>Number of integration points along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>, respectively, for
 the Legendre-Gauss quadrature rule applied in the numerical
 integration. Only used when <code class="docutils literal"><span class="pre">c</span></code> is given.</p>
 </div></blockquote>
 <p><strong>Fnxny</strong> : 4-D array-like or None, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>The constitutive relations for the laminate at each integration
 point. Must be a 4-D array of shape <code class="docutils literal"><span class="pre">(nx,</span> <span class="pre">ny,</span> <span class="pre">6,</span> <span class="pre">6)</span></code> when using
 classical laminated plate theory models.</p>
+</div></blockquote>
+<p><strong>NLgeom</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Flag to indicate if geometrically non-linearities should be
+considered.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -328,61 +331,9 @@ classical laminated plate theory models.</p>
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.calc_kG0">
-<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em>, <em>nx=None</em>, <em>ny=None</em>, <em>Fnxny=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_kG0" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em>, <em>nx=None</em>, <em>ny=None</em>, <em>Fnxny=None</em>, <em>NLgeom=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_kG0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the linear geometric stiffness matrix</p>
-<p>When using <code class="docutils literal"><span class="pre">c</span></code>:</p>
-<ul class="simple">
-<li>if you pass <code class="docutils literal"><span class="pre">row0</span></code> and <code class="docutils literal"><span class="pre">col0</span></code> the size of <code class="docutils literal"><span class="pre">c</span></code></li>
-</ul>
-<p>should be the size of the whole assembly
-- if <code class="docutils literal"><span class="pre">row0=0</span></code> and <code class="docutils literal"><span class="pre">col0=0</span></code> the size of <code class="docutils literal"><span class="pre">c</span></code> should be the size of</p>
-<blockquote>
-<div>the individual panel</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>size</strong> : int, optional</p>
-<blockquote>
-<div><p>Size of the output squared sparse matrix (if the panel is used in
-an assembly this must be the size of the assembly). If <code class="docutils literal"><span class="pre">None</span></code> it
-will consider only the degrees-of-freedom of the individual panel.</p>
-</div></blockquote>
-<p><strong>row0 and col0: int or None, optional</strong></p>
-<blockquote>
-<div><p>Offset to populate the output sparse matrix (useful when
-assemblying panels).</p>
-</div></blockquote>
-<p><strong>silent</strong> : bool, optional</p>
-<blockquote>
-<div><p>A boolean to tell whether the log messages should be printed.</p>
-</div></blockquote>
-<p><strong>finalize</strong> : bool, optional</p>
-<blockquote>
-<div><p>Asserts validity of output data and makes the output matrix
-symmetric, should be <code class="docutils literal"><span class="pre">False</span></code> when assemblying.</p>
-</div></blockquote>
-<p><strong>c</strong> : array-like or None, optional</p>
-<blockquote>
-<div><p>This must be the result of a static analysis, used to numerically
-compute <img class="math" src="../../_images/math/47ead0708031337e50c5fdaac605a66674ff6407.png" alt="$K_G$"/> based on the actual membrane-stress state.</p>
-</div></blockquote>
-<p><strong>nx and ny</strong> : int or None, optional</p>
-<blockquote>
-<div><p>Number of integration points along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>, respectively, for
-the Legendre-Gauss quadrature rule applied in the numerical
-integration. Only used when <code class="docutils literal"><span class="pre">c</span></code> is given.</p>
-</div></blockquote>
-<p><strong>Fnxny</strong> : 4-D array-like or None, optional</p>
-<blockquote class="last">
-<div><p>The constitutive relations for the laminate at each integration
-point. Must be a 4-D array of shape <code class="docutils literal"><span class="pre">(nx,</span> <span class="pre">ny,</span> <span class="pre">6,</span> <span class="pre">6)</span></code> when using
-classical laminated plate theory models.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>See <a class="reference internal" href="#compmech.panel.panel.Panel.calc_k0" title="compmech.panel.panel.Panel.calc_k0"><code class="xref py py-meth docutils literal"><span class="pre">Panel.calc_k0()</span></code></a> for details on each parameter.</p>
 </dd></dl>
 
 <dl class="method">
@@ -905,14 +856,14 @@ stored as parameters with the same name in the <code class="docutils literal"><s
         <li class="right" >
           <a href="index.html" title="Flat Plates, Curved Panels and Assemblies"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Jun 26, 2016.
+      Last updated on Aug 29, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

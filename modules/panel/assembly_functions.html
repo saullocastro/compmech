@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Functions using Assemblies of Flat Plates and Panels &mdash; CompMech 0.6.6 documentation</title>
+    <title>Functions using Assemblies of Flat Plates and Panels &mdash; CompMech 0.6.7 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.6',
+        VERSION:     '0.6.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.6 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../index.html" />
     <link rel="up" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" />
     <link rel="next" title="Example to Create a Panel Assembly" href="assembly_example_to_create.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="assembly_example_to_create.html" title="Example to Create a Panel Assembly"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="assembly_intro.html" accesskey="U">Assembly of Semi-Analytical Models</a> &raquo;</li> 
@@ -96,6 +96,8 @@
        <span class="n">loaded</span> <span class="n">edge</span>     <span class="n">loaded</span> <span class="n">edge</span>
 </pre></div>
 </div>
+<p>For more details about the theory involved, see
+<a class="reference internal" href="../../theory/ref.html#castro2017assemblymodels" id="id1">[castro2017AssemblyModels]</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -216,7 +218,7 @@ flange.</p>
         <span class="n">Nxx_base</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
         <span class="n">Nxx_flange</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">142.65057725</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">142.65057725</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 
     <span class="n">assy</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">tstiff2d_1stiff_compression</span><span class="p">(</span>
         <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span>
@@ -239,7 +241,7 @@ flange.</p>
         <span class="n">Nxx_base</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
         <span class="n">Nxx_flange</span><span class="o">=-</span><span class="mf">1.</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">114.76990872</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">114.85854770879844</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -249,7 +251,7 @@ flange.</p>
 <code class="descclassname">compmech.panel.assembly.tstiff2d_1stiff_flutter.</code><code class="descname">tstiff2d_1stiff_flutter</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>defect_a</em>, <em>mu</em>, <em>plyt</em>, <em>laminaprop</em>, <em>stack_skin</em>, <em>stack_base</em>, <em>stack_flange</em>, <em>air_speed=None</em>, <em>rho_air=None</em>, <em>Mach=None</em>, <em>speed_sound=None</em>, <em>flow='x'</em>, <em>Nxx_skin=None</em>, <em>Nxx_base=None</em>, <em>Nxx_flange=None</em>, <em>run_static_case=True</em>, <em>r=None</em>, <em>m=8</em>, <em>n=8</em>, <em>mb=None</em>, <em>nb=None</em>, <em>mf=None</em>, <em>nf=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/tstiff2d_1stiff_flutter.html#tstiff2d_1stiff_flutter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.tstiff2d_1stiff_flutter.tstiff2d_1stiff_flutter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flutter of T-Stiffened Panel with possible defect at middle</p>
 <p>For more details about each parameter and the aerodynamic formulation see
-Ref. <a class="reference internal" href="../../theory/ref.html#castro2016flutterpanel" id="id1">[castro2016FlutterPanel]</a> .</p>
+Ref. <a class="reference internal" href="../../theory/ref.html#castro2016flutterpanel" id="id2">[castro2016FlutterPanel]</a> .</p>
 <p>The panel assembly looks like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">skin</span>
  <span class="n">_________</span> <span class="n">_____</span> <span class="n">_________</span>
@@ -427,7 +429,7 @@ flange.</p>
         <span class="n">speed_sound</span><span class="o">=</span><span class="mf">343.</span><span class="p">,</span>
         <span class="n">run_static_case</span><span class="o">=</span><span class="k">True</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1423.254820</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1423.254820</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -437,7 +439,9 @@ flange.</p>
 <code class="descclassname">compmech.panel.assembly.tstiff2d_1stiff_freq.</code><code class="descname">tstiff2d_1stiff_freq</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>defect_a</em>, <em>mu</em>, <em>plyt</em>, <em>laminaprop</em>, <em>stack_skin</em>, <em>stack_base</em>, <em>stack_flange</em>, <em>r=None</em>, <em>m=8</em>, <em>n=8</em>, <em>mb=None</em>, <em>nb=None</em>, <em>mf=None</em>, <em>nf=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/tstiff2d_1stiff_freq.html#tstiff2d_1stiff_freq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.tstiff2d_1stiff_freq.tstiff2d_1stiff_freq" title="Permalink to this definition">¶</a></dt>
 <dd><p>Frequency T-Stiffened Panel with possible defect at middle</p>
 <p>For more details about each parameter and the aerodynamic formulation see
-Ref. <a class="reference internal" href="../../theory/ref.html#castro2016flutterpanel" id="id2">[castro2016FlutterPanel]</a> .</p>
+Ref. <a class="reference internal" href="../../theory/ref.html#castro2016flutterpanel" id="id3">[castro2016FlutterPanel]</a> .</p>
+<p>For more details about the theory involved on the assembly of panels, see
+<a class="reference internal" href="../../theory/ref.html#castro2017assemblymodels" id="id4">[castro2017AssemblyModels]</a>.</p>
 <p>The panel assembly looks like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">skin</span>
  <span class="n">_________</span> <span class="n">_____</span> <span class="n">_________</span>
@@ -570,7 +574,7 @@ flange.</p>
         <span class="n">mb</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
         <span class="n">mf</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">nf</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">48.35762006</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">48.440425531703042</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -622,7 +626,7 @@ flange.</p>
         <li class="right" >
           <a href="assembly_example_to_create.html" title="Example to Create a Panel Assembly"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li> 
@@ -630,7 +634,7 @@ flange.</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Jun 26, 2016.
+      Last updated on Aug 29, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

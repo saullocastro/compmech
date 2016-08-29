@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Example to Create a Panel Assembly &mdash; CompMech 0.6.6 documentation</title>
+    <title>Example to Create a Panel Assembly &mdash; CompMech 0.6.7 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.6',
+        VERSION:     '0.6.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.6 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../index.html" />
     <link rel="up" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" />
-    <link rel="next" title="Semi-analytical models for Stiffeners (compmech.stiffener)" href="../stiffener/index.html" />
+    <link rel="next" title="Panel Connections (compmech.panel.connections)" href="connections.html" />
     <link rel="prev" title="Functions using Assemblies of Flat Plates and Panels" href="assembly_functions.html" /> 
   </head>
   <body role="document">
@@ -41,12 +41,12 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../stiffener/index.html" title="Semi-analytical models for Stiffeners (compmech.stiffener)"
+          <a href="connections.html" title="Panel Connections (compmech.panel.connections)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="assembly_functions.html" title="Functions using Assemblies of Flat Plates and Panels"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="assembly_intro.html" accesskey="U">Assembly of Semi-Analytical Models</a> &raquo;</li> 
@@ -71,6 +71,8 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
 <span class="kn">from</span> <span class="nn">compmech.composite</span> <span class="k">import</span> <span class="n">laminate</span>
 <span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="k">import</span> <span class="n">make_symmetric</span>
 <span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="k">import</span> <span class="n">freq</span>
+<span class="kn">from</span> <span class="nn">compmech.panel.connections</span> <span class="k">import</span> <span class="n">calc_kt_kr</span>
+
 
 <span class="k">def</span> <span class="nf">tstiff2d_1stiff_freq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">bf</span><span class="p">,</span> <span class="n">defect_a</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
         <span class="n">stack_skin</span><span class="p">,</span> <span class="n">stack_base</span><span class="p">,</span> <span class="n">stack_flange</span><span class="p">,</span>
@@ -79,6 +81,9 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
 
 <span class="sd">    For more details about each parameter and the aerodynamic formulation see</span>
 <span class="sd">    Ref. [castro2016FlutterPanel]_ .</span>
+
+<span class="sd">    For more details about the theory involved on the assembly of panels, see</span>
+<span class="sd">    [castro2017AssemblyModels]_.</span>
 
 <span class="sd">    The panel assembly looks like::</span>
 
@@ -370,10 +375,7 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
         <span class="n">p1</span> <span class="o">=</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;p1&#39;</span><span class="p">]</span>
         <span class="n">p2</span> <span class="o">=</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;p2&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;SSycte&#39;</span><span class="p">:</span>
-            <span class="c"># kt = A22/t</span>
-            <span class="c"># kr = D22/t</span>
-            <span class="n">kt</span> <span class="o">=</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
-            <span class="n">kr</span> <span class="o">=</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span> <span class="o">=</span> <span class="n">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="s">&#39;ycte&#39;</span><span class="p">)</span>
             <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSSycte</span><span class="o">.</span><span class="n">fkCSSycte11</span><span class="p">(</span>
                     <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte1&#39;</span><span class="p">],</span>
                     <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
@@ -384,10 +386,7 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
                     <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte2&#39;</span><span class="p">],</span>
                     <span class="n">size</span><span class="p">,</span> <span class="n">p2</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;SSxcte&#39;</span><span class="p">:</span>
-            <span class="c"># kt = A11/t</span>
-            <span class="c"># kr = D11/t</span>
-            <span class="n">kt</span> <span class="o">=</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
-            <span class="n">kr</span> <span class="o">=</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span> <span class="o">=</span> <span class="n">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="s">&#39;xcte&#39;</span><span class="p">)</span>
             <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSSxcte</span><span class="o">.</span><span class="n">fkCSSxcte11</span><span class="p">(</span>
                     <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;xcte1&#39;</span><span class="p">],</span>
                     <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
@@ -398,9 +397,7 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
                     <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;xcte2&#39;</span><span class="p">],</span>
                     <span class="n">size</span><span class="p">,</span> <span class="n">p2</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;SB&#39;</span><span class="p">:</span>
-            <span class="c"># kt = max(A11_p1, A11_p2)/(min(t_p1, t_p2) * min(a, b))</span>
-            <span class="n">den</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-            <span class="n">kt</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">den</span>
+            <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span> <span class="o">=</span> <span class="n">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="s">&#39;bot-top&#39;</span><span class="p">)</span>
             <span class="n">dsb</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">plyts</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p2</span><span class="o">.</span><span class="n">plyts</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
             <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSB</span><span class="o">.</span><span class="n">fkCSB11</span><span class="p">(</span><span class="n">kt</span><span class="p">,</span> <span class="n">dsb</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span>
                     <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
@@ -409,10 +406,7 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
             <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSB</span><span class="o">.</span><span class="n">fkCSB22</span><span class="p">(</span><span class="n">kt</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span>
                     <span class="n">size</span><span class="p">,</span> <span class="n">p2</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;BFycte&#39;</span><span class="p">:</span>
-            <span class="c"># kt = A22/t</span>
-            <span class="c"># kr = D22/t</span>
-            <span class="n">kt</span> <span class="o">=</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
-            <span class="n">kr</span> <span class="o">=</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span> <span class="o">=</span> <span class="n">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="s">&#39;ycte&#39;</span><span class="p">)</span>
             <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCBFycte</span><span class="o">.</span><span class="n">fkCBFycte11</span><span class="p">(</span>
                     <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte1&#39;</span><span class="p">],</span>
                     <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
@@ -455,8 +449,8 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
   <p class="topless"><a href="assembly_functions.html"
                         title="previous chapter">Functions using Assemblies of Flat Plates and Panels</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../stiffener/index.html"
-                        title="next chapter">Semi-analytical models for Stiffeners (<code class="docutils literal"><span class="pre">compmech.stiffener</span></code>)</a></p>
+  <p class="topless"><a href="connections.html"
+                        title="next chapter">Panel Connections (<code class="docutils literal"><span class="pre">compmech.panel.connections</span></code>)</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -488,12 +482,12 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../stiffener/index.html" title="Semi-analytical models for Stiffeners (compmech.stiffener)"
+          <a href="connections.html" title="Panel Connections (compmech.panel.connections)"
              >next</a> |</li>
         <li class="right" >
           <a href="assembly_functions.html" title="Functions using Assemblies of Flat Plates and Panels"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li> 
@@ -501,7 +495,7 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Jun 26, 2016.
+      Last updated on Aug 29, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

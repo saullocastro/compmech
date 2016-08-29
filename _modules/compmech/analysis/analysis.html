@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.analysis.analysis &mdash; CompMech 0.6.6 documentation</title>
+    <title>compmech.analysis.analysis &mdash; CompMech 0.6.7 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.6.6',
+        VERSION:     '0.6.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.6.6 documentation" href="../../../index.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,6 +58,7 @@
 <span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="n">msg</span>
 <span class="kn">from</span> <span class="nn">.newton_raphson</span> <span class="kn">import</span> <span class="n">_solver_NR</span>
 <span class="kn">from</span> <span class="nn">.arc_length</span> <span class="kn">import</span> <span class="n">_solver_arc_length</span>
+
 
 <div class="viewcode-block" id="Analysis"><a class="viewcode-back" href="../../../modules/analysis/index.html#compmech.analysis.Analysis">[docs]</a><span class="k">class</span> <span class="nc">Analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Class that embodies all data required for linear/non-linear analysis</span>
@@ -133,12 +134,11 @@
             <span class="s">&#39;modified_NR&#39;</span><span class="p">,</span> <span class="s">&#39;compute_every_n&#39;</span><span class="p">,</span>
             <span class="s">&#39;kT_initial_state&#39;</span><span class="p">,</span> <span class="s">&#39;initialInc&#39;</span><span class="p">,</span> <span class="s">&#39;minInc&#39;</span><span class="p">,</span> <span class="s">&#39;maxInc&#39;</span><span class="p">,</span> <span class="s">&#39;absTOL&#39;</span><span class="p">,</span>
             <span class="s">&#39;relTOL&#39;</span><span class="p">,</span> <span class="s">&#39;maxNumIter&#39;</span><span class="p">,</span> <span class="s">&#39;too_slow_TOL&#39;</span><span class="p">,</span> <span class="s">&#39;increments&#39;</span><span class="p">,</span> <span class="s">&#39;cs&#39;</span><span class="p">,</span>
-            <span class="s">&#39;last_analysis&#39;</span><span class="p">,</span> <span class="s">&#39;calc_fext&#39;</span><span class="p">,</span> <span class="s">&#39;calc_k0&#39;</span><span class="p">,</span> <span class="s">&#39;calc_fint&#39;</span><span class="p">,</span> <span class="s">&#39;calc_kT&#39;</span><span class="p">,</span>
-            <span class="s">&#39;calc_k0_bc&#39;</span><span class="p">]</span>
+            <span class="s">&#39;last_analysis&#39;</span><span class="p">,</span> <span class="s">&#39;calc_fext&#39;</span><span class="p">,</span> <span class="s">&#39;calc_k0&#39;</span><span class="p">,</span> <span class="s">&#39;calc_fint&#39;</span><span class="p">,</span> <span class="s">&#39;calc_kT&#39;</span><span class="p">]</span>
 
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calc_fext</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">calc_k0</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">calc_fint</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-            <span class="n">calc_kT</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">calc_k0_bc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+            <span class="n">calc_kT</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="c"># non-linear algorithm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">NL_method</span> <span class="o">=</span> <span class="s">&#39;NR&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">line_search</span> <span class="o">=</span> <span class="bp">True</span>
@@ -161,9 +161,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0</span> <span class="o">=</span> <span class="n">calc_k0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_fint</span> <span class="o">=</span> <span class="n">calc_fint</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_kT</span> <span class="o">=</span> <span class="n">calc_kT</span>
-
-        <span class="c"># optional methods</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0_bc</span> <span class="o">=</span> <span class="n">calc_k0_bc</span>
 
         <span class="c"># outputs to be filled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">increments</span> <span class="o">=</span> <span class="bp">None</span>
@@ -195,7 +192,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">maxInc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initialInc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxInc</span><span class="p">)</span>
             <span class="n">msg</span><span class="p">(</span><span class="s">&#39;Started Non-Linear Static Analysis&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">NL_method</span> <span class="ow">is</span> <span class="s">&#39;NR&#39;</span><span class="p">:</span>
-                <span class="n">_solver_NR</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="n">_solver_NR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">NL_method</span> <span class="ow">is</span> <span class="s">&#39;arc_length&#39;</span><span class="p">:</span>
                 <span class="n">_solver_arc_length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -206,24 +203,7 @@
             <span class="n">fext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
             <span class="n">k0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0_bc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">k0_bc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0_bc</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
-                <span class="n">k0max</span> <span class="o">=</span> <span class="n">k0</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-                <span class="n">k0</span> <span class="o">/=</span> <span class="n">k0max</span>
-
-                <span class="n">fextmax</span> <span class="o">=</span> <span class="n">fext</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-                <span class="n">fext</span> <span class="o">/=</span> <span class="n">fextmax</span>
-
-                <span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span> <span class="o">+</span> <span class="n">k0_bc</span>
-
             <span class="n">c</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_k0_bc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">k0</span> <span class="o">*=</span> <span class="n">k0max</span>
-                <span class="n">fext</span> <span class="o">*=</span> <span class="n">fextmax</span>
-
-                <span class="n">c</span> <span class="o">/=</span> <span class="n">k0max</span>
-                <span class="n">c</span> <span class="o">*=</span> <span class="n">fextmax</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">increments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
@@ -266,13 +246,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Jun 26, 2016.
+      Last updated on Aug 29, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

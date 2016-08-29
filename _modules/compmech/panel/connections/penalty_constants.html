@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compmech.panel.connections.penalty_constants &mdash; CompMech 0.6.7 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.6.7',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for compmech.panel.connections.penalty_constants</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">compmech.composite.laminate</span> <span class="kn">as</span> <span class="nn">laminate</span>
+
+<div class="viewcode-block" id="calc_kt_kr"><a class="viewcode-back" href="../../../../modules/panel/connections.html#compmech.panel.connections.calc_kt_kr">[docs]</a><span class="k">def</span> <span class="nf">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connection_type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate translation and rotation penalty constants</span>
+
+<span class="sd">    For details on how to derive these equations, see</span>
+<span class="sd">    [castro2017AssemblyModels]_.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p1 : :class:`.Panel`</span>
+<span class="sd">        First panel.</span>
+<span class="sd">    p2 : :class:`.Panel`</span>
+<span class="sd">        Second panel.</span>
+<span class="sd">    connection_type : str</span>
+<span class="sd">        One of the types:</span>
+<span class="sd">            - &#39;xcte&#39;</span>
+<span class="sd">            - &#39;ycte&#39;</span>
+<span class="sd">            - &#39;bot-top&#39;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    kt, kr : tuple</span>
+<span class="sd">        A tuple with both values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">build_panel_lam</span><span class="p">(</span><span class="n">panel</span><span class="p">):</span>
+        <span class="n">panel</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">panel</span><span class="o">.</span><span class="n">lam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">panel</span><span class="o">.</span><span class="n">stack</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Panel defined without stacking sequence&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">panel</span><span class="o">.</span><span class="n">plyts</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Panel defined without ply thicknesses&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">panel</span><span class="o">.</span><span class="n">laminaprops</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Panel defined without laminae properties&#39;</span><span class="p">)</span>
+        <span class="n">panel</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">laminate</span><span class="o">.</span><span class="n">read_stack</span><span class="p">(</span><span class="n">panel</span><span class="o">.</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="n">panel</span><span class="o">.</span><span class="n">plyts</span><span class="p">,</span>
+                <span class="n">laminaprops</span><span class="o">=</span><span class="n">panel</span><span class="o">.</span><span class="n">laminaprops</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">build_panel_lam</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+    <span class="n">build_panel_lam</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+
+    <span class="n">A11_p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">A11_p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">D11_p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">D11_p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">A22_p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">A22_p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">D22_p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">D22_p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">hp1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span>
+    <span class="n">hp2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span>
+    <span class="k">if</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;xcte&#39;</span><span class="p">:</span>
+        <span class="n">kt</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">A11_p1</span><span class="o">*</span><span class="n">A11_p2</span><span class="o">/</span><span class="p">((</span><span class="n">A11_p1</span> <span class="o">+</span> <span class="n">A11_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span>
+        <span class="n">kr</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">D11_p1</span><span class="o">*</span><span class="n">D11_p2</span><span class="o">/</span><span class="p">((</span><span class="n">D11_p1</span> <span class="o">+</span> <span class="n">D11_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span>
+    <span class="k">elif</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;ycte&#39;</span><span class="p">:</span>
+        <span class="n">kt</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">A22_p1</span><span class="o">*</span><span class="n">A22_p2</span><span class="o">/</span><span class="p">((</span><span class="n">A22_p1</span> <span class="o">+</span> <span class="n">A22_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span>
+        <span class="n">kr</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">D22_p1</span><span class="o">*</span><span class="n">D22_p2</span><span class="o">/</span><span class="p">((</span><span class="n">D22_p1</span> <span class="o">+</span> <span class="n">D22_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span>
+    <span class="k">elif</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;bot-top&#39;</span><span class="p">:</span>
+        <span class="n">kt</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">A11_p1</span><span class="o">*</span><span class="n">A11_p2</span><span class="o">/</span><span class="p">((</span><span class="n">A11_p1</span> <span class="o">+</span> <span class="n">A11_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span> <span class="o">/</span> <span class="nb">min</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">kr</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Aug 29, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

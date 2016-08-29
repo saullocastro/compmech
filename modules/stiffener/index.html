@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Semi-analytical models for Stiffeners (compmech.stiffener) &mdash; CompMech 0.6.6 documentation</title>
+    <title>Semi-analytical models for Stiffeners (compmech.stiffener) &mdash; CompMech 0.6.7 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.6',
+        VERSION:     '0.6.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.6 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../index.html" />
     <link rel="up" title="Modules" href="../index.html" />
-    <link rel="prev" title="Example to Create a Panel Assembly" href="../panel/assembly_example_to_create.html" /> 
+    <link rel="prev" title="Panel Connections (compmech.panel.connections)" href="../panel/connections.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,9 +40,9 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../panel/assembly_example_to_create.html" title="Example to Create a Panel Assembly"
+          <a href="../panel/connections.html" title="Panel Connections (compmech.panel.connections)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
       </ul>
     </div>  
@@ -110,7 +110,7 @@
 
 <dl class="class">
 <dt id="compmech.stiffener.BladeStiff2D">
-<em class="property">class </em><code class="descclassname">compmech.stiffener.</code><code class="descname">BladeStiff2D</code><span class="sig-paren">(</span><em>bay</em>, <em>mu</em>, <em>panel1</em>, <em>panel2</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>bstack</em>, <em>bplyts</em>, <em>blaminaprops</em>, <em>fstack</em>, <em>fplyts</em>, <em>flaminaprops</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/bladestiff2d.html#BladeStiff2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff2D" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">compmech.stiffener.</code><code class="descname">BladeStiff2D</code><span class="sig-paren">(</span><em>bay</em>, <em>mu</em>, <em>panel1</em>, <em>panel2</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>bstack</em>, <em>bplyts</em>, <em>blaminaprops</em>, <em>fstack</em>, <em>fplyts</em>, <em>flaminaprops</em>, <em>mf=14</em>, <em>nf=11</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/bladestiff2d.html#BladeStiff2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff2D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Blade Stiffener using 2D Formulation for Flange</p>
 <p>Blade-type of stiffener model using a 2D formulation for the flange and a
 2D formulation for the base (padup):</p>
@@ -135,7 +135,7 @@ offset.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.stiffener.BladeStiff2D.calc_k0" title="compmech.stiffener.BladeStiff2D.calc_k0"><code class="xref py py-obj docutils literal"><span class="pre">calc_k0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize])</td>
 <td>Calculate the linear constitutive stiffness matrix</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.stiffener.BladeStiff2D.calc_kG0" title="compmech.stiffener.BladeStiff2D.calc_kG0"><code class="xref py py-obj docutils literal"><span class="pre">calc_kG0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize,&nbsp;c])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.stiffener.BladeStiff2D.calc_kG0" title="compmech.stiffener.BladeStiff2D.calc_kG0"><code class="xref py py-obj docutils literal"><span class="pre">calc_kG0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;...])</td>
 <td>Calculate the linear geometric stiffness matrix</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.stiffener.BladeStiff2D.calc_kM" title="compmech.stiffener.BladeStiff2D.calc_kM"><code class="xref py py-obj docutils literal"><span class="pre">calc_kM</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize])</td>
@@ -151,7 +151,7 @@ offset.</p>
 
 <dl class="method">
 <dt id="compmech.stiffener.BladeStiff2D.calc_kG0">
-<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/bladestiff2d.html#BladeStiff2D.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff2D.calc_kG0" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em>, <em>NLgeom=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/bladestiff2d.html#BladeStiff2D.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.BladeStiff2D.calc_kG0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the linear geometric stiffness matrix</p>
 </dd></dl>
 
@@ -165,7 +165,7 @@ offset.</p>
 
 <dl class="class">
 <dt id="compmech.stiffener.TStiff2D">
-<em class="property">class </em><code class="descclassname">compmech.stiffener.</code><code class="descname">TStiff2D</code><span class="sig-paren">(</span><em>bay</em>, <em>mu</em>, <em>panel1</em>, <em>panel2</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>bstack</em>, <em>bplyts</em>, <em>blaminaprops</em>, <em>fstack</em>, <em>fplyts</em>, <em>flaminaprops</em>, <em>model='tstiff2d_clt_donnell_bardell'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/tstiff2d.html#TStiff2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.TStiff2D" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">compmech.stiffener.</code><code class="descname">TStiff2D</code><span class="sig-paren">(</span><em>bay</em>, <em>mu</em>, <em>panel1</em>, <em>panel2</em>, <em>ys</em>, <em>bb</em>, <em>bf</em>, <em>bstack</em>, <em>bplyts</em>, <em>blaminaprops</em>, <em>fstack</em>, <em>fplyts</em>, <em>flaminaprops</em>, <em>model='tstiff2d_clt_donnell_bardell'</em>, <em>mb=15</em>, <em>nb=12</em>, <em>mf=15</em>, <em>nf=12</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/tstiff2d.html#TStiff2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.TStiff2D" title="Permalink to this definition">¶</a></dt>
 <dd><p>T Stiffener using 2D Formulation for the Base and Flange</p>
 <p>T-type of stiffener model using a 2D formulation for the flange and a
 2D formulation for the base:</p>
@@ -190,7 +190,7 @@ simulation of skin-stiffener debounding effects.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.stiffener.TStiff2D.calc_k0" title="compmech.stiffener.TStiff2D.calc_k0"><code class="xref py py-obj docutils literal"><span class="pre">calc_k0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize])</td>
 <td>Calculate the linear constitutive stiffness matrix</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.stiffener.TStiff2D.calc_kG0" title="compmech.stiffener.TStiff2D.calc_kG0"><code class="xref py py-obj docutils literal"><span class="pre">calc_kG0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize,&nbsp;c])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.stiffener.TStiff2D.calc_kG0" title="compmech.stiffener.TStiff2D.calc_kG0"><code class="xref py py-obj docutils literal"><span class="pre">calc_kG0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;...])</td>
 <td>Calculate the linear geometric stiffness matrix</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.stiffener.TStiff2D.calc_kM" title="compmech.stiffener.TStiff2D.calc_kM"><code class="xref py py-obj docutils literal"><span class="pre">calc_kM</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;finalize])</td>
@@ -206,8 +206,9 @@ simulation of skin-stiffener debounding effects.</p>
 
 <dl class="method">
 <dt id="compmech.stiffener.TStiff2D.calc_kG0">
-<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/tstiff2d.html#TStiff2D.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.TStiff2D.calc_kG0" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>size=None</em>, <em>row0=0</em>, <em>col0=0</em>, <em>silent=False</em>, <em>finalize=True</em>, <em>c=None</em>, <em>NLgeom=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffener/tstiff2d.html#TStiff2D.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffener.TStiff2D.calc_kG0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the linear geometric stiffness matrix</p>
+<p>See <a class="reference internal" href="../panel/panel.html#compmech.panel.panel.Panel.calc_k0" title="compmech.panel.panel.Panel.calc_k0"><code class="xref py py-meth docutils literal"><span class="pre">Panel.calc_k0()</span></code></a> for details on each parameter.</p>
 </dd></dl>
 
 <dl class="method">
@@ -230,8 +231,8 @@ simulation of skin-stiffener debounding effects.</p>
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../panel/assembly_example_to_create.html"
-                        title="previous chapter">Example to Create a Panel Assembly</a></p>
+  <p class="topless"><a href="../panel/connections.html"
+                        title="previous chapter">Panel Connections (<code class="docutils literal"><span class="pre">compmech.panel.connections</span></code>)</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -263,15 +264,15 @@ simulation of skin-stiffener debounding effects.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../panel/assembly_example_to_create.html" title="Example to Create a Panel Assembly"
+          <a href="../panel/connections.html" title="Panel Connections (compmech.panel.connections)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.6 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Jun 26, 2016.
+      Last updated on Aug 29, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

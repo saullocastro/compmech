@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Panel Connections (compmech.panel.connections) &mdash; CompMech 0.6.7 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.6.7',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="top" title="CompMech 0.6.7 documentation" href="../../index.html" />
+    <link rel="up" title="Flat Plates, Curved Panels and Assemblies" href="index.html" />
+    <link rel="next" title="Semi-analytical models for Stiffeners (compmech.stiffener)" href="../stiffener/index.html" />
+    <link rel="prev" title="Example to Create a Panel Assembly" href="assembly_example_to_create.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../stiffener/index.html" title="Semi-analytical models for Stiffeners (compmech.stiffener)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="assembly_example_to_create.html" title="Example to Create a Panel Assembly"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-compmech.panel.connections"></span><div class="section" id="panel-connections-compmech-panel-connections">
+<h1>Panel Connections (<a class="reference internal" href="#module-compmech.panel.connections" title="compmech.panel.connections"><code class="xref py py-mod docutils literal"><span class="pre">compmech.panel.connections</span></code></a>)<a class="headerlink" href="#panel-connections-compmech-panel-connections" title="Permalink to this headline">¶</a></h1>
+<p>Connection between panel domains. Each panel domain has its own set of Bardell
+approximation functions. Below it is shown the connections currently supported.</p>
+<div class="section" id="kcbfycte">
+<h2>kCBFycte<a class="headerlink" href="#kcbfycte" title="Permalink to this headline">¶</a></h2>
+<p>Connection of type:</p>
+<div class="highlight-default"><div class="highlight"><pre>                     <span class="n">_</span>
+                      <span class="o">|</span>
+  <span class="o">||</span> <span class="o">--&gt;</span> <span class="n">Flange</span>       <span class="o">|</span>
+  <span class="o">||</span>                  <span class="o">|-&gt;</span> <span class="n">Can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">model</span> <span class="n">a</span> <span class="n">stiffener</span>
+<span class="o">======</span>  <span class="o">--&gt;</span> <span class="n">Base</span>      <span class="o">|</span>
+                     <span class="n">_</span><span class="o">|</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">ycte</span></code> indicates the connection exists at a constant <img class="math" src="../../_images/math/684dd3641c96ab76058f5e71ac6443d0de5e2340.png" alt="y_1"/> for panel 1
+(base) and <img class="math" src="../../_images/math/ced580c1d6b38deeb8b2e9ab3ecea8332d066e46.png" alt="y_2"/> for panel 2 (flange).</p>
+</div>
+<div class="section" id="kcsb">
+<h2>kCSB<a class="headerlink" href="#kcsb" title="Permalink to this headline">¶</a></h2>
+<p>Connection of type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">======</span>        <span class="o">==&gt;</span> <span class="n">base</span>
+<span class="o">------</span>        <span class="o">--&gt;</span> <span class="n">skin</span>
+</pre></div>
+</div>
+<p>Takes into account the offset between the two mid-surfaces.</p>
+</div>
+<div class="section" id="kcssxcte">
+<h2>kCSSxcte<a class="headerlink" href="#kcssxcte" title="Permalink to this headline">¶</a></h2>
+<p>Connection of type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">__________</span>
+<span class="o">|</span>        <span class="o">|</span>
+<span class="o">|</span>        <span class="o">|</span>      <span class="o">/^</span>\ <span class="n">x2</span>
+<span class="o">|</span>   <span class="n">S2</span>   <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>        <span class="o">|</span>   <span class="n">y2</span>  <span class="o">|</span>
+<span class="o">|</span>        <span class="o">|</span>   <span class="o">&lt;----</span>
+<span class="o">|</span><span class="n">________</span><span class="o">|</span> <span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">x2</span><span class="o">=</span><span class="n">xcte2</span><span class="p">)</span>
+<span class="n">__________</span> <span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">x1</span><span class="o">=</span><span class="n">xcte1</span><span class="p">)</span>
+<span class="o">|</span>        <span class="o">|</span>
+<span class="o">|</span>        <span class="o">|</span>      <span class="o">/^</span>\ <span class="n">x1</span>
+<span class="o">|</span>   <span class="n">S1</span>   <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>        <span class="o">|</span>   <span class="n">y1</span>  <span class="o">|</span>
+<span class="o">|</span><span class="n">________</span><span class="o">|</span>   <span class="o">&lt;----</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="kcssycte">
+<h2>kCSSycte<a class="headerlink" href="#kcssycte" title="Permalink to this headline">¶</a></h2>
+<p>Connection of type:</p>
+<div class="highlight-default"><div class="highlight"><pre>           <span class="o">/-&gt;</span> <span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">y1</span><span class="o">=</span><span class="n">ycte1</span><span class="p">)</span>
+          <span class="o">/</span>
+         <span class="o">/</span>  <span class="o">/-&gt;</span><span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">y2</span><span class="o">=</span><span class="n">ycte2</span><span class="p">)</span>
+<span class="n">_________</span><span class="o">|</span> <span class="o">|</span><span class="n">_________</span>
+<span class="o">|</span>        <span class="o">|</span> <span class="o">|</span>        <span class="o">|</span>
+<span class="o">|</span>        <span class="o">|</span> <span class="o">|</span>        <span class="o">|</span>
+<span class="o">|</span>   <span class="n">S1</span>   <span class="o">|</span> <span class="o">|</span>   <span class="n">S2</span>   <span class="o">|</span>
+<span class="o">|</span>        <span class="o">|</span> <span class="o">|</span>        <span class="o">|</span>
+<span class="o">|</span><span class="n">________</span><span class="o">|</span> <span class="o">|</span><span class="n">________</span><span class="o">|</span>
+
+    <span class="o">/^</span>\ <span class="n">x1</span>       <span class="o">/^</span>\ <span class="n">x2</span>
+     <span class="o">|</span>            <span class="o">|</span>
+ <span class="n">y1</span>  <span class="o">|</span>        <span class="n">y2</span>  <span class="o">|</span>
+ <span class="o">&lt;----</span>        <span class="o">&lt;----</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculating-penalty-constants">
+<h2>Calculating Penalty Constants<a class="headerlink" href="#calculating-penalty-constants" title="Permalink to this headline">¶</a></h2>
+<p>Function :func:&#8217;.calc_kt_kr&#8217; is based on Ref <a class="reference internal" href="../../theory/ref.html#castro2017assemblymodels" id="id1">[castro2017AssemblyModels]</a> and
+uses a strain compatibility criterion to calculate penalty constants for
+translation (<code class="docutils literal"><span class="pre">kt</span></code>) and rotatio (<code class="docutils literal"><span class="pre">kr</span></code>). The aim is to have penalty constants
+that are just high enough to produce the desired compatibility, but not too
+high such that numerical stability issues start to appear.</p>
+<dl class="function">
+<dt id="compmech.panel.connections.calc_kt_kr">
+<code class="descclassname">compmech.panel.connections.</code><code class="descname">calc_kt_kr</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em>, <em>connection_type</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/connections/penalty_constants.html#calc_kt_kr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.connections.calc_kt_kr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate translation and rotation penalty constants</p>
+<p>For details on how to derive these equations, see
+<a class="reference internal" href="../../theory/ref.html#castro2017assemblymodels" id="id2">[castro2017AssemblyModels]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> : <a class="reference internal" href="panel.html#compmech.panel.panel.Panel" title="compmech.panel.panel.Panel"><code class="xref py py-class docutils literal"><span class="pre">Panel</span></code></a></p>
+<blockquote>
+<div><p>First panel.</p>
+</div></blockquote>
+<p><strong>p2</strong> : <a class="reference internal" href="panel.html#compmech.panel.panel.Panel" title="compmech.panel.panel.Panel"><code class="xref py py-class docutils literal"><span class="pre">Panel</span></code></a></p>
+<blockquote>
+<div><p>Second panel.</p>
+</div></blockquote>
+<p><strong>connection_type</strong> : str</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>One of the types:</dt>
+<dd><ul class="first last simple">
+<li>&#8216;xcte&#8217;</li>
+<li>&#8216;ycte&#8217;</li>
+<li>&#8216;bot-top&#8217;</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>kt, kr</strong> : tuple</p>
+<blockquote class="last">
+<div><p>A tuple with both values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Panel Connections (<code class="docutils literal"><span class="pre">compmech.panel.connections</span></code>)</a><ul>
+<li><a class="reference internal" href="#kcbfycte">kCBFycte</a></li>
+<li><a class="reference internal" href="#kcsb">kCSB</a></li>
+<li><a class="reference internal" href="#kcssxcte">kCSSxcte</a></li>
+<li><a class="reference internal" href="#kcssycte">kCSSycte</a></li>
+<li><a class="reference internal" href="#calculating-penalty-constants">Calculating Penalty Constants</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="assembly_example_to_create.html"
+                        title="previous chapter">Example to Create a Panel Assembly</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../stiffener/index.html"
+                        title="next chapter">Semi-analytical models for Stiffeners (<code class="docutils literal"><span class="pre">compmech.stiffener</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/panel/connections.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../stiffener/index.html" title="Semi-analytical models for Stiffeners (compmech.stiffener)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="assembly_example_to_create.html" title="Example to Create a Panel Assembly"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Aug 29, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>
