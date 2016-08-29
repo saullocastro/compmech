@@ -72,11 +72,11 @@ class BladeStiff2D(object):
             self.flange = Panel(m=mf, n=nf, a=bay.a, b=bf, mu=mu,
                     stack=fstack, plyts=fplyts, laminaprops=flaminaprops,
                     model='plate_clt_donnell_bardell',
-                    u1tx=0., u1rx=1., u2tx=0., u2rx=1.,
-                    v1tx=0., v1rx=1., v2tx=0., v2rx=1.,
+                    u1tx=0., u1rx=0., u2tx=0., u2rx=0.,
+                    v1tx=0., v1rx=0., v2tx=0., v2rx=0.,
                     w1tx=0., w1rx=1., w2tx=0., w2rx=1.,
-                    u1ty=1., u1ry=1., u2ty=1., u2ry=1.,
-                    v1ty=1., v1ry=1., v2ty=1., v2ry=1.,
+                    u1ty=1., u1ry=0., u2ty=1., u2ry=0.,
+                    v1ty=1., v1ry=0., v2ty=1., v2ry=0.,
                     w1ty=1., w1ry=1., w2ty=1., w2ry=1.)
 
         self._rebuild()
