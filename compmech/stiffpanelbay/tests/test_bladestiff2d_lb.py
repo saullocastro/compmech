@@ -4,13 +4,13 @@ from compmech.stiffpanelbay import StiffPanelBay
 from compmech.analysis import lb
 
 
-def test_lb_without_defect():
+def test_bladestiff2d_lb():
     print('Testing linear buckling with BladeStiff2D')
 
     spb = StiffPanelBay()
     spb.a = 2.
     spb.b = 1.
-    spb.stack = [0, +45, -45, 90, -45, +45, 0]
+    spb.stack = [0, +45, -45, 90, -45, +45]
     spb.plyt = 1e-3*0.125
     spb.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
     spb.model = 'plate_clt_donnell_bardell'
@@ -34,9 +34,13 @@ def test_lb_without_defect():
     spb.calc_kG0()
     eigvals, eigvecs = lb(spb.k0, spb.kG0, silent=True)
 
+    spb.plot_skin(eigvecs[:, 0], filename='tmp_test_bladestiff2d_lb_skin.png',
+            colorbar=True)
+    spb.plot_stiffener(eigvecs[:, 0], si=0, region='flange',
+            filename='tmp_test_bladestiff2d_lb_stiff_flange.png', colorbar=True)
+
     calc = eigvals[0]*Nxx
 
     spb.plot_skin(eigvecs[:, 0], filename='tmp_test_bladestiff2d_lb_skin.png', colorbar=True, vec='w', clean=False)
-    assert np.isclose(calc, -1085.4231209121331, atol=0.0001)
-
+    assert np.isclose(calc, -759.05491731597624, atol=0.0001, rtol=0.001)
 

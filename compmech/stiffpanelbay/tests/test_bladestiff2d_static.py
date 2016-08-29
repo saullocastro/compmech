@@ -34,9 +34,14 @@ def test_static_with_BladeStiff2D():
     inc, cs = static(spb.k0, fext, silent=True)
 
     wpanelmin = spb.uvw_skin(cs[0])[2].min()
+    #NOTE repeated call on purpose to evaluate if cs[0] is being messed up
+    #     somewhere
+    wpanelmin = spb.uvw_skin(cs[0])[2].min()
     wflangemax = spb.uvw_stiffener(cs[0], 0, region='flange')[2].max()
-    assert np.isclose(wpanelmin, -0.27085039816333117, atol=1.e-6)
-    assert np.isclose(wflangemax, 0.28813881055867618, atol=1.e-2)
+    #NOTE repeated call on purpose
+    wflangemax = spb.uvw_stiffener(cs[0], 0, region='flange')[2].max()
+    assert np.isclose(wpanelmin, -0.30581458201781481, atol=1.e-4, rtol=0.001)
+    assert np.isclose(wflangemax, 0.331155797371884, atol=1.e-4, rtol=0.001)
     spb.plot_skin(cs[0], filename='tmp_test_bladestiff2d_static_skin.png', colorbar=True, vec='w', clean=False)
     spb.plot_stiffener(cs[0], si=0, region='flange',
             filename='tmp_test_bladestiff2d_stiff_static_flange.png', colorbar=True, clean=False)
