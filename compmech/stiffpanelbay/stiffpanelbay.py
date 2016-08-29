@@ -89,26 +89,26 @@ class StiffPanelBay(object):
 
         # boundary conditions
         self.u1tx = 0.
-        self.u1rx = 1.
+        self.u1rx = 0.
         self.u2tx = 0.
-        self.u2rx = 1.
+        self.u2rx = 0.
         self.v1tx = 0.
-        self.v1rx = 1.
+        self.v1rx = 0.
         self.v2tx = 0.
-        self.v2rx = 1.
+        self.v2rx = 0.
         self.w1tx = 0.
         self.w1rx = 1.
         self.w2tx = 0.
         self.w2rx = 1.
 
         self.u1ty = 0.
-        self.u1ry = 1.
+        self.u1ry = 0.
         self.u2ty = 0.
-        self.u2ry = 1.
+        self.u2ry = 0.
         self.v1ty = 0.
-        self.v1ry = 1.
+        self.v1ry = 0.
         self.v2ty = 0.
-        self.v2ry = 1.
+        self.v2ry = 0.
         self.w1ty = 0.
         self.w1ry = 1.
         self.w2ty = 0.
@@ -471,7 +471,7 @@ class StiffPanelBay(object):
     def add_tstiff2d(self, ys, mu=None, bb=None, bstack=None,
             bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
             bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
-            flaminaprop=None, mb=12, nb=13, mf=11, nf=12, **kwargs):
+            flaminaprop=None, mb=12, nb=13, mf=11, nf=12, Nxxf=0., **kwargs):
         """Add a new TStiff2D to the current panel bay
 
         Parameters
@@ -577,6 +577,7 @@ class StiffPanelBay(object):
                 bb=bb, bf=bf, bstack=bstack, bplyts=bplyts,
                 blaminaprops=blaminaprops, fstack=fstack, fplyts=fplyts,
                 flaminaprops=flaminaprops, mb=mb, nb=nb, mf=mf, nf=nf)
+        s.flange.Nxx = Nxxf
 
         for k, v in kwargs.items():
             setattr(s, k, v)
@@ -622,15 +623,14 @@ class StiffPanelBay(object):
         Additional parameters can be passed using the ``kwargs``.
 
         """
-        p = Panel()
-        p.m = self.m
-        p.n = self.n
-        p.a = self.a
-        p.b = self.b
-        p.r = self.r
-        p.y1 = y1
-        p.y2 = y2
-        p.d = 0.
+        p = Panel(a=self.a, b=self.b, m=self.m, n=self.n, r=self.r,
+                  alphadeg=self.alphadeg, y1=y1, y2=y2,
+                  u1tx=self.u1tx, u1rx=self.u1rx, u2tx=self.u2tx, u2rx=self.u2rx,
+                  v1tx=self.v1tx, v1rx=self.v1rx, v2tx=self.v2tx, v2rx=self.v2rx,
+                  w1tx=self.w1tx, w1rx=self.w1rx, w2tx=self.w2tx, w2rx=self.w2rx,
+                  u1ty=self.u1ty, u1ry=self.u1ry, u2ty=self.u2ty, u2ry=self.u2ry,
+                  v1ty=self.v1ty, v1ry=self.v1ry, v2ty=self.v2ty, v2ry=self.v2ry,
+                  w1ty=self.w1ty, w1ry=self.w1ry, w2ty=self.w2ty, w2ry=self.w2ry)
         p.model = model if model is not None else self.model
         p.stack = stack if stack is not None else self.stack
         p.plyt = plyt if plyt is not None else self.plyt
@@ -638,31 +638,6 @@ class StiffPanelBay(object):
         p.laminaprop = laminaprop if laminaprop is not None else self.laminaprop
         p.laminaprops = laminaprops if laminaprops is not None else self.laminaprops
         p.mu = mu if mu is not None else self.mu
-
-        p.u1tx = self.u1tx
-        p.u1rx = self.u1rx
-        p.u2tx = self.u2tx
-        p.u2rx = self.u2rx
-        p.v1tx = self.v1tx
-        p.v1rx = self.v1rx
-        p.v2tx = self.v2tx
-        p.v2rx = self.v2rx
-        p.w1tx = self.w1tx
-        p.w1rx = self.w1rx
-        p.w2tx = self.w2tx
-        p.w2rx = self.w2rx
-        p.u1ty = self.u1ty
-        p.u1ry = self.u1ry
-        p.u2ty = self.u2ty
-        p.u2ry = self.u2ry
-        p.v1ty = self.v1ty
-        p.v1ry = self.v1ry
-        p.v2ty = self.v2ty
-        p.v2ry = self.v2ry
-        p.w1ty = self.w1ty
-        p.w1ry = self.w1ry
-        p.w2ty = self.w2ty
-        p.w2ry = self.w2ry
 
         for k, v in kwargs.items():
             setattr(p, k, v)
@@ -675,53 +650,45 @@ class StiffPanelBay(object):
     def calc_k0(self, silent=False):
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
-        model = self.model
-        a = self.a
-        b = self.b
-        r = self.r
-        m = self.m
-        n = self.n
-        num = panelmDB.db[self.model]['num']
+
         size = self.get_size()
 
         k0 = 0.
-
-        # contributions from panels
         for p in self.panels:
             p.calc_k0(size=size, row0=0, col0=0, silent=True,
                           finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             k0 += p.k0
 
-        # contributions from bladestiff1ds
         for s in self.bladestiff1ds:
             s.calc_k0(size=size, row0=0, col0=0, silent=True,
                       finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             k0 += s.k0
 
+        num = panelmDB.db[self.model]['num']
+        m = self.m
+        n = self.n
         row0 = num*m*n
         col0 = num*m*n
-
-        # contributions from bladestiff2ds
         for i, s in enumerate(self.bladestiff2ds):
             if i > 0:
                 s_1 = self.bladestiff2ds[i-1]
-                row0 += s_1.flange.get_size()
-                col0 += s_1.flange.get_size()
             s.calc_k0(size=size, row0=row0, col0=col0, silent=True,
                       finalize=False)
+            if s.flange is not None:
+                row0 += s.flange.get_size()
+                col0 += s.flange.get_size()
             #TODO summing up coo_matrix objects may be slow!
             k0 += s.k0
 
-        # contributions from tstiff2ds
         for i, s in enumerate(self.tstiff2ds):
             if i > 0:
                 s_1 = self.tstiff2ds[i-1]
-                row0 += s_1.base.get_size() + s_1.flange.get_size()
-                col0 += s_1.base.get_size() + s_1.flange.get_size()
             s.calc_k0(size=size, row0=row0, col0=col0, silent=True,
                       finalize=False)
+            row0 += s.base.get_size() + s.flange.get_size()
+            col0 += s.base.get_size() + s.flange.get_size()
             #TODO summing up coo_matrix objects may be slow!
             k0 += s.k0
 
@@ -745,52 +712,46 @@ class StiffPanelBay(object):
     def calc_kG0(self, silent=False, c=None):
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
-        model = self.model
-        a = self.a
-        b = self.b
-        m = self.m
-        n = self.n
-        num = panelmDB.db[self.model]['num']
+
         size = self.get_size()
 
         kG0 = 0.
-
-        # contributions from panels
         for p in self.panels:
             p.calc_kG0(size=size, row0=0, col0=0, silent=True,
                        finalize=False, c=c)
             #TODO summing up coo_matrix objects may be slow!
             kG0 += p.kG0
 
-        # contributions from bladestiff1ds
         for s in self.bladestiff1ds:
             s.calc_kG0(size=size, row0=0, col0=0, silent=True,
                        finalize=False, c=c)
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
 
+        num = panelmDB.db[self.model]['num']
+        m = self.m
+        n = self.n
         row0 = num*m*n
         col0 = num*m*n
 
-        # contributions from bladestiff2ds
         for i, s in enumerate(self.bladestiff2ds):
             if i > 0:
                 s_1 = self.bladestiff2ds[i-1]
-                row0 += s_1.flange.get_size()
-                col0 += s_1.flange.get_size()
             s.calc_kG0(size=size, row0=row0, col0=col0, silent=True,
                        finalize=False, c=c)
+            if s.flange is not None:
+                row0 += s.flange.get_size()
+                col0 += s.flange.get_size()
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
 
-        # contributions from tstiff2ds
         for i, s in enumerate(self.tstiff2ds):
             if i > 0:
                 s_1 = self.tstiff2ds[i-1]
-                row0 += s_1.base.get_size() + s_1.flange.get_size()
-                col0 += s_1.base.get_size() + s_1.flange.get_size()
             s.calc_kG0(size=size, row0=row0, col0=col0, silent=True,
                        finalize=False, c=c)
+            row0 += s.base.get_size() + s.flange.get_size()
+            col0 += s.base.get_size() + s.flange.get_size()
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
 
@@ -813,11 +774,7 @@ class StiffPanelBay(object):
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
         model = self.model
-        a = self.a
-        b = self.b
-        m = self.m
-        n = self.n
-        num = panelmDB.db[self.model]['num']
+
         size = self.get_size()
 
         kM = 0.
@@ -828,35 +785,36 @@ class StiffPanelBay(object):
             #TODO summing up coo_matrix objects may be slow!
             kM += p.kM
 
-        # contributions from bladestiff1ds
         for s in self.bladestiff1ds:
             s.calc_kM(size=size, row0=0, col0=0, silent=True,
                       finalize=False)
             #TODO summing up coo_matrix objects may be slow!
             kM += s.kM
 
+        num = panelmDB.db[self.model]['num']
+        m = self.m
+        n = self.n
         row0 = num*m*n
         col0 = num*m*n
 
-        # contributions from bladestiff2ds
         for i, s in enumerate(self.bladestiff2ds):
             if i > 0:
                 s_1 = self.bladestiff2ds[i-1]
-                row0 += s_1.flange.get_size()
-                col0 += s_1.flange.get_size()
             s.calc_kM(size=size, row0=row0, col0=col0, silent=True,
                     finalize=False)
+            if s.flange is not None:
+                row0 += s.flange.get_size()
+                col0 += s.flange.get_size()
             #TODO summing up coo_matrix objects may be slow!
             kM += s.kM
 
-        # contributions from tstiff2ds
         for i, s in enumerate(self.tstiff2ds):
             if i > 0:
                 s_1 = self.tstiff2ds[i-1]
-                row0 += s_1.base.get_size() + s_1.flange.get_size()
-                col0 += s_1.base.get_size() + s_1.flange.get_size()
             s.calc_kM(size=size, row0=row0, col0=col0, silent=True,
                     finalize=False)
+            row0 += s.base.get_size() + s.flange.get_size()
+            col0 += s.base.get_size() + s.flange.get_size()
             #TODO summing up coo_matrix objects may be slow!
             kM += s.kM
 
@@ -911,7 +869,7 @@ class StiffPanelBay(object):
         #      stiffpanelbay domain (mainly integration interval, boundary
         #      conditions)
         p = self.panels[0]
-        #FIXME the initialization below lookd terrible
+        #FIXME the initialization below looks terrible
         #      we should move as quick as possible to the strategy of using
         #      classes more to carry data, avoiding these intrincated methods
         #      shared among classes... (calc_k0, calc_kG0 etc)
@@ -1661,7 +1619,7 @@ class StiffPanelBay(object):
             size = s.flange.get_size()
             g_flange = np.zeros((3, size), dtype=DOUBLE)
             fext_stiffener = np.zeros(size, dtype=DOUBLE)
-            for i, force in enumerate(s.forces_flange + s.flange.forces):
+            for i, force in enumerate(s.flange.forces):
                 xf, yf, fx, fy, fz = force
                 fg_flange(g_flange, xf, yf, s.flange)
                 fpt = np.array([[fx, fy, fz]])
@@ -1676,7 +1634,7 @@ class StiffPanelBay(object):
             g_base = np.zeros((3, size), dtype=DOUBLE)
             fext_base = np.zeros(size, dtype=DOUBLE)
             fg_base = panelmDB.db[s.base.model]['field'].fg
-            for i, force in enumerate(s.forces_base):
+            for i, force in enumerate(s.base.forces):
                 xb, yb, fx, fy, fz = force
                 fg_base(g_base, xb, yb, s.base)
                 fpt = np.array([[fx, fy, fz]])
@@ -1687,7 +1645,7 @@ class StiffPanelBay(object):
             g_flange = np.zeros((3, size), dtype=DOUBLE)
             fext_flange = np.zeros(size, dtype=DOUBLE)
             fg_flange = panelmDB.db[s.flange.model]['field'].fg
-            for i, force in enumerate(s.forces_flange):
+            for i, force in enumerate(s.flange.forces):
                 xf, yf, fx, fy, fz = force
                 fg_flange(g_flange, xf, yf, s.flange)
                 fpt = np.array([[fx, fy, fz]])
