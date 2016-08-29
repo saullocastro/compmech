@@ -42,5 +42,5 @@ def test_bladestiff2d_lb():
     calc = eigvals[0]*Nxx
 
     spb.plot_skin(eigvecs[:, 0], filename='tmp_test_bladestiff2d_lb_skin.png', colorbar=True, vec='w', clean=False)
-    assert np.isclose(calc, -759.05491731597624, atol=0.0001, rtol=0.001)
+    assert np.isclose(calc, -759.05689868085778, atol=0.0001, rtol=0.001)
 
