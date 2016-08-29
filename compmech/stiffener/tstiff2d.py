@@ -12,7 +12,6 @@ from compmech.composite import laminate
 from compmech.panel.connections import (fkCBFycte11, fkCBFycte12, fkCBFycte22,
         calc_kt_kr)
 
-
 class TStiff2D(object):
     r"""T Stiffener using 2D Formulation for the Base and Flange
 
@@ -36,6 +35,16 @@ class TStiff2D(object):
     def __init__(self, bay, mu, panel1, panel2, ys, bb, bf, bstack, bplyts,
             blaminaprops, fstack, fplyts, flaminaprops,
             model='tstiff2d_clt_donnell_bardell', mb=15, nb=12, mf=15, nf=12):
+
+        print('\n\nWARNING - TStiff2D no longer recommended!\n'
+              '          There is a numerically unstable way to compute the\n'
+              '          connection between the skin and stiffener\'s base, it is\n'
+              '          recommended to use panel.assembly instead.\n'
+              '          Module panel.assembly allows stable ways to perform\n'
+              '          connection among panels, and avoids using sliced\n'
+              '          integration intervals that were causing trouble in\n'
+              '          TStiff2D\n\n')
+
         self.bay = bay
         self.panel1 = panel1
         self.panel2 = panel2
@@ -49,11 +58,11 @@ class TStiff2D(object):
         self.base = Panel(a=bay.a, b=bb, r=bay.r, alphadeg=bay.alphadeg,
                 stack=bstack, plyts=bplyts, laminaprops=blaminaprops,
                 mu=mu, m=mb, n=nb, offset=0.,
-                u1tx=1, u1rx=1, u2tx=1, u2rx=1,
-                v1tx=1, v1rx=1, v2tx=1, v2rx=1,
+                u1tx=1, u1rx=0, u2tx=1, u2rx=0,
+                v1tx=1, v1rx=0, v2tx=1, v2rx=0,
                 w1tx=1, w1rx=1, w2tx=1, w2rx=1,
-                u1ty=1, u1ry=1, u2ty=1, u2ry=1,
-                v1ty=1, v1ry=1, v2ty=1, v2ry=1,
+                u1ty=1, u1ry=0, u2ty=1, u2ry=0,
+                v1ty=1, v1ry=0, v2ty=1, v2ry=0,
                 w1ty=1, w1ry=1, w2ty=1, w2ry=1,
                 y1=y1, y2=y2)
         self.base._rebuild()
@@ -63,11 +72,11 @@ class TStiff2D(object):
         self.flange = Panel(a=bay.a, b=bf, model='plate_clt_donnell_bardell',
                 stack=fstack, plyts=fplyts, laminaprops=flaminaprops,
                 mu=mu, m=mf, n=nf, offset=0.,
-                u1tx=0, u1rx=1, u2tx=0, u2rx=1,
-                v1tx=0, v1rx=1, v2tx=0, v2rx=1,
+                u1tx=0, u1rx=0, u2tx=0, u2rx=0,
+                v1tx=0, v1rx=0, v2tx=0, v2rx=0,
                 w1tx=0, w1rx=1, w2tx=0, w2rx=1,
-                u1ty=1, u1ry=1, u2ty=1, u2ry=1,
-                v1ty=1, v1ry=1, v2ty=1, v2ry=1,
+                u1ty=1, u1ry=0, u2ty=1, u2ry=0,
+                v1ty=1, v1ry=0, v2ty=1, v2ry=0,
                 w1ty=1, w1ry=1, w2ty=1, w2ry=1)
         self.flange._rebuild()
 
@@ -132,10 +141,6 @@ class TStiff2D(object):
         conn = stiffmDB.db[self.model]['connections']
 
         ktpb, krpb = calc_kt_kr(self.panel1, self.base, 'bot-top')
-        print('WARNING - TStiff2D has a numerically unstable way to compute\n' +
-              '          the connection between the skin and stiffener\'s\n' +
-              '          base, it is recommended to use panel.assembly\n' +
-              '          instead')
         ktpb = min(1.e7, ktpb)
 
 
