@@ -30,6 +30,22 @@ def configuration(parent_package='', top_path=None):
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']
 
+    config.add_extension('clt_bardell_field',
+              sources=['clt_bardell_field.pyx'],
+              extra_compile_args=args_linear,
+              runtime_library_dirs=runtime_library_dirs,
+              include_dirs=[include],
+              libraries=['bardell_functions'],
+              library_dirs=[lib])
+
+    config.add_extension('clt_bardell_field_w',
+              sources=['clt_bardell_field_w.pyx'],
+              extra_compile_args=args_linear,
+              runtime_library_dirs=runtime_library_dirs,
+              include_dirs=[include],
+              libraries=['bardell_functions'],
+              library_dirs=[lib])
+
     config.add_extension('kpanel_clt_donnell_bardell',
               sources=['kpanel_clt_donnell_bardell.pyx'],
               extra_compile_args=args_linear,
@@ -37,13 +53,6 @@ def configuration(parent_package='', top_path=None):
               include_dirs=[include],
               libraries=['bardell', 'bardell_12'],
               library_dirs=[lib])
-    #config.add_extension('kpanel_clt_donnell_bardell_field',
-              #sources=['kpanel_clt_donnell_bardell_field.pyx'],
-              #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
-              #include_dirs=[include],
-              #libraries=['bardell_functions'],
-              #library_dirs=[lib])
 
     config.add_extension('cpanel_clt_donnell_bardell',
               sources=['cpanel_clt_donnell_bardell.pyx'],
@@ -58,13 +67,6 @@ def configuration(parent_package='', top_path=None):
               runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
               libraries=['bardell_functions', 'legendre_gauss_quadrature'],
-              library_dirs=[lib])
-    config.add_extension('cpanel_clt_donnell_bardell_field',
-              sources=['cpanel_clt_donnell_bardell_field.pyx'],
-              extra_compile_args=args_linear,
-              runtime_library_dirs=runtime_library_dirs,
-              include_dirs=[include],
-              libraries=['bardell_functions'],
               library_dirs=[lib])
 
     config.add_extension('plate_clt_donnell_bardell',
@@ -81,13 +83,6 @@ def configuration(parent_package='', top_path=None):
               include_dirs=[include],
               libraries=['bardell_functions', 'legendre_gauss_quadrature'],
               library_dirs=[lib])
-    config.add_extension('plate_clt_donnell_bardell_field',
-              sources=['plate_clt_donnell_bardell_field.pyx'],
-              extra_compile_args=args_linear,
-              runtime_library_dirs=runtime_library_dirs,
-              include_dirs=[include],
-              libraries=['bardell_functions'],
-              library_dirs=[lib])
 
     config.add_extension('plate_clt_donnell_bardell_w',
               sources=['plate_clt_donnell_bardell_w.pyx'],
@@ -95,13 +90,6 @@ def configuration(parent_package='', top_path=None):
               runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
               libraries=['bardell', 'bardell_12'],
-              library_dirs=[lib])
-    config.add_extension('plate_clt_donnell_bardell_w_field',
-              sources=['plate_clt_donnell_bardell_w_field.pyx'],
-              extra_compile_args=args_linear,
-              runtime_library_dirs=runtime_library_dirs,
-              include_dirs=[include],
-              libraries=['bardell_functions'],
               library_dirs=[lib])
 
     cythonize(config.ext_modules)

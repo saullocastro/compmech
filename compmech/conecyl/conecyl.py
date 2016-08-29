@@ -1,10 +1,10 @@
 from __future__ import division, absolute_import
+import platform
 import gc
 import os
 import traceback
 import time
 import pickle
-import __main__
 
 import numpy as np
 from scipy.sparse import coo_matrix, csr_matrix, csc_matrix
@@ -12,13 +12,13 @@ from scipy.sparse.linalg import eigsh
 from scipy.optimize import leastsq
 from numpy import linspace, pi, cos, sin, tan, deg2rad
 
-from conecylDB import ccs, laminaprops
+from .conecylDB import ccs, laminaprops
 import compmech.composite.laminate as laminate
 from compmech.analysis import Analysis
 from compmech.logger import msg, warn, error
 from compmech.sparse import remove_null_cols, make_symmetric
 from compmech.constants import DOUBLE
-import modelDB
+from . import modelDB
 from .modelDB import get_model
 
 
@@ -63,7 +63,7 @@ class ConeCyl(object):
         ]
 
     def __init__(self):
-        self.name = ''
+        self.name = 'no_name_defined'
 
         # geometry
         self.alphadeg = 0.
@@ -216,12 +216,6 @@ class ConeCyl(object):
 
 
     def _rebuild(self):
-        if not self.name:
-            try:
-                self.name = os.path.basename(__main__.__file__).split('.py')[0]
-            except AttributeError:
-                warn('ConeCyl name unchanged')
-
         if self.k0 is not None:
             if self.k0.shape[0] != self.get_size():
                 self._clear_matrices()
@@ -617,11 +611,13 @@ class ConeCyl(object):
         if c.shape[0] == size:
             for dof in self.excluded_dofs:
                 c[dof] *= inc
+            c = np.ascontiguousarray(c, dtype=DOUBLE)
             return c
         ordered = sorted(zip(self.excluded_dofs,
                              self.excluded_dofs_ck), key=lambda x:x[0])
         for dof, cai in ordered:
             c = np.insert(c, dof, inc*cai)
+        c = np.ascontiguousarray(c, dtype=DOUBLE)
         return c
 
 
@@ -629,7 +625,7 @@ class ConeCyl(object):
         if xs is None or ts is None:
             xs = linspace(0, self.L, gridx)
             ts = linspace(-pi, pi, gridt)
-            xs, ts = np.meshgrid(xs, ts, copy=False)
+            xs, ts = np.meshgrid(xs, ts, copy=True)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ts = np.atleast_1d(np.array(ts, dtype=DOUBLE))
         xshape = xs.shape
@@ -638,13 +634,13 @@ class ConeCyl(object):
             raise ValueError('Arrays xs and ts must have the same shape')
         self.Xs = xs
         self.Ts = ts
-        xs = xs.ravel()
-        ts = ts.ravel()
+        xs = np.ascontiguousarray(xs.flatten(), dtype=DOUBLE)
+        ts = np.ascontiguousarray(ts.flatten(), dtype=DOUBLE)
 
         return xs, ts, xshape, tshape
 
 
-    def _calc_linear_matrices(self, combined_load_case=None):
+    def _calc_linear_matrices(self, combined_load_case=None, silent=False):
         self._rebuild()
         msg('Calculating linear matrices... ', level=2)
 
@@ -679,8 +675,8 @@ class ConeCyl(object):
 
         if 'clpt' in model:
             if self.F_reuse is not None:
-                msg('')
-                msg('Reusing F matrix...', level=2)
+                msg('', silent=silent)
+                msg('Reusing F matrix...', level=2, silent=silent)
                 F = self.F_reuse
             elif lam is not None:
                 F = lam.ABD
@@ -689,8 +685,8 @@ class ConeCyl(object):
 
         elif 'fsdt' in model:
             if self.F_reuse is not None:
-                msg('')
-                msg('Reusing F matrix...', level=2)
+                msg('', silent=silent)
+                msg('Reusing F matrix...', level=2, silent=silent)
                 F = self.F_reuse
             elif lam is not None:
                 F = lam.ABDE
@@ -699,8 +695,8 @@ class ConeCyl(object):
                 F = self.F
 
         if self.force_orthotropic_laminate:
-            msg('')
-            msg('Forcing orthotropic laminate...', level=2)
+            msg('', silent=silent)
+            msg('Forcing orthotropic laminate...', level=2, silent=silent)
             F[0, 2] = 0. # A16
             F[1, 2] = 0. # A26
             F[2, 0] = 0. # A61
@@ -790,13 +786,13 @@ class ConeCyl(object):
         msg('finished!', level=2)
 
 
-    def calc_k0(self):
+    def calc_k0(self, silent=False):
         if self.k0uu is None:
-            self._calc_linear_matrices()
+            self._calc_linear_matrices(silent=silent)
         return self.k0uu
 
 
-    def calc_kT(self, c, inc=1.):
+    def calc_kT(self, c, inc=1., silent=False):
         r"""Calculates the tangent stiffness matrix
 
         The following attributes will affect the numerical integration:
@@ -822,6 +818,8 @@ class ConeCyl(object):
         inc : float, optional
             Load increment, necessary to calculate the full set of Ritz
             constants using :meth:`calc_full_c`.
+        silent : bool, optional
+            A boolean to tell whether the msg messages should be printed.
 
         Returns
         -------
@@ -830,7 +828,7 @@ class ConeCyl(object):
             of freedom.
 
         """
-        self._calc_NL_matrices(c, inc=inc)
+        self._calc_NL_matrices(c, inc=inc, silent=silent)
         return self.kTuu
 
 
@@ -1068,7 +1066,7 @@ class ConeCyl(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def _calc_NL_matrices(self, c, inc=1., with_kLL=None, with_k0L=None):
+    def _calc_NL_matrices(self, c, inc=1., with_kLL=None, with_k0L=None, silent=False):
         r"""Calculates the non-linear stiffness matrices
 
         Parameters
@@ -1083,6 +1081,8 @@ class ConeCyl(object):
             When ``with_kLL=False`` assumes kLL << than k0L and kG.
         with_k0L : bool, optional
             When ``with_k0L=False`` assumes k0L << than kLL and kG.
+        silent : bool, optional
+            A boolean to tell whether the msg messages should be printed.
 
         Notes
         -----
@@ -1092,13 +1092,13 @@ class ConeCyl(object):
         c = self.calc_full_c(c, inc=inc)
 
         if self.k0 is None:
-            self._calc_linear_matrices()
+            self._calc_linear_matrices(silent=silent)
         if with_k0L is None:
             with_k0L = self.with_k0L
         if with_kLL is None:
             with_kLL = self.with_kLL
 
-        msg('Calculating non-linear matrices...', level=2)
+        msg('Calculating non-linear matrices...', level=2, silent=silent)
         alpharad = self.alpharad
         r2 = self.r2
         L = self.L
@@ -1188,7 +1188,7 @@ class ConeCyl(object):
         self.kL = csr_matrix(self.k0 + k0L + kL0 + kLL)
         self.kG = csr_matrix(kG)
 
-        msg('finished!', level=2)
+        msg('finished!', level=2, silent=silent)
 
 
     def uvw(self, c, xs=None, ts=None, gridx=300, gridt=300, inc=1.):
@@ -1204,10 +1204,10 @@ class ConeCyl(object):
             The full set of Ritz constants
         xs : np.ndarray
             The `x` positions where to calculate the displacement field.
-            Default is ``None`` and the method ``_default_field`` is used.
+            Default is ``None`` and method ``_default_field`` is used.
         ts : np.ndarray
             The ``theta`` positions where to calculate the displacement field.
-            Default is ``None`` and the method ``_default_field`` is used.
+            Default is ``None`` and method ``_default_field`` is used.
         gridx : int
             Number of points along the `x` axis where to calculate the
             displacement field.
@@ -1381,7 +1381,7 @@ class ConeCyl(object):
         return Ns.reshape((xshape + (e_num,)))
 
 
-    def calc_fint(self, c, inc=1., m=1, return_u=True):
+    def calc_fint(self, c, inc=1., m=1, return_u=True, silent=False):
         r"""Calculates the internal force vector `\{F_{int}\}`
 
         The following attributes will affect the numerical integration:
@@ -1414,6 +1414,8 @@ class ConeCyl(object):
         return_u : bool, optional
             If the internal force vector corresponsing to the unknown
             set of Ritz constants should be returned.
+        silent : bool, optional
+            A boolean to tell whether the msg messages should be printed.
 
         Returns
         -------
@@ -1538,7 +1540,7 @@ class ConeCyl(object):
         """
         self._rebuild()
         if self.k0 is None:
-            self._calc_linear_matrices()
+            self._calc_linear_matrices(silent=silent)
 
         msg('Calculating external forces...', level=2, silent=silent)
 
@@ -1716,7 +1718,7 @@ class ConeCyl(object):
             msg('', level=1, silent=silent)
             warn('Model {} cannot be used in linear static analysis!'.
                  format(self.model), level=1, silent=silent)
-            lob('________________________________________________',
+            msg('________________________________________________',
                 level=1, silent=silent)
             raise
 
@@ -1736,7 +1738,7 @@ class ConeCyl(object):
              cbar_title='', cbar_fontsize=10,
              aspect='equal', clean=True, dpi=400,
              texts=[], xs=None, ts=None, gridx=300, gridt=300,
-             num_levels=400, inc=1.):
+             num_levels=400, inc=1., vecmin=None, vecmax=None):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1803,10 +1805,10 @@ class ConeCyl(object):
             Clean axes ticks, grids, spines etc.
         xs : np.ndarray, optional
             The `x` positions where to calculate the displacement field.
-            Default is ``None`` and the method ``_default_field`` is used.
+            Default is ``None`` and method ``_default_field`` is used.
         ts : np.ndarray, optional
             The ``theta`` positions where to calculate the displacement field.
-            Default is ``None`` and the method ``_default_field`` is used.
+            Default is ``None`` and method ``_default_field`` is used.
         gridx : int, optional
             Number of points along the `x` axis where to calculate the
             displacement field.
@@ -1818,6 +1820,12 @@ class ConeCyl(object):
         inc : float, optional
             Load increment, necessary to calculate the full set of Ritz
             constants using :meth:`calc_full_c`.
+        vecmin : float, optional
+            Minimum value for the contour scale (useful to compare with other
+            results). If not specified it will be taken from the calculated
+            field.
+        vecmax : float, optional
+            Maximum value for the contour scale.
 
         Returns
         -------
@@ -1831,10 +1839,12 @@ class ConeCyl(object):
         ubkp, vbkp, wbkp, phixbkp, phitbkp = (self.u, self.v, self.w,
                                               self.phix, self.phit)
 
-        import matplotlib.pyplot as plt
         import matplotlib
+        if platform.system().lower() == 'linux':
+            matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
 
-        from plotutils import get_filename
+        from . plotutils import get_filename
 
         c = self.calc_full_c(c, inc=inc)
 
@@ -1872,10 +1882,12 @@ class ConeCyl(object):
         Xs = self.Xs
         Ts = self.Ts
 
-        vecmin = field.min()
-        vecmax = field.max()
+        if vecmin is None:
+            vecmin = field.min()
+        if vecmax is None:
+            vecmax = field.max()
 
-        levels = np.linspace(vecmin, vecmax, num_levels)
+        levels = linspace(vecmin, vecmax, num_levels)
 
         if ax is None:
             fig = plt.figure(figsize=figsize)
@@ -1928,7 +1940,7 @@ class ConeCyl(object):
             fsize = cbar_fontsize
             divider = make_axes_locatable(ax)
             cax = divider.append_axes('right', size='5%', pad=0.05)
-            cbarticks = np.linspace(vecmin, vecmax, cbar_nticks)
+            cbarticks = linspace(vecmin, vecmax, cbar_nticks)
             cbar = plt.colorbar(contour, ticks=cbarticks, format=cbar_format,
                                 cax=cax)
             if cbar_title:
@@ -2179,7 +2191,7 @@ class ConeCyl(object):
             field = uvw
 
             if workingplt:
-                levels = np.linspace(field.min(), field.max(), num_levels)
+                levels = linspace(field.min(), field.max(), num_levels)
                 if ax is None:
                     fig = plt.figure(figsize=figsize)
                     ax = fig.add_subplot(111)
@@ -2308,11 +2320,11 @@ class ConeCyl(object):
             curve = {}
             self.forces = []
             self.add_SPL(PL)
-            time1 = time.clock()
+            t0 = time.clock()
             cs = self.static(NLgeom=NLgeom)
             if plot:
                 self.plot(cs[-1])
-            curve['wall_time_s'] = time.clock() - time1
+            curve['wall_time_s'] = time.clock() - t0
             curve['name'] = 'PL = {} N'.format(PL)
             curve['cs'] = cs
             curve['increments'] = self.increments
@@ -2324,7 +2336,7 @@ class ConeCyl(object):
                 self.uvw(c, xs=self.L/2, ts=0)
                 curve['wPLs'].append(self.w[0])
                 if self.pdC:
-                    ts = np.linspace(0, pi*2, 1000, endpoint=False)
+                    ts = linspace(0, pi*2, 1000, endpoint=False)
                     xs = np.zeros_like(ts)
                     es = self.strain(c=c, xs=xs, ts=ts, inc=inc)
                     fvec = self.F.dot(es.T)
@@ -2377,7 +2389,7 @@ class ConeCyl(object):
         >>> ts, us = cc.apply_shim(0., 25.4, 0.1)
 
         """
-        ts = np.linspace(-np.pi, np.pi, ncpts)
+        ts = linspace(-np.pi, np.pi, ncpts)
         xs = np.zeros_like(ts)
         us = np.zeros_like(ts)
         self.static(NLgeom=False)

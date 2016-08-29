@@ -30,7 +30,7 @@ def test_tstiff2d_1stiff_freq():
         mb=5, nb=6,
         mf=6, nf=7,
         )
-    assert np.isclose(eigvals[0], 48.35762006+0.j, atol=0.001)
+    assert np.isclose(eigvals[0], 48.440425531703042+0.j, atol=0.001)
 
 
 def test_tstiff2d_1stiff_compression():
@@ -60,7 +60,7 @@ def test_tstiff2d_1stiff_compression():
         Nxx_base=-1.,
         Nxx_flange=-1.,
         )
-    assert np.isclose(eigvals[0], 142.65057725, rtol=0.01)
+    assert np.isclose(eigvals[0], 142.65057725, rtol=0.001)
 
     assy, c, eigvals, eigvecs = tstiff2d_1stiff_compression(
         b=b,
@@ -83,7 +83,7 @@ def test_tstiff2d_1stiff_compression():
         Nxx_base=-1.,
         Nxx_flange=-1.,
         )
-    assert np.isclose(eigvals[0], 114.76990872, rtol=0.01)
+    assert np.isclose(eigvals[0], 114.85854770879844, rtol=0.001)
 
 
 def test_tstiff2d_1stiff_flutter():
@@ -114,7 +114,7 @@ def test_tstiff2d_1stiff_flutter():
         speed_sound=343.,
         run_static_case=True,
         )
-    assert np.isclose(eigvals[0], 1423.254820+0.j, rtol=0.01)
+    assert np.isclose(eigvals[0], 1423.254820+0.j, rtol=0.001)
 
 if __name__ == '__main__':
     test_tstiff2d_1stiff_freq()

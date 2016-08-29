@@ -23,24 +23,20 @@ Third part:
 
 Fourth part:
 - field - functions to calculate field variables
-- empty - functions to calculate the stiffness matrices
+- empty - functions to integrate the stiffness matrices
+- num - functions to numerically integrate the stiffness matrices
 
 """
-from glob import glob
-from os.path import realpath, dirname, join
-import inspect
-import imp
+from __future__ import absolute_import
 
 module_names = [
-          'cpanel_clt_donnell_bardell_field',
+          'clt_bardell_field',
+          'clt_bardell_field_w',
           'cpanel_clt_donnell_bardell',
           'cpanel_clt_donnell_bardell_num',
-          #'kpanel_clt_donnell_bardell_field',
           'kpanel_clt_donnell_bardell',
-          'plate_clt_donnell_bardell_field',
           'plate_clt_donnell_bardell',
           'plate_clt_donnell_bardell_num',
-          'plate_clt_donnell_bardell_w_field',
           'plate_clt_donnell_bardell_w',
           ]
 

@@ -1,5 +1,6 @@
 from __future__ import division, absolute_import
 
+import platform
 import gc
 import pickle
 from multiprocessing import cpu_count
@@ -25,6 +26,15 @@ def load(name):
         return pickle.load(open(name, 'rb'))
     else:
         return pickle.load(open(name + '.Panel', 'rb'))
+
+
+def check_c(c, size):
+    if not isinstance(c, np.ndarray):
+        raise TypeError('"c" must be a NumPy ndarray object')
+    if c.ndim != 1:
+        raise ValueError('"c" must be a 1-D ndarray object')
+    if c.shape[0] != size:
+        raise ValueError('"c" must have the same size as the global stiffness matrix')
 
 
 class Panel(object):
@@ -89,15 +99,15 @@ class Panel(object):
 
         # model
         self.model = None
-        self.K = 5/6. # in case of First-order Shear Deformation Theory
+        self.fsdt_shear_correction = 5/6. # in case of First-order Shear Deformation Theory
 
         # approximation series
         self.m = m
         self.n = n
 
         # numerical integration
-        self.nx = 10
-        self.ny = 10
+        self.nx = m
+        self.ny = n
         self.ni_num_cores = cpu_count()//2
         self.ni_method = 'trapz2d'
         self.c0 = None
@@ -117,25 +127,26 @@ class Panel(object):
         # displacement at 4 edges is zero
         # free to rotate at 4 edges (simply supported by default)
         self.u1tx = 0.
-        self.u1rx = 1.
+        self.u1rx = 0.
         self.u2tx = 0.
-        self.u2rx = 1.
+        self.u2rx = 0.
         self.v1tx = 0.
-        self.v1rx = 1.
+        self.v1rx = 0.
         self.v2tx = 0.
-        self.v2rx = 1.
+        self.v2rx = 0.
         self.w1tx = 0.
         self.w1rx = 1.
         self.w2tx = 0.
         self.w2rx = 1.
+
         self.u1ty = 0.
-        self.u1ry = 1.
+        self.u1ry = 0.
         self.u2ty = 0.
-        self.u2ry = 1.
+        self.u2ry = 0.
         self.v1ty = 0.
-        self.v1ry = 1.
+        self.v1ry = 0.
         self.v2ty = 0.
-        self.v2ry = 1.
+        self.v2ry = 0.
         self.w1ty = 0.
         self.w1ry = 1.
         self.w2ty = 0.
@@ -168,7 +179,7 @@ class Panel(object):
         self.out_num_cores = cpu_count()
 
         # analysis
-        self.analysis = Analysis(self.calc_fext, self.calc_k0, None, None)
+        self.analysis = Analysis(self.calc_fext, self.calc_k0, self.calc_fint, self.calc_kT)
 
         # outputs
         self.increments = None
@@ -228,118 +239,6 @@ class Panel(object):
                 raise ValueError('plyt must be defined')
             self.plyts = [self.plyt for i in self.stack]
 
-        if False:
-            def check_load(load, size):
-                if load is not None:
-                    check = False
-                    if isinstance(load, np.ndarray):
-                        if load.ndim == 1:
-                            assert load.shape[0] == size
-
-                            return load
-                    elif type(load) in (int, float):
-                        newload = np.zeros(size, dtype=DOUBLE)
-                        newload[0] = load
-
-                        return newload
-                    if not check:
-                        raise ValueError('Invalid Nxx_cte input')
-                else:
-                    return np.zeros(size, dtype=DOUBLE)
-
-
-            # axial load
-            size = self.n+1
-            self.Nxx_cte = check_load(self.Nxx_cte, size)
-            self.Nxx = check_load(self.Nxx, size)
-            # shear xt
-            self.Nxy_cte = check_load(self.Nxy_cte, size)
-            self.Nxy = check_load(self.Nxy, size)
-            # circumferential load
-            size = self.m+1
-            self.Nyy_cte = check_load(self.Nyy_cte, size)
-            self.Nyy = check_load(self.Nyy, size)
-
-
-    def bc_sfss(self):
-        self.u1tx = 0.
-        self.u1rx = 0.
-        self.u2tx = 1.
-        self.u2rx = 1.
-        self.v1tx = 0.
-        self.v1rx = 0.
-        self.v2tx = 1.
-        self.v2rx = 1.
-        self.w1tx = 0.
-        self.w1rx = 1.
-        self.w2tx = 1.
-        self.w2rx = 1.
-        self.u1ty = 0.
-        self.u1ry = 1.
-        self.u2ty = 0.
-        self.u2ry = 0.
-        self.v1ty = 0.
-        self.v1ry = 1.
-        self.v2ty = 0.
-        self.v2ry = 0.
-        self.w1ty = 0.
-        self.w1ry = 1.
-        self.w2ty = 0.
-        self.w2ry = 1.
-
-    def bc_ssfs(self):
-        self.u1tx = 0.
-        self.u1rx = 0.
-        self.u2tx = 0.
-        self.u2rx = 0.
-        self.v1tx = 0.
-        self.v1rx = 0.
-        self.v2tx = 0.
-        self.v2rx = 0.
-        self.w1tx = 0.
-        self.w1rx = 1.
-        self.w2tx = 0.
-        self.w2rx = 1.
-        self.u1ty = 1.
-        self.u1ry = 1.
-        self.u2ty = 0.
-        self.u2ry = 0.
-        self.v1ty = 1.
-        self.v1ry = 1.
-        self.v2ty = 0.
-        self.v2ry = 0.
-        self.w1ty = 1.
-        self.w1ry = 1.
-        self.w2ty = 0.
-        self.w2ry = 1.
-
-
-    def bc_ssss(self):
-        self.u1tx = 0.
-        self.u1rx = 0.
-        self.u2tx = 0.
-        self.u2rx = 0.
-        self.v1tx = 0.
-        self.v1rx = 0.
-        self.v2tx = 0.
-        self.v2rx = 0.
-        self.w1tx = 0.
-        self.w1rx = 1.
-        self.w2tx = 0.
-        self.w2rx = 1.
-        self.u1ty = 0.
-        self.u1ry = 0.
-        self.u2ty = 0.
-        self.u2ry = 0.
-        self.v1ty = 0.
-        self.v1ry = 0.
-        self.v2ty = 0.
-        self.v2ry = 0.
-        self.w1ty = 0.
-        self.w1ry = 1.
-        self.w2ty = 0.
-        self.w2ry = 1.
-
 
     def get_size(self):
         r"""Calculates the size of the stiffness matrices
@@ -364,7 +263,7 @@ class Panel(object):
         if xs is None or ys is None:
             xs = linspace(0, self.a, gridx)
             ys = linspace(0, self.b, gridy)
-            xs, ys = np.meshgrid(xs, ys, copy=False)
+            xs, ys = np.meshgrid(xs, ys, copy=True)
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
         xshape = xs.shape
@@ -373,8 +272,8 @@ class Panel(object):
             raise ValueError('Arrays xs and ys must have the same shape')
         self.Xs = xs
         self.Ys = ys
-        xs = xs.ravel()
-        ys = ys.ravel()
+        xs = np.ascontiguousarray(xs.ravel(), dtype=DOUBLE)
+        ys = np.ascontiguousarray(ys.ravel(), dtype=DOUBLE)
 
         return xs, ys, xshape, tshape
 
@@ -387,7 +286,7 @@ class Panel(object):
 
         elif 'fsdt' in self.model:
             F = self.lam.ABDE
-            F[6:, 6:] *= self.K
+            F[6:, 6:] *= self.fsdt_shear_correction
 
         if self.force_orthotropic_laminate:
             msg('', silent=silent)
@@ -420,12 +319,13 @@ class Panel(object):
 
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
-            c=None, nx=None, ny=None, Fnxny=None):
+            c=None, nx=None, ny=None, Fnxny=None, inc=None, NLgeom=False):
         """Calculate the constitutive stiffness matrix
 
         If ``c`` is not given it calculates the linear constitutive stiffness
         matrix, otherwise the large displacement linear constitutive stiffness
-        matrix is calculated.
+        matrix is calculated. When using ``c``the size of ``c`` must be the
+        same as ``size``.
 
         In assemblies of semi-analytical models the sparse matrices that are
         calculated may have the ``size`` of the assembled global model, and the
@@ -436,7 +336,7 @@ class Panel(object):
         ----------
         size : int
             The size of the calculated sparse matrices.
-        row0 and col0: int or None, optional
+        row0, col0: int or None, optional
             Offset to populate the output sparse matrix (useful when
             assemblying panels).
         silent : bool, optional
@@ -447,7 +347,7 @@ class Panel(object):
         c : array-like or None, optional
             This must be the result of a static analysis, used to compute the
             non-linear term based on the actual displacement field.
-        nx and ny : int or None, optional
+        nx, ny : int or None, optional
             Number of integration points along `x` and `y`, respectively, for
             the Legendre-Gauss quadrature rule applied in the numerical
             integration. Only used when ``c`` is given.
@@ -455,66 +355,41 @@ class Panel(object):
             The constitutive relations for the laminate at each integration
             point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
             classical laminated plate theory models.
+        NLgeom : bool, optional
+            Flag to indicate if geometrically non-linearities should be
+            considered.
 
         """
         self._rebuild()
+        if size is None:
+            size = self.get_size()
         if c is None:
             msg('Calculating k0... ', level=2, silent=silent)
         else:
+            check_c(c, size)
             msg('Calculating kL... ', level=2, silent=silent)
-
-        if size is None:
-            size = self.get_size()
 
         matrices = modelDB.db[self.model]['matrices']
 
-        a = self.a
-        b = self.b
-        y1 = self.y1
-        y2 = self.y2
-        r = self.r if self.r is not None else 0.
         alphadeg = self.alphadeg if self.alphadeg is not None else 0.
+        self.alpharad = deg2rad(alphadeg)
+        self.r = self.r if self.r is not None else 0.
 
-        m = self.m
-        n = self.n
+        if self.stack is not None:
+            lam = laminate.read_stack(self.stack, plyts=self.plyts,
+                                      laminaprops=self.laminaprops,
+                                      offset=self.offset)
+            self.lam = lam
+            self.F = self._get_lam_F()
 
-        stack = self.stack
-        plyts = self.plyts
-        laminaprops = self.laminaprops
-
-        if stack is not None:
-            lam = laminate.read_stack(stack, plyts=plyts,
-                                             laminaprops=laminaprops)
-
-        self.lam = lam
-        self.F = self._get_lam_F()
-
-        alpharad = np.deg2rad(alphadeg)
-
-        if y1 is not None and y2 is not None:
+        if self.y1 is not None and self.y2 is not None:
             if c is not None or Fnxny is not None:
                 raise NotImplementedError(
                 'Partial domain from y1 to y2 not implemented for kL')
-            k0 = matrices.fk0y1y2(y1, y2, a, b, r, alpharad, self.F,
-                     self.m, self.n,
-                     self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                     self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                     self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                     self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                     self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                     self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                     size, row0, col0)
+            k0 = matrices.fk0y1y2(self.y1, self.y2, self, size, row0, col0)
         else:
             if c is None and Fnxny is None:
-                k0 = matrices.fk0(a, b, r, alpharad, self.F,
-                         self.m, self.n,
-                         self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                         self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                         self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                         self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                         self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                         self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                         size, row0, col0)
+                k0 = matrices.fk0(self, size, row0, col0)
             else:
                 matrices_num = modelDB.db[self.model]['matrices_num']
                 nx = self.nx if nx is None else nx
@@ -526,33 +401,23 @@ class Panel(object):
                     # Empty c if the interest is only on the heterogeneous
                     # laminate properties
                     c = np.zeros(self.size, dtype=DOUBLE)
-                k0 = matrices_num.fkL_num(c, a, b, r, alpharad,
-                         self.F, self.m, self.n,
-                         self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                         self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                         self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                         self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                         self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                         self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                         size, row0, col0, nx, ny)
+                c = np.ascontiguousarray(c, dtype=DOUBLE)
+                k0 = matrices_num.fkL_num(c, Fnxny, self,
+                         size, row0, col0, nx, ny, NLgeom=int(NLgeom))
 
+        #TODO allow constant stress state to be obtained using static results,
+        #     which would require just passing a 'c_cte' used to calculate kG0
         Nxx_cte = self.Nxx_cte if self.Nxx_cte is not None else 0.
         Nyy_cte = self.Nyy_cte if self.Nyy_cte is not None else 0.
         Nxy_cte = self.Nxy_cte if self.Nxy_cte is not None else 0.
 
         if Nxx_cte != 0. or Nyy_cte != 0. or Nxy_cte != 0.:
-            if y1 is not None and y2 is not None:
-                k0 += matrices.fkG0y1y2(y1, y2, Nxx_cte, Nyy_cte, Nxy_cte,
-                               a, b, r, alpharad, self.m, self.n,
-                               self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                               self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                               size, row0, col0)
+            if self.y1 is not None and self.y2 is not None:
+                k0 += matrices.fkG0y1y2(self.y1, self.y2, Nxx_cte, Nyy_cte, Nxy_cte,
+                           self, size, row0, col0)
             else:
                 k0 += matrices.fkG0(Nxx_cte, Nyy_cte, Nxy_cte,
-                           a, b, r, alpharad, self.m, self.n,
-                           self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                           self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                           size, row0, col0)
+                           self, size, row0, col0)
 
         if finalize:
             # performing final checks for k0 and making symmetry
@@ -573,64 +438,28 @@ class Panel(object):
 
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
-            c=None, nx=None, ny=None, Fnxny=None):
+            c=None, nx=None, ny=None, Fnxny=None, NLgeom=False):
         """Calculate the linear geometric stiffness matrix
 
-        When using ``c``:
-
-        - if you pass ``row0`` and ``col0`` the size of ``c``
-        should be the size of the whole assembly
-        - if ``row0=0`` and ``col0=0`` the size of ``c`` should be the size of
-          the individual panel
-
-
-        Parameters
-        ----------
-        size : int, optional
-            Size of the output squared sparse matrix (if the panel is used in
-            an assembly this must be the size of the assembly). If ``None`` it
-            will consider only the degrees-of-freedom of the individual panel.
-        row0 and col0: int or None, optional
-            Offset to populate the output sparse matrix (useful when
-            assemblying panels).
-        silent : bool, optional
-            A boolean to tell whether the log messages should be printed.
-        finalize : bool, optional
-            Asserts validity of output data and makes the output matrix
-            symmetric, should be ``False`` when assemblying.
-        c : array-like or None, optional
-            This must be the result of a static analysis, used to numerically
-            compute `$K_G$` based on the actual membrane-stress state.
-        nx and ny : int or None, optional
-            Number of integration points along `x` and `y`, respectively, for
-            the Legendre-Gauss quadrature rule applied in the numerical
-            integration. Only used when ``c`` is given.
-        Fnxny : 4-D array-like or None, optional
-            The constitutive relations for the laminate at each integration
-            point. Must be a 4-D array of shape ``(nx, ny, 6, 6)`` when using
-            classical laminated plate theory models.
+        See :meth:`.Panel.calc_k0` for details on each parameter.
 
         """
-        msg('Calculating kG0... ', level=2, silent=silent)
-
+        self._rebuild()
         if size is None:
             size = self.get_size()
-
         if c is None:
+            msg('Calculating kG0... ', level=2, silent=silent)
             matrices = modelDB.db[self.model]['matrices']
         else:
+            check_c(c, size)
+            msg('Calculating kG... ', level=2, silent=silent)
             matrices = modelDB.db[self.model]['matrices_num']
 
-        a = self.a
-        b = self.b
-        r = self.r if self.r is not None else 0.
         y1 = self.y1
         y2 = self.y2
         alphadeg = self.alphadeg if self.alphadeg is not None else 0.
-        alpharad = deg2rad(alphadeg)
-
-        m = self.m
-        n = self.n
+        self.alpharad = deg2rad(alphadeg)
+        self.r = self.r if self.r is not None else 0.
 
         Nxx = self.Nxx if self.Nxx is not None else 0.
         Nyy = self.Nyy if self.Nyy is not None else 0.
@@ -638,17 +467,10 @@ class Panel(object):
 
         if c is None:
             if y1 is not None and y2 is not None:
-                kG0 = matrices.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, a, b, r,
-                           alpharad, self.m, self.n,
-                           self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                           self.w1ty, self.w1ry, self.w2ty, self.w2ry,
+                kG0 = matrices.fkG0y1y2(y1, y2, Nxx, Nyy, Nxy, self,
                            size, row0, col0)
             else:
-                kG0 = matrices.fkG0(Nxx, Nyy, Nxy, a, b, r, alpharad,
-                           self.m, self.n,
-                           self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                           self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                           size, row0, col0)
+                kG0 = matrices.fkG0(Nxx, Nyy, Nxy, self, size, row0, col0)
         else:
             if y1 is not None or y2 is not None:
                 raise NotImplementedError('Only y1=0, y2=b is implemented!')
@@ -657,18 +479,12 @@ class Panel(object):
             ny = self.ny if ny is None else ny
             if Fnxny is None:
                 Fnxny = self._get_lam_F()
-            kG0 = matrices.fkG_num(c, Fnxny, a, b, r,
-                       alpharad, self.m, self.n,
-                       self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                       self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                       self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                       self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                       self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                       self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                       size, row0, col0, nx, ny)
+            kG0 = matrices.fkG_num(c, Fnxny, self,
+                       size, row0, col0, nx, ny, NLgeom=int(NLgeom))
 
         if finalize:
-            assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
+            assert np.any(np.isnan(kG0.data)) == False
+            assert np.any(np.isinf(kG0.data)) == False
             kG0 = csr_matrix(make_symmetric(kG0))
 
         self.kG0 = kG0
@@ -681,6 +497,18 @@ class Panel(object):
         return kG0
 
 
+    def calc_kT(self, size=None, row0=0, col0=0, silent=False, finalize=True,
+            c=None, nx=None, ny=None, Fnxny=None, inc=None):
+        kL = self.calc_k0(size=size, row0=row0, col0=col0, silent=silent, finalize=finalize,
+            c=c, nx=nx, ny=ny, Fnxny=Fnxny, inc=inc, NLgeom=True)
+        kG = self.calc_kG0(size=size, row0=row0, col0=col0, silent=silent, finalize=finalize,
+            c=c, nx=nx, ny=ny, Fnxny=Fnxny, NLgeom=True)
+        kT = kL + kG
+        self.kT = kT
+
+        return kT
+
+
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         """Calculate the mass matrix
         """
@@ -690,34 +518,23 @@ class Panel(object):
 
         y1 = self.y1
         y2 = self.y2
-        r = self.r if self.r is not None else 0.
         alphadeg = self.alphadeg if self.alphadeg is not None else 0.
-        alpharad = deg2rad(alphadeg)
+        self.alpharad = deg2rad(alphadeg)
+        self.r = self.r if self.r is not None else 0.
 
         if size is None:
             size = self.get_size()
 
+        #TODO allow a distribution of mu instead of constant value, at least allow a mu for each ply
+        if self.mu is None:
+            raise ValueError('Attribute "mu" (density) must be defined')
+
+
         h = sum(self.plyts)
         if y1 is not None and y2 is not None:
-            kM = matrices.fkMy1y2(y1, y2, self.mu, self.offset, h,
-                                  self.a, self.b, r, alpharad, self.m, self.n,
-                                  self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                                  self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                                  self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                                  self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                                  self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                                  self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                                  size, row0, col0)
+            kM = matrices.fkMy1y2(y1, y2, self.offset, self, size, row0, col0)
         else:
-            kM = matrices.fkM(self.mu, self.offset, h,
-                              self.a, self.b, r, alpharad, self.m, self.n,
-                              self.u1tx, self.u1rx, self.u2tx, self.u2rx,
-                              self.v1tx, self.v1rx, self.v2tx, self.v2rx,
-                              self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                              self.u1ty, self.u1ry, self.u2ty, self.u2ry,
-                              self.v1ty, self.v1ry, self.v2ty, self.v2ry,
-                              self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                              size, row0, col0)
+            kM = matrices.fkM(self.offset, self, size, row0, col0)
 
         if finalize:
             assert np.any(np.isnan(kM.data)) == False
@@ -739,20 +556,15 @@ class Panel(object):
         """
         msg('Calculating kA... ', level=2, silent=silent)
 
-        matrices = modelDB.db[self.model]['matrices']
+        if 'kpanel' in self.model:
+            raise NotImplementedError('Conical panels not supported')
 
-        a = self.a
-        b = self.b
-        m = self.m
-        n = self.n
+        matrices = modelDB.db[self.model]['matrices']
 
         if size is None:
             size = self.get_size()
 
-        if 'kpanel' in self.model:
-            raise NotImplementedError('Conical panels not supported')
-
-        r = self.r if self.r is not None else 0.
+        self.r = self.r if self.r is not None else 0.
 
         if self.beta is None:
             if self.Mach is None:
@@ -763,8 +575,8 @@ class Panel(object):
                 self.Mach = 1.0001
             Mach = self.Mach
             beta = self.rho_air * self.V**2 / (Mach**2 - 1)**0.5
-            if r != 0.:
-                gamma = beta*1./(2.*r*(Mach**2 - 1)**0.5)
+            if self.r != 0.:
+                gamma = beta*1./(2.*self.r*(Mach**2 - 1)**0.5)
             else:
                 gamma = 0.
             ainf = self.speed_sound
@@ -775,17 +587,9 @@ class Panel(object):
             aeromu = self.aeromu if self.aeromu is not None else 0.
 
         if self.flow.lower() == 'x':
-            kA = matrices.fkAx(
-                    beta, gamma, a, b, m, n,
-                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                    size, row0, col0)
+            kA = matrices.fkAx(beta, gamma, self, size, row0, col0)
         elif self.flow.lower() == 'y':
-            kA = mod.fkAy(
-                    beta, a, b, m, n,
-                    self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                    self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                    size, row0, col0)
+            kA = mod.fkAy(beta, self, size, row0, col0)
         else:
             raise ValueError('Invalid flow value, must be x or y')
 
@@ -809,11 +613,7 @@ class Panel(object):
         """
         msg('Calculating cA... ', level=2, silent=silent)
 
-        cA = matrices.fcA(
-                aeromu, self.a, self.b, self.m, self.n,
-                self.w1tx, self.w1rx, self.w2tx, self.w2rx,
-                self.w1ty, self.w1ry, self.w2ty, self.w2ry,
-                self.size, 0, 0)
+        cA = matrices.fcA(aeromu, self, self.size, 0, 0)
         cA = cA*(0+1j)
 
         if finalize:
@@ -1177,15 +977,8 @@ class Panel(object):
         c = np.ascontiguousarray(c, dtype=DOUBLE)
 
         xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
-        m = self.m
-        n = self.n
-        a = self.a
-        b = self.b
-        model = self.model
-
-        fuvw = modelDB.db[model]['field'].fuvw
-        us, vs, ws, phixs, phiys = fuvw(c, m, n, a, b, xs, ys,
-                self.out_num_cores)
+        fuvw = modelDB.db[self.model]['field'].fuvw
+        us, vs, ws, phixs, phiys = fuvw(c, self, xs, ys, self.out_num_cores)
 
         self.u = us.reshape(xshape)
         self.v = vs.reshape(xshape)
@@ -1221,14 +1014,6 @@ class Panel(object):
 
         xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
 
-        a = self.a
-        b = self.b
-        m = self.m
-        n = self.n
-        c0 = self.c0
-        m0 = self.m0
-        n0 = self.n0
-        funcnum = self.funcnum
         model = self.model
         NL_kinematics = model.split('_')[1]
         fstrain = modelDB.db[model]['field'].fstrain
@@ -1242,8 +1027,9 @@ class Panel(object):
             raise NotImplementedError(
                 '{} is not a valid NL_kinematics option'.format(NL_kinematics))
 
-        es = fstrain(c, xs, ys, a, b, m, n,
-                c0, m0, n0, funcnum, int_NL_kinematics, self.out_num_cores)
+        es = fstrain(c, xs, ys, self.a, self.b, self.m, self.n, self.c0,
+                self.m0, self.n0, self.funcnum, int_NL_kinematics,
+                self.out_num_cores)
 
         return es.reshape((xshape + (e_num,)))
 
@@ -1273,15 +1059,6 @@ class Panel(object):
 
         xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
 
-        F = self.F
-        a = self.a
-        b = self.b
-        m = self.m
-        n = self.n
-        c0 = self.c0
-        m0 = self.m0
-        n0 = self.n0
-        funcnum = self.funcnum
         model = self.model
         NL_kinematics = model.split('_')[1]
         fstress = modelDB.db[model]['field'].fstress
@@ -1295,9 +1072,10 @@ class Panel(object):
             raise NotImplementedError(
                     '{} is not a valid NL_kinematics option'.format(
                     NL_kinematics))
+        Ns = fstress(c, self.F, xs, ys, self.a, self.b, self.m, self.n,
+                self.c0, self.m0, self.n0,
+                self.funcnum, int_NL_kinematics, self.out_num_cores)
 
-        Ns = fstress(c, F, xs, ys, a, b, m, n, c0, m0, n0,
-                funcnum, int_NL_kinematics, self.out_num_cores)
         return Ns.reshape((xshape + (e_num,)))
 
 
@@ -1356,30 +1134,24 @@ class Panel(object):
         """
         self._rebuild()
         msg('Calculating external forces...', level=2, silent=silent)
-        a = self.a
-        b = self.b
-        m = self.m
-        n = self.n
-        model = self.model
 
+        model = self.model
         if not model in modelDB.db.keys():
             raise ValueError(
                     '{} is not a valid model option'.format(model))
-
         db = modelDB.db
         num = db[model]['num']
         dofs = db[model]['dofs']
         fg = db[model]['field'].fg
 
         size = self.get_size()
-
         g = np.zeros((dofs, size), dtype=DOUBLE)
         fext = np.zeros(size, dtype=DOUBLE)
 
         # non-incrementable punctual forces
         for i, force in enumerate(self.forces):
             x, y, fx, fy, fz = force
-            fg(g, m, n, x, y, a, b)
+            fg(g, x, y, self)
             if dofs == 3:
                 fpt = np.array([[fx, fy, fz]])
             elif dofs == 5:
@@ -1389,14 +1161,51 @@ class Panel(object):
         # incrementable punctual forces
         for i, force in enumerate(self.forces_inc):
             x, y, fx, fy, fz = force
-            fg(g, m, n, x, y, a, b)
-            if dofs == 3:
+            fg(g, x, y, self)
+            if dofs == 3: #CLT
                 fpt = np.array([[fx, fy, fz]])*inc
-            elif dofs == 5:
+            elif dofs == 5: #FSDT
                 fpt = np.array([[fx, fy, fz, 0, 0]])*inc
             fext += fpt.dot(g).ravel()
 
         return fext
+
+
+    def calc_fint(self, c, size=None, col0=0, silent=False, nx=None,
+            ny=None, Fnxny=None, inc=None):
+        #TODO inc not needed here; otherwise with prescribed displacements
+        msg('Calculating internal forces...', level=2, silent=silent)
+        model = self.model
+        if not model in modelDB.db.keys():
+            raise ValueError(
+                    '{0} is not a valid model option'.format(model))
+        matrices_num = modelDB.db[model].get('matrices_num')
+        if matrices_num is None:
+            raise ValuError('matrices_num not implemented for model {0}'.
+                    format(model))
+        calc_fint = getattr(matrices_num, 'calc_fint', None)
+        if calc_fint is None:
+            raise ValuError('calc_fint not implemented for model {0}'.
+                    format(model))
+
+        if size is None:
+            size = self.get_size()
+
+        alphadeg = self.alphadeg if self.alphadeg is not None else 0.
+        self.alpharad = deg2rad(alphadeg)
+        self.r = self.r if self.r is not None else 0.
+        nx = self.nx if nx is None else nx
+        ny = self.ny if ny is None else ny
+        Fnxny = self.F if Fnxny is None else Fnxny
+
+        c = np.ascontiguousarray(c, dtype=DOUBLE)
+        fint = calc_fint(c, Fnxny, self, size, col0, nx, ny)
+
+        gc.collect()
+
+        msg('finished!', level=2, silent=silent)
+
+        return fint
 
 
     def static(self, NLgeom=False, silent=False):
@@ -1431,10 +1240,10 @@ class Panel(object):
         ``self.analysis.increments`` parameter.
 
         """
-        if self.c0 is not None:
-            self.analysis.kT_initial_state = True
-        else:
-            self.analysis.kT_initial_state = False
+        self._rebuild()
+        self.analysis.line_search = False
+        self.analysis.kT_initial_state = False
+        self.analysis.compute_every_n = 6
 
         if NLgeom and not modelDB.db[self.model]['non-linear static']:
             msg('________________________________________________',
@@ -1445,7 +1254,7 @@ class Panel(object):
             msg('________________________________________________',
                 silent=silent)
             raise
-        elif not NLgeom and not modelDB.db[self.model]['linear static']:
+        elif not NLgeom and not modelDB.db[self.model]['matrices']:
             msg('________________________________________________',
                 level=1, silent=silent)
             msg('', level=1, silent=silent)
@@ -1552,8 +1361,10 @@ class Panel(object):
         ubkp, vbkp, wbkp, phixbkp, phiybkp = (self.u, self.v, self.w,
                                               self.phix, self.phiy)
 
-        import matplotlib.pyplot as plt
         import matplotlib
+        if platform.system().lower() == 'linux':
+            matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
 
         msg('Computing field variables...', level=1)
         displs = ['u', 'v', 'w', 'phix', 'phiy']

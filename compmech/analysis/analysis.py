@@ -8,6 +8,7 @@ from compmech.logger import msg
 from .newton_raphson import _solver_NR
 from .arc_length import _solver_arc_length
 
+
 class Analysis(object):
     r"""Class that embodies all data required for linear/non-linear analysis
 
@@ -82,12 +83,11 @@ class Analysis(object):
             'modified_NR', 'compute_every_n',
             'kT_initial_state', 'initialInc', 'minInc', 'maxInc', 'absTOL',
             'relTOL', 'maxNumIter', 'too_slow_TOL', 'increments', 'cs',
-            'last_analysis', 'calc_fext', 'calc_k0', 'calc_fint', 'calc_kT',
-            'calc_k0_bc']
+            'last_analysis', 'calc_fext', 'calc_k0', 'calc_fint', 'calc_kT']
 
 
     def __init__(self, calc_fext=None, calc_k0=None, calc_fint=None,
-            calc_kT=None, calc_k0_bc=None):
+            calc_kT=None):
         # non-linear algorithm
         self.NL_method = 'NR'
         self.line_search = True
@@ -110,9 +110,6 @@ class Analysis(object):
         self.calc_k0 = calc_k0
         self.calc_fint = calc_fint
         self.calc_kT = calc_kT
-
-        # optional methods
-        self.calc_k0_bc = calc_k0_bc
 
         # outputs to be filled
         self.increments = None
@@ -144,7 +141,7 @@ class Analysis(object):
             self.maxInc = max(self.initialInc, self.maxInc)
             msg('Started Non-Linear Static Analysis', silent=silent)
             if self.NL_method is 'NR':
-                _solver_NR(self)
+                _solver_NR(self, silent=silent)
             elif self.NL_method is 'arc_length':
                 _solver_arc_length(self)
             else:
@@ -155,24 +152,7 @@ class Analysis(object):
             fext = self.calc_fext(silent=silent)
             k0 = self.calc_k0(silent=silent)
 
-            if self.calc_k0_bc is not None:
-                k0_bc = self.calc_k0_bc(silent=silent)
-                k0max = k0.max()
-                k0 /= k0max
-
-                fextmax = fext.max()
-                fext /= fextmax
-
-                k0 = k0 + k0_bc
-
             c = solve(k0, fext, silent=silent)
-
-            if self.calc_k0_bc is not None:
-                k0 *= k0max
-                fext *= fextmax
-
-                c /= k0max
-                c *= fextmax
 
             self.cs.append(c)
             self.increments.append(1.)

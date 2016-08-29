@@ -210,11 +210,9 @@ class Laminate(object):
         xiD1, xiD2, xiD3, xiD4 = 0, 0, 0, 0
         xiE1, xiE2, xiE3, xiE4 = 0, 0, 0, 0
 
-        lam_thick = 0
-
-        for ply in self.plies:
-            lam_thick += ply.t
+        lam_thick = sum([ply.t for ply in self.plies])
         self.t = lam_thick
+
         h0 = -lam_thick/2. + self.offset
         for ply in self.plies:
             hk_1 = h0
@@ -327,9 +325,7 @@ class Laminate(object):
         self.B_general = np.zeros([5,5], dtype=DOUBLE)
         self.D_general = np.zeros([5,5], dtype=DOUBLE)
 
-        lam_thick = 0
-        for ply in self.plies:
-            lam_thick += ply.t
+        lam_thick = sum([ply.t for ply in self.plies])
         self.t = lam_thick
 
         h0 = -lam_thick/2 + self.offset

@@ -18,6 +18,8 @@ derivatives `- \tfrac{\partial w}{\partial x}` and
 
 
 """
+from __future__ import absolute_import
+
 modules = [
           'clpt_commons_bc1',
           'clpt_commons_bc2',

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     49683,       1022]
-NotebookOptionsPosition[     49302,       1006]
-NotebookOutlinePosition[     49781,       1024]
-CellTagsIndexPosition[     49738,       1021]
+NotebookDataLength[     50738,       1049]
+NotebookOptionsPosition[     50357,       1033]
+NotebookOutlinePosition[     50835,       1051]
+CellTagsIndexPosition[     50792,       1048]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -366,6 +366,18 @@ Cell[BoxData[
        RowBox[{"Transpose", "[", "BA", "]"}], ".", "F", ".", "BB"}]}]}], 
     ";"}], "\[IndentingNewLine]", 
    RowBox[{
+    RowBox[{"fint", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"a", "*", 
+        RowBox[{"b", "/", "4"}]}], ")"}], "*", 
+      RowBox[{
+       RowBox[{"Transpose", "[", "BA", "]"}], ".", 
+       RowBox[{"{", 
+        RowBox[{
+        "Nxx", ",", "Nyy", ",", "Nxy", ",", "Mxx", ",", "Myy", ",", "Mxy"}], 
+        "}"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
     RowBox[{"k0", " ", "=", " ", 
      RowBox[{
       RowBox[{"(", 
@@ -523,7 +535,11 @@ Cell[BoxData[
           ",", "B11", ",", "B12", ",", "B16", ",", "B22", ",", "B26", ",", 
           "B66", ",", "D11", ",", "D12", ",", "D16", ",", "D22", ",", "D26", 
           ",", "D66"}], "}"}], ",", "Simplify"}], "]"}], "]"}]}], ";"}], 
-   "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"fint", "=", 
+     RowBox[{"FortranForm", "[", "fint", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"k0", "=", 
      RowBox[{"FortranForm", "[", 
@@ -552,6 +568,15 @@ Cell[BoxData[
    RowBox[{
     RowBox[{"Write", "[", 
      RowBox[{"s", ",", "kL"}], "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"s", " ", "=", " ", 
+     RowBox[{"OpenWrite", "[", "\"\<fortran_fint.txt\>\"", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Write", "[", 
+     RowBox[{"s", ",", "fint"}], "]"}], ";"}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"Close", "[", "s", "]"}], ";"}], "\[IndentingNewLine]", 
    RowBox[{
@@ -1002,10 +1027,12 @@ Cell[BoxData[
    3.6723381615243783`*^9, 3.6723381703245244`*^9}, {3.6723382189064183`*^9, 
    3.6723382442487144`*^9}, {3.672338350980524*^9, 3.672338404126561*^9}, {
    3.6723384540143795`*^9, 3.672338486909505*^9}, {3.6724831071136713`*^9, 
-   3.672483156745906*^9}, {3.6724880573741293`*^9, 3.672488067111251*^9}}]
+   3.672483156745906*^9}, {3.6724880573741293`*^9, 3.672488067111251*^9}, {
+   3.676668911670834*^9, 3.6766689434801083`*^9}, {3.6766689746896696`*^9, 
+   3.6766689817410965`*^9}, {3.6766699946422434`*^9, 3.6766700141634903`*^9}}]
 },
 WindowSize->{766, 792},
-WindowMargins->{{Automatic, -7}, {-7, Automatic}},
+WindowMargins->{{Automatic, -7}, {Automatic, 8}},
 PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
 CellContext->Notebook,
 Magnification->1.100000023841858,
@@ -1023,7 +1050,7 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 48741, 984, 2293, "Input"]
+Cell[557, 20, 49796, 1011, 2433, "Input"]
 }
 ]
 *)

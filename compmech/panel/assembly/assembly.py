@@ -1,3 +1,7 @@
+from __future__ import division, absolute_import
+
+import platform
+
 import numpy as np
 from numpy import linspace
 
@@ -11,6 +15,9 @@ class PanelAssembly(object):
 
     This class has some useful methods that will help plotting output for
     different panel groups within the assembly and so forth.
+
+    For more details about the theory involved, see
+    [castro2017AssemblyModels]_.
 
     Parameters
     ----------
@@ -128,8 +135,10 @@ class PanelAssembly(object):
         """
         msg('Plotting contour...')
 
-        import matplotlib.pyplot as plt
         import matplotlib
+        if platform.system().lower() == 'linux':
+            matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
 
         msg('Computing field variables...', level=1)
         displs = ['u', 'v', 'w', 'phix', 'phiy']

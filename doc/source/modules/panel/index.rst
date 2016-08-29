@@ -6,3 +6,4 @@ Flat Plates, Curved Panels and Assemblies
 
     panel.rst
     assembly_intro.rst
+    connections.rst
