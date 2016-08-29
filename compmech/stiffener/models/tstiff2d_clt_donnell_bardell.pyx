@@ -15,12 +15,12 @@ cdef extern from 'bardell.h':
     double integral_ff(int i, int j,
             double x1t, double x1r, double x2t, double x2r,
             double y1t, double y1r, double y2t, double y2r) nogil
-
-cdef extern from 'bardell_functions.h':
-    double calc_f(int i, double xi, double xi1t, double xi1r,
-                  double xi2t, double xi2r) nogil
-    double calc_fxi(int i, double xi, double xi1t, double xi1r,
-                    double xi2t, double xi2r) nogil
+    double integral_ffxi(int i, int j,
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
+    double integral_fxifxi(int i, int j,
+            double x1t, double x1r, double x2t, double x2r,
+            double y1t, double y1r, double y2t, double y2r) nogil
 
 cdef extern from 'bardell_12.h':
     double integral_ff_12(double eta1, double eta2, int i, int j,
@@ -51,7 +51,7 @@ cdef int num1 = 3
 cdef int num2 = 3
 
 
-def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
+def fkCppy1y2(double y1, double y2,
           double kt, double a, double b, double dpb, int m, int n,
           double u1tx, double u1rx, double u2tx, double u2rx,
           double v1tx, double v1rx, double v2tx, double v2rx,
@@ -61,7 +61,7 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
           double w1ty, double w1ry, double w2ty, double w2ry,
           int size, int row0, int col0):
     cdef int i, k, j, l, c, row, col
-    cdef double xi1, xi2, eta1, eta2
+    cdef double eta1, eta2
 
     cdef np.ndarray[cINT, ndim=1] kCppr, kCppc
     cdef np.ndarray[cDOUBLE, ndim=1] kCppv
@@ -69,8 +69,6 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
     cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwfBv, fAwfBw, fAwxifBu, fAwxifBwxi
     cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBu, gAwgBw, gAwetagBv, gAwetagBweta
 
-    xi1 = 2*x1/a - 1.
-    xi2 = 2*x2/a - 1.
     eta1 = 2*y1/b - 1.
     eta2 = 2*y2/b - 1.
 
@@ -83,19 +81,19 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
     with nogil:
         # kCpp
         c = -1
-        for i in range(m):
-            for k in range(m):
-                fAufBu = integral_ff_12(xi1, xi2, i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
-                fAufBwxi = integral_ffxi_12(xi1, xi2, i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-                fAvfBv = integral_ff_12(xi1, xi2, i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
-                fAvfBw = integral_ff_12(xi1, xi2, i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
-                fAwfBv = integral_ff_12(xi1, xi2, i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
-                fAwfBw = integral_ff_12(xi1, xi2, i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
-                fAwxifBu = integral_ffxi_12(xi1, xi2, k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
-                fAwxifBwxi = integral_fxifxi_12(xi1, xi2, i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+        for j in range(n):
+            for l in range(n):
+                gAugBu = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
+                gAugBw = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
+                gAvgBv = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
+                gAvgBweta = integral_ffxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwgBu = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
+                gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetagBv = integral_ffxi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
+                gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
 
-                for j in range(n):
-                    for l in range(n):
+                for i in range(m):
+                    for k in range(m):
                         row = row0 + num*(j*m + i)
                         col = col0 + num*(l*m + k)
 
@@ -103,14 +101,14 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
                         if row > col:
                             continue
 
-                        gAugBu = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, u1ty, u1ry, u2ty, u2ry)
-                        gAugBw = integral_ff_12(eta1, eta2, j, l, u1ty, u1ry, u2ty, u2ry, w1ty, w1ry, w2ty, w2ry)
-                        gAvgBv = integral_ff_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, v1ty, v1ry, v2ty, v2ry)
-                        gAvgBweta = integral_ffxi_12(eta1, eta2, j, l, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                        gAwgBu = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, u1ty, u1ry, u2ty, u2ry)
-                        gAwgBw = integral_ff_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
-                        gAwetagBv = integral_ffxi_12(eta1, eta2, l, j, v1ty, v1ry, v2ty, v2ry, w1ty, w1ry, w2ty, w2ry)
-                        gAwetagBweta = integral_fxifxi_12(eta1, eta2, j, l, w1ty, w1ry, w2ty, w2ry, w1ty, w1ry, w2ty, w2ry)
+                        fAufBu = integral_ff(i, k, u1tx, u1rx, u2tx, u2rx, u1tx, u1rx, u2tx, u2rx)
+                        fAufBwxi = integral_ffxi(i, k, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAvfBv = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, v1tx, v1rx, v2tx, v2rx)
+                        fAvfBw = integral_ff(i, k, v1tx, v1rx, v2tx, v2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwfBv = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, v1tx, v1rx, v2tx, v2rx)
+                        fAwfBw = integral_ff(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxifBu = integral_ffxi(k, i, u1tx, u1rx, u2tx, u2rx, w1tx, w1rx, w2tx, w2rx)
+                        fAwxifBwxi = integral_fxifxi(i, k, w1tx, w1rx, w2tx, w2rx, w1tx, w1rx, w2tx, w2rx)
 
                         c += 1
                         kCppr[c] = row+0
@@ -146,7 +144,7 @@ def fkCppx1x2y1y2(double x1, double x2, double y1, double y2,
     return kCpp
 
 
-def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
+def fkCpby1y2(double y1, double y2,
           double kt, double a, double b, double dpb,
           int m, int n, int m1, int n1,
           double u1tx, double u1rx, double u2tx, double u2rx,
@@ -163,7 +161,7 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
           double w1tyb, double w1ryb, double w2tyb, double w2ryb,
           int size, int row0, int col0):
     cdef int i, j, k1, l1, c, row, col
-    cdef double xi1, xi2, eta1, eta2, c0, c1
+    cdef double eta1, eta2, c0, c1
 
     cdef np.ndarray[cINT, ndim=1] kCpbr, kCpbc
     cdef np.ndarray[cDOUBLE, ndim=1] kCpbv
@@ -171,8 +169,6 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
     cdef double fAupBu, fAvpBv, fAwpBw, fAwxipBu, fAwpBv
     cdef double gAuqBu, gAvqBv, gAwqBw, gAwetaqBv, gAwqBu
 
-    xi1 = 2*x1/a - 1.
-    xi2 = 2*x2/a - 1.
     eta1 = 2*y1/b - 1.
     eta2 = 2*y2/b - 1.
 
@@ -190,28 +186,24 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
     with nogil:
         # kCpb
         c = -1
-        for i in range(m):
-            for k1 in range(m1):
-                fAupBu = integral_ff_12(xi1, xi2, i, k1, u1tx, u1rx, u2tx, u2rx, u1txb, u1rxb, u2txb, u2rxb)
-                fAvpBv = integral_ff_12(xi1, xi2, i, k1, v1tx, v1rx, v2tx, v2rx, v1txb, v1rxb, v2txb, v2rxb)
-                fAwpBw = integral_ff_12(xi1, xi2, i, k1, w1tx, w1rx, w2tx, w2rx, w1txb, w1rxb, w2txb, w2rxb)
-                fAwxipBu = integral_ffxi_12(xi1, xi2, k1, i, u1txb, u1rxb, u2txb, u2rxb, w1tx, w1rx, w2tx, w2rx)
-                fAwpBv = integral_ff_12(xi1, xi2, i, k1, w1tx, w1rx, w2tx, w2rx, v1txb, v1rxb, v2txb, v2rxb)
+        for j in range(n):
+            for l1 in range(n1):
+                gAuqBu = integral_ff_c0c1(c0, c1, l1, j, u1tyb, u1ryb, u2tyb, u2ryb, u1ty, u1ry, u2ty, u2ry)
+                gAvqBv = integral_ff_c0c1(c0, c1, l1, j, v1tyb, v1ryb, v2tyb, v2ryb, v1ty, v1ry, v2ty, v2ry)
+                gAwqBw = integral_ff_c0c1(c0, c1, l1, j, w1tyb, w1ryb, w2tyb, w2ryb, w1ty, w1ry, w2ty, w2ry)
+                gAwetaqBv = integral_ffxi_c0c1(c0, c1, l1, j, v1tyb, v1ryb, v2tyb, v2ryb, w1ty, w1ry, w2ty, w2ry)
+                gAwqBu = integral_ff_c0c1(c0, c1, l1, j, u1tyb, u1ryb, u2tyb, u2ryb, w1ty, w1ry, w2ty, w2ry)
 
-                for j in range(n):
-                    for l1 in range(n1):
+                for i in range(m):
+                    for k1 in range(m1):
                         row = row0 + num*(j*m + i)
                         col = col0 + num1*(l1*m1 + k1)
 
-                        #NOTE symmetry not applicable here
-                        #if row > col:
-                            #continue
-
-                        gAuqBu = integral_ff_c0c1(c0, c1, l1, j, u1tyb, u1ryb, u2tyb, u2ryb, u1ty, u1ry, u2ty, u2ry)
-                        gAvqBv = integral_ff_c0c1(c0, c1, l1, j, v1tyb, v1ryb, v2tyb, v2ryb, v1ty, v1ry, v2ty, v2ry)
-                        gAwqBw = integral_ff_c0c1(c0, c1, l1, j, w1tyb, w1ryb, w2tyb, w2ryb, w1ty, w1ry, w2ty, w2ry)
-                        gAwetaqBv = integral_ffxi_c0c1(c0, c1, l1, j, v1tyb, v1ryb, v2tyb, v2ryb, w1ty, w1ry, w2ty, w2ry)
-                        gAwqBu = integral_ff_c0c1(c0, c1, l1, j, u1tyb, u1ryb, u2tyb, u2ryb, w1ty, w1ry, w2ty, w2ry)
+                        fAupBu = integral_ff(i, k1, u1tx, u1rx, u2tx, u2rx, u1txb, u1rxb, u2txb, u2rxb)
+                        fAvpBv = integral_ff(i, k1, v1tx, v1rx, v2tx, v2rx, v1txb, v1rxb, v2txb, v2rxb)
+                        fAwpBw = integral_ff(i, k1, w1tx, w1rx, w2tx, w2rx, w1txb, w1rxb, w2txb, w2rxb)
+                        fAwxipBu = integral_ffxi(k1, i, u1txb, u1rxb, u2txb, u2rxb, w1tx, w1rx, w2tx, w2rx)
+                        fAwpBv = integral_ff(i, k1, w1tx, w1rx, w2tx, w2rx, v1txb, v1rxb, v2txb, v2rxb)
 
                         c += 1
                         kCpbr[c] = row+0
@@ -239,7 +231,7 @@ def fkCpbx1x2y1y2(double x1, double x2, double y1, double y2,
     return kCpb
 
 
-def fkCbbpbx1x2(double x1, double x2, double y1, double y2,
+def fkCbbpby1y2(double y1, double y2,
         double kt, double a, double b, int m1, int n1,
         double u1txb, double u1rxb, double u2txb, double u2rxb,
         double v1txb, double v1rxb, double v2txb, double v2rxb,
@@ -249,7 +241,7 @@ def fkCbbpbx1x2(double x1, double x2, double y1, double y2,
         double w1tyb, double w1ryb, double w2tyb, double w2ryb,
         int size, int row0, int col0):
     cdef int i1, k1, j1, l1, c, row, col
-    cdef double xi1, xi2, eta1, eta2, c1
+    cdef double eta1, eta2, c1
 
     cdef np.ndarray[cINT, ndim=1] kCbbpbr, kCbbpbc
     cdef np.ndarray[cDOUBLE, ndim=1] kCbbpbv
@@ -257,8 +249,6 @@ def fkCbbpbx1x2(double x1, double x2, double y1, double y2,
     cdef double pAupBu, pAvpBv, pAwpBw
     cdef double qAuqBu, qAvqBv, qAwqBw, qAwetaqBweta
 
-    xi1 = 2*x1/a - 1.
-    xi2 = 2*x2/a - 1.
     eta1 = 2*y1/b - 1.
     eta2 = 2*y2/b - 1.
     c1 = 0.5*(eta2 - eta1)
@@ -274,9 +264,9 @@ def fkCbbpbx1x2(double x1, double x2, double y1, double y2,
         c = -1
         for i1 in range(m1):
             for k1 in range(m1):
-                pAupBu = integral_ff_12(xi1, xi2, i1, k1, u1txb, u1rxb, u2txb, u2rxb, u1txb, u1rxb, u2txb, u2rxb)
-                pAvpBv = integral_ff_12(xi1, xi2, i1, k1, v1txb, v1rxb, v2txb, v2rxb, v1txb, v1rxb, v2txb, v2rxb)
-                pAwpBw = integral_ff_12(xi1, xi2, i1, k1, w1txb, w1rxb, w2txb, w2rxb, w1txb, w1rxb, w2txb, w2rxb)
+                pAupBu = integral_ff(i1, k1, u1txb, u1rxb, u2txb, u2rxb, u1txb, u1rxb, u2txb, u2rxb)
+                pAvpBv = integral_ff(i1, k1, v1txb, v1rxb, v2txb, v2rxb, v1txb, v1rxb, v2txb, v2rxb)
+                pAwpBw = integral_ff(i1, k1, w1txb, w1rxb, w2txb, w2rxb, w1txb, w1rxb, w2txb, w2rxb)
 
                 for j1 in range(n1):
                     for l1 in range(n1):

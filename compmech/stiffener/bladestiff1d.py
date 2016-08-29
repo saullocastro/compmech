@@ -1,11 +1,13 @@
 from __future__ import division, absolute_import
 import gc
+import copy
 
 import numpy as np
 from numpy import deg2rad
 
 from . import modelDB
 import compmech.panel.modelDB as panmodelDB
+from compmech.panel import Panel
 from compmech.logger import msg, warn
 from compmech.composite import laminate
 
@@ -44,10 +46,10 @@ class BladeStiff1D(object):
         self.bstack = bstack
         self.bplyts = bplyts
         self.blaminaprops = blaminaprops
+        self.base = None
         self.fstack = fstack
         self.fplyts = fplyts
         self.flaminaprops = flaminaprops
-        self.blam = None
         self.flam = None
 
         self.As = None
@@ -62,6 +64,12 @@ class BladeStiff1D(object):
 
 
     def _rebuild(self):
+        assert self.panel1.model == self.panel2.model
+        assert self.panel1.m == self.panel2.m
+        assert self.panel1.n == self.panel2.n
+        assert self.panel1.r == self.panel2.r
+        assert self.panel1.alphadeg == self.panel2.alphadeg
+
         if self.fstack is not None:
             self.hf = sum(self.fplyts)
             self.Asf = self.bf*self.hf
@@ -70,17 +78,26 @@ class BladeStiff1D(object):
             self.flam.calc_equivalent_modulus()
 
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
+        hb = 0.
         if self.bstack is not None:
             hb = sum(self.bplyts)
-            self.dpb = h/2. + hb/2.
-            self.blam = laminate.read_stack(self.bstack, plyts=self.bplyts,
-                                            laminaprops=self.blaminaprops,
-                                            offset=(-h/2.-hb/2.))
-            self.hb = hb
-            self.Asb = self.bb*self.hb
+            y1 = self.ys - self.bb/2.
+            y2 = self.ys + self.bb/2.
+            self.base = Panel(a=bay.a, b=bay.b, r=bay.r, alphadeg=bay.alphadeg,
+                    stack=self.bstack, plyts=self.bplyts,
+                    mu=self.mu, m=bay.m, n=bay.n,
+                    laminaprops=self.blaminaprops, offset=(-h/2.-hb/2.),
+                    u1tx=bay.u1tx, u1rx=bay.u1rx, u2tx=bay.u2tx, u2rx=bay.u2rx,
+                    v1tx=bay.v1tx, v1rx=bay.v1rx, v2tx=bay.v2tx, v2rx=bay.v2rx,
+                    w1tx=bay.w1tx, w1rx=bay.w1rx, w2tx=bay.w2tx, w2rx=bay.w2rx,
+                    u1ty=bay.u1ty, u1ry=bay.u1ry, u2ty=bay.u2ty, u2ry=bay.u2ry,
+                    v1ty=bay.v1ty, v1ry=bay.v1ry, v2ty=bay.v2ty, v2ry=bay.v2ry,
+                    w1ty=bay.w1ty, w1ry=bay.w1ry, w2ty=bay.w2ty, w2ry=bay.w2ry,
+                    y1=y1, y2=y2)
+            self.Asb = self.bb*hb
 
         #TODO check offset effect on curved panels
-        self.dbf = self.bf/2. + self.hb + h/2.
+        self.dbf = self.bf/2. + hb + h/2.
         self.Iyy = self.hf*self.bf**3/12.
         self.Jxx = self.hf*self.bf**3/12. + self.bf*self.hf**3/12.
 
@@ -103,12 +120,6 @@ class BladeStiff1D(object):
 
             self.F1 = self.bf**2/12.*self.E1
 
-        assert self.panel1.model == self.panel2.model
-        assert self.panel1.m == self.panel2.m
-        assert self.panel1.n == self.panel2.n
-        assert self.panel1.r == self.panel2.r
-        assert self.panel1.alphadeg == self.panel2.alphadeg
-
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True):
         """Calculate the linear constitutive stiffness matrix
@@ -116,37 +127,15 @@ class BladeStiff1D(object):
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
 
-        panmod = panmodelDB.db[self.panel1.model]['matrices']
-        mod = modelDB.db[self.model]['matrices']
-
-        bay = self.bay
-        ys = self.ys
-        a = bay.a
-        b = bay.b
-        m = self.panel1.m
-        n = self.panel1.n
-        r = self.panel1.r if self.panel1.r is not None else 0.
-        alphadeg = self.panel1.alphadeg
-        alphadeg = alphadeg if alphadeg is not None else 0.
-        alpharad = deg2rad(alphadeg)
-
         k0 = 0.
-        if self.blam is not None:
-            Fsb = self.blam.ABD
-            y1 = ys - self.bb/2.
-            y2 = ys + self.bb/2.
-            k0 += panmod.fk0y1y2(y1, y2, a, b, r, alpharad, Fsb, m, n,
-                                 bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                                 bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                                 bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                                 bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                                 bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                                 bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                                 size=size, row0=row0, col0=col0)
-
+        if self.base is not None:
+            k0 += self.base.calc_k0(size=size, row0=row0, col0=col0,
+                    silent=True, finalize=False)
         if self.flam is not None:
-            k0 += mod.fk0f(ys, a, b, self.bf, self.dbf, self.E1, self.F1,
-                           self.S1, self.Jxx, m, n,
+            mod = modelDB.db[self.model]['matrices']
+            bay = self.bay
+            k0 += mod.fk0f(self.ys, bay.a, bay.b, self.bf, self.dbf, self.E1, self.F1,
+                           self.S1, self.Jxx, bay.m, bay.n,
                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
                            bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
@@ -179,28 +168,16 @@ class BladeStiff1D(object):
         self._rebuild()
         msg('Calculating kG0... ', level=2, silent=silent)
 
-        panmod = panmodelDB.db[self.panel1.model]['matrices']
-        mod = modelDB.db[self.model]['matrices']
-
-        bay = self.bay
-
-        ys = self.ys
-        m = bay.m
-        n = bay.n
-        mu = self.mu
-
         kG0 = 0.
-
-        if self.blam is not None:
-            Fsb = self.blam.ABD
-            y1 = ys - self.bb/2.
-            y2 = ys + self.bb/2.
+        if self.base is not None:
             # TODO include kG0 for padup
             #      now it is assumed that all the load goes to the flange
-
+            pass
         if self.flam is not None:
             Fx = self.Fx if self.Fx is not None else 0.
-            kG0 += mod.fkG0f(ys, Fx, bay.a, bay.b, self.bf, m, n,
+            mod = modelDB.db[self.model]['matrices']
+            bay = self.bay
+            kG0 += mod.fkG0f(self.ys, Fx, bay.a, bay.b, self.bf, bay.m, bay.n,
                              bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
                              bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
                              size, row0, col0)
@@ -225,39 +202,16 @@ class BladeStiff1D(object):
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
 
-        panmod = panmodelDB.db[self.panel1.model]['matrices']
         mod = modelDB.db[self.model]['matrices']
 
-        bay = self.bay
-        ys = self.ys
-        a = bay.a
-        b = bay.b
-        r = self.panel1.r if self.panel1.r is not None else 0.
-        m = self.panel1.m
-        n = self.panel1.n
-        mu = self.mu
-        h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
-        alphadeg = self.panel1.alphadeg
-        alphadeg = alphadeg if alphadeg is not None else 0.
-        alpharad = deg2rad(alphadeg)
-
         kM = 0.
-        if self.blam is not None:
-            y1 = ys - self.bb/2.
-            y2 = ys + self.bb/2.
-            kM += panmod.fkMy1y2(y1, y2, self.mu, self.dpb, self.hb,
-                          a, b, r, alpharad, m, n,
-                          bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
-                          bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
-                          bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
-                          bay.u1ty, bay.u1ry, bay.u2ty, bay.u2ry,
-                          bay.v1ty, bay.v1ry, bay.v2ty, bay.v2ry,
-                          bay.w1ty, bay.w1ry, bay.w2ty, bay.w2ry,
-                          size=size, row0=row0, col0=col0)
-
+        if self.base is not None:
+            kM += self.base.calc_kM(size=size, row0=row0, col0=col0, silent=silent, finalize=False)
         if self.flam is not None:
-            kM += mod.fkMf(ys, self.mu, h, self.hb, self.hf, a, b, self.bf,
-                           self.dbf, m, n,
+            bay = self.bay
+            h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
+            kM += mod.fkMf(self.ys, self.mu, h, self.hb, self.hf, bay.a, bay.b,
+                           self.bf, self.dbf, bay.m, bay.n,
                            bay.u1tx, bay.u1rx, bay.u2tx, bay.u2rx,
                            bay.v1tx, bay.v1rx, bay.v2tx, bay.v2rx,
                            bay.w1tx, bay.w1rx, bay.w2tx, bay.w2rx,
@@ -279,6 +233,4 @@ class BladeStiff1D(object):
         gc.collect()
 
         msg('finished!', level=2, silent=silent)
-
-
 
