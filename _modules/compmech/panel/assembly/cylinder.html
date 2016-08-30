@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>compmech.panel.assembly.cylinder &mdash; CompMech 0.7.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="top" title="CompMech 0.7.0 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for compmech.panel.assembly.cylinder</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+
+<span class="kn">from</span> <span class="nn">compmech.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
+<span class="kn">from</span> <span class="nn">compmech.panel.assembly</span> <span class="kn">import</span> <span class="n">PanelAssembly</span>
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="n">make_symmetric</span>
+<span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="kn">import</span> <span class="n">lb</span><span class="p">,</span> <span class="n">static</span>
+
+
+<div class="viewcode-block" id="create_cylinder_assy"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_unstiffened.html#compmech.panel.assembly.cylinder.create_cylinder_assy">[docs]</a><span class="k">def</span> <span class="nf">create_cylinder_assy</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
+        <span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Cylinder Assembly</span>
+
+<span class="sd">    The panel assembly looks like::</span>
+
+
+<span class="sd">        B                             A</span>
+<span class="sd">         _______ _______ _______ _______</span>
+<span class="sd">        |       |       |       |       |</span>
+<span class="sd">        |       |       |       |       |</span>
+<span class="sd">        |       |       |       |       |</span>
+<span class="sd">        |  p04  |  p03  |  p02  |  p01  |</span>
+<span class="sd">        |       |       |       |       |    /\  x</span>
+<span class="sd">        |       |       |       |       |    |</span>
+<span class="sd">        |_______|_______|_______|_______|    |</span>
+<span class="sd">                                             |</span>
+<span class="sd">                                   y  &lt;-------</span>
+
+<span class="sd">    where edges ``A`` and ``B`` are connected to produce the cyclic effect.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    height : float</span>
+<span class="sd">        Cylinder height (along `x`).</span>
+<span class="sd">    r : float</span>
+<span class="sd">        Cylinder radius.</span>
+<span class="sd">    stack : list or tuple</span>
+<span class="sd">        Stacking sequence for the cylinder.</span>
+<span class="sd">    plyt : float</span>
+<span class="sd">        Ply thickness.</span>
+<span class="sd">    laminaprop : list or tuple</span>
+<span class="sd">        Orthotropic lamina properties: `E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}`.</span>
+<span class="sd">    npanels : int</span>
+<span class="sd">        The number of panels the cylinder perimiter.</span>
+<span class="sd">    m, n : int, optional</span>
+<span class="sd">        Number of approximation terms for each panel.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    assy, conn_dict : tuple</span>
+<span class="sd">        A tuple containing the assembly and the default connectivity</span>
+<span class="sd">        dictionary.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">npanels</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;At least two panels are needed&#39;</span><span class="p">)</span>
+    <span class="n">skin</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">perimiter</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">r</span>
+    <span class="n">b_skin</span> <span class="o">=</span> <span class="n">perimiter</span> <span class="o">/</span> <span class="n">npanels</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npanels</span><span class="p">):</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">b_skin</span>
+        <span class="n">panel</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s">&#39;skin&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="n">y0</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b_skin</span><span class="p">,</span>
+            <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="n">stack</span><span class="p">,</span> <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span>
+            <span class="n">u1tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u1rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u2tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u2rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">v1tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">v1rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v2tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">v2rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">w1tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">w1rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w2tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">w2rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">u1ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u1ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u2ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u2ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">v1ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v1ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v2ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v2ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">w1ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w1ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w2ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w2ry</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">skin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">panel</span><span class="p">)</span>
+    <span class="n">conn_dict</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">skin_loop</span> <span class="o">=</span> <span class="n">skin</span> <span class="o">+</span> <span class="p">[</span><span class="n">skin</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">skin</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">skin</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">p01</span> <span class="o">=</span> <span class="n">skin_loop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">p02</span> <span class="o">=</span> <span class="n">skin_loop</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">conn_dict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">p1</span><span class="o">=</span><span class="n">p01</span><span class="p">,</span> <span class="n">p2</span><span class="o">=</span><span class="n">p02</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="s">&#39;SSycte&#39;</span><span class="p">,</span> <span class="n">ycte1</span><span class="o">=</span><span class="n">p01</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">ycte2</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p01</span> <span class="o">=</span> <span class="n">skin_loop</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">p02</span> <span class="o">=</span> <span class="n">skin_loop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">conn_dict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">p1</span><span class="o">=</span><span class="n">p01</span><span class="p">,</span> <span class="n">p2</span><span class="o">=</span><span class="n">p02</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="s">&#39;SSycte&#39;</span><span class="p">,</span> <span class="n">ycte1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ycte2</span><span class="o">=</span><span class="n">p02</span><span class="o">.</span><span class="n">b</span><span class="p">))</span>
+    <span class="n">assy</span> <span class="o">=</span> <span class="n">PanelAssembly</span><span class="p">(</span><span class="n">skin</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">conn_dict</span></div>
+
+
+<div class="viewcode-block" id="cylinder_compression_lb_Nxx_cte"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_unstiffened.html#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_cte">[docs]</a><span class="k">def</span> <span class="nf">cylinder_compression_lb_Nxx_cte</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
+        <span class="n">npanels</span><span class="p">,</span> <span class="n">Nxxs</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Linear buckling analysis with a constant Nxx for each panel</span>
+
+<span class="sd">    See :func:`.create_cylinder_assy` for most parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Nxxs : list</span>
+<span class="sd">        A Nxx for each panel.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    assy, eigvals, eigvecs : tuple</span>
+<span class="sd">        Assembly, eigenvalues and eigenvectors.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    The following example is one of the test cases:</span>
+
+<span class="sd">    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder.py</span>
+<span class="sd">        :pyobject: test_cylinder_compression_lb_Nxx_cte</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">conn_dict</span> <span class="o">=</span> <span class="n">create_cylinder_assy</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span>
+            <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Nxxs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;The length of &quot;Nxxs&quot; must be the same as &quot;npanels&quot;&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">):</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conn_dict</span><span class="p">)</span>
+    <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">()</span>
+    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">lb</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kG</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+             <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_eigvalues_print</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span></div>
+
+
+<div class="viewcode-block" id="cylinder_compression_lb_Nxx_from_static"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_unstiffened.html#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_from_static">[docs]</a><span class="k">def</span> <span class="nf">cylinder_compression_lb_Nxx_from_static</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
+        <span class="n">npanels</span><span class="p">,</span> <span class="n">Nxxs</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Linear buckling analysis with a Nxx calculated using static analysis</span>
+
+<span class="sd">    See :func:`.create_cylinder_assy` for most parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Nxxs : list</span>
+<span class="sd">        A Nxx for each panel.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    assy, c, eigvals, eigvecs : tuple</span>
+<span class="sd">        Assembly, static results, eigenvalues and eigenvectors.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    The following example is one of the test cases:</span>
+
+<span class="sd">    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder.py</span>
+<span class="sd">        :pyobject: test_cylinder_compression_lb_Nxx_from_static</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">conn_dict</span> <span class="o">=</span> <span class="n">create_cylinder_assy</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span>
+            <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Nxxs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;The length of &quot;Nxxs&quot; must be the same as &quot;npanels&quot;&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">):</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">u2tx</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">fext</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">get_size</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
+        <span class="n">Nforces</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="n">fx</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">Nforces</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nforces</span><span class="p">):</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">Nforces</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">fext</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">col_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conn_dict</span><span class="p">)</span>
+    <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">static</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">lb</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kG</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+             <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_eigvalues_print</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span></div>
+
+
+<span class="k">def</span> <span class="nf">TBD</span><span class="p">():</span>
+    <span class="c">#skin[1].forces.append([p.a/2, p.b/2, 0, 0, -10])</span>
+    <span class="n">fext</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">skin</span><span class="p">:</span>
+        <span class="n">Nforces</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="n">fx</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">Nforces</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nforces</span><span class="p">):</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">Nforces</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">fext</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">col_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">static</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">lb</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kG</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+             <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_eigvalues_print</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Aug 30, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Unstiffened Cylinder &mdash; CompMech 0.7.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/logo.png"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="top" title="CompMech 0.7.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Functions using Assemblies of Panels" href="assembly_functions.html" />
+    <link rel="next" title="Example to Create a Panel Assembly" href="assembly_example_to_create.html" />
+    <link rel="prev" title="T-Stiffened Panels" href="tstiff2d.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="assembly_example_to_create.html" title="Example to Create a Panel Assembly"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tstiff2d.html" title="T-Stiffened Panels"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li>
+          <li class="nav-item nav-item-4"><a href="assembly_functions.html" accesskey="U">Functions using Assemblies of Panels</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="unstiffened-cylinder">
+<h1>Unstiffened Cylinder<a class="headerlink" href="#unstiffened-cylinder" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="compmech.panel.assembly.cylinder.create_cylinder_assy">
+<code class="descclassname">compmech.panel.assembly.cylinder.</code><code class="descname">create_cylinder_assy</code><span class="sig-paren">(</span><em>height</em>, <em>r</em>, <em>stack</em>, <em>plyt</em>, <em>laminaprop</em>, <em>npanels</em>, <em>m=8</em>, <em>n=8</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#create_cylinder_assy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cylinder Assembly</p>
+<p>The panel assembly looks like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">B</span>                             <span class="n">A</span>
+ <span class="n">_______</span> <span class="n">_______</span> <span class="n">_______</span> <span class="n">_______</span>
+<span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>
+<span class="o">|</span>  <span class="n">p04</span>  <span class="o">|</span>  <span class="n">p03</span>  <span class="o">|</span>  <span class="n">p02</span>  <span class="o">|</span>  <span class="n">p01</span>  <span class="o">|</span>
+<span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>    <span class="o">/</span>\  <span class="n">x</span>
+<span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>    <span class="o">|</span>
+<span class="o">|</span><span class="n">_______</span><span class="o">|</span><span class="n">_______</span><span class="o">|</span><span class="n">_______</span><span class="o">|</span><span class="n">_______</span><span class="o">|</span>    <span class="o">|</span>
+                                     <span class="o">|</span>
+                           <span class="n">y</span>  <span class="o">&lt;-------</span>
+</pre></div>
+</div>
+<p>where edges <code class="docutils literal"><span class="pre">A</span></code> and <code class="docutils literal"><span class="pre">B</span></code> are connected to produce the cyclic effect.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>height</strong> : float</p>
+<blockquote>
+<div><p>Cylinder height (along <img class="math" src="../../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>).</p>
+</div></blockquote>
+<p><strong>r</strong> : float</p>
+<blockquote>
+<div><p>Cylinder radius.</p>
+</div></blockquote>
+<p><strong>stack</strong> : list or tuple</p>
+<blockquote>
+<div><p>Stacking sequence for the cylinder.</p>
+</div></blockquote>
+<p><strong>plyt</strong> : float</p>
+<blockquote>
+<div><p>Ply thickness.</p>
+</div></blockquote>
+<p><strong>laminaprop</strong> : list or tuple</p>
+<blockquote>
+<div><p>Orthotropic lamina properties: <img class="math" src="../../../_images/math/4cfe776bc9ce20038d7eb49036c0658bc6518039.png" alt="E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}"/>.</p>
+</div></blockquote>
+<p><strong>npanels</strong> : int</p>
+<blockquote>
+<div><p>The number of panels the cylinder perimiter.</p>
+</div></blockquote>
+<p><strong>m, n</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of approximation terms for each panel.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>assy, conn_dict</strong> : tuple</p>
+<blockquote class="last">
+<div><p>A tuple containing the assembly and the default connectivity
+dictionary.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_cte">
+<code class="descclassname">compmech.panel.assembly.cylinder.</code><code class="descname">cylinder_compression_lb_Nxx_cte</code><span class="sig-paren">(</span><em>height</em>, <em>r</em>, <em>stack</em>, <em>plyt</em>, <em>laminaprop</em>, <em>npanels</em>, <em>Nxxs</em>, <em>m=8</em>, <em>n=8</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#cylinder_compression_lb_Nxx_cte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_cte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear buckling analysis with a constant Nxx for each panel</p>
+<p>See <a class="reference internal" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="compmech.panel.assembly.cylinder.create_cylinder_assy"><code class="xref py py-func docutils literal"><span class="pre">create_cylinder_assy()</span></code></a> for most parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nxxs</strong> : list</p>
+<blockquote>
+<div><p>A Nxx for each panel.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>assy, eigvals, eigvecs</strong> : tuple</p>
+<blockquote class="last">
+<div><p>Assembly, eigenvalues and eigenvectors.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The following example is one of the test cases:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test_cylinder_compression_lb_Nxx_cte</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s">&#39;Testing assembly function: cylinder_compression_lb_Nxx_cte&#39;</span><span class="p">)</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">0.500</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="mf">0.250</span>
+    <span class="n">npanels</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">Nxxs</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.</span><span class="p">]</span><span class="o">*</span><span class="n">npanels</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">cylinder_compression_lb_Nxx_cte</span><span class="p">(</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+        <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span>
+        <span class="n">plyt</span><span class="o">=</span><span class="mf">0.125e-3</span><span class="p">,</span>
+        <span class="n">stack</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span>
+        <span class="n">laminaprop</span><span class="o">=</span><span class="p">(</span><span class="mf">142.5e9</span><span class="p">,</span> <span class="mf">8.7e9</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">),</span>
+        <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span>
+        <span class="n">Nxxs</span><span class="o">=</span><span class="n">Nxxs</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+    <span class="n">assy</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eigvecs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s">&#39;skin&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;tmp_cylinder_compression_lb_Nxx_cte.png&#39;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">Nxxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">49906.793576</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_from_static">
+<code class="descclassname">compmech.panel.assembly.cylinder.</code><code class="descname">cylinder_compression_lb_Nxx_from_static</code><span class="sig-paren">(</span><em>height</em>, <em>r</em>, <em>stack</em>, <em>plyt</em>, <em>laminaprop</em>, <em>npanels</em>, <em>Nxxs</em>, <em>m=8</em>, <em>n=8</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#cylinder_compression_lb_Nxx_from_static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_from_static" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear buckling analysis with a Nxx calculated using static analysis</p>
+<p>See <a class="reference internal" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="compmech.panel.assembly.cylinder.create_cylinder_assy"><code class="xref py py-func docutils literal"><span class="pre">create_cylinder_assy()</span></code></a> for most parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nxxs</strong> : list</p>
+<blockquote>
+<div><p>A Nxx for each panel.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>assy, c, eigvals, eigvecs</strong> : tuple</p>
+<blockquote class="last">
+<div><p>Assembly, static results, eigenvalues and eigenvectors.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>The following example is one of the test cases:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test_cylinder_compression_lb_Nxx_from_static</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s">&#39;Testing assembly function: cylinder_compression_lb_Nxx_from_static&#39;</span><span class="p">)</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">0.500</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="mf">0.250</span>
+    <span class="n">npanels</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">Nxxs</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.</span><span class="p">]</span><span class="o">*</span><span class="n">npanels</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">cylinder_compression_lb_Nxx_from_static</span><span class="p">(</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+        <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span>
+        <span class="n">plyt</span><span class="o">=</span><span class="mf">0.125e-3</span><span class="p">,</span>
+        <span class="n">stack</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">45</span><span class="p">],</span>
+        <span class="n">laminaprop</span><span class="o">=</span><span class="p">(</span><span class="mf">142.5e9</span><span class="p">,</span> <span class="mf">8.7e9</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">,</span> <span class="mf">5.1e9</span><span class="p">),</span>
+        <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span>
+        <span class="n">Nxxs</span><span class="o">=</span><span class="n">Nxxs</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+    <span class="n">assy</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s">&#39;skin&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;tmp_cylinder_compression_lb_Nxx_from_static_c.png&#39;</span><span class="p">)</span>
+    <span class="n">assy</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">eigvecs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s">&#39;skin&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;tmp_cylinder_compression_lb_Nxx_from_static_eigvec.png&#39;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">Nxxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">47681.669880</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tstiff2d.html"
+                        title="previous chapter">T-Stiffened Panels</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="assembly_example_to_create.html"
+                        title="next chapter">Example to Create a Panel Assembly</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/modules/panel/assembly/cylinder_unstiffened.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="assembly_example_to_create.html" title="Example to Create a Panel Assembly"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tstiff2d.html" title="T-Stiffened Panels"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li>
+          <li class="nav-item nav-item-4"><a href="assembly_functions.html" >Functions using Assemblies of Panels</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Aug 30, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

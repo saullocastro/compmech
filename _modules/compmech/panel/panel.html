@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.panel.panel &mdash; CompMech 0.6.7 documentation</title>
+    <title>compmech.panel.panel &mdash; CompMech 0.7.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.6.7',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.6.7 documentation" href="../../../index.html" />
+    <link rel="top" title="CompMech 0.7.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -66,8 +66,8 @@
 <span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
 <span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="n">msg</span><span class="p">,</span> <span class="n">warn</span>
 <span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">DOUBLE</span>
-<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="p">(</span><span class="n">make_symmetric</span><span class="p">,</span> <span class="n">remove_null_cols</span><span class="p">,</span>
-        <span class="n">make_skew_symmetric</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="p">(</span><span class="n">remove_null_cols</span><span class="p">,</span> <span class="n">make_skew_symmetric</span><span class="p">,</span>
+        <span class="n">finalize_symmetric_matrix</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">modelDB</span>
 
@@ -144,6 +144,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x0</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y0</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">row_start</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_start</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">row_end</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_end</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;panel&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bay</span> <span class="o">=</span> <span class="bp">None</span>
@@ -396,8 +400,8 @@
 <span class="sd">            Asserts validity of output data and makes the output matrix</span>
 <span class="sd">            symmetric, should be ``False`` when assemblying.</span>
 <span class="sd">        c : array-like or None, optional</span>
-<span class="sd">            This must be the result of a static analysis, used to compute the</span>
-<span class="sd">            non-linear term based on the actual displacement field.</span>
+<span class="sd">            This must be the result of a static analysis, used to compute</span>
+<span class="sd">            non-linear terms based on the actual displacement field.</span>
 <span class="sd">        nx, ny : int or None, optional</span>
 <span class="sd">            Number of integration points along `x` and `y`, respectively, for</span>
 <span class="sd">            the Legendre-Gauss quadrature rule applied in the numerical</span>
@@ -471,11 +475,7 @@
                            <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
-            <span class="c"># performing final checks for k0 and making symmetry</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">k0</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">k0</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
-            <span class="n">k0</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_symmetric</span><span class="p">(</span><span class="n">k0</span><span class="p">))</span>
-
+            <span class="n">k0</span> <span class="o">=</span> <span class="n">finalize_symmetric_matrix</span><span class="p">(</span><span class="n">k0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span>
 
         <span class="c">#NOTE forcing Python garbage collector to clean the memory</span>
@@ -534,10 +534,7 @@
                        <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">NLgeom</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">kG0</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">kG0</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
-            <span class="n">kG0</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_symmetric</span><span class="p">(</span><span class="n">kG0</span><span class="p">))</span>
-
+            <span class="n">kG0</span> <span class="o">=</span> <span class="n">finalize_symmetric_matrix</span><span class="p">(</span><span class="n">kG0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kG0</span> <span class="o">=</span> <span class="n">kG0</span>
 
         <span class="c">#NOTE memory cleanup</span>
@@ -588,10 +585,7 @@
             <span class="n">kM</span> <span class="o">=</span> <span class="n">matrices</span><span class="o">.</span><span class="n">fkM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">kM</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">kM</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
-            <span class="n">kM</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_symmetric</span><span class="p">(</span><span class="n">kM</span><span class="p">))</span>
-
+            <span class="n">kM</span> <span class="o">=</span> <span class="n">finalize_symmetric_matrix</span><span class="p">(</span><span class="n">kM</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kM</span> <span class="o">=</span> <span class="n">kM</span>
 
         <span class="c">#NOTE memory cleanup</span>
@@ -648,7 +642,6 @@
             <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">kA</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
             <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">kA</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
             <span class="n">kA</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_skew_symmetric</span><span class="p">(</span><span class="n">kA</span><span class="p">))</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">kA</span> <span class="o">=</span> <span class="n">kA</span>
 
         <span class="c">#NOTE memory cleanup</span>
@@ -668,10 +661,7 @@
         <span class="n">cA</span> <span class="o">=</span> <span class="n">cA</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">+</span><span class="mi">1j</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">cA</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">cA</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="bp">False</span>
-            <span class="n">cA</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_symmetric</span><span class="p">(</span><span class="n">cA</span><span class="p">))</span>
-
+            <span class="n">cA</span> <span class="o">=</span> <span class="n">finalize_symmetric_matrix</span><span class="p">(</span><span class="n">cA</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cA</span> <span class="o">=</span> <span class="n">cA</span>
 
         <span class="c">#NOTE memory cleanup</span>
@@ -1584,13 +1574,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 29, 2016.
+      Last updated on Aug 30, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

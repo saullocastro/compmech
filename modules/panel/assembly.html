@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Assembly of Plate and Panel Models (compmech.panel.assembly) &mdash; CompMech 0.6.7 documentation</title>
+    <title>Assembly of Plate and Panel Models (compmech.panel.assembly) &mdash; CompMech 0.7.0.dev0+703b1bc documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.7',
+        VERSION:     '0.7.0.dev0+703b1bc',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.7 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.7.0.dev0+703b1bc documentation" href="../../index.html" />
     <link rel="up" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" />
     <link rel="prev" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="assembly_intro.html" title="Assembly of Semi-Analytical Models"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0.dev0+703b1bc documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="assembly_intro.html" accesskey="U">Assembly of Semi-Analytical Models</a> &raquo;</li> 
@@ -83,17 +83,86 @@ different panel groups within the assembly and so forth.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_size</span></code>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.assembly.PanelAssembly.calc_k0" title="compmech.panel.assembly.PanelAssembly.calc_k0"><code class="xref py py-obj docutils literal"><span class="pre">calc_k0</span></code></a>(conn[,&nbsp;c,&nbsp;silent,&nbsp;finalize])</td>
+<td>Calculate the constitutive stiffness matrix of the assembly</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.assembly.PanelAssembly.calc_kG0" title="compmech.panel.assembly.PanelAssembly.calc_kG0"><code class="xref py py-obj docutils literal"><span class="pre">calc_kG0</span></code></a>([c,&nbsp;silent,&nbsp;finalize])</td>
+<td>Calculate the geometric stiffness matrix of the assembly</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">calc_kM</span></code>([silent,&nbsp;finalize])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.assembly.PanelAssembly.plot" title="compmech.panel.assembly.PanelAssembly.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(c,&nbsp;group[,&nbsp;invert_y,&nbsp;vec,&nbsp;filename,&nbsp;...])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_size</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.assembly.PanelAssembly.plot" title="compmech.panel.assembly.PanelAssembly.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(c,&nbsp;group[,&nbsp;invert_y,&nbsp;vec,&nbsp;filename,&nbsp;...])</td>
 <td>Contour plot for a Ritz constants vector.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.assembly.PanelAssembly.uvw" title="compmech.panel.assembly.PanelAssembly.uvw"><code class="xref py py-obj docutils literal"><span class="pre">uvw</span></code></a>(c,&nbsp;group[,&nbsp;gridx,&nbsp;gridy])</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.assembly.PanelAssembly.uvw" title="compmech.panel.assembly.PanelAssembly.uvw"><code class="xref py py-obj docutils literal"><span class="pre">uvw</span></code></a>(c,&nbsp;group[,&nbsp;gridx,&nbsp;gridy])</td>
 <td>Calculates the displacement field</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="compmech.panel.assembly.PanelAssembly.calc_k0">
+<code class="descname">calc_k0</code><span class="sig-paren">(</span><em>conn</em>, <em>c=None</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/assembly.html#PanelAssembly.calc_k0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.PanelAssembly.calc_k0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the constitutive stiffness matrix of the assembly</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>conn</strong> : dict</p>
+<blockquote>
+<div><p>A connectivity dictionary.</p>
+</div></blockquote>
+<p><strong>c</strong> : array-like or None, optional</p>
+<blockquote>
+<div><p>This must be the result of a static analysis, used to compute
+non-linear terms based on the actual displacement field.</p>
+</div></blockquote>
+<p><strong>silent</strong> : bool, optional</p>
+<blockquote>
+<div><p>A boolean to tell whether the log messages should be printed.</p>
+</div></blockquote>
+<p><strong>finalize</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Asserts validity of output data and makes the output matrix
+symmetric, should be <code class="docutils literal"><span class="pre">False</span></code> when assemblying.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.panel.assembly.PanelAssembly.calc_kG0">
+<code class="descname">calc_kG0</code><span class="sig-paren">(</span><em>c=None</em>, <em>silent=False</em>, <em>finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/assembly.html#PanelAssembly.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.PanelAssembly.calc_kG0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the geometric stiffness matrix of the assembly</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : array-like or None, optional</p>
+<blockquote>
+<div><p>This must be the result of a static analysis, used to compute
+non-linear terms based on the actual displacement field.</p>
+</div></blockquote>
+<p><strong>silent</strong> : bool, optional</p>
+<blockquote>
+<div><p>A boolean to tell whether the log messages should be printed.</p>
+</div></blockquote>
+<p><strong>finalize</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Asserts validity of output data and makes the output matrix
+symmetric, should be <code class="docutils literal"><span class="pre">False</span></code> when assemblying.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="compmech.panel.assembly.PanelAssembly.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>c</em>, <em>group</em>, <em>invert_y=False</em>, <em>vec='w'</em>, <em>filename=''</em>, <em>ax=None</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>title=''</em>, <em>identify=False</em>, <em>show_boundaries=False</em>, <em>boundary_line='--k'</em>, <em>boundary_linewidth=1.0</em>, <em>colorbar=False</em>, <em>cbar_nticks=2</em>, <em>cbar_format=None</em>, <em>cbar_title=''</em>, <em>cbar_fontsize=10</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=400</em>, <em>texts=[]</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=50</em>, <em>gridy=50</em>, <em>num_levels=400</em>, <em>vecmin=None</em>, <em>vecmax=None</em>, <em>calc_data_only=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/assembly/assembly.html#PanelAssembly.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.PanelAssembly.plot" title="Permalink to this definition">¶</a></dt>
@@ -349,7 +418,7 @@ stored as parameters with the same name in the <code class="docutils literal"><s
         <li class="right" >
           <a href="assembly_intro.html" title="Assembly of Semi-Analytical Models"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0.dev0+703b1bc documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li> 
@@ -357,7 +426,7 @@ stored as parameters with the same name in the <code class="docutils literal"><s
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 29, 2016.
+      Last updated on Aug 30, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>

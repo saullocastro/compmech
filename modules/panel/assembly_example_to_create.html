@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Example to Create a Panel Assembly &mdash; CompMech 0.6.7 documentation</title>
+    <title>Example to Create a Panel Assembly &mdash; CompMech 0.7.0.dev0+703b1bc documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.7',
+        VERSION:     '0.7.0.dev0+703b1bc',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.6.7 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.7.0.dev0+703b1bc documentation" href="../../index.html" />
     <link rel="up" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" />
     <link rel="next" title="Panel Connections (compmech.panel.connections)" href="connections.html" />
     <link rel="prev" title="Functions using Assemblies of Flat Plates and Panels" href="assembly_functions.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="assembly_functions.html" title="Functions using Assemblies of Flat Plates and Panels"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0.dev0+703b1bc documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="assembly_intro.html" accesskey="U">Assembly of Semi-Analytical Models</a> &raquo;</li> 
@@ -62,16 +62,11 @@
 <h1>Example to Create a Panel Assembly<a class="headerlink" href="#example-to-create-a-panel-assembly" title="Permalink to this headline">¶</a></h1>
 <p>The following assembly is used to compute natural frequencies of a stiffened
 panel in <a class="reference internal" href="assembly_functions.html#compmech.panel.assembly.tstiff2d_1stiff_freq.tstiff2d_1stiff_freq" title="compmech.panel.assembly.tstiff2d_1stiff_freq.tstiff2d_1stiff_freq"><code class="xref py py-func docutils literal"><span class="pre">tstiff2d_1stiff_freq()</span></code></a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 
-<span class="kn">import</span> <span class="nn">compmech.panel.connections</span> <span class="k">as</span> <span class="nn">connections</span>
 <span class="kn">from</span> <span class="nn">compmech.panel</span> <span class="k">import</span> <span class="n">Panel</span>
 <span class="kn">from</span> <span class="nn">compmech.panel.assembly</span> <span class="k">import</span> <span class="n">PanelAssembly</span>
-<span class="kn">from</span> <span class="nn">compmech.composite</span> <span class="k">import</span> <span class="n">laminate</span>
-<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="k">import</span> <span class="n">make_symmetric</span>
 <span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="k">import</span> <span class="n">freq</span>
-<span class="kn">from</span> <span class="nn">compmech.panel.connections</span> <span class="k">import</span> <span class="n">calc_kt_kr</span>
 
 
 <span class="k">def</span> <span class="nf">tstiff2d_1stiff_freq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">bf</span><span class="p">,</span> <span class="n">defect_a</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
@@ -352,16 +347,13 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
     <span class="n">base</span> <span class="o">=</span> <span class="p">[</span><span class="n">p10</span><span class="p">,</span> <span class="n">p12</span><span class="p">,</span> <span class="n">p14</span><span class="p">]</span>
     <span class="n">flange</span> <span class="o">=</span> <span class="p">[</span><span class="n">p11</span><span class="p">,</span> <span class="n">p13</span><span class="p">,</span> <span class="n">p15</span><span class="p">]</span>
 
-    <span class="n">size</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">3</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">n</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">panels</span><span class="p">])</span>
+    <span class="n">assy</span> <span class="o">=</span> <span class="n">PanelAssembly</span><span class="p">(</span><span class="n">panels</span><span class="p">)</span>
 
-    <span class="n">k0</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">kM</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
 
     <span class="n">row0</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">col0</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">panels</span><span class="p">:</span>
-        <span class="n">k0</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">row0</span><span class="o">=</span><span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">col0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="k">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="k">False</span><span class="p">)</span>
-        <span class="n">kM</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_kM</span><span class="p">(</span><span class="n">row0</span><span class="o">=</span><span class="n">row0</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">col0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="k">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="k">False</span><span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="o">=</span> <span class="n">row0</span>
         <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="o">=</span> <span class="n">col0</span>
         <span class="n">row0</span> <span class="o">+=</span> <span class="mi">3</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">n</span>
@@ -369,67 +361,18 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
         <span class="n">p</span><span class="o">.</span><span class="n">row_end</span> <span class="o">=</span> <span class="n">row0</span>
         <span class="n">p</span><span class="o">.</span><span class="n">col_end</span> <span class="o">=</span> <span class="n">col0</span>
 
+    <span class="n">valid_conn</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">connecti</span> <span class="ow">in</span> <span class="n">conn</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">connecti</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;has_defect&#39;</span><span class="p">):</span> <span class="c"># connecting if there is no defect</span>
+        <span class="k">if</span> <span class="n">connecti</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;has_defect&#39;</span><span class="p">):</span>
             <span class="k">continue</span>
-        <span class="n">p1</span> <span class="o">=</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;p1&#39;</span><span class="p">]</span>
-        <span class="n">p2</span> <span class="o">=</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;p2&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;SSycte&#39;</span><span class="p">:</span>
-            <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span> <span class="o">=</span> <span class="n">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="s">&#39;ycte&#39;</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSSycte</span><span class="o">.</span><span class="n">fkCSSycte11</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte1&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSSycte</span><span class="o">.</span><span class="n">fkCSSycte12</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte1&#39;</span><span class="p">],</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte2&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSSycte</span><span class="o">.</span><span class="n">fkCSSycte22</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte2&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p2</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;SSxcte&#39;</span><span class="p">:</span>
-            <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span> <span class="o">=</span> <span class="n">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="s">&#39;xcte&#39;</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSSxcte</span><span class="o">.</span><span class="n">fkCSSxcte11</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;xcte1&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSSxcte</span><span class="o">.</span><span class="n">fkCSSxcte12</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;xcte1&#39;</span><span class="p">],</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;xcte2&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSSxcte</span><span class="o">.</span><span class="n">fkCSSxcte22</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;xcte2&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p2</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;SB&#39;</span><span class="p">:</span>
-            <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span> <span class="o">=</span> <span class="n">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="s">&#39;bot-top&#39;</span><span class="p">)</span>
-            <span class="n">dsb</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">plyts</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p2</span><span class="o">.</span><span class="n">plyts</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSB</span><span class="o">.</span><span class="n">fkCSB11</span><span class="p">(</span><span class="n">kt</span><span class="p">,</span> <span class="n">dsb</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSB</span><span class="o">.</span><span class="n">fkCSB12</span><span class="p">(</span><span class="n">kt</span><span class="p">,</span> <span class="n">dsb</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCSB</span><span class="o">.</span><span class="n">fkCSB22</span><span class="p">(</span><span class="n">kt</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p2</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;BFycte&#39;</span><span class="p">:</span>
-            <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span> <span class="o">=</span> <span class="n">calc_kt_kr</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="s">&#39;ycte&#39;</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCBFycte</span><span class="o">.</span><span class="n">fkCBFycte11</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte1&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p1</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCBFycte</span><span class="o">.</span><span class="n">fkCBFycte12</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte1&#39;</span><span class="p">],</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte2&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
-            <span class="n">k0</span> <span class="o">+=</span> <span class="n">connections</span><span class="o">.</span><span class="n">kCBFycte</span><span class="o">.</span><span class="n">fkCBFycte22</span><span class="p">(</span>
-                    <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">connecti</span><span class="p">[</span><span class="s">&#39;ycte2&#39;</span><span class="p">],</span>
-                    <span class="n">size</span><span class="p">,</span> <span class="n">p2</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p2</span><span class="o">.</span><span class="n">col_start</span><span class="p">)</span>
+        <span class="n">valid_conn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">connecti</span><span class="p">)</span>
 
-
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">k0</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="k">False</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">k0</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="k">False</span>
-    <span class="n">k0</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_symmetric</span><span class="p">(</span><span class="n">k0</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">kM</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="k">False</span>
-    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">kM</span><span class="o">.</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="k">False</span>
-    <span class="n">kM</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">make_symmetric</span><span class="p">(</span><span class="n">kM</span><span class="p">))</span>
+    <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conn</span><span class="o">=</span><span class="n">valid_conn</span><span class="p">)</span>
+    <span class="n">kM</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kM</span><span class="p">()</span>
 
     <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">freq</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kM</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="k">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="k">True</span><span class="p">,</span>
              <span class="n">sort</span><span class="o">=</span><span class="k">True</span><span class="p">,</span> <span class="n">reduced_dof</span><span class="o">=</span><span class="k">False</span><span class="p">,</span>
              <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">num_eigvalues_print</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-
-    <span class="n">assy</span> <span class="o">=</span> <span class="n">PanelAssembly</span><span class="p">(</span><span class="n">panels</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span>
 </pre></div>
@@ -487,7 +430,7 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
         <li class="right" >
           <a href="assembly_functions.html" title="Functions using Assemblies of Flat Plates and Panels"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.6.7 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0.dev0+703b1bc documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
           <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li> 
@@ -495,7 +438,7 @@ panel in <a class="reference internal" href="assembly_functions.html#compmech.pa
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 29, 2016.
+      Last updated on Aug 30, 2016.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
