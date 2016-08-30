@@ -17,16 +17,16 @@ def create_cylinder_assy(height, r, stack, plyt, laminaprop,
 
 
         B                             A
-         _________ _________ _________
-        |         |         |         |
-        |         |         |         |
-        |         |         |         |
-        |   p03   |   p02   |   p01   |
-        |         |         |         |    /\  x
-        |         |         |         |    |
-        |_________|_________|_________|    |
-                                           |
-                                y  <-------
+         _______ _______ _______ _______
+        |       |       |       |       |
+        |       |       |       |       |
+        |       |       |       |       |
+        |  p04  |  p03  |  p02  |  p01  |
+        |       |       |       |       |    /\  x
+        |       |       |       |       |    |
+        |_______|_______|_______|_______|    |
+                                             |
+                                   y  <-------
 
     where edges ``A`` and ``B`` are connected to produce the cyclic effect.
 
@@ -57,7 +57,7 @@ def create_cylinder_assy(height, r, stack, plyt, laminaprop,
 
     """
     if npanels < 2:
-        raise ValueError('At least two panels are needed!')
+        raise ValueError('At least two panels are needed')
     skin = []
     perimiter = 2*np.pi*r
     b_skin = perimiter / npanels
@@ -90,8 +90,26 @@ def create_cylinder_assy(height, r, stack, plyt, laminaprop,
 
 def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
         npanels, Nxxs, m=8, n=8):
+    """Linear buckling analysis with a constant Nxx for each panel
+
+    See :func:`.create_cylinder_assy` for most parameters.
+
+    Parameters
+    ----------
+    Nxxs : list
+        A Nxx for each panel.
+
+
+    Returns
+    -------
+    assy, eigvals, eigvecs : tuple
+        Assembly, eigenvalues and eigenvectors.
+
+    """
     assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
             laminaprop=laminaprop, npanels=npanels, m=m, n=n)
+    if len(Nxxs) != npanels:
+        raise ValueError('The length of "Nxxs" must be the same as "npanels"')
     for i, p in enumerate(assy.panels):
         p.Nxx = Nxxs[i]
 
@@ -104,8 +122,25 @@ def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
 
 def cylinder_compression_lb_Nxx_from_static(height, r, stack, plyt, laminaprop,
         npanels, Nxxs, m=8, n=8):
+    """Linear buckling analysis with a Nxx calculated using static analysis
+
+    See :func:`.create_cylinder_assy` for most parameters.
+
+    Parameters
+    ----------
+    Nxxs : list
+        A Nxx for each panel.
+
+    Returns
+    -------
+    assy, c, eigvals, eigvecs : tuple
+        Assembly, static results, eigenvalues and eigenvectors.
+
+    """
     assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
             laminaprop=laminaprop, npanels=npanels, m=m, n=n)
+    if len(Nxxs) != npanels:
+        raise ValueError('The length of "Nxxs" must be the same as "npanels"')
     for i, p in enumerate(assy.panels):
         p.Nxx = Nxxs[i]
         p.u2tx = 1
