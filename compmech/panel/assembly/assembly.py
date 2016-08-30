@@ -4,10 +4,14 @@ import platform
 
 import numpy as np
 from numpy import linspace
+from scipy.sparse import csr_matrix
 
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
+from compmech.panel.panel import check_c
 import compmech.panel.modelDB as modelDB
+import compmech.panel.connections as connections
+from compmech.sparse import make_symmetric, finalize_symmetric_matrix
 
 
 class PanelAssembly(object):
@@ -32,7 +36,7 @@ class PanelAssembly(object):
 
 
     def get_size(self):
-        self.size = sum([3*p.m*p.n for p in panels])
+        self.size = sum([3*p.m*p.n for p in self.panels])
         return self.size
 
 
@@ -301,17 +305,12 @@ class PanelAssembly(object):
                 continue
             cpanel = c[panel.col_start: panel.col_end]
             cpanel = np.ascontiguousarray(cpanel, dtype=DOUBLE)
-            m = panel.m
-            n = panel.n
-            a = panel.a
-            b = panel.b
             model = panel.model
             fuvw = modelDB.db[model]['field'].fuvw
             x, y, shape = default_field(panel)
-            u, v, w, phix, phiy = fuvw(cpanel, m, n, a, b,
-                    np.ascontiguousarray(x),
-                    np.ascontiguousarray(y),
-                    self.out_num_cores)
+            x = np.ascontiguousarray(x)
+            y = np.ascontiguousarray(y)
+            u, v, w, phix, phiy = fuvw(cpanel, panel, x, y, self.out_num_cores)
             res['x'].append(x.reshape(shape))
             res['y'].append(y.reshape(shape))
             res['u'].append(u.reshape(shape))
@@ -322,3 +321,141 @@ class PanelAssembly(object):
 
         return res
 
+
+    def calc_k0(self, conn, c=None, silent=False, finalize=True):
+        """Calculate the constitutive stiffness matrix of the assembly
+
+        Parameters
+        ----------
+
+        conn : dict
+            A connectivity dictionary.
+        c : array-like or None, optional
+            This must be the result of a static analysis, used to compute
+            non-linear terms based on the actual displacement field.
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+        finalize : bool, optional
+            Asserts validity of output data and makes the output matrix
+            symmetric, should be ``False`` when assemblying.
+
+        """
+        size = self.get_size()
+        if c is None:
+            msg('Calculating k0 for assembly...', level=2, silent=silent)
+        else:
+            check_c(c, size)
+            msg('Calculating kL for assembly...', level=2, silent=silent)
+
+        k0 = 0.
+        for p in self.panels:
+            if p.row_start is None or p.col_start is None:
+                raise ValueError('Panel attributes "row_start" and "col_start" must be defined!')
+            k0 += p.calc_k0(c=c, row0=p.row_start, col0=p.col_start, size=size,
+                    silent=True, finalize=False)
+
+        for connecti in conn:
+            p1 = connecti['p1']
+            p2 = connecti['p2']
+            if connecti['func'] == 'SSycte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
+                k0 += connections.kCSSycte.fkCSSycte11(
+                        kt, kr, p1, connecti['ycte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0 += connections.kCSSycte.fkCSSycte12(
+                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0 += connections.kCSSycte.fkCSSycte22(
+                        kt, kr, p1, p2, connecti['ycte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'SSxcte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'xcte')
+                k0 += connections.kCSSxcte.fkCSSxcte11(
+                        kt, kr, p1, connecti['xcte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0 += connections.kCSSxcte.fkCSSxcte12(
+                        kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0 += connections.kCSSxcte.fkCSSxcte22(
+                        kt, kr, p1, p2, connecti['xcte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'SB':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'bot-top')
+                dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
+                k0 += connections.kCSB.fkCSB11(kt, dsb, p1,
+                        size, p1.row_start, col0=p1.col_start)
+                k0 += connections.kCSB.fkCSB12(kt, dsb, p1, p2,
+                        size, p1.row_start, col0=p2.col_start)
+                k0 += connections.kCSB.fkCSB22(kt, p1, p2,
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'BFycte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
+                k0 += connections.kCBFycte.fkCBFycte11(
+                        kt, kr, p1, connecti['ycte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0 += connections.kCBFycte.fkCBFycte12(
+                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0 += connections.kCBFycte.fkCBFycte22(
+                        kt, kr, p1, p2, connecti['ycte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            else:
+                raise
+
+        if finalize:
+            k0 = finalize_symmetric_matrix(k0)
+        self.k0 = k0
+
+        msg('finished!', level=2, silent=silent)
+
+        return k0
+
+
+    def calc_kG0(self, c=None, silent=False, finalize=True):
+        """Calculate the geometric stiffness matrix of the assembly
+
+        Parameters
+        ----------
+
+        c : array-like or None, optional
+            This must be the result of a static analysis, used to compute
+            non-linear terms based on the actual displacement field.
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+        finalize : bool, optional
+            Asserts validity of output data and makes the output matrix
+            symmetric, should be ``False`` when assemblying.
+
+        """
+        size = self.get_size()
+        if c is None:
+            msg('Calculating kG0 for assembly...', level=2, silent=silent)
+        else:
+            check_c(c, size)
+            msg('Calculating kG for assembly...', level=2, silent=silent)
+        kG0 = 0.
+        for p in self.panels:
+            if p.row_start is None or p.col_start is None:
+                raise ValueError('Panel attributes "row_start" and "col_start" must be defined!')
+            kG0 += p.calc_kG0(c=c, row0=p.row_start, col0=p.col_start, size=size,
+                    silent=True, finalize=False)
+        if finalize:
+            kG0 = finalize_symmetric_matrix(kG0)
+        self.kG0 = kG0
+        msg('finished!', level=2, silent=silent)
+        return kG0
+
+
+    def calc_kM(self, silent=False, finalize=True):
+        msg('Calculating kM for assembly...', level=2, silent=silent)
+        size = self.get_size()
+        kM = 0
+        for p in self.panels:
+            if p.row_start is None or p.col_start is None:
+                raise ValueError('Panel attributes "row_start" and "col_start" must be defined!')
+            kM += p.calc_kM(row0=p.row_start, col0=p.col_start, size=size, silent=True, finalize=False)
+        if finalize:
+            kM = finalize_symmetric_matrix(kM)
+        self.kM = kM
+        msg('finished!', level=2, silent=silent)
+        return kM
