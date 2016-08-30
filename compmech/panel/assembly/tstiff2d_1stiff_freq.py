@@ -287,16 +287,6 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, defect_a, mu, plyt, laminaprop,
 
     size = assy.get_size()
 
-    row0 = 0
-    col0 = 0
-    for p in panels:
-        p.row_start = row0
-        p.col_start = col0
-        row0 += 3*p.m*p.n
-        col0 += 3*p.m*p.n
-        p.row_end = row0
-        p.col_end = col0
-
     valid_conn = []
     for connecti in conn:
         if connecti.get('has_defect'):

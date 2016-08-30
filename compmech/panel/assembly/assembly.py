@@ -33,6 +33,15 @@ class PanelAssembly(object):
         self.panels = panels
         self.size = None
         self.out_num_cores = 4
+        row0 = 0
+        col0 = 0
+        for p in panels:
+            p.row_start = row0
+            p.col_start = col0
+            row0 += 3*p.m*p.n
+            col0 += 3*p.m*p.n
+            p.row_end = row0
+            p.col_end = col0
 
 
     def get_size(self):

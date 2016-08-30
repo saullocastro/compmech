@@ -11,6 +11,53 @@ from compmech.analysis import lb, static
 
 def create_cylinder_assy(height, r, stack, plyt, laminaprop,
         npanels, m=8, n=8):
+    r"""Cylinder Assembly
+
+    The panel assembly looks like::
+
+
+        B                             A
+         _________ _________ _________
+        |         |         |         |
+        |         |         |         |
+        |         |         |         |
+        |   p03   |   p02   |   p01   |
+        |         |         |         |    /\  x
+        |         |         |         |    |
+        |_________|_________|_________|    |
+                                           |
+                                y  <-------
+
+    where edges ``A`` and ``B`` are connected to produce the cyclic effect.
+
+
+    Parameters
+    ----------
+
+    height : float
+        Cylinder height (along `x`).
+    r : float
+        Cylinder radius.
+    stack : list or tuple
+        Stacking sequence for the cylinder.
+    plyt : float
+        Ply thickness.
+    laminaprop : list or tuple
+        Orthotropic lamina properties: `E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}`.
+    npanels : int
+        The number of panels the cylinder perimiter.
+    m, n : int, optional
+        Number of approximation terms for each panel.
+
+    Returns
+    -------
+    assy, conn_dict : tuple
+        A tuple containing the assembly and the default connectivity
+        dictionary.
+
+    """
+    if npanels < 2:
+        raise ValueError('At least two panels are needed!')
     skin = []
     perimiter = 2*np.pi*r
     b_skin = perimiter / npanels
@@ -36,18 +83,7 @@ def create_cylinder_assy(height, r, stack, plyt, laminaprop,
             p01 = skin_loop[i+1]
             p02 = skin_loop[i]
             conn_dict.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=0, ycte2=p02.b))
-
     assy = PanelAssembly(skin)
-
-    row0 = 0
-    col0 = 0
-    for p in skin:
-        p.row_start = row0
-        p.col_start = col0
-        row0 += 3*p.m*p.n
-        col0 += 3*p.m*p.n
-        p.row_end = row0
-        p.col_end = col0
 
     return assy, conn_dict
 
