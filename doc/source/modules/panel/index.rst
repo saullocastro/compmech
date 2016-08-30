@@ -5,5 +5,5 @@ Flat Plates, Curved Panels and Assemblies
     :maxdepth: 3
 
     panel.rst
-    assembly_intro.rst
     connections.rst
+    assembly/assembly_intro.rst

@@ -1,24 +1,4 @@
-Version 0.6.7
--------------
-- fix compatibility with Python 3 for conecyl
-- tests for conecyl
-- non-linear static analysis for Panel
-- replaced bladestiff2d model with already existing panel models
-- panel.connections.penalty_constants based on COST paper
-- pass panel object instead of w1tx, w2tx to connections, field and stiffness
-  matrices
-- replaced tstiff2d base-flange connectivity matrices by those in
-  panel.connections
-- remove support to integrate from x1 to x2 in TStiff2D
-- TStiff2D no longer recommended due to highly numerical instability
-- think about with panel.offset,
-  why it is not being used to calculated laminaprop? This should be an option,
-  for example when calculating stiffener base laminate, which shares the same
-  domain of the skin. Offset is currently only used for the inertia properties
-  when calculating kM, but not for the stiffness B matrix
-- general code simplification possible due to measures above
-
-Version 0.7.0
+Version 0.8.0
 -------------
 - allow a constant stress state using static results for linear buckling
 - mass matrices also valid for variable property along domain (perhaps with
@@ -33,7 +13,7 @@ Version 0.7.0
 - check why plate lb with reduced_dof=True is not the same as plate_w
 - reconsider reading bardell_12 from the C code and reuse in FORTRAN
 
-Version 0.8.0
+Version 0.9.0
 -------------
 - implement CI compilation and test for FORTRANs
 - improve the numerical stability of FORTRAN's eigensolver (cpanelbay)

@@ -1,13 +1,12 @@
+from __future__ import division, absolute_import
+
 import numpy as np
 from scipy.sparse import csr_matrix
 
-import compmech.panel.connections as connections
 from compmech.panel import Panel
 from compmech.panel.assembly import PanelAssembly
-from compmech.composite import laminate
-from compmech.sparse import make_symmetric, make_skew_symmetric
-from compmech.analysis import freq, lb, static
-from compmech.panel.connections import calc_kt_kr
+from compmech.sparse import make_skew_symmetric
+from compmech.analysis import freq, static
 
 
 def tstiff2d_1stiff_flutter(a, b, ys, bb, bf, defect_a, mu, plyt,
@@ -119,7 +118,7 @@ def tstiff2d_1stiff_flutter(a, b, ys, bb, bf, defect_a, mu, plyt,
 
     The following example is one of the test cases:
 
-    .. literalinclude:: ../../../../compmech/panel/assembly/tests/test_tstiff2d_assembly.py
+    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_tstiff2d_assembly.py
         :pyobject: test_tstiff2d_1stiff_flutter
 
     """
@@ -309,82 +308,15 @@ def tstiff2d_1stiff_flutter(a, b, ys, bb, bf, defect_a, mu, plyt,
 
     assy = PanelAssembly(panels)
 
-    size = sum([3*p.m*p.n for p in panels])
+    size = assy.get_size()
 
-    k0 = 0
-    kM = 0
-    kG = 0
-
-    row0 = 0
-    col0 = 0
-    for p in panels:
-        k0 += p.calc_k0(row0=row0, col0=col0, size=size, silent=True, finalize=False)
-        kM += p.calc_kM(row0=row0, col0=col0, size=size, silent=True, finalize=False)
-        if not run_static_case:
-            kG += p.calc_kG0(row0=row0, col0=col0, size=size, silent=True, finalize=False)
-        p.row_start = row0
-        p.col_start = col0
-        row0 += 3*p.m*p.n
-        col0 += 3*p.m*p.n
-        p.row_end = row0
-        p.col_end = col0
-
+    valid_conn = []
     for connecti in conn:
         if connecti.get('has_defect'): # connecting if there is no defect
             continue
-        p1 = connecti['p1']
-        p2 = connecti['p2']
-        if connecti['func'] == 'SSycte':
-            kt, kr = calc_kt_kr(p1, p2, 'ycte')
-            k0 += connections.kCSSycte.fkCSSycte11(
-                    kt, kr, p1, connecti['ycte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSSycte.fkCSSycte12(
-                    kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSSycte.fkCSSycte22(
-                    kt, kr, p1, p2, connecti['ycte2'],
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'SSxcte':
-            kt, kr = calc_kt_kr(p1, p2, 'xcte')
-            k0 += connections.kCSSxcte.fkCSSxcte11(
-                    kt, kr, p1, connecti['xcte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSSxcte.fkCSSxcte12(
-                    kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSSxcte.fkCSSxcte22(
-                    kt, kr, p1, p2, connecti['xcte2'],
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'SB':
-            kt, kr = calc_kt_kr(p1, p2, 'bot-top')
-            dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
-            k0 += connections.kCSB.fkCSB11(kt, dsb, p1,
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSB.fkCSB12(kt, dsb, p1, p2,
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSB.fkCSB22(kt, p1, p2,
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'BFycte':
-            kt, kr = calc_kt_kr(p1, p2, 'ycte')
-            k0 += connections.kCBFycte.fkCBFycte11(
-                    kt, kr, p1, connecti['ycte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCBFycte.fkCBFycte12(
-                    kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCBFycte.fkCBFycte22(
-                    kt, kr, p1, p2, connecti['ycte2'],
-                    size, p2.row_start, col0=p2.col_start)
+        valid_conn.append(connecti)
 
-
-    assert np.any(np.isnan(k0.data)) == False
-    assert np.any(np.isinf(k0.data)) == False
-    k0 = csr_matrix(make_symmetric(k0))
-    assert np.any(np.isnan(kM.data)) == False
-    assert np.any(np.isinf(kM.data)) == False
-    kM = csr_matrix(make_symmetric(kM))
-
+    k0 = assy.calc_k0(valid_conn)
     c = None
     if (run_static_case and not
             (Nxx_skin is None and Nxx_base is None and Nxx_flange is None)):
@@ -402,19 +334,13 @@ def tstiff2d_1stiff_flutter(a, b, ys, bb, bf, defect_a, mu, plyt,
 
         incs, cs = static(k0, -fext, silent=True)
         c = cs[0]
-        kG = 0
-        for p in panels:
-            kG += p.calc_kG0(c=c, size=size, row0=p.row_start, col0=p.col_start,
-                    silent=True, finalize=False, nx=10, ny=10)
 
-    if kG is not 0:
-        assert np.any(np.isnan(kG.data)) == False
-        assert np.any(np.isinf(kG.data)) == False
-        kG = csr_matrix(make_symmetric(kG))
+    kM = assy.calc_kM()
+    kG = assy.calc_kG0(c=c)
 
     kA = 0
     for p in skin:
-        # TODO the current  has somewhat hiden settings
+        # TODO the current approach has somewhat hiden settings
         #     check this strategy:
         #     - define module aerodynamics
         #     - function calc_kA inside a module piston_theory

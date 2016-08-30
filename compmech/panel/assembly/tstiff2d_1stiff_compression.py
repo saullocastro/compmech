@@ -1,13 +1,10 @@
-import numpy as np
-from scipy.sparse import csr_matrix
+from __future__ import division, absolute_import
 
-import compmech.panel.connections as connections
+import numpy as np
+
 from compmech.panel import Panel
 from compmech.panel.assembly import PanelAssembly
-from compmech.composite import laminate
-from compmech.sparse import make_symmetric
-from compmech.analysis import freq, lb, static
-from compmech.panel.connections import calc_kt_kr
+from compmech.analysis import lb, static
 
 
 def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
@@ -107,7 +104,7 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
 
     The following example is one of the test cases:
 
-    .. literalinclude:: ../../../../compmech/panel/assembly/tests/test_tstiff2d_assembly.py
+    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_tstiff2d_assembly.py
         :pyobject: test_tstiff2d_1stiff_compression
 
     """
@@ -310,76 +307,14 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
 
     size = sum([3*p.m*p.n for p in panels])
 
-    k0 = 0
-    if not run_static_case:
-        kG = 0
-
-    row0 = 0
-    col0 = 0
-    for p in panels:
-        k0 += p.calc_k0(row0=row0, col0=col0, size=size, silent=True, finalize=False)
-        if not run_static_case:
-            kG += p.calc_kG0(row0=row0, col0=col0, size=size, silent=True, finalize=False)
-        p.row_start = row0
-        p.col_start = col0
-        row0 += 3*p.m*p.n
-        col0 += 3*p.m*p.n
-        p.row_end = row0
-        p.col_end = col0
-
+    valid_conn = []
     for connecti in conn:
         if connecti.get('has_defect'): # connecting if there is no defect
             continue
-        p1 = connecti['p1']
-        p2 = connecti['p2']
-        if connecti['func'] == 'SSycte':
-            kt, kr = calc_kt_kr(p1, p2, 'ycte')
-            k0 += connections.kCSSycte.fkCSSycte11(
-                    kt, kr, p1, connecti['ycte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSSycte.fkCSSycte12(
-                    kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSSycte.fkCSSycte22(
-                    kt, kr, p1, p2, connecti['ycte2'],
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'SSxcte':
-            kt, kr = calc_kt_kr(p1, p2, 'xcte')
-            k0 += connections.kCSSxcte.fkCSSxcte11(
-                    kt, kr, p1, connecti['xcte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSSxcte.fkCSSxcte12(
-                    kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSSxcte.fkCSSxcte22(
-                    kt, kr, p1, p2, connecti['xcte2'],
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'SB':
-            kt, kr = calc_kt_kr(p1, p2, 'bot-top')
-            dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
-            k0 += connections.kCSB.fkCSB11(kt, dsb, p1,
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSB.fkCSB12(kt, dsb, p1, p2,
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSB.fkCSB22(kt, p1, p2,
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'BFycte':
-            kt, kr = calc_kt_kr(p1, p2, 'ycte')
-            k0 += connections.kCBFycte.fkCBFycte11(
-                    kt, kr, p1, connecti['ycte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCBFycte.fkCBFycte12(
-                    kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCBFycte.fkCBFycte22(
-                    kt, kr, p1, p2, connecti['ycte2'],
-                    size, p2.row_start, col0=p2.col_start)
+        valid_conn.append(connecti)
 
-
-    assert np.any(np.isnan(k0.data)) == False
-    assert np.any(np.isinf(k0.data)) == False
-    k0 = csr_matrix(make_symmetric(k0))
-
+    k0 = assy.calc_k0(valid_conn)
+    c = None
     if run_static_case:
         fext = np.zeros(size)
         for p in [p07, p08, p09, p14, p15]:
@@ -395,14 +330,8 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
 
         incs, cs = static(k0, -fext, silent=True)
         c = cs[0]
-        kG = 0
-        for p in panels:
-            kG += p.calc_kG0(c=c, size=size, row0=p.row_start, col0=p.col_start,
-                    silent=True, finalize=False, nx=10, ny=10)
 
-    assert np.any(np.isnan(kG.data)) == False
-    assert np.any(np.isinf(kG.data)) == False
-    kG = csr_matrix(make_symmetric(kG))
+    kG = assy.calc_kG0(c=c)
 
     eigvals = eigvecs = None
     eigvals, eigvecs = lb(k0, kG, tol=0, sparse_solver=True, silent=True,

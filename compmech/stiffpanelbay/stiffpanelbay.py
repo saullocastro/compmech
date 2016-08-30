@@ -19,7 +19,7 @@ from numpy import linspace
 import compmech.composite.laminate as laminate
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
-from compmech.sparse import (make_symmetric, make_skew_symmetric,
+from compmech.sparse import (finalize_symmetric_matrix, make_skew_symmetric,
                              remove_null_cols)
 from compmech.panel import Panel, modelDB as panelmDB
 from compmech.stiffener import (BladeStiff1D, BladeStiff2D, TStiff2D)
@@ -692,11 +692,7 @@ class StiffPanelBay(object):
             #TODO summing up coo_matrix objects may be slow!
             k0 += s.k0
 
-        # performing checks for the stiffness matrices
-        assert np.any(np.isnan(k0.data)) == False
-        assert np.any(np.isinf(k0.data)) == False
-        k0 = csr_matrix(make_symmetric(k0))
-
+        k0 = finalize_symmetric_matrix(k0)
         self.k0 = k0
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -755,9 +751,8 @@ class StiffPanelBay(object):
             #TODO summing up coo_matrix objects may be slow!
             kG0 += s.kG0
 
-        assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
-        kG0 = csr_matrix(make_symmetric(kG0))
 
+        kG0 = finalize_symmetric_matrix(kG0)
         self.kG0 = kG0
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -818,10 +813,7 @@ class StiffPanelBay(object):
             #TODO summing up coo_matrix objects may be slow!
             kM += s.kM
 
-        assert np.any(np.isnan(kM.data)) == False
-        assert np.any(np.isinf(kM.data)) == False
-        kM = csr_matrix(make_symmetric(kM))
-
+        kM = finalize_symmetric_matrix(kM)
         self.kM = kM
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -886,7 +878,6 @@ class StiffPanelBay(object):
         assert np.any(np.isnan(kA.data)) == False
         assert np.any(np.isinf(kA.data)) == False
         kA = csr_matrix(make_skew_symmetric(kA))
-
         self.kA = kA
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -930,11 +921,7 @@ class StiffPanelBay(object):
         p.calc_cA(size=size, row0=0, col0=0, silent=silent)
         cA = p.cA
 
-        assert np.any(np.isnan(cA.data)) == False
-        assert np.any(np.isinf(cA.data)) == False
-
-        cA = csr_matrix(make_symmetric(cA))
-
+        cA = finalize_symmetric_matrix(cA)
         self.cA = cA
 
         #NOTE forcing Python garbage collector to clean the memory

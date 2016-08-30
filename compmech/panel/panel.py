@@ -15,8 +15,8 @@ import compmech.composite.laminate as laminate
 from compmech.analysis import Analysis
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
-from compmech.sparse import (make_symmetric, remove_null_cols,
-        make_skew_symmetric)
+from compmech.sparse import (remove_null_cols, make_skew_symmetric,
+        finalize_symmetric_matrix)
 
 from . import modelDB
 
@@ -93,6 +93,10 @@ class Panel(object):
         self.group = None
         self.x0 = None
         self.y0 = None
+        self.row_start = None
+        self.col_start = None
+        self.row_end = None
+        self.col_end = None
 
         self.name = 'panel'
         self.bay = None
@@ -345,8 +349,8 @@ class Panel(object):
             Asserts validity of output data and makes the output matrix
             symmetric, should be ``False`` when assemblying.
         c : array-like or None, optional
-            This must be the result of a static analysis, used to compute the
-            non-linear term based on the actual displacement field.
+            This must be the result of a static analysis, used to compute
+            non-linear terms based on the actual displacement field.
         nx, ny : int or None, optional
             Number of integration points along `x` and `y`, respectively, for
             the Legendre-Gauss quadrature rule applied in the numerical
@@ -420,11 +424,7 @@ class Panel(object):
                            self, size, row0, col0)
 
         if finalize:
-            # performing final checks for k0 and making symmetry
-            assert np.any(np.isnan(k0.data)) == False
-            assert np.any(np.isinf(k0.data)) == False
-            k0 = csr_matrix(make_symmetric(k0))
-
+            k0 = finalize_symmetric_matrix(k0)
         self.k0 = k0
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -483,10 +483,7 @@ class Panel(object):
                        size, row0, col0, nx, ny, NLgeom=int(NLgeom))
 
         if finalize:
-            assert np.any(np.isnan(kG0.data)) == False
-            assert np.any(np.isinf(kG0.data)) == False
-            kG0 = csr_matrix(make_symmetric(kG0))
-
+            kG0 = finalize_symmetric_matrix(kG0)
         self.kG0 = kG0
 
         #NOTE memory cleanup
@@ -537,10 +534,7 @@ class Panel(object):
             kM = matrices.fkM(self.offset, self, size, row0, col0)
 
         if finalize:
-            assert np.any(np.isnan(kM.data)) == False
-            assert np.any(np.isinf(kM.data)) == False
-            kM = csr_matrix(make_symmetric(kM))
-
+            kM = finalize_symmetric_matrix(kM)
         self.kM = kM
 
         #NOTE memory cleanup
@@ -597,7 +591,6 @@ class Panel(object):
             assert np.any(np.isnan(kA.data)) == False
             assert np.any(np.isinf(kA.data)) == False
             kA = csr_matrix(make_skew_symmetric(kA))
-
         self.kA = kA
 
         #NOTE memory cleanup
@@ -617,10 +610,7 @@ class Panel(object):
         cA = cA*(0+1j)
 
         if finalize:
-            assert np.any(np.isnan(cA.data)) == False
-            assert np.any(np.isinf(cA.data)) == False
-            cA = csr_matrix(make_symmetric(cA))
-
+            cA = finalize_symmetric_matrix(cA)
         self.cA = cA
 
         #NOTE memory cleanup
