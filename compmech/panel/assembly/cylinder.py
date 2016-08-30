@@ -105,6 +105,14 @@ def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
     assy, eigvals, eigvecs : tuple
         Assembly, eigenvalues and eigenvectors.
 
+    Examples
+    --------
+
+    The following example is one of the test cases:
+
+    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder.py
+        :pyobject: test_cylinder_compression_lb_Nxx_cte
+
     """
     assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
             laminaprop=laminaprop, npanels=npanels, m=m, n=n)
@@ -135,6 +143,14 @@ def cylinder_compression_lb_Nxx_from_static(height, r, stack, plyt, laminaprop,
     -------
     assy, c, eigvals, eigvecs : tuple
         Assembly, static results, eigenvalues and eigenvectors.
+
+    Examples
+    --------
+
+    The following example is one of the test cases:
+
+    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder.py
+        :pyobject: test_cylinder_compression_lb_Nxx_from_static
 
     """
     assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,

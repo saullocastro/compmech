@@ -104,7 +104,7 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
 
     The following example is one of the test cases:
 
-    .. literalinclude:: ../../../../compmech/panel/assembly/tests/test_tstiff2d_assembly.py
+    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_tstiff2d_assembly.py
         :pyobject: test_tstiff2d_1stiff_compression
 
     """
