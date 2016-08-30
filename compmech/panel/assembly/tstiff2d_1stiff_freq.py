@@ -1,13 +1,8 @@
-import numpy as np
-from scipy.sparse import csr_matrix
+from __future__ import division, absolute_import
 
-import compmech.panel.connections as connections
 from compmech.panel import Panel
 from compmech.panel.assembly import PanelAssembly
-from compmech.composite import laminate
-from compmech.sparse import make_symmetric
 from compmech.analysis import freq
-from compmech.panel.connections import calc_kt_kr
 
 
 def tstiff2d_1stiff_freq(a, b, ys, bb, bf, defect_a, mu, plyt, laminaprop,
@@ -288,16 +283,13 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, defect_a, mu, plyt, laminaprop,
     base = [p10, p12, p14]
     flange = [p11, p13, p15]
 
-    size = sum([3*p.m*p.n for p in panels])
+    assy = PanelAssembly(panels)
 
-    k0 = 0
-    kM = 0
+    size = assy.get_size()
 
     row0 = 0
     col0 = 0
     for p in panels:
-        k0 += p.calc_k0(row0=row0, col0=col0, size=size, silent=True, finalize=False)
-        kM += p.calc_kM(row0=row0, col0=col0, size=size, silent=True, finalize=False)
         p.row_start = row0
         p.col_start = col0
         row0 += 3*p.m*p.n
@@ -305,66 +297,17 @@ def tstiff2d_1stiff_freq(a, b, ys, bb, bf, defect_a, mu, plyt, laminaprop,
         p.row_end = row0
         p.col_end = col0
 
+    valid_conn = []
     for connecti in conn:
-        if connecti.get('has_defect'): # connecting if there is no defect
+        if connecti.get('has_defect'):
             continue
-        p1 = connecti['p1']
-        p2 = connecti['p2']
-        if connecti['func'] == 'SSycte':
-            kt, kr = calc_kt_kr(p1, p2, 'ycte')
-            k0 += connections.kCSSycte.fkCSSycte11(
-                    kt, kr, p1, connecti['ycte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSSycte.fkCSSycte12(
-                    kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSSycte.fkCSSycte22(
-                    kt, kr, p1, p2, connecti['ycte2'],
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'SSxcte':
-            kt, kr = calc_kt_kr(p1, p2, 'xcte')
-            k0 += connections.kCSSxcte.fkCSSxcte11(
-                    kt, kr, p1, connecti['xcte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSSxcte.fkCSSxcte12(
-                    kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSSxcte.fkCSSxcte22(
-                    kt, kr, p1, p2, connecti['xcte2'],
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'SB':
-            kt, kr = calc_kt_kr(p1, p2, 'bot-top')
-            dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
-            k0 += connections.kCSB.fkCSB11(kt, dsb, p1,
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCSB.fkCSB12(kt, dsb, p1, p2,
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCSB.fkCSB22(kt, p1, p2,
-                    size, p2.row_start, col0=p2.col_start)
-        elif connecti['func'] == 'BFycte':
-            kt, kr = calc_kt_kr(p1, p2, 'ycte')
-            k0 += connections.kCBFycte.fkCBFycte11(
-                    kt, kr, p1, connecti['ycte1'],
-                    size, p1.row_start, col0=p1.col_start)
-            k0 += connections.kCBFycte.fkCBFycte12(
-                    kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                    size, p1.row_start, col0=p2.col_start)
-            k0 += connections.kCBFycte.fkCBFycte22(
-                    kt, kr, p1, p2, connecti['ycte2'],
-                    size, p2.row_start, col0=p2.col_start)
+        valid_conn.append(connecti)
 
-
-    assert np.any(np.isnan(k0.data)) == False
-    assert np.any(np.isinf(k0.data)) == False
-    k0 = csr_matrix(make_symmetric(k0))
-    assert np.any(np.isnan(kM.data)) == False
-    assert np.any(np.isinf(kM.data)) == False
-    kM = csr_matrix(make_symmetric(kM))
+    k0 = assy.calc_k0(conn=valid_conn)
+    kM = assy.calc_kM()
 
     eigvals, eigvecs = freq(k0, kM, tol=0, sparse_solver=True, silent=True,
              sort=True, reduced_dof=False,
              num_eigvalues=25, num_eigvalues_print=5)
-
-    assy = PanelAssembly(panels)
 
     return assy, eigvals, eigvecs
