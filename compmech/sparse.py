@@ -219,3 +219,11 @@ def is_symmetric(m):
     check = np.allclose(vl, vu)
 
     return check
+
+
+def finalize_symmetric_matrix(M):
+    """ Check for nan and inf valus and makes M symmetric
+    """
+    assert np.any(np.isnan(M.data)) == False
+    assert np.any(np.isinf(M.data)) == False
+    return csr_matrix(make_symmetric(M))

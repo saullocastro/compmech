@@ -11,6 +11,7 @@ from compmech.logger import msg, warn
 from compmech.composite import laminate
 from compmech.panel.connections import (fkCBFycte11, fkCBFycte12, fkCBFycte22,
         calc_kt_kr)
+from compmech.sparse import finalize_symmetric_matrix
 
 class TStiff2D(object):
     r"""T Stiffener using 2D Formulation for the Base and Flange
@@ -195,10 +196,7 @@ class TStiff2D(object):
         k0 += fkCBFycte22(ktbf, krbf, self.base, self.flange, ycte2, size, rowf, colf)
 
         if finalize:
-            assert np.any(np.isnan(k0.data)) == False
-            assert np.any(np.isinf(k0.data)) == False
-            k0 = csr_matrix(make_symmetric(k0))
-
+            k0 = finalize_symmetric_matrix(k0)
         self.k0 = k0
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -236,10 +234,7 @@ class TStiff2D(object):
                 silent=True, finalize=False, NLgeom=NLgeom)
 
         if finalize:
-            assert np.any(np.isnan(kG0.data)) == False
-            assert np.any(np.isinf(kG0.data)) == False
-            kG0 = csr_matrix(make_symmetric(kG0))
-
+            kG0 = finalize_symmetric_matrix(kG0)
         self.kG0 = kG0
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -266,10 +261,7 @@ class TStiff2D(object):
                 finalize=False)
 
         if finalize:
-            assert np.any(np.isnan(kM.data)) == False
-            assert np.any(np.isinf(kM.data)) == False
-            kM = csr_matrix(make_symmetric(kM))
-
+            kM = finalize_symmetric_matrix(kM)
         self.kM = kM
 
         #NOTE forcing Python garbage collector to clean the memory

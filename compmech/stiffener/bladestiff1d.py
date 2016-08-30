@@ -10,6 +10,7 @@ import compmech.panel.modelDB as panmodelDB
 from compmech.panel import Panel
 from compmech.logger import msg, warn
 from compmech.composite import laminate
+from compmech.sparse import finalize_symmetric_matrix
 
 
 class BladeStiff1D(object):
@@ -143,10 +144,7 @@ class BladeStiff1D(object):
                            size=size, row0=row0, col0=col0)
 
         if finalize:
-            assert np.any(np.isnan(k0.data)) == False
-            assert np.any(np.isinf(k0.data)) == False
-            k0 = csr_matrix(make_symmetric(k0))
-
+            k0 = finalize_symmetric_matrix(k0)
         self.k0 = k0
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -183,9 +181,7 @@ class BladeStiff1D(object):
                              size, row0, col0)
 
         if finalize:
-            assert np.any((np.isnan(kG0.data) | np.isinf(kG0.data))) == False
-            kG0 = csr_matrix(make_symmetric(kG0))
-
+            kG0 = finalize_symmetric_matrix(kG0)
         self.kG0 = kG0
 
         #NOTE forcing Python garbage collector to clean the memory
@@ -221,10 +217,7 @@ class BladeStiff1D(object):
                            size=size, row0=row0, col0=col0)
 
         if finalize:
-            assert np.any(np.isnan(kM.data)) == False
-            assert np.any(np.isinf(kM.data)) == False
-            kM = csr_matrix(make_symmetric(kM))
-
+            kM = finalize_symmetric_matrix(kM)
         self.kM = kM
 
         #NOTE forcing Python garbage collector to clean the memory
