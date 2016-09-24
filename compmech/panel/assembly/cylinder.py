@@ -121,8 +121,8 @@ def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
     for i, p in enumerate(assy.panels):
         p.Nxx = Nxxs[i]
 
-    k0 = assy.calc_k0(conn_dict)
-    kG = assy.calc_kG0()
+    k0 = assy.calc_k0(conn_dict, silent=True)
+    kG = assy.calc_kG0(silent=True)
     eigvals, eigvecs = lb(k0, kG, tol=0, sparse_solver=True, silent=True,
              num_eigvalues=20, num_eigvalues_print=5)
     return assy, eigvals, eigvecs
