@@ -27,9 +27,13 @@ class PanelAssembly(object):
     ----------
     panels : iterable
         A list, tuple etc of :class:`.Panel` objects.
+    conn : dict
+        A connectivity dictionary.
 
     """
     def __init__(self, panels):
+        self.conn = None
+        self.k0_conn = None
         self.panels = panels
         self.size = None
         self.out_num_cores = 4
@@ -331,14 +335,81 @@ class PanelAssembly(object):
         return res
 
 
-    def calc_k0(self, conn, c=None, silent=False, finalize=True):
+    def get_k0_conn(self, conn=None, finalize=True):
+        if conn is None:
+            if self.conn is None:
+                raise RuntimeError('No connectivity dictionary defined!')
+            conn = self.conn
+
+        if self.k0_conn is not None:
+            return self.k0_conn
+
+        size = self.get_size()
+
+        k0_conn = 0.
+        for connecti in conn:
+            p1 = connecti['p1']
+            p2 = connecti['p2']
+            if connecti['func'] == 'SSycte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
+                k0_conn += connections.kCSSycte.fkCSSycte11(
+                        kt, kr, p1, connecti['ycte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCSSycte.fkCSSycte12(
+                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCSSycte.fkCSSycte22(
+                        kt, kr, p1, p2, connecti['ycte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'SSxcte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'xcte')
+                k0_conn += connections.kCSSxcte.fkCSSxcte11(
+                        kt, kr, p1, connecti['xcte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCSSxcte.fkCSSxcte12(
+                        kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCSSxcte.fkCSSxcte22(
+                        kt, kr, p1, p2, connecti['xcte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'SB':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'bot-top')
+                dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
+                k0_conn += connections.kCSB.fkCSB11(kt, dsb, p1,
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCSB.fkCSB12(kt, dsb, p1, p2,
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCSB.fkCSB22(kt, p1, p2,
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'BFycte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
+                k0_conn += connections.kCBFycte.fkCBFycte11(
+                        kt, kr, p1, connecti['ycte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCBFycte.fkCBFycte12(
+                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCBFycte.fkCBFycte22(
+                        kt, kr, p1, p2, connecti['ycte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            else:
+                raise
+
+        if finalize:
+            k0_conn = finalize_symmetric_matrix(k0_conn)
+        self.k0_conn = k0_conn
+        return k0_conn
+
+
+    def calc_k0(self, conn=None, c=None, silent=False, finalize=True, inc=1.):
         """Calculate the constitutive stiffness matrix of the assembly
 
         Parameters
         ----------
 
-        conn : dict
-            A connectivity dictionary.
+        conn : dict, optional
+            A connectivity dictionary. Optional if already defined for the
+            assembly.
         c : array-like or None, optional
             This must be the result of a static analysis, used to compute
             non-linear terms based on the actual displacement field.
@@ -347,6 +418,8 @@ class PanelAssembly(object):
         finalize : bool, optional
             Asserts validity of output data and makes the output matrix
             symmetric, should be ``False`` when assemblying.
+        inc : float, optional
+            Dummy argument needed for non-linear analyses.
 
         """
         size = self.get_size()
@@ -363,60 +436,13 @@ class PanelAssembly(object):
             k0 += p.calc_k0(c=c, row0=p.row_start, col0=p.col_start, size=size,
                     silent=True, finalize=False)
 
-        for connecti in conn:
-            p1 = connecti['p1']
-            p2 = connecti['p2']
-            if connecti['func'] == 'SSycte':
-                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
-                k0 += connections.kCSSycte.fkCSSycte11(
-                        kt, kr, p1, connecti['ycte1'],
-                        size, p1.row_start, col0=p1.col_start)
-                k0 += connections.kCSSycte.fkCSSycte12(
-                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                        size, p1.row_start, col0=p2.col_start)
-                k0 += connections.kCSSycte.fkCSSycte22(
-                        kt, kr, p1, p2, connecti['ycte2'],
-                        size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'SSxcte':
-                kt, kr = connections.calc_kt_kr(p1, p2, 'xcte')
-                k0 += connections.kCSSxcte.fkCSSxcte11(
-                        kt, kr, p1, connecti['xcte1'],
-                        size, p1.row_start, col0=p1.col_start)
-                k0 += connections.kCSSxcte.fkCSSxcte12(
-                        kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
-                        size, p1.row_start, col0=p2.col_start)
-                k0 += connections.kCSSxcte.fkCSSxcte22(
-                        kt, kr, p1, p2, connecti['xcte2'],
-                        size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'SB':
-                kt, kr = connections.calc_kt_kr(p1, p2, 'bot-top')
-                dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
-                k0 += connections.kCSB.fkCSB11(kt, dsb, p1,
-                        size, p1.row_start, col0=p1.col_start)
-                k0 += connections.kCSB.fkCSB12(kt, dsb, p1, p2,
-                        size, p1.row_start, col0=p2.col_start)
-                k0 += connections.kCSB.fkCSB22(kt, p1, p2,
-                        size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'BFycte':
-                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
-                k0 += connections.kCBFycte.fkCBFycte11(
-                        kt, kr, p1, connecti['ycte1'],
-                        size, p1.row_start, col0=p1.col_start)
-                k0 += connections.kCBFycte.fkCBFycte12(
-                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                        size, p1.row_start, col0=p2.col_start)
-                k0 += connections.kCBFycte.fkCBFycte22(
-                        kt, kr, p1, p2, connecti['ycte2'],
-                        size, p2.row_start, col0=p2.col_start)
-            else:
-                raise
-
         if finalize:
             k0 = finalize_symmetric_matrix(k0)
+        k0_conn = self.get_k0_conn(conn=conn)
+        k0 += self.k0_conn
+
         self.k0 = k0
-
         msg('finished!', level=2, silent=silent)
-
         return k0
 
 
@@ -468,3 +494,51 @@ class PanelAssembly(object):
         self.kM = kM
         msg('finished!', level=2, silent=silent)
         return kM
+
+
+    def calc_kT(self, c=None, silent=False, finalize=True, inc=None):
+        msg('Calculating kT for assembly...', level=2, silent=silent)
+        size = self.get_size()
+        kT = 0
+        for p in self.panels:
+            if p.row_start is None or p.col_start is None:
+                raise ValueError('Panel attributes "row_start" and "col_start" must be defined!')
+            kT += p.calc_k0(c=c, size=size, row0=p.row_start, col0=p.col_start,
+                    silent=True, finalize=False, inc=inc, NLgeom=True)
+            kT += p.calc_kG0(c=c, size=size, row0=p.row_start,
+                    col0=p.col_start, silent=True, finalize=False, NLgeom=True)
+        if finalize:
+            kT = finalize_symmetric_matrix(kT)
+        k0_conn = self.get_k0_conn()
+        kT += k0_conn
+        self.kT = kT
+        msg('finished!', level=2, silent=silent)
+        return kT
+
+
+    def calc_fint(self, c, silent=False, inc=1.):
+        msg('Calculating internal forces for assembly...', level=2, silent=silent)
+        size = self.get_size()
+        fint = 0
+        for p in self.panels:
+            if p.col_start is None:
+                raise ValueError('Panel attributes "col_start" must be defined!')
+            fint += p.calc_fint(c=c, size=size, col0=p.col_start, silent=True)
+        k0_conn = self.get_k0_conn()
+        fint += k0_conn*c
+        self.fint = fint
+        msg('finished!', level=2, silent=silent)
+        return fint
+
+
+    def calc_fext(self, inc=1., silent=False):
+        msg('Calculating external forces for assembly...', level=2, silent=silent)
+        size = self.get_size()
+        fext = 0
+        for p in self.panels:
+            if p.col_start is None:
+                raise ValueError('Panel attributes "col_start" must be defined!')
+            fext += p.calc_fext(inc=inc, size=size, col0=p.col_start, silent=True)
+        self.fext = fext
+        msg('finished!', level=2, silent=silent)
+        return fext
