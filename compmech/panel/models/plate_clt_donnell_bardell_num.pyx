@@ -54,7 +54,7 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef double fBu, fBuxi, fBv, fBvxi, fBw, fBwxi, fBwxixi
     cdef double gAu, gAueta, gAv, gAveta, gAw, gAweta, gAwetaeta
     cdef double gBu, gBueta, gBv, gBveta, gBw, gBweta, gBwetaeta
-    cdef double xi, eta, alpha
+    cdef double xi, eta, weight
     cdef double wxi, weta
 
     cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
@@ -73,7 +73,7 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     elif Finput.shape == (6, 6):
         # creating dummy 4-D array that is not used
         Fnxny = np.empty(shape=(0, 0, 0, 0), dtype=DOUBLE)
-        # using a constant F for all integration domain
+        # using a constant F for all the integration domain
         Finput = np.ascontiguousarray(Finput)
         for i in range(6):
             for j in range(6):
@@ -113,7 +113,7 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
             for pty in range(ny):
                 xi = xis[ptx]
                 eta = etas[pty]
-                alpha = weightsxi[ptx]*weightseta[pty]
+                weight = weightsxi[ptx]*weightseta[pty]
 
                 wxi = 0
                 weta = 0
@@ -209,47 +209,47 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+0
                                     kLc[c] = col+0
-                                kLv[c] += alpha*(A11*b*fAuxi*fBuxi*gAu*gBu/a + A16*(fAu*fBuxi*gAueta*gBu + fAuxi*fBu*gAu*gBueta) + A66*a*fAu*fBu*gAueta*gBueta/b)
+                                kLv[c] += weight*(A11*b*fAuxi*fBuxi*gAu*gBu/a + A16*(fAu*fBuxi*gAueta*gBu + fAuxi*fBu*gAu*gBueta) + A66*a*fAu*fBu*gAueta*gBueta/b)
                                 c += 1
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+0
                                     kLc[c] = col+1
-                                kLv[c] += alpha*(A12*fAuxi*fBv*gAu*gBveta + A16*b*fAuxi*fBvxi*gAu*gBv/a + A26*a*fAu*fBv*gAueta*gBveta/b + A66*fAu*fBvxi*gAueta*gBv)
+                                kLv[c] += weight*(A12*fAuxi*fBv*gAu*gBveta + A16*b*fAuxi*fBvxi*gAu*gBv/a + A26*a*fAu*fBv*gAueta*gBveta/b + A66*fAu*fBvxi*gAueta*gBv)
                                 c += 1
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+0
                                     kLc[c] = col+2
-                                kLv[c] += alpha*(2*A11*b*fAuxi*fBwxi*gAu*gBw*wxi/(a*a) + 2*A12*fAuxi*fBw*gAu*gBweta*weta/b + 2*A16*(fAu*fBwxi*gAueta*gBw*wxi + fAuxi*gAu*(fBw*gBweta*wxi + fBwxi*gBw*weta))/a + 2*A26*a*fAu*fBw*gAueta*gBweta*weta/(b*b) + 2*A66*fAu*gAueta*(fBw*gBweta*wxi + fBwxi*gBw*weta)/b - 2*B11*b*fAuxi*fBwxixi*gAu*gBw/(a*a) - 2*B12*fAuxi*fBw*gAu*gBwetaeta/b - 2*B16*(fAu*fBwxixi*gAueta*gBw + 2*fAuxi*fBwxi*gAu*gBweta)/a - 2*B26*a*fAu*fBw*gAueta*gBwetaeta/(b*b) - 4*B66*fAu*fBwxi*gAueta*gBweta/b)
+                                kLv[c] += weight*(2*A11*b*fAuxi*fBwxi*gAu*gBw*wxi/(a*a) + 2*A12*fAuxi*fBw*gAu*gBweta*weta/b + 2*A16*(fAu*fBwxi*gAueta*gBw*wxi + fAuxi*gAu*(fBw*gBweta*wxi + fBwxi*gBw*weta))/a + 2*A26*a*fAu*fBw*gAueta*gBweta*weta/(b*b) + 2*A66*fAu*gAueta*(fBw*gBweta*wxi + fBwxi*gBw*weta)/b - 2*B11*b*fAuxi*fBwxixi*gAu*gBw/(a*a) - 2*B12*fAuxi*fBw*gAu*gBwetaeta/b - 2*B16*(fAu*fBwxixi*gAueta*gBw + 2*fAuxi*fBwxi*gAu*gBweta)/a - 2*B26*a*fAu*fBw*gAueta*gBwetaeta/(b*b) - 4*B66*fAu*fBwxi*gAueta*gBweta/b)
                                 c += 1
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+1
                                     kLc[c] = col+0
-                                kLv[c] += alpha*(A12*fAv*fBuxi*gAveta*gBu + A16*b*fAvxi*fBuxi*gAv*gBu/a + A26*a*fAv*fBu*gAveta*gBueta/b + A66*fAvxi*fBu*gAv*gBueta)
+                                kLv[c] += weight*(A12*fAv*fBuxi*gAveta*gBu + A16*b*fAvxi*fBuxi*gAv*gBu/a + A26*a*fAv*fBu*gAveta*gBueta/b + A66*fAvxi*fBu*gAv*gBueta)
                                 c += 1
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+1
                                     kLc[c] = col+1
-                                kLv[c] += alpha*(A22*a*fAv*fBv*gAveta*gBveta/b + A26*(fAv*fBvxi*gAveta*gBv + fAvxi*fBv*gAv*gBveta) + A66*b*fAvxi*fBvxi*gAv*gBv/a)
+                                kLv[c] += weight*(A22*a*fAv*fBv*gAveta*gBveta/b + A26*(fAv*fBvxi*gAveta*gBv + fAvxi*fBv*gAv*gBveta) + A66*b*fAvxi*fBvxi*gAv*gBv/a)
                                 c += 1
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+1
                                     kLc[c] = col+2
-                                kLv[c] += alpha*(2*A12*fAv*fBwxi*gAveta*gBw*wxi/a + 2*A16*b*fAvxi*fBwxi*gAv*gBw*wxi/(a*a) + 2*A22*a*fAv*fBw*gAveta*gBweta*weta/(b*b) + 2*A26*(fAv*gAveta*(fBw*gBweta*wxi + fBwxi*gBw*weta) + fAvxi*fBw*gAv*gBweta*weta)/b + 2*A66*fAvxi*gAv*(fBw*gBweta*wxi + fBwxi*gBw*weta)/a - 2*B12*fAv*fBwxixi*gAveta*gBw/a - 2*B16*b*fAvxi*fBwxixi*gAv*gBw/(a*a) - 2*B22*a*fAv*fBw*gAveta*gBwetaeta/(b*b) - 2*B26*(2*fAv*fBwxi*gAveta*gBweta + fAvxi*fBw*gAv*gBwetaeta)/b - 4*B66*fAvxi*fBwxi*gAv*gBweta/a)
+                                kLv[c] += weight*(2*A12*fAv*fBwxi*gAveta*gBw*wxi/a + 2*A16*b*fAvxi*fBwxi*gAv*gBw*wxi/(a*a) + 2*A22*a*fAv*fBw*gAveta*gBweta*weta/(b*b) + 2*A26*(fAv*gAveta*(fBw*gBweta*wxi + fBwxi*gBw*weta) + fAvxi*fBw*gAv*gBweta*weta)/b + 2*A66*fAvxi*gAv*(fBw*gBweta*wxi + fBwxi*gBw*weta)/a - 2*B12*fAv*fBwxixi*gAveta*gBw/a - 2*B16*b*fAvxi*fBwxixi*gAv*gBw/(a*a) - 2*B22*a*fAv*fBw*gAveta*gBwetaeta/(b*b) - 2*B26*(2*fAv*fBwxi*gAveta*gBweta + fAvxi*fBw*gAv*gBwetaeta)/b - 4*B66*fAvxi*fBwxi*gAv*gBweta/a)
                                 c += 1
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+2
                                     kLc[c] = col+0
-                                kLv[c] += alpha*(2*A11*b*fAwxi*fBuxi*gAw*gBu*wxi/(a*a) + 2*A12*fAw*fBuxi*gAweta*gBu*weta/b + 2*A16*(fAw*fBuxi*gAweta*gBu*wxi + fAwxi*gAw*(fBu*gBueta*wxi + fBuxi*gBu*weta))/a + 2*A26*a*fAw*fBu*gAweta*gBueta*weta/(b*b) + 2*A66*fBu*gBueta*(fAw*gAweta*wxi + fAwxi*gAw*weta)/b - 2*B11*b*fAwxixi*fBuxi*gAw*gBu/(a*a) - 2*B12*fAw*fBuxi*gAwetaeta*gBu/b - 2*B16*(2*fAwxi*fBuxi*gAweta*gBu + fAwxixi*fBu*gAw*gBueta)/a - 2*B26*a*fAw*fBu*gAwetaeta*gBueta/(b*b) - 4*B66*fAwxi*fBu*gAweta*gBueta/b)
+                                kLv[c] += weight*(2*A11*b*fAwxi*fBuxi*gAw*gBu*wxi/(a*a) + 2*A12*fAw*fBuxi*gAweta*gBu*weta/b + 2*A16*(fAw*fBuxi*gAweta*gBu*wxi + fAwxi*gAw*(fBu*gBueta*wxi + fBuxi*gBu*weta))/a + 2*A26*a*fAw*fBu*gAweta*gBueta*weta/(b*b) + 2*A66*fBu*gBueta*(fAw*gAweta*wxi + fAwxi*gAw*weta)/b - 2*B11*b*fAwxixi*fBuxi*gAw*gBu/(a*a) - 2*B12*fAw*fBuxi*gAwetaeta*gBu/b - 2*B16*(2*fAwxi*fBuxi*gAweta*gBu + fAwxixi*fBu*gAw*gBueta)/a - 2*B26*a*fAw*fBu*gAwetaeta*gBueta/(b*b) - 4*B66*fAwxi*fBu*gAweta*gBueta/b)
                                 c += 1
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+2
                                     kLc[c] = col+1
-                                kLv[c] += alpha*(2*A12*fAwxi*fBv*gAw*gBveta*wxi/a + 2*A16*b*fAwxi*fBvxi*gAw*gBv*wxi/(a*a) + 2*A22*a*fAw*fBv*gAweta*gBveta*weta/(b*b) + 2*A26*(fAw*gAweta*(fBv*gBveta*wxi + fBvxi*gBv*weta) + fAwxi*fBv*gAw*gBveta*weta)/b + 2*A66*fBvxi*gBv*(fAw*gAweta*wxi + fAwxi*gAw*weta)/a - 2*B12*fAwxixi*fBv*gAw*gBveta/a - 2*B16*b*fAwxixi*fBvxi*gAw*gBv/(a*a) - 2*B22*a*fAw*fBv*gAwetaeta*gBveta/(b*b) - 2*B26*(fAw*fBvxi*gAwetaeta*gBv + 2*fAwxi*fBv*gAweta*gBveta)/b - 4*B66*fAwxi*fBvxi*gAweta*gBv/a)
+                                kLv[c] += weight*(2*A12*fAwxi*fBv*gAw*gBveta*wxi/a + 2*A16*b*fAwxi*fBvxi*gAw*gBv*wxi/(a*a) + 2*A22*a*fAw*fBv*gAweta*gBveta*weta/(b*b) + 2*A26*(fAw*gAweta*(fBv*gBveta*wxi + fBvxi*gBv*weta) + fAwxi*fBv*gAw*gBveta*weta)/b + 2*A66*fBvxi*gBv*(fAw*gAweta*wxi + fAwxi*gAw*weta)/a - 2*B12*fAwxixi*fBv*gAw*gBveta/a - 2*B16*b*fAwxixi*fBvxi*gAw*gBv/(a*a) - 2*B22*a*fAw*fBv*gAwetaeta*gBveta/(b*b) - 2*B26*(fAw*fBvxi*gAwetaeta*gBv + 2*fAwxi*fBv*gAweta*gBveta)/b - 4*B66*fAwxi*fBvxi*gAweta*gBv/a)
                                 c += 1
                                 if ptx == 0 and pty == 0:
                                     kLr[c] = row+2
                                     kLc[c] = col+2
-                                kLv[c] += alpha*(4*A11*b*fAwxi*fBwxi*gAw*gBw*(wxi*wxi)/(a*a*a) + 4*A12*weta*wxi*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta)/(a*b) + 4*A16*wxi*(fAw*fBwxi*gAweta*gBw*wxi + fAwxi*gAw*(fBw*gBweta*wxi + 2*fBwxi*gBw*weta))/(a*a) + 4*A22*a*fAw*fBw*gAweta*gBweta*(weta*weta)/(b*b*b) + 4*A26*weta*(fAw*gAweta*(2*fBw*gBweta*wxi + fBwxi*gBw*weta) + fAwxi*fBw*gAw*gBweta*weta)/(b*b) + 4*A66*(fAw*gAweta*wxi + fAwxi*gAw*weta)*(fBw*gBweta*wxi + fBwxi*gBw*weta)/(a*b) - 4*B11*b*gAw*gBw*wxi*(fAwxi*fBwxixi + fAwxixi*fBwxi)/(a*a*a) - 4*B12*(fAw*gBw*(fBwxi*gAwetaeta*wxi + fBwxixi*gAweta*weta) + fBw*gAw*(fAwxi*gBwetaeta*wxi + fAwxixi*gBweta*weta))/(a*b) - 4*B16*(fAw*fBwxixi*gAweta*gBw*wxi + fAwxi*(2*fBwxi*gAw*gBweta*wxi + 2*fBwxi*gAweta*gBw*wxi + fBwxixi*gAw*gBw*weta) + fAwxixi*gAw*(fBw*gBweta*wxi + fBwxi*gBw*weta))/(a*a) - 4*B22*a*fAw*fBw*weta*(gAweta*gBwetaeta + gAwetaeta*gBweta)/(b*b*b) - 4*B26*(fAw*(fBw*wxi*(gAweta*gBwetaeta + gAwetaeta*gBweta) + fBwxi*weta*(2*gAweta*gBweta + gAwetaeta*gBw)) + fAwxi*fBw*weta*(gAw*gBwetaeta + 2*gAweta*gBweta))/(b*b) - 8*B66*(fAw*fBwxi*gAweta*gBweta*wxi + fAwxi*(fBw*gAweta*gBweta*wxi + fBwxi*weta*(gAw*gBweta + gAweta*gBw)))/(a*b) + 4*D11*b*fAwxixi*fBwxixi*gAw*gBw/(a*a*a) + 4*D12*(fAw*fBwxixi*gAwetaeta*gBw + fAwxixi*fBw*gAw*gBwetaeta)/(a*b) + 8*D16*(fAwxi*fBwxixi*gAweta*gBw + fAwxixi*fBwxi*gAw*gBweta)/(a*a) + 4*D22*a*fAw*fBw*gAwetaeta*gBwetaeta/(b*b*b) + 8*D26*(fAw*fBwxi*gAwetaeta*gBweta + fAwxi*fBw*gAweta*gBwetaeta)/(b*b) + 16*D66*fAwxi*fBwxi*gAweta*gBweta/(a*b))
+                                kLv[c] += weight*(4*A11*b*fAwxi*fBwxi*gAw*gBw*(wxi*wxi)/(a*a*a) + 4*A12*weta*wxi*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta)/(a*b) + 4*A16*wxi*(fAw*fBwxi*gAweta*gBw*wxi + fAwxi*gAw*(fBw*gBweta*wxi + 2*fBwxi*gBw*weta))/(a*a) + 4*A22*a*fAw*fBw*gAweta*gBweta*(weta*weta)/(b*b*b) + 4*A26*weta*(fAw*gAweta*(2*fBw*gBweta*wxi + fBwxi*gBw*weta) + fAwxi*fBw*gAw*gBweta*weta)/(b*b) + 4*A66*(fAw*gAweta*wxi + fAwxi*gAw*weta)*(fBw*gBweta*wxi + fBwxi*gBw*weta)/(a*b) - 4*B11*b*gAw*gBw*wxi*(fAwxi*fBwxixi + fAwxixi*fBwxi)/(a*a*a) - 4*B12*(fAw*gBw*(fBwxi*gAwetaeta*wxi + fBwxixi*gAweta*weta) + fBw*gAw*(fAwxi*gBwetaeta*wxi + fAwxixi*gBweta*weta))/(a*b) - 4*B16*(fAw*fBwxixi*gAweta*gBw*wxi + fAwxi*(2*fBwxi*gAw*gBweta*wxi + 2*fBwxi*gAweta*gBw*wxi + fBwxixi*gAw*gBw*weta) + fAwxixi*gAw*(fBw*gBweta*wxi + fBwxi*gBw*weta))/(a*a) - 4*B22*a*fAw*fBw*weta*(gAweta*gBwetaeta + gAwetaeta*gBweta)/(b*b*b) - 4*B26*(fAw*(fBw*wxi*(gAweta*gBwetaeta + gAwetaeta*gBweta) + fBwxi*weta*(2*gAweta*gBweta + gAwetaeta*gBw)) + fAwxi*fBw*weta*(gAw*gBwetaeta + 2*gAweta*gBweta))/(b*b) - 8*B66*(fAw*fBwxi*gAweta*gBweta*wxi + fAwxi*(fBw*gAweta*gBweta*wxi + fBwxi*weta*(gAw*gBweta + gAweta*gBw)))/(a*b) + 4*D11*b*fAwxixi*fBwxixi*gAw*gBw/(a*a*a) + 4*D12*(fAw*fBwxixi*gAwetaeta*gBw + fAwxixi*fBw*gAw*gBwetaeta)/(a*b) + 8*D16*(fAwxi*fBwxixi*gAweta*gBw + fAwxixi*fBwxi*gAw*gBweta)/(a*a) + 4*D22*a*fAw*fBw*gAwetaeta*gBwetaeta/(b*b*b) + 8*D26*(fAw*fBwxi*gAwetaeta*gBweta + fAwxi*fBw*gAweta*gBwetaeta)/(b*b) + 16*D66*fAwxi*fBwxi*gAweta*gBweta/(a*b))
 
     kL = coo_matrix((kLv, (kLr, kLc)), shape=(size, size))
 
@@ -268,7 +268,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef double w1ty, w1ry, w2ty, w2ry
 
     cdef int i, k, j, l, c, row, col, ptx, pty
-    cdef double xi, eta, x, y, alpha
+    cdef double xi, eta, x, y, weight
 
     cdef np.ndarray[cINT, ndim=1] kGr, kGc
     cdef np.ndarray[cDOUBLE, ndim=1] kGv
@@ -298,7 +298,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     elif Finput.shape == (6, 6):
         # creating dummy 4-D array that is not used
         Fnxny = np.empty(shape=(0, 0, 0, 0), dtype=DOUBLE)
-        # using a constant F for all integration domain
+        # using a constant F for all the integration domain
         Finput = np.ascontiguousarray(Finput)
         for i in range(6):
             for j in range(6):
@@ -338,7 +338,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
             for pty in range(ny):
                 xi = xis[ptx]
                 eta = etas[pty]
-                alpha = weightsxi[ptx]*weightseta[pty]
+                weight = weightsxi[ptx]*weightseta[pty]
 
                 # Reading laminate constitutive data
                 if one_F_each_point == 1:
@@ -450,7 +450,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
                                 if ptx == 0 and pty == 0:
                                     kGr[c] = row+2
                                     kGc[c] = col+2
-                                kGv[c] = kGv[c] + alpha*(Nxx*b*fAwxi*fBwxi*gAw*gBw/a + Nxy*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta) + Nyy*a*fAw*fBw*gAweta*gBweta/b)
+                                kGv[c] = kGv[c] + weight*(Nxx*b*fAwxi*fBwxi*gAw*gBw/a + Nxy*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta) + Nyy*a*fAw*fBw*gAweta*gBweta/b)
 
     kG = coo_matrix((kGv, (kGr, kGc)), shape=(size, size))
 
@@ -475,7 +475,7 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef double Nxx, Nyy, Nxy, Mxx, Myy, Mxy
     cdef double exx, eyy, gxy, kxx, kyy, kxy
 
-    cdef double xi, eta, alpha
+    cdef double xi, eta, weight
     cdef double wxi, weta
 
     cdef double fAu, fAuxi, fAv, fAvxi, fAw, fAwxi, fAwxixi
@@ -499,7 +499,7 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     elif Finput.shape == (6, 6):
         # creating dummy 4-D array that is not used
         Fnxny = np.empty(shape=(0, 0, 0, 0), dtype=DOUBLE)
-        # using a constant F for all integration domain
+        # using a constant F for all the integration domain
         Finput = np.ascontiguousarray(Finput)
         for i in range(6):
             for j in range(6):
@@ -535,7 +535,7 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
             for pty in range(ny):
                 xi = xis[ptx]
                 eta = etas[pty]
-                alpha = weightsxi[ptx]*weightseta[pty]
+                weight = weightsxi[ptx]*weightseta[pty]
 
                 if one_F_each_point == 1:
                     for i in range(6):
@@ -648,8 +648,8 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
 
                         col = col0 + num*(j*m + i)
 
-                        fint[col+0] += alpha*( 0.25*a*b*(2*Nxx*fAuxi*gAu/a + 2*Nxy*fAu*gAueta/b) )
-                        fint[col+1] += alpha*( 0.25*a*b*(2*Nxy*fAvxi*gAv/a + 2*Nyy*fAv*gAveta/b) )
-                        fint[col+2] += alpha*( 0.25*a*b*(-4*Mxx*fAwxixi*gAw/(a*a) - 8*Mxy*fAwxi*gAweta/(a*b) - 4*Myy*fAw*gAwetaeta/(b*b) + 4*Nxx*fAwxi*gAw*wxi/(a*a) + 4*Nxy*(fAw*gAweta*wxi + fAwxi*gAw*weta)/(a*b) + 4*Nyy*fAw*gAweta*weta/(b*b)) )
+                        fint[col+0] += weight*( 0.25*a*b*(2*Nxx*fAuxi*gAu/a + 2*Nxy*fAu*gAueta/b) )
+                        fint[col+1] += weight*( 0.25*a*b*(2*Nxy*fAvxi*gAv/a + 2*Nyy*fAv*gAveta/b) )
+                        fint[col+2] += weight*( 0.25*a*b*(-4*Mxx*fAwxixi*gAw/(a*a) - 8*Mxy*fAwxi*gAweta/(a*b) - 4*Myy*fAw*gAwetaeta/(b*b) + 4*Nxx*fAwxi*gAw*wxi/(a*a) + 4*Nxy*(fAw*gAweta*wxi + fAwxi*gAw*weta)/(a*b) + 4*Nyy*fAw*gAweta*weta/(b*b)) )
 
     return fint
