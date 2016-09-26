@@ -1095,7 +1095,7 @@ class Panel(object):
             self.forces_inc.append([x, y, fx, fy, fz])
 
 
-    def calc_fext(self, inc=1., silent=False):
+    def calc_fext(self, inc=1., size=None, col0=0, silent=False):
         """Calculates the external force vector `\{F_{ext}\}`
 
         Recall that:
@@ -1134,8 +1134,10 @@ class Panel(object):
         dofs = db[model]['dofs']
         fg = db[model]['field'].fg
 
-        size = self.get_size()
-        g = np.zeros((dofs, size), dtype=DOUBLE)
+        if size is None:
+            size = self.get_size()
+        col1 = col0 + self.get_size()
+        g = np.zeros((dofs, self.get_size()), dtype=DOUBLE)
         fext = np.zeros(size, dtype=DOUBLE)
 
         # non-incrementable punctual forces
@@ -1146,7 +1148,7 @@ class Panel(object):
                 fpt = np.array([[fx, fy, fz]])
             elif dofs == 5:
                 fpt = np.array([[fx, fy, fz, 0, 0]])
-            fext += fpt.dot(g).ravel()
+            fext[col0:col1] += fpt.dot(g).ravel()
 
         # incrementable punctual forces
         for i, force in enumerate(self.forces_inc):
@@ -1156,14 +1158,14 @@ class Panel(object):
                 fpt = np.array([[fx, fy, fz]])*inc
             elif dofs == 5: #FSDT
                 fpt = np.array([[fx, fy, fz, 0, 0]])*inc
-            fext += fpt.dot(g).ravel()
+            fext[col0:col1] += fpt.dot(g).ravel()
 
         return fext
 
 
     def calc_fint(self, c, size=None, col0=0, silent=False, nx=None,
             ny=None, Fnxny=None, inc=None):
-        #TODO inc not needed here; otherwise with prescribed displacements
+        #TODO inc not needed here; only with prescribed displacements
         msg('Calculating internal forces...', level=2, silent=silent)
         model = self.model
         if not model in modelDB.db.keys():
