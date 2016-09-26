@@ -1,3 +1,9 @@
+Version 0.7.1
+-------------
+- non-linear matrices for PanelAssembly
+- elliptical panel, only with numerical integration
+- parallel processing to compute kT for PanelAssembly
+
 Version 0.8.0
 -------------
 - allow a constant stress state using static results for linear buckling
