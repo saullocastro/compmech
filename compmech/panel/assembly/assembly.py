@@ -1,6 +1,7 @@
 from __future__ import division, absolute_import
 
 import platform
+from multiprocessing import Pool
 
 import numpy as np
 from numpy import linspace
@@ -500,6 +501,7 @@ class PanelAssembly(object):
         msg('Calculating kT for assembly...', level=2, silent=silent)
         size = self.get_size()
         kT = 0
+        #TODO use multiprocessing.Pool here
         for p in self.panels:
             if p.row_start is None or p.col_start is None:
                 raise ValueError('Panel attributes "row_start" and "col_start" must be defined!')
