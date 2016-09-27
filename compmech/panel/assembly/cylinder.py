@@ -172,7 +172,8 @@ def cylinder_compression_lb_Nxx_from_static(height, r, stack, plyt, laminaprop,
         for i in range(Nforces):
             y = i*p.b/(Nforces-1.)
             p.add_force(p.a, y, fx, 0, 0)
-        fext[p.col_start: p.col_end] = p.calc_fext(silent=True)
+
+    fext = assy.calc_fext(silent=True)
 
     k0 = assy.calc_k0(conn_dict)
     incs, cs = static(k0, fext, silent=True)
