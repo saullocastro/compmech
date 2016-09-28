@@ -52,9 +52,9 @@ def create_cylinder_assy(height, r, stack, plyt, laminaprop,
 
     Returns
     -------
-    assy, conn_dict : tuple
+    assy, conns : tuple
         A tuple containing the assembly and the default connectivity
-        dictionary.
+        list of dictionaries.
 
     """
     if npanels < 2:
@@ -73,20 +73,20 @@ def create_cylinder_assy(height, r, stack, plyt, laminaprop,
             v1ty=1, v1ry=1, v2ty=1, v2ry=1,
             w1ty=1, w1ry=1, w2ty=1, w2ry=1)
         skin.append(panel)
-    conn_dict = []
+    conns = []
     skin_loop = skin + [skin[0]]
     for i in range(len(skin)):
         if i != len(skin) - 1:
             p01 = skin_loop[i]
             p02 = skin_loop[i+1]
-            conn_dict.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=p01.b, ycte2=0))
+            conns.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=p01.b, ycte2=0))
         else:
             p01 = skin_loop[i+1]
             p02 = skin_loop[i]
-            conn_dict.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=0, ycte2=p02.b))
+            conns.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=0, ycte2=p02.b))
     assy = PanelAssembly(skin)
 
-    return assy, conn_dict
+    return assy, conns
 
 
 def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
@@ -117,14 +117,14 @@ def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
         :pyobject: test_cylinder_compression_lb_Nxx_cte
 
     """
-    assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
+    assy, conns = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
             laminaprop=laminaprop, npanels=npanels, m=m, n=n)
     if len(Nxxs) != npanels:
         raise ValueError('The length of "Nxxs" must be the same as "npanels"')
     for i, p in enumerate(assy.panels):
         p.Nxx = Nxxs[i]
 
-    k0 = assy.calc_k0(conn_dict, silent=True)
+    k0 = assy.calc_k0(conns, silent=True)
     kG = assy.calc_kG0(silent=True)
     eigvals, eigvecs = lb(k0, kG, tol=0, sparse_solver=True, silent=True,
              num_eigvalues=num_eigvalues, num_eigvalues_print=5)
@@ -158,7 +158,7 @@ def cylinder_compression_lb_Nxx_from_static(height, r, stack, plyt, laminaprop,
         :pyobject: test_cylinder_compression_lb_Nxx_from_static
 
     """
-    assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
+    assy, conns = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
             laminaprop=laminaprop, npanels=npanels, m=m, n=n)
     if len(Nxxs) != npanels:
         raise ValueError('The length of "Nxxs" must be the same as "npanels"')
@@ -166,16 +166,21 @@ def cylinder_compression_lb_Nxx_from_static(height, r, stack, plyt, laminaprop,
         p.Nxx = Nxxs[i]
         p.u2tx = 1
 
+    #TODO improve application of distributed loads
     for p in assy.panels:
         Nforces = 1000
         fx = p.Nxx*p.b/(Nforces-1.)
         for i in range(Nforces):
             y = i*p.b/(Nforces-1.)
-            p.add_force(p.a, y, fx, 0, 0)
+            if i == 0 or i == (Nforces-1):
+                fx_applied = fx/2.
+            else:
+                fx_applied = fx
+            p.add_force(p.a, y, fx_applied, 0, 0)
 
     fext = assy.calc_fext(silent=True)
 
-    k0 = assy.calc_k0(conn_dict)
+    k0 = assy.calc_k0(conns)
     incs, cs = static(k0, fext, silent=True)
     c = cs[0]
     kG = assy.calc_kG0(c=c)
@@ -215,30 +220,33 @@ def cylinder_spla(height, r, stack, plyt, laminaprop,
         :pyobject: test_cylinder_spla
 
     """
-    assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
+    assy, conns = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
             laminaprop=laminaprop, npanels=npanels, m=m, n=n)
 
     for i, p in enumerate(assy.panels):
         p.u2tx = 1
 
+    #TODO improve application of distributed loads
     for p in assy.panels:
         Nforces = 1000
         fx = Nxx*p.b/(Nforces-1.)
         for i in range(Nforces):
             y = i*p.b/(Nforces-1.)
             if i == 0 or i == (Nforces-1):
-                fx /= 2
-            p.add_force(p.a, y, fx, 0, 0, cte=False)
+                fx_applied = fx/2.
+            else:
+                fx_applied = fx
+            p.add_force(p.a, y, fx_applied, 0, 0, cte=False)
 
     p_spla = assy.panels[0]
     p_spla.add_force(p_spla.a/2, p_spla.b/2, 0, 0, -SPLA, cte=True)
 
-    assy.conn = conn_dict
+    assy.conn = conns
     analysis = Analysis(assy.calc_fext, assy.calc_k0, assy.calc_fint,
             assy.calc_kT)
     analysis.NL_method = 'NR'
-    analysis.modified_NR = True
-    analysis.line_search = True
+    analysis.modified_NR = False
+    analysis.line_search = False
     analysis.kT_initial_state = False
     incs, cs = analysis.static(NLgeom=True)
 
