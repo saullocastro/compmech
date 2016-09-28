@@ -1,6 +1,7 @@
 from __future__ import division, absolute_import
 
 import platform
+import gc
 from multiprocessing import Pool
 
 import numpy as np
@@ -399,6 +400,8 @@ class PanelAssembly(object):
         if finalize:
             k0_conn = finalize_symmetric_matrix(k0_conn)
         self.k0_conn = k0_conn
+        #NOTE memory cleanup
+        gc.collect()
         return k0_conn
 
 
