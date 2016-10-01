@@ -245,7 +245,7 @@ class Panel(object):
 
 
     def get_size(self):
-        r"""Calculates the size of the stiffness matrices
+        r"""Calculate the size of the stiffness matrices
 
         The size of the stiffness matrices can be interpreted as the number of
         rows or columns, recalling that this will be the size of the Ritz
@@ -621,7 +621,7 @@ class Panel(object):
 
     def lb(self, tol=0, sparse_solver=True, calc_kA=False, silent=False,
            nx=10, ny=10, c=None, ckL=None, Fnxny=None):
-        """Performs a linear buckling analysis
+        """Linear buckling analysis
 
         .. note:: This will be deprecated soon, use
                   :func:`.compmech.analysis.lb`.
@@ -738,7 +738,7 @@ class Panel(object):
 
     def freq(self, atype=4, tol=0, sparse_solver=True, silent=False,
              sort=True, damping=False, reduced_dof=False):
-        """Performs a natural frequency analysis
+        """Natural frequency analysis
 
         .. note:: This will be deprecated soon, use
                   :func:`.compmech.analysis.freq`.
@@ -929,7 +929,7 @@ class Panel(object):
 
 
     def uvw(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the displacement field
+        r"""Calculate the displacement field
 
         For a given full set of Ritz constants ``c``, the displacement
         field is calculated and stored in the parameters
@@ -979,8 +979,8 @@ class Panel(object):
         return self.u, self.v, self.w, self.phix, self.phiy
 
 
-    def strain(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the strain field
+    def strain(self, c, xs=None, ys=None, gridx=300, gridy=300, NLterms=True):
+        r"""Calculate the strain field
 
         Parameters
         ----------
@@ -998,40 +998,34 @@ class Panel(object):
         gridy : int, optional
             When ``xs`` and ``ys`` are not supplied, ``gridx`` and ``gridy``
             are used.
+        NLterms : bool
+            Flag to indicate whether non-linear strain components should be considered.
 
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
-
         xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
-
-        model = self.model
-        NL_kinematics = model.split('_')[1]
-        fstrain = modelDB.db[model]['field'].fstrain
-        e_num = modelDB.db[model]['e_num']
-
-        if 'donnell' in NL_kinematics:
-            int_NL_kinematics = 0
-        elif 'sanders' in NL_kinematics:
-            int_NL_kinematics = 1
-        else:
-            raise NotImplementedError(
-                '{} is not a valid NL_kinematics option'.format(NL_kinematics))
-
-        es = fstrain(c, xs, ys, self.a, self.b, self.m, self.n, self.c0,
-                self.m0, self.n0, self.funcnum, int_NL_kinematics,
-                self.out_num_cores)
-
-        return es.reshape((xshape + (e_num,)))
+        fstrain = modelDB.db[self.model]['field'].fstrain
+        exx, eyy, gxy, kxx, kyy, kxy = fstrain(c, self, xs, ys, self.out_num_cores, int(NLterms))
+        exx = exx.reshape(xshape)
+        eyy = eyy.reshape(xshape)
+        gxy = gxy.reshape(xshape)
+        kxx = kxx.reshape(xshape)
+        kyy = kyy.reshape(xshape)
+        kxy = kxy.reshape(xshape)
+        return (exx, eyy, gxy, kxx, kyy, kxy)
 
 
-    def stress(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the stress field
+    def stress(self, c, F=None, xs=None, ys=None, gridx=300, gridy=300, NLterms=True):
+        r"""Calculate the stress field
 
         Parameters
         ----------
         c : np.ndarray
             The Ritz constants vector to be used for the strain field
             calculation.
+        F : np.ndarray, optional
+            The laminate stiffness matrix. Can be a 6 x 6 (ABD) matrix for
+            homogeneous laminates over the whole domain.
         xs : np.ndarray, optional
             The `x` coordinates where to calculate the strains.
         ys : np.ndarray, optional
@@ -1043,30 +1037,20 @@ class Panel(object):
         gridy : int, optional
             When ``xs`` and ``ys`` are not supplied, ``gridx`` and ``gridy``
             are used.
+        NLterms : bool
+            Flag to indicate whether non-linear strain components should be considered.
 
         """
-        c = np.ascontiguousarray(c, dtype=DOUBLE)
-
-        xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
-
-        model = self.model
-        NL_kinematics = model.split('_')[1]
-        fstress = modelDB.db[model]['field'].fstress
-        e_num = modelDB.db[model]['e_num']
-
-        if 'donnell' in NL_kinematics:
-            int_NL_kinematics = 0
-        elif 'sanders' in NL_kinematics:
-            int_NL_kinematics = 1
-        else:
-            raise NotImplementedError(
-                    '{} is not a valid NL_kinematics option'.format(
-                    NL_kinematics))
-        Ns = fstress(c, self.F, xs, ys, self.a, self.b, self.m, self.n,
-                self.c0, self.m0, self.n0,
-                self.funcnum, int_NL_kinematics, self.out_num_cores)
-
-        return Ns.reshape((xshape + (e_num,)))
+        exx, eyy, gxy, kxx, kyy, kxy = self.strain(c, xs, ys, gridx, gridy)
+        Ns = np.zeros((exx.shape + (6,)))
+        if F is None:
+            F = self.F
+        if F is None:
+            raise ValueError('Laminate ABD matrix not defined for panel')
+        for i in range(6):
+            Ns[..., i] = (exx*F[i, 0] + eyy*F[i, 1] + gxy*F[i, 2]
+                        + kxx*F[i, 3] + kyy*F[i, 4] + kxy*F[i, 5])
+        return Ns
 
 
     def add_force(self, x, y, fx, fy, fz, cte=True):
@@ -1096,7 +1080,7 @@ class Panel(object):
 
 
     def calc_fext(self, inc=1., size=None, col0=0, silent=False):
-        """Calculates the external force vector `\{F_{ext}\}`
+        """Calculate the external force vector `\{F_{ext}\}`
 
         Recall that:
 
@@ -1165,6 +1149,37 @@ class Panel(object):
 
     def calc_fint(self, c, size=None, col0=0, silent=False, nx=None,
             ny=None, Fnxny=None, inc=None):
+        """Calculate the internal force vector `\{F_{int}\}`
+
+
+        Parameters
+        ----------
+        c : np.ndarray
+            The Ritz constants vector to be used for the internal forces
+            calculation.
+        size : int, optional
+            The size of the internal force vector. Can be the size of a global
+            internal force vector of an assembly.
+        col0 : int, optional
+            Offset in a global internal forcce vector of an assembly.
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+        nx : int, optional
+            Number of integration points along `x`.
+        ny : int, optional
+            Number of integration points along `y`.
+        Fnxny : np.ndarray, optional
+            Laminate stiffness for each integration point, if not supplied it
+            will assume constant properties over the panel domain.
+        inc : float, optional
+            Load increment.
+
+        Returns
+        -------
+        fint : np.ndarray
+            The internal force vector
+
+        """
         #TODO inc not needed here; only with prescribed displacements
         msg('Calculating internal forces...', level=2, silent=silent)
         model = self.model
@@ -1368,10 +1383,10 @@ class Panel(object):
         elif vec in strains:
             es = self.strain(c, xs=xs, ys=ys,
                              gridx=gridx, gridy=gridy)
-            field = es[..., strains.index(vec)]
+            field = es[strains.index(vec)]
         elif vec in stresses:
             Ns = self.stress(c, xs=xs, ys=ys,
-                             gridx=gridx, gridy=gridy)
+                             gridx=gridx, gridy=gridy, NLterms=True)
             field = Ns[..., stresses.index(vec)]
         else:
             raise ValueError(

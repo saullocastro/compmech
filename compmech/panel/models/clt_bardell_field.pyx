@@ -14,6 +14,8 @@ cdef extern from 'bardell_functions.h':
                   double xi2t, double xi2r) nogil
     double calc_vec_fxi(double *f, double xi, double xi1t, double xi1r,
                   double xi2t, double xi2r) nogil
+    double calc_vec_fxixi(double *f, double xi, double xi1t, double xi1r,
+                  double xi2t, double xi2r) nogil
 
 DOUBLE = np.float64
 ctypedef np.double_t cDOUBLE
@@ -51,13 +53,13 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, object p,
     size = xs.shape[0]
     add_size = num_cores - (size % num_cores)
     if add_size == num_cores:
-        add_size=0
+        add_size = 0
     new_size = size + add_size
 
     if (size % num_cores) != 0:
         xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
         ys_core = np.ascontiguousarray(np.hstack((ys, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
-    else:                              
+    else:
         xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
         ys_core = np.ascontiguousarray(ys.reshape(num_cores, -1), dtype=DOUBLE)
 
@@ -94,6 +96,76 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, object p,
     phiys *= -1.
     return (us.ravel()[:size], vs.ravel()[:size], ws.ravel()[:size],
             phixs.ravel()[:size], phiys.ravel()[:size])
+
+
+def fstrain(np.ndarray[cDOUBLE, ndim=1] c, object p,
+        np.ndarray[cDOUBLE, ndim=1] xs, np.ndarray[cDOUBLE, ndim=1] ys,
+        int num_cores=4, int NLterms=0):
+    cdef double a, b, r, alpharad
+    cdef int m, n
+    cdef double u1tx, u1rx, u2tx, u2rx
+    cdef double v1tx, v1rx, v2tx, v2rx
+    cdef double w1tx, w1rx, w2tx, w2rx
+    cdef double u1ty, u1ry, u2ty, u2ry
+    cdef double v1ty, v1ry, v2ty, v2ry
+    cdef double w1ty, w1ry, w2ty, w2ry
+    a = p.a
+    b = p.b
+    r = p.r
+    alpharad = p.alpharad
+    m = p.m
+    n = p.n
+    u1tx = p.u1tx ; u1rx = p.u1rx ; u2tx = p.u2tx ; u2rx = p.u2rx
+    v1tx = p.v1tx ; v1rx = p.v1rx ; v2tx = p.v2tx ; v2rx = p.v2rx
+    w1tx = p.w1tx ; w1rx = p.w1rx ; w2tx = p.w2tx ; w2rx = p.w2rx
+    u1ty = p.u1ty ; u1ry = p.u1ry ; u2ty = p.u2ty ; u2ry = p.u2ry
+    v1ty = p.v1ty ; v1ry = p.v1ry ; v2ty = p.v2ty ; v2ry = p.v2ry
+    w1ty = p.w1ty ; w1ry = p.w1ry ; w2ty = p.w2ty ; w2ry = p.w2ry
+
+    cdef int size_core, pti
+    cdef np.ndarray[cDOUBLE, ndim=2] exxs, eyys, gxys, kxxs, kyys, kxys
+    cdef np.ndarray[cDOUBLE, ndim=2] xs_core, ys_core
+
+    size = xs.shape[0]
+    add_size = num_cores - (size % num_cores)
+    if add_size == num_cores:
+        add_size = 0
+    new_size = size + add_size
+
+    if (size % num_cores) != 0:
+        xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
+        ys_core = np.ascontiguousarray(np.hstack((ys, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
+    else:
+        xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
+        ys_core = np.ascontiguousarray(ys.reshape(num_cores, -1), dtype=DOUBLE)
+
+    size_core = xs_core.shape[1]
+
+    exxs = np.zeros((num_cores, size_core), dtype=DOUBLE)
+    eyys = np.zeros((num_cores, size_core), dtype=DOUBLE)
+    gxys = np.zeros((num_cores, size_core), dtype=DOUBLE)
+    kxxs = np.zeros((num_cores, size_core), dtype=DOUBLE)
+    kyys = np.zeros((num_cores, size_core), dtype=DOUBLE)
+    kxys = np.zeros((num_cores, size_core), dtype=DOUBLE)
+
+    if alpharad != 0:
+        raise NotImplementedError('Conical shells not suported')
+
+    for pti in prange(num_cores, nogil=True, chunksize=1, num_threads=num_cores,
+                    schedule='static'):
+        cfstrain(&c[0], m, n, a, b, r, alpharad,
+              &xs_core[pti,0], &ys_core[pti,0], size_core,
+              &exxs[pti,0], &eyys[pti,0], &gxys[pti,0],
+              &kxxs[pti,0], &kyys[pti,0], &kxys[pti,0],
+              u1tx, u1rx, u2tx, u2rx,
+              v1tx, v1rx, v2tx, v2rx,
+              w1tx, w1rx, w2tx, w2rx,
+              u1ty, u1ry, u2ty, u2ry,
+              v1ty, v1ry, v2ty, v2ry,
+              w1ty, w1ry, w2ty, w2ry, NLterms)
+
+    return (exxs.ravel()[:size], eyys.ravel()[:size], gxys.ravel()[:size],
+            kxxs.ravel()[:size], kyys.ravel()[:size], kxys.ravel()[:size])
 
 
 cdef void cfuvw(double *c, int m, int n, double a, double b, double *xs,
@@ -160,7 +232,7 @@ cdef void cfuvw(double *c, int m, int n, double a, double b, double *xs,
 cdef void cfwx(double *c, int m, int n, double a, double b, double *xs,
         double *ys, int size, double *wxs,
         double w1tx, double w1rx, double w2tx, double w2rx,
-        double w1ty, double w1ry, double w2ty, double w2ry) nogil: 
+        double w1ty, double w1ry, double w2ty, double w2ry) nogil:
     cdef int i, j, col, pti
     cdef double x, y, wx, xi, eta
     cdef double *fwxi
@@ -195,7 +267,7 @@ cdef void cfwx(double *c, int m, int n, double a, double b, double *xs,
 cdef void cfwy(double *c, int m, int n, double a, double b, double *xs,
         double *ys, int size, double *wys,
         double w1tx, double w1rx, double w2tx, double w2rx,
-        double w1ty, double w1ry, double w2ty, double w2ry) nogil: 
+        double w1ty, double w1ry, double w2ty, double w2ry) nogil:
     cdef int i, j, col, pti
     cdef double x, y, wy, xi, eta
     cdef double *fw
@@ -296,3 +368,116 @@ cdef void cfg(double[:,::1] g, int m, int n,
     free(gv)
     free(fw)
     free(gw)
+
+
+cdef void cfstrain(double *c, int m, int n, double a, double b,
+        double r, double alpharad,
+        double *xs, double *ys, int size,
+        double *exxs, double *eyys, double *gxys,
+        double *kxxs, double *kyys, double *kxys,
+        double u1tx, double u1rx, double u2tx, double u2rx,
+        double v1tx, double v1rx, double v2tx, double v2rx,
+        double w1tx, double w1rx, double w2tx, double w2rx,
+        double u1ty, double u1ry, double u2ty, double u2ry,
+        double v1ty, double v1ry, double v2ty, double v2ry,
+        double w1ty, double w1ry, double w2ty, double w2ry, int NLterms) nogil:
+    cdef int i, j, col, pti
+    cdef double x, y, xi, eta
+    cdef double exx, eyy, gxy, kxx, kyy, kxy
+    cdef double flagcyl
+
+    cdef double *fu
+    cdef double *fuxi
+    cdef double *fv
+    cdef double *fvxi
+    cdef double *fw
+    cdef double *fwxi
+    cdef double *fwxixi
+
+    cdef double *gu
+    cdef double *gueta
+    cdef double *gv
+    cdef double *gveta
+    cdef double *gw
+    cdef double *gweta
+    cdef double *gwetaeta
+
+    fu = <double *>malloc(nmax * sizeof(double *))
+    fuxi = <double *>malloc(nmax * sizeof(double *))
+    gu = <double *>malloc(nmax * sizeof(double *))
+    gueta = <double *>malloc(nmax * sizeof(double *))
+    fv = <double *>malloc(nmax * sizeof(double *))
+    fvxi = <double *>malloc(nmax * sizeof(double *))
+    gv = <double *>malloc(nmax * sizeof(double *))
+    gveta = <double *>malloc(nmax * sizeof(double *))
+    fw = <double *>malloc(nmax * sizeof(double *))
+    fwxi = <double *>malloc(nmax * sizeof(double *))
+    fwxixi = <double *>malloc(nmax * sizeof(double *))
+    gw = <double *>malloc(nmax * sizeof(double *))
+    gweta = <double *>malloc(nmax * sizeof(double *))
+    gwetaeta = <double *>malloc(nmax * sizeof(double *))
+
+    flagcyl = 1
+    if r == 0:
+        flagcyl = 0
+
+    for pti in range(size):
+        x = xs[pti]
+        y = ys[pti]
+
+        xi = 2*x/a - 1.
+        eta = 2*y/b - 1.
+
+        calc_vec_f(fu, xi, u1tx, u1rx, u2tx, u2rx)
+        calc_vec_fxi(fuxi, xi, u1tx, u1rx, u2tx, u2rx)
+        calc_vec_f(gu, eta, u1ty, u1ry, u2ty, u2ry)
+        calc_vec_fxi(gueta, eta, u1ty, u1ry, u2ty, u2ry)
+        calc_vec_f(fv, xi, v1tx, v1rx, v2tx, v2rx)
+        calc_vec_fxi(fvxi, xi, v1tx, v1rx, v2tx, v2rx)
+        calc_vec_f(gv, eta, v1ty, v1ry, v2ty, v2ry)
+        calc_vec_fxi(gveta, eta, v1ty, v1ry, v2ty, v2ry)
+        calc_vec_f(fw, xi, w1tx, w1rx, w2tx, w2rx)
+        calc_vec_fxi(fwxi, xi, w1tx, w1rx, w2tx, w2rx)
+        calc_vec_fxixi(fwxixi, xi, w1tx, w1rx, w2tx, w2rx)
+        calc_vec_f(gw, eta, w1ty, w1ry, w2ty, w2ry)
+        calc_vec_fxi(gweta, eta, w1ty, w1ry, w2ty, w2ry)
+        calc_vec_fxixi(gwetaeta, eta, w1ty, w1ry, w2ty, w2ry)
+
+        exx = 0
+        eyy = 0
+        gxy = 0
+        kxx = 0
+        kyy = 0
+        kxy = 0
+
+        for j in range(n):
+            for i in range(m):
+                col = num*(j*m + i)
+                exx += c[col+0]*fuxi[i]*gu[j]*(2/a) + NLterms*2/(a*a)*(c[col+2]*fwxi[i]*gw[j])**2
+                eyy += c[col+1]*fv[i]*gveta[j]*(2/b) + flagcyl*1/r*c[col+2]*fw[i]*gw[j] + NLterms*2/(b*b)*(c[col+2]*fw[i]*gweta[j])**2
+                gxy += c[col+0]*fu[i]*gueta[j]*(2/b) + c[col+1]*fvxi[i]*gv[j]*(2/a) + NLterms*4/(a*b)*c[col+2]*fwxi[i]*gw[j]*c[col+2]*fw[i]*gweta[j]
+                kxx += -c[col+2]*fwxixi[i]*gw[j]*4/(a*a)
+                kyy += -c[col+2]*fw[i]*gwetaeta[j]*4/(b*b)
+                kxy += -2*c[col+2]*fwxi[i]*gweta[j]*4/(a*b)
+
+        exxs[pti] = exx
+        eyys[pti] = eyy
+        gxys[pti] = gxy
+        kxxs[pti] = kxx
+        kyys[pti] = kyy
+        kxys[pti] = kxy
+
+    free(fu)
+    free(fuxi)
+    free(gu)
+    free(gueta)
+    free(fv)
+    free(fvxi)
+    free(gv)
+    free(gveta)
+    free(fw)
+    free(fwxi)
+    free(fwxixi)
+    free(gw)
+    free(gweta)
+    free(gwetaeta)

@@ -16,6 +16,18 @@ import compmech.panel.connections as connections
 from compmech.sparse import make_symmetric, finalize_symmetric_matrix
 
 
+def default_field(panel, gridx, gridy):
+    xs = linspace(0, panel.a, gridx)
+    ys = linspace(0, panel.b, gridy)
+    xs, ys = np.meshgrid(xs, ys, copy=False)
+    xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
+    ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
+    shape = xs.shape
+    xs = xs.ravel()
+    ys = ys.ravel()
+    return xs, ys, shape
+
+
 class PanelAssembly(object):
     r"""Class for Panel Assemblies
 
@@ -165,14 +177,14 @@ class PanelAssembly(object):
         stresses = ['Nxx', 'Nyy', 'Nxy', 'Mxx', 'Myy', 'Mxy', 'Qy', 'Qx']
         if vec in displs:
             res = self.uvw(c, group, gridx=gridx, gridy=gridy)
-            field = np.array(res[vec])
         elif vec in strains:
-            raise NotImplementedError('Strains not implemented')
+            res = self.strain(c, group, gridx=gridx, gridy=gridy)
         elif vec in stresses:
-            raise NotImplementedError('Stresses not implemented')
+            res = self.stress(c, group, gridx=gridx, gridy=gridy)
         else:
             raise ValueError(
                     '{0} is not a valid vec parameter value!'.format(vec))
+        field = np.array(res[vec])
         msg('Finished!', level=1)
 
         if vecmin is None:
@@ -270,7 +282,7 @@ class PanelAssembly(object):
 
 
     def uvw(self, c, group, gridx=50, gridy=50):
-        r"""Calculates the displacement field
+        r"""Calculate the displacement field
 
         For a given full set of Ritz constants ``c``, the displacement
         field is calculated and stored in the parameters
@@ -303,29 +315,18 @@ class PanelAssembly(object):
         stored as parameters with the same name in the ``Panel`` object.
 
         """
-        def default_field(panel):
-            xs = linspace(0, panel.a, gridx)
-            ys = linspace(0, panel.b, gridy)
-            xs, ys = np.meshgrid(xs, ys, copy=False)
-            xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
-            ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
-            shape = xs.shape
-            xs = xs.ravel()
-            ys = ys.ravel()
-            return xs, ys, shape
-
         res = dict(x=[], y=[], u=[], v=[], w=[], phix=[], phiy=[])
         for panel in self.panels:
             if panel.group != group:
                 continue
-            cpanel = c[panel.col_start: panel.col_end]
-            cpanel = np.ascontiguousarray(cpanel, dtype=DOUBLE)
+            c_panel = c[panel.col_start: panel.col_end]
+            c_panel = np.ascontiguousarray(c_panel, dtype=DOUBLE)
             model = panel.model
             fuvw = modelDB.db[model]['field'].fuvw
-            x, y, shape = default_field(panel)
+            x, y, shape = default_field(panel, gridx, gridy)
             x = np.ascontiguousarray(x)
             y = np.ascontiguousarray(y)
-            u, v, w, phix, phiy = fuvw(cpanel, panel, x, y, self.out_num_cores)
+            u, v, w, phix, phiy = fuvw(c_panel, panel, x, y, self.out_num_cores)
             res['x'].append(x.reshape(shape))
             res['y'].append(y.reshape(shape))
             res['u'].append(u.reshape(shape))
@@ -334,6 +335,122 @@ class PanelAssembly(object):
             res['phix'].append(phix.reshape(shape))
             res['phiy'].append(phiy.reshape(shape))
 
+        return res
+
+
+    def strain(self, c, group, gridx=50, gridy=50, NLterms=True):
+        r"""Calculate the strain field
+
+        Parameters
+        ----------
+        c : float
+            The full set of Ritz constants
+        group : str
+            A group to plot. Each panel in ``panels`` should contain an
+            attribute ``group``, which is used to identify which entities
+            should be plotted together.
+        gridx : int, optional
+            Number of points along the `x` axis where to calculate the
+            displacement field.
+        gridy : int, optional
+            Number of points along the `y` where to calculate the
+            displacement field.
+        NLterms : bool
+            Flag to indicate whether non-linear strain components should be considered.
+
+        Returns
+        -------
+        out : tuple
+            A tuple of ``np.ndarrays`` containing
+            ``(xs, ys, exx, eyy, gxy, kxx, kyy, kxy)``.
+
+        """
+        res = dict(x=[], y=[], exx=[], eyy=[], gxy=[], kxx=[], kyy=[], kxy=[])
+        for panel in self.panels:
+            if panel.group != group:
+                continue
+            c_panel = c[panel.col_start: panel.col_end]
+            c_panel = np.ascontiguousarray(c_panel, dtype=DOUBLE)
+            model = panel.model
+            fstrain = modelDB.db[model]['field'].fstrain
+            x, y, shape = default_field(panel, gridx, gridy)
+            x = np.ascontiguousarray(x)
+            y = np.ascontiguousarray(y)
+            exx, eyy, gxy, kxx, kyy, kxy = fstrain(c_panel, panel, x, y,
+                    self.out_num_cores, NLterms=int(NLterms))
+            res['x'].append(x.reshape(shape))
+            res['y'].append(y.reshape(shape))
+            res['exx'].append(exx.reshape(shape))
+            res['eyy'].append(eyy.reshape(shape))
+            res['gxy'].append(gxy.reshape(shape))
+            res['kxx'].append(kxx.reshape(shape))
+            res['kyy'].append(kyy.reshape(shape))
+            res['kxy'].append(kxy.reshape(shape))
+
+        return res
+
+
+    def stress(self, c, group, gridx=50, gridy=50, NLterms=True):
+        r"""Calculate the stress field
+
+        Parameters
+        ----------
+        c : float
+            The full set of Ritz constants
+        group : str
+            A group to plot. Each panel in ``panels`` should contain an
+            attribute ``group``, which is used to identify which entities
+            should be plotted together.
+        gridx : int, optional
+            Number of points along the `x` axis where to calculate the
+            displacement field.
+        gridy : int, optional
+            Number of points along the `y` where to calculate the
+            displacement field.
+        NLterms : bool
+            Flag to indicate whether non-linear strain components should be considered.
+
+        Returns
+        -------
+        out : tuple
+            A tuple of ``np.ndarrays`` containing
+            ``(xs, ys, Nxx, Nyy, Nxy, Mxx, Myy, Mxy)``.
+
+        """
+        res = dict(x=[], y=[], Nxx=[], Nyy=[], Nxy=[], Mxx=[], Myy=[], Mxy=[])
+        for panel in self.panels:
+            if panel.group != group:
+                continue
+            c_panel = c[panel.col_start: panel.col_end]
+            c_panel = np.ascontiguousarray(c_panel, dtype=DOUBLE)
+            model = panel.model
+            fstrain = modelDB.db[model]['field'].fstrain
+            x, y, shape = default_field(panel, gridx, gridy)
+            x = np.ascontiguousarray(x)
+            y = np.ascontiguousarray(y)
+            exx, eyy, gxy, kxx, kyy, kxy = fstrain(c_panel, panel, x, y,
+                    self.out_num_cores, NLterms=int(NLterms))
+            exx = exx.reshape(shape)
+            eyy = eyy.reshape(shape)
+            gxy = gxy.reshape(shape)
+            kxx = kxx.reshape(shape)
+            kyy = kyy.reshape(shape)
+            kxy = kxy.reshape(shape)
+            Ns = np.zeros((exx.shape + (6,)))
+            F = panel.F
+            if F is None:
+                raise ValueError('Laminate ABD matrix not defined for panel')
+            for i in range(6):
+                Ns[..., i] = (exx*F[i, 0] + eyy*F[i, 1] + gxy*F[i, 2]
+                            + kxx*F[i, 3] + kyy*F[i, 4] + kxy*F[i, 5])
+            res['x'].append(x.reshape(shape))
+            res['y'].append(y.reshape(shape))
+            res['Nxx'].append(Ns[..., 0])
+            res['Nyy'].append(Ns[..., 1])
+            res['Nxy'].append(Ns[..., 2])
+            res['Mxx'].append(Ns[..., 3])
+            res['Myy'].append(Ns[..., 4])
+            res['Mxy'].append(Ns[..., 5])
         return res
 
 
