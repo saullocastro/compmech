@@ -1,9 +1,13 @@
 Version 0.7.1
 -------------
 - non-linear matrices for PanelAssembly
+- strain / stress calculation for assembly
+
+Version 0.7.2
+-------------
 - elliptical panel, only with numerical integration
 - parallel processing to compute kT for PanelAssembly
-- strain / stress calculation for panels
+- strain / stress calculation for all panels
 
 Version 0.8.0
 -------------
