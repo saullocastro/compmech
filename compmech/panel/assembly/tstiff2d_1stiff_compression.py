@@ -124,6 +124,13 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
     nb = n if nb is None else nb
     mf = m if mf is None else mf
     nf = n if nf is None else nf
+    nx = m if nx is None else nx
+    ny = n if ny is None else ny
+    nxb = mb if nxb is None else nxb
+    nyb = nb if nyb is None else nyb
+    nxf = mf if nxf is None else nxf
+    nyf = nf if nyf is None else nyf
+
     # skin panels
     p01 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=ys+bb/2., a=aup, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
     p02 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=ys-bb/2., a=aup, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
