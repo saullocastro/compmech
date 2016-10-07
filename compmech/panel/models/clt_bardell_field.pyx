@@ -384,7 +384,7 @@ cdef void cfstrain(double *c, int m, int n, double a, double b,
     cdef int i, j, col, pti
     cdef double x, y, xi, eta
     cdef double exx, eyy, gxy, kxx, kyy, kxy
-    cdef double flagcyl
+    cdef int flagcyl
 
     cdef double *fu
     cdef double *fuxi
@@ -417,9 +417,10 @@ cdef void cfstrain(double *c, int m, int n, double a, double b,
     gweta = <double *>malloc(nmax * sizeof(double *))
     gwetaeta = <double *>malloc(nmax * sizeof(double *))
 
-    flagcyl = 1
     if r == 0:
         flagcyl = 0
+    else:
+        flagcyl = 1
 
     for pti in range(size):
         x = xs[pti]
@@ -454,7 +455,10 @@ cdef void cfstrain(double *c, int m, int n, double a, double b,
             for i in range(m):
                 col = num*(j*m + i)
                 exx += c[col+0]*fuxi[i]*gu[j]*(2/a) + NLterms*2/(a*a)*(c[col+2]*fwxi[i]*gw[j])**2
-                eyy += c[col+1]*fv[i]*gveta[j]*(2/b) + flagcyl*1/r*c[col+2]*fw[i]*gw[j] + NLterms*2/(b*b)*(c[col+2]*fw[i]*gweta[j])**2
+                if flagcyl == 1:
+                    eyy += c[col+1]*fv[i]*gveta[j]*(2/b) + 1/r*c[col+2]*fw[i]*gw[j] + NLterms*2/(b*b)*(c[col+2]*fw[i]*gweta[j])**2
+                else:
+                    eyy += c[col+1]*fv[i]*gveta[j]*(2/b) + NLterms*2/(b*b)*(c[col+2]*fw[i]*gweta[j])**2
                 gxy += c[col+0]*fu[i]*gueta[j]*(2/b) + c[col+1]*fvxi[i]*gv[j]*(2/a) + NLterms*4/(a*b)*c[col+2]*fwxi[i]*gw[j]*c[col+2]*fw[i]*gweta[j]
                 kxx += -c[col+2]*fwxixi[i]*gw[j]*4/(a*a)
                 kyy += -c[col+2]*fw[i]*gwetaeta[j]*4/(b*b)
