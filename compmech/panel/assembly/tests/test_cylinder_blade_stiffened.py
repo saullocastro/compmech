@@ -5,7 +5,7 @@ from compmech.panel.assembly import (
         cylinder_blade_stiffened_compression_lb_Nxx_from_static)
 
 
-def test_cylinder_compression_lb_Nxx_cte():
+def test_cylinder_blade_stiffened_compression_lb_Nxx_cte():
     print('Testing assembly function: cylinder_blade_stiffened_compression_lb_Nxx_cte')
     height = 0.500
     r = 0.250
@@ -29,7 +29,7 @@ def test_cylinder_compression_lb_Nxx_cte():
     assert np.isclose(Nxxs[0]*eigvals[0], -56569.62172, atol=0.01, rtol=0.001)
 
 
-def test_cylinder_compression_lb_Nxx_from_static():
+def test_cylinder_blade_stiffened_compression_lb_Nxx_from_static():
     print('Testing assembly function: cylinder_blade_stiffened_compression_lb_Nxx_from_static')
     height = 0.500
     r = 0.250

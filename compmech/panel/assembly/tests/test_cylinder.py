@@ -44,4 +44,4 @@ def test_cylinder_compression_lb_Nxx_from_static():
     assy.plot(c, 'skin', filename='tmp_cylinder_compression_lb_Nxx_from_static_c.png')
     assy.plot(eigvecs[:, 0], 'skin', filename='tmp_cylinder_compression_lb_Nxx_from_static_eigvec.png')
 
-    assert np.isclose(Nxxs[0]*eigvals[0], -47681.669880, atol=0.01, rtol=0.001)
+    assert np.isclose(Nxxs[0]*eigvals[0], -47735.882729, atol=0.01, rtol=0.001)
