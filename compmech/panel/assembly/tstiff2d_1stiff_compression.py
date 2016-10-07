@@ -10,7 +10,8 @@ from compmech.analysis import lb, static
 def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
         laminaprop, stack_skin, stack_base, stack_flange,
         Nxx_skin, Nxx_base, Nxx_flange, run_static_case=True,
-        r=None, m=8, n=8, mb=None, nb=None, mf=None, nf=None):
+        r=None, m=8, n=8, mb=None, nb=None, mf=None, nf=None,
+        nx=None, ny=None, nxb=None, nyb=None, nxf=None, nyf=None):
     r"""Linear Buckling of T-Stiffened panel with debonding defect
 
     The panel assembly looks like::
@@ -98,6 +99,10 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
     mf, nf : int, optional
         Number of terms of the approximation function for the stiffener's
         flange.
+    nx, ny, nxb, nyb, nxf, nyf : int, optional
+        Define of integration points used for skin, stiffener's base or flange;
+        along x and y. Keeping ``None`` will use the default (see
+        :class:`.Panel`).
 
     Examples
     --------
@@ -120,27 +125,27 @@ def tstiff2d_1stiff_compression(a, b, ys, bb, bf, defect_a, mu, plyt,
     mf = m if mf is None else mf
     nf = n if nf is None else nf
     # skin panels
-    p01 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=ys+bb/2., a=aup, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p02 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=ys-bb/2., a=aup, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p03 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=0,        a=aup, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p01 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=ys+bb/2., a=aup, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
+    p02 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=ys-bb/2., a=aup, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
+    p03 = Panel(group='skin', Nxx=Nxx_skin, x0=alow+defect, y0=0,        a=aup, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
     # defect
-    p04 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys+bb/2., a=defect, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p05 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys-bb/2., a=defect, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p06 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=0,        a=defect, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p04 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys+bb/2., a=defect, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
+    p05 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=ys-bb/2., a=defect, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
+    p06 = Panel(group='skin', Nxx=Nxx_skin, x0=alow, y0=0,        a=defect, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
     #
-    p07 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=ys+bb/2., a=alow, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p08 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
-    p09 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=0,        a=alow, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu)
+    p07 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=ys+bb/2., a=alow, b=bleft, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
+    p08 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
+    p09 = Panel(group='skin', Nxx=Nxx_skin, x0=0, y0=0,        a=alow, b=bright, r=r, m=m, n=n, plyt=plyt, stack=stack_skin, laminaprop=laminaprop, mu=mu, nx=nx, ny=ny)
 
     # stiffeners
-    p10 = Panel(group='base', Nxx=Nxx_base, x0=alow+defect, y0=ys-bb/2., a=aup, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-    p11 = Panel(group='flange', Nxx=Nxx_flange, x0=alow+defect, y0=0,        a=aup, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+    p10 = Panel(group='base', Nxx=Nxx_base, x0=alow+defect, y0=ys-bb/2., a=aup, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu, nx=nxb, ny=nyb)
+    p11 = Panel(group='flange', Nxx=Nxx_flange, x0=alow+defect, y0=0,        a=aup, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu, nx=nxf, ny=nyf)
     # defect
-    p12 = Panel(group='base', Nxx=Nxx_base, x0=alow, y0=ys-bb/2., a=defect, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-    p13 = Panel(group='flange', Nxx=Nxx_flange, x0=alow, y0=0,        a=defect, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+    p12 = Panel(group='base', Nxx=Nxx_base, x0=alow, y0=ys-bb/2., a=defect, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu, nx=nxb, ny=nyb)
+    p13 = Panel(group='flange', Nxx=Nxx_flange, x0=alow, y0=0,        a=defect, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu, nx=nxf, ny=nyf)
     #
-    p14 = Panel(group='base', Nxx=Nxx_base, x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu)
-    p15 = Panel(group='flange', Nxx=Nxx_flange, x0=0, y0=0,        a=alow, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu)
+    p14 = Panel(group='base', Nxx=Nxx_base, x0=0, y0=ys-bb/2., a=alow, b=bb, r=r, m=mb, n=nb, plyt=plyt, stack=stack_base, laminaprop=laminaprop, mu=mu, nx=nxb, ny=nyb)
+    p15 = Panel(group='flange', Nxx=Nxx_flange, x0=0, y0=0,        a=alow, b=bf, m=mf, n=nf, plyt=plyt, stack=stack_flange, laminaprop=laminaprop, mu=mu, nx=nxf, ny=nyf)
 
     # boundary conditions
     p01.u1tx = 1 ; p01.u1rx = 1 ; p01.u2tx = 0 ; p01.u2rx = 1
