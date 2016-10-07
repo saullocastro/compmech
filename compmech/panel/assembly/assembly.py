@@ -69,14 +69,12 @@ class PanelAssembly(object):
 
 
     def plot(self, c, group, invert_y=False, vec='w', filename='', ax=None,
-            figsize=(3.5, 2.), save=True, title='',
-            identify=False, show_boundaries=False,
-            boundary_line='--k', boundary_linewidth=1.,
-            colormap='jet',
+            figsize=(3.5, 2.), save=True, title='', identify=False,
+            show_boundaries=False, boundary_line='--k', boundary_linewidth=1.,
             colorbar=False, cbar_nticks=2, cbar_format=None, cbar_title='',
-            cbar_fontsize=10, aspect='equal', clean=True, dpi=400, texts=[],
-            xs=None, ys=None, gridx=50, gridy=50, num_levels=400,
-            vecmin=None, vecmax=None, calc_data_only=False):
+            cbar_fontsize=10, colormap='jet', aspect='equal', clean=True,
+            dpi=400, texts=[], xs=None, ys=None, gridx=50, gridy=50,
+            num_levels=400, vecmin=None, vecmax=None, calc_data_only=False):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -119,18 +117,18 @@ class PanelAssembly(object):
             Matplotlib string to define line type and color.
         boundary_linewidth : float, optional
             Matplotlib float to define line width.
-        colormap : string, optional
-            Name of one of matplotlib available colormaps.
         colorbar : bool, optional
             If a colorbar should be added to the contour plot.
         cbar_nticks : int, optional
             Number of ticks added to the colorbar.
         cbar_format : [ None | format string | Formatter object ], optional
             See the ``matplotlib.pyplot.colorbar`` documentation.
-        cbar_fontsize : int, optional
-            Fontsize of the colorbar labels.
         cbar_title : str, optional
             Colorbar title. If ``cbar_title == ''`` no title is added.
+        cbar_fontsize : int, optional
+            Fontsize of the colorbar labels.
+        colormap : string, optional
+            Name of a matplotlib available colormap.
         aspect : str, optional
             String that will be passed to the ``AxesSubplot.set_aspect()``
             method.

@@ -10,6 +10,7 @@ from scipy.sparse import csr_matrix
 from scipy.sparse.linalg import eigs, eigsh
 from scipy.linalg import eig
 from numpy import linspace, deg2rad
+import matplotlib.cm as cm
 
 import compmech.composite.laminate as laminate
 from compmech.analysis import Analysis
@@ -1276,17 +1277,13 @@ class Panel(object):
         return self.analysis.cs
 
 
-    def plot(self, c, invert_y=False, vec='w',
-             deform_u=False, deform_u_sf=100.,
-             filename='',
-             ax=None, figsize=(3.5, 2.), save=True,
-             title='',
-             colorbar=False, cbar_nticks=2, cbar_format=None,
-             cbar_title='', cbar_fontsize=10,
-             aspect='equal', clean=True, dpi=400,
-             texts=[], xs=None, ys=None, gridx=300, gridy=300,
-             num_levels=400, vecmin=None, vecmax=None, plotoffsetxs=0.,
-             plotoffsetys=0.):
+    def plot(self, c, invert_y=False, vec='w', deform_u=False,
+            deform_u_sf=100., filename='', ax=None, figsize=(3.5, 2.),
+            save=True, title='', colorbar=False, cbar_nticks=2,
+            cbar_format=None, cbar_title='', cbar_fontsize=10, colormap='jet',
+            aspect='equal', clean=True, dpi=400, texts=[], xs=None, ys=None,
+            gridx=300, gridy=300, num_levels=400, vecmin=None, vecmax=None,
+            plotoffsetxs=0., plotoffsetys=0.):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1326,10 +1323,12 @@ class Panel(object):
             Number of ticks added to the colorbar.
         cbar_format : [ None | format string | Formatter object ], optional
             See the ``matplotlib.pyplot.colorbar`` documentation.
-        cbar_fontsize : int, optional
-            Fontsize of the colorbar labels.
         cbar_title : str, optional
             Colorbar title. If ``cbar_title == ''`` no title is added.
+        cbar_fontsize : int, optional
+            Fontsize of the colorbar labels.
+        colormap : string, optional
+            Name of a matplotlib available colormap.
         aspect : str, optional
             String that will be passed to the ``AxesSubplot.set_aspect()``
             method.
@@ -1431,12 +1430,17 @@ class Panel(object):
         if colorbar:
             from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+            colormap_obj = getattr(cm, colormap, None)
+            if colormap_obj is None:
+                warn('Invalid colormap, using "jet"', level=1)
+                colormap_obj = cm.jet
+
             fsize = cbar_fontsize
             divider = make_axes_locatable(ax)
             cax = divider.append_axes('right', size='5%', pad=0.05)
             cbarticks = linspace(vecmin, vecmax, cbar_nticks)
             cbar = plt.colorbar(contour, ticks=cbarticks, format=cbar_format,
-                                cax=cax)
+                                cax=cax, cmap=colormap_obj)
             if cbar_title:
                 cax.text(0.5, 1.05, cbar_title, horizontalalignment='center',
                          verticalalignment='bottom', fontsize=fsize)
