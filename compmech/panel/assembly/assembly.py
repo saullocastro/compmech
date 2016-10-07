@@ -7,6 +7,7 @@ from multiprocessing import Pool
 import numpy as np
 from numpy import linspace
 from scipy.sparse import csr_matrix
+import matplotlib.cm as cm
 
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
@@ -71,6 +72,7 @@ class PanelAssembly(object):
             figsize=(3.5, 2.), save=True, title='',
             identify=False, show_boundaries=False,
             boundary_line='--k', boundary_linewidth=1.,
+            colormap='jet',
             colorbar=False, cbar_nticks=2, cbar_format=None, cbar_title='',
             cbar_fontsize=10, aspect='equal', clean=True, dpi=400, texts=[],
             xs=None, ys=None, gridx=50, gridy=50, num_levels=400,
@@ -117,6 +119,8 @@ class PanelAssembly(object):
             Matplotlib string to define line type and color.
         boundary_linewidth : float, optional
             Matplotlib float to define line width.
+        colormap : string, optional
+            Name of one of matplotlib available colormaps.
         colorbar : bool, optional
             If a colorbar should be added to the contour plot.
         cbar_nticks : int, optional
@@ -214,6 +218,11 @@ class PanelAssembly(object):
             ax.invert_yaxis()
         ax.invert_xaxis()
 
+        colormap_obj = getattr(cm, colormap, None)
+        if colormap_obj is None:
+            warn('Invalid colormap, using "jet"', level=1)
+            colormap_obj = cm.jet
+
         count = -1
         for i, panel in enumerate(self.panels):
             if panel.group != group:
@@ -222,7 +231,8 @@ class PanelAssembly(object):
             xplot = res['y'][count] + panel.y0
             yplot = res['x'][count] + panel.x0
             field = res[vec][count]
-            contour = ax.contourf(xplot, yplot, field, levels=levels)
+            contour = ax.contourf(xplot, yplot, field, levels=levels,
+                    cmap=colormap_obj)
             if identify:
                 ax.text(xplot.mean(), yplot.mean(), 'P {0:02d}'.format(i+1),
                         transform=ax.transData, ha='center')
