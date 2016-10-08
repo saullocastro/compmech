@@ -368,9 +368,9 @@ class PanelAssembly(object):
 
         Returns
         -------
-        out : tuple
-            A tuple of ``np.ndarrays`` containing
-            ``(xs, ys, exx, eyy, gxy, kxx, kyy, kxy)``.
+        out : dict
+            A dictionary of ``np.ndarrays`` with the keys:
+            ``(x, y, exx, eyy, gxy, kxx, kyy, kxy)``.
 
         """
         res = dict(x=[], y=[], exx=[], eyy=[], gxy=[], kxx=[], kyy=[], kxy=[])
@@ -420,9 +420,9 @@ class PanelAssembly(object):
 
         Returns
         -------
-        out : tuple
-            A tuple of ``np.ndarrays`` containing
-            ``(xs, ys, Nxx, Nyy, Nxy, Mxx, Myy, Mxy)``.
+        out : dict
+            A dict containing many ``np.ndarrays``, with the keys:
+            ``(x, y, Nxx, Nyy, Nxy, Mxx, Myy, Mxy)``.
 
         """
         res = dict(x=[], y=[], Nxx=[], Nyy=[], Nxy=[], Mxx=[], Myy=[], Mxy=[])
