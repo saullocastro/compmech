@@ -8,8 +8,8 @@ def test_panel_field_outputs():
     m = 7
     n = 6
     #TODO implement for conical panels
-    store = dict(exx=None, eyy=None, gxy=None, kxx=None, kyy=None, kxy=None,
-            Nxx=None, Nyy=None, Nxy=None, Mxx=None, Myy=None, Mxy=None)
+    strain_field = dict(exx=None, eyy=None, gxy=None, kxx=None, kyy=None, kxy=None)
+    stress_field = dict(Nxx=None, Nyy=None, Nxy=None, Mxx=None, Myy=None, Mxy=None)
     for model in ['plate_clt_donnell_bardell',
                   'cpanel_clt_donnell_bardell']:
         p = Panel()
@@ -21,7 +21,6 @@ def test_panel_field_outputs():
         p.v2tx = 0
         p.v1ty = 0
         p.v2ty = 0
-
 
         p.a = 2.
         p.b = 1.
@@ -45,19 +44,16 @@ def test_panel_field_outputs():
         p.static()
         c = p.analysis.cs[0]
         Ns = p.stress(c)
-        store.get('exx') = es[0]
-        store.get('eyy') = es[1]
-        store.get('gxy') = es[2]
-        store.get('kxx') = es[3]
-        store.get('kyy') = es[4]
-        store.get('kxy') = es[5]
-        store.get('Nxx') = Ns[..., 0]
-        store.get('Nyy') = Ns[..., 1]
-        store.get('Nxy') = Ns[..., 2]
-        store.get('Mxx') = Ns[..., 3]
-        store.get('Myy') = Ns[..., 4]
-        store.get('Mxy') = Ns[..., 5]
         es = p.strain(c)
-        for k, v in store.items():
-            p.plot(c, vec=k, filename='tmp_test_panel_field_%s.png' % k)
-        #TODO include assertions
+        for k, v in strain_field.items():
+            if v is None:
+                strain_field[k] = es.get(k).min()
+            else:
+                assert np.isclose(strain_field[k], es.get(k).min(), rtol=0.05)
+            p.plot(c, vec=k, filename='tmp_test_panel_strain_field_%s.png' % k)
+        for k, v in stress_field.items():
+            if v is None:
+                stress_field[k] = Ns.get(k).min()
+            else:
+                assert np.isclose(stress_field[k], Ns.get(k).min(), rtol=0.05)
+            p.plot(c, vec=k, filename='tmp_test_panel_stress_field_%s.png' % k)

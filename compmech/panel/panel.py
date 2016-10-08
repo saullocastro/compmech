@@ -272,15 +272,15 @@ class Panel(object):
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
         xshape = xs.shape
-        tshape = ys.shape
-        if xshape != tshape:
+        yshape = ys.shape
+        if xshape != yshape:
             raise ValueError('Arrays xs and ys must have the same shape')
         self.Xs = xs
         self.Ys = ys
         xs = np.ascontiguousarray(xs.ravel(), dtype=DOUBLE)
         ys = np.ascontiguousarray(ys.ravel(), dtype=DOUBLE)
 
-        return xs, ys, xshape, tshape
+        return xs, ys, xshape, yshape
 
 
     def _get_lam_F(self):
@@ -967,7 +967,7 @@ class Panel(object):
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
 
-        xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
+        xs, ys, xshape, yshape = self._default_field(xs, ys, gridx, gridy)
         fuvw = modelDB.db[self.model]['field'].fuvw
         us, vs, ws, phixs, phiys = fuvw(c, self, xs, ys, self.out_num_cores)
 
@@ -1002,18 +1002,27 @@ class Panel(object):
         NLterms : bool
             Flag to indicate whether non-linear strain components should be considered.
 
+        Returns
+        -------
+        res : dict
+            A dictionary of ``np.ndarrays`` with the keys:
+            ``(x, y, exx, eyy, gxy, kxx, kyy, kxy)``
+
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
-        xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
+        xs, ys, xshape, yshape = self._default_field(xs, ys, gridx, gridy)
         fstrain = modelDB.db[self.model]['field'].fstrain
         exx, eyy, gxy, kxx, kyy, kxy = fstrain(c, self, xs, ys, self.out_num_cores, int(NLterms))
-        exx = exx.reshape(xshape)
-        eyy = eyy.reshape(xshape)
-        gxy = gxy.reshape(xshape)
-        kxx = kxx.reshape(xshape)
-        kyy = kyy.reshape(xshape)
-        kxy = kxy.reshape(xshape)
-        return (exx, eyy, gxy, kxx, kyy, kxy)
+        res = {}
+        res['x'] = xs.reshape(xshape)
+        res['y'] = ys.reshape(yshape)
+        res['exx'] = exx.reshape(xshape)
+        res['eyy'] = eyy.reshape(xshape)
+        res['gxy'] = gxy.reshape(xshape)
+        res['kxx'] = kxx.reshape(xshape)
+        res['kyy'] = kyy.reshape(xshape)
+        res['kxy'] = kxy.reshape(xshape)
+        return res
 
 
     def stress(self, c, F=None, xs=None, ys=None, gridx=300, gridy=300, NLterms=True):
@@ -1041,17 +1050,37 @@ class Panel(object):
         NLterms : bool
             Flag to indicate whether non-linear strain components should be considered.
 
+        Returns
+        -------
+        res : dict
+            A dictionary of ``np.ndarrays`` with the keys:
+            ``(x, y, Nxx, Nyy, Nxy, Mxx, Myy, Mxy)``
+
         """
-        exx, eyy, gxy, kxx, kyy, kxy = self.strain(c, xs, ys, gridx, gridy)
-        Ns = np.zeros((exx.shape + (6,)))
+        res_strain = self.strain(c, xs, ys, gridx, gridy)
+        x = res_strain['x']
+        y = res_strain['y']
+        exx = res_strain['exx']
+        eyy = res_strain['eyy']
+        gxy = res_strain['gxy']
+        kxx = res_strain['kxx']
+        kyy = res_strain['kyy']
+        kxy = res_strain['kxy']
         if F is None:
             F = self.F
         if F is None:
             raise ValueError('Laminate ABD matrix not defined for panel')
-        for i in range(6):
-            Ns[..., i] = (exx*F[i, 0] + eyy*F[i, 1] + gxy*F[i, 2]
-                        + kxx*F[i, 3] + kyy*F[i, 4] + kxy*F[i, 5])
-        return Ns
+        res = {}
+        res['x'] = res_strain['x']
+        res['y'] = res_strain['y']
+        res['Nxx'] = exx*F[0, 0] + eyy*F[0, 1] + gxy*F[0, 2] + kxx*F[0, 3] + kyy*F[0, 4] + kxy*F[0, 5]
+        res['Nyy'] = exx*F[1, 0] + eyy*F[1, 1] + gxy*F[1, 2] + kxx*F[1, 3] + kyy*F[1, 4] + kxy*F[1, 5]
+        res['Nxy'] = exx*F[2, 0] + eyy*F[2, 1] + gxy*F[2, 2] + kxx*F[2, 3] + kyy*F[2, 4] + kxy*F[2, 5]
+        res['Mxx'] = exx*F[3, 0] + eyy*F[3, 1] + gxy*F[3, 2] + kxx*F[3, 3] + kyy*F[3, 4] + kxy*F[3, 5]
+        res['Myy'] = exx*F[4, 0] + eyy*F[4, 1] + gxy*F[4, 2] + kxx*F[4, 3] + kyy*F[4, 4] + kxy*F[4, 5]
+        res['Mxy'] = exx*F[5, 0] + eyy*F[5, 1] + gxy*F[5, 2] + kxx*F[5, 3] + kyy*F[5, 4] + kxy*F[5, 5]
+
+        return res
 
 
     def add_force(self, x, y, fx, fy, fz, cte=True):
@@ -1382,11 +1411,11 @@ class Panel(object):
         elif vec in strains:
             es = self.strain(c, xs=xs, ys=ys,
                              gridx=gridx, gridy=gridy)
-            field = es[strains.index(vec)]
+            field = es.get(vec)
         elif vec in stresses:
             Ns = self.stress(c, xs=xs, ys=ys,
                              gridx=gridx, gridy=gridy, NLterms=True)
-            field = Ns[..., stresses.index(vec)]
+            field = Ns.get(vec)
         else:
             raise ValueError(
                     '{0} is not a valid vec parameter value!'.format(vec))
