@@ -16,7 +16,7 @@ for:
 
 - unstiffened cylindrical and conical shells
 - stiffened and unstiffened panels and plates
-- any general assemble of 2D plates and curved panels
+- any assembly of 2D plates and curved panels
 
 The implementation is based on Python and the low level routines are
 programmed in C and Cython.
