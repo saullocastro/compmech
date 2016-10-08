@@ -10,6 +10,9 @@ import os
 from os.path import join
 import sys
 import subprocess
+pyversion = sys.version_info
+if pyversion.major == 3 and pyversion.minor == 4:
+    import importlib.machinery
 from distutils.sysconfig import get_python_lib
 
 if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] > (3, 5):
@@ -43,7 +46,7 @@ Operating System :: Unix
 
 MAJOR = 0
 MINOR = 7
-MICRO = 0
+MICRO = 1
 ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 

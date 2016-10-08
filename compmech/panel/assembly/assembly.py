@@ -1,10 +1,13 @@
 from __future__ import division, absolute_import
 
 import platform
+import gc
+from multiprocessing import Pool
 
 import numpy as np
 from numpy import linspace
 from scipy.sparse import csr_matrix
+import matplotlib.cm as cm
 
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
@@ -12,6 +15,18 @@ from compmech.panel.panel import check_c
 import compmech.panel.modelDB as modelDB
 import compmech.panel.connections as connections
 from compmech.sparse import make_symmetric, finalize_symmetric_matrix
+
+
+def default_field(panel, gridx, gridy):
+    xs = linspace(0, panel.a, gridx)
+    ys = linspace(0, panel.b, gridy)
+    xs, ys = np.meshgrid(xs, ys, copy=False)
+    xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
+    ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
+    shape = xs.shape
+    xs = xs.ravel()
+    ys = ys.ravel()
+    return xs, ys, shape
 
 
 class PanelAssembly(object):
@@ -27,9 +42,13 @@ class PanelAssembly(object):
     ----------
     panels : iterable
         A list, tuple etc of :class:`.Panel` objects.
+    conn : dict
+        A connectivity dictionary.
 
     """
     def __init__(self, panels):
+        self.conn = None
+        self.k0_conn = None
         self.panels = panels
         self.size = None
         self.out_num_cores = 4
@@ -50,13 +69,12 @@ class PanelAssembly(object):
 
 
     def plot(self, c, group, invert_y=False, vec='w', filename='', ax=None,
-            figsize=(3.5, 2.), save=True, title='',
-            identify=False, show_boundaries=False,
-            boundary_line='--k', boundary_linewidth=1.,
+            figsize=(3.5, 2.), save=True, title='', identify=False,
+            show_boundaries=False, boundary_line='--k', boundary_linewidth=1.,
             colorbar=False, cbar_nticks=2, cbar_format=None, cbar_title='',
-            cbar_fontsize=10, aspect='equal', clean=True, dpi=400, texts=[],
-            xs=None, ys=None, gridx=50, gridy=50, num_levels=400,
-            vecmin=None, vecmax=None, calc_data_only=False):
+            cbar_fontsize=10, colormap='jet', aspect='equal', clean=True,
+            dpi=400, texts=[], xs=None, ys=None, gridx=50, gridy=50,
+            num_levels=400, vecmin=None, vecmax=None, calc_data_only=False):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -105,10 +123,12 @@ class PanelAssembly(object):
             Number of ticks added to the colorbar.
         cbar_format : [ None | format string | Formatter object ], optional
             See the ``matplotlib.pyplot.colorbar`` documentation.
-        cbar_fontsize : int, optional
-            Fontsize of the colorbar labels.
         cbar_title : str, optional
             Colorbar title. If ``cbar_title == ''`` no title is added.
+        cbar_fontsize : int, optional
+            Fontsize of the colorbar labels.
+        colormap : string, optional
+            Name of a matplotlib available colormap.
         aspect : str, optional
             String that will be passed to the ``AxesSubplot.set_aspect()``
             method.
@@ -159,14 +179,14 @@ class PanelAssembly(object):
         stresses = ['Nxx', 'Nyy', 'Nxy', 'Mxx', 'Myy', 'Mxy', 'Qy', 'Qx']
         if vec in displs:
             res = self.uvw(c, group, gridx=gridx, gridy=gridy)
-            field = np.array(res[vec])
         elif vec in strains:
-            raise NotImplementedError('Strains not implemented')
+            res = self.strain(c, group, gridx=gridx, gridy=gridy)
         elif vec in stresses:
-            raise NotImplementedError('Stresses not implemented')
+            res = self.stress(c, group, gridx=gridx, gridy=gridy)
         else:
             raise ValueError(
                     '{0} is not a valid vec parameter value!'.format(vec))
+        field = np.array(res[vec])
         msg('Finished!', level=1)
 
         if vecmin is None:
@@ -196,6 +216,11 @@ class PanelAssembly(object):
             ax.invert_yaxis()
         ax.invert_xaxis()
 
+        colormap_obj = getattr(cm, colormap, None)
+        if colormap_obj is None:
+            warn('Invalid colormap, using "jet"', level=1)
+            colormap_obj = cm.jet
+
         count = -1
         for i, panel in enumerate(self.panels):
             if panel.group != group:
@@ -204,7 +229,8 @@ class PanelAssembly(object):
             xplot = res['y'][count] + panel.y0
             yplot = res['x'][count] + panel.x0
             field = res[vec][count]
-            contour = ax.contourf(xplot, yplot, field, levels=levels)
+            contour = ax.contourf(xplot, yplot, field, levels=levels,
+                    cmap=colormap_obj)
             if identify:
                 ax.text(xplot.mean(), yplot.mean(), 'P {0:02d}'.format(i+1),
                         transform=ax.transData, ha='center')
@@ -264,7 +290,7 @@ class PanelAssembly(object):
 
 
     def uvw(self, c, group, gridx=50, gridy=50):
-        r"""Calculates the displacement field
+        r"""Calculate the displacement field
 
         For a given full set of Ritz constants ``c``, the displacement
         field is calculated and stored in the parameters
@@ -297,29 +323,18 @@ class PanelAssembly(object):
         stored as parameters with the same name in the ``Panel`` object.
 
         """
-        def default_field(panel):
-            xs = linspace(0, panel.a, gridx)
-            ys = linspace(0, panel.b, gridy)
-            xs, ys = np.meshgrid(xs, ys, copy=False)
-            xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
-            ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
-            shape = xs.shape
-            xs = xs.ravel()
-            ys = ys.ravel()
-            return xs, ys, shape
-
         res = dict(x=[], y=[], u=[], v=[], w=[], phix=[], phiy=[])
         for panel in self.panels:
             if panel.group != group:
                 continue
-            cpanel = c[panel.col_start: panel.col_end]
-            cpanel = np.ascontiguousarray(cpanel, dtype=DOUBLE)
+            c_panel = c[panel.col_start: panel.col_end]
+            c_panel = np.ascontiguousarray(c_panel, dtype=DOUBLE)
             model = panel.model
             fuvw = modelDB.db[model]['field'].fuvw
-            x, y, shape = default_field(panel)
+            x, y, shape = default_field(panel, gridx, gridy)
             x = np.ascontiguousarray(x)
             y = np.ascontiguousarray(y)
-            u, v, w, phix, phiy = fuvw(cpanel, panel, x, y, self.out_num_cores)
+            u, v, w, phix, phiy = fuvw(c_panel, panel, x, y, self.out_num_cores)
             res['x'].append(x.reshape(shape))
             res['y'].append(y.reshape(shape))
             res['u'].append(u.reshape(shape))
@@ -331,14 +346,199 @@ class PanelAssembly(object):
         return res
 
 
-    def calc_k0(self, conn, c=None, silent=False, finalize=True):
+    def strain(self, c, group, gridx=50, gridy=50, NLterms=True):
+        r"""Calculate the strain field
+
+        Parameters
+        ----------
+        c : float
+            The full set of Ritz constants
+        group : str
+            A group to plot. Each panel in ``panels`` should contain an
+            attribute ``group``, which is used to identify which entities
+            should be plotted together.
+        gridx : int, optional
+            Number of points along the `x` axis where to calculate the
+            displacement field.
+        gridy : int, optional
+            Number of points along the `y` where to calculate the
+            displacement field.
+        NLterms : bool
+            Flag to indicate whether non-linear strain components should be considered.
+
+        Returns
+        -------
+        out : dict
+            A dictionary of ``np.ndarrays`` with the keys:
+            ``(x, y, exx, eyy, gxy, kxx, kyy, kxy)``.
+
+        """
+        res = dict(x=[], y=[], exx=[], eyy=[], gxy=[], kxx=[], kyy=[], kxy=[])
+        for panel in self.panels:
+            if panel.group != group:
+                continue
+            c_panel = c[panel.col_start: panel.col_end]
+            c_panel = np.ascontiguousarray(c_panel, dtype=DOUBLE)
+            model = panel.model
+            fstrain = modelDB.db[model]['field'].fstrain
+            x, y, shape = default_field(panel, gridx, gridy)
+            x = np.ascontiguousarray(x)
+            y = np.ascontiguousarray(y)
+            exx, eyy, gxy, kxx, kyy, kxy = fstrain(c_panel, panel, x, y,
+                    self.out_num_cores, NLterms=int(NLterms))
+            res['x'].append(x.reshape(shape))
+            res['y'].append(y.reshape(shape))
+            res['exx'].append(exx.reshape(shape))
+            res['eyy'].append(eyy.reshape(shape))
+            res['gxy'].append(gxy.reshape(shape))
+            res['kxx'].append(kxx.reshape(shape))
+            res['kyy'].append(kyy.reshape(shape))
+            res['kxy'].append(kxy.reshape(shape))
+
+        return res
+
+
+    def stress(self, c, group, gridx=50, gridy=50, NLterms=True):
+        r"""Calculate the stress field
+
+        Parameters
+        ----------
+        c : float
+            The full set of Ritz constants
+        group : str
+            A group to plot. Each panel in ``panels`` should contain an
+            attribute ``group``, which is used to identify which entities
+            should be plotted together.
+        gridx : int, optional
+            Number of points along the `x` axis where to calculate the
+            displacement field.
+        gridy : int, optional
+            Number of points along the `y` where to calculate the
+            displacement field.
+        NLterms : bool
+            Flag to indicate whether non-linear strain components should be considered.
+
+        Returns
+        -------
+        out : dict
+            A dict containing many ``np.ndarrays``, with the keys:
+            ``(x, y, Nxx, Nyy, Nxy, Mxx, Myy, Mxy)``.
+
+        """
+        res = dict(x=[], y=[], Nxx=[], Nyy=[], Nxy=[], Mxx=[], Myy=[], Mxy=[])
+        for panel in self.panels:
+            if panel.group != group:
+                continue
+            c_panel = c[panel.col_start: panel.col_end]
+            c_panel = np.ascontiguousarray(c_panel, dtype=DOUBLE)
+            model = panel.model
+            fstrain = modelDB.db[model]['field'].fstrain
+            x, y, shape = default_field(panel, gridx, gridy)
+            x = np.ascontiguousarray(x)
+            y = np.ascontiguousarray(y)
+            exx, eyy, gxy, kxx, kyy, kxy = fstrain(c_panel, panel, x, y,
+                    self.out_num_cores, NLterms=int(NLterms))
+            exx = exx.reshape(shape)
+            eyy = eyy.reshape(shape)
+            gxy = gxy.reshape(shape)
+            kxx = kxx.reshape(shape)
+            kyy = kyy.reshape(shape)
+            kxy = kxy.reshape(shape)
+            Ns = np.zeros((exx.shape + (6,)))
+            F = panel.F
+            if F is None:
+                raise ValueError('Laminate ABD matrix not defined for panel')
+            for i in range(6):
+                Ns[..., i] = (exx*F[i, 0] + eyy*F[i, 1] + gxy*F[i, 2]
+                            + kxx*F[i, 3] + kyy*F[i, 4] + kxy*F[i, 5])
+            res['x'].append(x.reshape(shape))
+            res['y'].append(y.reshape(shape))
+            res['Nxx'].append(Ns[..., 0])
+            res['Nyy'].append(Ns[..., 1])
+            res['Nxy'].append(Ns[..., 2])
+            res['Mxx'].append(Ns[..., 3])
+            res['Myy'].append(Ns[..., 4])
+            res['Mxy'].append(Ns[..., 5])
+        return res
+
+
+    def get_k0_conn(self, conn=None, finalize=True):
+        if conn is None:
+            if self.conn is None:
+                raise RuntimeError('No connectivity dictionary defined!')
+            conn = self.conn
+
+        if self.k0_conn is not None:
+            return self.k0_conn
+
+        size = self.get_size()
+
+        k0_conn = 0.
+        for connecti in conn:
+            p1 = connecti['p1']
+            p2 = connecti['p2']
+            if connecti['func'] == 'SSycte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
+                k0_conn += connections.kCSSycte.fkCSSycte11(
+                        kt, kr, p1, connecti['ycte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCSSycte.fkCSSycte12(
+                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCSSycte.fkCSSycte22(
+                        kt, kr, p1, p2, connecti['ycte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'SSxcte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'xcte')
+                k0_conn += connections.kCSSxcte.fkCSSxcte11(
+                        kt, kr, p1, connecti['xcte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCSSxcte.fkCSSxcte12(
+                        kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCSSxcte.fkCSSxcte22(
+                        kt, kr, p1, p2, connecti['xcte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'SB':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'bot-top')
+                dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
+                k0_conn += connections.kCSB.fkCSB11(kt, dsb, p1,
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCSB.fkCSB12(kt, dsb, p1, p2,
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCSB.fkCSB22(kt, p1, p2,
+                        size, p2.row_start, col0=p2.col_start)
+            elif connecti['func'] == 'BFycte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
+                k0_conn += connections.kCBFycte.fkCBFycte11(
+                        kt, kr, p1, connecti['ycte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCBFycte.fkCBFycte12(
+                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCBFycte.fkCBFycte22(
+                        kt, kr, p1, p2, connecti['ycte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            else:
+                raise
+
+        if finalize:
+            k0_conn = finalize_symmetric_matrix(k0_conn)
+        self.k0_conn = k0_conn
+        #NOTE memory cleanup
+        gc.collect()
+        return k0_conn
+
+
+    def calc_k0(self, conn=None, c=None, silent=False, finalize=True, inc=1.):
         """Calculate the constitutive stiffness matrix of the assembly
 
         Parameters
         ----------
 
-        conn : dict
-            A connectivity dictionary.
+        conn : dict, optional
+            A connectivity dictionary. Optional if already defined for the
+            assembly.
         c : array-like or None, optional
             This must be the result of a static analysis, used to compute
             non-linear terms based on the actual displacement field.
@@ -347,6 +547,8 @@ class PanelAssembly(object):
         finalize : bool, optional
             Asserts validity of output data and makes the output matrix
             symmetric, should be ``False`` when assemblying.
+        inc : float, optional
+            Dummy argument needed for non-linear analyses.
 
         """
         size = self.get_size()
@@ -363,60 +565,13 @@ class PanelAssembly(object):
             k0 += p.calc_k0(c=c, row0=p.row_start, col0=p.col_start, size=size,
                     silent=True, finalize=False)
 
-        for connecti in conn:
-            p1 = connecti['p1']
-            p2 = connecti['p2']
-            if connecti['func'] == 'SSycte':
-                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
-                k0 += connections.kCSSycte.fkCSSycte11(
-                        kt, kr, p1, connecti['ycte1'],
-                        size, p1.row_start, col0=p1.col_start)
-                k0 += connections.kCSSycte.fkCSSycte12(
-                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                        size, p1.row_start, col0=p2.col_start)
-                k0 += connections.kCSSycte.fkCSSycte22(
-                        kt, kr, p1, p2, connecti['ycte2'],
-                        size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'SSxcte':
-                kt, kr = connections.calc_kt_kr(p1, p2, 'xcte')
-                k0 += connections.kCSSxcte.fkCSSxcte11(
-                        kt, kr, p1, connecti['xcte1'],
-                        size, p1.row_start, col0=p1.col_start)
-                k0 += connections.kCSSxcte.fkCSSxcte12(
-                        kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
-                        size, p1.row_start, col0=p2.col_start)
-                k0 += connections.kCSSxcte.fkCSSxcte22(
-                        kt, kr, p1, p2, connecti['xcte2'],
-                        size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'SB':
-                kt, kr = connections.calc_kt_kr(p1, p2, 'bot-top')
-                dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
-                k0 += connections.kCSB.fkCSB11(kt, dsb, p1,
-                        size, p1.row_start, col0=p1.col_start)
-                k0 += connections.kCSB.fkCSB12(kt, dsb, p1, p2,
-                        size, p1.row_start, col0=p2.col_start)
-                k0 += connections.kCSB.fkCSB22(kt, p1, p2,
-                        size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'BFycte':
-                kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
-                k0 += connections.kCBFycte.fkCBFycte11(
-                        kt, kr, p1, connecti['ycte1'],
-                        size, p1.row_start, col0=p1.col_start)
-                k0 += connections.kCBFycte.fkCBFycte12(
-                        kt, kr, p1, p2, connecti['ycte1'], connecti['ycte2'],
-                        size, p1.row_start, col0=p2.col_start)
-                k0 += connections.kCBFycte.fkCBFycte22(
-                        kt, kr, p1, p2, connecti['ycte2'],
-                        size, p2.row_start, col0=p2.col_start)
-            else:
-                raise
-
         if finalize:
             k0 = finalize_symmetric_matrix(k0)
+        k0_conn = self.get_k0_conn(conn=conn)
+        k0 += self.k0_conn
+
         self.k0 = k0
-
         msg('finished!', level=2, silent=silent)
-
         return k0
 
 
@@ -468,3 +623,52 @@ class PanelAssembly(object):
         self.kM = kM
         msg('finished!', level=2, silent=silent)
         return kM
+
+
+    def calc_kT(self, c=None, silent=False, finalize=True, inc=None):
+        msg('Calculating kT for assembly...', level=2, silent=silent)
+        size = self.get_size()
+        kT = 0
+        #TODO use multiprocessing.Pool here
+        for p in self.panels:
+            if p.row_start is None or p.col_start is None:
+                raise ValueError('Panel attributes "row_start" and "col_start" must be defined!')
+            kT += p.calc_k0(c=c, size=size, row0=p.row_start, col0=p.col_start,
+                    silent=True, finalize=False, inc=inc, NLgeom=True)
+            kT += p.calc_kG0(c=c, size=size, row0=p.row_start,
+                    col0=p.col_start, silent=True, finalize=False, NLgeom=True)
+        if finalize:
+            kT = finalize_symmetric_matrix(kT)
+        k0_conn = self.get_k0_conn()
+        kT += k0_conn
+        self.kT = kT
+        msg('finished!', level=2, silent=silent)
+        return kT
+
+
+    def calc_fint(self, c, silent=False, inc=1.):
+        msg('Calculating internal forces for assembly...', level=2, silent=silent)
+        size = self.get_size()
+        fint = 0
+        for p in self.panels:
+            if p.col_start is None:
+                raise ValueError('Panel attributes "col_start" must be defined!')
+            fint += p.calc_fint(c=c, size=size, col0=p.col_start, silent=True)
+        k0_conn = self.get_k0_conn()
+        fint += k0_conn*c
+        self.fint = fint
+        msg('finished!', level=2, silent=silent)
+        return fint
+
+
+    def calc_fext(self, inc=1., silent=False):
+        msg('Calculating external forces for assembly...', level=2, silent=silent)
+        size = self.get_size()
+        fext = 0
+        for p in self.panels:
+            if p.col_start is None:
+                raise ValueError('Panel attributes "col_start" must be defined!')
+            fext += p.calc_fext(inc=inc, size=size, col0=p.col_start, silent=True)
+        self.fext = fext
+        msg('finished!', level=2, silent=silent)
+        return fext

@@ -7,6 +7,7 @@ from compmech.panel import Panel
 from compmech.panel.assembly import PanelAssembly
 from compmech.sparse import make_symmetric
 from compmech.analysis import lb, static
+from compmech.analysis import Analysis
 
 
 def create_cylinder_assy(height, r, stack, plyt, laminaprop,
@@ -51,9 +52,9 @@ def create_cylinder_assy(height, r, stack, plyt, laminaprop,
 
     Returns
     -------
-    assy, conn_dict : tuple
+    assy, conns : tuple
         A tuple containing the assembly and the default connectivity
-        dictionary.
+        list of dictionaries.
 
     """
     if npanels < 2:
@@ -72,24 +73,24 @@ def create_cylinder_assy(height, r, stack, plyt, laminaprop,
             v1ty=1, v1ry=1, v2ty=1, v2ry=1,
             w1ty=1, w1ry=1, w2ty=1, w2ry=1)
         skin.append(panel)
-    conn_dict = []
+    conns = []
     skin_loop = skin + [skin[0]]
     for i in range(len(skin)):
         if i != len(skin) - 1:
             p01 = skin_loop[i]
             p02 = skin_loop[i+1]
-            conn_dict.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=p01.b, ycte2=0))
+            conns.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=p01.b, ycte2=0))
         else:
             p01 = skin_loop[i+1]
             p02 = skin_loop[i]
-            conn_dict.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=0, ycte2=p02.b))
+            conns.append(dict(p1=p01, p2=p02, func='SSycte', ycte1=0, ycte2=p02.b))
     assy = PanelAssembly(skin)
 
-    return assy, conn_dict
+    return assy, conns
 
 
 def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
-        npanels, Nxxs, m=8, n=8):
+        npanels, Nxxs, m=8, n=8, num_eigvalues=20):
     """Linear buckling analysis with a constant Nxx for each panel
 
     See :func:`.create_cylinder_assy` for most parameters.
@@ -98,6 +99,8 @@ def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
     ----------
     Nxxs : list
         A Nxx for each panel.
+    num_eigvalues : int
+        Number of eigenvalues to be extracted.
 
 
     Returns
@@ -114,22 +117,22 @@ def cylinder_compression_lb_Nxx_cte(height, r, stack, plyt, laminaprop,
         :pyobject: test_cylinder_compression_lb_Nxx_cte
 
     """
-    assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
+    assy, conns = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
             laminaprop=laminaprop, npanels=npanels, m=m, n=n)
     if len(Nxxs) != npanels:
         raise ValueError('The length of "Nxxs" must be the same as "npanels"')
     for i, p in enumerate(assy.panels):
         p.Nxx = Nxxs[i]
 
-    k0 = assy.calc_k0(conn_dict)
-    kG = assy.calc_kG0()
+    k0 = assy.calc_k0(conns, silent=True)
+    kG = assy.calc_kG0(silent=True)
     eigvals, eigvecs = lb(k0, kG, tol=0, sparse_solver=True, silent=True,
-             num_eigvalues=20, num_eigvalues_print=5)
+             num_eigvalues=num_eigvalues, num_eigvalues_print=5)
     return assy, eigvals, eigvecs
 
 
 def cylinder_compression_lb_Nxx_from_static(height, r, stack, plyt, laminaprop,
-        npanels, Nxxs, m=8, n=8):
+        npanels, Nxxs, m=8, n=8, num_eigvalues=20):
     """Linear buckling analysis with a Nxx calculated using static analysis
 
     See :func:`.create_cylinder_assy` for most parameters.
@@ -138,6 +141,8 @@ def cylinder_compression_lb_Nxx_from_static(height, r, stack, plyt, laminaprop,
     ----------
     Nxxs : list
         A Nxx for each panel.
+    num_eigvalues : int
+        Number of eigenvalues to be extracted.
 
     Returns
     -------
@@ -153,51 +158,96 @@ def cylinder_compression_lb_Nxx_from_static(height, r, stack, plyt, laminaprop,
         :pyobject: test_cylinder_compression_lb_Nxx_from_static
 
     """
-    assy, conn_dict = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
+    assy, conns = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
             laminaprop=laminaprop, npanels=npanels, m=m, n=n)
     if len(Nxxs) != npanels:
         raise ValueError('The length of "Nxxs" must be the same as "npanels"')
     for i, p in enumerate(assy.panels):
         p.Nxx = Nxxs[i]
         p.u2tx = 1
-    fext = np.zeros(assy.get_size())
+
+    #TODO improve application of distributed loads
     for p in assy.panels:
         Nforces = 1000
         fx = p.Nxx*p.b/(Nforces-1.)
         for i in range(Nforces):
             y = i*p.b/(Nforces-1.)
-            p.add_force(p.a, y, fx, 0, 0)
-        fext[p.col_start: p.col_end] = p.calc_fext(silent=True)
+            if i == 0 or i == (Nforces-1):
+                fx_applied = fx/2.
+            else:
+                fx_applied = fx
+            p.add_force(p.a, y, fx_applied, 0, 0)
 
-    k0 = assy.calc_k0(conn_dict)
+    fext = assy.calc_fext(silent=True)
+
+    k0 = assy.calc_k0(conns)
     incs, cs = static(k0, fext, silent=True)
     c = cs[0]
     kG = assy.calc_kG0(c=c)
 
     eigvals = eigvecs = None
     eigvals, eigvecs = lb(k0, kG, tol=0, sparse_solver=True, silent=True,
-             num_eigvalues=20, num_eigvalues_print=5)
+             num_eigvalues=num_eigvalues, num_eigvalues_print=5)
 
     return assy, c, eigvals, eigvecs
 
 
-def TBD():
-    #skin[1].forces.append([p.a/2, p.b/2, 0, 0, -10])
-    fext = np.zeros(size)
-    for p in skin:
+def cylinder_spla(height, r, stack, plyt, laminaprop,
+        npanels, Nxx, SPLA, m=8, n=8):
+    """Non-linear buckling analysis using a perturbation load as imperfection
+
+    See :func:`.create_cylinder_assy` for most parameters.
+
+    Parameters
+    ----------
+    Nxx : float
+        The applied axial compression load
+    SPLA : float
+        The single perturbation load used to induce the imperfection. Applied
+        at the midle of the cylinder meridian.
+
+    Returns
+    -------
+    assy, c : tuple
+        Assembly, static results.
+
+    Examples
+    --------
+
+    The following example is one of the test cases:
+
+    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder.py
+        :pyobject: test_cylinder_spla
+
+    """
+    assy, conns = create_cylinder_assy(height=height, r=r, stack=stack, plyt=plyt,
+            laminaprop=laminaprop, npanels=npanels, m=m, n=n)
+
+    for i, p in enumerate(assy.panels):
+        p.u2tx = 1
+
+    #TODO improve application of distributed loads
+    for p in assy.panels:
         Nforces = 1000
-        fx = p.Nxx*p.b/(Nforces-1.)
+        fx = Nxx*p.b/(Nforces-1.)
         for i in range(Nforces):
             y = i*p.b/(Nforces-1.)
-            p.add_force(p.a, y, fx, 0, 0)
-        fext[p.col_start: p.col_end] = p.calc_fext(silent=True)
+            if i == 0 or i == (Nforces-1):
+                fx_applied = fx/2.
+            else:
+                fx_applied = fx
+            p.add_force(p.a, y, fx_applied, 0, 0, cte=False)
 
-    incs, cs = static(k0, fext, silent=True)
-    c = cs[0]
-    kG = assy.calc_kG0(c=c)
+    p_spla = assy.panels[0]
+    p_spla.add_force(p_spla.a/2, p_spla.b/2, 0, 0, -SPLA, cte=True)
 
-    eigvals = eigvecs = None
-    eigvals, eigvecs = lb(k0, kG, tol=0, sparse_solver=True, silent=True,
-             num_eigvalues=20, num_eigvalues_print=5)
+    assy.conn = conns
+    analysis = Analysis(assy.calc_fext, assy.calc_k0, assy.calc_fint,
+            assy.calc_kT)
+    analysis.NL_method = 'NR'
+    analysis.modified_NR = False
+    analysis.line_search = False
+    analysis.kT_initial_state = False
+    incs, cs = analysis.static(NLgeom=True)
 
-    return assy, c, eigvals, eigvecs
+    return assy, incs, cs

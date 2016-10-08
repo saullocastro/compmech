@@ -6,3 +6,4 @@ Functions using Assemblies of Panels
 
     tstiff2d.rst
     cylinder_unstiffened.rst
+    cylinder_blade_stiffened.rst

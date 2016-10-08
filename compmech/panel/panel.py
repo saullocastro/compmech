@@ -10,6 +10,7 @@ from scipy.sparse import csr_matrix
 from scipy.sparse.linalg import eigs, eigsh
 from scipy.linalg import eig
 from numpy import linspace, deg2rad
+import matplotlib.cm as cm
 
 import compmech.composite.laminate as laminate
 from compmech.analysis import Analysis
@@ -245,7 +246,7 @@ class Panel(object):
 
 
     def get_size(self):
-        r"""Calculates the size of the stiffness matrices
+        r"""Calculate the size of the stiffness matrices
 
         The size of the stiffness matrices can be interpreted as the number of
         rows or columns, recalling that this will be the size of the Ritz
@@ -271,15 +272,15 @@ class Panel(object):
         xs = np.atleast_1d(np.array(xs, dtype=DOUBLE))
         ys = np.atleast_1d(np.array(ys, dtype=DOUBLE))
         xshape = xs.shape
-        tshape = ys.shape
-        if xshape != tshape:
+        yshape = ys.shape
+        if xshape != yshape:
             raise ValueError('Arrays xs and ys must have the same shape')
         self.Xs = xs
         self.Ys = ys
         xs = np.ascontiguousarray(xs.ravel(), dtype=DOUBLE)
         ys = np.ascontiguousarray(ys.ravel(), dtype=DOUBLE)
 
-        return xs, ys, xshape, tshape
+        return xs, ys, xshape, yshape
 
 
     def _get_lam_F(self):
@@ -621,7 +622,7 @@ class Panel(object):
 
     def lb(self, tol=0, sparse_solver=True, calc_kA=False, silent=False,
            nx=10, ny=10, c=None, ckL=None, Fnxny=None):
-        """Performs a linear buckling analysis
+        """Linear buckling analysis
 
         .. note:: This will be deprecated soon, use
                   :func:`.compmech.analysis.lb`.
@@ -738,7 +739,7 @@ class Panel(object):
 
     def freq(self, atype=4, tol=0, sparse_solver=True, silent=False,
              sort=True, damping=False, reduced_dof=False):
-        """Performs a natural frequency analysis
+        """Natural frequency analysis
 
         .. note:: This will be deprecated soon, use
                   :func:`.compmech.analysis.freq`.
@@ -929,7 +930,7 @@ class Panel(object):
 
 
     def uvw(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the displacement field
+        r"""Calculate the displacement field
 
         For a given full set of Ritz constants ``c``, the displacement
         field is calculated and stored in the parameters
@@ -966,7 +967,7 @@ class Panel(object):
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
 
-        xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
+        xs, ys, xshape, yshape = self._default_field(xs, ys, gridx, gridy)
         fuvw = modelDB.db[self.model]['field'].fuvw
         us, vs, ws, phixs, phiys = fuvw(c, self, xs, ys, self.out_num_cores)
 
@@ -979,8 +980,8 @@ class Panel(object):
         return self.u, self.v, self.w, self.phix, self.phiy
 
 
-    def strain(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the strain field
+    def strain(self, c, xs=None, ys=None, gridx=300, gridy=300, NLterms=True):
+        r"""Calculate the strain field
 
         Parameters
         ----------
@@ -998,40 +999,43 @@ class Panel(object):
         gridy : int, optional
             When ``xs`` and ``ys`` are not supplied, ``gridx`` and ``gridy``
             are used.
+        NLterms : bool
+            Flag to indicate whether non-linear strain components should be considered.
+
+        Returns
+        -------
+        res : dict
+            A dictionary of ``np.ndarrays`` with the keys:
+            ``(x, y, exx, eyy, gxy, kxx, kyy, kxy)``
 
         """
         c = np.ascontiguousarray(c, dtype=DOUBLE)
-
-        xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
-
-        model = self.model
-        NL_kinematics = model.split('_')[1]
-        fstrain = modelDB.db[model]['field'].fstrain
-        e_num = modelDB.db[model]['e_num']
-
-        if 'donnell' in NL_kinematics:
-            int_NL_kinematics = 0
-        elif 'sanders' in NL_kinematics:
-            int_NL_kinematics = 1
-        else:
-            raise NotImplementedError(
-                '{} is not a valid NL_kinematics option'.format(NL_kinematics))
-
-        es = fstrain(c, xs, ys, self.a, self.b, self.m, self.n, self.c0,
-                self.m0, self.n0, self.funcnum, int_NL_kinematics,
-                self.out_num_cores)
-
-        return es.reshape((xshape + (e_num,)))
+        xs, ys, xshape, yshape = self._default_field(xs, ys, gridx, gridy)
+        fstrain = modelDB.db[self.model]['field'].fstrain
+        exx, eyy, gxy, kxx, kyy, kxy = fstrain(c, self, xs, ys, self.out_num_cores, int(NLterms))
+        res = {}
+        res['x'] = xs.reshape(xshape)
+        res['y'] = ys.reshape(yshape)
+        res['exx'] = exx.reshape(xshape)
+        res['eyy'] = eyy.reshape(xshape)
+        res['gxy'] = gxy.reshape(xshape)
+        res['kxx'] = kxx.reshape(xshape)
+        res['kyy'] = kyy.reshape(xshape)
+        res['kxy'] = kxy.reshape(xshape)
+        return res
 
 
-    def stress(self, c, xs=None, ys=None, gridx=300, gridy=300):
-        r"""Calculates the stress field
+    def stress(self, c, F=None, xs=None, ys=None, gridx=300, gridy=300, NLterms=True):
+        r"""Calculate the stress field
 
         Parameters
         ----------
         c : np.ndarray
             The Ritz constants vector to be used for the strain field
             calculation.
+        F : np.ndarray, optional
+            The laminate stiffness matrix. Can be a 6 x 6 (ABD) matrix for
+            homogeneous laminates over the whole domain.
         xs : np.ndarray, optional
             The `x` coordinates where to calculate the strains.
         ys : np.ndarray, optional
@@ -1043,30 +1047,40 @@ class Panel(object):
         gridy : int, optional
             When ``xs`` and ``ys`` are not supplied, ``gridx`` and ``gridy``
             are used.
+        NLterms : bool
+            Flag to indicate whether non-linear strain components should be considered.
+
+        Returns
+        -------
+        res : dict
+            A dictionary of ``np.ndarrays`` with the keys:
+            ``(x, y, Nxx, Nyy, Nxy, Mxx, Myy, Mxy)``
 
         """
-        c = np.ascontiguousarray(c, dtype=DOUBLE)
+        res_strain = self.strain(c, xs, ys, gridx, gridy)
+        x = res_strain['x']
+        y = res_strain['y']
+        exx = res_strain['exx']
+        eyy = res_strain['eyy']
+        gxy = res_strain['gxy']
+        kxx = res_strain['kxx']
+        kyy = res_strain['kyy']
+        kxy = res_strain['kxy']
+        if F is None:
+            F = self.F
+        if F is None:
+            raise ValueError('Laminate ABD matrix not defined for panel')
+        res = {}
+        res['x'] = res_strain['x']
+        res['y'] = res_strain['y']
+        res['Nxx'] = exx*F[0, 0] + eyy*F[0, 1] + gxy*F[0, 2] + kxx*F[0, 3] + kyy*F[0, 4] + kxy*F[0, 5]
+        res['Nyy'] = exx*F[1, 0] + eyy*F[1, 1] + gxy*F[1, 2] + kxx*F[1, 3] + kyy*F[1, 4] + kxy*F[1, 5]
+        res['Nxy'] = exx*F[2, 0] + eyy*F[2, 1] + gxy*F[2, 2] + kxx*F[2, 3] + kyy*F[2, 4] + kxy*F[2, 5]
+        res['Mxx'] = exx*F[3, 0] + eyy*F[3, 1] + gxy*F[3, 2] + kxx*F[3, 3] + kyy*F[3, 4] + kxy*F[3, 5]
+        res['Myy'] = exx*F[4, 0] + eyy*F[4, 1] + gxy*F[4, 2] + kxx*F[4, 3] + kyy*F[4, 4] + kxy*F[4, 5]
+        res['Mxy'] = exx*F[5, 0] + eyy*F[5, 1] + gxy*F[5, 2] + kxx*F[5, 3] + kyy*F[5, 4] + kxy*F[5, 5]
 
-        xs, ys, xshape, tshape = self._default_field(xs, ys, gridx, gridy)
-
-        model = self.model
-        NL_kinematics = model.split('_')[1]
-        fstress = modelDB.db[model]['field'].fstress
-        e_num = modelDB.db[model]['e_num']
-
-        if 'donnell' in NL_kinematics:
-            int_NL_kinematics = 0
-        elif 'sanders' in NL_kinematics:
-            int_NL_kinematics = 1
-        else:
-            raise NotImplementedError(
-                    '{} is not a valid NL_kinematics option'.format(
-                    NL_kinematics))
-        Ns = fstress(c, self.F, xs, ys, self.a, self.b, self.m, self.n,
-                self.c0, self.m0, self.n0,
-                self.funcnum, int_NL_kinematics, self.out_num_cores)
-
-        return Ns.reshape((xshape + (e_num,)))
+        return res
 
 
     def add_force(self, x, y, fx, fy, fz, cte=True):
@@ -1095,8 +1109,8 @@ class Panel(object):
             self.forces_inc.append([x, y, fx, fy, fz])
 
 
-    def calc_fext(self, inc=1., silent=False):
-        """Calculates the external force vector `\{F_{ext}\}`
+    def calc_fext(self, inc=1., size=None, col0=0, silent=False):
+        """Calculate the external force vector `\{F_{ext}\}`
 
         Recall that:
 
@@ -1134,8 +1148,10 @@ class Panel(object):
         dofs = db[model]['dofs']
         fg = db[model]['field'].fg
 
-        size = self.get_size()
-        g = np.zeros((dofs, size), dtype=DOUBLE)
+        if size is None:
+            size = self.get_size()
+        col1 = col0 + self.get_size()
+        g = np.zeros((dofs, self.get_size()), dtype=DOUBLE)
         fext = np.zeros(size, dtype=DOUBLE)
 
         # non-incrementable punctual forces
@@ -1146,7 +1162,7 @@ class Panel(object):
                 fpt = np.array([[fx, fy, fz]])
             elif dofs == 5:
                 fpt = np.array([[fx, fy, fz, 0, 0]])
-            fext += fpt.dot(g).ravel()
+            fext[col0:col1] += fpt.dot(g).ravel()
 
         # incrementable punctual forces
         for i, force in enumerate(self.forces_inc):
@@ -1156,14 +1172,45 @@ class Panel(object):
                 fpt = np.array([[fx, fy, fz]])*inc
             elif dofs == 5: #FSDT
                 fpt = np.array([[fx, fy, fz, 0, 0]])*inc
-            fext += fpt.dot(g).ravel()
+            fext[col0:col1] += fpt.dot(g).ravel()
 
         return fext
 
 
     def calc_fint(self, c, size=None, col0=0, silent=False, nx=None,
             ny=None, Fnxny=None, inc=None):
-        #TODO inc not needed here; otherwise with prescribed displacements
+        """Calculate the internal force vector `\{F_{int}\}`
+
+
+        Parameters
+        ----------
+        c : np.ndarray
+            The Ritz constants vector to be used for the internal forces
+            calculation.
+        size : int, optional
+            The size of the internal force vector. Can be the size of a global
+            internal force vector of an assembly.
+        col0 : int, optional
+            Offset in a global internal forcce vector of an assembly.
+        silent : bool, optional
+            A boolean to tell whether the log messages should be printed.
+        nx : int, optional
+            Number of integration points along `x`.
+        ny : int, optional
+            Number of integration points along `y`.
+        Fnxny : np.ndarray, optional
+            Laminate stiffness for each integration point, if not supplied it
+            will assume constant properties over the panel domain.
+        inc : float, optional
+            Load increment.
+
+        Returns
+        -------
+        fint : np.ndarray
+            The internal force vector
+
+        """
+        #TODO inc not needed here; only with prescribed displacements
         msg('Calculating internal forces...', level=2, silent=silent)
         model = self.model
         if not model in modelDB.db.keys():
@@ -1259,17 +1306,13 @@ class Panel(object):
         return self.analysis.cs
 
 
-    def plot(self, c, invert_y=False, vec='w',
-             deform_u=False, deform_u_sf=100.,
-             filename='',
-             ax=None, figsize=(3.5, 2.), save=True,
-             title='',
-             colorbar=False, cbar_nticks=2, cbar_format=None,
-             cbar_title='', cbar_fontsize=10,
-             aspect='equal', clean=True, dpi=400,
-             texts=[], xs=None, ys=None, gridx=300, gridy=300,
-             num_levels=400, vecmin=None, vecmax=None, plotoffsetxs=0.,
-             plotoffsetys=0.):
+    def plot(self, c, invert_y=False, vec='w', deform_u=False,
+            deform_u_sf=100., filename='', ax=None, figsize=(3.5, 2.),
+            save=True, title='', colorbar=False, cbar_nticks=2,
+            cbar_format=None, cbar_title='', cbar_fontsize=10, colormap='jet',
+            aspect='equal', clean=True, dpi=400, texts=[], xs=None, ys=None,
+            gridx=300, gridy=300, num_levels=400, vecmin=None, vecmax=None,
+            plotoffsetxs=0., plotoffsetys=0.):
         r"""Contour plot for a Ritz constants vector.
 
         Parameters
@@ -1309,10 +1352,12 @@ class Panel(object):
             Number of ticks added to the colorbar.
         cbar_format : [ None | format string | Formatter object ], optional
             See the ``matplotlib.pyplot.colorbar`` documentation.
-        cbar_fontsize : int, optional
-            Fontsize of the colorbar labels.
         cbar_title : str, optional
             Colorbar title. If ``cbar_title == ''`` no title is added.
+        cbar_fontsize : int, optional
+            Fontsize of the colorbar labels.
+        colormap : string, optional
+            Name of a matplotlib available colormap.
         aspect : str, optional
             String that will be passed to the ``AxesSubplot.set_aspect()``
             method.
@@ -1366,11 +1411,11 @@ class Panel(object):
         elif vec in strains:
             es = self.strain(c, xs=xs, ys=ys,
                              gridx=gridx, gridy=gridy)
-            field = es[..., strains.index(vec)]
+            field = es.get(vec)
         elif vec in stresses:
             Ns = self.stress(c, xs=xs, ys=ys,
-                             gridx=gridx, gridy=gridy)
-            field = Ns[..., stresses.index(vec)]
+                             gridx=gridx, gridy=gridy, NLterms=True)
+            field = Ns.get(vec)
         else:
             raise ValueError(
                     '{0} is not a valid vec parameter value!'.format(vec))
@@ -1414,12 +1459,17 @@ class Panel(object):
         if colorbar:
             from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+            colormap_obj = getattr(cm, colormap, None)
+            if colormap_obj is None:
+                warn('Invalid colormap, using "jet"', level=1)
+                colormap_obj = cm.jet
+
             fsize = cbar_fontsize
             divider = make_axes_locatable(ax)
             cax = divider.append_axes('right', size='5%', pad=0.05)
             cbarticks = linspace(vecmin, vecmax, cbar_nticks)
             cbar = plt.colorbar(contour, ticks=cbarticks, format=cbar_format,
-                                cax=cax)
+                                cax=cax, cmap=colormap_obj)
             if cbar_title:
                 cax.text(0.5, 1.05, cbar_title, horizontalalignment='center',
                          verticalalignment='bottom', fontsize=fsize)

@@ -19,7 +19,7 @@ for r in range(5, nmax+1):
         utmp.append((-1)**n*factorial2(2*r - 2*n - 7)/den * xi**(r-2*n-1)/1.)
     u.append(sum(utmp))
 
-with open('../../../C/src/bardell_functions.c', 'w') as f:
+with open('../../../compmech/lib/src/bardell_functions.c', 'w') as f:
     f.write("// Bardell's hierarchical functions\n\n")
     f.write('// Number of terms: {0}\n\n'.format(len(u)))
     f.write('#include <stdlib.h>\n')
@@ -52,7 +52,17 @@ with open('../../../C/src/bardell_functions.c', 'w') as f:
     f.write('}\n')
 
     f.write('\n\n')
+    f.write('EXPORTIT void calc_vec_fxixi(double *fxixi, double xi,\n' +
+            '           double xi1t, double xi1r, double xi2t, double xi2r) {\n')
+    for i in range(len(u)):
+        const = consts.get(i)
+        if const is None:
+            f.write('    fxixi[%d] = %s;\n' % (i, ccode(diff(u[i], xi, xi))))
+        else:
+            f.write('    fxixi[%d] = %s*(%s);\n' % (i, const, ccode(diff(u[i], xi, xi))))
+    f.write('}\n')
 
+    f.write('\n\n')
     f.write('EXPORTIT double calc_f(int i, double xi,\n' +
             '           double xi1t, double xi1r, double xi2t, double xi2r) {\n')
     f.write('    switch(i) {\n')
@@ -113,6 +123,9 @@ with open('../../../compmech/include/bardell_functions.h', 'w') as g:
             '        double xi1t, double xi1r,double xi2t, double xi2r);\n')
     g.write('\n')
     g.write('IMPORTIT void calc_vec_fxi(double *fxi, double xi,\n' +
+            '        double xi1t, double xi1r,double xi2t, double xi2r);\n')
+    g.write('\n')
+    g.write('IMPORTIT void calc_vec_fxixi(double *fxixi, double xi,\n' +
             '        double xi1t, double xi1r,double xi2t, double xi2r);\n')
     g.write('\n')
     g.write('IMPORTIT double calc_f(int i, double xi,\n' +
