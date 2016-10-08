@@ -43,8 +43,8 @@ def test_panel_field_outputs():
 
         p.static()
         c = p.analysis.cs[0]
-        Ns = p.stress(c)
-        es = p.strain(c)
+        Ns = p.stress(c, gridx=50, gridy=50)
+        es = p.strain(c, gridx=50, gridy=50)
         for k, v in strain_field.items():
             if v is None:
                 strain_field[k] = es.get(k).min()
