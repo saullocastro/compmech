@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorials &mdash; CompMech 0.7.0 documentation</title>
+    <title>Tutorials &mdash; CompMech 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
     <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
     <link rel="next" title="References" href="ref.html" />
     <link rel="prev" title="Boundary conditions" href="bcs.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="bcs.html" title="Boundary conditions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
@@ -69,7 +69,7 @@
 any other combination (like <img class="math" src="../../_images/math/c0895a46089688784c74d8236df6300ec6631b35.png" alt="L"/>, <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/>) of the geometric parameters
 that will allow the complete definition of the cone / cylinder geometry.</p>
 <p><strong>Example</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="k">import</span> <span class="n">ConeCyl</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="k">import</span> <span class="n">ConeCyl</span>
 
 <span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
 <span class="n">cc</span><span class="o">.</span><span class="n">r1</span> <span class="o">=</span> <span class="mi">400</span>
@@ -85,16 +85,16 @@ properties given the stacking sequence, the thicknesses  and
 the material properties.</p>
 <p>The <strong>stacking sequence</strong> is passed using a container (<code class="docutils literal"><span class="pre">list</span></code> or <code class="docutils literal"><span class="pre">tuple</span></code>)
 with the orientations of each ply, <strong>from inwards to outwards</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="o">+</span><span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">+</span><span class="mi">30</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="o">+</span><span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">+</span><span class="mi">30</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The ply thickness is passed using a single value when all the plies have the
 same thickness or using a container with the thickness of each ply:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
 </pre></div>
 </div>
 <p><strong>or</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The material properties are given using a tuple:</p>
@@ -104,13 +104,13 @@ same thickness or using a container with the thickness of each ply:</p>
 <img class="math" src="../../_images/math/b538f243a6ccc8dd0461418d790e2916f6f3d309.png" alt="E_{22}"/> the modulus along the direction 2, <img class="math" src="../../_images/math/28d42c5dfa97d18acf412e06eb80951fed23d2f9.png" alt="\nu_{12}"/> the Poisson&#8217;s ratio
 and <img class="math" src="../../_images/math/24548d704a44280d1acecbccc9039af213576a34.png" alt="G_{12}"/>, <img class="math" src="../../_images/math/7eadf0b06cc013ee81a9a12c752f68fc80f9b4e9.png" alt="G_{13}"/>, <img class="math" src="../../_images/math/0e98798c4ea3aa2e0da5139de979e2d3bdef8820.png" alt="G_{23}"/> the shear modules.</p>
 <p><strong>Example</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This will assume the same material properties for each ply. When different
 properties must be used the user must supply the <code class="docutils literal"><span class="pre">laminaprops</span></code> container.</p>
 <p><strong>Example</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">prop1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">prop1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
 <span class="n">prop2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
 <span class="n">prop3</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
 <span class="n">cc</span><span class="o">.</span><span class="n">laminaprops</span> <span class="o">=</span> <span class="p">[</span><span class="n">prop1</span><span class="p">,</span> <span class="n">prop1</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop3</span><span class="p">,</span> <span class="n">prop3</span><span class="p">]</span>
@@ -123,7 +123,7 @@ properties must be used the user must supply the <code class="docutils literal">
 <a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><code class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.static()</span></code></a> method. The following example will
 give an overview of the main steps needed for a linear static analysis.</p>
 <p>Defining the geometry:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="o">-</span><span class="mi">19</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="o">-</span><span class="mi">37</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="o">-</span><span class="mi">51</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">r2</span> <span class="o">=</span> <span class="mf">250.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="mf">510.</span>
@@ -132,8 +132,8 @@ give an overview of the main steps needed for a linear static analysis.</p>
 </pre></div>
 </div>
 <p>Defining the model and boundary conditions:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s">&#39;fsdt_donnell_bc1&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s">&#39;cc1&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;fsdt_donnell_bc1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s1">&#39;cc1&#39;</span>
 </pre></div>
 </div>
 <p>Defining if the analysis is displacement or load controlled by changing
@@ -147,7 +147,7 @@ the boolean parameters <code class="docutils literal"><span class="pre">pd</span
 </div></blockquote>
 <p>Applying the axial compression, pressure, torsion and the single-perturbation
 loads:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">Fc</span> <span class="o">=</span> <span class="mf">10000.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">Fc</span> <span class="o">=</span> <span class="mf">10000.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="mf">100000.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.01</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">add_SPL</span><span class="p">(</span><span class="mf">10.</span><span class="p">)</span>
@@ -155,18 +155,18 @@ loads:</p>
 </pre></div>
 </div>
 <p>Defining the number of terms in the approximation functions:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">m1</span> <span class="o">=</span> <span class="mi">80</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">m1</span> <span class="o">=</span> <span class="mi">80</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">m2</span> <span class="o">=</span> <span class="mi">40</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">n2</span> <span class="o">=</span> <span class="mi">40</span>
 </pre></div>
 </div>
 <p>Running the analysis:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">static</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">static</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The results are stored in the <code class="docutils literal"><span class="pre">cs</span></code> list, and for a linear static analysis
 only one entry exists. Plotting the results:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="section" id="static-analysis">
@@ -178,11 +178,11 @@ of 1-D <code class="docutils literal"><span class="pre">np.ndarray</span></code>
 only one entry while for a non-linear analysis it will contain one entry
 for each iteration needed up to the convergence or up to the termination
 criterion. To access the last result:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The displacement field can be plotted, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s">&#39;my_output.png&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;my_output.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -264,15 +264,15 @@ stored in the <code class="docutils literal"><span class="pre">cs</span></code> 
         <li class="right" >
           <a href="bcs.html" title="Boundary conditions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 30, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Last updated on Oct 08, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

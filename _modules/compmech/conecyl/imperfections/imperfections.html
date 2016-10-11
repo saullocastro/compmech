@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.conecyl.imperfections.imperfections &mdash; CompMech 0.7.0 documentation</title>
+    <title>compmech.conecyl.imperfections.imperfections &mdash; CompMech 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
-    <link rel="top" title="CompMech 0.7.0 documentation" href="../../../../index.html" />
+    <link rel="top" title="CompMech 0.7.1 documentation" href="../../../../index.html" />
     <link rel="up" title="Module code" href="../../../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -49,7 +49,7 @@
           <div class="body" role="main">
             
   <h1>Source code for compmech.conecyl.imperfections.imperfections</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">sample</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -60,13 +60,13 @@
 <span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">def</span> <span class="nf">load_c0</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">):</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMHOME</span><span class="p">,</span> <span class="s">&#39;conecyl&#39;</span><span class="p">,</span> <span class="s">&#39;imperfections&#39;</span><span class="p">,</span> <span class="s">&#39;c0&#39;</span><span class="p">,</span>
-            <span class="s">&#39;c0_{0}_f{1}_m{2:03d}_n{3:03d}.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMHOME</span><span class="p">,</span> <span class="s1">&#39;conecyl&#39;</span><span class="p">,</span> <span class="s1">&#39;imperfections&#39;</span><span class="p">,</span> <span class="s1">&#39;c0&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;c0_{0}_f{1}_m{2:03d}_n{3:03d}.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Coefficient file not found!&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Coefficient file not found!&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="calc_c0"><a class="viewcode-back" href="../../../../modules/conecyl/index.html#compmech.conecyl.imperfections.imperfections.calc_c0">[docs]</a><span class="k">def</span> <span class="nf">calc_c0</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">m0</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
             <span class="n">maxmem</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">offset_w0</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -166,14 +166,14 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="n">input_pts</span> <span class="o">=</span> <span class="n">path</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;unnamed.txt&#39;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;unnamed.txt&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">input_pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">input_pts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Input does not have the format: &quot;theta, x, imp&quot;&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input does not have the format: &quot;theta, x, imp&quot;&#39;</span><span class="p">)</span>
 
-    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finding w0 coefficients for {0},</span><span class="se">\n\t</span><span class="s">using funcnum {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">log</span><span class="p">(</span><span class="s1">&#39;Finding w0 coefficients for {0},</span><span class="se">\n\t</span><span class="s1">using funcnum {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)),</span> <span class="n">funcnum</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">sample_size</span><span class="p">:</span>
@@ -188,14 +188,14 @@
     <span class="k">elif</span> <span class="n">funcnum</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
         <span class="n">size</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Valid values for &quot;funcnum&quot; are 1, 2 or 3&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Valid values for &quot;funcnum&quot; are 1, 2 or 3&#39;</span><span class="p">)</span>
 
     <span class="n">maxnum</span> <span class="o">=</span> <span class="n">maxmem</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">8</span><span class="o">/</span><span class="p">(</span><span class="mi">64</span><span class="o">*</span><span class="n">size</span><span class="o">*</span><span class="n">m0</span><span class="o">*</span><span class="n">n0</span><span class="p">)</span>
     <span class="n">num</span> <span class="o">=</span> <span class="n">input_pts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;=</span> <span class="n">maxnum</span><span class="p">:</span>
         <span class="n">input_pts</span> <span class="o">=</span> <span class="n">input_pts</span><span class="p">[</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">maxnum</span><span class="p">))]</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s">&#39;Reducing sample size from {0} to {1} &#39;</span> <span class="o">+</span>
-             <span class="s">&#39;due to the &quot;maxmem&quot; specified&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Reducing sample size from {0} to {1} &#39;</span> <span class="o">+</span>
+             <span class="s1">&#39;due to the &quot;maxmem&quot; specified&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">maxnum</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">thetas</span> <span class="o">=</span> <span class="n">input_pts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="n">input_pts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
@@ -204,24 +204,24 @@
     <span class="k">if</span> <span class="n">offset_w0</span><span class="p">:</span>
         <span class="n">w0pts</span> <span class="o">+=</span> <span class="n">offset_w0</span>
 
-    <span class="c"># normalizing x</span>
+    <span class="c1"># normalizing x</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="p">(</span><span class="n">xs</span> <span class="o">-</span> <span class="n">xs</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">xs</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">xs</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 
-    <span class="c"># inverting x to cope with the coordsys of the semi-analytical model</span>
+    <span class="c1"># inverting x to cope with the coordsys of the semi-analytical model</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">xs</span>
 
     <span class="n">a</span> <span class="o">=</span> <span class="n">mgi</span><span class="o">.</span><span class="n">fa</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="n">funcnum</span><span class="p">)</span>
-    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Base functions calculated&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">(</span><span class="s1">&#39;Base functions calculated&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">c0</span><span class="p">,</span> <span class="n">residues</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">lstsq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">w0pts</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">MemoryError</span><span class="p">:</span>
-        <span class="n">error</span><span class="p">(</span><span class="s">&#39;Reduce the &quot;maxmem&quot; parameter!&#39;</span><span class="p">)</span>
-    <span class="n">log</span><span class="p">(</span><span class="s">&#39;Finished scipy.linalg.lstsq&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Reduce the &quot;maxmem&quot; parameter!&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">(</span><span class="s1">&#39;Finished scipy.linalg.lstsq&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMHOME</span><span class="p">,</span> <span class="s">&#39;conecyl&#39;</span><span class="p">,</span> <span class="s">&#39;imperfections&#39;</span><span class="p">,</span> <span class="s">&#39;c0&#39;</span><span class="p">,</span>
-                <span class="s">&#39;c0_{0}_f{1}_m{2:03d}_n{3:03d}.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">outpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMHOME</span><span class="p">,</span> <span class="s1">&#39;conecyl&#39;</span><span class="p">,</span> <span class="s1">&#39;imperfections&#39;</span><span class="p">,</span> <span class="s1">&#39;c0&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;c0_{0}_f{1}_m{2:03d}_n{3:03d}.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">name</span><span class="p">,</span> <span class="n">funcnum</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">))</span>
         <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="n">c0</span><span class="p">)</span>
 
@@ -256,7 +256,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">xs_norm</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">ts</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;xs_norm and ts must have the same shape&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;xs_norm and ts must have the same shape&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">funcnum</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
         <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="k">elif</span> <span class="n">funcnum</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
@@ -264,7 +264,7 @@
     <span class="k">elif</span> <span class="n">funcnum</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
         <span class="n">size</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="k">if</span> <span class="n">c0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">size</span><span class="o">*</span><span class="n">m0</span><span class="o">*</span><span class="n">n0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid c0 for the given m0 and n0!&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid c0 for the given m0 and n0!&#39;</span><span class="p">)</span>
     <span class="kn">import</span> <span class="nn">mgi</span>
     <span class="n">w0s</span> <span class="o">=</span> <span class="n">mgi</span><span class="o">.</span><span class="n">fw0</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">xs_norm</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">ts</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">funcnum</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">w0s</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xs_norm</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></div>
@@ -301,14 +301,14 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 30, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Last updated on Oct 11, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

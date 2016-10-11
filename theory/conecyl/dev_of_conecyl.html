@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developing the code for the conecyl module &mdash; CompMech 0.7.0 documentation</title>
+    <title>Developing the code for the conecyl module &mdash; CompMech 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
     <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
     <link rel="next" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
     <link rel="prev" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" /> 
@@ -46,7 +46,7 @@
         <li class="right" >
           <a href="index.html" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
@@ -97,11 +97,11 @@ equations.</p>
 <h2>Integration of the linear matrices<a class="headerlink" href="#integration-of-the-linear-matrices" title="Permalink to this headline">¶</a></h2>
 <p>The linear matrices K0 and KG0 are integrated analytically, and the
 Mathematica routines necessary for this task are named as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span><span class="n">ESL</span> <span class="n">theory</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">equation</span> <span class="nb">type</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">boundary</span> <span class="n">condition</span><span class="p">}</span><span class="n">_linear</span><span class="o">.</span><span class="n">nb</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">ESL</span> <span class="n">theory</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">equation</span> <span class="nb">type</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">boundary</span> <span class="n">condition</span><span class="p">}</span><span class="n">_linear</span><span class="o">.</span><span class="n">nb</span>
 </pre></div>
 </div>
 <p>Each integrated smallest repeatable sub-matrix:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="mi">00</span><span class="p">,</span> <span class="mi">01</span><span class="p">,</span> <span class="mi">02</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span> <span class="ow">and</span> <span class="mi">22</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">00</span><span class="p">,</span> <span class="mi">01</span><span class="p">,</span> <span class="mi">02</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span> <span class="ow">and</span> <span class="mi">22</span>
 </pre></div>
 </div>
 <p>are stored in two text files inside the folder <code class="docutils literal"><span class="pre">./linear_mathematica</span></code>,
@@ -119,7 +119,7 @@ which can be modified by changing the parameters in the
 <code class="docutils literal"><span class="pre">mprint_as_sparse()</span></code> function.</p>
 <p>The integrated sparse matrices are pasted in the corresponding Cython codes,
 currently:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">clpt_donnell_bcX_linear</span><span class="o">.</span><span class="n">pyx</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">clpt_donnell_bcX_linear</span><span class="o">.</span><span class="n">pyx</span>
 <span class="n">clpt_sanders_bcX_linear</span><span class="o">.</span><span class="n">pyx</span>
 <span class="n">fsdt_donnell_bcX_linear</span><span class="o">.</span><span class="n">pyx</span>
 </pre></div>
@@ -131,7 +131,7 @@ currently:</p>
 analytically and their integrands are built for the numerical integration
 algorithms. Mathematica is used to build the integrands, in the routines
 named as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span><span class="n">ESL</span> <span class="n">theory</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">equation</span> <span class="nb">type</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">boundary</span> <span class="n">condition</span><span class="p">}</span><span class="n">_nonlinear</span><span class="o">.</span><span class="n">nb</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">ESL</span> <span class="n">theory</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">equation</span> <span class="nb">type</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">boundary</span> <span class="n">condition</span><span class="p">}</span><span class="n">_nonlinear</span><span class="o">.</span><span class="n">nb</span>
 </pre></div>
 </div>
 <p>The output is printed inside <code class="docutils literal"><span class="pre">./nonlinear_mathematica</span></code> and the routine
@@ -139,11 +139,11 @@ named as:</p>
 that can be directly implemented into Cython, and the new outputs are
 stored in <code class="docutils literal"><span class="pre">./nonlinear_sparse</span></code>.</p>
 <p>For each sub-matrix:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="mi">00</span><span class="p">,</span> <span class="mi">01</span><span class="p">,</span> <span class="mi">02</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">00</span><span class="p">,</span> <span class="mi">01</span><span class="p">,</span> <span class="mi">02</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">22</span>
 </pre></div>
 </div>
 <p>there will be a corresponding file:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">fortran_</span><span class="p">{</span><span class="n">cone</span> <span class="ow">or</span> <span class="n">cylinder</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">matrix</span> <span class="n">name</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">sub</span><span class="o">-</span><span class="n">matrix</span><span class="p">}</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fortran_</span><span class="p">{</span><span class="n">cone</span> <span class="ow">or</span> <span class="n">cylinder</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">matrix</span> <span class="n">name</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">sub</span><span class="o">-</span><span class="n">matrix</span><span class="p">}</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>The sub-matrix is identified by a left and a right digit (<code class="docutils literal"><span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">1</span></code> or
@@ -151,7 +151,7 @@ stored in <code class="docutils literal"><span class="pre">./nonlinear_sparse</s
 sub-matrix refers to.</p>
 <p>The sub-matrices&#8217; integrands are printed in a format ready to be programmed
 using sparse matrices:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span>
 <span class="n">rows</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">cols</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">col</span><span class="o">+</span><span class="mi">4</span>
 <span class="n">out</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span><span class="o">*</span><span class="n">out</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+</span> <span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">p00</span><span class="o">*</span><span class="n">q04</span> <span class="o">+</span> <span class="n">p01</span><span class="o">*</span><span class="n">q14</span> <span class="o">+</span> <span class="n">p02</span><span class="o">*</span><span class="n">q24</span><span class="p">)</span>
@@ -162,25 +162,25 @@ algorithm (they give a pre-calculated weight for the point being integrated),
 <code class="docutils literal"><span class="pre">pij</span></code> are the left <code class="docutils literal"><span class="pre">qij</span></code> the right components of the integrand.</p>
 <p>The definitions of <code class="docutils literal"><span class="pre">pij</span></code> and <code class="docutils literal"><span class="pre">qij</span></code> are given in the corresponding files
 with a <code class="docutils literal"><span class="pre">p</span></code> and a <code class="docutils literal"><span class="pre">q</span></code> character after the matrix name:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">fortran_</span><span class="p">{</span><span class="n">cone</span> <span class="ow">or</span> <span class="n">cylinder</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">matrix</span> <span class="n">name</span><span class="p">}</span><span class="n">p_</span><span class="p">{</span><span class="n">left</span> <span class="n">digit</span><span class="p">}</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fortran_</span><span class="p">{</span><span class="n">cone</span> <span class="ow">or</span> <span class="n">cylinder</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">matrix</span> <span class="n">name</span><span class="p">}</span><span class="n">p_</span><span class="p">{</span><span class="n">left</span> <span class="n">digit</span><span class="p">}</span><span class="o">.</span><span class="n">txt</span>
 <span class="n">fortran_</span><span class="p">{</span><span class="n">cone</span> <span class="ow">or</span> <span class="n">cylinder</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">matrix</span> <span class="n">name</span><span class="p">}</span><span class="n">q_</span><span class="p">{</span><span class="n">right</span> <span class="n">digit</span><span class="p">}</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>For example, to calculate the smallest repeatable sub-matrix <code class="docutils literal"><span class="pre">12</span></code> of
 <code class="docutils literal"><span class="pre">KG</span></code>, first the file:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">fortran_cone_kG_12</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fortran_cone_kG_12</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>should be openened, and the definitions for <code class="docutils literal"><span class="pre">pij</span></code> are found in:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">fortran_cone_kGNLp_1</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fortran_cone_kGNLp_1</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>and the definitions for <code class="docutils literal"><span class="pre">qij</span></code> are found in:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">fortran_cone_kGNLq_2</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fortran_cone_kGNLq_2</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>These are implemented in:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">clpt_donnell_bcX_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">clpt_donnell_bcX_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
 <span class="n">clpt_sanders_bcX_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
 <span class="n">fsdt_donnell_bcX_nonlinear</span><span class="o">.</span><span class="n">pyx</span>
 </pre></div>
@@ -190,15 +190,15 @@ with a <code class="docutils literal"><span class="pre">p</span></code> and a <c
 <h2>Strain Equations<a class="headerlink" href="#strain-equations" title="Permalink to this headline">¶</a></h2>
 <p>When the non-linear integrands are built another file containing the
 strain equations is written:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">fortran_strainFunc</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fortran_strainFunc</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>This file is processed using the routine:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">print_strainFunc</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">print_strainFunc</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>which creates the output files:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">output_strainFunc</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">output_strainFunc</span><span class="o">.</span><span class="n">txt</span>
 <span class="n">output_e0</span><span class="o">.</span><span class="n">txt</span>
 <span class="n">output_eL</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
@@ -206,7 +206,7 @@ strain equations is written:</p>
 <p>the first with the full strain relations, the second with the linear
 and the third with the non-linear strain relations. The format saved
 is easy to implement in the Cython codes:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">clpt_commons_bcX</span><span class="o">.</span><span class="n">pyx</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">clpt_commons_bcX</span><span class="o">.</span><span class="n">pyx</span>
 <span class="n">fsdt_commons_bcX</span><span class="o">.</span><span class="n">pyx</span>
 </pre></div>
 </div>
@@ -228,15 +228,15 @@ to say that computational cost associated
 with the numerical integration of <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> is approximately
 <img class="math" src="../../_images/math/fe02a797055ce3bc794a574b37da80b191be5b59.png" alt="m_2 \times n_2"/> smaller than the integraion of <img class="math" src="../../_images/math/6de489b578ca938805144e2400be7e2773da19ab.png" alt="[K_T]"/>.</p>
 <p>The Mathematica routine:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="p">{</span><span class="n">ESL</span> <span class="n">theory</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">equation</span> <span class="nb">type</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">boundary</span> <span class="n">condition</span><span class="p">}</span><span class="n">_nonlinear</span><span class="o">.</span><span class="n">nb</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">ESL</span> <span class="n">theory</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">equation</span> <span class="nb">type</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">boundary</span> <span class="n">condition</span><span class="p">}</span><span class="n">_nonlinear</span><span class="o">.</span><span class="n">nb</span>
 </pre></div>
 </div>
 <p>produces a file:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">fortran_fint_L0_0L_LL</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">fortran_fint_L0_0L_LL</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>which is post-processed by the routine:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">print_fint_L0_0L_LL</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">print_fint_L0_0L_LL</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>that prints into <code class="docutils literal"><span class="pre">./nonlinear_sparse</span></code> in a ready-to-paste format, that
@@ -309,15 +309,15 @@ is copy-pasted in Cython.</p>
         <li class="right" >
           <a href="index.html" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 30, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Last updated on Oct 08, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

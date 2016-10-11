@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Composite Module (compmech.composite) &mdash; CompMech 0.7.0 documentation</title>
+    <title>Composite Module (compmech.composite) &mdash; CompMech 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
     <link rel="up" title="Modules" href="../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
       </ul>
     </div>  
@@ -55,7 +55,7 @@ laminate properties based on input data of stacking sequence and lamina
 properties.</p>
 <p>The most convenient usage is probably using the
 <a class="reference internal" href="#compmech.composite.laminate.read_stack" title="compmech.composite.laminate.read_stack"><code class="xref py py-func docutils literal"><span class="pre">compmech.composite.laminate.read_stack()</span></code></a> function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">compmech.composite.laminate</span> <span class="k">import</span> <span class="n">read_stack</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compmech.composite.laminate</span> <span class="k">import</span> <span class="n">read_stack</span>
 
 <span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="n">E11</span><span class="p">,</span> <span class="n">E22</span><span class="p">,</span> <span class="n">nu12</span><span class="p">,</span> <span class="n">G12</span><span class="p">,</span> <span class="n">G13</span><span class="p">,</span> <span class="n">G23</span><span class="p">)</span>
 <span class="n">plyt</span> <span class="o">=</span> <span class="n">ply_thickness</span>
@@ -65,12 +65,12 @@ properties.</p>
 </div>
 <p>Where the laminate stiffness matrix, the often called <code class="docutils literal"><span class="pre">ABD</span></code> matrix, with
 <code class="docutils literal"><span class="pre">shape=(6,</span> <span class="pre">6)</span></code>, can be accessed using:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lam</span><span class="o">.</span><span class="n">ABD</span>
 </pre></div>
 </div>
 <p>and when shear stiffnesses are required, the <code class="docutils literal"><span class="pre">ABDE</span></code> matrix, with
 <code class="docutils literal"><span class="pre">shape=(8,</span> <span class="pre">8)</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">lam</span><span class="o">.</span><span class="n">ABDE</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lam</span><span class="o">.</span><span class="n">ABDE</span>
 </pre></div>
 </div>
 <span class="target" id="module-compmech.composite.laminate"></span><div class="section" id="composite-laminate-module-compmech-composite-laminate">
@@ -332,11 +332,11 @@ the laminate properties.</p>
 <p><code class="docutils literal"><span class="pre">plyt</span></code> or <code class="docutils literal"><span class="pre">plyts</span></code> must be supplied
 <code class="docutils literal"><span class="pre">laminaprop</span></code> or <code class="docutils literal"><span class="pre">laminaprops</span></code> must be supplied</p>
 <p>For orthotropic plies, the <code class="docutils literal"><span class="pre">laminaprop</span></code> should be:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="n">E11</span><span class="p">,</span> <span class="n">E22</span><span class="p">,</span> <span class="n">nu12</span><span class="p">,</span> <span class="n">G12</span><span class="p">,</span> <span class="n">G13</span><span class="p">,</span> <span class="n">G23</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="n">E11</span><span class="p">,</span> <span class="n">E22</span><span class="p">,</span> <span class="n">nu12</span><span class="p">,</span> <span class="n">G12</span><span class="p">,</span> <span class="n">G13</span><span class="p">,</span> <span class="n">G23</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For isotropic pliey, the <code class="docutils literal"><span class="pre">laminaprop</span></code> should be:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">nu</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">nu</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -672,14 +672,14 @@ on equation: <img class="math" src="../../_images/math/14df131ea25a1e70bb42df25b
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 30, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Last updated on Oct 08, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

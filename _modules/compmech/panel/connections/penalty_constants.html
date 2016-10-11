@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.panel.connections.penalty_constants &mdash; CompMech 0.7.0 documentation</title>
+    <title>compmech.panel.connections.penalty_constants &mdash; CompMech 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
-    <link rel="top" title="CompMech 0.7.0 documentation" href="../../../../index.html" />
+    <link rel="top" title="CompMech 0.7.1 documentation" href="../../../../index.html" />
     <link rel="up" title="Module code" href="../../../index.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -49,7 +49,7 @@
           <div class="body" role="main">
             
   <h1>Source code for compmech.panel.connections.penalty_constants</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 
 <span class="kn">import</span> <span class="nn">compmech.composite.laminate</span> <span class="kn">as</span> <span class="nn">laminate</span>
 
@@ -82,11 +82,11 @@
         <span class="k">if</span> <span class="n">panel</span><span class="o">.</span><span class="n">lam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="n">panel</span><span class="o">.</span><span class="n">stack</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Panel defined without stacking sequence&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel defined without stacking sequence&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">panel</span><span class="o">.</span><span class="n">plyts</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Panel defined without ply thicknesses&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel defined without ply thicknesses&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">panel</span><span class="o">.</span><span class="n">laminaprops</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Panel defined without laminae properties&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel defined without laminae properties&#39;</span><span class="p">)</span>
         <span class="n">panel</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">laminate</span><span class="o">.</span><span class="n">read_stack</span><span class="p">(</span><span class="n">panel</span><span class="o">.</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="n">panel</span><span class="o">.</span><span class="n">plyts</span><span class="p">,</span>
                 <span class="n">laminaprops</span><span class="o">=</span><span class="n">panel</span><span class="o">.</span><span class="n">laminaprops</span><span class="p">)</span>
         <span class="k">return</span>
@@ -104,15 +104,15 @@
     <span class="n">D22_p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">hp1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span>
     <span class="n">hp2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">lam</span><span class="o">.</span><span class="n">t</span>
-    <span class="k">if</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;xcte&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;xcte&#39;</span><span class="p">:</span>
         <span class="n">kt</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">A11_p1</span><span class="o">*</span><span class="n">A11_p2</span><span class="o">/</span><span class="p">((</span><span class="n">A11_p1</span> <span class="o">+</span> <span class="n">A11_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span>
         <span class="n">kr</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">D11_p1</span><span class="o">*</span><span class="n">D11_p2</span><span class="o">/</span><span class="p">((</span><span class="n">D11_p1</span> <span class="o">+</span> <span class="n">D11_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span>
-    <span class="k">elif</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;ycte&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;ycte&#39;</span><span class="p">:</span>
         <span class="n">kt</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">A22_p1</span><span class="o">*</span><span class="n">A22_p2</span><span class="o">/</span><span class="p">((</span><span class="n">A22_p1</span> <span class="o">+</span> <span class="n">A22_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span>
         <span class="n">kr</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">D22_p1</span><span class="o">*</span><span class="n">D22_p2</span><span class="o">/</span><span class="p">((</span><span class="n">D22_p1</span> <span class="o">+</span> <span class="n">D22_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span>
-    <span class="k">elif</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;bot-top&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">connection_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;bot-top&#39;</span><span class="p">:</span>
         <span class="n">kt</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">A11_p1</span><span class="o">*</span><span class="n">A11_p2</span><span class="o">/</span><span class="p">((</span><span class="n">A11_p1</span> <span class="o">+</span> <span class="n">A11_p2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">hp1</span> <span class="o">+</span> <span class="n">hp2</span><span class="p">))</span> <span class="o">/</span> <span class="nb">min</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">p1</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
         <span class="n">kr</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="n">kt</span><span class="p">,</span> <span class="n">kr</span></div>
@@ -150,14 +150,14 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 30, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Last updated on Oct 11, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

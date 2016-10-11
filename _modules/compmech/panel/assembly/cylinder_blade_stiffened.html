@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.panel.assembly.cylinder &mdash; CompMech 0.7.1 documentation</title>
+    <title>compmech.panel.assembly.cylinder_blade_stiffened &mdash; CompMech 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -48,7 +48,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for compmech.panel.assembly.cylinder</h1><div class="highlight"><pre>
+  <h1>Source code for compmech.panel.assembly.cylinder_blade_stiffened</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -61,22 +61,34 @@
 <span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
 
 
-<div class="viewcode-block" id="create_cylinder_assy"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_unstiffened.html#compmech.panel.assembly.cylinder.create_cylinder_assy">[docs]</a><span class="k">def</span> <span class="nf">create_cylinder_assy</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
-        <span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+<div class="viewcode-block" id="create_cylinder_blade_stiffened"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_blade_stiffened.html#compmech.panel.assembly.cylinder_blade_stiffened.create_cylinder_blade_stiffened">[docs]</a><span class="k">def</span> <span class="nf">create_cylinder_blade_stiffened</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">stack_blades</span><span class="p">,</span>
+        <span class="n">width_blades</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Cylinder Assembly</span>
 
 <span class="sd">    The panel assembly looks like::</span>
 
 
-<span class="sd">        B                             A</span>
+<span class="sd">        B                               A</span>
 <span class="sd">         _______ _______ _______ _______</span>
 <span class="sd">        |       |       |       |       |</span>
 <span class="sd">        |       |       |       |       |</span>
 <span class="sd">        |       |       |       |       |</span>
 <span class="sd">        |  p04  |  p03  |  p02  |  p01  |</span>
-<span class="sd">        |       |       |       |       |    /\  x</span>
-<span class="sd">        |       |       |       |       |    |</span>
-<span class="sd">        |_______|_______|_______|_______|    |</span>
+<span class="sd">        |       |       |       |       |</span>
+<span class="sd">        |       |       |       |       |</span>
+<span class="sd">        |_______|_______|_______|_______|</span>
+
+<span class="sd">        Blade   Blade   Blade   Blade</span>
+<span class="sd">        04      03      02      01</span>
+<span class="sd">         _       _       _       _</span>
+<span class="sd">        | |     | |     | |     | |</span>
+<span class="sd">        | |     | |     | |     | |</span>
+<span class="sd">        | |     | |     | |     | |</span>
+<span class="sd">        | |     | |     | |     | |</span>
+<span class="sd">        |_|     |_|     |_|     |_|</span>
+<span class="sd">                                               x</span>
+<span class="sd">                                             /\</span>
+<span class="sd">                                             |</span>
 <span class="sd">                                             |</span>
 <span class="sd">                                   y  &lt;-------</span>
 
@@ -90,10 +102,14 @@
 <span class="sd">        Cylinder height (along `x`).</span>
 <span class="sd">    r : float</span>
 <span class="sd">        Cylinder radius.</span>
-<span class="sd">    stack : list or tuple</span>
+<span class="sd">    stack : array-like</span>
 <span class="sd">        Stacking sequence for the cylinder.</span>
+<span class="sd">    stack_blades : list of array-like</span>
+<span class="sd">        The stacking sequence for each blade (with length = npanels).</span>
+<span class="sd">    width_blades : array-like</span>
+<span class="sd">        The width for each blade (with length = npanels).</span>
 <span class="sd">    plyt : float</span>
-<span class="sd">        Ply thickness.</span>
+<span class="sd">        Ply thickness (assumed unique for the whole structure).</span>
 <span class="sd">    laminaprop : list or tuple</span>
 <span class="sd">        Orthotropic lamina properties: `E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}`.</span>
 <span class="sd">    npanels : int</span>
@@ -110,7 +126,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">npanels</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;At least two panels are needed&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack_blades</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;stack_blades must have length = npanels&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">width_blades</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;width_blades must have length = npanels&#39;</span><span class="p">)</span>
     <span class="n">skin</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">blades</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">perimiter</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">r</span>
     <span class="n">b_skin</span> <span class="o">=</span> <span class="n">perimiter</span> <span class="o">/</span> <span class="n">npanels</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npanels</span><span class="p">):</span>
@@ -124,6 +145,20 @@
             <span class="n">v1ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v1ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v2ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v2ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">w1ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w1ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w2ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w2ry</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">skin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">panel</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">panel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">skin</span><span class="p">):</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">b_skin</span>
+        <span class="n">blade_name</span> <span class="o">=</span> <span class="s1">&#39;blade_</span><span class="si">%02d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span>
+        <span class="n">blade</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">blade_name</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="n">y0</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+                    <span class="n">b</span><span class="o">=</span><span class="n">width_blades</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span>
+                    <span class="n">stack</span><span class="o">=</span><span class="n">stack_blades</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span>
+                    <span class="n">u1tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u1rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u2tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u2rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">v1tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">v1rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v2tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">v2rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">w1tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">w1rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w2tx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">w2rx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">u1ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u1ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u2ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">u2ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">v1ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v1ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v2ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">v2ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">w1ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w1ry</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w2ty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">w2ry</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">blades</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">blade</span><span class="p">)</span>
+
     <span class="n">conns</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">skin_loop</span> <span class="o">=</span> <span class="n">skin</span> <span class="o">+</span> <span class="p">[</span><span class="n">skin</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">skin</span><span class="p">)):</span>
@@ -135,24 +170,30 @@
             <span class="n">p01</span> <span class="o">=</span> <span class="n">skin_loop</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">p02</span> <span class="o">=</span> <span class="n">skin_loop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">conns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">p1</span><span class="o">=</span><span class="n">p01</span><span class="p">,</span> <span class="n">p2</span><span class="o">=</span><span class="n">p02</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="s1">&#39;SSycte&#39;</span><span class="p">,</span> <span class="n">ycte1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ycte2</span><span class="o">=</span><span class="n">p02</span><span class="o">.</span><span class="n">b</span><span class="p">))</span>
-    <span class="n">assy</span> <span class="o">=</span> <span class="n">PanelAssembly</span><span class="p">(</span><span class="n">skin</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">panel</span><span class="p">,</span> <span class="n">blade</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">skin</span><span class="p">,</span> <span class="n">blades</span><span class="p">):</span>
+        <span class="n">conns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">p1</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span> <span class="n">p2</span><span class="o">=</span><span class="n">blade</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="s1">&#39;BFycte&#39;</span><span class="p">,</span> <span class="n">ycte1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ycte2</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">assy</span> <span class="o">=</span> <span class="n">PanelAssembly</span><span class="p">(</span><span class="n">skin</span> <span class="o">+</span> <span class="n">blades</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">conns</span></div>
 
 
-<div class="viewcode-block" id="cylinder_compression_lb_Nxx_cte"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_unstiffened.html#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_cte">[docs]</a><span class="k">def</span> <span class="nf">cylinder_compression_lb_Nxx_cte</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
-        <span class="n">npanels</span><span class="p">,</span> <span class="n">Nxxs</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<div class="viewcode-block" id="cylinder_blade_stiffened_compression_lb_Nxx_cte"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_blade_stiffened.html#compmech.panel.assembly.cylinder_blade_stiffened.cylinder_blade_stiffened_compression_lb_Nxx_cte">[docs]</a><span class="k">def</span> <span class="nf">cylinder_blade_stiffened_compression_lb_Nxx_cte</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">stack_blades</span><span class="p">,</span>
+        <span class="n">width_blades</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
+        <span class="n">npanels</span><span class="p">,</span> <span class="n">Nxxs_skin</span><span class="p">,</span> <span class="n">Nxxs_blade</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Linear buckling analysis with a constant Nxx for each panel</span>
 
-<span class="sd">    See :func:`.create_cylinder_assy` for most parameters.</span>
+<span class="sd">    See :func:`.create_cylinder_blade_stiffened` for most parameters.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Nxxs : list</span>
-<span class="sd">        A Nxx for each panel.</span>
+<span class="sd">    Nxxs_skin : list</span>
+<span class="sd">        A Nxx for each skin panel.</span>
+<span class="sd">    Nxxs_blade : list</span>
+<span class="sd">        A Nxx for each blade stiffener.</span>
 <span class="sd">    num_eigvalues : int</span>
 <span class="sd">        Number of eigenvalues to be extracted.</span>
-
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -164,16 +205,26 @@
 
 <span class="sd">    The following example is one of the test cases:</span>
 
-<span class="sd">    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder.py</span>
-<span class="sd">        :pyobject: test_cylinder_compression_lb_Nxx_cte</span>
+<span class="sd">    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder_blade_stiffened.py</span>
+<span class="sd">        :pyobject: test_cylinder_blade_stiffened_compression_lb_Nxx_cte</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">assy</span><span class="p">,</span> <span class="n">conns</span> <span class="o">=</span> <span class="n">create_cylinder_assy</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span>
-            <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Nxxs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The length of &quot;Nxxs&quot; must be the same as &quot;npanels&quot;&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">):</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">conns</span> <span class="o">=</span> <span class="n">create_cylinder_blade_stiffened</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span>
+            <span class="n">stack</span><span class="o">=</span><span class="n">stack</span><span class="p">,</span> <span class="n">stack_blades</span><span class="o">=</span><span class="n">stack_blades</span><span class="p">,</span> <span class="n">width_blades</span><span class="o">=</span><span class="n">width_blades</span><span class="p">,</span>
+            <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Nxxs_skin</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The length of &quot;Nxxs_skin&quot; must be the same as &quot;npanels&quot;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Nxxs_blade</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The length of &quot;Nxxs_blade&quot; must be the same as &quot;npanels&quot;&#39;</span><span class="p">)</span>
+    <span class="n">i_skin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">i_blade</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;skin&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="n">i_skin</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs_skin</span><span class="p">[</span><span class="n">i_skin</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s1">&#39;blade&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="n">i_blade</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs_blade</span><span class="p">[</span><span class="n">i_blade</span><span class="p">]</span>
 
     <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conns</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -182,16 +233,20 @@
     <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span></div>
 
 
-<div class="viewcode-block" id="cylinder_compression_lb_Nxx_from_static"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_unstiffened.html#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_from_static">[docs]</a><span class="k">def</span> <span class="nf">cylinder_compression_lb_Nxx_from_static</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
-        <span class="n">npanels</span><span class="p">,</span> <span class="n">Nxxs</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<div class="viewcode-block" id="cylinder_blade_stiffened_compression_lb_Nxx_from_static"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_blade_stiffened.html#compmech.panel.assembly.cylinder_blade_stiffened.cylinder_blade_stiffened_compression_lb_Nxx_from_static">[docs]</a><span class="k">def</span> <span class="nf">cylinder_blade_stiffened_compression_lb_Nxx_from_static</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span>
+        <span class="n">stack_blades</span><span class="p">,</span> <span class="n">width_blades</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="p">,</span> <span class="n">Nxxs_skin</span><span class="p">,</span>
+        <span class="n">Nxxs_blade</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+        <span class="n">num_eigvalues</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Linear buckling analysis with a Nxx calculated using static analysis</span>
 
-<span class="sd">    See :func:`.create_cylinder_assy` for most parameters.</span>
+<span class="sd">    See :func:`.create_cylinder_blade_stiffened` for most parameters.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Nxxs : list</span>
-<span class="sd">        A Nxx for each panel.</span>
+<span class="sd">    Nxxs_skin : list</span>
+<span class="sd">        A Nxx for each skin panel.</span>
+<span class="sd">    Nxxs_blade : list</span>
+<span class="sd">        A Nxx for each blade stiffener.</span>
 <span class="sd">    num_eigvalues : int</span>
 <span class="sd">        Number of eigenvalues to be extracted.</span>
 
@@ -206,16 +261,26 @@
 <span class="sd">    The following example is one of the test cases:</span>
 
 <span class="sd">    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder.py</span>
-<span class="sd">        :pyobject: test_cylinder_compression_lb_Nxx_from_static</span>
+<span class="sd">        :pyobject: test_cylinder_blade_stiffened_compression_lb_Nxx_from_static</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">assy</span><span class="p">,</span> <span class="n">conns</span> <span class="o">=</span> <span class="n">create_cylinder_assy</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span>
-            <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Nxxs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The length of &quot;Nxxs&quot; must be the same as &quot;npanels&quot;&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">):</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">assy</span><span class="p">,</span> <span class="n">conns</span> <span class="o">=</span> <span class="n">create_cylinder_blade_stiffened</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span>
+            <span class="n">stack</span><span class="o">=</span><span class="n">stack</span><span class="p">,</span> <span class="n">stack_blades</span><span class="o">=</span><span class="n">stack_blades</span><span class="p">,</span> <span class="n">width_blades</span><span class="o">=</span><span class="n">width_blades</span><span class="p">,</span>
+            <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Nxxs_skin</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The length of &quot;Nxxs_skin&quot; must be the same as &quot;npanels&quot;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Nxxs_blade</span><span class="p">)</span> <span class="o">!=</span> <span class="n">npanels</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The length of &quot;Nxxs_blade&quot; must be the same as &quot;npanels&quot;&#39;</span><span class="p">)</span>
+    <span class="n">i_skin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">i_blade</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
         <span class="n">p</span><span class="o">.</span><span class="n">u2tx</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="s1">&#39;skin&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="n">i_skin</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs_skin</span><span class="p">[</span><span class="n">i_skin</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s1">&#39;blade&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="n">i_blade</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs_blade</span><span class="p">[</span><span class="n">i_blade</span><span class="p">]</span>
 
     <span class="c1">#TODO improve application of distributed loads</span>
     <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
@@ -231,77 +296,16 @@
 
     <span class="n">fext</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-    <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conns</span><span class="p">)</span>
+    <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conns</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">static</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
     <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">lb</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kG</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
              <span class="n">num_eigvalues</span><span class="o">=</span><span class="n">num_eigvalues</span><span class="p">,</span> <span class="n">num_eigvalues_print</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span></div>
-
-
-<span class="k">def</span> <span class="nf">cylinder_spla</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
-        <span class="n">npanels</span><span class="p">,</span> <span class="n">Nxx</span><span class="p">,</span> <span class="n">SPLA</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Non-linear buckling analysis using a perturbation load as imperfection</span>
-
-<span class="sd">    See :func:`.create_cylinder_assy` for most parameters.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    Nxx : float</span>
-<span class="sd">        The applied axial compression load</span>
-<span class="sd">    SPLA : float</span>
-<span class="sd">        The single perturbation load used to induce the imperfection. Applied</span>
-<span class="sd">        at the midle of the cylinder meridian.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    assy, c : tuple</span>
-<span class="sd">        Assembly, static results.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-
-<span class="sd">    The following example is one of the test cases:</span>
-
-<span class="sd">    .. literalinclude:: ../../../../../compmech/panel/assembly/tests/test_cylinder.py</span>
-<span class="sd">        :pyobject: test_cylinder_spla</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">assy</span><span class="p">,</span> <span class="n">conns</span> <span class="o">=</span> <span class="n">create_cylinder_assy</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="n">plyt</span><span class="p">,</span>
-            <span class="n">laminaprop</span><span class="o">=</span><span class="n">laminaprop</span><span class="p">,</span> <span class="n">npanels</span><span class="o">=</span><span class="n">npanels</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">):</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">u2tx</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="c1">#TODO improve application of distributed loads</span>
-    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
-        <span class="n">Nforces</span> <span class="o">=</span> <span class="mi">1000</span>
-        <span class="n">fx</span> <span class="o">=</span> <span class="n">Nxx</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">Nforces</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nforces</span><span class="p">):</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="p">(</span><span class="n">Nforces</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="p">(</span><span class="n">Nforces</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-                <span class="n">fx_applied</span> <span class="o">=</span> <span class="n">fx</span><span class="o">/</span><span class="mf">2.</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">fx_applied</span> <span class="o">=</span> <span class="n">fx</span>
-            <span class="n">p</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx_applied</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cte</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-
-    <span class="n">p_spla</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">p_spla</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p_spla</span><span class="o">.</span><span class="n">a</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_spla</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">SPLA</span><span class="p">,</span> <span class="n">cte</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-    <span class="n">assy</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">conns</span>
-    <span class="n">analysis</span> <span class="o">=</span> <span class="n">Analysis</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">,</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">,</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">,</span>
-            <span class="n">assy</span><span class="o">.</span><span class="n">calc_kT</span><span class="p">)</span>
-    <span class="n">analysis</span><span class="o">.</span><span class="n">NL_method</span> <span class="o">=</span> <span class="s1">&#39;NR&#39;</span>
-    <span class="n">analysis</span><span class="o">.</span><span class="n">modified_NR</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">analysis</span><span class="o">.</span><span class="n">line_search</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">analysis</span><span class="o">.</span><span class="n">kT_initial_state</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">NLgeom</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span>
 </pre></div>
 
           </div>

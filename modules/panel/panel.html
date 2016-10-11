@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Semi-analytical Models for Panels (compmech.panel) &mdash; CompMech 0.7.0 documentation</title>
+    <title>Semi-analytical Models for Panels (compmech.panel) &mdash; CompMech 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
     <link rel="up" title="Flat Plates, Curved Panels and Assemblies" href="index.html" />
     <link rel="prev" title="Flat Plates, Curved Panels and Assemblies" href="index.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="index.html" title="Flat Plates, Curved Panels and Assemblies"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
       </ul>
@@ -132,11 +132,11 @@ domains.</p>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_cA" title="compmech.panel.panel.Panel.calc_cA"><code class="xref py py-obj docutils literal"><span class="pre">calc_cA</span></code></a>(aeromu[,&nbsp;silent,&nbsp;finalize])</td>
 <td>Calculate the aerodynamic damping matrix using the piston theory</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fext" title="compmech.panel.panel.Panel.calc_fext"><code class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></code></a>([inc,&nbsp;silent])</td>
-<td>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fext" title="compmech.panel.panel.Panel.calc_fext"><code class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></code></a>([inc,&nbsp;size,&nbsp;col0,&nbsp;silent])</td>
+<td>Calculate the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">calc_fint</span></code>(c[,&nbsp;size,&nbsp;col0,&nbsp;silent,&nbsp;nx,&nbsp;ny,&nbsp;...])</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fint" title="compmech.panel.panel.Panel.calc_fint"><code class="xref py py-obj docutils literal"><span class="pre">calc_fint</span></code></a>(c[,&nbsp;size,&nbsp;col0,&nbsp;silent,&nbsp;nx,&nbsp;ny,&nbsp;...])</td>
+<td>Calculate the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_k0" title="compmech.panel.panel.Panel.calc_k0"><code class="xref py py-obj docutils literal"><span class="pre">calc_k0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;...])</td>
 <td>Calculate the constitutive stiffness matrix</td>
@@ -154,13 +154,13 @@ domains.</p>
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.freq" title="compmech.panel.panel.Panel.freq"><code class="xref py py-obj docutils literal"><span class="pre">freq</span></code></a>([atype,&nbsp;tol,&nbsp;sparse_solver,&nbsp;silent,&nbsp;...])</td>
-<td>Performs a natural frequency analysis</td>
+<td>Natural frequency analysis</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.get_size" title="compmech.panel.panel.Panel.get_size"><code class="xref py py-obj docutils literal"><span class="pre">get_size</span></code></a>()</td>
-<td>Calculates the size of the stiffness matrices</td>
+<td>Calculate the size of the stiffness matrices</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.lb" title="compmech.panel.panel.Panel.lb"><code class="xref py py-obj docutils literal"><span class="pre">lb</span></code></a>([tol,&nbsp;sparse_solver,&nbsp;calc_kA,&nbsp;silent,&nbsp;...])</td>
-<td>Performs a linear buckling analysis</td>
+<td>Linear buckling analysis</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.plot" title="compmech.panel.panel.Panel.plot"><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code></a>(c[,&nbsp;invert_y,&nbsp;vec,&nbsp;deform_u,&nbsp;...])</td>
 <td>Contour plot for a Ritz constants vector.</td>
@@ -171,14 +171,14 @@ domains.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.static" title="compmech.panel.panel.Panel.static"><code class="xref py py-obj docutils literal"><span class="pre">static</span></code></a>([NLgeom,&nbsp;silent])</td>
 <td>Static analysis for cones and cylinders</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.strain" title="compmech.panel.panel.Panel.strain"><code class="xref py py-obj docutils literal"><span class="pre">strain</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
-<td>Calculates the strain field</td>
+<tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.strain" title="compmech.panel.panel.Panel.strain"><code class="xref py py-obj docutils literal"><span class="pre">strain</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy,&nbsp;NLterms])</td>
+<td>Calculate the strain field</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.stress" title="compmech.panel.panel.Panel.stress"><code class="xref py py-obj docutils literal"><span class="pre">stress</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
-<td>Calculates the stress field</td>
+<tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.stress" title="compmech.panel.panel.Panel.stress"><code class="xref py py-obj docutils literal"><span class="pre">stress</span></code></a>(c[,&nbsp;F,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy,&nbsp;NLterms])</td>
+<td>Calculate the stress field</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.uvw" title="compmech.panel.panel.Panel.uvw"><code class="xref py py-obj docutils literal"><span class="pre">uvw</span></code></a>(c[,&nbsp;xs,&nbsp;ys,&nbsp;gridx,&nbsp;gridy])</td>
-<td>Calculates the displacement field</td>
+<td>Calculate the displacement field</td>
 </tr>
 </tbody>
 </table>
@@ -229,8 +229,8 @@ analysis.</p>
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.calc_fext">
-<code class="descname">calc_fext</code><span class="sig-paren">(</span><em>inc=1.0</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_fext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_fext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></p>
+<code class="descname">calc_fext</code><span class="sig-paren">(</span><em>inc=1.0</em>, <em>size=None</em>, <em>col0=0</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_fext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_fext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></p>
 <p>Recall that:</p>
 <div class="math">
 <p><img src="../../_images/math/2fb33e9fbe55241dfb49fa663f23e7bc8fe4cd12.png" alt="\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}"/></p>
@@ -254,6 +254,61 @@ analysis.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fext</strong> : np.ndarray</p>
 <blockquote class="last">
 <div><p>The external force vector</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="compmech.panel.panel.Panel.calc_fint">
+<code class="descname">calc_fint</code><span class="sig-paren">(</span><em>c</em>, <em>size=None</em>, <em>col0=0</em>, <em>silent=False</em>, <em>nx=None</em>, <em>ny=None</em>, <em>Fnxny=None</em>, <em>inc=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_fint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_fint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>c</strong> : np.ndarray</p>
+<blockquote>
+<div><p>The Ritz constants vector to be used for the internal forces
+calculation.</p>
+</div></blockquote>
+<p><strong>size</strong> : int, optional</p>
+<blockquote>
+<div><p>The size of the internal force vector. Can be the size of a global
+internal force vector of an assembly.</p>
+</div></blockquote>
+<p><strong>col0</strong> : int, optional</p>
+<blockquote>
+<div><p>Offset in a global internal forcce vector of an assembly.</p>
+</div></blockquote>
+<p><strong>silent</strong> : bool, optional</p>
+<blockquote>
+<div><p>A boolean to tell whether the log messages should be printed.</p>
+</div></blockquote>
+<p><strong>nx</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of integration points along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>.</p>
+</div></blockquote>
+<p><strong>ny</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of integration points along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+</div></blockquote>
+<p><strong>Fnxny</strong> : np.ndarray, optional</p>
+<blockquote>
+<div><p>Laminate stiffness for each integration point, if not supplied it
+will assume constant properties over the panel domain.</p>
+</div></blockquote>
+<p><strong>inc</strong> : float, optional</p>
+<blockquote>
+<div><p>Load increment.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fint</strong> : np.ndarray</p>
+<blockquote class="last">
+<div><p>The internal force vector</p>
 </div></blockquote>
 </td>
 </tr>
@@ -345,7 +400,7 @@ considered.</p>
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.freq">
 <code class="descname">freq</code><span class="sig-paren">(</span><em>atype=4</em>, <em>tol=0</em>, <em>sparse_solver=True</em>, <em>silent=False</em>, <em>sort=True</em>, <em>damping=False</em>, <em>reduced_dof=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.freq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.freq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs a natural frequency analysis</p>
+<dd><p>Natural frequency analysis</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This will be deprecated soon, use
@@ -412,7 +467,7 @@ the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.get_size">
 <code class="descname">get_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.get_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.get_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the size of the stiffness matrices</p>
+<dd><p>Calculate the size of the stiffness matrices</p>
 <p>The size of the stiffness matrices can be interpreted as the number of
 rows or columns, recalling that this will be the size of the Ritz
 constants&#8217; vector <img class="math" src="../../_images/math/4fb833c3c0e0a5bde813b48df6b2ae96af9302aa.png" alt="\{c\}"/>, the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> and
@@ -434,7 +489,7 @@ the external force vector <img class="math" src="../../_images/math/cb43e5db3d9b
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.lb">
 <code class="descname">lb</code><span class="sig-paren">(</span><em>tol=0</em>, <em>sparse_solver=True</em>, <em>calc_kA=False</em>, <em>silent=False</em>, <em>nx=10</em>, <em>ny=10</em>, <em>c=None</em>, <em>ckL=None</em>, <em>Fnxny=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.lb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs a linear buckling analysis</p>
+<dd><p>Linear buckling analysis</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This will be deprecated soon, use
@@ -494,7 +549,7 @@ of the <code class="docutils literal"><span class="pre">Panel</span></code> obje
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>c</em>, <em>invert_y=False</em>, <em>vec='w'</em>, <em>deform_u=False</em>, <em>deform_u_sf=100.0</em>, <em>filename=''</em>, <em>ax=None</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>title=''</em>, <em>colorbar=False</em>, <em>cbar_nticks=2</em>, <em>cbar_format=None</em>, <em>cbar_title=''</em>, <em>cbar_fontsize=10</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=400</em>, <em>texts=[]</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=300</em>, <em>gridy=300</em>, <em>num_levels=400</em>, <em>vecmin=None</em>, <em>vecmax=None</em>, <em>plotoffsetxs=0.0</em>, <em>plotoffsetys=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.plot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>c</em>, <em>invert_y=False</em>, <em>vec='w'</em>, <em>deform_u=False</em>, <em>deform_u_sf=100.0</em>, <em>filename=''</em>, <em>ax=None</em>, <em>figsize=(3.5</em>, <em>2.0)</em>, <em>save=True</em>, <em>title=''</em>, <em>colorbar=False</em>, <em>cbar_nticks=2</em>, <em>cbar_format=None</em>, <em>cbar_title=''</em>, <em>cbar_fontsize=10</em>, <em>colormap='jet'</em>, <em>aspect='equal'</em>, <em>clean=True</em>, <em>dpi=400</em>, <em>texts=[]</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=300</em>, <em>gridy=300</em>, <em>num_levels=400</em>, <em>vecmin=None</em>, <em>vecmax=None</em>, <em>plotoffsetxs=0.0</em>, <em>plotoffsetys=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contour plot for a Ritz constants vector.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -564,13 +619,17 @@ the <img class="math" src="../../_images/math/86ce084fee7aaac111b4c85576e5c0b494
 <blockquote>
 <div><p>See the <code class="docutils literal"><span class="pre">matplotlib.pyplot.colorbar</span></code> documentation.</p>
 </div></blockquote>
+<p><strong>cbar_title</strong> : str, optional</p>
+<blockquote>
+<div><p>Colorbar title. If <code class="docutils literal"><span class="pre">cbar_title</span> <span class="pre">==</span> <span class="pre">''</span></code> no title is added.</p>
+</div></blockquote>
 <p><strong>cbar_fontsize</strong> : int, optional</p>
 <blockquote>
 <div><p>Fontsize of the colorbar labels.</p>
 </div></blockquote>
-<p><strong>cbar_title</strong> : str, optional</p>
+<p><strong>colormap</strong> : string, optional</p>
 <blockquote>
-<div><p>Colorbar title. If <code class="docutils literal"><span class="pre">cbar_title</span> <span class="pre">==</span> <span class="pre">''</span></code> no title is added.</p>
+<div><p>Name of a matplotlib available colormap.</p>
 </div></blockquote>
 <p><strong>aspect</strong> : str, optional</p>
 <blockquote>
@@ -682,8 +741,8 @@ increments used in the non-linear analysis are stored in the
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.strain">
-<code class="descname">strain</code><span class="sig-paren">(</span><em>c</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=300</em>, <em>gridy=300</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.strain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.strain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the strain field</p>
+<code class="descname">strain</code><span class="sig-paren">(</span><em>c</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=300</em>, <em>gridy=300</em>, <em>NLterms=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.strain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.strain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the strain field</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -708,9 +767,20 @@ have the same shape as <code class="docutils literal"><span class="pre">xs</span
 are used.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>When <code class="docutils literal"><span class="pre">xs</span></code> and <code class="docutils literal"><span class="pre">ys</span></code> are not supplied, <code class="docutils literal"><span class="pre">gridx</span></code> and <code class="docutils literal"><span class="pre">gridy</span></code>
 are used.</p>
+</div></blockquote>
+<p><strong>NLterms</strong> : bool</p>
+<blockquote>
+<div><p>Flag to indicate whether non-linear strain components should be considered.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>res</strong> : dict</p>
+<blockquote class="last">
+<div><p>A dictionary of <code class="docutils literal"><span class="pre">np.ndarrays</span></code> with the keys:
+<code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">exx,</span> <span class="pre">eyy,</span> <span class="pre">gxy,</span> <span class="pre">kxx,</span> <span class="pre">kyy,</span> <span class="pre">kxy)</span></code></p>
 </div></blockquote>
 </td>
 </tr>
@@ -720,8 +790,8 @@ are used.</p>
 
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.stress">
-<code class="descname">stress</code><span class="sig-paren">(</span><em>c</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=300</em>, <em>gridy=300</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.stress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.stress" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the stress field</p>
+<code class="descname">stress</code><span class="sig-paren">(</span><em>c</em>, <em>F=None</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=300</em>, <em>gridy=300</em>, <em>NLterms=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.stress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.stress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the stress field</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -730,6 +800,11 @@ are used.</p>
 <blockquote>
 <div><p>The Ritz constants vector to be used for the strain field
 calculation.</p>
+</div></blockquote>
+<p><strong>F</strong> : np.ndarray, optional</p>
+<blockquote>
+<div><p>The laminate stiffness matrix. Can be a 6 x 6 (ABD) matrix for
+homogeneous laminates over the whole domain.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
@@ -746,9 +821,20 @@ have the same shape as <code class="docutils literal"><span class="pre">xs</span
 are used.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>When <code class="docutils literal"><span class="pre">xs</span></code> and <code class="docutils literal"><span class="pre">ys</span></code> are not supplied, <code class="docutils literal"><span class="pre">gridx</span></code> and <code class="docutils literal"><span class="pre">gridy</span></code>
 are used.</p>
+</div></blockquote>
+<p><strong>NLterms</strong> : bool</p>
+<blockquote>
+<div><p>Flag to indicate whether non-linear strain components should be considered.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>res</strong> : dict</p>
+<blockquote class="last">
+<div><p>A dictionary of <code class="docutils literal"><span class="pre">np.ndarrays</span></code> with the keys:
+<code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">Nxx,</span> <span class="pre">Nyy,</span> <span class="pre">Nxy,</span> <span class="pre">Mxx,</span> <span class="pre">Myy,</span> <span class="pre">Mxy)</span></code></p>
 </div></blockquote>
 </td>
 </tr>
@@ -759,7 +845,7 @@ are used.</p>
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.uvw">
 <code class="descname">uvw</code><span class="sig-paren">(</span><em>c</em>, <em>xs=None</em>, <em>ys=None</em>, <em>gridx=300</em>, <em>gridy=300</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.uvw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.uvw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the displacement field</p>
+<dd><p>Calculate the displacement field</p>
 <p>For a given full set of Ritz constants <code class="docutils literal"><span class="pre">c</span></code>, the displacement
 field is calculated and stored in the parameters
 <code class="docutils literal"><span class="pre">u</span></code>, <code class="docutils literal"><span class="pre">v</span></code>, <code class="docutils literal"><span class="pre">w</span></code>, <code class="docutils literal"><span class="pre">phix</span></code>, <code class="docutils literal"><span class="pre">phiy</span></code> of the <code class="docutils literal"><span class="pre">Panel</span></code> object.</p>
@@ -856,15 +942,15 @@ stored as parameters with the same name in the <code class="docutils literal"><s
         <li class="right" >
           <a href="index.html" title="Flat Plates, Curved Panels and Assemblies"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 30, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Last updated on Oct 11, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Panel Connections (compmech.panel.connections) &mdash; CompMech 0.7.0 documentation</title>
+    <title>Panel Connections (compmech.panel.connections) &mdash; CompMech 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
     <link rel="up" title="Flat Plates, Curved Panels and Assemblies" href="index.html" />
     <link rel="next" title="Assembly of Semi-Analytical Models" href="assembly/assembly_intro.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="assembly/assembly_intro.html" title="Assembly of Semi-Analytical Models"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
       </ul>
@@ -60,7 +60,7 @@ approximation functions. Below it is shown the connections currently supported.<
 <div class="section" id="kcbfycte">
 <h2>kCBFycte<a class="headerlink" href="#kcbfycte" title="Permalink to this headline">¶</a></h2>
 <p>Connection of type:</p>
-<div class="highlight-default"><div class="highlight"><pre>                     <span class="n">_</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span>                     <span class="n">_</span>
                       <span class="o">|</span>
   <span class="o">||</span> <span class="o">--&gt;</span> <span class="n">Flange</span>       <span class="o">|</span>
   <span class="o">||</span>                  <span class="o">|-&gt;</span> <span class="n">Can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">model</span> <span class="n">a</span> <span class="n">stiffener</span>
@@ -74,7 +74,7 @@ approximation functions. Below it is shown the connections currently supported.<
 <div class="section" id="kcsb">
 <h2>kCSB<a class="headerlink" href="#kcsb" title="Permalink to this headline">¶</a></h2>
 <p>Connection of type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="o">======</span>        <span class="o">==&gt;</span> <span class="n">base</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">======</span>        <span class="o">==&gt;</span> <span class="n">base</span>
 <span class="o">------</span>        <span class="o">--&gt;</span> <span class="n">skin</span>
 </pre></div>
 </div>
@@ -83,7 +83,7 @@ approximation functions. Below it is shown the connections currently supported.<
 <div class="section" id="kcssxcte">
 <h2>kCSSxcte<a class="headerlink" href="#kcssxcte" title="Permalink to this headline">¶</a></h2>
 <p>Connection of type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">__________</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">__________</span>
 <span class="o">|</span>        <span class="o">|</span>
 <span class="o">|</span>        <span class="o">|</span>      <span class="o">/^</span>\ <span class="n">x2</span>
 <span class="o">|</span>   <span class="n">S2</span>   <span class="o">|</span>       <span class="o">|</span>
@@ -102,7 +102,7 @@ approximation functions. Below it is shown the connections currently supported.<
 <div class="section" id="kcssycte">
 <h2>kCSSycte<a class="headerlink" href="#kcssycte" title="Permalink to this headline">¶</a></h2>
 <p>Connection of type:</p>
-<div class="highlight-default"><div class="highlight"><pre>           <span class="o">/-&gt;</span> <span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">y1</span><span class="o">=</span><span class="n">ycte1</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span>           <span class="o">/-&gt;</span> <span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">y1</span><span class="o">=</span><span class="n">ycte1</span><span class="p">)</span>
           <span class="o">/</span>
          <span class="o">/</span>  <span class="o">/-&gt;</span><span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">y2</span><span class="o">=</span><span class="n">ycte2</span><span class="p">)</span>
 <span class="n">_________</span><span class="o">|</span> <span class="o">|</span><span class="n">_________</span>
@@ -228,15 +228,15 @@ high such that numerical stability issues start to appear.</p>
         <li class="right" >
           <a href="assembly/assembly_intro.html" title="Assembly of Semi-Analytical Models"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.0 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Aug 30, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Last updated on Oct 08, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
     </div>
   </body>
 </html>

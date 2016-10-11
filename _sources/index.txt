@@ -16,7 +16,7 @@ for:
 
 - unstiffened cylindrical and conical shells
 - stiffened and unstiffened panels and plates
-- any general assemble of 2D plates and curved panels
+- any assembly of 2D plates and curved panels
 
 The implementation is based on Python and the low level routines are
 programmed in C and Cython.
@@ -39,8 +39,8 @@ Released Versions
 `All released versions available here
 <https://github.com/compmech/compmech/releases>`_
 
-`Version 0.7.0
-<https://github.com/compmech/compmech/releases/tag/0.7.0>`_
+`Version 0.7.1
+<https://github.com/compmech/compmech/releases/tag/0.7.1>`_
 
 `Version 0.6.6
 <https://github.com/compmech/compmech/releases/tag/0.6.6>`_
