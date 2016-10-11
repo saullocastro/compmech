@@ -1,17 +1,11 @@
-Version 0.7.1
--------------
-- non-linear matrices for PanelAssembly
-- strain / stress calculation for assembly
-
-Version 0.7.2
+Version 0.8.0
 -------------
 - elliptical panel, only with numerical integration
 - parallel processing to compute kT for PanelAssembly
 - strain / stress calculation for all panels
 
-Version 0.8.0
+Version 0.9.0
 -------------
-- allow a constant stress state using static results for linear buckling
 - mass matrices also valid for variable property along domain (perhaps with
   numerical integration)
 - create a boundary class with w1tx etc?
@@ -24,7 +18,7 @@ Version 0.8.0
 - check why plate lb with reduced_dof=True is not the same as plate_w
 - reconsider reading bardell_12 from the C code and reuse in FORTRAN
 
-Version 0.9.0
+Version 0.10.0
 -------------
 - implement CI compilation and test for FORTRANs
 - improve the numerical stability of FORTRAN's eigensolver (cpanelbay)
