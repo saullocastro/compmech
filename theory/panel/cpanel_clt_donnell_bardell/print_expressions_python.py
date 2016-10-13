@@ -15,7 +15,7 @@ var('fAuxi, fBuxi, gAu, gBu, fAu, fBu, gAueta, gBueta')
 var('fAvxi, fBvxi, fAv, fBv, gAv, gBv, gAveta, gBveta')
 var('fAwxixi, fBwxixi, gAw, gBw, fAwxi, fBwxi, gAweta, gBweta')
 var('fAw, fBw, gAwetaeta, gBwetaeta')
-var('r, a, b, Nxx, Nyy, Nxy')
+var('r, a, b, Nxx, Nyy, Nxy, Mxx, Myy, Mxy')
 var('wxi, weta')
 
 subs = {
