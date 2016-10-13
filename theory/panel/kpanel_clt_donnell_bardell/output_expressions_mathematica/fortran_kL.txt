@@ -1,0 +1,147 @@
+List(List((A11*b*fAuxi*fBuxi*gAu*gBu)/a + (a*A66*fAu*fBu*gAueta*gBueta)/b + 
+    A16*(fAu*fBuxi*gAueta*gBu + fAuxi*fBu*gAu*gBueta) + 
+    (A12*b*(fAuxi*fBu + fAu*fBuxi)*gAu*gBu*sina)/(2.*r) + 
+    (a*A26*fAu*fBu*(gAueta*gBu + gAu*gBueta)*sina)/(2.*r) + 
+    (a*A22*b*fAu*fBu*gAu*gBu*sina**2)/(4.*r**2),
+   A12*fAuxi*fBv*gAu*gBveta + (a*A22*fAu*fBv*gAu*gBveta*sina)/(2.*r) + 
+    (A16*b*fAuxi*gAu*((2*fBvxi*gBv)/a - (fBv*gBv*sina)/r))/2. + 
+    A66*fAu*(fBvxi*gAueta*gBv - (a*fBv*gAueta*gBv*sina)/(2.*r)) + 
+    A26*((a*fAu*fBv*gAueta*gBveta)/b + (b*fAu*fBvxi*gAu*gBv*sina)/(2.*r) - 
+       (a*b*fAu*fBv*gAu*gBv*sina**2)/(4.*r**2)),
+   (-2*b*B11*fAuxi*fBwxixi*gAu*gBw)/a**2 + 
+    (B66*fAu*gAueta*gBweta*(-4*fBwxi*r + a*fBw*sina))/(b*r) - 
+    (B22*fAu*gAu*sina*(2*a*fBw*gBwetaeta*r + b**2*fBwxi*gBw*sina))/
+     (2.*b*r**2) - (B12*gAu*(2*a*fAuxi*fBw*gBwetaeta*r + 
+         b**2*(fAuxi*fBwxi + fAu*fBwxixi)*gBw*sina))/(a*b*r) + 
+    (B16*(-2*fAu*fBwxixi*gAueta*gBw*r + 
+         fAuxi*gAu*gBweta*(-4*fBwxi*r + a*fBw*sina)))/(a*r) - 
+    (B26*fAu*(2*b**2*fBwxi*(gAueta*gBw + 2*gAu*gBweta)*r*sina + 
+         a*fBw*(4*gAueta*gBwetaeta*r**2 - b**2*gAu*gBweta*sina**2)))/
+     (2.*b**2*r**2) + (a*A22*fAu*fBw*gAu*sina*
+       (b**2*cosa*gBw + 4*gBweta*r*weta))/(4.*b*r**2) + 
+    (2*A11*b*fAuxi*fBwxi*gAu*gBw*wxi)/a**2 + 
+    (2*A66*fAu*gAueta*(fBwxi*gBw*weta + fBw*gBweta*wxi))/b + 
+    (2*A16*(fAu*fBwxi*gAueta*gBw*wxi + 
+         fAuxi*gAu*(fBwxi*gBw*weta + fBw*gBweta*wxi)))/a + 
+    (A26*fAu*(a*fBw*gAueta*(b**2*cosa*gBw + 4*gBweta*r*weta) + 
+         2*b**2*gAu*sina*(fBwxi*gBw*weta + fBw*gBweta*wxi)))/(2.*b**2*r) + 
+    A12*((2*fAuxi*fBw*gAu*gBweta*weta)/b + 
+       (b*gAu*gBw*(a*cosa*fAuxi*fBw + 2*fAu*fBwxi*sina*wxi))/(2.*a*r))),
+  List(A12*fAv*fBuxi*gAveta*gBu + (a*A22*fAv*fBu*gAveta*gBu*sina)/(2.*r) + 
+    (A16*b*fBuxi*gBu*((2*fAvxi*gAv)/a - (fAv*gAv*sina)/r))/2. + 
+    A66*(fAvxi*fBu*gAv*gBueta - (a*fAv*fBu*gAv*gBueta*sina)/(2.*r)) + 
+    A26*((a*fAv*fBu*gAveta*gBueta)/b + (b*fAvxi*fBu*gAv*gBu*sina)/(2.*r) - 
+       (a*b*fAv*fBu*gAv*gBu*sina**2)/(4.*r**2)),
+   (a*A22*fAv*fBv*gAveta*gBveta)/b + 
+    (A66*b*gAv*gBv*(-2*fAvxi*r + a*fAv*sina)*(-2*fBvxi*r + a*fBv*sina))/
+     (4.*a*r**2) + (A26*(2*fAvxi*fBv*gAv*gBveta*r + 
+         fAv*(2*fBvxi*gAveta*gBv*r - a*fBv*(gAveta*gBv + gAv*gBveta)*sina))\
+)/(2.*r),(-2*B12*fAv*fBwxixi*gAveta*gBw)/a + 
+    (b*B16*fBwxixi*gAv*gBw*(-2*fAvxi*r + a*fAv*sina))/(a**2*r) - 
+    (B66*gAv*gBweta*(-2*fAvxi*r + a*fAv*sina)*(-4*fBwxi*r + a*fBw*sina))/
+     (2.*a*r**2) + B22*fAv*gAveta*
+     ((-2*a*fBw*gBwetaeta)/b**2 - (fBwxi*gBw*sina)/r) + 
+    (B26*(-2*b**2*fAvxi*fBwxi*gAv*gBw*r*sina + 
+         2*a**2*fAv*fBw*(gAveta*gBweta + gAv*gBwetaeta)*r*sina + 
+         a*(-8*fAv*fBwxi*gAveta*gBweta*r**2 - 
+            4*fAvxi*fBw*gAv*gBwetaeta*r**2 + b**2*fAv*fBwxi*gAv*gBw*sina**2\
+)))/(2.*a*b*r**2) + (a*A22*fAv*gAveta*
+       ((cosa*fBw*gBw)/r + (4*fBw*gBweta*weta)/b**2))/2. + 
+    (2*A12*fAv*fBwxi*gAveta*gBw*wxi)/a + 
+    (A16*b*fBwxi*gAv*gBw*(2*fAvxi*r - a*fAv*sina)*wxi)/(a**2*r) + 
+    A66*((2*fAvxi*gAv)/a - (fAv*gAv*sina)/r)*
+     (fBwxi*gBw*weta + fBw*gBweta*wxi) + 
+    (a*A26*b*(((2*fAvxi*gAv)/a - (fAv*gAv*sina)/r)*
+          ((cosa*fBw*gBw)/r + (4*fBw*gBweta*weta)/b**2) + 
+         (8*fAv*gAveta*(fBwxi*gBw*weta + fBw*gBweta*wxi))/(a*b**2)))/4.),
+  List((-2*b*B11*fAwxixi*fBuxi*gAw*gBu)/a**2 + 
+    (B66*fBu*gAweta*gBueta*(-4*fAwxi*r + a*fAw*sina))/(b*r) - 
+    (B22*fBu*gBu*sina*(2*a*fAw*gAwetaeta*r + b**2*fAwxi*gAw*sina))/
+     (2.*b*r**2) - (B12*gBu*(2*a*fAw*fBuxi*gAwetaeta*r + 
+         b**2*(fAwxixi*fBu + fAwxi*fBuxi)*gAw*sina))/(a*b*r) + 
+    (B16*(-4*fAwxi*fBuxi*gAweta*gBu*r - 2*fAwxixi*fBu*gAw*gBueta*r + 
+         a*fAw*fBuxi*gAweta*gBu*sina))/(a*r) - 
+    (B26*fBu*(2*b**2*fAwxi*(2*gAweta*gBu + gAw*gBueta)*r*sina + 
+         a*fAw*(4*gAwetaeta*gBueta*r**2 - b**2*gAweta*gBu*sina**2)))/
+     (2.*b**2*r**2) + (a*A22*fAw*fBu*gBu*sina*
+       (b**2*cosa*gAw + 4*gAweta*r*weta))/(4.*b*r**2) + 
+    (2*A11*b*fAwxi*fBuxi*gAw*gBu*wxi)/a**2 + 
+    (2*A66*fBu*gBueta*(fAwxi*gAw*weta + fAw*gAweta*wxi))/b + 
+    (A26*fBu*(a*fAw*gBueta*(b**2*cosa*gAw + 4*gAweta*r*weta) + 
+         2*b**2*gBu*sina*(fAwxi*gAw*weta + fAw*gAweta*wxi)))/(2.*b**2*r) + 
+    (2*A16*(fAw*fBuxi*gAweta*gBu*wxi + 
+         fAwxi*gAw*(fBuxi*gBu*weta + fBu*gBueta*wxi)))/a + 
+    A12*((2*fAw*fBuxi*gAweta*gBu*weta)/b + 
+       (b*gAw*gBu*(a*cosa*fAw*fBuxi + 2*fAwxi*fBu*sina*wxi))/(2.*a*r)),
+   (-2*B12*fAwxixi*fBv*gAw*gBveta)/a + 
+    (b*B16*fAwxixi*gAw*gBv*(-2*fBvxi*r + a*fBv*sina))/(a**2*r) - 
+    (B66*gAweta*gBv*(-4*fAwxi*r + a*fAw*sina)*(-2*fBvxi*r + a*fBv*sina))/
+     (2.*a*r**2) + B22*fBv*gBveta*
+     ((-2*a*fAw*gAwetaeta)/b**2 - (fAwxi*gAw*sina)/r) + 
+    (B26*(-2*b**2*fAwxi*fBvxi*gAw*gBv*r*sina + 
+         2*a**2*fAw*fBv*(gAwetaeta*gBv + gAweta*gBveta)*r*sina + 
+         a*(-4*fAw*fBvxi*gAwetaeta*gBv*r**2 + 
+            fAwxi*fBv*(-8*gAweta*gBveta*r**2 + b**2*gAw*gBv*sina**2))))/
+     (2.*a*b*r**2) + (a*A22*fBv*gBveta*
+       ((cosa*fAw*gAw)/r + (4*fAw*gAweta*weta)/b**2))/2. + 
+    (2*A12*fAwxi*fBv*gAw*gBveta*wxi)/a + 
+    (A16*b*fAwxi*gAw*gBv*(2*fBvxi*r - a*fBv*sina)*wxi)/(a**2*r) + 
+    A66*((2*fBvxi*gBv)/a - (fBv*gBv*sina)/r)*
+     (fAwxi*gAw*weta + fAw*gAweta*wxi) + 
+    (a*A26*b*(((2*fBvxi*gBv)/a - (fBv*gBv*sina)/r)*
+          ((cosa*fAw*gAw)/r + (4*fAw*gAweta*weta)/b**2) + 
+         (8*fBv*gBveta*(fAwxi*gAw*weta + fAw*gAweta*wxi))/(a*b**2)))/4.,
+   (4*b*D11*fAwxixi*fBwxixi*gAw*gBw)/a**3 + 
+    (D66*gAweta*gBweta*(-4*fAwxi*r + a*fAw*sina)*(-4*fBwxi*r + a*fBw*sina))/
+     (a*b*r**2) + (D22*(2*a*fAw*gAwetaeta*r + b**2*fAwxi*gAw*sina)*
+       (2*a*fBw*gBwetaeta*r + b**2*fBwxi*gBw*sina))/(a*b**3*r**2) + 
+    (2*D12*(2*a*(fAw*fBwxixi*gAwetaeta*gBw + fAwxixi*fBw*gAw*gBwetaeta)*r + 
+         b**2*(fAwxixi*fBwxi + fAwxi*fBwxixi)*gAw*gBw*sina))/(a**2*b*r) - 
+    (2*D16*(-4*fAwxi*fBwxixi*gAweta*gBw*r + a*fAw*fBwxixi*gAweta*gBw*sina + 
+         fAwxixi*gAw*gBweta*(-4*fBwxi*r + a*fBw*sina)))/(a**2*r) + 
+    (D26*(4*b**2*fAwxi*fBwxi*(gAweta*gBw + gAw*gBweta)*r*sina - 
+         2*a**2*fAw*fBw*(gAwetaeta*gBweta + gAweta*gBwetaeta)*r*sina + 
+         a*(fAw*fBwxi*(8*gAwetaeta*gBweta*r**2 - b**2*gAweta*gBw*sina**2) + 
+            fAwxi*fBw*(8*gAweta*gBwetaeta*r**2 - b**2*gAw*gBweta*sina**2))))/
+     (a*b**2*r**2) + (a*A22*fAw*fBw*(b**2*cosa*gAw + 4*gAweta*r*weta)*
+       (b**2*cosa*gBw + 4*gBweta*r*weta))/(4.*b**3*r**2) - 
+    (B22*(b**2*sina*(b**2*cosa*(fAwxi*fBw + fAw*fBwxi)*gAw*gBw + 
+            4*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta)*r*weta) + 
+         2*a*fAw*fBw*r*(b**2*cosa*(gAwetaeta*gBw + gAw*gBwetaeta) + 
+            4*(gAwetaeta*gBweta + gAweta*gBwetaeta)*r*weta)))/(2.*b**3*r**2) \
+- (4*b*B11*(fAwxixi*fBwxi + fAwxi*fBwxixi)*gAw*gBw*wxi)/a**3 + 
+    (A12*(b**2*cosa*(fAwxi*fBw + fAw*fBwxi)*gAw*gBw + 
+         4*(fAw*fBwxi*gAweta*gBw + fAwxi*fBw*gAw*gBweta)*r*weta)*wxi)/(a*b*r) \
++ (4*A11*b*fAwxi*fBwxi*gAw*gBw*wxi**2)/a**3 + 
+    (4*A66*(fAwxi*gAw*weta + fAw*gAweta*wxi)*
+       (fBwxi*gBw*weta + fBw*gBweta*wxi))/(a*b) + 
+    (4*A16*wxi*(fAw*fBwxi*gAweta*gBw*wxi + 
+         fAwxi*gAw*(2*fBwxi*gBw*weta + fBw*gBweta*wxi)))/a**2 + 
+    (2*B16*(fAw*gAweta*gBw*(-2*fBwxixi*r + a*fBwxi*sina)*wxi - 
+         2*fAwxixi*gAw*r*(fBwxi*gBw*weta + fBw*gBweta*wxi) + 
+         fAwxi*(-2*fBwxixi*gAw*gBw*r*weta + 
+            (-4*fBwxi*(gAweta*gBw + gAw*gBweta)*r + a*fBw*gAw*gBweta*sina)*
+             wxi)))/(a**2*r) + (A26*
+       (4*r*weta*(fAwxi*fBw*gAw*gBweta*weta + 
+            fAw*gAweta*(fBwxi*gBw*weta + 2*fBw*gBweta*wxi)) + 
+         b**2*cosa*(fAwxi*fBw*gAw*gBw*weta + 
+            fAw*(fBwxi*gAw*gBw*weta + fBw*gAweta*gBw*wxi + 
+               fBw*gAw*gBweta*wxi))))/(b**2*r) - 
+    (B12*(4*b**2*fAwxi*fBwxi*gAw*gBw*sina*wxi + 
+         a*(b**2*cosa*(fAwxixi*fBw + fAw*fBwxixi)*gAw*gBw + 
+            4*r*(fAw*fBwxixi*gAweta*gBw*weta + 
+               fAwxixi*fBw*gAw*gBweta*weta + fAw*fBwxi*gAwetaeta*gBw*wxi + 
+               fAwxi*fBw*gAw*gBwetaeta*wxi))))/(a**2*b*r) + 
+    (2*B66*(fAw*gAweta*(-4*fBwxi*gBweta*r*wxi + 
+            a*sina*(fBwxi*gBw*weta + 2*fBw*gBweta*wxi)) + 
+         fAwxi*(-4*fBwxi*(gAweta*gBw + gAw*gBweta)*r*weta + 
+            fBw*gBweta*(a*gAw*sina*weta - 4*gAweta*r*wxi))))/(a*b*r) + 
+    (B26*(a**2*fAw*fBw*sina*(b**2*cosa*(gAweta*gBw + gAw*gBweta) + 
+            8*gAweta*gBweta*r*weta) - 
+         4*b**2*r*sina*(fAw*fBwxi*gAweta*gBw*wxi + 
+            fAwxi*gAw*(2*fBwxi*gBw*weta + fBw*gBweta*wxi)) - 
+         4*a*r*(b**2*cosa*(fAwxi*fBw*gAweta*gBw + fAw*fBwxi*gAw*gBweta) + 
+            2*r*(fAwxi*fBw*(2*gAweta*gBweta + gAw*gBwetaeta)*weta + 
+               fAw*(fBwxi*gAwetaeta*gBw*weta + 2*fBwxi*gAweta*gBweta*weta + 
+                  fBw*gAwetaeta*gBweta*wxi + fBw*gAweta*gBwetaeta*wxi)))))/
+     (2.*a*b**2*r**2)))
