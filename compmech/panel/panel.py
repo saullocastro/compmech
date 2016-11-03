@@ -405,7 +405,7 @@ class Panel(object):
                 if c is None:
                     # Empty c if the interest is only on the heterogeneous
                     # laminate properties
-                    c = np.zeros(self.size, dtype=DOUBLE)
+                    c = np.zeros(size, dtype=DOUBLE)
                 c = np.ascontiguousarray(c, dtype=DOUBLE)
                 k0 = matrices_num.fkL_num(c, Fnxny, self,
                          size, row0, col0, nx, ny, NLgeom=int(NLgeom))
