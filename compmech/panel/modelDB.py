@@ -14,9 +14,10 @@ db = {
     'kpanel_clt_donnell_bardell': {
                     'linear static': True,
                     'linear buckling': True,
-                    'non-linear static': False,
+                    'non-linear static': True,
                     'field': clt_bardell_field,
                     'matrices': kpanel_clt_donnell_bardell,
+                    'matrices_num': kpanel_clt_donnell_bardell_num,
                     'dofs': 3,
                     'e_num': 6,
                     'num': 3,
