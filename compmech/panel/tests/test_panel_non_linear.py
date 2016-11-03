@@ -10,7 +10,9 @@ def test_kT():
            [8, 9], [9, 8]]
     for m, n in mns:
         for model in ['plate_clt_donnell_bardell',
-                      'cpanel_clt_donnell_bardell']:
+                      'cpanel_clt_donnell_bardell',
+                      'kpanel_clt_donnell_bardell',
+                      ]:
             p = Panel()
             p.model = model
             p.w1tx = 0
@@ -20,6 +22,7 @@ def test_kT():
             p.a = 2.
             p.b = 0.5
             p.r = 10
+            p.alphadeg = 1.e-16
             p.stack = [0, 90, -45, +45]
             p.plyt = 1e-3*0.125
             p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
@@ -41,14 +44,15 @@ def test_kT():
 
             error = np.abs(kT-k0).sum()
 
-            assert error < 1.e-7
+            assert error < 1.e-6
 
 
 def test_fint():
     m = 6
     n = 6
     for model in ['plate_clt_donnell_bardell',
-                  'cpanel_clt_donnell_bardell'
+                  'cpanel_clt_donnell_bardell',
+                  'kpanel_clt_donnell_bardell',
                   ]:
         p = Panel()
         p.model = model
@@ -60,6 +64,7 @@ def test_fint():
         p.a = 2.
         p.b = 1.
         p.r = 1.e5
+        p.alphadeg = 1.e-16
         p.stack = [0, 90, -45, +45]
         p.plyt = 1e-3*0.125
         p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
@@ -79,11 +84,76 @@ def test_fint():
 
         p.static(NLgeom=True, silent=True)
         c = p.analysis.cs[0]
-        p.plot(c, vec='w', filename='tmp_test_non_linear.png', colorbar=True)
-
+        p.plot(c, vec='w', filename='tmp_test_non_linear_%s.png' % model, colorbar=True)
 
         p.uvw(p.analysis.cs[0])
         assert np.isclose(p.w.max(), 0.000144768080125, rtol=0.001)
+
+
+def test_NL_plate():
+    for model in ['plate_clt_donnell_bardell',
+                  'cpanel_clt_donnell_bardell',
+                  'kpanel_clt_donnell_bardell']:
+        p = Panel(m=6, n=6)
+        p.model = model
+        p.a = 4.
+        p.b = 2.
+        p.r = 1.e5
+        p.alphadeg = 0.
+
+        p.u1ty = 1
+        p.u2ty = 1
+        p.u1tx = 1
+        p.u2tx = 0
+
+        p.u1rx = 1
+        p.u2rx = 1
+        p.u1ry = 1
+        p.u2ry = 1
+
+        p.v1tx = 1
+        p.v2tx = 1
+        p.v1ty = 1
+        p.v2ty = 1
+
+        p.v1rx = 1
+        p.v2rx = 1
+        p.v1ry = 1
+        p.v2ry = 1
+
+        p.w1rx = 1
+        p.w2rx = 1
+        p.w1ry = 1
+        p.w2ry = 1
+
+        p.w1tx = 0
+        p.w2tx = 0
+        p.w1ty = 0
+        p.w2ty = 0
+
+        p.nx = 10
+        p.ny = 10
+        p.stack = [0, 90, -45, +45, +45, -45, 90, 0]
+        p.plyt = 1e-3*0.125
+        p.laminaprop = (142.5e9, 8.7e9, 0.28, 5.1e9, 5.1e9, 5.1e9)
+
+        P = 10.
+        npts = 1000
+        p.forces_inc = []
+        for y in np.linspace(0, p.b, npts):
+            p.forces_inc.append([0., y, P/(npts-1.), 0, 0])
+        p.forces_inc[0][2] /= 2.
+        p.forces_inc[-1][2] /= 2.
+        p.forces_inc.append([p.a/2., p.b/2., 0, 0, 1])
+
+        p.static(NLgeom=True, silent=False)
+
+        c = p.analysis.cs[-1]
+        p.plot(c, vec='w', filename='temp_test_NL_plate_%s.png' % model,
+                colorbar=True)
+
+        p.uvw(p.analysis.cs[-1])
+        assert np.isclose(p.w.max(), 0.004945, rtol=0.01)
 
 
 if __name__ == '__main__':
