@@ -269,7 +269,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef double w1ty, w1ry, w2ty, w2ry
 
     cdef int i, k, j, l, c, row, col, ptx, pty
-    cdef double xi, eta, x, y, weight
+    cdef double xi, eta, weight
 
     cdef np.ndarray[cINT, ndim=1] kGr, kGc
     cdef np.ndarray[cDOUBLE, ndim=1] kGv
