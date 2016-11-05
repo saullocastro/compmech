@@ -393,7 +393,9 @@ class Panel(object):
                 'Partial domain from y1 to y2 not implemented for kL')
             k0 = matrices.fk0y1y2(self.y1, self.y2, self, size, row0, col0)
         else:
-            if c is None and Fnxny is None:
+            #NOTE forcing kpanel to use numerical integration, which showed to
+            #     be faster
+            if c is None and Fnxny is None and not 'kpanel' in self.model:
                 k0 = matrices.fk0(self, size, row0, col0)
             else:
                 matrices_num = modelDB.db[self.model]['matrices_num']
