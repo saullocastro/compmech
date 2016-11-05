@@ -836,25 +836,6 @@ class StiffPanelBay(object):
         m = self.m
         n = self.n
         size = self.get_size()
-
-        if self.beta is None:
-            if self.Mach < 1:
-                raise ValueError('Mach number must be >= 1')
-            elif self.Mach == 1:
-                self.Mach = 1.0001
-            Mach = self.Mach
-            beta = self.rho_air * self.V**2 / (Mach**2 - 1)**0.5
-            if r != 0.:
-                gamma = beta*1./(2.*self.r*(Mach**2 - 1)**0.5)
-            else:
-                gamma = 0.
-            ainf = self.speed_sound
-            aeromu = beta/(Mach*ainf)*(Mach**2 - 2)/(Mach**2 - 1)
-        else:
-            beta = self.beta
-            gamma = self.gamma if self.gamma is not None else 0.
-            aeromu = self.aeromu if self.aeromu is not None else 0.
-
         # contributions from panels
         #TODO summing up coo_matrix objects may be slow!
         #FIXME this only works if the first panel represent the full
@@ -872,6 +853,8 @@ class StiffPanelBay(object):
         p.size = self.size
         p.V = self.V
         p.r = self.r
+        p.beta = self.beta
+        p.gamma = self.gamma
         p.calc_kA(silent=True, finalize=False)
         kA = p.kA
 
