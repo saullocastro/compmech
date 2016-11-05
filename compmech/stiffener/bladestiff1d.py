@@ -80,6 +80,7 @@ class BladeStiff1D(object):
 
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
         hb = 0.
+        bay = self.bay
         if self.bstack is not None:
             hb = sum(self.bplyts)
             y1 = self.ys - self.bb/2.
