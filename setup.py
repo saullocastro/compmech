@@ -46,7 +46,7 @@ Operating System :: Unix
 
 MAJOR = 0
 MINOR = 7
-MICRO = 1
+MICRO = 2
 ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
