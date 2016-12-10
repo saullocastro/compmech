@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Boundary conditions &mdash; CompMech 0.7.1 documentation</title>
+    <title>Boundary conditions &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="FSDT - First-order Shear Deformation Theory" href="fsdt.html" /> 
   </head>
@@ -46,9 +47,9 @@
         <li class="right" >
           <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -63,7 +64,7 @@
 boundary conditions.</p>
 <p>The simply-supported boundary conditions are:</p>
 <div class="math">
-<p><img src="../../_images/math/b6810c44afab6667ae964351c467407aaeedd0ab.png" alt="\begin{tabular}{l c r}
+<p><span class="math">\begin{tabular}{l c r}
     Name &amp; Displ. Vector &amp; Elastic Constants \\
     \hline
     SS1  &amp; $u=v=w=0$        &amp; $K^u=K^v=K^w=\infty$ \\
@@ -77,10 +78,10 @@ boundary conditions.</p>
     \hline
     SS4  &amp; $w=0$            &amp; $K^w=\infty$ \\
          &amp;                  &amp; $K^u=K^v=K^{\phi_x}=K^{\phi_\theta}=0$
-\end{tabular}"/></p>
+\end{tabular}</span></p>
 </div><p>and the clamped are:</p>
 <div class="math">
-<p><img src="../../_images/math/4b1cf4828faf64fdb0f1379eab511454fd5e6ab7.png" alt="\begin{tabular}{l c r}
+<p><span class="math">\begin{tabular}{l c r}
     Name &amp; Displ. Vector &amp; Elastic Constants \\
     \hline
     CC1  &amp; $u=v=w=w_{,x}=0$ &amp; $K^u=K^v=K^w=K^{\phi_x}=\infty$ \\
@@ -94,7 +95,7 @@ boundary conditions.</p>
     \hline
     CC4  &amp; $w=w_{,x}=0$     &amp; $K^w=K^{\phi_x}=\infty$ \\
          &amp;                  &amp; $K^u=K^v=K^{\phi_\theta}=0$
-\end{tabular}"/></p>
+\end{tabular}</span></p>
 </div><div class="section" id="using-the-default-boundary-conditions">
 <h2>Using the default boundary conditions<a class="headerlink" href="#using-the-default-boundary-conditions" title="Permalink to this headline">¶</a></h2>
 <p>The analyst may set the boundary conditions specifying the parameter <code class="docutils literal"><span class="pre">bc</span></code>
@@ -130,13 +131,13 @@ ajusted in order to provide the right set of boundary conditions, as shown
 in the table above. The table below shows the models that can be used for each
 boundary condition:</p>
 <div class="math">
-<p><img src="../../_images/math/7e49159199ed54fe6fef8534c06381ce6a3af4d4.png" alt="\begin{tabular}{l c r}
+<p><span class="math">\begin{tabular}{l c r}
     Name       &amp; Model         \\ \hline
     SS1 / CC1  &amp; bc2, bc3, bc4 \\ \hline
     SS2 / CC2  &amp; bc2, bc4      \\ \hline
     SS3 / CC3  &amp; bc3, bc4      \\ \hline
     SS4 / CC4  &amp; bc4
-\end{tabular}"/></p>
+\end{tabular}</span></p>
 </div><p>Note that the models <code class="docutils literal"><span class="pre">bc4</span></code> can be used for all the cases listed above. It
 is expected that <strong>more terms are required</strong> in the approximation when
 a model from another group is used.</p>
@@ -190,7 +191,7 @@ will affect only models <a class="reference internal" href="clpt.html#clpt-donne
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/conecyl/bcs.txt"
+      <li><a href="../../_sources/theory/conecyl/bcs.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -223,15 +224,15 @@ will affect only models <a class="reference internal" href="clpt.html#clpt-donne
         <li class="right" >
           <a href="fsdt.html" title="FSDT - First-order Shear Deformation Theory"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

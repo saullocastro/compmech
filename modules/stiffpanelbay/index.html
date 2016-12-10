@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Stiffened Panel Bay (compmech.stiffpanelbay) &mdash; CompMech 0.7.1 documentation</title>
+    <title>Stiffened Panel Bay (compmech.stiffpanelbay) &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Modules" href="../index.html" /> 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,8 +39,8 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -53,8 +54,8 @@
 <p>Main features:</p>
 <ul class="simple">
 <li>possibility to use many panels with different properties. In such case the
-panels are separated by their <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> (circumferential) coordinate. Usually
-there is a stiffener positioned at the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> coordinate between two panels.</li>
+panels are separated by their <span class="math">y</span> (circumferential) coordinate. Usually
+there is a stiffener positioned at the <span class="math">y</span> coordinate between two panels.</li>
 <li>possibility to use stiffeners (blade) modeled with 1D or 2D formulation.</li>
 </ul>
 <dl class="class">
@@ -94,7 +95,7 @@ Controlled by the parameter <code class="docutils literal"><span class="pre">flo
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.calc_fext" title="compmech.stiffpanelbay.StiffPanelBay.calc_fext"><code class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></code></a>([silent])</td>
-<td>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></td>
+<td>Calculates the external force vector <span class="math">\{F_{ext}\}</span></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">calc_k0</span></code>([silent])</td>
 <td></td>
@@ -271,11 +272,11 @@ used.</p>
 </div></blockquote>
 <p><strong>mf</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>.</p>
+<div><p>Number of approximation terms for flange, along <span class="math">x</span>.</p>
 </div></blockquote>
 <p><strong>nf</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+<div><p>Number of approximation terms for flange, along <span class="math">y</span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -298,11 +299,11 @@ used.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>y1</strong> : float</p>
 <blockquote>
-<div><p>Position of the first panel edge along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+<div><p>Position of the first panel edge along <span class="math">y</span>.</p>
 </div></blockquote>
 <p><strong>y2</strong> : float</p>
 <blockquote>
-<div><p>Position of the second panel edge along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+<div><p>Position of the second panel edge along <span class="math">y</span>.</p>
 </div></blockquote>
 <p><strong>stack</strong> : list, optional</p>
 <blockquote>
@@ -412,19 +413,19 @@ used.</p>
 </div></blockquote>
 <p><strong>mb</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of approximation terms for base, along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>.</p>
+<div><p>Number of approximation terms for base, along <span class="math">x</span>.</p>
 </div></blockquote>
 <p><strong>nb</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of approximation terms for base, along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+<div><p>Number of approximation terms for base, along <span class="math">y</span>.</p>
 </div></blockquote>
 <p><strong>mf</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>.</p>
+<div><p>Number of approximation terms for flange, along <span class="math">x</span>.</p>
 </div></blockquote>
 <p><strong>nf</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+<div><p>Number of approximation terms for flange, along <span class="math">y</span>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -440,7 +441,7 @@ used.</p>
 <dl class="method">
 <dt id="compmech.stiffpanelbay.StiffPanelBay.calc_fext">
 <code class="descname">calc_fext</code><span class="sig-paren">(</span><em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.calc_fext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.calc_fext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></p>
+<dd><p>Calculates the external force vector <span class="math">\{F_{ext}\}</span></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -467,10 +468,10 @@ used.</p>
 <dd><p>Calculate the size of the stiffness matrices</p>
 <p>The size of the stiffness matrices can be interpreted as the number of
 rows or columns, recalling that this will be the size of the Ritz
-constants&#8217; vector <img class="math" src="../../_images/math/4fb833c3c0e0a5bde813b48df6b2ae96af9302aa.png" alt="\{c\}"/>, the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> and
-the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/>.</p>
+constants&#8217; vector <span class="math">\{c\}</span>, the internal force vector <span class="math">\{F_{int}\}</span> and
+the external force vector <span class="math">\{F_{ext}\}</span>.</p>
 <p>It takes into account the independent degrees of freedom from each of
-the <img class="math" src="../../_images/math/5635362133de4e53eb9d1f639c2a20c0dead86ee.png" alt=".Stiffener2D"/> objects that belong to the current assembly.</p>
+the <span class="math">.Stiffener2D</span> objects that belong to the current assembly.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -518,7 +519,7 @@ the <img class="math" src="../../_images/math/5635362133de4e53eb9d1f639c2a20c0de
 </div></blockquote>
 <p><strong>invert_y</strong> : bool, optional</p>
 <blockquote>
-<div><p>Inverts the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> axis of the plot. It may be used to match
+<div><p>Inverts the <span class="math">y</span> axis of the plot. It may be used to match
 the coordinate system of the finite element models created
 using the <code class="docutils literal"><span class="pre">desicos.abaqus</span></code> module.</p>
 </div></blockquote>
@@ -530,8 +531,8 @@ For cones all the following types can be used:</p>
 <li><code class="docutils literal"><span class="pre">1</span></code>: concave up (with <code class="docutils literal"><span class="pre">invert_y=False</span></code>) (default)</li>
 <li><code class="docutils literal"><span class="pre">2</span></code>: concave down (with <code class="docutils literal"><span class="pre">invert_y=False</span></code>)</li>
 <li><code class="docutils literal"><span class="pre">3</span></code>: stretched closed</li>
-<li><code class="docutils literal"><span class="pre">4</span></code>: stretched opened (<img class="math" src="../../_images/math/8f7f5cb8c465f48b72d814282b3894252c996291.png" alt="r \times y"/> vs. <img class="math" src="../../_images/math/249c1fddd2eec332fd845995935a0fab6e13a44d.png" alt="a"/>)</li>
-<li><code class="docutils literal"><span class="pre">5</span></code>: stretched opened (<img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> vs. <img class="math" src="../../_images/math/249c1fddd2eec332fd845995935a0fab6e13a44d.png" alt="a"/>)</li>
+<li><code class="docutils literal"><span class="pre">4</span></code>: stretched opened (<span class="math">r \times y</span> vs. <span class="math">a</span>)</li>
+<li><code class="docutils literal"><span class="pre">5</span></code>: stretched opened (<span class="math">y</span> vs. <span class="math">a</span>)</li>
 </ul>
 </div></blockquote>
 <p><strong>save</strong> : bool, optional</p>
@@ -545,7 +546,7 @@ For cones all the following types can be used:</p>
 <p><strong>filename</strong> : str, optional</p>
 <blockquote>
 <div><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../_images/math/86ce084fee7aaac111b4c85576e5c0b49483efe0.png" alt="name"/> parameter of the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal"><span class="pre">StiffPanelBay</span></code></a> object
+the <span class="math">name</span> parameter of the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal"><span class="pre">StiffPanelBay</span></code></a> object
 will be used.</p>
 </div></blockquote>
 <p><strong>ax</strong> : AxesSubplot, optional</p>
@@ -591,7 +592,7 @@ method.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray, optional</p>
@@ -601,12 +602,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>num_levels</strong> : int, optional</p>
@@ -681,7 +682,7 @@ if needed.</p>
 </div></blockquote>
 <p><strong>invert_y</strong> : bool, optional</p>
 <blockquote>
-<div><p>Inverts the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> axis of the plot. It may be used to match
+<div><p>Inverts the <span class="math">y</span> axis of the plot. It may be used to match
 the coordinate system of the finite element models created
 using the <code class="docutils literal"><span class="pre">desicos.abaqus</span></code> module.</p>
 </div></blockquote>
@@ -693,8 +694,8 @@ For cones all the following types can be used:</p>
 <li><code class="docutils literal"><span class="pre">1</span></code>: concave up (with <code class="docutils literal"><span class="pre">invert_y=False</span></code>) (default)</li>
 <li><code class="docutils literal"><span class="pre">2</span></code>: concave down (with <code class="docutils literal"><span class="pre">invert_y=False</span></code>)</li>
 <li><code class="docutils literal"><span class="pre">3</span></code>: stretched closed</li>
-<li><code class="docutils literal"><span class="pre">4</span></code>: stretched opened (<img class="math" src="../../_images/math/8f7f5cb8c465f48b72d814282b3894252c996291.png" alt="r \times y"/> vs. <img class="math" src="../../_images/math/249c1fddd2eec332fd845995935a0fab6e13a44d.png" alt="a"/>)</li>
-<li><code class="docutils literal"><span class="pre">5</span></code>: stretched opened (<img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> vs. <img class="math" src="../../_images/math/249c1fddd2eec332fd845995935a0fab6e13a44d.png" alt="a"/>)</li>
+<li><code class="docutils literal"><span class="pre">4</span></code>: stretched opened (<span class="math">r \times y</span> vs. <span class="math">a</span>)</li>
+<li><code class="docutils literal"><span class="pre">5</span></code>: stretched opened (<span class="math">y</span> vs. <span class="math">a</span>)</li>
 </ul>
 </div></blockquote>
 <p><strong>save</strong> : bool, optional</p>
@@ -708,7 +709,7 @@ For cones all the following types can be used:</p>
 <p><strong>filename</strong> : str, optional</p>
 <blockquote>
 <div><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../_images/math/86ce084fee7aaac111b4c85576e5c0b49483efe0.png" alt="name"/> parameter of the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal"><span class="pre">StiffPanelBay</span></code></a> object
+the <span class="math">name</span> parameter of the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal"><span class="pre">StiffPanelBay</span></code></a> object
 will be used.</p>
 </div></blockquote>
 <p><strong>ax</strong> : AxesSubplot, optional</p>
@@ -754,7 +755,7 @@ method.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray, optional</p>
@@ -764,12 +765,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>num_levels</strong> : int, optional</p>
@@ -831,7 +832,7 @@ field is calculated and stored in the parameters
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray</p>
@@ -841,12 +842,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 </td>
@@ -892,7 +893,7 @@ field is calculated and stored in the parameters
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray</p>
@@ -902,12 +903,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 </td>
@@ -943,7 +944,7 @@ stored as parameters with the same name in the
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/stiffpanelbay/index.txt"
+      <li><a href="../../_sources/modules/stiffpanelbay/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -970,14 +971,14 @@ stored as parameters with the same name in the
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Composite Module (compmech.composite) &mdash; CompMech 0.7.1 documentation</title>
+    <title>Composite Module (compmech.composite) &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Modules" href="../index.html" /> 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,8 +39,8 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -220,7 +221,7 @@ transverse shear terms.</p>
 <dt id="compmech.composite.laminate.Laminate.force_balanced_LP">
 <code class="descname">force_balanced_LP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/composite/laminate.html#Laminate.force_balanced_LP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.composite.laminate.Laminate.force_balanced_LP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Force balanced lamination parameters</p>
-<p>The lamination parameters <img class="math" src="../../_images/math/e24cd6bf67eda43fc2f74722e09cd5178912e401.png" alt="\xi_{A2}"/> and <img class="math" src="../../_images/math/c9723a59d3ac0d65786aecdc8ca48c80cc89201a.png" alt="\xi_{A4}"/> are set to null
+<p>The lamination parameters <span class="math">\xi_{A2}</span> and <span class="math">\xi_{A4}</span> are set to null
 to force a balanced laminate.</p>
 </dd></dl>
 
@@ -229,9 +230,9 @@ to force a balanced laminate.</p>
 <code class="descname">force_orthotropic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/composite/laminate.html#Laminate.force_orthotropic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.composite.laminate.Laminate.force_orthotropic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Force an orthotropic laminate</p>
 <p>The terms
-<img class="math" src="../../_images/math/0276f0905a387fc3fcbc16c439b5279dcc7852ee.png" alt="A_{13}"/>, <img class="math" src="../../_images/math/e78f92287241f17105b5ffca1aa4767d92f121c6.png" alt="A_{23}"/>, <img class="math" src="../../_images/math/3e90f5c80dc43b8444d9dd9553174dc1a33b18f6.png" alt="A_{31}"/>, <img class="math" src="../../_images/math/21ac8dcd0f832a842d180c05648bdfa7a7fa2808.png" alt="A_{32}"/>,
-<img class="math" src="../../_images/math/b4c683b38b5406f1cddc077e451b0234924c27ba.png" alt="B_{13}"/>, <img class="math" src="../../_images/math/37544313a661270d0fc57e6a5550f5db2b0fe113.png" alt="B_{23}"/>, <img class="math" src="../../_images/math/d696e11004727b8e590d8f31784cf1074d6c5642.png" alt="B_{31}"/>, <img class="math" src="../../_images/math/504939a51b97fbbf22eadf78d24828fd273a1e39.png" alt="B_{32}"/>,
-<img class="math" src="../../_images/math/b8daa997c1dd34c8fa9873e28dad7816a16acadb.png" alt="D_{13}"/>, <img class="math" src="../../_images/math/3d7b1da6fcfd382c97e981cf5666032953ad01a8.png" alt="D_{23}"/>, <img class="math" src="../../_images/math/ec85dd0c24ceb36ea92bde16bc4a69aa4904f643.png" alt="D_{31}"/>, <img class="math" src="../../_images/math/cbefc1b38db8d31e845ce7a1891e2c1d9760990c.png" alt="D_{32}"/> are set to zero to force an
+<span class="math">A_{13}</span>, <span class="math">A_{23}</span>, <span class="math">A_{31}</span>, <span class="math">A_{32}</span>,
+<span class="math">B_{13}</span>, <span class="math">B_{23}</span>, <span class="math">B_{31}</span>, <span class="math">B_{32}</span>,
+<span class="math">D_{13}</span>, <span class="math">D_{23}</span>, <span class="math">D_{31}</span>, <span class="math">D_{32}</span> are set to zero to force an
 orthotropic laminate.</p>
 </dd></dl>
 
@@ -239,14 +240,14 @@ orthotropic laminate.</p>
 <dt id="compmech.composite.laminate.Laminate.force_symmetric">
 <code class="descname">force_symmetric</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/composite/laminate.html#Laminate.force_symmetric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.composite.laminate.Laminate.force_symmetric" title="Permalink to this definition">¶</a></dt>
 <dd><p>Force a symmetric laminate</p>
-<p>The <img class="math" src="../../_images/math/6ca90f2dcedbe7eba390a1d20219a78c9aad37b0.png" alt="B"/> terms of the constitutive matrix are set to zero.</p>
+<p>The <span class="math">B</span> terms of the constitutive matrix are set to zero.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="compmech.composite.laminate.Laminate.force_symmetric_LP">
 <code class="descname">force_symmetric_LP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/composite/laminate.html#Laminate.force_symmetric_LP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.composite.laminate.Laminate.force_symmetric_LP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Force symmetric lamination parameters</p>
-<p>The lamination parameters <img class="math" src="../../_images/math/0de5779e2e54fc0171f6f4c5a229528e5b8cb941.png" alt="\xi_{Bi}"/> are set to null
+<p>The lamination parameters <span class="math">\xi_{Bi}</span> are set to null
 to force a symmetric laminate.</p>
 </dd></dl>
 
@@ -257,9 +258,9 @@ to force a symmetric laminate.</p>
 <code class="descclassname">compmech.composite.laminate.</code><code class="descname">read_lamination_parameters</code><span class="sig-paren">(</span><em>thickness</em>, <em>laminaprop</em>, <em>xiA1</em>, <em>xiA2</em>, <em>xiA3</em>, <em>xiA4</em>, <em>xiB1</em>, <em>xiB2</em>, <em>xiB3</em>, <em>xiB4</em>, <em>xiD1</em>, <em>xiD2</em>, <em>xiD3</em>, <em>xiD4</em>, <em>xiE1</em>, <em>xiE2</em>, <em>xiE3</em>, <em>xiE4</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/composite/laminate.html#read_lamination_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.composite.laminate.read_lamination_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a laminate based on the lamination parameters.</p>
 <p>The lamination parameters:
-<img class="math" src="../../_images/math/c4dd0dddbee59b3507eea99c1261e4d040e5a0b7.png" alt="\xi_{A1} \cdots \xi_{A4}"/>,  <img class="math" src="../../_images/math/862fa2fe0c7f37832df96b7c389dfd441b42608d.png" alt="\xi_{B1} \cdots \xi_{B4}"/>,
-<img class="math" src="../../_images/math/e5dbaf4f314a96d15a831cfa31773645dcfd2c1b.png" alt="\xi_{C1} \cdots \xi_{C4}"/>,  <img class="math" src="../../_images/math/ad6b5f37daf255faaddd653863229aa336580e6b.png" alt="\xi_{D1} \cdots \xi_{D4}"/>,
-<img class="math" src="../../_images/math/655f634aa364e47d3f0f2a77853698994a9a0d7a.png" alt="\xi_{E1} \cdots \xi_{E4}"/></p>
+<span class="math">\xi_{A1} \cdots \xi_{A4}</span>,  <span class="math">\xi_{B1} \cdots \xi_{B4}</span>,
+<span class="math">\xi_{C1} \cdots \xi_{C4}</span>,  <span class="math">\xi_{D1} \cdots \xi_{D4}</span>,
+<span class="math">\xi_{E1} \cdots \xi_{E4}</span></p>
 <p>are used to calculate the laminate constitutive matrix.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -524,10 +525,10 @@ the laminate properties.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>For isotropic materials when the user defines <img class="math" src="../../_images/math/e04967a4f3d341f9a00fc61d2bfe67931041a0bf.png" alt="\nu"/> and <img class="math" src="../../_images/math/480467fb04e0e9bf2d8eb8110365454f15c5dfbe.png" alt="E"/>, <img class="math" src="../../_images/math/3ecfa5c09f122aaf63542b6a968956cde2feb944.png" alt="G"/> will be
-recaculated based on equation: <img class="math" src="../../_images/math/57fc40f9c9a601d541aebf2073e74627ace09a45.png" alt="G = E/(2 \times (1+\nu))"/>; in a lower
-priority if the user defines <img class="math" src="../../_images/math/e04967a4f3d341f9a00fc61d2bfe67931041a0bf.png" alt="\nu"/> and <img class="math" src="../../_images/math/3ecfa5c09f122aaf63542b6a968956cde2feb944.png" alt="G"/>, <img class="math" src="../../_images/math/480467fb04e0e9bf2d8eb8110365454f15c5dfbe.png" alt="E"/> will be recaculated based
-on equation: <img class="math" src="../../_images/math/14df131ea25a1e70bb42df25b91aded28df7f7a8.png" alt="E = 2 \times (1+\nu) \times G"/>.</p>
+<p>For isotropic materials when the user defines <span class="math">\nu</span> and <span class="math">E</span>, <span class="math">G</span> will be
+recaculated based on equation: <span class="math">G = E/(2 \times (1+\nu))</span>; in a lower
+priority if the user defines <span class="math">\nu</span> and <span class="math">G</span>, <span class="math">E</span> will be recaculated based
+on equation: <span class="math">E = 2 \times (1+\nu) \times G</span>.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -645,7 +646,7 @@ on equation: <img class="math" src="../../_images/math/14df131ea25a1e70bb42df25b
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/composite/index.txt"
+      <li><a href="../../_sources/modules/composite/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -672,14 +673,14 @@ on equation: <img class="math" src="../../_images/math/14df131ea25a1e70bb42df25b
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Semi-analytical Models for Panels (compmech.panel) &mdash; CompMech 0.7.1 documentation</title>
+    <title>Semi-analytical Models for Panels (compmech.panel) &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Flat Plates, Curved Panels and Assemblies" href="index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="prev" title="Flat Plates, Curved Panels and Assemblies" href="index.html" /> 
   </head>
   <body role="document">
@@ -42,9 +43,9 @@
         <li class="right" >
           <a href="index.html" title="Flat Plates, Curved Panels and Assemblies"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Flat Plates, Curved Panels and Assemblies</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -70,11 +71,11 @@ model is selected according to parameters <code class="docutils literal"><span c
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : float, optional</p>
 <blockquote>
-<div><p>Length (along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinate).</p>
+<div><p>Length (along the <span class="math">x</span> coordinate).</p>
 </div></blockquote>
 <p><strong>b</strong> : float, optional</p>
 <blockquote>
-<div><p>Width (along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> coordinate).</p>
+<div><p>Width (along the <span class="math">y</span> coordinate).</p>
 </div></blockquote>
 <p><strong>r</strong> : float, optional</p>
 <blockquote>
@@ -94,7 +95,7 @@ model is selected according to parameters <code class="docutils literal"><span c
 </div></blockquote>
 <p><strong>laminaprop</strong> : list or tuple, optional</p>
 <blockquote>
-<div><p>Orthotropic lamina properties: <img class="math" src="../../_images/math/4cfe776bc9ce20038d7eb49036c0658bc6518039.png" alt="E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}"/>.</p>
+<div><p>Orthotropic lamina properties: <span class="math">E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}</span>.</p>
 </div></blockquote>
 <p><strong>mu</strong> : float, optional</p>
 <blockquote>
@@ -102,17 +103,17 @@ model is selected according to parameters <code class="docutils literal"><span c
 </div></blockquote>
 <p><strong>m, n</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of terms for the approximation functions along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>,
+<div><p>Number of terms for the approximation functions along <span class="math">x</span> and <span class="math">y</span>,
 respectively.</p>
 </div></blockquote>
 <p><strong>offset</strong> : float, optional</p>
 <blockquote>
 <div><p>Laminate offset about panel mid-surface. The offset is measured along
-the normal (<img class="math" src="../../_images/math/eb4fcf2ea15c365948abb172ed3693fbc10b3b4a.png" alt="z"/>) axis.</p>
+the normal (<span class="math">z</span>) axis.</p>
 </div></blockquote>
 <p><strong>y1, y2</strong> : float, optional</p>
 <blockquote class="last">
-<div><p>Define the lower and upper limit along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> for panel with incomplete
+<div><p>Define the lower and upper limit along <span class="math">y</span> for panel with incomplete
 domains.</p>
 </div></blockquote>
 </td>
@@ -133,10 +134,10 @@ domains.</p>
 <td>Calculate the aerodynamic damping matrix using the piston theory</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fext" title="compmech.panel.panel.Panel.calc_fext"><code class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></code></a>([inc,&nbsp;size,&nbsp;col0,&nbsp;silent])</td>
-<td>Calculate the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></td>
+<td>Calculate the external force vector <span class="math">\{F_{ext}\}</span></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fint" title="compmech.panel.panel.Panel.calc_fint"><code class="xref py py-obj docutils literal"><span class="pre">calc_fint</span></code></a>(c[,&nbsp;size,&nbsp;col0,&nbsp;silent,&nbsp;nx,&nbsp;ny,&nbsp;...])</td>
-<td>Calculate the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></td>
+<td>Calculate the internal force vector <span class="math">\{F_{int}\}</span></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.panel.panel.Panel.calc_k0" title="compmech.panel.panel.Panel.calc_k0"><code class="xref py py-obj docutils literal"><span class="pre">calc_k0</span></code></a>([size,&nbsp;row0,&nbsp;col0,&nbsp;silent,&nbsp;...])</td>
 <td>Calculate the constitutive stiffness matrix</td>
@@ -192,23 +193,23 @@ domains.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> position.</p>
+<div><p>The <span class="math">x</span> position.</p>
 </div></blockquote>
 <p><strong>y</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> position in radians.</p>
+<div><p>The <span class="math">y</span> position in radians.</p>
 </div></blockquote>
 <p><strong>fx</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> component of the force vector.</p>
+<div><p>The <span class="math">x</span> component of the force vector.</p>
 </div></blockquote>
 <p><strong>fy</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> component of the force vector.</p>
+<div><p>The <span class="math">y</span> component of the force vector.</p>
 </div></blockquote>
 <p><strong>fz</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/eb4fcf2ea15c365948abb172ed3693fbc10b3b4a.png" alt="z"/> component of the force vector.</p>
+<div><p>The <span class="math">z</span> component of the force vector.</p>
 </div></blockquote>
 <p><strong>cte</strong> : bool, optional</p>
 <blockquote class="last">
@@ -230,12 +231,12 @@ analysis.</p>
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.calc_fext">
 <code class="descname">calc_fext</code><span class="sig-paren">(</span><em>inc=1.0</em>, <em>size=None</em>, <em>col0=0</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_fext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_fext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></p>
+<dd><p>Calculate the external force vector <span class="math">\{F_{ext}\}</span></p>
 <p>Recall that:</p>
 <div class="math">
-<p><img src="../../_images/math/2fb33e9fbe55241dfb49fa663f23e7bc8fe4cd12.png" alt="\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}"/></p>
-</div><p>such that the terms in <img class="math" src="../../_images/math/00c6148f94b4180279918d67b1ddfde4310d39f5.png" alt="\{{F_{ext}}_0\}"/> are constant and the terms in
-<img class="math" src="../../_images/math/6efbef4fe3c6f2df3a955d0285e9f7e2483bf3f0.png" alt="\{{F_{ext}}_\lambda\}"/> will be scaled by the parameter <code class="docutils literal"><span class="pre">inc</span></code>.</p>
+<p><span class="math">\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}</span></p>
+</div><p>such that the terms in <span class="math">\{{F_{ext}}_0\}</span> are constant and the terms in
+<span class="math">\{{F_{ext}}_\lambda\}</span> will be scaled by the parameter <code class="docutils literal"><span class="pre">inc</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -243,7 +244,7 @@ analysis.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>inc</strong> : float, optional</p>
 <blockquote>
 <div><p>Since this function is called during the non-linear analysis,
-<code class="docutils literal"><span class="pre">inc</span></code> will multiply the terms <img class="math" src="../../_images/math/6efbef4fe3c6f2df3a955d0285e9f7e2483bf3f0.png" alt="\{{F_{ext}}_\lambda\}"/>.</p>
+<code class="docutils literal"><span class="pre">inc</span></code> will multiply the terms <span class="math">\{{F_{ext}}_\lambda\}</span>.</p>
 </div></blockquote>
 <p><strong>silent</strong> : bool, optional</p>
 <blockquote>
@@ -264,7 +265,7 @@ analysis.</p>
 <dl class="method">
 <dt id="compmech.panel.panel.Panel.calc_fint">
 <code class="descname">calc_fint</code><span class="sig-paren">(</span><em>c</em>, <em>size=None</em>, <em>col0=0</em>, <em>silent=False</em>, <em>nx=None</em>, <em>ny=None</em>, <em>Fnxny=None</em>, <em>inc=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_fint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_fint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></p>
+<dd><p>Calculate the internal force vector <span class="math">\{F_{int}\}</span></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -289,11 +290,11 @@ internal force vector of an assembly.</p>
 </div></blockquote>
 <p><strong>nx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of integration points along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>.</p>
+<div><p>Number of integration points along <span class="math">x</span>.</p>
 </div></blockquote>
 <p><strong>ny</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of integration points along <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>.</p>
+<div><p>Number of integration points along <span class="math">y</span>.</p>
 </div></blockquote>
 <p><strong>Fnxny</strong> : np.ndarray, optional</p>
 <blockquote>
@@ -357,7 +358,7 @@ non-linear terms based on the actual displacement field.</p>
 </div></blockquote>
 <p><strong>nx, ny</strong> : int or None, optional</p>
 <blockquote>
-<div><p>Number of integration points along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>, respectively, for
+<div><p>Number of integration points along <span class="math">x</span> and <span class="math">y</span>, respectively, for
 the Legendre-Gauss quadrature rule applied in the numerical
 integration. Only used when <code class="docutils literal"><span class="pre">c</span></code> is given.</p>
 </div></blockquote>
@@ -451,7 +452,7 @@ for some cases, though the sparse solver is faster.</p>
 </div></blockquote>
 <p><strong>reduced_dof</strong> : bool, optional</p>
 <blockquote class="last">
-<div><p>Considers only the contributions of <img class="math" src="../../_images/math/285ea4ce424ca59373b740d721f3b288c454e3a3.png" alt="v"/> and <img class="math" src="../../_images/math/e71c6ccb3d0ab335b8cad21bcf3111f465752cd3.png" alt="w"/> to the stiffness
+<div><p>Considers only the contributions of <span class="math">v</span> and <span class="math">w</span> to the stiffness
 matrix and accelerates the run. Only effective when
 <code class="docutils literal"><span class="pre">sparse_solver=False</span></code>.</p>
 </div></blockquote>
@@ -461,7 +462,7 @@ matrix and accelerates the run. Only effective when
 </table>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal"><span class="pre">eigvals</span></code> parameter and
-the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the <code class="docutils literal"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
+the <span class="math">i^{th}</span> eigenvector in the <code class="docutils literal"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
 </dd></dl>
 
 <dl class="method">
@@ -470,8 +471,8 @@ the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f
 <dd><p>Calculate the size of the stiffness matrices</p>
 <p>The size of the stiffness matrices can be interpreted as the number of
 rows or columns, recalling that this will be the size of the Ritz
-constants&#8217; vector <img class="math" src="../../_images/math/4fb833c3c0e0a5bde813b48df6b2ae96af9302aa.png" alt="\{c\}"/>, the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> and
-the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/>.</p>
+constants&#8217; vector <span class="math">\{c\}</span>, the internal force vector <span class="math">\{F_{int}\}</span> and
+the external force vector <span class="math">\{F_{ext}\}</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -527,7 +528,7 @@ the external force vector <img class="math" src="../../_images/math/cb43e5db3d9b
 </div></blockquote>
 <p><strong>nx and ny</strong> : int or None, optional</p>
 <blockquote>
-<div><p>Number of integration points along <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/>, respectively, for
+<div><p>Number of integration points along <span class="math">x</span> and <span class="math">y</span>, respectively, for
 the Legendre-Gauss quadrature rule applied in the numerical
 integration.</p>
 </div></blockquote>
@@ -543,7 +544,7 @@ classical laminated plate theory models.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal"><span class="pre">eigvals</span></code> parameter
-of the <code class="docutils literal"><span class="pre">Panel</span></code> object and the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the
+of the <code class="docutils literal"><span class="pre">Panel</span></code> object and the <span class="math">i^{th}</span> eigenvector in the
 <code class="docutils literal"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
 </dd></dl>
 
@@ -580,7 +581,7 @@ of the <code class="docutils literal"><span class="pre">Panel</span></code> obje
 </div></blockquote>
 <p><strong>invert_y</strong> : bool, optional</p>
 <blockquote>
-<div><p>Inverts the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> axis of the plot.</p>
+<div><p>Inverts the <span class="math">y</span> axis of the plot.</p>
 </div></blockquote>
 <p><strong>save</strong> : bool, optional</p>
 <blockquote>
@@ -593,7 +594,7 @@ of the <code class="docutils literal"><span class="pre">Panel</span></code> obje
 <p><strong>filename</strong> : str, optional</p>
 <blockquote>
 <div><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../_images/math/86ce084fee7aaac111b4c85576e5c0b49483efe0.png" alt="name"/> parameter of the <code class="docutils literal"><span class="pre">Panel</span></code> object will be used.</p>
+the <span class="math">name</span> parameter of the <code class="docutils literal"><span class="pre">Panel</span></code> object will be used.</p>
 </div></blockquote>
 <p><strong>ax</strong> : AxesSubplot, optional</p>
 <blockquote>
@@ -642,7 +643,7 @@ method.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray, optional</p>
@@ -652,12 +653,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>num_levels</strong> : int, optional</p>
@@ -754,11 +755,11 @@ calculation.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinates where to calculate the strains.</p>
+<div><p>The <span class="math">x</span> coordinates where to calculate the strains.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> coordinates where to calculate the strains, must
+<div><p>The <span class="math">y</span> coordinates where to calculate the strains, must
 have the same shape as <code class="docutils literal"><span class="pre">xs</span></code>.</p>
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
@@ -808,11 +809,11 @@ homogeneous laminates over the whole domain.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinates where to calculate the strains.</p>
+<div><p>The <span class="math">x</span> coordinates where to calculate the strains.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> coordinates where to calculate the strains, must
+<div><p>The <span class="math">y</span> coordinates where to calculate the strains, must
 have the same shape as <code class="docutils literal"><span class="pre">xs</span></code>.</p>
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
@@ -859,7 +860,7 @@ field is calculated and stored in the parameters
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray</p>
@@ -869,12 +870,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 </td>
@@ -912,7 +913,7 @@ stored as parameters with the same name in the <code class="docutils literal"><s
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/panel/panel.txt"
+      <li><a href="../../_sources/modules/panel/panel.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -942,15 +943,15 @@ stored as parameters with the same name in the <code class="docutils literal"><s
         <li class="right" >
           <a href="index.html" title="Flat Plates, Curved Panels and Assemblies"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 11, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

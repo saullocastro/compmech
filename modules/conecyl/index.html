@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Semi-analytical Models for Cones and Cylinder (compmech.conecyl) &mdash; CompMech 0.7.1 documentation</title>
+    <title>Semi-analytical Models for Cones and Cylinder (compmech.conecyl) &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Modules" href="../index.html" /> 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,8 +39,8 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -60,11 +61,11 @@ perform:</p>
 <p>in conical and cylindrical structures.</p>
 <p>The implementation focused on laminate composite shells with a constant
 laminate constitutive relation. This means that the semi-analtical
-models were derived doing an integration using a constant <img class="math" src="../../_images/math/701ee538464334ab7f699b9029ec7b4da7d3fafd.png" alt="[F]"/> for the whole
-domain. Recalling that <img class="math" src="../../_images/math/701ee538464334ab7f699b9029ec7b4da7d3fafd.png" alt="[F]"/> correlates the strains and the distributed
+models were derived doing an integration using a constant <span class="math">[F]</span> for the whole
+domain. Recalling that <span class="math">[F]</span> correlates the strains and the distributed
 stresses by the relation:</p>
 <div class="math">
-<p><img src="../../_images/math/104c234beaa000c33a559d0f66d050945bbd58a8.png" alt="\{N\} = [F] \{\varepsilon\}"/></p>
+<p><span class="math">\{N\} = [F] \{\varepsilon\}</span></p>
 </div><div class="section" id="the-conecyl-object">
 <h2>The <code class="docutils literal"><span class="pre">ConeCyl</span></code> object<a class="headerlink" href="#the-conecyl-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -81,7 +82,7 @@ stresses by the relation:</p>
 <td>Runs the Single Perturbation Load Approach (SPLA)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_SPL" title="compmech.conecyl.ConeCyl.add_SPL"><code class="xref py py-obj docutils literal"><span class="pre">add_SPL</span></code></a>(PL[,&nbsp;pt,&nbsp;thetadeg,&nbsp;increment])</td>
-<td>Add a Single Perturbation Load <img class="math" src="../../_images/math/a432acccae213a65c34d59f3de9a4121ceecdf0b.png" alt="\{{F_{PL}}_i\}"/></td>
+<td>Add a Single Perturbation Load <span class="math">\{{F_{PL}}_i\}</span></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_force" title="compmech.conecyl.ConeCyl.add_force"><code class="xref py py-obj docutils literal"><span class="pre">add_force</span></code></a>(x,&nbsp;thetadeg,&nbsp;fx,&nbsp;ftheta,&nbsp;fz[,&nbsp;...])</td>
 <td>Add a punctual force</td>
@@ -90,10 +91,10 @@ stresses by the relation:</p>
 <td>Distributes the axial load in order to simulate a shim</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fext" title="compmech.conecyl.ConeCyl.calc_fext"><code class="xref py py-obj docutils literal"><span class="pre">calc_fext</span></code></a>([inc,&nbsp;kuk,&nbsp;silent])</td>
-<td>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></td>
+<td>Calculates the external force vector <span class="math">\{F_{ext}\}</span></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><code class="xref py py-obj docutils literal"><span class="pre">calc_fint</span></code></a>(c[,&nbsp;inc,&nbsp;m,&nbsp;return_u,&nbsp;silent])</td>
-<td>Calculates the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></td>
+<td>Calculates the internal force vector <span class="math">\{F_{int}\}</span></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><code class="xref py py-obj docutils literal"><span class="pre">calc_full_c</span></code></a>(cu[,&nbsp;inc])</td>
 <td>Returns the full set of Ritz constants</td>
@@ -223,7 +224,7 @@ for each load increment</td>
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.add_SPL">
 <code class="descname">add_SPL</code><span class="sig-paren">(</span><em>PL</em>, <em>pt=0.5</em>, <em>thetadeg=0.0</em>, <em>increment=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.add_SPL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_SPL" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a Single Perturbation Load <img class="math" src="../../_images/math/a432acccae213a65c34d59f3de9a4121ceecdf0b.png" alt="\{{F_{PL}}_i\}"/></p>
+<dd><p>Add a Single Perturbation Load <span class="math">\{{F_{PL}}_i\}</span></p>
 <p>Adds a perturbation load to the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object, the perturbation
 load is a particular case of the punctual load with only a normal
 component.</p>
@@ -237,7 +238,7 @@ component.</p>
 </div></blockquote>
 <p><strong>pt</strong> : float, optional</p>
 <blockquote>
-<div><p>The normalized position along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis in which the new SPL
+<div><p>The normalized position along the <span class="math">x</span> axis in which the new SPL
 will be included.</p>
 </div></blockquote>
 <p><strong>thetadeg</strong> : float, optional</p>
@@ -263,7 +264,7 @@ any time.</p>
 <dt id="compmech.conecyl.ConeCyl.add_force">
 <code class="descname">add_force</code><span class="sig-paren">(</span><em>x</em>, <em>thetadeg</em>, <em>fx</em>, <em>ftheta</em>, <em>fz</em>, <em>increment=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.add_force"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_force" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a punctual force</p>
-<p>Adds a force vector <img class="math" src="../../_images/math/556bef07eeeb6f6d8499dc8ab628abcf2ff16991.png" alt="\{f_x, f_\theta, f_z\}^T"/> to the <code class="docutils literal"><span class="pre">forces</span></code>
+<p>Adds a force vector <span class="math">\{f_x, f_\theta, f_z\}^T</span> to the <code class="docutils literal"><span class="pre">forces</span></code>
 parameter of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -271,23 +272,23 @@ parameter of the <code class="docutils literal"><span class="pre">ConeCyl</span>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> position.</p>
+<div><p>The <span class="math">x</span> position.</p>
 </div></blockquote>
 <p><strong>thetadeg</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> position in degrees.</p>
+<div><p>The <span class="math">\theta</span> position in degrees.</p>
 </div></blockquote>
 <p><strong>fx</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> component of the force vector.</p>
+<div><p>The <span class="math">x</span> component of the force vector.</p>
 </div></blockquote>
 <p><strong>ftheta</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> component of the force vector.</p>
+<div><p>The <span class="math">\theta</span> component of the force vector.</p>
 </div></blockquote>
 <p><strong>fz</strong> : float</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/eb4fcf2ea15c365948abb172ed3693fbc10b3b4a.png" alt="z"/> component of the force vector.</p>
+<div><p>The <span class="math">z</span> component of the force vector.</p>
 </div></blockquote>
 <p><strong>increment</strong> : bool, optional</p>
 <blockquote class="last">
@@ -304,8 +305,8 @@ non-linear analysis.</p>
 <dt id="compmech.conecyl.ConeCyl.apply_shim">
 <code class="descname">apply_shim</code><span class="sig-paren">(</span><em>thetadeg</em>, <em>width</em>, <em>thick</em>, <em>ncpts=10000</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.apply_shim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.apply_shim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distributes the axial load in order to simulate a shim</p>
-<p>The axial load distribution <img class="math" src="../../_images/math/14a7d8e44839a209df7324ef10fff2e318cdc0b1.png" alt="{N_{xx}}_{top}"/> will be adjusted such
-that the resulting displacement <img class="math" src="../../_images/math/12a3ef26788e5c4328d1b988703cc9f0ed1b571d.png" alt="u"/> at <img class="math" src="../../_images/math/b4a929a5f4be9465dcd6d19301186c539082c3c5.png" alt="x=0"/> (top edge) will look
+<p>The axial load distribution <span class="math">{N_{xx}}_{top}</span> will be adjusted such
+that the resulting displacement <span class="math">u</span> at <span class="math">x=0</span> (top edge) will look
 similar to a case where a shim is applied.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -331,11 +332,11 @@ similar to a case where a shim is applied.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ts</strong> : np.ndarray</p>
 <blockquote>
-<div><p>Positions <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> of the control points.</p>
+<div><p>Positions <span class="math">\theta</span> of the control points.</p>
 </div></blockquote>
 <p><strong>us</strong> : np.ndarray</p>
 <blockquote class="last">
-<div><p>Displacements <img class="math" src="../../_images/math/12a3ef26788e5c4328d1b988703cc9f0ed1b571d.png" alt="u"/> of the control points.</p>
+<div><p>Displacements <span class="math">u</span> of the control points.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -354,12 +355,12 @@ processing purposes only.</p>
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.calc_fext">
 <code class="descname">calc_fext</code><span class="sig-paren">(</span><em>inc=1.0</em>, <em>kuk=None</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_fext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/></p>
+<dd><p>Calculates the external force vector <span class="math">\{F_{ext}\}</span></p>
 <p>Recall that:</p>
 <div class="math">
-<p><img src="../../_images/math/2fb33e9fbe55241dfb49fa663f23e7bc8fe4cd12.png" alt="\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}"/></p>
-</div><p>such that the terms in <img class="math" src="../../_images/math/00c6148f94b4180279918d67b1ddfde4310d39f5.png" alt="\{{F_{ext}}_0\}"/> are constant and the terms in
-<img class="math" src="../../_images/math/6efbef4fe3c6f2df3a955d0285e9f7e2483bf3f0.png" alt="\{{F_{ext}}_\lambda\}"/> will be scaled by the parameter <code class="docutils literal"><span class="pre">inc</span></code>.</p>
+<p><span class="math">\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}</span></p>
+</div><p>such that the terms in <span class="math">\{{F_{ext}}_0\}</span> are constant and the terms in
+<span class="math">\{{F_{ext}}_\lambda\}</span> will be scaled by the parameter <code class="docutils literal"><span class="pre">inc</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -367,7 +368,7 @@ processing purposes only.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>inc</strong> : float, optional</p>
 <blockquote>
 <div><p>Since this function is called during the non-linear analysis,
-<code class="docutils literal"><span class="pre">inc</span></code> will multiply the terms <img class="math" src="../../_images/math/6efbef4fe3c6f2df3a955d0285e9f7e2483bf3f0.png" alt="\{{F_{ext}}_\lambda\}"/>.</p>
+<code class="docutils literal"><span class="pre">inc</span></code> will multiply the terms <span class="math">\{{F_{ext}}_\lambda\}</span>.</p>
 </div></blockquote>
 <p><strong>kuk</strong> : np.ndarray, optional</p>
 <blockquote>
@@ -394,7 +395,7 @@ implementation has not been finished, see
 <dl class="method">
 <dt id="compmech.conecyl.ConeCyl.calc_fint">
 <code class="descname">calc_fint</code><span class="sig-paren">(</span><em>c</em>, <em>inc=1.0</em>, <em>m=1</em>, <em>return_u=True</em>, <em>silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_fint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/></p>
+<dd><p>Calculates the internal force vector <span class="math">\{F_{int}\}</span></p>
 <p>The following attributes will affect the numerical integration:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -424,11 +425,11 @@ integration</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">nx</span></code></td>
 <td><code class="docutils literal"><span class="pre">int</span></code>, number of integration points along the
-<img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinate</td>
+<span class="math">x</span> coordinate</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">nt</span></code></td>
 <td><code class="docutils literal"><span class="pre">int</span></code>, number of integration points along the
-<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinate</td>
+<span class="math">\theta</span> coordinate</td>
 </tr>
 </tbody>
 </table>
@@ -547,11 +548,11 @@ integration</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">nx</span></code></td>
 <td><code class="docutils literal"><span class="pre">int</span></code>, number of integration points along the
-<img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinate</td>
+<span class="math">x</span> coordinate</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">nt</span></code></td>
 <td><code class="docutils literal"><span class="pre">int</span></code>, number of integration points along the
-<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinate</td>
+<span class="math">\theta</span> coordinate</td>
 </tr>
 </tbody>
 </table>
@@ -636,7 +637,7 @@ way. The valid values are <code class="docutils literal"><span class="pre">1</sp
 </table>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal"><span class="pre">eigvals</span></code> parameter
-of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object and the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the
+of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object and the <span class="math">i^{th}</span> eigenvector in the
 <code class="docutils literal"><span class="pre">eigvecs[i-1,</span> <span class="pre">:]</span></code> parameter.</p>
 </dd></dl>
 
@@ -659,15 +660,15 @@ of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> ob
 </div></blockquote>
 <p><strong>return_kkk</strong> : bool, optional</p>
 <blockquote>
-<div><p>If the region <img class="math" src="../../_images/math/84d316f35c291c9877df2943021a269bf92b7865.png" alt="kkk"/> must be returned.</p>
+<div><p>If the region <span class="math">kkk</span> must be returned.</p>
 </div></blockquote>
 <p><strong>return_kku</strong> : bool, optional</p>
 <blockquote>
-<div><p>If the region <img class="math" src="../../_images/math/2ab7d918c74450985624bf7888b276d0074efeee.png" alt="kku"/> must be returned.</p>
+<div><p>If the region <span class="math">kku</span> must be returned.</p>
 </div></blockquote>
 <p><strong>return_kuk</strong> : bool, optional</p>
 <blockquote>
-<div><p>If the region <img class="math" src="../../_images/math/ccfc1f37c7547cbb336a0bde36a87f3176027abc.png" alt="kuk"/> must be returned.</p>
+<div><p>If the region <span class="math">kuk</span> must be returned.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -695,11 +696,11 @@ displacement</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ts</strong> : np.ndarray</p>
 <blockquote>
-<div><p>Corrdinates <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> of each control point.</p>
+<div><p>Corrdinates <span class="math">\theta</span> of each control point.</p>
 </div></blockquote>
 <p><strong>us</strong> : np.ndarray</p>
 <blockquote>
-<div><p>Desired displacement <img class="math" src="../../_images/math/12a3ef26788e5c4328d1b988703cc9f0ed1b571d.png" alt="u"/> for each control point.</p>
+<div><p>Desired displacement <span class="math">u</span> for each control point.</p>
 </div></blockquote>
 <p><strong>update_Nxxtop</strong> : bool, optional</p>
 <blockquote>
@@ -709,7 +710,7 @@ displacement</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Nxxtop</strong> : np.ndarray</p>
 <blockquote class="last">
-<div><p>The coefficients for the <img class="math" src="../../_images/math/14a7d8e44839a209df7324ef10fff2e318cdc0b1.png" alt="{N_{xx}}_{top}"/> function.</p>
+<div><p>The coefficients for the <span class="math">{N_{xx}}_{top}</span> function.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -742,8 +743,8 @@ displacement</p>
 <dd><p>Calculates the size of the stiffness matrices</p>
 <p>The size of the stiffness matrices can be interpreted as the number of
 rows or columns, recalling that this will be the size of the Ritz
-constants&#8217; vector <img class="math" src="../../_images/math/4fb833c3c0e0a5bde813b48df6b2ae96af9302aa.png" alt="\{c\}"/>, the internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> and
-the external force vector <img class="math" src="../../_images/math/cb43e5db3d9bae999531d00c55f72dcd4d2bdfd8.png" alt="\{F_{ext}\}"/>.</p>
+constants&#8217; vector <span class="math">\{c\}</span>, the internal force vector <span class="math">\{F_{int}\}</span> and
+the external force vector <span class="math">\{F_{ext}\}</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -806,7 +807,7 @@ way. The valid values are <code class="docutils literal"><span class="pre">1</sp
 </table>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal"><span class="pre">eigvals</span></code> parameter
-of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object and the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the
+of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object and the <span class="math">i^{th}</span> eigenvector in the
 <code class="docutils literal"><span class="pre">eigvecs[i-1,</span> <span class="pre">:]</span></code> parameter.</p>
 </dd></dl>
 
@@ -825,19 +826,16 @@ of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> ob
 <p><strong>vec</strong> : str, optional</p>
 <blockquote>
 <div><p>Can be one of the components:</p>
-<ul>
+<ul class="simple">
 <li><dl class="first docutils">
 <dt>Displacement: <code class="docutils literal"><span class="pre">'u'</span></code>, <code class="docutils literal"><span class="pre">'v'</span></code>, <code class="docutils literal"><span class="pre">'w'</span></code>, <code class="docutils literal"><span class="pre">'phix'</span></code>, <code class="docutils literal"><span class="pre">'phit'</span></code>,</dt>
-<dd><p class="first last"><code class="docutils literal"><span class="pre">'magnitude'</span></code></p>
-</dd>
+<dd><code class="docutils literal"><span class="pre">'magnitude'</span></code></dd>
 </dl>
 </li>
-<li><p class="first">Strain: <code class="docutils literal"><span class="pre">'exx'</span></code>, <code class="docutils literal"><span class="pre">'ett'</span></code>, <code class="docutils literal"><span class="pre">'gxt'</span></code>, <code class="docutils literal"><span class="pre">'kxx'</span></code>, <code class="docutils literal"><span class="pre">'ktt'</span></code>,
-<code class="docutils literal"><span class="pre">'kxt'</span></code>, <code class="docutils literal"><span class="pre">'gtz'</span></code>, <code class="docutils literal"><span class="pre">'gxz'</span></code></p>
-</li>
-<li><p class="first">Stress: <code class="docutils literal"><span class="pre">'Nxx'</span></code>, <code class="docutils literal"><span class="pre">'Ntt'</span></code>, <code class="docutils literal"><span class="pre">'Nxt'</span></code>, <code class="docutils literal"><span class="pre">'Mxx'</span></code>, <code class="docutils literal"><span class="pre">'Mtt'</span></code>,
-<code class="docutils literal"><span class="pre">'Mxt'</span></code>, <code class="docutils literal"><span class="pre">'Qt'</span></code>, <code class="docutils literal"><span class="pre">'Qx'</span></code></p>
-</li>
+<li>Strain: <code class="docutils literal"><span class="pre">'exx'</span></code>, <code class="docutils literal"><span class="pre">'ett'</span></code>, <code class="docutils literal"><span class="pre">'gxt'</span></code>, <code class="docutils literal"><span class="pre">'kxx'</span></code>, <code class="docutils literal"><span class="pre">'ktt'</span></code>,
+<code class="docutils literal"><span class="pre">'kxt'</span></code>, <code class="docutils literal"><span class="pre">'gtz'</span></code>, <code class="docutils literal"><span class="pre">'gxz'</span></code></li>
+<li>Stress: <code class="docutils literal"><span class="pre">'Nxx'</span></code>, <code class="docutils literal"><span class="pre">'Ntt'</span></code>, <code class="docutils literal"><span class="pre">'Nxt'</span></code>, <code class="docutils literal"><span class="pre">'Mxx'</span></code>, <code class="docutils literal"><span class="pre">'Mtt'</span></code>,
+<code class="docutils literal"><span class="pre">'Mxt'</span></code>, <code class="docutils literal"><span class="pre">'Qt'</span></code>, <code class="docutils literal"><span class="pre">'Qx'</span></code></li>
 </ul>
 </div></blockquote>
 <p><strong>deform_u</strong> : bool, optional</p>
@@ -850,7 +848,7 @@ of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> ob
 </div></blockquote>
 <p><strong>invert_x</strong> : bool, optional</p>
 <blockquote>
-<div><p>Inverts the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis of the plot. It may be used to match
+<div><p>Inverts the <span class="math">x</span> axis of the plot. It may be used to match
 the coordinate system of the finite element models created
 using the <code class="docutils literal"><span class="pre">desicos.abaqus</span></code> module.</p>
 </div></blockquote>
@@ -862,8 +860,8 @@ For cones all the following types can be used:</p>
 <li><code class="docutils literal"><span class="pre">1</span></code>: concave up (with <code class="docutils literal"><span class="pre">invert_x=False</span></code>) (default)</li>
 <li><code class="docutils literal"><span class="pre">2</span></code>: concave down (with <code class="docutils literal"><span class="pre">invert_x=False</span></code>)</li>
 <li><code class="docutils literal"><span class="pre">3</span></code>: stretched closed</li>
-<li><code class="docutils literal"><span class="pre">4</span></code>: stretched opened (<img class="math" src="../../_images/math/2c74807b30799c600a7ef0ec01bff0025a2c4690.png" alt="r \times \theta"/> vs. <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>)</li>
-<li><code class="docutils literal"><span class="pre">5</span></code>: stretched opened (<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> vs. <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>)</li>
+<li><code class="docutils literal"><span class="pre">4</span></code>: stretched opened (<span class="math">r \times \theta</span> vs. <span class="math">H</span>)</li>
+<li><code class="docutils literal"><span class="pre">5</span></code>: stretched opened (<span class="math">\theta</span> vs. <span class="math">H</span>)</li>
 </ul>
 </div></blockquote>
 <p><strong>save</strong> : bool, optional</p>
@@ -877,7 +875,7 @@ For cones all the following types can be used:</p>
 <p><strong>filename</strong> : str, optional</p>
 <blockquote>
 <div><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../_images/math/86ce084fee7aaac111b4c85576e5c0b49483efe0.png" alt="name"/> parameter of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object will be used.</p>
+the <span class="math">name</span> parameter of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object will be used.</p>
 </div></blockquote>
 <p><strong>ax</strong> : AxesSubplot, optional</p>
 <blockquote>
@@ -927,7 +925,7 @@ method.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ts</strong> : np.ndarray, optional</p>
@@ -937,12 +935,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridt</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/b0279a44fa37816ca2b838f34c3b065979cee610.png" alt="theta"/> where to calculate the
+<div><p>Number of points along the <span class="math">theta</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>num_levels</strong> : int, optional</p>
@@ -1155,11 +1153,11 @@ calculation.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinates where to calculate the strains.</p>
+<div><p>The <span class="math">x</span> coordinates where to calculate the strains.</p>
 </div></blockquote>
 <p><strong>ts</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinates where to calculate the strains, must
+<div><p>The <span class="math">\theta</span> coordinates where to calculate the strains, must
 have the same shape as <code class="docutils literal"><span class="pre">xs</span></code>.</p>
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
@@ -1198,11 +1196,11 @@ calculation.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> coordinates where to calculate the strains.</p>
+<div><p>The <span class="math">x</span> coordinates where to calculate the strains.</p>
 </div></blockquote>
 <p><strong>ts</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinates where to calculate the strains, must
+<div><p>The <span class="math">\theta</span> coordinates where to calculate the strains, must
 have the same shape as <code class="docutils literal"><span class="pre">xs</span></code>.</p>
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
@@ -1243,7 +1241,7 @@ field is calculated and stored in the parameters
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray</p>
 <blockquote>
-<div><p>The <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ts</strong> : np.ndarray</p>
@@ -1253,12 +1251,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridt</strong> : int</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../_images/math/b0279a44fa37816ca2b838f34c3b065979cee610.png" alt="theta"/> where to calculate the
+<div><p>Number of points along the <span class="math">theta</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>inc</strong> : float, optional</p>
@@ -1348,8 +1346,8 @@ into continuous functions applicable in semi-analytical analyses.</p>
 representing the normal displacement of the mid-surface and will be
 called <em>Measured Geometric Imperfection (MGI)</em>.</p>
 <p>The non-linear analysis using a MGI require the calculation
-of the initial imperfection field, called <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/>, and the corresponding
-partial derivatives <img class="math" src="../../_images/math/bd9e7a9745595de4eef3ac5ceb2aa09ae044f697.png" alt="{w_0}_{,x}"/> and <img class="math" src="../../_images/math/bc7befe96ac9dde131b6c9f7d6cbfd3d7dd712c7.png" alt="{w_0}_{,\theta}"/>.</p>
+of the initial imperfection field, called <span class="math">w_0</span>, and the corresponding
+partial derivatives <span class="math">{w_0}_{,x}</span> and <span class="math">{w_0}_{,\theta}</span>.</p>
 <p>The function <code class="docutils literal"><span class="pre">calc_c0</span></code> described below is implemented to find
 the best-fit for a given imperfection data. Three different approximation
 functions can be selected using the <code class="docutils literal"><span class="pre">funcnum</span></code> parameter.</p>
@@ -1362,7 +1360,7 @@ functions can be selected using the <code class="docutils literal"><span class="
 </div>
 <p>where <code class="docutils literal"><span class="pre">height</span></code> is measured from the bottom to the top of the cylinder
 or cone, parallel to the axial axis, and <code class="docutils literal"><span class="pre">theta</span></code> is the circumferential
-coordinate <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> measured as shown
+coordinate <span class="math">\theta</span> measured as shown
 <a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><span class="std std-ref">in the semi-analytical model</span></a>.</p>
 <p>When implementing a non-linear analysis algorithm, see for example
 <a class="reference external" href="https://github.com/compmech/compmech/blob/master/compmech/conecyl/fsdt/fsdt_donnell_bc1_nonlinear.pyx">fsdt_donnell_bc1_nonlinear.pyx</a>
@@ -1381,46 +1379,46 @@ imperfection are accessible using Cython</p>
 </div>
 <p>where <code class="docutils literal"><span class="pre">c0</span></code> is the array containing the coefficients of the approximation
 function, <code class="docutils literal"><span class="pre">L</span></code> is the meridional length of the cone or cylinder
-(<a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><span class="std std-ref">as shown here</span></a>), <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">t</span></code> the <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> and
-<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> coordinates, <code class="docutils literal"><span class="pre">m</span></code> and <code class="docutils literal"><span class="pre">n</span></code> the number of terms of the
+(<a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><span class="std std-ref">as shown here</span></a>), <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">t</span></code> the <span class="math">x</span> and
+<span class="math">\theta</span> coordinates, <code class="docutils literal"><span class="pre">m</span></code> and <code class="docutils literal"><span class="pre">n</span></code> the number of terms of the
 approximation series as described above, and finally,
 <code class="docutils literal"><span class="pre">w0xref</span></code> and <code class="docutils literal"><span class="pre">w0tref</span></code> are pointers to <code class="docutils literal"><span class="pre">double</span></code> variables.</p>
 <span class="target" id="module-compmech.conecyl.imperfections.imperfections"></span><dl class="function">
 <dt id="compmech.conecyl.imperfections.imperfections.calc_c0">
 <code class="descclassname">compmech.conecyl.imperfections.imperfections.</code><code class="descname">calc_c0</code><span class="sig-paren">(</span><em>path</em>, <em>m0=40</em>, <em>n0=40</em>, <em>funcnum=2</em>, <em>sample_size=None</em>, <em>maxmem=8</em>, <em>save=True</em>, <em>offset_w0=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/imperfections/imperfections.html#calc_c0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.imperfections.imperfections.calc_c0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the coefficients <img class="math" src="../../_images/math/90dfad7e3008bd9296795faa349b4446f5e30197.png" alt="c_0"/> that best fit the <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> function.</p>
+<dd><p>Find the coefficients <span class="math">c_0</span> that best fit the <span class="math">w_0</span> function.</p>
 <p>The measured data will be fit using one of the following functions,
 selected using the <code class="docutils literal"><span class="pre">funcnum</span></code> parameter:</p>
 <p><code class="docutils literal"><span class="pre">funcnum=1</span></code></p>
 <div class="math">
-<p><img src="../../_images/math/a1a4b590203e6a9f11893839248070ddf15727ea.png" alt="w_0 = \sum_{i=1}^{m_0}{ \sum_{j=0}^{n_0}{
+<p><span class="math">w_0 = \sum_{i=1}^{m_0}{ \sum_{j=0}^{n_0}{
          c_{ij}^a sin{b_x} sin{b_\theta}
-        +c_{ij}^b sin{b_x} cos{b_\theta}}}"/></p>
+        +c_{ij}^b sin{b_x} cos{b_\theta}}}</span></p>
 </div><p><code class="docutils literal"><span class="pre">funcnum=2</span></code> (default)</p>
 <div class="math">
-<p><img src="../../_images/math/eb0e34c03f0a3436257f21d9a2be461beb938d29.png" alt="w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{
+<p><span class="math">w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{
         c_{ij}^a cos{b_x} sin{b_\theta}
-        +c_{ij}^b cos{b_x} cos{b_\theta}}}"/></p>
+        +c_{ij}^b cos{b_x} cos{b_\theta}}}</span></p>
 </div><p><code class="docutils literal"><span class="pre">funcnum=3</span></code></p>
 <div class="math">
-<p><img src="../../_images/math/3447a9d89fdf7c288087bd83607d4452767ba7f2.png" alt="w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{
+<p><span class="math">w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{
          c_{ij}^a sin{b_x} sin{b_\theta}
         +c_{ij}^b sin{b_x} cos{b_\theta}
         +c_{ij}^c cos{b_x} sin{b_\theta}
-        +c_{ij}^d cos{b_x} cos{b_\theta}}}"/></p>
+        +c_{ij}^d cos{b_x} cos{b_\theta}}}</span></p>
 </div><p>where:</p>
 <div class="math">
-<p><img src="../../_images/math/2cf3aafc73a93d494c993189c1784961e4f05a0a.png" alt="b_x = i \pi \frac x L_{points}
+<p><span class="math">b_x = i \pi \frac x L_{points}
 
-b_\theta = j \theta"/></p>
-</div><p>where <img class="math" src="../../_images/math/b5cadd3b85c5d3b9a6684f1e21089c61d9198e9a.png" alt="L_{points}"/> represents the difference between the maximum and
+b_\theta = j \theta</span></p>
+</div><p>where <span class="math">L_{points}</span> represents the difference between the maximum and
 the height values in the imperfection file divided by the cosine
 of the semi-vertex angle:</p>
 <div class="math">
-<p><img src="../../_images/math/e60093695a9c9f3dd38ff0dc13011e829d87a8ef.png" alt="L_{points} = \frac{H_{max} - H_{min}}{cos(\alpha)}
-           = \frac{H_{points}}{cos(\alpha)}"/></p>
-</div><p>In this form <img class="math" src="../../_images/math/760b8fc48228c614ecf0b936129250ed33b42133.png" alt="{}^x/_{L_{points}}"/> will vary from <img class="math" src="../../_images/math/779575f18dde3069197e30c9ce02f73d765fefe5.png" alt="0."/> (at the top)
-to <img class="math" src="../../_images/math/52f8ce4b0c6bce33f83e8d48a91f088fc6215c6e.png" alt="1."/> (at the bottom).</p>
+<p><span class="math">L_{points} = \frac{H_{max} - H_{min}}{cos(\alpha)}
+           = \frac{H_{points}}{cos(\alpha)}</span></p>
+</div><p>In this form <span class="math">{}^x/_{L_{points}}</span> will vary from <span class="math">0.</span> (at the top)
+to <span class="math">1.</span> (at the bottom).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Note that if the measured sample does not
@@ -1428,11 +1426,11 @@ cover all the height, <strong>it will be stretched</strong>.</p>
 </div>
 <p>The approximation can be written in matrix form as:</p>
 <div class="math">
-<p><img src="../../_images/math/5cdf86c1a07ac13db6c708d1ef4b4206996ae639.png" alt="w_0 = [g] \{c\}"/></p>
-</div><p>where <img class="math" src="../../_images/math/e5c181ab30f23cea7c86c455ea6ebc26edff132c.png" alt="[g]"/> carries the base functions and <img class="math" src="../../_images/math/ba6e4422096979219d12a4b01100f0bd33823c8d.png" alt="{c}"/> the respective
-amplitudes. The solution consists on finding the best <img class="math" src="../../_images/math/4fb833c3c0e0a5bde813b48df6b2ae96af9302aa.png" alt="\{c\}"/> that minimizes
+<p><span class="math">w_0 = [g] \{c\}</span></p>
+</div><p>where <span class="math">[g]</span> carries the base functions and <span class="math">{c}</span> the respective
+amplitudes. The solution consists on finding the best <span class="math">\{c\}</span> that minimizes
 the least-square error between the measured imperfection pattern and the
-<img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> function.</p>
+<span class="math">w_0</span> function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1441,18 +1439,18 @@ the least-square error between the measured imperfection pattern and the
 <blockquote>
 <div><p>The path of the file containing the data. Can be a full path using
 <code class="docutils literal"><span class="pre">r&quot;C:\Temp\inputfile.txt&quot;</span></code>, for example.
-The input file must have 3 columns: <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>, <img class="math" src="../../_images/math/c537047c627811e4ebbe2e109e282d2307c2dceb.png" alt="height"/>, <img class="math" src="../../_images/math/a359fcc67d4efbcaef5bda404120efef7de1ada3.png" alt="imp"/>;
+The input file must have 3 columns: <span class="math">\theta</span>, <span class="math">height</span>, <span class="math">imp</span>;
 expressed in Cartesian coordinates.</p>
 <p>This input can also be a <code class="docutils literal"><span class="pre">numpy.ndarray</span></code> object, with
-<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>, <img class="math" src="../../_images/math/c537047c627811e4ebbe2e109e282d2307c2dceb.png" alt="height"/>, <img class="math" src="../../_images/math/a359fcc67d4efbcaef5bda404120efef7de1ada3.png" alt="imp"/> in each corresponding column.</p>
+<span class="math">\theta</span>, <span class="math">height</span>, <span class="math">imp</span> in each corresponding column.</p>
 </div></blockquote>
 <p><strong>m0</strong> : int</p>
 <blockquote>
-<div><p>Number of terms along the meridian (<img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>).</p>
+<div><p>Number of terms along the meridian (<span class="math">x</span>).</p>
 </div></blockquote>
 <p><strong>n0</strong> : int</p>
 <blockquote>
-<div><p>Number of terms along the circumference (<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>).</p>
+<div><p>Number of terms along the circumference (<span class="math">\theta</span>).</p>
 </div></blockquote>
 <p><strong>funcnum</strong> : int, optional</p>
 <blockquote>
@@ -1489,7 +1487,7 @@ The <code class="docutils literal"><span class="pre">scipy.interpolate.lstsq</sp
 <dl class="function">
 <dt id="compmech.conecyl.imperfections.imperfections.fw0">
 <code class="descclassname">compmech.conecyl.imperfections.imperfections.</code><code class="descname">fw0</code><span class="sig-paren">(</span><em>m0</em>, <em>n0</em>, <em>c0</em>, <em>xs_norm</em>, <em>ts</em>, <em>funcnum=2</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/imperfections/imperfections.html#fw0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.imperfections.imperfections.fw0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the imperfection field <img class="math" src="../../_images/math/05342505402760ddea398cf4ac14bf08993c760f.png" alt="w_0"/> for a given input.</p>
+<dd><p>Calculates the imperfection field <span class="math">w_0</span> for a given input.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1508,13 +1506,13 @@ The <code class="docutils literal"><span class="pre">scipy.interpolate.lstsq</sp
 </div></blockquote>
 <p><strong>xs_norm</strong> : numpy.ndarray</p>
 <blockquote>
-<div><p>The meridian coordinate (<img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>) normalized to be between <code class="docutils literal"><span class="pre">0.</span></code> and
+<div><p>The meridian coordinate (<span class="math">x</span>) normalized to be between <code class="docutils literal"><span class="pre">0.</span></code> and
 <code class="docutils literal"><span class="pre">1.</span></code>.</p>
 </div></blockquote>
 <p><strong>ts</strong> : numpy.ndarray</p>
 <blockquote>
 <div><p>The angles in radians representing the circumferential coordinate
-(<img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>).</p>
+(<span class="math">\theta</span>).</p>
 </div></blockquote>
 <p><strong>funcnum</strong> : int, optional</p>
 <blockquote class="last">
@@ -1557,7 +1555,7 @@ The <code class="docutils literal"><span class="pre">scipy.interpolate.lstsq</sp
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/conecyl/index.txt"
+      <li><a href="../../_sources/modules/conecyl/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -1584,14 +1582,14 @@ The <code class="docutils literal"><span class="pre">scipy.interpolate.lstsq</sp
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 11, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

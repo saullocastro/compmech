@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FSDT - First-order Shear Deformation Theory &mdash; CompMech 0.7.1 documentation</title>
+    <title>FSDT - First-order Shear Deformation Theory &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Boundary conditions" href="bcs.html" />
     <link rel="prev" title="CLPT - Classical Laminated Plate Theory" href="clpt.html" /> 
   </head>
@@ -46,10 +47,10 @@
         <li class="right" >
           <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -64,27 +65,27 @@
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>For the FSDT the displacement field components are:</p>
 <div class="math">
-<p><img src="../../_images/math/6a4516744ac906a7575664621ea7592017f9079a.png" alt="u, v, w, \phi_x, \phi_t"/></p>
+<p><span class="math">u, v, w, \phi_x, \phi_t</span></p>
 </div><p>The displacement field is approximated similarly to the
-<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><span class="std std-ref">CLPT</span></a>, but here <img class="math" src="../../_images/math/8debdf841bb9645a2eb811c2d53ab8116ffe284e.png" alt="\phi_x"/> and <img class="math" src="../../_images/math/d25e7b8b0e679e79ff2ffbb51e0af864af42ac68.png" alt="\phi_\theta"/>
+<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><span class="std std-ref">CLPT</span></a>, but here <span class="math">\phi_x</span> and <span class="math">\phi_\theta</span>
 are independent variables, relaxing the approximation.</p>
 <p>For the <code class="docutils literal"><span class="pre">ConeCyl</span></code> implementations, the approximation functions are
 separated into three components:</p>
 <div class="math">
-<p><img src="../../_images/math/6d663741abfec29fef9da3416f1c26a4dc663f3d.png" alt="u = u_0 + u_1 + u_2\\
+<p><span class="math">u = u_0 + u_1 + u_2\\
 
 \vdots
 
 {{\phi}_\theta} = {{\phi}_\theta}_0 + {{\phi}_\theta}_1
-                  + {{\phi}_\theta}_2"/></p>
-</div><p>where <img class="math" src="../../_images/math/97dafbeb5cca69e23956c04f9cbb3706c307af65.png" alt="u_0"/> contains the approximation functions corresponding to the
-prescribed degrees of freedom, <img class="math" src="../../_images/math/dedfbf7cee9d49e89127c631cb840a4681ad87e3.png" alt="u_1"/> contains the functions independent
-of <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/> and <img class="math" src="../../_images/math/2b103edd760e8a5926b6b40e593c9b6cea1df5ce.png" alt="u_2"/> the functions that depend on both <img class="math" src="../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/>
-and <img class="math" src="../../_images/math/4dc4789b8e2f448615b3e2c2bdc22fb9267f7cd8.png" alt="\theta"/>.</p>
+                  + {{\phi}_\theta}_2</span></p>
+</div><p>where <span class="math">u_0</span> contains the approximation functions corresponding to the
+prescribed degrees of freedom, <span class="math">u_1</span> contains the functions independent
+of <span class="math">\theta</span> and <span class="math">u_2</span> the functions that depend on both <span class="math">x</span>
+and <span class="math">\theta</span>.</p>
 <p>The aim is to have a model capable to simulate non-rigid supports, and where
-the displacement components <img class="math" src="../../_images/math/b7244e7de2ce35bcf06d99d75d0a9e85d0fb19d4.png" alt="u, \phi_x"/> can habe a non-costant value
+the displacement components <span class="math">u, \phi_x</span> can habe a non-costant value
 along the edges.</p>
-<p>It is of special importance to allow <img class="math" src="../../_images/math/8debdf841bb9645a2eb811c2d53ab8116ffe284e.png" alt="\phi_x"/> to be between zero
+<p>It is of special importance to allow <span class="math">\phi_x</span> to be between zero
 (clamped) and another value (up to simply supported),
 by using elastic stiffnesses for the corresponding degrees of freedom. The
 elastic stiffnesses are implemented for the FSDT in the same manner described
@@ -107,7 +108,7 @@ constraints</span></a>.</p>
 <a class="reference internal" href="#fsdt-sanders-bcn">fsdt_sanders_bcn</a>) has been proposed and despite it has the largest
 simulation capabilities, it can be unstable for high stiffeness applied
 to the elastic constraints. Moreover, this model cannot simulate the linear
-buckling analysis of the <img class="math" src="../../_images/math/ffafd89bd88880d1d4a1730b5cb0b73017c03f7f.png" alt="4^{th}"/> type of boundary conditions.</p>
+buckling analysis of the <span class="math">4^{th}</span> type of boundary conditions.</p>
 <p>The models below were kept for future reference only and have
 been used in comparative studies:</p>
 <ul class="simple">
@@ -119,7 +120,7 @@ been used in comparative studies:</p>
 <span id="id1"></span><h3>fsdt_donnell_bc1<a class="headerlink" href="#fsdt-donnell-bc1" title="Permalink to this headline">¶</a></h3>
 <p>SS1- and CC1-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/6b5da94b9446c0c5c9cae7a6b55655e508e99913.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -148,19 +149,19 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
+          \right)</span></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math">\checkmark</span> linear static implemented</p>
+<p><span class="math">\checkmark</span> linear buckling implemented</p>
+<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-donnell-bc2">
 <span id="id2"></span><h3>fsdt_donnell_bc2<a class="headerlink" href="#fsdt-donnell-bc2" title="Permalink to this headline">¶</a></h3>
 <p>SS2- and CC2-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/c658a0897be46d49e4819e9c9c06e4840dca8c83.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -189,19 +190,19 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
+          \right)</span></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math">\checkmark</span> linear static implemented</p>
+<p><span class="math">\checkmark</span> linear buckling implemented</p>
+<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-donnell-bc3">
 <span id="id3"></span><h3>fsdt_donnell_bc3<a class="headerlink" href="#fsdt-donnell-bc3" title="Permalink to this headline">¶</a></h3>
 <p>SS3- and CC3-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/9435ccda6ceaba2c07b381edc0b8e2622c4b13dc.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -230,19 +231,19 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
+          \right)</span></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math">\checkmark</span> linear static implemented</p>
+<p><span class="math">\checkmark</span> linear buckling implemented</p>
+<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-donnell-bc4">
 <span id="id4"></span><h3>fsdt_donnell_bc4<a class="headerlink" href="#fsdt-donnell-bc4" title="Permalink to this headline">¶</a></h3>
 <p>SS4- and CC4-types of boundary conditions.</p>
 <div class="math">
-<p><img src="../../_images/math/0a66e45d846f70e80a4c6dbdb9ef7d982ccb6fc9.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -271,20 +272,20 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
+          \right)</span></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math">\checkmark</span> linear static implemented</p>
+<p><span class="math">\checkmark</span> linear buckling implemented</p>
+<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-donnell-bcn">
 <span id="id5"></span><h3>fsdt_donnell_bcn<a class="headerlink" href="#fsdt-donnell-bcn" title="Permalink to this headline">¶</a></h3>
-<p>The current attempt adds more flexibility in <img class="math" src="../../_images/math/71eed5bb74cb59bc5e3499732da96fbf51e3b22a.png" alt="v,w,\phi_\theta"/>.
+<p>The current attempt adds more flexibility in <span class="math">v,w,\phi_\theta</span>.
 The resulting approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/f0064062c6ace9cdb7d95300b4293c5789f3bb7f.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -313,12 +314,12 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
+          \right)</span></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/1f577636fd48e3d1e1c7f25ca7535cb24a2b3d44.png" alt="\times"/> linear buckling not working</p>
-<p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math">\checkmark</span> linear static implemented</p>
+<p><span class="math">\times</span> linear buckling not working</p>
+<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-sanders-bcn">
@@ -326,9 +327,9 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 <p>Counterpart of <a class="reference internal" href="#fsdt-donnell-bcn"><span class="std std-ref">fsdt_donnell_bcn</span></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/1f577636fd48e3d1e1c7f25ca7535cb24a2b3d44.png" alt="\times"/> linear buckling not working</p>
-<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+<div><p><span class="math">\checkmark</span> linear static implemented</p>
+<p><span class="math">\times</span> linear buckling not working</p>
+<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-shadmehri2012-bc2">
@@ -342,7 +343,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 of boundary conditions. Uses the Donnell&#8217;s equations and
 the approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/937d7b80578d8d02d7b2d436ac2590b7620dfd20.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><span class="math">u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -360,12 +361,12 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 \\
 {\phi}_\theta =  \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
      {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
+          \right)</span></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> linear static not implemented</p>
-<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+<div><p><span class="math">\checkmark</span> linear buckling implemented</p>
+<p><span class="math">\rightarrow</span> linear static not implemented</p>
+<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-shadmehri2012-bc3">
@@ -379,7 +380,7 @@ for more details). This model was developed to simulate the SS3- and
 CC3-types of boundary condition. Uses the Donnell&#8217;s
 equations and the approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/91e35ed5bb88ccd829a903d88be64fbf82955f0c.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><span class="math">u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -397,12 +398,12 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 \\
 {\phi}_\theta =  \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
      {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
+          \right)</span></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> linear static not implemented</p>
-<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+<div><p><span class="math">\checkmark</span> linear buckling implemented</p>
+<p><span class="math">\rightarrow</span> linear static not implemented</p>
+<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="fsdt-geier1997-bc2">
@@ -417,7 +418,7 @@ CC2-types of boundary condition. Such models seem to be originally
 proposed by Khdeir et al. (1989) (see <a class="reference internal" href="ref.html#khdeir1989" id="id15">[khdeir1989]</a>).
 Uses the Donnell&#8217;s equations and the approximation functions are:</p>
 <div class="math">
-<p><img src="../../_images/math/286ceefc1558ebb7adf70db9f0b51cf7c49dab6f.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><span class="math">u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -435,12 +436,12 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 \\
 {\phi}_\theta =  \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
      {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
-          \right)"/></p>
+          \right)</span></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/df40632fec47da52921ff56f5eedb0c3643a55dc.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> linear static not implemented</p>
-<p><img class="math" src="../../_images/math/fd26fe11d4997f7d52a65547f6c02fb180604a79.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+<div><p><span class="math">\checkmark</span> linear buckling implemented</p>
+<p><span class="math">\rightarrow</span> linear static not implemented</p>
+<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 </div>
@@ -484,7 +485,7 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/conecyl/fsdt.txt"
+      <li><a href="../../_sources/theory/conecyl/fsdt.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -517,16 +518,16 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
         <li class="right" >
           <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

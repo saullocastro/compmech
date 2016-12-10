@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorials &mdash; CompMech 0.7.1 documentation</title>
+    <title>Tutorials &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="References" href="ref.html" />
     <link rel="prev" title="Boundary conditions" href="bcs.html" /> 
   </head>
@@ -46,9 +47,9 @@
         <li class="right" >
           <a href="bcs.html" title="Boundary conditions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -65,8 +66,8 @@
 <div class="figure align-center" id="conecyl-figure">
 <a class="reference internal image-reference" href="../../_images/conecyl.png"><img alt="../../_images/conecyl.png" src="../../_images/conecyl.png" style="width: 430.8px; height: 282.0px;" /></a>
 </div>
-<p>The geometry can be defined using <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/> and <img class="math" src="../../_images/math/bbfbc8a7251a97f42020bf1fae519f2cd55dbdf7.png" alt="\alpha"/>, for example, or
-any other combination (like <img class="math" src="../../_images/math/c0895a46089688784c74d8236df6300ec6631b35.png" alt="L"/>, <img class="math" src="../../_images/math/5b4dfe819df3c0c09e92d12de54b6910e15f8457.png" alt="H"/>, <img class="math" src="../../_images/math/ee8412174b74b8a3e2ab0eb74de2c329985ce3d1.png" alt="R_1"/>) of the geometric parameters
+<p>The geometry can be defined using <span class="math">H</span>, <span class="math">R_1</span> and <span class="math">\alpha</span>, for example, or
+any other combination (like <span class="math">L</span>, <span class="math">H</span>, <span class="math">R_1</span>) of the geometric parameters
 that will allow the complete definition of the cone / cylinder geometry.</p>
 <p><strong>Example</strong>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="k">import</span> <span class="n">ConeCyl</span>
@@ -99,10 +100,10 @@ same thickness or using a container with the thickness of each ply:</p>
 </div>
 <p>The material properties are given using a tuple:</p>
 <div class="math">
-<p><img src="../../_images/math/486acfa81976771e4758b76ffde3d5f23df18118.png" alt="(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})"/></p>
-</div><p>where <img class="math" src="../../_images/math/efbbb4ccf9fc8f30395bdcce59db7517aadad3d8.png" alt="E_{11}"/> is the elastic modulus along the direction 1 of the ply,
-<img class="math" src="../../_images/math/b538f243a6ccc8dd0461418d790e2916f6f3d309.png" alt="E_{22}"/> the modulus along the direction 2, <img class="math" src="../../_images/math/28d42c5dfa97d18acf412e06eb80951fed23d2f9.png" alt="\nu_{12}"/> the Poisson&#8217;s ratio
-and <img class="math" src="../../_images/math/24548d704a44280d1acecbccc9039af213576a34.png" alt="G_{12}"/>, <img class="math" src="../../_images/math/7eadf0b06cc013ee81a9a12c752f68fc80f9b4e9.png" alt="G_{13}"/>, <img class="math" src="../../_images/math/0e98798c4ea3aa2e0da5139de979e2d3bdef8820.png" alt="G_{23}"/> the shear modules.</p>
+<p><span class="math">(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})</span></p>
+</div><p>where <span class="math">E_{11}</span> is the elastic modulus along the direction 1 of the ply,
+<span class="math">E_{22}</span> the modulus along the direction 2, <span class="math">\nu_{12}</span> the Poisson&#8217;s ratio
+and <span class="math">G_{12}</span>, <span class="math">G_{13}</span>, <span class="math">G_{23}</span> the shear modules.</p>
 <p><strong>Example</strong>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
 </pre></div>
@@ -231,7 +232,7 @@ stored in the <code class="docutils literal"><span class="pre">cs</span></code> 
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/conecyl/tutorials.txt"
+      <li><a href="../../_sources/theory/conecyl/tutorials.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -264,15 +265,15 @@ stored in the <code class="docutils literal"><span class="pre">cs</span></code> 
         <li class="right" >
           <a href="bcs.html" title="Boundary conditions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

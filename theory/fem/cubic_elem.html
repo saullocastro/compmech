@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cubic element of the Serendipity family &mdash; CompMech 0.7.1 documentation</title>
+    <title>Cubic element of the Serendipity family &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,7 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" /> 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,7 +39,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,24 +54,24 @@
 cubic element of the Serendipity family (in Chapter 8) which will be described
 here, focusing on its implementation using an isoparametric approach, i.e.
 the same approximation used for the geometry will be used to approximate
-the displacement field vector <img class="math" src="../../_images/math/9604ceff8959a2a9aed9cda1716554358510c677.png" alt="\{u\}"/>.</p>
+the displacement field vector <span class="math">\{u\}</span>.</p>
 <p>The element and the 12 nodes are shown in the figure below.</p>
 <p id="figure-quadcubics">(<a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.py">Source code</a>, <a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.png">png</a>, <a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.hires.png">hires.png</a>, <a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.pdf">pdf</a>)</p>
 <div class="figure">
 <img alt="../../_images/fsdt_donnell_quad12.png" src="../../_images/fsdt_donnell_quad12.png" />
 </div>
-<p>The variables of <img class="math" src="../../_images/math/9604ceff8959a2a9aed9cda1716554358510c677.png" alt="\{u\}"/> are interpolated using:</p>
+<p>The variables of <span class="math">\{u\}</span> are interpolated using:</p>
 <div class="math">
-<p><img src="../../_images/math/aaebf741fdf7c673311ce3b1a67a93d1f2b57d51.png" alt="\{u\} = \sum_{i=1}^{i=12}{h_i \{u_i\}}"/></p>
-</div><p>where <img class="math" src="../../_images/math/a7aa752c1b5cb22c33d8977f1086239d6ece9a10.png" alt="h_i"/> and <img class="math" src="../../_images/math/cc22b8bb1ba2a96586088d6954e1f59b49bb7ef7.png" alt="\{u_i\}"/> represent the interpolation and the displacement
-vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c2dadadbbd299ea5de.png" alt="n_i"/>. The interpolation function for the corner nodes are:</p>
+<p><span class="math">\{u\} = \sum_{i=1}^{i=12}{h_i \{u_i\}}</span></p>
+</div><p>where <span class="math">h_i</span> and <span class="math">\{u_i\}</span> represent the interpolation and the displacement
+vector at node <span class="math">n_i</span>. The interpolation function for the corner nodes are:</p>
 <div class="math">
-<p><img src="../../_images/math/f447ab3482c3a2f575d59eecb4bb8cd3435aef67.png" alt="h_{1,\cdots,4} = \frac{1}{32}(1 + \xi\cdot\xi_{1,\cdots,4})
-         (1 + \eta\cdot\eta_{1,\cdots,4})[-10 + 9\cdot(\xi^2 + \eta^2)]"/></p>
+<p><span class="math">h_{1,\cdots,4} = \frac{1}{32}(1 + \xi\cdot\xi_{1,\cdots,4})
+         (1 + \eta\cdot\eta_{1,\cdots,4})[-10 + 9\cdot(\xi^2 + \eta^2)]</span></p>
 </div><p>and for the middle nodes are:</p>
 <div class="math">
-<p><img src="../../_images/math/45fee1454637848c9767998cb2967bdd03f6503d.png" alt="h_{5,\cdots,12}  = \frac{9}{32}(1 + \xi\cdot\xi_{5,\cdots,12})
-                       (1-\eta^2)(1+9\cdot\eta\cdot\eta_{5,\cdots,12})"/></p>
+<p><span class="math">h_{5,\cdots,12}  = \frac{9}{32}(1 + \xi\cdot\xi_{5,\cdots,12})
+                       (1-\eta^2)(1+9\cdot\eta\cdot\eta_{5,\cdots,12})</span></p>
 </div><p>The coordinates for each node</p>
 </div>
 
@@ -85,7 +87,7 @@ vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/fem/cubic_elem.txt"
+      <li><a href="../../_sources/theory/fem/cubic_elem.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -112,13 +114,13 @@ vector at node <img class="math" src="../../_images/math/fbca0ef9c3b6754320ce10c
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

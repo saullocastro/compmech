@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Assembly of Plate and Panel Models (compmech.panel.assembly) &mdash; CompMech 0.7.1 documentation</title>
+    <title>Assembly of Plate and Panel Models (compmech.panel.assembly) &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../../index.html" />
-    <link rel="up" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
     <link rel="prev" title="Assembly of Semi-Analytical Models" href="assembly_intro.html" /> 
   </head>
   <body role="document">
@@ -42,10 +43,10 @@
         <li class="right" >
           <a href="assembly_intro.html" title="Assembly of Semi-Analytical Models"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="../index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="assembly_intro.html" accesskey="U">Assembly of Semi-Analytical Models</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >Flat Plates, Curved Panels and Assemblies</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="assembly_intro.html" accesskey="U">Assembly of Semi-Analytical Models</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -221,7 +222,7 @@ should be plotted together.</p>
 </div></blockquote>
 <p><strong>invert_y</strong> : bool, optional</p>
 <blockquote>
-<div><p>Inverts the <img class="math" src="../../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> axis of the plot.</p>
+<div><p>Inverts the <span class="math">y</span> axis of the plot.</p>
 </div></blockquote>
 <p><strong>save</strong> : bool, optional</p>
 <blockquote>
@@ -234,7 +235,7 @@ should be plotted together.</p>
 <p><strong>filename</strong> : str, optional</p>
 <blockquote>
 <div><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../../_images/math/86ce084fee7aaac111b4c85576e5c0b49483efe0.png" alt="name"/> parameter of the <code class="docutils literal"><span class="pre">Panel</span></code> object will be used.</p>
+the <span class="math">name</span> parameter of the <code class="docutils literal"><span class="pre">Panel</span></code> object will be used.</p>
 </div></blockquote>
 <p><strong>ax</strong> : AxesSubplot, optional</p>
 <blockquote>
@@ -300,7 +301,7 @@ method.</p>
 </div></blockquote>
 <p><strong>xs</strong> : np.ndarray, optional</p>
 <blockquote>
-<div><p>The <img class="math" src="../../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> positions where to calculate the displacement field.
+<div><p>The <span class="math">x</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal"><span class="pre">None</span></code> and the method <code class="docutils literal"><span class="pre">_default_field</span></code> is used.</p>
 </div></blockquote>
 <p><strong>ys</strong> : np.ndarray, optional</p>
@@ -310,12 +311,12 @@ Default is <code class="docutils literal"><span class="pre">None</span></code> a
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>num_levels</strong> : int, optional</p>
@@ -373,12 +374,12 @@ should be plotted together.</p>
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>NLterms</strong> : bool</p>
@@ -418,12 +419,12 @@ should be plotted together.</p>
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>NLterms</strong> : bool</p>
@@ -466,12 +467,12 @@ should be plotted together.</p>
 </div></blockquote>
 <p><strong>gridx</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../../_images/math/fcbaa2ea1c6a047f151a45849927929823fc5d88.png" alt="x"/> axis where to calculate the
+<div><p>Number of points along the <span class="math">x</span> axis where to calculate the
 displacement field.</p>
 </div></blockquote>
 <p><strong>gridy</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of points along the <img class="math" src="../../../_images/math/5a1161c9b9bf6a6addc18ade0f7fe8bb5ce0ba95.png" alt="y"/> where to calculate the
+<div><p>Number of points along the <span class="math">y</span> where to calculate the
 displacement field.</p>
 </div></blockquote>
 </td>
@@ -509,7 +510,7 @@ stored as parameters with the same name in the <code class="docutils literal"><s
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../../_sources/modules/panel/assembly/assembly.txt"
+      <li><a href="../../../_sources/modules/panel/assembly/assembly.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -539,16 +540,16 @@ stored as parameters with the same name in the <code class="docutils literal"><s
         <li class="right" >
           <a href="assembly_intro.html" title="Assembly of Semi-Analytical Models"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="../index.html" >Flat Plates, Curved Panels and Assemblies</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Modules</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >Flat Plates, Curved Panels and Assemblies</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="assembly_intro.html" >Assembly of Semi-Analytical Models</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 11, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

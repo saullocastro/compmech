@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Analysis Module (compmech.analysis) &mdash; CompMech 0.7.1 documentation</title>
+    <title>Analysis Module (compmech.analysis) &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Modules" href="../index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="prev" title="Modules" href="../index.html" /> 
   </head>
   <body role="document">
@@ -42,8 +43,8 @@
         <li class="right" >
           <a href="../index.html" title="Modules"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -87,7 +88,7 @@ for the line-search algorithm</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">compute_every_n</span></code></td>
 <td><code class="docutils literal"><span class="pre">int</span></code>, if <code class="docutils literal"><span class="pre">modified_NR=True</span></code>, the non-linear
-matrices will be updated at every <img class="math" src="../../_images/math/9b3557d5c9bbf3c7041215fdae28c97ac580789a.png" alt="n"/> iterations</td>
+matrices will be updated at every <span class="math">n</span> iterations</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">kT_initial_state</span></code></td>
 <td><code class="docutils literal"><span class="pre">bool</span></code>, tells if the tangent stiffness matrix
@@ -111,7 +112,7 @@ initial imperfections take place</td>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">initialInc</span></code></td>
 <td>initial load increment size. In the arc-length
 method it will be the initial value for
-<img class="math" src="../../_images/math/36c6cfbcb3f2012e7df66272346c724e18d464cc.png" alt="\lambda"/></td>
+<span class="math">\lambda</span></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">minInc</span></code></td>
 <td>minimum increment size; if achieved the analysis
@@ -267,7 +268,7 @@ for some cases, though the sparse solver is faster.</p>
 </div></blockquote>
 <p><strong>reduced_dof</strong> : bool, optional</p>
 <blockquote>
-<div><p>Considers only the contributions of <img class="math" src="../../_images/math/285ea4ce424ca59373b740d721f3b288c454e3a3.png" alt="v"/> and <img class="math" src="../../_images/math/e71c6ccb3d0ab335b8cad21bcf3111f465752cd3.png" alt="w"/> to the stiffness
+<div><p>Considers only the contributions of <span class="math">v</span> and <span class="math">w</span> to the stiffness
 matrix and accelerates the run. Only effective when
 <code class="docutils literal"><span class="pre">sparse_solver=False</span></code>.</p>
 </div></blockquote>
@@ -282,7 +283,7 @@ matrix and accelerates the run. Only effective when
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The extracted eigenvalues are stored in the <code class="docutils literal"><span class="pre">eigvals</span></code> parameter and</p>
-<p class="last">the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the <code class="docutils literal"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
+<p class="last">the <span class="math">i^{th}</span> eigenvector in the <code class="docutils literal"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
 </td>
 </tr>
 </tbody>
@@ -293,7 +294,7 @@ matrix and accelerates the run. Only effective when
 <dt id="compmech.analysis.lb">
 <code class="descclassname">compmech.analysis.</code><code class="descname">lb</code><span class="sig-paren">(</span><em>K</em>, <em>KG</em>, <em>tol=0</em>, <em>sparse_solver=True</em>, <em>silent=False</em>, <em>num_eigvalues=25</em>, <em>num_eigvalues_print=5</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/analysis/linear_buckling.html#lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.analysis.lb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear Buckling Analysis</p>
-<p>It can also be used for more general eigenvalue analyzes if <img class="math" src="../../_images/math/af5e2c374ff74e0ec0b535fe68fcf63babcc2600.png" alt="K"/> is the
+<p>It can also be used for more general eigenvalue analyzes if <span class="math">K</span> is the
 tangent stiffness matrix of a given load state.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -308,7 +309,7 @@ applicable.</p>
 <p><strong>KG</strong> : sparse_matrix</p>
 <blockquote>
 <div><p>Initial stress stiffness matrix that multiplies the load multiplcator
-<img class="math" src="../../_images/math/36c6cfbcb3f2012e7df66272346c724e18d464cc.png" alt="\lambda"/> of the eigenvalue problem.</p>
+<span class="math">\lambda</span> of the eigenvalue problem.</p>
 </div></blockquote>
 <p><strong>tol</strong> : float, optional</p>
 <blockquote>
@@ -337,7 +338,7 @@ applicable.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal"><span class="pre">eigvals</span></code> parameter
-of the <code class="docutils literal"><span class="pre">Panel</span></code> object and the <img class="math" src="../../_images/math/dc9f871264140bc853c81f21bac3f98d4f56baec.png" alt="i^{th}"/> eigenvector in the
+of the <code class="docutils literal"><span class="pre">Panel</span></code> object and the <span class="math">i^{th}</span> eigenvector in the
 <code class="docutils literal"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
 </dd></dl>
 
@@ -385,7 +386,7 @@ aerodynamic matrix and so forth when applicable.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/analysis/index.txt"
+      <li><a href="../../_sources/modules/analysis/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -415,14 +416,14 @@ aerodynamic matrix and so forth when applicable.</p>
         <li class="right" >
           <a href="../index.html" title="Modules"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Interpolate (compmech.interpolate) &mdash; CompMech 0.7.1 documentation</title>
+    <title>Interpolate (compmech.interpolate) &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Modules" href="../index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Compmech shared libraries (lib)" href="../lib/index.html" />
     <link rel="prev" title="Integrate &lt;compmech.integrate&gt;" href="../integrate/index.html" /> 
   </head>
@@ -46,8 +47,8 @@
         <li class="right" >
           <a href="../integrate/index.html" title="Integrate &lt;compmech.integrate&gt;"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -65,19 +66,19 @@ modules.</p>
 <code class="descclassname">compmech.interpolate.</code><code class="descname">inv_weighted</code><span class="sig-paren">(</span><em>data</em>, <em>mesh</em>, <em>num_sub</em>, <em>col</em>, <em>ncp=5</em>, <em>power_parameter=2</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/interpolate.html#inv_weighted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.interpolate.inv_weighted" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolates the values taken at one group of points into
 another using an inverse-weighted algorithm</p>
-<p>In the inverse-weighted algorithm a number of <img class="math" src="../../_images/math/c4f473ccc8c041edc1d3fe43afbd127558472439.png" alt="n_{CP}"/> measured points
+<p>In the inverse-weighted algorithm a number of <span class="math">n_{CP}</span> measured points
 of the input parameter <code class="docutils literal"><span class="pre">data</span></code> that are closest to a given node in
 the input parameter <code class="docutils literal"><span class="pre">mesh</span></code> are found and the imperfection value of
-this node (represented by the normal displacement <img class="math" src="../../_images/math/cde787ec40fea7028c04b6ba67347380976d5f74.png" alt="{w_0}_{node}"/>) is
+this node (represented by the normal displacement <span class="math">{w_0}_{node}</span>) is
 calculated as follows:</p>
 <div class="math">
-<p><img src="../../_images/math/203f934ea678b09cc43205cd975cd4af9a03331e.png" alt="{w_0}_{node} = \frac{\sum_{i}^{n_{CP}}{{w_0}_i\frac{1}{w_i}}}
-                    {\sum_{i}^{n_{CP}}{\frac{1}{w_i}}}"/></p>
-</div><p>where <img class="math" src="../../_images/math/5df9759a75683abeb124c0ed31d59208089a5a78.png" alt="w_i"/> is the imperfection at each measured point, calculated as:</p>
+<p><span class="math">{w_0}_{node} = \frac{\sum_{i}^{n_{CP}}{{w_0}_i\frac{1}{w_i}}}
+                    {\sum_{i}^{n_{CP}}{\frac{1}{w_i}}}</span></p>
+</div><p>where <span class="math">w_i</span> is the imperfection at each measured point, calculated as:</p>
 <div class="math">
-<p><img src="../../_images/math/32d90e2e407442f914d36c5fc409ba748283b110.png" alt="w_i = \left[(x_{node}-x_i)^2+(y_{node}-y_i)^2+(z_{node}-y_i)^2
-      \right]^p"/></p>
-</div><p>with <img class="math" src="../../_images/math/26b5461109d4bfe4c6dd43f103a74993eedd863b.png" alt="p"/> being a power parameter that when increased will increase the
+<p><span class="math">w_i = \left[(x_{node}-x_i)^2+(y_{node}-y_i)^2+(z_{node}-y_i)^2
+      \right]^p</span></p>
+</div><p>with <span class="math">p</span> being a power parameter that when increased will increase the
 relative influence of a closest point.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -246,7 +247,7 @@ A simple check for increasing is:</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/interpolate/index.txt"
+      <li><a href="../../_sources/modules/interpolate/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -279,14 +280,14 @@ A simple check for increasing is:</p>
         <li class="right" >
           <a href="../integrate/index.html" title="Integrate &lt;compmech.integrate&gt;"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

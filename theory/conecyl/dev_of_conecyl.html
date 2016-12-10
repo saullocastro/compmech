@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Developing the code for the conecyl module &mdash; CompMech 0.7.1 documentation</title>
+    <title>Developing the code for the conecyl module &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" />
     <link rel="prev" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)" href="index.html" /> 
   </head>
@@ -46,9 +47,9 @@
         <li class="right" >
           <a href="index.html" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -213,20 +214,20 @@ is easy to implement in the Cython codes:</p>
 </div>
 <div class="section" id="internal-forces">
 <h2>Internal Forces<a class="headerlink" href="#internal-forces" title="Permalink to this headline">¶</a></h2>
-<p>The internal force vector <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> is separated in four parts:</p>
+<p>The internal force vector <span class="math">\{F_{int}\}</span> is separated in four parts:</p>
 <div class="math">
-<p><img src="../../_images/math/b34f74aaf3638a980c0b9819459af6d8f555c2e8.png" alt="\{F_{int}\} = \{F_{int}\}_{00} + \{F_{int}\}_{0L} +
-              \{F_{int}\}_{L0} + \{F_{int}\}_{LL}"/></p>
+<p><span class="math">\{F_{int}\} = \{F_{int}\}_{00} + \{F_{int}\}_{0L} +
+              \{F_{int}\}_{L0} + \{F_{int}\}_{LL}</span></p>
 </div><p>As can be seen in function <a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><code class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.calc_fint()</span></code></a>,
-the linear component <img class="math" src="../../_images/math/72cc35d5e606f688c08945806109882e3e8d948b.png" alt="\{F_{int}\}_{00}"/> is calculated using:</p>
+the linear component <span class="math">\{F_{int}\}_{00}</span> is calculated using:</p>
 <div class="math">
-<p><img src="../../_images/math/798fedcfc2cf5c6b87082c8840363c8f10de1bd9.png" alt="\{F_{int}\}_{00} = [K_0]\{c\}"/></p>
-</div><p>because <img class="math" src="../../_images/math/ca28b2833c10991ea042899048cb950e3b10a235.png" alt="[K_0]"/> is calculated analytically and the numerical integration
-errors are avoided in this way. For the other three terms <img class="math" src="../../_images/math/d3fa4303d2d74cef548cb767ad5b2807a322f6a5.png" alt="0L"/>, <img class="math" src="../../_images/math/11fbcada63a169dd423d9f473d56fc0e0ca61ac3.png" alt="L0"/> and
-<img class="math" src="../../_images/math/48adb3ef59398490da97df22e078758e96813935.png" alt="LL"/>, a numerical integration is performed. It is important
+<p><span class="math">\{F_{int}\}_{00} = [K_0]\{c\}</span></p>
+</div><p>because <span class="math">[K_0]</span> is calculated analytically and the numerical integration
+errors are avoided in this way. For the other three terms <span class="math">0L</span>, <span class="math">L0</span> and
+<span class="math">LL</span>, a numerical integration is performed. It is important
 to say that computational cost associated
-with the numerical integration of <img class="math" src="../../_images/math/60e3b47a4eb49c8c930c30b9bf80d5cb987f35c9.png" alt="\{F_{int}\}"/> is approximately
-<img class="math" src="../../_images/math/fe02a797055ce3bc794a574b37da80b191be5b59.png" alt="m_2 \times n_2"/> smaller than the integraion of <img class="math" src="../../_images/math/6de489b578ca938805144e2400be7e2773da19ab.png" alt="[K_T]"/>.</p>
+with the numerical integration of <span class="math">\{F_{int}\}</span> is approximately
+<span class="math">m_2 \times n_2</span> smaller than the integraion of <span class="math">[K_T]</span>.</p>
 <p>The Mathematica routine:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">ESL</span> <span class="n">theory</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">equation</span> <span class="nb">type</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">boundary</span> <span class="n">condition</span><span class="p">}</span><span class="n">_nonlinear</span><span class="o">.</span><span class="n">nb</span>
 </pre></div>
@@ -276,7 +277,7 @@ is copy-pasted in Cython.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/conecyl/dev_of_conecyl.txt"
+      <li><a href="../../_sources/theory/conecyl/dev_of_conecyl.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -309,15 +310,15 @@ is copy-pasted in Cython.</p>
         <li class="right" >
           <a href="index.html" title="Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

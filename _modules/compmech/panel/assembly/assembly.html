@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.panel.assembly.assembly &mdash; CompMech 0.7.1 documentation</title>
+    <title>compmech.panel.assembly.assembly &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../../../index.html" />
-    <link rel="up" title="Module code" href="../../../index.html" /> 
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,8 +39,8 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -49,29 +50,29 @@
           <div class="body" role="main">
             
   <h1>Source code for compmech.panel.assembly.assembly</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">gc</span>
-<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">Pool</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
-<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="kn">as</span> <span class="nn">cm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">linspace</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
 
-<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="n">msg</span><span class="p">,</span> <span class="n">warn</span>
-<span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">DOUBLE</span>
-<span class="kn">from</span> <span class="nn">compmech.panel.panel</span> <span class="kn">import</span> <span class="n">check_c</span>
-<span class="kn">import</span> <span class="nn">compmech.panel.modelDB</span> <span class="kn">as</span> <span class="nn">modelDB</span>
-<span class="kn">import</span> <span class="nn">compmech.panel.connections</span> <span class="kn">as</span> <span class="nn">connections</span>
-<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="n">make_symmetric</span><span class="p">,</span> <span class="n">finalize_symmetric_matrix</span>
+<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="k">import</span> <span class="n">msg</span><span class="p">,</span> <span class="n">warn</span>
+<span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="k">import</span> <span class="n">DOUBLE</span>
+<span class="kn">from</span> <span class="nn">compmech.panel.panel</span> <span class="k">import</span> <span class="n">check_c</span>
+<span class="kn">import</span> <span class="nn">compmech.panel.modelDB</span> <span class="k">as</span> <span class="nn">modelDB</span>
+<span class="kn">import</span> <span class="nn">compmech.panel.connections</span> <span class="k">as</span> <span class="nn">connections</span>
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="k">import</span> <span class="n">make_symmetric</span><span class="p">,</span> <span class="n">finalize_symmetric_matrix</span>
 
 
 <span class="k">def</span> <span class="nf">default_field</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="n">gridx</span><span class="p">,</span> <span class="n">gridy</span><span class="p">):</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">panel</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">gridx</span><span class="p">)</span>
     <span class="n">ys</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">panel</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">gridy</span><span class="p">)</span>
-    <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">))</span>
     <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ys</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">))</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">shape</span>
@@ -98,10 +99,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">panels</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k0_conn</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k0_conn</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">panels</span> <span class="o">=</span> <span class="n">panels</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="n">row0</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">col0</span> <span class="o">=</span> <span class="mi">0</span>
@@ -119,13 +120,13 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
 
 
-<div class="viewcode-block" id="PanelAssembly.plot"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">invert_y</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">),</span> <span class="n">save</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">identify</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-            <span class="n">show_boundaries</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">boundary_line</span><span class="o">=</span><span class="s1">&#39;--k&#39;</span><span class="p">,</span> <span class="n">boundary_linewidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-            <span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cbar_nticks</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cbar_format</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cbar_title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="n">cbar_fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-            <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="p">[],</span> <span class="n">xs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-            <span class="n">num_levels</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">vecmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">vecmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">calc_data_only</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="PanelAssembly.plot"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">invert_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">),</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">identify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">show_boundaries</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">boundary_line</span><span class="o">=</span><span class="s1">&#39;--k&#39;</span><span class="p">,</span> <span class="n">boundary_linewidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+            <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cbar_nticks</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cbar_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbar_title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">cbar_fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="p">[],</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+            <span class="n">num_levels</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">vecmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vecmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">calc_data_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
 
 <span class="sd">        Parameters</span>
@@ -222,7 +223,7 @@
         <span class="kn">import</span> <span class="nn">matplotlib</span>
         <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;linux&#39;</span><span class="p">:</span>
             <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
-        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Computing field variables...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">displs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;phix&#39;</span><span class="p">,</span> <span class="s1">&#39;phiy&#39;</span><span class="p">]</span>
@@ -236,39 +237,39 @@
             <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stress</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="n">gridx</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="n">gridy</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s1">&#39;{0} is not a valid vec parameter value!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vec</span><span class="p">))</span>
+                    <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1"> is not a valid vec parameter value!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vec</span><span class="p">))</span>
         <span class="n">field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">vec</span><span class="p">])</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">vecmin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">vecmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">vecmin</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">vecmax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">vecmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">vecmax</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">vecmin</span><span class="o">=</span><span class="n">vecmin</span><span class="p">,</span> <span class="n">vecmax</span><span class="o">=</span><span class="n">vecmax</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">calc_data_only</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span><span class="p">,</span> <span class="n">data</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">data</span>
 
         <span class="n">levels</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">vecmin</span><span class="p">,</span> <span class="n">vecmax</span><span class="p">,</span> <span class="n">num_levels</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
                 <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span>
                 <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">figure</span>
-                <span class="n">save</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">save</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;ax must be an Axes object&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">invert_y</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">invert_y</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">invert_xaxis</span><span class="p">()</span>
 
-        <span class="n">colormap_obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">colormap</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">colormap_obj</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">colormap_obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">colormap</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">colormap_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Invalid colormap, using &quot;jet&quot;&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">colormap_obj</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">jet</span>
 
@@ -283,7 +284,7 @@
             <span class="n">contour</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xplot</span><span class="p">,</span> <span class="n">yplot</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span>
                     <span class="n">cmap</span><span class="o">=</span><span class="n">colormap_obj</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">identify</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xplot</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">yplot</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;P {0:02d}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xplot</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">yplot</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;P </span><span class="si">{0:02d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
                         <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">show_boundaries</span><span class="p">:</span>
                 <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">xplot</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">xplot</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
@@ -294,19 +295,19 @@
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">x2</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="n">boundary_line</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">boundary_linewidth</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">colorbar</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
+            <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="k">import</span> <span class="n">make_axes_locatable</span>
 
             <span class="n">fsize</span> <span class="o">=</span> <span class="n">cbar_fontsize</span>
             <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
             <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;5%&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
             <span class="n">cbarticks</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">vecmin</span><span class="p">,</span> <span class="n">vecmax</span><span class="p">,</span> <span class="n">cbar_nticks</span><span class="p">)</span>
-            <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">cbarticks</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="n">cbar_format</span><span class="p">,</span>
+            <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">cbarticks</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">cbar_format</span><span class="p">,</span>
                                 <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">cbar_title</span><span class="p">:</span>
                 <span class="n">cax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="n">cbar_title</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
                          <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fsize</span><span class="p">)</span>
             <span class="n">cbar</span><span class="o">.</span><span class="n">outline</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
-            <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">fsize</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tick2On</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">fsize</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tick2On</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">title</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
@@ -314,8 +315,8 @@
         <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_frame_on</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
@@ -331,7 +332,7 @@
         <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span>
                 <span class="n">filename</span> <span class="o">=</span> <span class="n">group</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                         <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -397,7 +398,7 @@
         <span class="k">return</span> <span class="n">res</span></div>
 
 
-<div class="viewcode-block" id="PanelAssembly.strain"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.strain">[docs]</a>    <span class="k">def</span> <span class="nf">strain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">NLterms</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PanelAssembly.strain"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.strain">[docs]</a>    <span class="k">def</span> <span class="nf">strain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">NLterms</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculate the strain field</span>
 
 <span class="sd">        Parameters</span>
@@ -449,7 +450,7 @@
         <span class="k">return</span> <span class="n">res</span></div>
 
 
-<div class="viewcode-block" id="PanelAssembly.stress"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.stress">[docs]</a>    <span class="k">def</span> <span class="nf">stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">NLterms</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PanelAssembly.stress"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.stress">[docs]</a>    <span class="k">def</span> <span class="nf">stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">NLterms</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculate the stress field</span>
 
 <span class="sd">        Parameters</span>
@@ -497,7 +498,7 @@
             <span class="n">kxy</span> <span class="o">=</span> <span class="n">kxy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
             <span class="n">Ns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">exx</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="mi">6</span><span class="p">,)))</span>
             <span class="n">F</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">F</span>
-            <span class="k">if</span> <span class="n">F</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">F</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Laminate ABD matrix not defined for panel&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
                 <span class="n">Ns</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">exx</span><span class="o">*</span><span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">eyy</span><span class="o">*</span><span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">gxy</span><span class="o">*</span><span class="n">F</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
@@ -513,13 +514,13 @@
         <span class="k">return</span> <span class="n">res</span></div>
 
 
-    <span class="k">def</span> <span class="nf">get_k0_conn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_k0_conn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;No connectivity dictionary defined!&#39;</span><span class="p">)</span>
             <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">k0_conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">k0_conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">k0_conn</span>
 
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
@@ -581,7 +582,7 @@
         <span class="k">return</span> <span class="n">k0_conn</span>
 
 
-<div class="viewcode-block" id="PanelAssembly.calc_k0"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.calc_k0">[docs]</a>    <span class="k">def</span> <span class="nf">calc_k0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<div class="viewcode-block" id="PanelAssembly.calc_k0"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.calc_k0">[docs]</a>    <span class="k">def</span> <span class="nf">calc_k0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the constitutive stiffness matrix of the assembly</span>
 
 <span class="sd">        Parameters</span>
@@ -603,7 +604,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating k0 for assembly...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">check_c</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
@@ -611,10 +612,10 @@
 
         <span class="n">k0</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel attributes &quot;row_start&quot; and &quot;col_start&quot; must be defined!&#39;</span><span class="p">)</span>
             <span class="n">k0</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
-                    <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
             <span class="n">k0</span> <span class="o">=</span> <span class="n">finalize_symmetric_matrix</span><span class="p">(</span><span class="n">k0</span><span class="p">)</span>
@@ -626,7 +627,7 @@
         <span class="k">return</span> <span class="n">k0</span></div>
 
 
-<div class="viewcode-block" id="PanelAssembly.calc_kG0"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.calc_kG0">[docs]</a>    <span class="k">def</span> <span class="nf">calc_kG0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PanelAssembly.calc_kG0"><a class="viewcode-back" href="../../../../modules/panel/assembly/assembly.html#compmech.panel.assembly.PanelAssembly.calc_kG0">[docs]</a>    <span class="k">def</span> <span class="nf">calc_kG0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Calculate the geometric stiffness matrix of the assembly</span>
 
 <span class="sd">        Parameters</span>
@@ -643,17 +644,17 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating kG0 for assembly...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">check_c</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
             <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating kG for assembly...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="n">kG0</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel attributes &quot;row_start&quot; and &quot;col_start&quot; must be defined!&#39;</span><span class="p">)</span>
             <span class="n">kG0</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
-                    <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                    <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
             <span class="n">kG0</span> <span class="o">=</span> <span class="n">finalize_symmetric_matrix</span><span class="p">(</span><span class="n">kG0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kG0</span> <span class="o">=</span> <span class="n">kG0</span>
@@ -661,14 +662,14 @@
         <span class="k">return</span> <span class="n">kG0</span></div>
 
 
-    <span class="k">def</span> <span class="nf">calc_kM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">calc_kM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating kM for assembly...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
         <span class="n">kM</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel attributes &quot;row_start&quot; and &quot;col_start&quot; must be defined!&#39;</span><span class="p">)</span>
-            <span class="n">kM</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_kM</span><span class="p">(</span><span class="n">row0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">kM</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_kM</span><span class="p">(</span><span class="n">row0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
             <span class="n">kM</span> <span class="o">=</span> <span class="n">finalize_symmetric_matrix</span><span class="p">(</span><span class="n">kM</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kM</span> <span class="o">=</span> <span class="n">kM</span>
@@ -676,18 +677,18 @@
         <span class="k">return</span> <span class="n">kM</span>
 
 
-    <span class="k">def</span> <span class="nf">calc_kT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">calc_kT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating kT for assembly...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
         <span class="n">kT</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1">#TODO use multiprocessing.Pool here</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">row_start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel attributes &quot;row_start&quot; and &quot;col_start&quot; must be defined!&#39;</span><span class="p">)</span>
             <span class="n">kT</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span>
-                    <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">kT</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">row0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">row_start</span><span class="p">,</span>
-                    <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                    <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">NLgeom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">finalize</span><span class="p">:</span>
             <span class="n">kT</span> <span class="o">=</span> <span class="n">finalize_symmetric_matrix</span><span class="p">(</span><span class="n">kT</span><span class="p">)</span>
         <span class="n">k0_conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_k0_conn</span><span class="p">()</span>
@@ -697,14 +698,14 @@
         <span class="k">return</span> <span class="n">kT</span>
 
 
-    <span class="k">def</span> <span class="nf">calc_fint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">calc_fint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating internal forces for assembly...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
         <span class="n">fint</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel attributes &quot;col_start&quot; must be defined!&#39;</span><span class="p">)</span>
-            <span class="n">fint</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">fint</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">k0_conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_k0_conn</span><span class="p">()</span>
         <span class="n">fint</span> <span class="o">+=</span> <span class="n">k0_conn</span><span class="o">*</span><span class="n">c</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fint</span> <span class="o">=</span> <span class="n">fint</span>
@@ -712,14 +713,14 @@
         <span class="k">return</span> <span class="n">fint</span>
 
 
-    <span class="k">def</span> <span class="nf">calc_fext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">calc_fext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating external forces for assembly...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
         <span class="n">fext</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">col_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Panel attributes &quot;col_start&quot; must be defined!&#39;</span><span class="p">)</span>
-            <span class="n">fext</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">fext</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">inc</span><span class="o">=</span><span class="n">inc</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">col0</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">col_start</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fext</span> <span class="o">=</span> <span class="n">fext</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fext</span></div>
@@ -756,14 +757,14 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 11, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.panel.assembly.cylinder &mdash; CompMech 0.7.1 documentation</title>
+    <title>compmech.panel.assembly.cylinder &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../../../index.html" />
-    <link rel="up" title="Module code" href="../../../index.html" /> 
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,8 +39,8 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -49,16 +50,16 @@
           <div class="body" role="main">
             
   <h1>Source code for compmech.panel.assembly.cylinder</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
 
-<span class="kn">from</span> <span class="nn">compmech.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
-<span class="kn">from</span> <span class="nn">compmech.panel.assembly</span> <span class="kn">import</span> <span class="n">PanelAssembly</span>
-<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="n">make_symmetric</span>
-<span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="kn">import</span> <span class="n">lb</span><span class="p">,</span> <span class="n">static</span>
-<span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
+<span class="kn">from</span> <span class="nn">compmech.panel</span> <span class="k">import</span> <span class="n">Panel</span>
+<span class="kn">from</span> <span class="nn">compmech.panel.assembly</span> <span class="k">import</span> <span class="n">PanelAssembly</span>
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="k">import</span> <span class="n">make_symmetric</span>
+<span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="k">import</span> <span class="n">lb</span><span class="p">,</span> <span class="n">static</span>
+<span class="kn">from</span> <span class="nn">compmech.analysis</span> <span class="k">import</span> <span class="n">Analysis</span>
 
 
 <div class="viewcode-block" id="create_cylinder_assy"><a class="viewcode-back" href="../../../../modules/panel/assembly/cylinder_unstiffened.html#compmech.panel.assembly.cylinder.create_cylinder_assy">[docs]</a><span class="k">def</span> <span class="nf">create_cylinder_assy</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
@@ -175,9 +176,9 @@
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">):</span>
         <span class="n">p</span><span class="o">.</span><span class="n">Nxx</span> <span class="o">=</span> <span class="n">Nxxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-    <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conns</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">lb</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kG</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conns</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">lb</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kG</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
              <span class="n">num_eigvalues</span><span class="o">=</span><span class="n">num_eigvalues</span><span class="p">,</span> <span class="n">num_eigvalues_print</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span></div>
 
@@ -229,15 +230,15 @@
                 <span class="n">fx_applied</span> <span class="o">=</span> <span class="n">fx</span>
             <span class="n">p</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx_applied</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="n">fext</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">fext</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">k0</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">(</span><span class="n">conns</span><span class="p">)</span>
-    <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">static</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">static</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">fext</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">kG</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_kG0</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
 
-    <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">lb</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kG</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">lb</span><span class="p">(</span><span class="n">k0</span><span class="p">,</span> <span class="n">kG</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sparse_solver</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
              <span class="n">num_eigvalues</span><span class="o">=</span><span class="n">num_eigvalues</span><span class="p">,</span> <span class="n">num_eigvalues_print</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span></div>
@@ -287,19 +288,19 @@
                 <span class="n">fx_applied</span> <span class="o">=</span> <span class="n">fx</span><span class="o">/</span><span class="mf">2.</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">fx_applied</span> <span class="o">=</span> <span class="n">fx</span>
-            <span class="n">p</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx_applied</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cte</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx_applied</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cte</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">p_spla</span> <span class="o">=</span> <span class="n">assy</span><span class="o">.</span><span class="n">panels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">p_spla</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p_spla</span><span class="o">.</span><span class="n">a</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_spla</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">SPLA</span><span class="p">,</span> <span class="n">cte</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">p_spla</span><span class="o">.</span><span class="n">add_force</span><span class="p">(</span><span class="n">p_spla</span><span class="o">.</span><span class="n">a</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">p_spla</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">SPLA</span><span class="p">,</span> <span class="n">cte</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">assy</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">conns</span>
     <span class="n">analysis</span> <span class="o">=</span> <span class="n">Analysis</span><span class="p">(</span><span class="n">assy</span><span class="o">.</span><span class="n">calc_fext</span><span class="p">,</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_k0</span><span class="p">,</span> <span class="n">assy</span><span class="o">.</span><span class="n">calc_fint</span><span class="p">,</span>
             <span class="n">assy</span><span class="o">.</span><span class="n">calc_kT</span><span class="p">)</span>
     <span class="n">analysis</span><span class="o">.</span><span class="n">NL_method</span> <span class="o">=</span> <span class="s1">&#39;NR&#39;</span>
-    <span class="n">analysis</span><span class="o">.</span><span class="n">modified_NR</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">analysis</span><span class="o">.</span><span class="n">line_search</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">analysis</span><span class="o">.</span><span class="n">kT_initial_state</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">NLgeom</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">analysis</span><span class="o">.</span><span class="n">modified_NR</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">analysis</span><span class="o">.</span><span class="n">line_search</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">analysis</span><span class="o">.</span><span class="n">kT_initial_state</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">NLgeom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">assy</span><span class="p">,</span> <span class="n">incs</span><span class="p">,</span> <span class="n">cs</span>
 </pre></div>
@@ -335,14 +336,14 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 11, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

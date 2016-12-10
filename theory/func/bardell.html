@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Bardell’s Hierarchical Functions &mdash; CompMech 0.7.1 documentation</title>
+    <title>Bardell’s Hierarchical Functions &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" />
-    <link rel="up" title="Approximation Functions Used in Various Models" href="index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="References" href="ref.html" />
     <link rel="prev" title="Approximation Functions Used in Various Models" href="index.html" /> 
   </head>
@@ -46,9 +47,9 @@
         <li class="right" >
           <a href="index.html" title="Approximation Functions Used in Various Models"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Approximation Functions Used in Various Models</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Approximation Functions Used in Various Models</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -68,9 +69,9 @@ boundary conditions.</p>
 <p>The boundary condition is controlled by the first 4 terms of the approximation
 function, herein defined as:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">t1</span></code>: the translation at extremity 1 (<img class="math" src="../../_images/math/6c46ae3c3c5b8ad66d90ce0c5a3c9725ca58bcb4.png" alt="\xi = -1"/>)</li>
+<li><code class="docutils literal"><span class="pre">t1</span></code>: the translation at extremity 1 (<span class="math">\xi = -1</span>)</li>
 <li><code class="docutils literal"><span class="pre">r1</span></code>: the rotation at extremity 1</li>
-<li><code class="docutils literal"><span class="pre">t2</span></code>: the translation at extremity 2 (<img class="math" src="../../_images/math/eba14d201b255bad4126b283043aeb4163a7a15e.png" alt="\xi = +1"/>)</li>
+<li><code class="docutils literal"><span class="pre">t2</span></code>: the translation at extremity 2 (<span class="math">\xi = +1</span>)</li>
 <li><code class="docutils literal"><span class="pre">r2</span></code>: the rotation at extremity 2</li>
 </ul>
 </div>
@@ -79,8 +80,8 @@ function, herein defined as:</p>
 <p>The following code can be used to generate the Bardell functions for a given
 number of terms <code class="docutils literal"><span class="pre">nmax</span></code>. The substitution <code class="docutils literal"><span class="pre">replace('**',</span> <span class="pre">'^')</span></code> aims to
 create an input to Mathematica.</p>
-<div class="literal-block-wrapper container" id="theory-func-bardell-bardell-py">
-<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell.py</span><a class="headerlink" href="#theory-func-bardell-bardell-py" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sympy</span> <span class="k">import</span> <span class="n">var</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">factorial2</span><span class="p">,</span> <span class="n">sympify</span>
@@ -120,8 +121,8 @@ create an input to Mathematica.</p>
 the above output is not adequate due to very long integer numbers that will
 cause precision overflows. The code below should be used to create an input to
 Cython:</p>
-<div class="literal-block-wrapper container" id="theory-func-bardell-bardell-floating-point-py">
-<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell_floating_point.py</span><a class="headerlink" href="#theory-func-bardell-bardell-floating-point-py" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell_floating_point.py</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sympy</span> <span class="k">import</span> <span class="n">var</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">factorial2</span><span class="p">,</span> <span class="n">sympify</span><span class="p">,</span> <span class="n">diff</span>
@@ -203,22 +204,22 @@ These libraries are available in <code class="docutils literal"><span class="pre
 <li>bardell: for the integration along the full domain</li>
 </ul>
 <div class="math">
-<p><img src="../../_images/math/6a61680554343ed3eb881c20095ca531b7df6639.png" alt="\int_{\xi=-1}^{\xi=+1} {f(\xi) g(\xi)}"/></p>
+<p><span class="math">\int_{\xi=-1}^{\xi=+1} {f(\xi) g(\xi)}</span></p>
 </div><ul class="simple">
 <li>bardell_12: for the integration in any interval</li>
 </ul>
 <div class="math">
-<p><img src="../../_images/math/af442699b3ea1f708cb52fc92a21128ff2de8a5e.png" alt="\int_{\xi=\xi_1}^{\xi=\xi_2} {f(\xi) g(\xi)}"/></p>
+<p><span class="math">\int_{\xi=\xi_1}^{\xi=\xi_2} {f(\xi) g(\xi)}</span></p>
 </div><ul class="simple">
 <li>bardell_c0c1: for the integration of two linearly dependent field variables
-<img class="math" src="../../_images/math/d528601a7f4a88ba946fd7ecec406524627f40e9.png" alt="\xi"/> and <img class="math" src="../../_images/math/48d6a1560e9a04bed03ff67882700e186dabf54a.png" alt="\xi'"/></li>
+<span class="math">\xi</span> and <span class="math">\xi'</span></li>
 </ul>
 <div class="math">
-<p><img src="../../_images/math/9056dd5e0a13fd85d08d4577cb860e1b8409f948.png" alt="\int_{\xi=-1}^{\xi=+1} {f(\xi) g(\xi')}"/></p>
+<p><span class="math">\int_{\xi=-1}^{\xi=+1} {f(\xi) g(\xi')}</span></p>
 </div><p>such that:</p>
 <div class="math">
-<p><img src="../../_images/math/85c5cc08985bb47b609717deae8cc09505ad5445.png" alt="\xi' = c_0 + c_1 \xi"/></p>
-</div><p>with <img class="math" src="../../_images/math/90dfad7e3008bd9296795faa349b4446f5e30197.png" alt="c_0"/> and <img class="math" src="../../_images/math/d73f431390d62218ff33f078fc0604ce16258fbc.png" alt="c_1"/> being constant values.</p>
+<p><span class="math">\xi' = c_0 + c_1 \xi</span></p>
+</div><p>with <span class="math">c_0</span> and <span class="math">c_1</span> being constant values.</p>
 </div>
 </div>
 
@@ -250,7 +251,7 @@ These libraries are available in <code class="docutils literal"><span class="pre
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/func/bardell.txt"
+      <li><a href="../../_sources/theory/func/bardell.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -283,15 +284,15 @@ These libraries are available in <code class="docutils literal"><span class="pre
         <li class="right" >
           <a href="index.html" title="Approximation Functions Used in Various Models"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Approximation Functions Used in Various Models</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Approximation Functions Used in Various Models</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

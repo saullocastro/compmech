@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Implementation &mdash; CompMech 0.7.1 documentation</title>
+    <title>Implementation &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -25,7 +26,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../index.html" /> 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,7 +39,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -50,8 +52,8 @@
 <h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="definitions">
 <h2>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
-<p><img class="math" src="../../_images/math/fdc724fcfe6fcd3a077d48d7f0e1b923c193d1aa.png" alt="J_{ij}"/> - component of the Jacobian matrix
-<img class="math" src="../../_images/math/35bcfca0f731aa3f81e7b6542ed72c6612875165.png" alt="j_{ij}"/> - component of the inverse of the Jacobian matrix</p>
+<p><span class="math">J_{ij}</span> - component of the Jacobian matrix
+<span class="math">j_{ij}</span> - component of the inverse of the Jacobian matrix</p>
 <p>The numerical integration should be efficiently vectorized by grouping the
 elements of the same type in a single call to the corresponding function that
 will perform the numerical integration. The required parameters for this
@@ -65,7 +67,7 @@ radius or radii at each integration point</li>
 <p>Each element will pass an array with the inverse of the Jacobian
 for each integration point, e.g. for a shell element:</p>
 <div class="math">
-<p><img src="../../_images/math/6546400a3b531e812d4d3eee4a1f9bb696ce6b1f.png" alt="\{{j_{11}}_1, {j_{12}}_1, {j_{21}}_1, {j_{22}}_1,
+<p><span class="math">\{{j_{11}}_1, {j_{12}}_1, {j_{21}}_1, {j_{22}}_1,
 \\
   {j_{11}}_2, {j_{12}}_2, {j_{21}}_2, {j_{22}}_2,
 \\
@@ -74,7 +76,7 @@ for each integration point, e.g. for a shell element:</p>
   \cdots,
 \\
   {j_{11}}_{n_{ip}}, {j_{12}}_{n_{ip}}, {j_{21}}_{n_{ip}}, {j_{22}}_{n_{ip}},
-\}"/></p>
+\}</span></p>
 </div></div>
 <div class="section" id="the-element-class">
 <h2>The Element Class<a class="headerlink" href="#the-element-class" title="Permalink to this headline">¶</a></h2>
@@ -102,7 +104,7 @@ for each integration point, e.g. for a shell element:</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/fem/implementation.txt"
+      <li><a href="../../_sources/theory/fem/implementation.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -129,13 +131,13 @@ for each integration point, e.g. for a shell element:</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 08, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>

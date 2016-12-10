@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>compmech.conecyl.modelDB &mdash; CompMech 0.7.1 documentation</title>
+    <title>compmech.conecyl.modelDB &#8212; CompMech 0.7.2 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.7.1',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
@@ -25,8 +26,8 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
-    <link rel="top" title="CompMech 0.7.1 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,8 +39,8 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -56,16 +57,16 @@
 
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="nn">clpt</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="nn">fsdt</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="n">clpt</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="n">fsdt</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">db</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;clpt_donnell_bc1&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc1</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc1_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc1_nonlinear</span><span class="p">,</span>
@@ -78,9 +79,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_donnell_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc2</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc2_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc2_nonlinear</span><span class="p">,</span>
@@ -93,9 +94,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;iso_clpt_donnell_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc2</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">iso_clpt_donnell_bc2_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">iso_clpt_donnell_bc2_nonlinear</span><span class="p">,</span>
@@ -108,9 +109,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_donnell_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc3</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc3_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc3_nonlinear</span><span class="p">,</span>
@@ -123,9 +124,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;iso_clpt_donnell_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc3</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">iso_clpt_donnell_bc3_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">iso_clpt_donnell_bc3_nonlinear</span><span class="p">,</span>
@@ -138,9 +139,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_donnell_bc4&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc4</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc4_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bc4_nonlinear</span><span class="p">,</span>
@@ -153,12 +154,12 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_donnell_bcn&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bcn</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_donnell_bcn_linear</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
                     <span class="s1">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="s1">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -168,9 +169,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_sanders_bc1&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc1</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc1_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc1_nonlinear</span><span class="p">,</span>
@@ -183,9 +184,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_sanders_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc2</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc2_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc2_nonlinear</span><span class="p">,</span>
@@ -198,9 +199,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_sanders_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc3</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc3_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc3_nonlinear</span><span class="p">,</span>
@@ -213,9 +214,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_sanders_bc4&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_commons_bc4</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc4_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">clpt_sanders_bc4_nonlinear</span><span class="p">,</span>
@@ -228,12 +229,12 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;clpt_geier1997_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">clpt_geier1997_bc2</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">clpt_geier1997_bc2</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
                     <span class="s1">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
                     <span class="s1">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -243,9 +244,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_donnell_bcn&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bcn</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bcn_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bcn_nonlinear</span><span class="p">,</span>
@@ -258,9 +259,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_donnell_bc1&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bc1</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc1_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc1_nonlinear</span><span class="p">,</span>
@@ -273,9 +274,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_donnell_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bc2</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc2_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc2_nonlinear</span><span class="p">,</span>
@@ -288,9 +289,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_donnell_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bc3</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc3_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc3_nonlinear</span><span class="p">,</span>
@@ -303,9 +304,9 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_donnell_bc4&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bc4</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc4_linear</span><span class="p">,</span>
                     <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="n">fsdt_donnell_bc4_nonlinear</span><span class="p">,</span>
@@ -318,12 +319,12 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_sanders_bcn&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_commons_bcn</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_sanders_bcn_linear</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
                     <span class="s1">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
                     <span class="s1">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -333,12 +334,12 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_shadmehri2012_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_shadmehri2012_bc2</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_shadmehri2012_bc2</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
                     <span class="s1">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
                     <span class="s1">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -348,12 +349,12 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_shadmehri2012_bc3&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_shadmehri2012_bc3</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_shadmehri2012_bc3</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
                     <span class="s1">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
                     <span class="s1">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -363,12 +364,12 @@
                     <span class="s1">&#39;num2&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
                     <span class="p">},</span>
     <span class="s1">&#39;fsdt_geier1997_bc2&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
-                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;linear buckling&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear static&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;commons&#39;</span><span class="p">:</span> <span class="n">fsdt_geier1997_bc2</span><span class="p">,</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">fsdt_geier1997_bc2</span><span class="p">,</span>
-                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                    <span class="s1">&#39;non-linear&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="s1">&#39;dofs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
                     <span class="s1">&#39;e_num&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
                     <span class="s1">&#39;i0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -379,7 +380,7 @@
                     <span class="p">},</span>
     <span class="p">}</span>
 
-<div class="viewcode-block" id="get_linear_matrices"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.modelDB.get_linear_matrices">[docs]</a><span class="k">def</span> <span class="nf">get_linear_matrices</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="n">combined_load_case</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="get_linear_matrices"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.modelDB.get_linear_matrices">[docs]</a><span class="k">def</span> <span class="nf">get_linear_matrices</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="n">combined_load_case</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Obtain the right functions to calculate hte linear matrices</span>
 <span class="sd">    for a given model.</span>
 
@@ -416,7 +417,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fk0edges</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;linear&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fk0edges</span>
     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="n">k0edges</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">k0edges</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;clpt_donnell_bc1&#39;</span><span class="p">:</span>
         <span class="n">k0edges</span> <span class="o">=</span> <span class="n">fk0edges</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span>
@@ -586,14 +587,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Oct 11, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.
+        &#169; Copyright 2012-2016 Saullo G. P. Castro.
+      Last updated on Dec 10, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
     </div>
   </body>
 </html>
