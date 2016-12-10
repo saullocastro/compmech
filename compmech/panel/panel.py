@@ -584,7 +584,7 @@ class Panel(object):
         if self.flow.lower() == 'x':
             kA = matrices.fkAx(beta, gamma, self, size, row0, col0)
         elif self.flow.lower() == 'y':
-            kA = mod.fkAy(beta, self, size, row0, col0)
+            kA = matrices.fkAy(beta, self, size, row0, col0)
         else:
             raise ValueError('Invalid flow value, must be x or y')
 
