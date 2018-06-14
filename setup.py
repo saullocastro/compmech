@@ -13,9 +13,6 @@ import subprocess
 pyversion = sys.version_info
 from distutils.sysconfig import get_python_lib
 
-if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] > (3, 5):
-    raise RuntimeError("Python version 2.7, 3.4 or 3.5 required.")
-
 DOCLINES = __doc__.split("\n")
 
 CLASSIFIERS = """\
@@ -27,8 +24,8 @@ License :: OSI Approved :: BSD License
 Programming Language :: Fortran
 Programming Language :: C
 Programming Language :: Python :: 2.7
-Programming Language :: Python :: 3.4
 Programming Language :: Python :: 3.5
+Programming Language :: Python :: 3.6
 Topic :: Scientific/Engineering
 Topic :: Scientific/Engineering :: Mathematics
 Topic :: Software Development
@@ -38,9 +35,9 @@ Operating System :: Unix
 """
 
 MAJOR = 0
-MINOR = 7
-MICRO = 2
-ISRELEASED = True
+MINOR = 8
+MICRO = 0
+ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
