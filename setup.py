@@ -11,17 +11,10 @@ from os.path import join
 import sys
 import subprocess
 pyversion = sys.version_info
-if pyversion.major == 3 and pyversion.minor == 4:
-    import importlib.machinery
 from distutils.sysconfig import get_python_lib
 
 if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] > (3, 5):
     raise RuntimeError("Python version 2.7, 3.4 or 3.5 required.")
-
-if sys.version_info[0] < 3:
-    import __builtin__ as builtins
-else:
-    import builtins
 
 DOCLINES = __doc__.split("\n")
 
@@ -133,7 +126,7 @@ def configuration(parent_package='', top_path=None):
     config.add_data_files(('compmech', 'setup.cfg'))
     config.add_data_files(('compmech', 'setup.py'))
 
-    if 'bdist_wheel' in sys.argv[1:]:
+    if 'bdist_wheel' in sys.argv[1:] or 'build_ext' in sys.argv[1:]:
         includedir = join(get_python_lib(), 'compmech', 'include')
         libdir = join(get_python_lib(), 'compmech', 'lib')
         if not (os.path.isdir(includedir) and os.path.isdir(libdir)):
@@ -196,11 +189,6 @@ def setup_package():
 
         metadata['version'] = FULLVERSION
     else:
-        if (len(sys.argv) >= 2 and sys.argv[1] in ('bdist_wheel', 'bdist_egg')) or (
-                    'develop' in sys.argv):
-            # bdist_wheel/bdist_egg needs setuptools
-            import setuptools
-
         from numpy.distutils.core import setup
 
         metadata['configuration'] = configuration
