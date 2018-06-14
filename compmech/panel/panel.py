@@ -294,8 +294,8 @@ class Panel(object):
             F[6:, 6:] *= self.fsdt_shear_correction
 
         if self.force_orthotropic_laminate:
-            msg('', silent=silent)
-            msg('Forcing orthotropic laminate...', level=2, silent=silent)
+            msg('')
+            msg('Forcing orthotropic laminate...', level=2)
             F[0, 2] = 0. # A16
             F[1, 2] = 0. # A26
             F[2, 0] = 0. # A61
@@ -389,8 +389,7 @@ class Panel(object):
 
         if self.y1 is not None and self.y2 is not None:
             if c is not None or Fnxny is not None:
-                raise NotImplementedError(
-                'Partial domain from y1 to y2 not implemented for kL')
+                raise NotImplementedError('Partial domain from y1 to y2 not implemented for kL')
             k0 = matrices.fk0y1y2(self.y1, self.y2, self, size, row0, col0)
         else:
             if c is None and Fnxny is None:
@@ -528,7 +527,6 @@ class Panel(object):
             raise ValueError('Attribute "mu" (density) must be defined')
 
 
-        h = sum(self.plyts)
         if y1 is not None and y2 is not None:
             kM = matrices.fkMy1y2(y1, y2, self.offset, self, size, row0, col0)
         else:
@@ -574,12 +572,9 @@ class Panel(object):
                 gamma = beta*1./(2.*self.r*(Mach**2 - 1)**0.5)
             else:
                 gamma = 0.
-            ainf = self.speed_sound
-            aeromu = beta/(Mach*ainf)*(Mach**2 - 2)/(Mach**2 - 1)
         else:
             beta = self.beta
             gamma = self.gamma if self.gamma is not None else 0.
-            aeromu = self.aeromu if self.aeromu is not None else 0.
 
         if self.flow.lower() == 'x':
             kA = matrices.fkAx(beta, gamma, self, size, row0, col0)
@@ -607,6 +602,7 @@ class Panel(object):
         """
         msg('Calculating cA... ', level=2, silent=silent)
 
+        matrices = modelDB.db[self.model]['matrices']
         cA = matrices.fcA(aeromu, self, self.size, 0, 0)
         cA = cA*(0+1j)
 
@@ -674,10 +670,7 @@ class Panel(object):
 
         nx = self.nx if nx is None else nx
         ny = self.ny if ny is None else ny
-        if ckL is None:
-            self.calc_k0(silent=silent)
-        else:
-            self.calc_k0(silent=silent, c=ckL, nx=nx, ny=ny, Fnxny=Fnxny)
+        self.calc_k0(silent=silent, c=ckL, nx=nx, ny=ny, Fnxny=Fnxny)
         self.calc_kG0(silent=silent, c=c, nx=nx, ny=ny, Fnxny=Fnxny)
 
         if calc_kA:
@@ -732,8 +725,8 @@ class Panel(object):
 
         msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1,
             silent=silent)
-        for eig in eigvals[:self.num_eigvalues_print]:
-            msg('{0}'.format(eig), level=2, silent=silent)
+        for eigval in eigvals[:self.num_eigvalues_print]:
+            msg('{0}'.format(eigval), level=2, silent=silent)
         self.analysis.last_analysis = 'lb'
 
 
@@ -859,7 +852,6 @@ class Panel(object):
             if not damping:
                 M = -M
             else:
-                size = M.shape[0]
                 cA = self.cA.toarray()
                 cA = cA[:, check][check, :]
                 if reduced_dof:
@@ -1058,8 +1050,6 @@ class Panel(object):
 
         """
         res_strain = self.strain(c, xs, ys, gridx, gridy)
-        x = res_strain['x']
-        y = res_strain['y']
         exx = res_strain['exx']
         eyy = res_strain['eyy']
         gxy = res_strain['gxy']
@@ -1144,7 +1134,6 @@ class Panel(object):
             raise ValueError(
                     '{} is not a valid model option'.format(model))
         db = modelDB.db
-        num = db[model]['num']
         dofs = db[model]['dofs']
         fg = db[model]['field'].fg
 
@@ -1218,11 +1207,11 @@ class Panel(object):
                     '{0} is not a valid model option'.format(model))
         matrices_num = modelDB.db[model].get('matrices_num')
         if matrices_num is None:
-            raise ValuError('matrices_num not implemented for model {0}'.
+            raise ValueError('matrices_num not implemented for model {0}'.
                     format(model))
         calc_fint = getattr(matrices_num, 'calc_fint', None)
         if calc_fint is None:
-            raise ValuError('calc_fint not implemented for model {0}'.
+            raise ValueError('calc_fint not implemented for model {0}'.
                     format(model))
 
         if size is None:
