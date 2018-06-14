@@ -27,7 +27,7 @@ def configuration(parent_package='',top_path=None):
     # lib
     setuppath = join(realpath(config.package_path), './lib/setup.py')
     print('Building shared libraries using {0}'.format(setuppath))
-    if 'install' in sys.argv:
+    if 'install' in sys.argv or 'build_ext' in sys.argv:
         p = Popen('python ' + join(setuppath) + ' install',
             shell=True)
         p.wait()
