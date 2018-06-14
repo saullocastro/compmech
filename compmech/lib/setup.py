@@ -1,6 +1,5 @@
 from __future__ import division, print_function, absolute_import
 
-import sys
 import os
 from os.path import join, basename, extsep
 from distutils.sysconfig import get_python_lib
