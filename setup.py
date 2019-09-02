@@ -15,8 +15,8 @@ if pyversion.major == 3 and pyversion.minor == 4:
     import importlib.machinery
 from distutils.sysconfig import get_python_lib
 
-if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] > (3, 5):
-    raise RuntimeError("Python version 2.7, 3.4 or 3.5 required.")
+if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] > (3, 4):
+    raise RuntimeError("Python version 2.7, >= 3.5 required.")
 
 if sys.version_info[0] < 3:
     import __builtin__ as builtins
@@ -34,8 +34,9 @@ License :: OSI Approved :: BSD License
 Programming Language :: Fortran
 Programming Language :: C
 Programming Language :: Python :: 2.7
-Programming Language :: Python :: 3.4
 Programming Language :: Python :: 3.5
+Programming Language :: Python :: 3.6
+Programming Language :: Python :: 3.7
 Topic :: Scientific/Engineering
 Topic :: Scientific/Engineering :: Mathematics
 Topic :: Software Development
