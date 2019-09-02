@@ -11,11 +11,9 @@ from os.path import join
 import sys
 import subprocess
 pyversion = sys.version_info
-if pyversion.major == 3 and pyversion.minor == 4:
-    import importlib.machinery
 from distutils.sysconfig import get_python_lib
 
-if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] > (3, 4):
+if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] < (3, 5):
     raise RuntimeError("Python version 2.7, >= 3.5 required.")
 
 if sys.version_info[0] < 3:
