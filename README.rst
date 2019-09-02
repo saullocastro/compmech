@@ -1,6 +1,6 @@
-.. image:: https://travis-ci.org/compmech/compmech.svg?branch=master
+.. image:: https://travis-ci.org/saullocastro/compmech.svg?branch=master
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/compmech/compmech
+.. image:: https://ci.appveyor.com/api/projects/status/github/saullocastro/compmech
 
 
 ==================================
@@ -14,7 +14,7 @@ fluid-structure interaction with the panel flutter analyzes available.
 Documentation
 -------------
 
-The documentation is available on: http://compmech.github.io/compmech/
+The documentation is available on: http://saullocastro.github.io/compmech/
 
 Requirements
 ------------
@@ -26,6 +26,6 @@ Licensing
 ---------
 
 The new BSD License (`see the LICENSE file for details
-<https://raw.github.com/compmech/compmech/master/LICENSE>`_)
+<https://raw.github.com/saullocastro/compmech/master/LICENSE>`_)
 covers all files in the compmech repository unless stated otherwise.
 
