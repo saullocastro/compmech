@@ -1,37 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Next Steps &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="_static/logo.png"/>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing to CompMech" href="dev/index.html" />
     <link rel="prev" title="About" href="about.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -61,12 +51,12 @@
 <div class="section" id="use-of-finite-elements">
 <h2>Use of Finite Elements<a class="headerlink" href="#use-of-finite-elements" title="Permalink to this headline">¶</a></h2>
 <p>The studies with the Ritz Method presented in module
-<a class="reference internal" href="modules/conecyl/index.html#module-compmech.conecyl" title="compmech.conecyl"><code class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></code></a> have shown the main disadvantages regarding
+<a class="reference internal" href="modules/conecyl/index.html#module-compmech.conecyl" title="compmech.conecyl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl</span></code></a> have shown the main disadvantages regarding
 the numerical integration of the non-linear stiffness matrices:</p>
 <ul class="simple">
-<li>since the approximation functions are complex, the evaluation of each
-integration point is expensive</li>
-<li>there is no quadrature rule available for such complex functions</li>
+<li><p>since the approximation functions are complex, the evaluation of each
+integration point is expensive</p></li>
+<li><p>there is no quadrature rule available for such complex functions</p></li>
 </ul>
 <p>Moreover, the use of very especialized models makes it difficult to extend
 their applicability for different cases where different load and boundary
@@ -80,32 +70,36 @@ minimizing the number of integration points required.</p>
 <p>Before implementing the new finite elements a very well defined process
 must be stablished in order to define:</p>
 <ul class="simple">
-<li>integration with pynastran to read NASTRAN input files</li>
-<li>define node class</li>
-<li>define element class</li>
-<li>node-element connectivity schemes:<ul>
-<li>minimize band-width of the stiffness matrices by working with a proper
+<li><p>integration with pynastran to read NASTRAN input files</p></li>
+<li><p>define node class</p></li>
+<li><p>define element class</p></li>
+<li><p>node-element connectivity schemes:</p>
+<ul>
+<li><p>minimize band-width of the stiffness matrices by working with a proper
 internal node identification. The user will use the conventional node ID,
 but the analysis could use an internal ID that is calculated to minimize
-the band-width of the sparse matrices</li>
+the band-width of the sparse matrices</p></li>
 </ul>
 </li>
-<li>use of C++, C or Cython?<ul>
-<li>use Cython or Python classes?</li>
+<li><p>use of C++, C or Cython?</p>
+<ul>
+<li><p>use Cython or Python classes?</p></li>
 </ul>
 </li>
-<li>possible sparse solvers:<ul>
-<li>Intel MKL PARDISO</li>
-<li>the <code class="docutils literal"><span class="pre">scipy.sparse</span></code> solver, at least to build the <code class="docutils literal"><span class="pre">csr_matrix</span></code>
-or <code class="docutils literal"><span class="pre">csc_matrix</span></code></li>
-<li>SuperLU</li>
-<li>ARPACK (used in <code class="docutils literal"><span class="pre">scipy.sparse.linalg.eigsh</span></code>)</li>
-<li>Use the rainflow algorithm?</li>
+<li><p>possible sparse solvers:</p>
+<ul>
+<li><p>Intel MKL PARDISO</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">scipy.sparse</span></code> solver, at least to build the <code class="docutils literal notranslate"><span class="pre">csr_matrix</span></code>
+or <code class="docutils literal notranslate"><span class="pre">csc_matrix</span></code></p></li>
+<li><p>SuperLU</p></li>
+<li><p>ARPACK (used in <code class="docutils literal notranslate"><span class="pre">scipy.sparse.linalg.eigsh</span></code>)</p></li>
+<li><p>Use the rainflow algorithm?</p></li>
 </ul>
 </li>
-<li>Use SIMD programming for common array operations?<ul>
-<li>rely on NumPy, with a group working on these optimizations</li>
-<li>use Eigen3 wrappers such as minieigen</li>
+<li><p>Use SIMD programming for common array operations?</p>
+<ul>
+<li><p>rely on NumPy, with a group working on these optimizations</p></li>
+<li><p>use Eigen3 wrappers such as minieigen</p></li>
 </ul>
 </li>
 </ul>
@@ -115,26 +109,27 @@ or <code class="docutils literal"><span class="pre">csc_matrix</span></code></li
 <p>The element types should include some of those available in NASTRAN plus
 some additional options:</p>
 <ul class="simple">
-<li>The priority order should be:<ul>
-<li>CQUAD4 - plate element like in NASTRAN</li>
-<li>ZQUAD4 - cylindrical (Zylinder) shell element</li>
-<li>KQUAD4 - conical (Konus) shell element</li>
-<li>1-D elements</li>
-<li>3-D elements</li>
+<li><p>The priority order should be:</p>
+<ul>
+<li><p>CQUAD4 - plate element like in NASTRAN</p></li>
+<li><p>ZQUAD4 - cylindrical (Zylinder) shell element</p></li>
+<li><p>KQUAD4 - conical (Konus) shell element</p></li>
+<li><p>1-D elements</p></li>
+<li><p>3-D elements</p></li>
 </ul>
 </li>
-<li>The element&#8217;s formulation should allow:
+<li><p>The element’s formulation should allow:
 - Initial Imperfection (how?!)
 - CLPT
 - FSDT
-- TSDT</li>
+- TSDT</p></li>
 </ul>
 </div>
 <div class="section" id="studies">
 <h3>Studies<a class="headerlink" href="#studies" title="Permalink to this headline">¶</a></h3>
 <p>The new tools will create a high potential for new studies concerning
 advanced procedures to calculate shear correction factors, new non-linear
-methods and so on...</p>
+methods and so on…</p>
 </div>
 </div>
 <div class="section" id="gpu">
@@ -142,10 +137,10 @@ methods and so on...</p>
 <p>How to use GPU-based programming?</p>
 <p>Some preliminary studies show that it is promising to apply such programming
 strategies to largely parallelize operations like the numerical integration of
-each element&#8217;s stiffness matrix... each thread could be one element being
+each element’s stiffness matrix… each thread could be one element being
 integrated for example and this should be benchmarked against a CPU-based
 integration using Shared-Memory Parallel programming through OpenMP, which has
-already been applied in <a class="reference internal" href="modules/conecyl/index.html#module-compmech.conecyl" title="compmech.conecyl"><code class="xref py py-mod docutils literal"><span class="pre">compmech.conecyl</span></code></a>.</p>
+already been applied in <a class="reference internal" href="modules/conecyl/index.html#module-compmech.conecyl" title="compmech.conecyl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl</span></code></a>.</p>
 </div>
 </div>
 
@@ -158,7 +153,7 @@ already been applied in <a class="reference internal" href="modules/conecyl/inde
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Next Steps</a><ul>
 <li><a class="reference internal" href="#use-of-finite-elements">Use of Finite Elements</a><ul>
@@ -186,13 +181,13 @@ already been applied in <a class="reference internal" href="modules/conecyl/inde
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -219,8 +214,8 @@ already been applied in <a class="reference internal" href="modules/conecyl/inde
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

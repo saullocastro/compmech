@@ -1,35 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>compmech.analysis.analysis &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -62,7 +52,7 @@
 
 
 <div class="viewcode-block" id="Analysis"><a class="viewcode-back" href="../../../modules/analysis/index.html#compmech.analysis.Analysis">[docs]</a><span class="k">class</span> <span class="nc">Analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Class that embodies all data required for linear/non-linear analysis</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Class that embodies all data required for linear/non-linear analysis</span>
 
 <span class="sd">    The parameters are described in the following tables:</span>
 
@@ -131,7 +121,7 @@
 <span class="sd">        The solution for each increment.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NL_method&#39;</span><span class="p">,</span> <span class="s1">&#39;line_search&#39;</span><span class="p">,</span> <span class="s1">&#39;max_iter_line_search&#39;</span><span class="p">,</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NL_method&#39;</span><span class="p">,</span> <span class="s1">&#39;line_search&#39;</span><span class="p">,</span> <span class="s1">&#39;max_iter_line_search&#39;</span><span class="p">,</span>
             <span class="s1">&#39;modified_NR&#39;</span><span class="p">,</span> <span class="s1">&#39;compute_every_n&#39;</span><span class="p">,</span>
             <span class="s1">&#39;kT_initial_state&#39;</span><span class="p">,</span> <span class="s1">&#39;initialInc&#39;</span><span class="p">,</span> <span class="s1">&#39;minInc&#39;</span><span class="p">,</span> <span class="s1">&#39;maxInc&#39;</span><span class="p">,</span> <span class="s1">&#39;absTOL&#39;</span><span class="p">,</span>
             <span class="s1">&#39;relTOL&#39;</span><span class="p">,</span> <span class="s1">&#39;maxNumIter&#39;</span><span class="p">,</span> <span class="s1">&#39;too_slow_TOL&#39;</span><span class="p">,</span> <span class="s1">&#39;increments&#39;</span><span class="p">,</span> <span class="s1">&#39;cs&#39;</span><span class="p">,</span>
@@ -225,13 +215,13 @@
               <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
             </a></p>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -253,8 +243,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

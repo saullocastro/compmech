@@ -1,35 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Cubic element of the Serendipity family &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -50,28 +40,28 @@
             
   <div class="section" id="cubic-element-of-the-serendipity-family">
 <h1>Cubic element of the Serendipity family<a class="headerlink" href="#cubic-element-of-the-serendipity-family" title="Permalink to this headline">¶</a></h1>
-<p>Zienkiewicz and Taylor (2000) <a class="reference internal" href="../conecyl/ref.html#zienkiewicz2000v1" id="id1">[zienkiewicz2000v1]</a> present a rectangular
+<p>Zienkiewicz and Taylor (2000) <a class="reference internal" href="../conecyl/ref.html#zienkiewicz2000v1" id="id1"><span>[zienkiewicz2000v1]</span></a> present a rectangular
 cubic element of the Serendipity family (in Chapter 8) which will be described
 here, focusing on its implementation using an isoparametric approach, i.e.
 the same approximation used for the geometry will be used to approximate
-the displacement field vector <span class="math">\{u\}</span>.</p>
+the displacement field vector <img class="math" src="../../_images/math/3e84e09634fc35300ca92d763d7a7c3dfb6a5f52.png" alt="\{u\}"/>.</p>
 <p>The element and the 12 nodes are shown in the figure below.</p>
-<p id="figure-quadcubics">(<a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.py">Source code</a>, <a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.png">png</a>, <a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.hires.png">hires.png</a>, <a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.pdf">pdf</a>)</p>
-<div class="figure">
+<p id="figure-quadcubics">(<a class="reference external" href="../../../pyplots/theory/fem/fsdt_donnell_quad12.py">Source code</a>)</p>
+<div class="figure align-default">
 <img alt="../../_images/fsdt_donnell_quad12.png" src="../../_images/fsdt_donnell_quad12.png" />
 </div>
-<p>The variables of <span class="math">\{u\}</span> are interpolated using:</p>
+<p>The variables of <img class="math" src="../../_images/math/3e84e09634fc35300ca92d763d7a7c3dfb6a5f52.png" alt="\{u\}"/> are interpolated using:</p>
 <div class="math">
-<p><span class="math">\{u\} = \sum_{i=1}^{i=12}{h_i \{u_i\}}</span></p>
-</div><p>where <span class="math">h_i</span> and <span class="math">\{u_i\}</span> represent the interpolation and the displacement
-vector at node <span class="math">n_i</span>. The interpolation function for the corner nodes are:</p>
+<p><img src="../../_images/math/5a3bf4e57f6455d44dbe35c4ab70ad8d2dcbe4ba.png" alt="\{u\} = \sum_{i=1}^{i=12}{h_i \{u_i\}}"/></p>
+</div><p>where <img class="math" src="../../_images/math/b6e2c1bc7d8a8ef8bc3878348c32e442f102d286.png" alt="h_i"/> and <img class="math" src="../../_images/math/ed760380fcd599ade0c0ea1c2b06f0956bda76b0.png" alt="\{u_i\}"/> represent the interpolation and the displacement
+vector at node <img class="math" src="../../_images/math/29920eacb87ef0eb96e99aca37a523798ce98563.png" alt="n_i"/>. The interpolation function for the corner nodes are:</p>
 <div class="math">
-<p><span class="math">h_{1,\cdots,4} = \frac{1}{32}(1 + \xi\cdot\xi_{1,\cdots,4})
-         (1 + \eta\cdot\eta_{1,\cdots,4})[-10 + 9\cdot(\xi^2 + \eta^2)]</span></p>
+<p><img src="../../_images/math/14af442b41c9bfb16ac031f4ab975f8d4cbf0db1.png" alt="h_{1,\cdots,4} = \frac{1}{32}(1 + \xi\cdot\xi_{1,\cdots,4})
+         (1 + \eta\cdot\eta_{1,\cdots,4})[-10 + 9\cdot(\xi^2 + \eta^2)]"/></p>
 </div><p>and for the middle nodes are:</p>
 <div class="math">
-<p><span class="math">h_{5,\cdots,12}  = \frac{9}{32}(1 + \xi\cdot\xi_{5,\cdots,12})
-                       (1-\eta^2)(1+9\cdot\eta\cdot\eta_{5,\cdots,12})</span></p>
+<p><img src="../../_images/math/4b5aaa034460438f24d0da14ff6e20938850a753.png" alt="h_{5,\cdots,12}  = \frac{9}{32}(1 + \xi\cdot\xi_{5,\cdots,12})
+                       (1-\eta^2)(1+9\cdot\eta\cdot\eta_{5,\cdots,12})"/></p>
 </div><p>The coordinates for each node</p>
 </div>
 
@@ -92,13 +82,13 @@ vector at node <span class="math">n_i</span>. The interpolation function for the
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -119,8 +109,8 @@ vector at node <span class="math">n_i</span>. The interpolation function for the
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

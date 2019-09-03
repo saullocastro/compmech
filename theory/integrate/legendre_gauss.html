@@ -1,37 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Legendre-Gauss Quadrature Points &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="References" href="ref.html" />
     <link rel="prev" title="Numerical Integration Methods" href="index.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -60,12 +50,12 @@
             
   <div class="section" id="legendre-gauss-quadrature-points">
 <span id="theory-integrate-legendre-gauss"></span><h1>Legendre-Gauss Quadrature Points<a class="headerlink" href="#legendre-gauss-quadrature-points" title="Permalink to this headline">¶</a></h1>
-<p>The related theory is well presented by <a class="reference internal" href="ref.html#weisstein" id="id1">[weisstein]</a>.</p>
+<p>The related theory is well presented by <a class="reference internal" href="ref.html#weisstein" id="id1"><span>[weisstein]</span></a>.</p>
 <div class="section" id="code-to-generate-points">
 <h2>Code to generate points<a class="headerlink" href="#code-to-generate-points" title="Permalink to this headline">¶</a></h2>
-<p>The following Mathematica script, taken from <a class="reference internal" href="ref.html#pomax" id="id2">[pomax]</a> was used to generate the Legendre-Gauss
+<p>The following Mathematica script, taken from <a class="reference internal" href="ref.html#pomax" id="id2"><span>[pomax]</span></a> was used to generate the Legendre-Gauss
 quadrature points:</p>
-<div class="highlight-mathematica"><div class="highlight"><pre><span></span><span class="n">symboliclegendre</span><span class="p">[</span><span class="nv">n_</span><span class="p">,</span><span class="nv">x_</span><span class="p">]</span><span class="o">:=</span><span class="n">Solve</span><span class="p">[</span><span class="n">LegendreP</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+<div class="highlight-mathematica notranslate"><div class="highlight"><pre><span></span><span class="n">symboliclegendre</span><span class="p">[</span><span class="nv">n_</span><span class="p">,</span><span class="nv">x_</span><span class="p">]</span><span class="o">:=</span><span class="n">Solve</span><span class="p">[</span><span class="n">LegendreP</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
 <span class="n">legendreprime</span><span class="p">[</span><span class="nv">n_</span><span class="p">,</span><span class="nv">a_</span><span class="p">]</span><span class="o">:=</span><span class="n">D</span><span class="p">[</span><span class="n">LegendreP</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">],</span><span class="n">x</span><span class="p">]</span><span class="o">/.</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">a</span><span class="p">;</span><span class="w"></span>
 <span class="n">weights</span><span class="p">[</span><span class="nv">n_</span><span class="p">,</span><span class="nv">x_</span><span class="p">]</span><span class="o">:=</span><span class="mi">2</span><span class="o">/</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">legendreprime</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">]</span><span class="o">^</span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
 
@@ -109,7 +99,7 @@ quadrature points:</p>
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Legendre-Gauss Quadrature Points</a><ul>
 <li><a class="reference internal" href="#code-to-generate-points">Code to generate points</a></li>
@@ -133,13 +123,13 @@ quadrature points:</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -168,8 +158,8 @@ quadrature points:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

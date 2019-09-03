@@ -1,35 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>compmech.panel.panel &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -91,7 +81,7 @@
 
 
 <div class="viewcode-block" id="Panel"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel">[docs]</a><span class="k">class</span> <span class="nc">Panel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;General Panel class</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;General Panel class</span>
 
 <span class="sd">    It works for both flat plates, cylindrical and conical panels. The right</span>
 <span class="sd">    model is selected according to parameters ``r`` (radius) and ``alphadeg``</span>
@@ -298,7 +288,7 @@
 
 
 <div class="viewcode-block" id="Panel.get_size"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.get_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculate the size of the stiffness matrices</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the size of the stiffness matrices</span>
 
 <span class="sd">        The size of the stiffness matrices can be interpreted as the number of</span>
 <span class="sd">        rows or columns, recalling that this will be the size of the Ritz</span>
@@ -942,7 +932,7 @@
 
         <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">damping</span><span class="p">:</span>
-                <span class="n">higher_zero</span> <span class="o">=</span> <span class="n">eigvals</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
+                <span class="n">higher_zero</span> <span class="o">=</span> <span class="n">eigvals</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="mf">1e-6</span>
 
                 <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">higher_zero</span><span class="p">]</span>
                 <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">higher_zero</span><span class="p">]</span>
@@ -958,7 +948,7 @@
                 <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">sort_ind</span><span class="p">]</span>
                 <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">sort_ind</span><span class="p">]</span>
 
-                <span class="n">higher_zero</span> <span class="o">=</span> <span class="n">eigvals</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">6</span>
+                <span class="n">higher_zero</span> <span class="o">=</span> <span class="n">eigvals</span><span class="o">.</span><span class="n">real</span> <span class="o">&gt;</span> <span class="mf">1e-6</span>
 
                 <span class="n">eigvals</span> <span class="o">=</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">higher_zero</span><span class="p">]</span>
                 <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">higher_zero</span><span class="p">]</span>
@@ -982,7 +972,7 @@
 
 
 <div class="viewcode-block" id="Panel.uvw"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.uvw">[docs]</a>    <span class="k">def</span> <span class="nf">uvw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculate the displacement field</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the displacement field</span>
 
 <span class="sd">        For a given full set of Ritz constants ``c``, the displacement</span>
 <span class="sd">        field is calculated and stored in the parameters</span>
@@ -1033,7 +1023,7 @@
 
 
 <div class="viewcode-block" id="Panel.strain"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.strain">[docs]</a>    <span class="k">def</span> <span class="nf">strain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">NLterms</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculate the strain field</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the strain field</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1078,7 +1068,7 @@
 
 
 <div class="viewcode-block" id="Panel.stress"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.stress">[docs]</a>    <span class="k">def</span> <span class="nf">stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">NLterms</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculate the stress field</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the stress field</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1136,7 +1126,7 @@
 
 
 <div class="viewcode-block" id="Panel.add_force"><a class="viewcode-back" href="../../../modules/panel/panel.html#compmech.panel.panel.Panel.add_force">[docs]</a>    <span class="k">def</span> <span class="nf">add_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span><span class="p">,</span> <span class="n">cte</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Add a punctual force with three components</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a punctual force with three components</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1365,7 +1355,7 @@
             <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="p">[],</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">num_levels</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">vecmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vecmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">plotoffsetxs</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">plotoffsetys</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1603,13 +1593,13 @@
               <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
             </a></p>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1631,8 +1621,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

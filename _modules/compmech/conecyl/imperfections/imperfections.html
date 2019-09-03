@@ -1,35 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>compmech.conecyl.imperfections.imperfections &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -71,7 +61,7 @@
 
 <div class="viewcode-block" id="calc_c0"><a class="viewcode-back" href="../../../../modules/conecyl/index.html#compmech.conecyl.imperfections.imperfections.calc_c0">[docs]</a><span class="k">def</span> <span class="nf">calc_c0</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">m0</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">maxmem</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">offset_w0</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Find the coefficients `c_0` that best fit the `w_0` function.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Find the coefficients `c_0` that best fit the `w_0` function.</span>
 
 <span class="sd">    The measured data will be fit using one of the following functions,</span>
 <span class="sd">    selected using the ``funcnum`` parameter:</span>
@@ -229,7 +219,7 @@
     <span class="k">return</span> <span class="n">c0</span><span class="p">,</span> <span class="n">residues</span></div>
 
 <div class="viewcode-block" id="fw0"><a class="viewcode-back" href="../../../../modules/conecyl/index.html#compmech.conecyl.imperfections.imperfections.fw0">[docs]</a><span class="k">def</span> <span class="nf">fw0</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">xs_norm</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">funcnum</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Calculates the imperfection field `w_0` for a given input.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the imperfection field `w_0` for a given input.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -280,13 +270,13 @@
               <img class="logo" src="../../../../_static/logo.png" alt="Logo"/>
             </a></p>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -308,8 +298,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

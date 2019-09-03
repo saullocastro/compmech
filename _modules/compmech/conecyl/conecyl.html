@@ -1,35 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>compmech.conecyl.conecyl &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -89,7 +79,7 @@
 <div class="viewcode-block" id="ConeCyl"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl">[docs]</a><span class="k">class</span> <span class="nc">ConeCyl</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_load_rebuilt&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;alphadeg&#39;</span><span class="p">,</span> <span class="s1">&#39;alpharad&#39;</span><span class="p">,</span> <span class="s1">&#39;r1&#39;</span><span class="p">,</span> <span class="s1">&#39;r2&#39;</span><span class="p">,</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_load_rebuilt&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;alphadeg&#39;</span><span class="p">,</span> <span class="s1">&#39;alpharad&#39;</span><span class="p">,</span> <span class="s1">&#39;r1&#39;</span><span class="p">,</span> <span class="s1">&#39;r2&#39;</span><span class="p">,</span>
             <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;is_cylinder&#39;</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">,</span> <span class="s1">&#39;zero&#39;</span><span class="p">,</span>
             <span class="s1">&#39;bc&#39;</span><span class="p">,</span> <span class="s1">&#39;kuBot&#39;</span><span class="p">,</span> <span class="s1">&#39;kvBot&#39;</span><span class="p">,</span> <span class="s1">&#39;kwBot&#39;</span><span class="p">,</span> <span class="s1">&#39;kphixBot&#39;</span><span class="p">,</span> <span class="s1">&#39;kphitBot&#39;</span><span class="p">,</span> <span class="s1">&#39;kuTop&#39;</span><span class="p">,</span>
             <span class="s1">&#39;kvTop&#39;</span><span class="p">,</span> <span class="s1">&#39;kwTop&#39;</span><span class="p">,</span> <span class="s1">&#39;kphixTop&#39;</span><span class="p">,</span> <span class="s1">&#39;kphitTop&#39;</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="s1">&#39;m1&#39;</span><span class="p">,</span> <span class="s1">&#39;m2&#39;</span><span class="p">,</span>
@@ -490,7 +480,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.get_size"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.get_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculates the size of the stiffness matrices</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the size of the stiffness matrices</span>
 
 <span class="sd">        The size of the stiffness matrices can be interpreted as the number of</span>
 <span class="sd">        rows or columns, recalling that this will be the size of the Ritz</span>
@@ -845,7 +835,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.calc_kT"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.calc_kT">[docs]</a>    <span class="k">def</span> <span class="nf">calc_kT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculates the tangent stiffness matrix</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the tangent stiffness matrix</span>
 
 <span class="sd">        The following attributes will affect the numerical integration:</span>
 
@@ -1119,7 +1109,7 @@
 
 
     <span class="k">def</span> <span class="nf">_calc_NL_matrices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">with_kLL</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">with_k0L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculates the non-linear stiffness matrices</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the non-linear stiffness matrices</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1244,7 +1234,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.uvw"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.uvw">[docs]</a>    <span class="k">def</span> <span class="nf">uvw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridt</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculates the displacement field</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the displacement field</span>
 
 <span class="sd">        For a given full set of Ritz constants ``c``, the displacement</span>
 <span class="sd">        field is calculated and stored in the parameters</span>
@@ -1308,7 +1298,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.strain"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.strain">[docs]</a>    <span class="k">def</span> <span class="nf">strain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridt</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculates the strain field</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the strain field</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1371,7 +1361,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.stress"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.stress">[docs]</a>    <span class="k">def</span> <span class="nf">stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridt</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculates the stress field</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the stress field</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1434,7 +1424,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.calc_fint"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.calc_fint">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_u</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Calculates the internal force vector `\{F_{int}\}`</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the internal force vector `\{F_{int}\}`</span>
 
 <span class="sd">        The following attributes will affect the numerical integration:</span>
 
@@ -1530,7 +1520,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.add_force"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.add_force">[docs]</a>    <span class="k">def</span> <span class="nf">add_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">thetadeg</span><span class="p">,</span> <span class="n">fx</span><span class="p">,</span> <span class="n">ftheta</span><span class="p">,</span> <span class="n">fz</span><span class="p">,</span> <span class="n">increment</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Add a punctual force</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a punctual force</span>
 
 <span class="sd">        Adds a force vector `\{f_x, f_\theta, f_z\}^T` to the ``forces``</span>
 <span class="sd">        parameter of the ``ConeCyl`` object.</span>
@@ -1791,7 +1781,7 @@
              <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
              <span class="n">texts</span><span class="o">=</span><span class="p">[],</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridt</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
              <span class="n">num_levels</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">vecmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vecmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2009,12 +1999,12 @@
 
         <span class="k">elif</span> <span class="n">add_title</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">last_analysis</span> <span class="o">==</span> <span class="s1">&#39;static&#39;</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">r&#39;$m_1=</span><span class="si">{0}</span><span class="s1">$, $m_2=</span><span class="si">{1}</span><span class="s1">$, $n_2=</span><span class="si">{2}</span><span class="s1">$&#39;</span><span class="o">.</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$m_1=</span><span class="si">{0}</span><span class="s1">$, $m_2=</span><span class="si">{1}</span><span class="s1">$, $n_2=</span><span class="si">{2}</span><span class="s1">$&#39;</span><span class="o">.</span>
                              <span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n2</span><span class="p">))</span>
 
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">last_analysis</span> <span class="o">==</span> <span class="s1">&#39;lb&#39;</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-           <span class="s1">r&#39;$m_1=</span><span class="si">{0}</span><span class="s1">$, $m2=</span><span class="si">{1}</span><span class="s1">$, $n2=</span><span class="si">{2}</span><span class="s1">$, $\lambda_{{CR}}=</span><span class="si">{3:1.3e}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+           <span class="sa">r</span><span class="s1">&#39;$m_1=</span><span class="si">{0}</span><span class="s1">$, $m2=</span><span class="si">{1}</span><span class="s1">$, $n2=</span><span class="si">{2}</span><span class="s1">$, $\lambda_{{CR}}=</span><span class="si">{3:1.3e}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">m1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eigvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -2060,7 +2050,7 @@
                    <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                    <span class="n">outpath</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">npzname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">pyname</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
                    <span class="n">num_levels</span><span class="o">=</span><span class="mi">400</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Print a field output for a cylinder/cone model from Abaqus</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Print a field output for a cylinder/cone model from Abaqus</span>
 
 <span class="sd">        This function is intended to be used with models created by the</span>
 <span class="sd">        `DESICOS plug-in for Abaqus &lt;http://desicos.github.io/desicos/&gt;`_,</span>
@@ -2406,7 +2396,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.apply_shim"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.apply_shim">[docs]</a>    <span class="k">def</span> <span class="nf">apply_shim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thetadeg</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">thick</span><span class="p">,</span> <span class="n">ncpts</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Distributes the axial load in order to simulate a shim</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Distributes the axial load in order to simulate a shim</span>
 
 <span class="sd">        The axial load distribution `{N_{xx}}_{top}` will be adjusted such</span>
 <span class="sd">        that the resulting displacement `u` at `x=0` (top edge) will look</span>
@@ -2460,7 +2450,7 @@
 
 
 <div class="viewcode-block" id="ConeCyl.fit_Nxxtop"><a class="viewcode-back" href="../../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.fit_Nxxtop">[docs]</a>    <span class="k">def</span> <span class="nf">fit_Nxxtop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">update_Nxxtop</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Adjusts the axial load distribution for a desired top edge</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Adjusts the axial load distribution for a desired top edge</span>
 <span class="sd">        displacement</span>
 
 <span class="sd">        Parameters</span>
@@ -2539,13 +2529,13 @@
               <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
             </a></p>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -2567,8 +2557,8 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

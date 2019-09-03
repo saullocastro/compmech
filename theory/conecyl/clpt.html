@@ -1,37 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>CLPT - Classical Laminated Plate Theory &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="FSDT - First-order Shear Deformation Theory" href="fsdt.html" />
     <link rel="prev" title="Equivalent Single Layer (ESL) Theories" href="esl_theories.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -65,65 +55,65 @@
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>For the CLPT the displacement field components are:</p>
 <div class="math">
-<p><span class="math">u, v, w</span></p>
+<p><img src="../../_images/math/1d9219d6fb5a7dd48ad0f614fefd7eaf2b8a1c35.png" alt="u, v, w"/></p>
 </div><p>And approximated as:</p>
 <div class="math">
-<p><span class="math">u = u_0(x, \theta) + z \phi_x(x, \theta) \\
+<p><img src="../../_images/math/2aca03997883ab0f6f9d3954167c1730d13890ab.png" alt="u = u_0(x, \theta) + z \phi_x(x, \theta) \\
 v = v_0(x, \theta) + z \phi_\theta(x, \theta) \\
-w = w_0(x, \theta)</span></p>
-</div><p>where <span class="math">u_0, v_0, w_0</span> are the displacements of the shell mid-surface and
-<span class="math">\phi_x</span> and <span class="math">\phi_\theta</span> the shell rotations along <span class="math">x</span> and <span class="math">\theta</span>
+w = w_0(x, \theta)"/></p>
+</div><p>where <img class="math" src="../../_images/math/9a5ff237f248d83423e88ebc3e3b27d5ace9d298.png" alt="u_0, v_0, w_0"/> are the displacements of the shell mid-surface and
+<img class="math" src="../../_images/math/5e085837d08c75ec79594318f5a902a543513bd9.png" alt="\phi_x"/> and <img class="math" src="../../_images/math/1a321ff4d7fb43d49eb5b6a5da87e7f6ea40950f.png" alt="\phi_\theta"/> the shell rotations along <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> and <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/>
 following the right-hand rule. For the CLPT the rotations are defined as:</p>
 <div class="math">
-<p><span class="math">\phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
+<p><img src="../../_images/math/4a8a895240ccdedb52694d91c73477cb8a03e817.png" alt="\phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
 \phi_\theta = - \frac 1 r \frac{\partial w}{\partial \theta}
-       = - \frac 1 r w_{,\theta}</span></p>
-</div><p>For the <code class="docutils literal"><span class="pre">ConeCyl</span></code> implementations the displacement field is approximated
+       = - \frac 1 r w_{,\theta}"/></p>
+</div><p>For the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> implementations the displacement field is approximated
 and the approximated functions can be separated as:</p>
 <div class="math">
-<p><span class="math">u = u_0 + u_1 + u_2\\
+<p><img src="../../_images/math/9a887986b67b246c8a1bb746cb3d6d150a197d15.png" alt="u = u_0 + u_1 + u_2\\
 v = v_0 + v_1 + v_2\\
-w = w_0 + w_1 + w_2\\</span></p>
-</div><p>where <span class="math">u_0</span> contains the approximation functions corresponding to the
-prescribed degrees of freedom, <span class="math">u_1</span> contains the functions independent
-of <span class="math">\theta</span> and <span class="math">u_2</span> the functions that depend on both <span class="math">x</span>
-and <span class="math">\theta</span>.</p>
+w = w_0 + w_1 + w_2\\"/></p>
+</div><p>where <img class="math" src="../../_images/math/d1a17cd80da51b6b0c6c84707c6b7ac1ebadbb5a.png" alt="u_0"/> contains the approximation functions corresponding to the
+prescribed degrees of freedom, <img class="math" src="../../_images/math/01acf36efebddffcbbc0d8e444fb558e322b4755.png" alt="u_1"/> contains the functions independent
+of <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> and <img class="math" src="../../_images/math/263f2238c58df635872e2de89eca1801ca68d1d4.png" alt="u_2"/> the functions that depend on both <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>
+and <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/>.</p>
 <p>The aim is to have models capable of simulating the displacement field of
 cones and cylinders. The approximation functions are the same
-for both the Donnell&#8217;s and the Sanders&#8217; models.</p>
+for both the Donnell’s and the Sanders’ models.</p>
 </div>
 <div class="section" id="models">
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
 <p>Below it follows a more detailed description of each of the implementations:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#clpt-donnell-bc1">clpt_donnell_bc1</a></li>
-<li><a class="reference internal" href="#clpt-donnell-bc2">clpt_donnell_bc2</a></li>
-<li><a class="reference internal" href="#clpt-donnell-bc3">clpt_donnell_bc3</a></li>
-<li><a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a></li>
-<li><a class="reference internal" href="#clpt-donnell-bcn">clpt_donnell_bcn</a></li>
-<li><a class="reference internal" href="#clpt-sanders-bc1">clpt_sanders_bc1</a></li>
-<li><a class="reference internal" href="#clpt-sanders-bc4">clpt_sanders_bc4</a></li>
-<li><a class="reference internal" href="#clpt-sanders-bc2">clpt_sanders_bc2</a></li>
+<li><p><a class="reference internal" href="#clpt-donnell-bc1">clpt_donnell_bc1</a></p></li>
+<li><p><a class="reference internal" href="#clpt-donnell-bc2">clpt_donnell_bc2</a></p></li>
+<li><p><a class="reference internal" href="#clpt-donnell-bc3">clpt_donnell_bc3</a></p></li>
+<li><p><a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a></p></li>
+<li><p><a class="reference internal" href="#clpt-donnell-bcn">clpt_donnell_bcn</a></p></li>
+<li><p><a class="reference internal" href="#clpt-sanders-bc1">clpt_sanders_bc1</a></p></li>
+<li><p><a class="reference internal" href="#clpt-sanders-bc4">clpt_sanders_bc4</a></p></li>
+<li><p><a class="reference internal" href="#clpt-sanders-bc2">clpt_sanders_bc2</a></p></li>
 </ul>
-<p>Each model can be accessed using the <code class="docutils literal"><span class="pre">linear_kinematics</span></code> parameter of the
-<code class="docutils literal"><span class="pre">ConeCyl</span></code> object. For linear static analysis the most general model is the
+<p>Each model can be accessed using the <code class="docutils literal notranslate"><span class="pre">linear_kinematics</span></code> parameter of the
+<code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object. For linear static analysis the most general model is the
 <a class="reference internal" href="#clpt-donnell-bcn">clpt_donnell_bcn</a>.</p>
 <p>For linear buckling analysis the following models should be used for
 each type of boundary conditions:</p>
 <ul class="simple">
-<li>SS1- or CC1-type: <a class="reference internal" href="#clpt-donnell-bc1">clpt_donnell_bc1</a> or <a class="reference internal" href="#clpt-sanders-bc1">clpt_sanders_bc1</a></li>
-<li>SS2- or CC2-type: <a class="reference internal" href="#clpt-donnell-bc2">clpt_donnell_bc2</a> or <a class="reference internal" href="#clpt-sanders-bc2">clpt_sanders_bc2</a></li>
-<li>SS3- or CC3-type: <a class="reference internal" href="#clpt-donnell-bc3">clpt_donnell_bc3</a> or <a class="reference internal" href="#clpt-sanders-bc3">clpt_sanders_bc3</a></li>
-<li>SS4- or CC4-type: <a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a> or <a class="reference internal" href="#clpt-sanders-bc4">clpt_sanders_bc4</a></li>
-<li>Free edges: use the <a class="reference internal" href="fsdt.html#fsdt-donnell-bcn"><span class="std std-ref">fsdt_donnell_bcn</span></a> (CLPT not implemented)</li>
+<li><p>SS1- or CC1-type: <a class="reference internal" href="#clpt-donnell-bc1">clpt_donnell_bc1</a> or <a class="reference internal" href="#clpt-sanders-bc1">clpt_sanders_bc1</a></p></li>
+<li><p>SS2- or CC2-type: <a class="reference internal" href="#clpt-donnell-bc2">clpt_donnell_bc2</a> or <a class="reference internal" href="#clpt-sanders-bc2">clpt_sanders_bc2</a></p></li>
+<li><p>SS3- or CC3-type: <a class="reference internal" href="#clpt-donnell-bc3">clpt_donnell_bc3</a> or <a class="reference internal" href="#clpt-sanders-bc3">clpt_sanders_bc3</a></p></li>
+<li><p>SS4- or CC4-type: <a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a> or <a class="reference internal" href="#clpt-sanders-bc4">clpt_sanders_bc4</a></p></li>
+<li><p>Free edges: use the <a class="reference internal" href="fsdt.html#fsdt-donnell-bcn"><span class="std std-ref">fsdt_donnell_bcn</span></a> (CLPT not implemented)</p></li>
 </ul>
 <div class="section" id="clpt-donnell-bc1">
 <span id="id1"></span><h3>clpt_donnell_bc1<a class="headerlink" href="#clpt-donnell-bc1" title="Permalink to this headline">¶</a></h3>
 <p>SS1- and CC1-types of boundary conditions, or anything
-in between by using elastic restrained edges in <span class="math">w_{,x}</span> and <span class="math">w_{,\theta}</span>.
+in between by using elastic restrained edges in <img class="math" src="../../_images/math/d6086e9cb0de05bf8d2f5ce5167fa8199de48b96.png" alt="w_{,x}"/> and <img class="math" src="../../_images/math/5cdfc00334f1a01795bf43fba61d1f964fedcef0.png" alt="w_{,\theta}"/>.
 The approximation functions are:</p>
 <div class="math" id="clpt-approx-functions">
-<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/cb34bb5ef5f61cff807d0173599c36b1aedf97d7.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -139,14 +129,14 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
-            \right)</span></p>
+            \right)"/></p>
 </div><p>with:</p>
 <div class="math">
-<p><span class="math">{b_x}_1 = i_1 \pi \frac x L \\
-{b_x}_2 = i_2 \pi \frac x L</span></p>
+<p><img src="../../_images/math/21c918dacd65ade34cd77ec7825828f9f26beba2.png" alt="{b_x}_1 = i_1 \pi \frac x L \\
+{b_x}_2 = i_2 \pi \frac x L"/></p>
 </div><p>The following general form of elastic constraints at the edges is used:</p>
 <div class="math">
-<p><span class="math">U_{springs} = \int_\theta r_1 \left(
+<p><img src="../../_images/math/9e4806579219e2c68c97685e486e6c9c9293b52f.png" alt="U_{springs} = \int_\theta r_1 \left(
                   K_{Bot}^u u_{x=L}^2
                 + K_{Bot}^v v_{x=L}^2
                 + K_{Bot}^w w_{x=L}^2
@@ -160,67 +150,67 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
                 + K_{Top}^w w_{x=0}^2
                 + K_{Top}^{\phi_x} {\phi_x}_{x=0}^2
                 + K_{Top}^{\phi_\theta} {\phi_\theta}_{x=0}^2
-              \right)</span></p>
-</div><p>Note that the stiffnesses: <span class="math">K_{Top}^u</span>, <span class="math">K_{Top}^v</span> and <span class="math">K_{Top}^w</span> are not
+              \right)"/></p>
+</div><p>Note that the stiffnesses: <img class="math" src="../../_images/math/19b73c70f8b5697d1383d84d3171addab1ce242c.png" alt="K_{Top}^u"/>, <img class="math" src="../../_images/math/2cc89f4a0bfb030d78eee42f311646d276460408.png" alt="K_{Top}^v"/> and <img class="math" src="../../_images/math/690fbfaee9e56d128d6861bdbdc9b8c08f6f64d2.png" alt="K_{Top}^w"/> are not
 used in <a class="reference internal" href="#clpt-donnell-bc1">clpt_donnell_bc1</a>, but since they are required in other
 implementations, it is convenient to present the general form using
 all the elastic terms.</p>
-<p>The equation for <span class="math">U_{springs}</span> can be written in matrix form, and it will
-result in an additional term <span class="math">[K_e]</span> to the linear stiffness matrix
-<span class="math">[K_0]</span>. The new stiffness matrix with the elastic constraints at the edges
-(<span class="math">[{K_0}_e]</span>) becomes:</p>
+<p>The equation for <img class="math" src="../../_images/math/ebab6fccf65f4fdaa139c0804e2e645f4717858b.png" alt="U_{springs}"/> can be written in matrix form, and it will
+result in an additional term <img class="math" src="../../_images/math/7fdd04b840566e6e9e15c9e57f99b3cb2b8b91cf.png" alt="[K_e]"/> to the linear stiffness matrix
+<img class="math" src="../../_images/math/b64ee8fe045cbbcb9ed6025a35a2a615acdc534b.png" alt="[K_0]"/>. The new stiffness matrix with the elastic constraints at the edges
+(<img class="math" src="../../_images/math/21d51e7ec7e948c3a76cabb3ae16e591ee40934c.png" alt="[{K_0}_e]"/>) becomes:</p>
 <div class="math" id="elastic-constraints">
-<p><span class="math">[{K_0}_e] = [K_0] + [K_e]
+<p><img src="../../_images/math/1f28b91c44194eb90ee6aaacd5e00886918d97f9.png" alt="[{K_0}_e] = [K_0] + [K_e]
 
 [K_e] = \int_{\theta} { \left(
             r_1 [g_{new}]_{x=L}^T [K]_{Bot} [g_{new}]_{x=L}^.
           + r_2 [g_{new}]_{x=0}^T [K]_{Top} [g_{new}]_{x=0}^.
          \right) d\theta
-        }</span></p>
+        }"/></p>
 </div><p>with :</p>
 <div class="math">
-<p><span class="math">[K_{Bot}] = \begin{bmatrix}
+<p><img src="../../_images/math/1eeb7a327a8251123338778126653d36214362b3.png" alt="[K_{Bot}] = \begin{bmatrix}
       K_{Bot}^u &amp;       0 &amp;       0 &amp;              0 &amp;             0 \\
             0 &amp; K_{Bot}^v &amp;       0 &amp;              0 &amp;             0 \\
             0 &amp;       0 &amp; K_{Bot}^w &amp;              0 &amp;             0 \\
             0 &amp;       0 &amp;       0 &amp; K_{Bot}^{\phi_x} &amp;             0 \\
             0 &amp;       0 &amp;       0 &amp;              0 &amp;K_{Bot}^{\phi_\theta}
-                \end{bmatrix}</span></p>
+                \end{bmatrix}"/></p>
 </div><p>and:</p>
 <div class="math">
-<p><span class="math">[K_{Top}] = \begin{bmatrix}
+<p><img src="../../_images/math/a4eb2b86e9092f6858e385cd57da6ce13484cc58.png" alt="[K_{Top}] = \begin{bmatrix}
       K_{Top}^u &amp;       0 &amp;       0 &amp;              0 &amp;             0 \\
             0 &amp; K_{Top}^v &amp;       0 &amp;              0 &amp;             0 \\
             0 &amp;       0 &amp; K_{Top}^w &amp;              0 &amp;             0 \\
             0 &amp;       0 &amp;       0 &amp; K_{Top}^{\phi_x} &amp;             0 \\
             0 &amp;       0 &amp;       0 &amp;              0 &amp;K_{Top}^{\phi_\theta}
-                \end{bmatrix}</span></p>
-</div><p>and the shape functions <span class="math">[g_{new}]</span> contains two extra rows that are built
+                \end{bmatrix}"/></p>
+</div><p>and the shape functions <img class="math" src="../../_images/math/796ab1acbad948420aa9cfd532afa48cfd1ffce8.png" alt="[g_{new}]"/> contains two extra rows that are built
 from the relations:</p>
 <div class="math">
-<p><span class="math">\phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
+<p><img src="../../_images/math/bc204560f0c1474fac0a91d68bd015f3ba3af2fb.png" alt="\phi_x = - \frac{\partial w}{\partial x} = -w_{,x} \\
 \phi_\theta = - \frac 1 r \frac{\partial w}{\partial \theta}
-            = - \frac 1 r w_{,\theta}</span></p>
+            = - \frac 1 r w_{,\theta}"/></p>
 </div><p>and therefore:</p>
 <div class="math">
-<p><span class="math">[g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x} \\
+<p><img src="../../_images/math/320964d093553b9aeb1b97e4ff1915b64fc37c1f.png" alt="[g^{\phi_x}] = - \frac {\partial [g^w]} {\partial x} \\
 [g^{\phi_\theta}] = - \frac 1 r \frac {\partial [g^w]} {\partial \theta} \\
 [g_{new}]^T = \left[ [g^u], [g^v], [g^w],
-                      [g^{\phi_x}], [g^{\phi_\theta}] \right]</span></p>
+                      [g^{\phi_x}], [g^{\phi_\theta}] \right]"/></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-donnell-bc2">
 <span id="id2"></span><h3>clpt_donnell_bc2<a class="headerlink" href="#clpt-donnell-bc2" title="Permalink to this headline">¶</a></h3>
 <p>Planned to simulate the SS2- and CC2-types of boundary conditions (or anything
-in between). The flexibily in <span class="math">v</span> is removed if compared to the
+in between). The flexibily in <img class="math" src="../../_images/math/02d98909b5d6acd6a7ff927d4d42790bdd407d58.png" alt="v"/> is removed if compared to the
 <a class="reference internal" href="#clpt-donnell-bc4">clpt_donnell_bc4</a>. Giving:</p>
 <div class="math">
-<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/25ef66dde116897ce9be323f5b9f5609b25465d4.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -237,14 +227,14 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)
-\\</span></p>
-</div><p>The linear stiffness matrix <span class="math">[K_0]</span> is changed using the same
+\\"/></p>
+</div><p>The linear stiffness matrix <img class="math" src="../../_images/math/b64ee8fe045cbbcb9ed6025a35a2a615acdc534b.png" alt="[K_0]"/> is changed using the same
 <a class="reference internal" href="#elastic-constraints"><span class="std std-ref">elastic contraints used for the clpt_donnell_bc1</span></a>.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-donnell-bc3">
@@ -252,7 +242,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Planned for SS3- and CC3-types of boundary conditions (or anything
 in between). The approximation functions are:</p>
 <div class="math">
-<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/3a42aa05daa31d9daf4bbc67a6e7ac4ef045870e.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -269,21 +259,21 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)
-\\</span></p>
-</div><p>The linear stiffness matrix <span class="math">[K_0]</span> is changed using the same
+\\"/></p>
+</div><p>The linear stiffness matrix <img class="math" src="../../_images/math/b64ee8fe045cbbcb9ed6025a35a2a615acdc534b.png" alt="[K_0]"/> is changed using the same
 <a class="reference internal" href="#elastic-constraints"><span class="std std-ref">elastic contraints used for the clpt_donnell_bc1</span></a>.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-donnell-bc4">
 <span id="id4"></span><h3>clpt_donnell_bc4<a class="headerlink" href="#clpt-donnell-bc4" title="Permalink to this headline">¶</a></h3>
 <p>SS4- or CC4-types of boundary conditions (or anything in between).</p>
 <div class="math">
-<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/d02e7556cebb5977c061f9ef85eaa10b3ac0e161.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -300,14 +290,14 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
                  {c_{i_2 j_2}}_a^{w} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
             \right)
-\\</span></p>
-</div><p>The linear stiffness matrix <span class="math">[K_0]</span> is changed using the same
+\\"/></p>
+</div><p>The linear stiffness matrix <img class="math" src="../../_images/math/b64ee8fe045cbbcb9ed6025a35a2a615acdc534b.png" alt="[K_0]"/> is changed using the same
 <a class="reference internal" href="#elastic-constraints"><span class="std std-ref">elastic contraints used for the clpt_donnell_bc1</span></a>.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\checkmark</span> non-linear analysis implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-donnell-bcn">
@@ -316,7 +306,7 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 boundary condition by setting the proper values for the elastic
 constants.</p>
 <div class="math">
-<p><span class="math">u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<p><img src="../../_images/math/62552fd28583d58b4632cd8a57c8473a86090a3b.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -334,14 +324,14 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
                 +{c_{i_2 j_2}}_b^{w} \sin{{b_x}_2} \cos{j_2 \theta}
                 +{c_{i_2 j_2}}_c^{w} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_d^{w} \cos{{b_x}_2} \cos{j_2 \theta}
-            \right)</span></p>
-</div><p>The linear stiffness matrix <span class="math">[K_0]</span> is changed using the same
+            \right)"/></p>
+</div><p>The linear stiffness matrix <img class="math" src="../../_images/math/b64ee8fe045cbbcb9ed6025a35a2a615acdc534b.png" alt="[K_0]"/> is changed using the same
 <a class="reference internal" href="#elastic-constraints"><span class="std std-ref">elastic contraints used for the clpt_donnell_bc1</span></a>.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\times</span> not working for linear buckling</p>
-<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/> not working for linear buckling</p>
+<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders-bc1">
@@ -349,9 +339,9 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc1"><span class="std std-ref">clpt_donnell_bc1</span></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders-bc2">
@@ -359,9 +349,9 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc2"><span class="std std-ref">clpt_donnell_bc2</span></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders-bc3">
@@ -369,9 +359,9 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc3"><span class="std std-ref">clpt_donnell_bc3</span></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-sanders-bc4">
@@ -379,24 +369,24 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w}\sin{{b_x}_1}
 <p>Counterpart of <a class="reference internal" href="#clpt-donnell-bc4"><span class="std std-ref">clpt_donnell_bc4</span></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear static implemented</p>
-<p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
+<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 <div class="section" id="clpt-geier1997-bc2">
 <span id="id10"></span><h3>clpt_geier1997_bc2<a class="headerlink" href="#clpt-geier1997-bc2" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">NOT RECOMMENDED, implemented for comparative purposes only.</p>
+<p class="admonition-title">Note</p>
+<p>NOT RECOMMENDED, implemented for comparative purposes only.</p>
 </div>
 <p>Analogous to the model published by Geier and Singh (1997)
-(see <a class="reference internal" href="ref.html#geier1997" id="id11">[geier1997]</a> for more details) for the SS2- and CC2-types of
+(see <a class="reference internal" href="ref.html#geier1997" id="id11"><span>[geier1997]</span></a> for more details) for the SS2- and CC2-types of
 boundary condition. Originally proposed by Khdeir et al. (1989)
-(see <a class="reference internal" href="ref.html#khdeir1989" id="id12">[khdeir1989]</a>). Uses the Donnell&#8217;s equations and the
+(see <a class="reference internal" href="ref.html#khdeir1989" id="id12"><span>[khdeir1989]</span></a>). Uses the Donnell’s equations and the
 approximation functions are:</p>
 <div class="math">
-<p><span class="math">u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<p><img src="../../_images/math/9e5837bcea4406fc6a2a2de3534103342b7e224e.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -406,12 +396,12 @@ v = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 \\
 w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{w} \sin{{b_x}_2} \cos{j_2 \theta}
-              \right)</span></p>
+              \right)"/></p>
 </div><p>Observations:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> linear buckling implemented</p>
-<p><span class="math">\rightarrow</span> linear static not implemented</p>
-<p><span class="math">\rightarrow</span> non-linear analysis not implemented</p>
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
+<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> linear static not implemented</p>
+<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
 </div></blockquote>
 </div>
 </div>
@@ -426,7 +416,7 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">CLPT - Classical Laminated Plate Theory</a><ul>
 <li><a class="reference internal" href="#description">Description</a></li>
@@ -461,13 +451,13 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -497,8 +487,8 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

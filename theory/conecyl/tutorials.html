@@ -1,37 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Tutorials &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="References" href="ref.html" />
     <link rel="prev" title="Boundary conditions" href="bcs.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -66,11 +56,11 @@
 <div class="figure align-center" id="conecyl-figure">
 <a class="reference internal image-reference" href="../../_images/conecyl.png"><img alt="../../_images/conecyl.png" src="../../_images/conecyl.png" style="width: 430.8px; height: 282.0px;" /></a>
 </div>
-<p>The geometry can be defined using <span class="math">H</span>, <span class="math">R_1</span> and <span class="math">\alpha</span>, for example, or
-any other combination (like <span class="math">L</span>, <span class="math">H</span>, <span class="math">R_1</span>) of the geometric parameters
+<p>The geometry can be defined using <img class="math" src="../../_images/math/cb5de54f699cf4b3c7c1a3e87313d11d536c0d88.png" alt="H"/>, <img class="math" src="../../_images/math/53cf7ab686c88dcddc7745cf2970c2b6de315c7a.png" alt="R_1"/> and <img class="math" src="../../_images/math/2f5aa019312e1bbc969deab8dca8b00f76025404.png" alt="\alpha"/>, for example, or
+any other combination (like <img class="math" src="../../_images/math/19eef1966f7c545af3ac8c0fa486974d873e3c65.png" alt="L"/>, <img class="math" src="../../_images/math/cb5de54f699cf4b3c7c1a3e87313d11d536c0d88.png" alt="H"/>, <img class="math" src="../../_images/math/53cf7ab686c88dcddc7745cf2970c2b6de315c7a.png" alt="R_1"/>) of the geometric parameters
 that will allow the complete definition of the cone / cylinder geometry.</p>
 <p><strong>Example</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="k">import</span> <span class="n">ConeCyl</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compmech.conecyl</span> <span class="k">import</span> <span class="n">ConeCyl</span>
 
 <span class="n">cc</span> <span class="o">=</span> <span class="n">ConeCyl</span><span class="p">()</span>
 <span class="n">cc</span><span class="o">.</span><span class="n">r1</span> <span class="o">=</span> <span class="mi">400</span>
@@ -81,37 +71,37 @@ that will allow the complete definition of the cone / cylinder geometry.</p>
 </div>
 <div class="section" id="defining-the-laminate-and-material-properties">
 <h2>Defining the Laminate and Material Properties<a class="headerlink" href="#defining-the-laminate-and-material-properties" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="../../modules/composite/index.html#module-compmech.composite" title="compmech.composite"><code class="xref py py-mod docutils literal"><span class="pre">compmech.composite</span></code></a> module is used to calculate the laminate
+<p>The <a class="reference internal" href="../../modules/composite/index.html#module-compmech.composite" title="compmech.composite"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.composite</span></code></a> module is used to calculate the laminate
 properties given the stacking sequence, the thicknesses  and
 the material properties.</p>
-<p>The <strong>stacking sequence</strong> is passed using a container (<code class="docutils literal"><span class="pre">list</span></code> or <code class="docutils literal"><span class="pre">tuple</span></code>)
+<p>The <strong>stacking sequence</strong> is passed using a container (<code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">tuple</span></code>)
 with the orientations of each ply, <strong>from inwards to outwards</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="o">+</span><span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">+</span><span class="mi">30</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="o">+</span><span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">+</span><span class="mi">30</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The ply thickness is passed using a single value when all the plies have the
 same thickness or using a container with the thickness of each ply:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plyt</span> <span class="o">=</span> <span class="mf">0.125</span>
 </pre></div>
 </div>
 <p><strong>or</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plyts</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">,</span> <span class="mf">0.101</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The material properties are given using a tuple:</p>
 <div class="math">
-<p><span class="math">(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})</span></p>
-</div><p>where <span class="math">E_{11}</span> is the elastic modulus along the direction 1 of the ply,
-<span class="math">E_{22}</span> the modulus along the direction 2, <span class="math">\nu_{12}</span> the Poisson&#8217;s ratio
-and <span class="math">G_{12}</span>, <span class="math">G_{13}</span>, <span class="math">G_{23}</span> the shear modules.</p>
+<p><img src="../../_images/math/681be47d60296dbcbd1b8c1773f8585719484bbc.png" alt="(E_{11}, E_{22}, \nu_{12}, G_{12}, G_{13}, G_{23})"/></p>
+</div><p>where <img class="math" src="../../_images/math/259bbb4a3e03a3054aa3873f3170d1180e50f508.png" alt="E_{11}"/> is the elastic modulus along the direction 1 of the ply,
+<img class="math" src="../../_images/math/8d5adbe6b253ea4b7a3572e1f156dad1547ac2c0.png" alt="E_{22}"/> the modulus along the direction 2, <img class="math" src="../../_images/math/684f412c185658eeb3fee3c2e43230f19394a6ee.png" alt="\nu_{12}"/> the Poisson’s ratio
+and <img class="math" src="../../_images/math/515114f5af3234b6b54c502a48f5374d2d69fb11.png" alt="G_{12}"/>, <img class="math" src="../../_images/math/5b50e1a3a1a641775eca3c2230975050551f86b2.png" alt="G_{13}"/>, <img class="math" src="../../_images/math/3d766a6fca26a825e427aa11664d35f5b4e3b995.png" alt="G_{23}"/> the shear modules.</p>
 <p><strong>Example</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This will assume the same material properties for each ply. When different
-properties must be used the user must supply the <code class="docutils literal"><span class="pre">laminaprops</span></code> container.</p>
+properties must be used the user must supply the <code class="docutils literal notranslate"><span class="pre">laminaprops</span></code> container.</p>
 <p><strong>Example</strong>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">prop1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">prop1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
 <span class="n">prop2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
 <span class="n">prop3</span> <span class="o">=</span> <span class="p">(</span><span class="mf">100.2e3</span> <span class="p">,</span> <span class="mf">4.2e3</span><span class="p">,</span>  <span class="mf">0.2</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">,</span> <span class="mf">5.1e3</span><span class="p">)</span>
 <span class="n">cc</span><span class="o">.</span><span class="n">laminaprops</span> <span class="o">=</span> <span class="p">[</span><span class="n">prop1</span><span class="p">,</span> <span class="n">prop1</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop2</span><span class="p">,</span> <span class="n">prop3</span><span class="p">,</span> <span class="n">prop3</span><span class="p">]</span>
@@ -121,10 +111,10 @@ properties must be used the user must supply the <code class="docutils literal">
 <div class="section" id="linear-static-analysis">
 <h2>Linear Static Analysis<a class="headerlink" href="#linear-static-analysis" title="Permalink to this headline">¶</a></h2>
 <p>The static analysis is executed using the
-<a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><code class="xref py py-meth docutils literal"><span class="pre">compmech.conecyl.ConeCyl.static()</span></code></a> method. The following example will
+<a class="reference internal" href="../../modules/conecyl/index.html#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compmech.conecyl.ConeCyl.static()</span></code></a> method. The following example will
 give an overview of the main steps needed for a linear static analysis.</p>
 <p>Defining the geometry:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">laminaprop</span> <span class="o">=</span> <span class="p">(</span><span class="mf">123.55e3</span> <span class="p">,</span> <span class="mf">8.708e3</span><span class="p">,</span>  <span class="mf">0.319</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">,</span> <span class="mf">5.695e3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="o">-</span><span class="mi">19</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="o">-</span><span class="mi">37</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="o">-</span><span class="mi">51</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">r2</span> <span class="o">=</span> <span class="mf">250.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="mf">510.</span>
@@ -133,22 +123,22 @@ give an overview of the main steps needed for a linear static analysis.</p>
 </pre></div>
 </div>
 <p>Defining the model and boundary conditions:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;fsdt_donnell_bc1&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s1">&#39;fsdt_donnell_bc1&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">bc</span> <span class="o">=</span> <span class="s1">&#39;cc1&#39;</span>
 </pre></div>
 </div>
 <p>Defining if the analysis is displacement or load controlled by changing
-the boolean parameters <code class="docutils literal"><span class="pre">pd</span></code> (prescribed displacement):</p>
+the boolean parameters <code class="docutils literal notranslate"><span class="pre">pd</span></code> (prescribed displacement):</p>
 <blockquote>
 <div><ul class="simple">
-<li>prescribed displacement for compression: <code class="docutils literal"><span class="pre">cc.pdC</span></code></li>
-<li>prescribed displacement for torsion: <code class="docutils literal"><span class="pre">cc.pdT</span></code></li>
-<li>prescribed load asymmetry <code class="docutils literal"><span class="pre">cc.pdLA</span></code></li>
+<li><p>prescribed displacement for compression: <code class="docutils literal notranslate"><span class="pre">cc.pdC</span></code></p></li>
+<li><p>prescribed displacement for torsion: <code class="docutils literal notranslate"><span class="pre">cc.pdT</span></code></p></li>
+<li><p>prescribed load asymmetry <code class="docutils literal notranslate"><span class="pre">cc.pdLA</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>Applying the axial compression, pressure, torsion and the single-perturbation
 loads:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">Fc</span> <span class="o">=</span> <span class="mf">10000.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">Fc</span> <span class="o">=</span> <span class="mf">10000.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="mf">100000.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.01</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">add_SPL</span><span class="p">(</span><span class="mf">10.</span><span class="p">)</span>
@@ -156,47 +146,47 @@ loads:</p>
 </pre></div>
 </div>
 <p>Defining the number of terms in the approximation functions:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">m1</span> <span class="o">=</span> <span class="mi">80</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">m1</span> <span class="o">=</span> <span class="mi">80</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">m2</span> <span class="o">=</span> <span class="mi">40</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">n2</span> <span class="o">=</span> <span class="mi">40</span>
 </pre></div>
 </div>
 <p>Running the analysis:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">static</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">static</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The results are stored in the <code class="docutils literal"><span class="pre">cs</span></code> list, and for a linear static analysis
+<p>The results are stored in the <code class="docutils literal notranslate"><span class="pre">cs</span></code> list, and for a linear static analysis
 only one entry exists. Plotting the results:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="section" id="static-analysis">
 <h3>Static Analysis<a class="headerlink" href="#static-analysis" title="Permalink to this headline">¶</a></h3>
-<p>where <code class="docutils literal"><span class="pre">NLgeom</span></code> is a flag telling whether or not a geometric non-linear
+<p>where <code class="docutils literal notranslate"><span class="pre">NLgeom</span></code> is a flag telling whether or not a geometric non-linear
 analysis is to be performed.</p>
-<p>The solution is stored in the <code class="docutils literal"><span class="pre">cs</span></code> attribute, which consists of a <code class="docutils literal"><span class="pre">list</span></code>
-of 1-D <code class="docutils literal"><span class="pre">np.ndarray</span></code> objects. For a linear analysis this list will contain
+<p>The solution is stored in the <code class="docutils literal notranslate"><span class="pre">cs</span></code> attribute, which consists of a <code class="docutils literal notranslate"><span class="pre">list</span></code>
+of 1-D <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> objects. For a linear analysis this list will contain
 only one entry while for a non-linear analysis it will contain one entry
 for each iteration needed up to the convergence or up to the termination
 criterion. To access the last result:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">solution</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The displacement field can be plotted, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;my_output.png&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;my_output.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="non-linear-analysis">
 <h2>Non-Linear Analysis<a class="headerlink" href="#non-linear-analysis" title="Permalink to this headline">¶</a></h2>
-<p>Using <code class="docutils literal"><span class="pre">NLgeom=True</span></code> in a static analysis will run a geometrically
-non-linear analysis. Many attributes of the <code class="docutils literal"><span class="pre">ConeCyl</span></code> object
+<p>Using <code class="docutils literal notranslate"><span class="pre">NLgeom=True</span></code> in a static analysis will run a geometrically
+non-linear analysis. Many attributes of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object
 are used to control the non-linear analysis (see
-<code class="xref py py-func docutils literal"><span class="pre">ConeCyl.static()</span></code>).</p>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ConeCyl.static()</span></code>).</p>
 <p>The converged increments used along the non-linear analysis are stored
-in the <code class="docutils literal"><span class="pre">increments</span></code> attribute and the corresponding solutions
-stored in the <code class="docutils literal"><span class="pre">cs</span></code> attribute (a <code class="docutils literal"><span class="pre">list</span></code> of 1-D <code class="docutils literal"><span class="pre">np.ndarray</span></code> objects).</p>
+in the <code class="docutils literal notranslate"><span class="pre">increments</span></code> attribute and the corresponding solutions
+stored in the <code class="docutils literal notranslate"><span class="pre">cs</span></code> attribute (a <code class="docutils literal notranslate"><span class="pre">list</span></code> of 1-D <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> objects).</p>
 </div>
 </div>
 
@@ -209,7 +199,7 @@ stored in the <code class="docutils literal"><span class="pre">cs</span></code> 
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Tutorials</a><ul>
 <li><a class="reference internal" href="#defining-the-geometry">Defining the Geometry</a></li>
@@ -237,13 +227,13 @@ stored in the <code class="docutils literal"><span class="pre">cs</span></code> 
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -272,8 +262,8 @@ stored in the <code class="docutils literal"><span class="pre">cs</span></code> 
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

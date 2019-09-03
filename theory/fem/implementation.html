@@ -1,35 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Implementation &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -52,22 +42,22 @@
 <h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="definitions">
 <h2>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
-<p><span class="math">J_{ij}</span> - component of the Jacobian matrix
-<span class="math">j_{ij}</span> - component of the inverse of the Jacobian matrix</p>
+<p><img class="math" src="../../_images/math/acd502acd7f80f6468bc1d557eab275ca77a0287.png" alt="J_{ij}"/> - component of the Jacobian matrix
+<img class="math" src="../../_images/math/b70797afd346a295ef3a8ccbf5aa4fb6fe777f18.png" alt="j_{ij}"/> - component of the inverse of the Jacobian matrix</p>
 <p>The numerical integration should be efficiently vectorized by grouping the
 elements of the same type in a single call to the corresponding function that
 will perform the numerical integration. The required parameters for this
 integration are:</p>
 <ul class="simple">
-<li>inverse of the Jacobian calculated at each integration point</li>
-<li>Constitutive relations at each integration point</li>
-<li>For elements such as cylindrical, conical or with double curvature, the
-radius or radii at each integration point</li>
+<li><p>inverse of the Jacobian calculated at each integration point</p></li>
+<li><p>Constitutive relations at each integration point</p></li>
+<li><p>For elements such as cylindrical, conical or with double curvature, the
+radius or radii at each integration point</p></li>
 </ul>
 <p>Each element will pass an array with the inverse of the Jacobian
 for each integration point, e.g. for a shell element:</p>
 <div class="math">
-<p><span class="math">\{{j_{11}}_1, {j_{12}}_1, {j_{21}}_1, {j_{22}}_1,
+<p><img src="../../_images/math/2b32c276d06976c1733f5d0b751a9fedc75cc8f7.png" alt="\{{j_{11}}_1, {j_{12}}_1, {j_{21}}_1, {j_{22}}_1,
 \\
   {j_{11}}_2, {j_{12}}_2, {j_{21}}_2, {j_{22}}_2,
 \\
@@ -76,7 +66,7 @@ for each integration point, e.g. for a shell element:</p>
   \cdots,
 \\
   {j_{11}}_{n_{ip}}, {j_{12}}_{n_{ip}}, {j_{21}}_{n_{ip}}, {j_{22}}_{n_{ip}},
-\}</span></p>
+\}"/></p>
 </div></div>
 <div class="section" id="the-element-class">
 <h2>The Element Class<a class="headerlink" href="#the-element-class" title="Permalink to this headline">¶</a></h2>
@@ -92,7 +82,7 @@ for each integration point, e.g. for a shell element:</p>
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Implementation</a><ul>
 <li><a class="reference internal" href="#definitions">Definitions</a></li>
@@ -109,13 +99,13 @@ for each integration point, e.g. for a shell element:</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -136,8 +126,8 @@ for each integration point, e.g. for a shell element:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

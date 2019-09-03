@@ -1,37 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Meshfree Methods &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="References" href="../ref.html" />
     <link rel="prev" title="References" href="../integrate/ref.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -61,98 +51,94 @@
 <span id="theory-meshfree"></span><h1>Meshfree Methods<a class="headerlink" href="#meshfree-methods" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="brief-introduction">
 <h2>Brief Introduction<a class="headerlink" href="#brief-introduction" title="Permalink to this headline">¶</a></h2>
-<p>Excellent overviews of meshfree methods are found in <a class="reference internal" href="ref.html#belytschko1996" id="id1">[belytschko1996]</a>,
-<a class="reference internal" href="ref.html#fries2004" id="id2">[fries2004]</a> and <a class="reference internal" href="ref.html#liu2003" id="id3">[liu2003]</a>.</p>
-<p>As reviewed by Wallstedt <a class="reference internal" href="ref.html#wallstedt2009" id="id4">[wallstedt2009]</a>, one of the methods developed to
+<p>Excellent overviews of meshfree methods are found in <a class="reference internal" href="ref.html#belytschko1996" id="id1"><span>[belytschko1996]</span></a>,
+<a class="reference internal" href="ref.html#fries2004" id="id2"><span>[fries2004]</span></a> and <a class="reference internal" href="ref.html#liu2003" id="id3"><span>[liu2003]</span></a>.</p>
+<p>As reviewed by Wallstedt <a class="reference internal" href="ref.html#wallstedt2009" id="id4"><span>[wallstedt2009]</span></a>, one of the methods developed to
 circumvent the limitations of the FEM when very large displacements are
 required (e.g. extrusion or intrusion simulations where remeshing is
 mandatory), is the Smooth Particle Hydrodynamics (SPH) Method developed by
-Lucy <a class="reference internal" href="ref.html#lucy1977" id="id5">[lucy1977]</a> and Monaghan <a class="reference internal" href="ref.html#monaghan1998" id="id6">[monaghan1998]</a> and coworkers to model
+Lucy <a class="reference internal" href="ref.html#lucy1977" id="id5"><span>[lucy1977]</span></a> and Monaghan <a class="reference internal" href="ref.html#monaghan1998" id="id6"><span>[monaghan1998]</span></a> and coworkers to model
 astrophysics problems and later extended to solid mechanics by Libersky,
-Petschek and Randles (see <a class="reference internal" href="ref.html#libersky1990" id="id7">[libersky1990]</a> and <a class="reference internal" href="ref.html#randles1996" id="id8">[randles1996]</a>). These first
+Petschek and Randles (see <a class="reference internal" href="ref.html#libersky1990" id="id7"><span>[libersky1990]</span></a> and <a class="reference internal" href="ref.html#randles1996" id="id8"><span>[randles1996]</span></a>). These first
 models suffered from instability and lack of convergence, which as corrected
-by Swegle <a class="reference internal" href="ref.html#swegle1995" id="id9">[swegle1995]</a>, Johnson and Beissel <a class="reference internal" href="ref.html#johnson1996" id="id10">[johnson1996]</a>, Dilts
-<a class="reference internal" href="ref.html#dilts2000" id="id11">[dilts2000]</a> and others. Despite correcting the stability and increasing the
+by Swegle <a class="reference internal" href="ref.html#swegle1995" id="id9"><span>[swegle1995]</span></a>, Johnson and Beissel <a class="reference internal" href="ref.html#johnson1996" id="id10"><span>[johnson1996]</span></a>, Dilts
+<a class="reference internal" href="ref.html#dilts2000" id="id11"><span>[dilts2000]</span></a> and others. Despite correcting the stability and increasing the
 accuracy of the SPH, these developments introduced some inconvenience, such as
 keeping track of additional stress points.</p>
-<p>As also reviewed by Wallstedt <a class="reference internal" href="ref.html#wallstedt2009" id="id12">[wallstedt2009]</a>, another branch of development
+<p>As also reviewed by Wallstedt <a class="reference internal" href="ref.html#wallstedt2009" id="id12"><span>[wallstedt2009]</span></a>, another branch of development
 based on the Diffuse Element Method (DEM) of Nayroles and coworkers
-<a class="reference internal" href="ref.html#nayroles1992" id="id13">[nayroles1992]</a>. Belytschko, Lu and Gu (see <a class="reference internal" href="ref.html#belytschko1994" id="id14">[belytschko1994]</a>, <a class="reference internal" href="ref.html#lu1994" id="id15">[lu1994]</a> and
-<a class="reference internal" href="ref.html#belytschko1994-2" id="id16">[belytschko1994_2]</a>) reformed the original proposal in terms of Moving Least
-Squares (MLS) <a class="footnote-reference" href="#f1" id="id17">[1]</a>. This introduced the Element Free Galerkin (EFG) method
+<a class="reference internal" href="ref.html#nayroles1992" id="id13"><span>[nayroles1992]</span></a>. Belytschko, Lu and Gu (see <a class="reference internal" href="ref.html#belytschko1994" id="id14"><span>[belytschko1994]</span></a>, <a class="reference internal" href="ref.html#lu1994" id="id15"><span>[lu1994]</span></a> and
+<a class="reference internal" href="ref.html#belytschko1994-2" id="id16"><span>[belytschko1994_2]</span></a>) reformed the original proposal in terms of Moving Least
+Squares (MLS) <a class="footnote-reference brackets" href="#f1" id="id17">1</a>. This introduced the Element Free Galerkin (EFG) method
 which achieved substantial improvements in accuracy.</p>
-<p>As stated by <a class="reference internal" href="ref.html#wallstedt2009" id="id18">[wallstedt2009]</a> the use of MSL-based methods is:</p>
+<p>As stated by <a class="reference internal" href="ref.html#wallstedt2009" id="id18"><span>[wallstedt2009]</span></a> the use of MSL-based methods is:</p>
 <blockquote>
-<div><p><span class="math">\checkmark</span> useful for new classes of problems for which FEM is ill-suited</p>
-<p><span class="math">\times</span> limited regarding the application of essential boundary conditions</p>
-<p><span class="math">\times</span> substantially larger computational cost relative to FEM, mainly
+<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> useful for new classes of problems for which FEM is ill-suited</p>
+<p><img class="math" src="../../_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/> limited regarding the application of essential boundary conditions</p>
+<p><img class="math" src="../../_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/> substantially larger computational cost relative to FEM, mainly
 due to the nearest-neighbor searches</p>
 </div></blockquote>
 <p>Several MLS-based methods appeared soon, including:</p>
 <ul class="simple">
-<li>Reproducing Kernel Particle Method (RKPM) (<a class="reference internal" href="ref.html#liu1993" id="id19">[liu1993]</a>, <a class="reference internal" href="ref.html#liu1995" id="id20">[liu1995]</a>,
-<a class="reference internal" href="ref.html#liu1995-2" id="id21">[liu1995_2]</a>, <a class="reference internal" href="ref.html#jun1998" id="id22">[jun1998]</a>)</li>
-<li>Meshless Local Petrov Galerkin (MLPG) (<a class="reference internal" href="ref.html#atluri1998" id="id23">[atluri1998]</a>])</li>
-<li>Particle-in-cell (PIC) method (<a class="reference internal" href="ref.html#harlow1963" id="id24">[harlow1963]</a>)</li>
-<li>Fluid-Implicit Particle (FLIP) (<a class="reference internal" href="ref.html#brackbill1986" id="id25">[brackbill1986]</a>)</li>
-<li>Material Point Method (MPM) (<a class="reference internal" href="ref.html#sulsky1994" id="id26">[sulsky1994]</a>, <a class="reference internal" href="ref.html#sulsky1995" id="id27">[sulsky1995]</a>, <a class="reference internal" href="ref.html#sulsky1996" id="id28">[sulsky1996]</a>)</li>
+<li><p>Reproducing Kernel Particle Method (RKPM) (<a class="reference internal" href="ref.html#liu1993" id="id19"><span>[liu1993]</span></a>, <a class="reference internal" href="ref.html#liu1995" id="id20"><span>[liu1995]</span></a>,
+<a class="reference internal" href="ref.html#liu1995-2" id="id21"><span>[liu1995_2]</span></a>, <a class="reference internal" href="ref.html#jun1998" id="id22"><span>[jun1998]</span></a>)</p></li>
+<li><p>Meshless Local Petrov Galerkin (MLPG) (<a class="reference internal" href="ref.html#atluri1998" id="id23"><span>[atluri1998]</span></a>])</p></li>
+<li><p>Particle-in-cell (PIC) method (<a class="reference internal" href="ref.html#harlow1963" id="id24"><span>[harlow1963]</span></a>)</p></li>
+<li><p>Fluid-Implicit Particle (FLIP) (<a class="reference internal" href="ref.html#brackbill1986" id="id25"><span>[brackbill1986]</span></a>)</p></li>
+<li><p>Material Point Method (MPM) (<a class="reference internal" href="ref.html#sulsky1994" id="id26"><span>[sulsky1994]</span></a>, <a class="reference internal" href="ref.html#sulsky1995" id="id27"><span>[sulsky1995]</span></a>, <a class="reference internal" href="ref.html#sulsky1996" id="id28"><span>[sulsky1996]</span></a>)</p></li>
 </ul>
 <p>Other meshfree methods:</p>
 <ul class="simple">
-<li>Diffuse Element Method (DEM) (<a class="reference internal" href="ref.html#nayroles1992" id="id29">[nayroles1992]</a>)</li>
-<li>Element Free Galerkin (EFG) (<a class="reference internal" href="ref.html#belytschko1994" id="id30">[belytschko1994]</a>, <a class="reference internal" href="ref.html#lu1994" id="id31">[lu1994]</a> and
-<a class="reference internal" href="ref.html#belytschko1994-2" id="id32">[belytschko1994_2]</a>). While the DEM suffers from a number of problems due to
+<li><p>Diffuse Element Method (DEM) (<a class="reference internal" href="ref.html#nayroles1992" id="id29"><span>[nayroles1992]</span></a>)</p></li>
+<li><p>Element Free Galerkin (EFG) (<a class="reference internal" href="ref.html#belytschko1994" id="id30"><span>[belytschko1994]</span></a>, <a class="reference internal" href="ref.html#lu1994" id="id31"><span>[lu1994]</span></a> and
+<a class="reference internal" href="ref.html#belytschko1994-2" id="id32"><span>[belytschko1994_2]</span></a>). While the DEM suffers from a number of problems due to
 some simplifications, the EFG may be considered a fixed version, being a
-very popular meshfree method <a class="reference internal" href="ref.html#fries2004" id="id33">[fries2004]</a></li>
-<li>Generalized Interpolation Material Point (GIMP) (<a class="reference internal" href="ref.html#bardenhagen2004" id="id34">[bardenhagen2004]</a>)</li>
-<li>Weighted Least Squares (WLS) (in the GIMP framework) (<a class="reference internal" href="ref.html#wallstedt2009" id="id35">[wallstedt2009]</a>).
+very popular meshfree method <a class="reference internal" href="ref.html#fries2004" id="id33"><span>[fries2004]</span></a></p></li>
+<li><p>Generalized Interpolation Material Point (GIMP) (<a class="reference internal" href="ref.html#bardenhagen2004" id="id34"><span>[bardenhagen2004]</span></a>)</p></li>
+<li><p>Weighted Least Squares (WLS) (in the GIMP framework) (<a class="reference internal" href="ref.html#wallstedt2009" id="id35"><span>[wallstedt2009]</span></a>).
 Does not require the nearest-neighbor searches and integrates over a
-background as the EFG</li>
+background as the EFG</p></li>
 </ul>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="f1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id17">[1]</a></td><td>The moving least squares is a method of reconstructing continuous
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id17">1</a></span></dt>
+<dd><p>The moving least squares is a method of reconstructing continuous
 functions from a set of unorganized point samples, as exampled
-<a class="reference external" href="http://en.wikipedia.org/wiki/Moving_least_squares">in Wikipedia...</a></td></tr>
-</tbody>
-</table>
+<a class="reference external" href="http://en.wikipedia.org/wiki/Moving_least_squares">in Wikipedia…</a></p>
+</dd>
+</dl>
 </div>
 <div class="section" id="gereral-characteristics">
 <h2>Gereral Characteristics<a class="headerlink" href="#gereral-characteristics" title="Permalink to this headline">¶</a></h2>
-<p>Based on the excellent review of <a class="reference internal" href="ref.html#fries2004" id="id36">[fries2004]</a>, some interesting aspects of
+<p>Based on the excellent review of <a class="reference internal" href="ref.html#fries2004" id="id36"><span>[fries2004]</span></a>, some interesting aspects of
 meshfree methods will be listed in this section. The author will try to
 collect the aspects that seem relevant to judge whether further investigation
 on these methods will be carried out in order to seek a future implementation
-in <code class="xref py py-mod docutils literal"><span class="pre">compmech</span></code>.</p>
+in <code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech</span></code>.</p>
 <ul>
-<li><p class="first">Computational effort: usually higher than mesh-based counterpart models:</p>
+<li><p>Computational effort: usually higher than mesh-based counterpart models:</p>
 <ul>
-<li><p class="first">meshfree shape functions are more complex than polynomial-like functions
+<li><p>meshfree shape functions are more complex than polynomial-like functions
 used in mesh-based methods, requiring many more integration points
-(collocation meshfree methods don&#8217;t require integration, but this evokes
-accuracy and stability problems)</p>
-</li>
-<li><p class="first">at each integration point the following steps are usually required:
+(collocation meshfree methods don’t require integration, but this evokes
+accuracy and stability problems)</p></li>
+<li><p>at each integration point the following steps are usually required:
 neighbor search, solution of small systems of equations and small
 matrix-matrix and matrix-vector operations in order to determine the
 derivatives</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this seems to be a perfect task for CUDA implementations...</p>
+<p class="admonition-title">Note</p>
+<p>this seems to be a perfect task for CUDA implementations…</p>
 </div>
 </li>
-<li><p class="first">the resulting system of equations has in general a larger band-width for
+<li><p>the resulting system of equations has in general a larger band-width for
 meshfree methods than for mesh-based (like finite elements)
-<a class="reference internal" href="ref.html#belytschko1996" id="id37">[belytschko1996]</a></p>
-</li>
+<a class="reference internal" href="ref.html#belytschko1996" id="id37"><span>[belytschko1996]</span></a></p></li>
 </ul>
 </li>
-<li><p class="first">Hard to impose essential boundary conditions since you don&#8217;t have the
+<li><p>Hard to impose essential boundary conditions since you don’t have the
 Kronecker delta property in meshfree methods, which will guarantee that a
-given approximation function has a determined value at a given location</p>
-</li>
+given approximation function has a determined value at a given location</p></li>
 </ul>
 </div>
 </div>
@@ -166,7 +152,7 @@ given approximation function has a determined value at a given location</p>
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Meshfree Methods</a><ul>
 <li><a class="reference internal" href="#brief-introduction">Brief Introduction</a></li>
@@ -189,13 +175,13 @@ given approximation function has a determined value at a given location</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -223,8 +209,8 @@ given approximation function has a determined value at a given location</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

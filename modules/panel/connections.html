@@ -1,36 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Panel Connections (compmech.panel.connections) &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Assembly of Semi-Analytical Models" href="assembly/assembly_intro.html" /> 
-  </head>
-  <body role="document">
+    <link rel="next" title="Assembly of Semi-Analytical Models" href="assembly/assembly_intro.html" />
+    <link rel="prev" title="Semi-analytical Models for Panels (compmech.panel)" href="panel.html" /> 
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,6 +34,9 @@
         <li class="right" >
           <a href="assembly/assembly_intro.html" title="Assembly of Semi-Analytical Models"
              accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="panel.html" title="Semi-analytical Models for Panels (compmech.panel)"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Flat Plates, Curved Panels and Assemblies</a> &#187;</li> 
@@ -55,13 +49,13 @@
           <div class="body" role="main">
             
   <span class="target" id="module-compmech.panel.connections"></span><div class="section" id="panel-connections-compmech-panel-connections">
-<h1>Panel Connections (<a class="reference internal" href="#module-compmech.panel.connections" title="compmech.panel.connections"><code class="xref py py-mod docutils literal"><span class="pre">compmech.panel.connections</span></code></a>)<a class="headerlink" href="#panel-connections-compmech-panel-connections" title="Permalink to this headline">¶</a></h1>
+<h1>Panel Connections (<a class="reference internal" href="#module-compmech.panel.connections" title="compmech.panel.connections"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.connections</span></code></a>)<a class="headerlink" href="#panel-connections-compmech-panel-connections" title="Permalink to this headline">¶</a></h1>
 <p>Connection between panel domains. Each panel domain has its own set of Bardell
 approximation functions. Below it is shown the connections currently supported.</p>
 <div class="section" id="kcbfycte">
 <h2>kCBFycte<a class="headerlink" href="#kcbfycte" title="Permalink to this headline">¶</a></h2>
 <p>Connection of type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>                     <span class="n">_</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                     <span class="n">_</span>
                       <span class="o">|</span>
   <span class="o">||</span> <span class="o">--&gt;</span> <span class="n">Flange</span>       <span class="o">|</span>
   <span class="o">||</span>                  <span class="o">|-&gt;</span> <span class="n">Can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">model</span> <span class="n">a</span> <span class="n">stiffener</span>
@@ -69,13 +63,13 @@ approximation functions. Below it is shown the connections currently supported.<
                      <span class="n">_</span><span class="o">|</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">ycte</span></code> indicates the connection exists at a constant <span class="math">y_1</span> for panel 1
-(base) and <span class="math">y_2</span> for panel 2 (flange).</p>
+<p><code class="docutils literal notranslate"><span class="pre">ycte</span></code> indicates the connection exists at a constant <img class="math" src="../../_images/math/7a4a430067dab11b32cfcddbd7d7fd6b5f4d3070.png" alt="y_1"/> for panel 1
+(base) and <img class="math" src="../../_images/math/f5f424471e1f942a67eedbdbb512954c4e722fe8.png" alt="y_2"/> for panel 2 (flange).</p>
 </div>
 <div class="section" id="kcsb">
 <h2>kCSB<a class="headerlink" href="#kcsb" title="Permalink to this headline">¶</a></h2>
 <p>Connection of type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">======</span>        <span class="o">==&gt;</span> <span class="n">base</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">======</span>        <span class="o">==&gt;</span> <span class="n">base</span>
 <span class="o">------</span>        <span class="o">--&gt;</span> <span class="n">skin</span>
 </pre></div>
 </div>
@@ -84,7 +78,7 @@ approximation functions. Below it is shown the connections currently supported.<
 <div class="section" id="kcssxcte">
 <h2>kCSSxcte<a class="headerlink" href="#kcssxcte" title="Permalink to this headline">¶</a></h2>
 <p>Connection of type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">__________</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">__________</span>
 <span class="o">|</span>        <span class="o">|</span>
 <span class="o">|</span>        <span class="o">|</span>      <span class="o">/^</span>\ <span class="n">x2</span>
 <span class="o">|</span>   <span class="n">S2</span>   <span class="o">|</span>       <span class="o">|</span>
@@ -103,7 +97,7 @@ approximation functions. Below it is shown the connections currently supported.<
 <div class="section" id="kcssycte">
 <h2>kCSSycte<a class="headerlink" href="#kcssycte" title="Permalink to this headline">¶</a></h2>
 <p>Connection of type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>           <span class="o">/-&gt;</span> <span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">y1</span><span class="o">=</span><span class="n">ycte1</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>           <span class="o">/-&gt;</span> <span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">y1</span><span class="o">=</span><span class="n">ycte1</span><span class="p">)</span>
           <span class="o">/</span>
          <span class="o">/</span>  <span class="o">/-&gt;</span><span class="p">(</span><span class="n">connection</span> <span class="n">at</span> <span class="n">y2</span><span class="o">=</span><span class="n">ycte2</span><span class="p">)</span>
 <span class="n">_________</span><span class="o">|</span> <span class="o">|</span><span class="n">_________</span>
@@ -122,51 +116,42 @@ approximation functions. Below it is shown the connections currently supported.<
 </div>
 <div class="section" id="calculating-penalty-constants">
 <h2>Calculating Penalty Constants<a class="headerlink" href="#calculating-penalty-constants" title="Permalink to this headline">¶</a></h2>
-<p>Function :func:&#8217;.calc_kt_kr&#8217; is based on Ref <a class="reference internal" href="../../theory/ref.html#castro2017assemblymodels" id="id1">[castro2017AssemblyModels]</a> and
+<p>Function :func:’.calc_kt_kr’ is based on Ref <a class="reference internal" href="../../theory/ref.html#castro2017assemblymodels" id="id1"><span>[castro2017AssemblyModels]</span></a> and
 uses a strain compatibility criterion to calculate penalty constants for
-translation (<code class="docutils literal"><span class="pre">kt</span></code>) and rotatio (<code class="docutils literal"><span class="pre">kr</span></code>). The aim is to have penalty constants
+translation (<code class="docutils literal notranslate"><span class="pre">kt</span></code>) and rotatio (<code class="docutils literal notranslate"><span class="pre">kr</span></code>). The aim is to have penalty constants
 that are just high enough to produce the desired compatibility, but not too
 high such that numerical stability issues start to appear.</p>
 <dl class="function">
 <dt id="compmech.panel.connections.calc_kt_kr">
-<code class="descclassname">compmech.panel.connections.</code><code class="descname">calc_kt_kr</code><span class="sig-paren">(</span><em>p1</em>, <em>p2</em>, <em>connection_type</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/connections/penalty_constants.html#calc_kt_kr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.connections.calc_kt_kr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">compmech.panel.connections.</code><code class="sig-name descname">calc_kt_kr</code><span class="sig-paren">(</span><em class="sig-param">p1</em>, <em class="sig-param">p2</em>, <em class="sig-param">connection_type</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/connections/penalty_constants.html#calc_kt_kr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.connections.calc_kt_kr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate translation and rotation penalty constants</p>
 <p>For details on how to derive these equations, see
-<a class="reference internal" href="../../theory/ref.html#castro2017assemblymodels" id="id2">[castro2017AssemblyModels]</a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p1</strong> : <a class="reference internal" href="panel.html#compmech.panel.panel.Panel" title="compmech.panel.panel.Panel"><code class="xref py py-class docutils literal"><span class="pre">Panel</span></code></a></p>
-<blockquote>
-<div><p>First panel.</p>
-</div></blockquote>
-<p><strong>p2</strong> : <a class="reference internal" href="panel.html#compmech.panel.panel.Panel" title="compmech.panel.panel.Panel"><code class="xref py py-class docutils literal"><span class="pre">Panel</span></code></a></p>
-<blockquote>
-<div><p>Second panel.</p>
-</div></blockquote>
-<p><strong>connection_type</strong> : str</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>One of the types:</dt>
-<dd><ul class="first last simple">
-<li>&#8216;xcte&#8217;</li>
-<li>&#8216;ycte&#8217;</li>
-<li>&#8216;bot-top&#8217;</li>
+<a class="reference internal" href="../../theory/ref.html#castro2017assemblymodels" id="id2"><span>[castro2017AssemblyModels]</span></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>p1</strong><span class="classifier"><a class="reference internal" href="panel.html#compmech.panel.panel.Panel" title="compmech.panel.panel.Panel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Panel</span></code></a></span></dt><dd><p>First panel.</p>
+</dd>
+<dt><strong>p2</strong><span class="classifier"><a class="reference internal" href="panel.html#compmech.panel.panel.Panel" title="compmech.panel.panel.Panel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Panel</span></code></a></span></dt><dd><p>Second panel.</p>
+</dd>
+<dt><strong>connection_type</strong><span class="classifier">str</span></dt><dd><dl class="simple">
+<dt>One of the types:</dt><dd><ul class="simple">
+<li><p>‘xcte’</p></li>
+<li><p>‘ycte’</p></li>
+<li><p>‘bot-top’</p></li>
 </ul>
 </dd>
 </dl>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>kt, kr</strong> : tuple</p>
-<blockquote class="last">
-<div><p>A tuple with both values.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>kt, kr</strong><span class="classifier">tuple</span></dt><dd><p>A tuple with both values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -181,9 +166,9 @@ high such that numerical stability issues start to appear.</p>
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Panel Connections (<code class="docutils literal"><span class="pre">compmech.panel.connections</span></code>)</a><ul>
+<li><a class="reference internal" href="#">Panel Connections (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.connections</span></code>)</a><ul>
 <li><a class="reference internal" href="#kcbfycte">kCBFycte</a></li>
 <li><a class="reference internal" href="#kcsb">kCSB</a></li>
 <li><a class="reference internal" href="#kcssxcte">kCSSxcte</a></li>
@@ -193,6 +178,9 @@ high such that numerical stability issues start to appear.</p>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="panel.html"
+                        title="previous chapter">Semi-analytical Models for Panels (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel</span></code>)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="assembly/assembly_intro.html"
                         title="next chapter">Assembly of Semi-Analytical Models</a></p>
@@ -204,13 +192,13 @@ high such that numerical stability issues start to appear.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -229,6 +217,9 @@ high such that numerical stability issues start to appear.</p>
         <li class="right" >
           <a href="assembly/assembly_intro.html" title="Assembly of Semi-Analytical Models"
              >next</a> |</li>
+        <li class="right" >
+          <a href="panel.html" title="Semi-analytical Models for Panels (compmech.panel)"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &#187;</li> 
@@ -236,8 +227,8 @@ high such that numerical stability issues start to appear.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

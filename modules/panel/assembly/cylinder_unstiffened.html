@@ -1,37 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Unstiffened Cylinder &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Blade-Stiffened Cylinder" href="cylinder_blade_stiffened.html" />
     <link rel="prev" title="T-Stiffened Panels" href="tstiff2d.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -64,10 +54,10 @@
 <h1>Unstiffened Cylinder<a class="headerlink" href="#unstiffened-cylinder" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="compmech.panel.assembly.cylinder.create_cylinder_assy">
-<code class="descclassname">compmech.panel.assembly.cylinder.</code><code class="descname">create_cylinder_assy</code><span class="sig-paren">(</span><em>height</em>, <em>r</em>, <em>stack</em>, <em>plyt</em>, <em>laminaprop</em>, <em>npanels</em>, <em>m=8</em>, <em>n=8</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#create_cylinder_assy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">compmech.panel.assembly.cylinder.</code><code class="sig-name descname">create_cylinder_assy</code><span class="sig-paren">(</span><em class="sig-param">height</em>, <em class="sig-param">r</em>, <em class="sig-param">stack</em>, <em class="sig-param">plyt</em>, <em class="sig-param">laminaprop</em>, <em class="sig-param">npanels</em>, <em class="sig-param">m=8</em>, <em class="sig-param">n=8</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#create_cylinder_assy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cylinder Assembly</p>
 <p>The panel assembly looks like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">B</span>                             <span class="n">A</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">B</span>                             <span class="n">A</span>
  <span class="n">_______</span> <span class="n">_______</span> <span class="n">_______</span> <span class="n">_______</span>
 <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>
 <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>       <span class="o">|</span>
@@ -80,82 +70,60 @@
                            <span class="n">y</span>  <span class="o">&lt;-------</span>
 </pre></div>
 </div>
-<p>where edges <code class="docutils literal"><span class="pre">A</span></code> and <code class="docutils literal"><span class="pre">B</span></code> are connected to produce the cyclic effect.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>height</strong> : float</p>
-<blockquote>
-<div><p>Cylinder height (along <span class="math">x</span>).</p>
-</div></blockquote>
-<p><strong>r</strong> : float</p>
-<blockquote>
-<div><p>Cylinder radius.</p>
-</div></blockquote>
-<p><strong>stack</strong> : list or tuple</p>
-<blockquote>
-<div><p>Stacking sequence for the cylinder.</p>
-</div></blockquote>
-<p><strong>plyt</strong> : float</p>
-<blockquote>
-<div><p>Ply thickness.</p>
-</div></blockquote>
-<p><strong>laminaprop</strong> : list or tuple</p>
-<blockquote>
-<div><p>Orthotropic lamina properties: <span class="math">E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}</span>.</p>
-</div></blockquote>
-<p><strong>npanels</strong> : int</p>
-<blockquote>
-<div><p>The number of panels the cylinder perimiter.</p>
-</div></blockquote>
-<p><strong>m, n</strong> : int, optional</p>
-<blockquote>
-<div><p>Number of approximation terms for each panel.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>assy, conns</strong> : tuple</p>
-<blockquote class="last">
-<div><p>A tuple containing the assembly and the default connectivity
+<p>where edges <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> are connected to produce the cyclic effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>height</strong><span class="classifier">float</span></dt><dd><p>Cylinder height (along <img class="math" src="../../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>).</p>
+</dd>
+<dt><strong>r</strong><span class="classifier">float</span></dt><dd><p>Cylinder radius.</p>
+</dd>
+<dt><strong>stack</strong><span class="classifier">list or tuple</span></dt><dd><p>Stacking sequence for the cylinder.</p>
+</dd>
+<dt><strong>plyt</strong><span class="classifier">float</span></dt><dd><p>Ply thickness.</p>
+</dd>
+<dt><strong>laminaprop</strong><span class="classifier">list or tuple</span></dt><dd><p>Orthotropic lamina properties: <img class="math" src="../../../_images/math/ccfbb261bc985b06e710fdf112e6617a56aa18c5.png" alt="E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}"/>.</p>
+</dd>
+<dt><strong>npanels</strong><span class="classifier">int</span></dt><dd><p>The number of panels the cylinder perimiter.</p>
+</dd>
+<dt><strong>m, n</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for each panel.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>assy, conns</strong><span class="classifier">tuple</span></dt><dd><p>A tuple containing the assembly and the default connectivity
 list of dictionaries.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_cte">
-<code class="descclassname">compmech.panel.assembly.cylinder.</code><code class="descname">cylinder_compression_lb_Nxx_cte</code><span class="sig-paren">(</span><em>height</em>, <em>r</em>, <em>stack</em>, <em>plyt</em>, <em>laminaprop</em>, <em>npanels</em>, <em>Nxxs</em>, <em>m=8</em>, <em>n=8</em>, <em>num_eigvalues=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#cylinder_compression_lb_Nxx_cte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_cte" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">compmech.panel.assembly.cylinder.</code><code class="sig-name descname">cylinder_compression_lb_Nxx_cte</code><span class="sig-paren">(</span><em class="sig-param">height</em>, <em class="sig-param">r</em>, <em class="sig-param">stack</em>, <em class="sig-param">plyt</em>, <em class="sig-param">laminaprop</em>, <em class="sig-param">npanels</em>, <em class="sig-param">Nxxs</em>, <em class="sig-param">m=8</em>, <em class="sig-param">n=8</em>, <em class="sig-param">num_eigvalues=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#cylinder_compression_lb_Nxx_cte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_cte" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear buckling analysis with a constant Nxx for each panel</p>
-<p>See <a class="reference internal" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="compmech.panel.assembly.cylinder.create_cylinder_assy"><code class="xref py py-func docutils literal"><span class="pre">create_cylinder_assy()</span></code></a> for most parameters.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nxxs</strong> : list</p>
-<blockquote>
-<div><p>A Nxx for each panel.</p>
-</div></blockquote>
-<p><strong>num_eigvalues</strong> : int</p>
-<blockquote>
-<div><p>Number of eigenvalues to be extracted.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>assy, eigvals, eigvecs</strong> : tuple</p>
-<blockquote class="last">
-<div><p>Assembly, eigenvalues and eigenvectors.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>See <a class="reference internal" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="compmech.panel.assembly.cylinder.create_cylinder_assy"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_cylinder_assy()</span></code></a> for most parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Nxxs</strong><span class="classifier">list</span></dt><dd><p>A Nxx for each panel.</p>
+</dd>
+<dt><strong>num_eigvalues</strong><span class="classifier">int</span></dt><dd><p>Number of eigenvalues to be extracted.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>assy, eigvals, eigvecs</strong><span class="classifier">tuple</span></dt><dd><p>Assembly, eigenvalues and eigenvectors.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <p>The following example is one of the test cases:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_cylinder_compression_lb_Nxx_cte</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_cylinder_compression_lb_Nxx_cte</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing assembly function: cylinder_compression_lb_Nxx_cte&#39;</span><span class="p">)</span>
     <span class="n">height</span> <span class="o">=</span> <span class="mf">0.500</span>
     <span class="n">r</span> <span class="o">=</span> <span class="mf">0.250</span>
@@ -180,34 +148,28 @@ list of dictionaries.</p>
 
 <dl class="function">
 <dt id="compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_from_static">
-<code class="descclassname">compmech.panel.assembly.cylinder.</code><code class="descname">cylinder_compression_lb_Nxx_from_static</code><span class="sig-paren">(</span><em>height</em>, <em>r</em>, <em>stack</em>, <em>plyt</em>, <em>laminaprop</em>, <em>npanels</em>, <em>Nxxs</em>, <em>m=8</em>, <em>n=8</em>, <em>num_eigvalues=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#cylinder_compression_lb_Nxx_from_static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_from_static" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">compmech.panel.assembly.cylinder.</code><code class="sig-name descname">cylinder_compression_lb_Nxx_from_static</code><span class="sig-paren">(</span><em class="sig-param">height</em>, <em class="sig-param">r</em>, <em class="sig-param">stack</em>, <em class="sig-param">plyt</em>, <em class="sig-param">laminaprop</em>, <em class="sig-param">npanels</em>, <em class="sig-param">Nxxs</em>, <em class="sig-param">m=8</em>, <em class="sig-param">n=8</em>, <em class="sig-param">num_eigvalues=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/compmech/panel/assembly/cylinder.html#cylinder_compression_lb_Nxx_from_static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.assembly.cylinder.cylinder_compression_lb_Nxx_from_static" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear buckling analysis with a Nxx calculated using static analysis</p>
-<p>See <a class="reference internal" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="compmech.panel.assembly.cylinder.create_cylinder_assy"><code class="xref py py-func docutils literal"><span class="pre">create_cylinder_assy()</span></code></a> for most parameters.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Nxxs</strong> : list</p>
-<blockquote>
-<div><p>A Nxx for each panel.</p>
-</div></blockquote>
-<p><strong>num_eigvalues</strong> : int</p>
-<blockquote>
-<div><p>Number of eigenvalues to be extracted.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>assy, c, eigvals, eigvecs</strong> : tuple</p>
-<blockquote class="last">
-<div><p>Assembly, static results, eigenvalues and eigenvectors.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>See <a class="reference internal" href="#compmech.panel.assembly.cylinder.create_cylinder_assy" title="compmech.panel.assembly.cylinder.create_cylinder_assy"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_cylinder_assy()</span></code></a> for most parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Nxxs</strong><span class="classifier">list</span></dt><dd><p>A Nxx for each panel.</p>
+</dd>
+<dt><strong>num_eigvalues</strong><span class="classifier">int</span></dt><dd><p>Number of eigenvalues to be extracted.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>assy, c, eigvals, eigvecs</strong><span class="classifier">tuple</span></dt><dd><p>Assembly, static results, eigenvalues and eigenvectors.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <p>The following example is one of the test cases:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_cylinder_compression_lb_Nxx_from_static</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_cylinder_compression_lb_Nxx_from_static</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Testing assembly function: cylinder_compression_lb_Nxx_from_static&#39;</span><span class="p">)</span>
     <span class="n">height</span> <span class="o">=</span> <span class="mf">0.500</span>
     <span class="n">r</span> <span class="o">=</span> <span class="mf">0.250</span>
@@ -256,13 +218,13 @@ list of dictionaries.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -293,8 +255,8 @@ list of dictionaries.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

@@ -1,37 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+    <meta charset="utf-8" />
     <title>Interpolate (compmech.interpolate) &#8212; CompMech 0.7.2 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.7.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
     <link rel="shortcut icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Compmech shared libraries (lib)" href="../lib/index.html" />
     <link rel="prev" title="Integrate &lt;compmech.integrate&gt;" href="../integrate/index.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -58,142 +48,114 @@
           <div class="body" role="main">
             
   <span class="target" id="module-compmech.interpolate"><span id="module-interpolate"></span></span><div class="section" id="interpolate-compmech-interpolate">
-<h1>Interpolate (<a class="reference internal" href="#module-compmech.interpolate" title="compmech.interpolate"><code class="xref py py-mod docutils literal"><span class="pre">compmech.interpolate</span></code></a>)<a class="headerlink" href="#interpolate-compmech-interpolate" title="Permalink to this headline">¶</a></h1>
+<h1>Interpolate (<a class="reference internal" href="#module-compmech.interpolate" title="compmech.interpolate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.interpolate</span></code></a>)<a class="headerlink" href="#interpolate-compmech-interpolate" title="Permalink to this headline">¶</a></h1>
 <p>This module includes some interpolation utilities that will be used in other
 modules.</p>
 <dl class="function">
 <dt id="compmech.interpolate.inv_weighted">
-<code class="descclassname">compmech.interpolate.</code><code class="descname">inv_weighted</code><span class="sig-paren">(</span><em>data</em>, <em>mesh</em>, <em>num_sub</em>, <em>col</em>, <em>ncp=5</em>, <em>power_parameter=2</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/interpolate.html#inv_weighted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.interpolate.inv_weighted" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">compmech.interpolate.</code><code class="sig-name descname">inv_weighted</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">mesh</em>, <em class="sig-param">num_sub</em>, <em class="sig-param">col</em>, <em class="sig-param">ncp=5</em>, <em class="sig-param">power_parameter=2</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/interpolate.html#inv_weighted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.interpolate.inv_weighted" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolates the values taken at one group of points into
 another using an inverse-weighted algorithm</p>
-<p>In the inverse-weighted algorithm a number of <span class="math">n_{CP}</span> measured points
-of the input parameter <code class="docutils literal"><span class="pre">data</span></code> that are closest to a given node in
-the input parameter <code class="docutils literal"><span class="pre">mesh</span></code> are found and the imperfection value of
-this node (represented by the normal displacement <span class="math">{w_0}_{node}</span>) is
+<p>In the inverse-weighted algorithm a number of <img class="math" src="../../_images/math/cc3563c01833ed65727af548f93b42f5a4a5c5b5.png" alt="n_{CP}"/> measured points
+of the input parameter <code class="docutils literal notranslate"><span class="pre">data</span></code> that are closest to a given node in
+the input parameter <code class="docutils literal notranslate"><span class="pre">mesh</span></code> are found and the imperfection value of
+this node (represented by the normal displacement <img class="math" src="../../_images/math/4ca38ed8e8500346ea96c411fa386d02d57e7413.png" alt="{w_0}_{node}"/>) is
 calculated as follows:</p>
 <div class="math">
-<p><span class="math">{w_0}_{node} = \frac{\sum_{i}^{n_{CP}}{{w_0}_i\frac{1}{w_i}}}
-                    {\sum_{i}^{n_{CP}}{\frac{1}{w_i}}}</span></p>
-</div><p>where <span class="math">w_i</span> is the imperfection at each measured point, calculated as:</p>
+<p><img src="../../_images/math/b0f66d7174efecae9ea534e1c3eb8f803333d37e.png" alt="{w_0}_{node} = \frac{\sum_{i}^{n_{CP}}{{w_0}_i\frac{1}{w_i}}}
+                    {\sum_{i}^{n_{CP}}{\frac{1}{w_i}}}"/></p>
+</div><p>where <img class="math" src="../../_images/math/00ab1d47834bf57ac5b018a21ace10aae5798cfd.png" alt="w_i"/> is the imperfection at each measured point, calculated as:</p>
 <div class="math">
-<p><span class="math">w_i = \left[(x_{node}-x_i)^2+(y_{node}-y_i)^2+(z_{node}-y_i)^2
-      \right]^p</span></p>
-</div><p>with <span class="math">p</span> being a power parameter that when increased will increase the
+<p><img src="../../_images/math/98ab768dacd31729cb069f04b5a1796a06e51b90.png" alt="w_i = \left[(x_{node}-x_i)^2+(y_{node}-y_i)^2+(z_{node}-y_i)^2
+      \right]^p"/></p>
+</div><p>with <img class="math" src="../../_images/math/141bbefb74014fc5e43499901bf78607ae335583.png" alt="p"/> being a power parameter that when increased will increase the
 relative influence of a closest point.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : numpy.ndarray, shape (N, ndim+1)</p>
-<blockquote>
-<div><p>The data or an array containing the imperfection file. The values
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">numpy.ndarray, shape (N, ndim+1)</span></dt><dd><p>The data or an array containing the imperfection file. The values
 to be interpolated must be in the last column.</p>
-</div></blockquote>
-<p><strong>mesh</strong> : numpy.ndarray, shape (M, ndim)</p>
-<blockquote>
-<div><p>The new coordinates where the values will be interpolated to.</p>
-</div></blockquote>
-<p><strong>num_sub</strong> : int</p>
-<blockquote>
-<div><p>The number of sub-sets used during the interpolation. The points
-are divided in sub-sets to increase the algorithm&#8217;s efficiency.</p>
-</div></blockquote>
-<p><strong>col</strong> : int</p>
-<blockquote>
-<div><p>The index of the column to be used in order to divide the data
-in sub-sets. Note that the first column index is <code class="docutils literal"><span class="pre">0</span></code>.</p>
-</div></blockquote>
-<p><strong>ncp</strong> : int, optional</p>
-<blockquote>
-<div><p>Number of closest points used in the inverse-weighted interpolation.</p>
-</div></blockquote>
-<p><strong>power_parameter</strong> : float, optional</p>
-<blockquote>
-<div><p>Power of inverse weighted interpolation function.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ans</strong> : numpy.ndarray</p>
-<blockquote class="last">
-<div><p>A 1-D array with the interpolated values. The size of this array
-is <code class="docutils literal"><span class="pre">mesh.shape[0]</span></code>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt><strong>mesh</strong><span class="classifier">numpy.ndarray, shape (M, ndim)</span></dt><dd><p>The new coordinates where the values will be interpolated to.</p>
+</dd>
+<dt><strong>num_sub</strong><span class="classifier">int</span></dt><dd><p>The number of sub-sets used during the interpolation. The points
+are divided in sub-sets to increase the algorithm’s efficiency.</p>
+</dd>
+<dt><strong>col</strong><span class="classifier">int</span></dt><dd><p>The index of the column to be used in order to divide the data
+in sub-sets. Note that the first column index is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+</dd>
+<dt><strong>ncp</strong><span class="classifier">int, optional</span></dt><dd><p>Number of closest points used in the inverse-weighted interpolation.</p>
+</dd>
+<dt><strong>power_parameter</strong><span class="classifier">float, optional</span></dt><dd><p>Power of inverse weighted interpolation function.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ans</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>A 1-D array with the interpolated values. The size of this array
+is <code class="docutils literal notranslate"><span class="pre">mesh.shape[0]</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="compmech.interpolate.interp">
-<code class="descclassname">compmech.interpolate.</code><code class="descname">interp</code><span class="sig-paren">(</span><em>x</em>, <em>xp</em>, <em>fp</em>, <em>left=None</em>, <em>right=None</em>, <em>period=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/interpolate.html#interp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.interpolate.interp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">compmech.interpolate.</code><code class="sig-name descname">interp</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">xp</em>, <em class="sig-param">fp</em>, <em class="sig-param">left=None</em>, <em class="sig-param">right=None</em>, <em class="sig-param">period=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/interpolate.html#interp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.interpolate.interp" title="Permalink to this definition">¶</a></dt>
 <dd><p>One-dimensional linear interpolation</p>
 <p>Returns the one-dimensional piecewise linear interpolant to a function
 with given values at discrete data-points.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This function has been incorporated in NumPy &gt;= 1.10.0 and will be soon
+<p class="admonition-title">Note</p>
+<p>This function has been incorporated in NumPy &gt;= 1.10.0 and will be soon
 removed from here.</p>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
-<blockquote>
-<div><p>The x-coordinates of the interpolated values.</p>
-</div></blockquote>
-<p><strong>xp</strong> : 1-D sequence of floats</p>
-<blockquote>
-<div><p>The x-coordinates of the data points, must be increasing if argument
-<code class="docutils literal"><span class="pre">period</span></code> is not specified. Otherwise, <code class="docutils literal"><span class="pre">xp</span></code> is internally sorted
-after normalizing the periodic boundaries with <code class="docutils literal"><span class="pre">xp</span> <span class="pre">=</span> <span class="pre">xp</span> <span class="pre">%</span> <span class="pre">period</span></code>.</p>
-</div></blockquote>
-<p><strong>fp</strong> : 1-D sequence of floats</p>
-<blockquote>
-<div><p>The y-coordinates of the data points, same length as <code class="docutils literal"><span class="pre">xp</span></code>.</p>
-</div></blockquote>
-<p><strong>left</strong> : float, optional</p>
-<blockquote>
-<div><p>Value to return for <code class="docutils literal"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">xp[0]</span></code>, default is <code class="docutils literal"><span class="pre">fp[0]</span></code>.</p>
-</div></blockquote>
-<p><strong>right</strong> : float, optional</p>
-<blockquote>
-<div><p>Value to return for <code class="docutils literal"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">xp[-1]</span></code>, default is <code class="docutils literal"><span class="pre">fp[-1]</span></code>.</p>
-</div></blockquote>
-<p><strong>period</strong> : float, optional</p>
-<blockquote>
-<div><p>A period for the x-coordinates. This parameter allows the proper
-interpolation of angular x-coordinates. Parameters <code class="docutils literal"><span class="pre">left</span></code> and
-<code class="docutils literal"><span class="pre">right</span></code> are ignored if <code class="docutils literal"><span class="pre">period</span></code> is specified.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>y</strong> : {float, ndarray}</p>
-<blockquote>
-<div><p>The interpolated values, same shape as <code class="docutils literal"><span class="pre">x</span></code>.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong></p>
-<blockquote class="last">
-<div><p>If <code class="docutils literal"><span class="pre">xp</span></code> and <code class="docutils literal"><span class="pre">fp</span></code> have different length
-If <code class="docutils literal"><span class="pre">xp</span></code> or <code class="docutils literal"><span class="pre">fp</span></code> are not 1-D sequences
-If <code class="docutils literal"><span class="pre">period==0</span></code></p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>The x-coordinates of the interpolated values.</p>
+</dd>
+<dt><strong>xp</strong><span class="classifier">1-D sequence of floats</span></dt><dd><p>The x-coordinates of the data points, must be increasing if argument
+<code class="docutils literal notranslate"><span class="pre">period</span></code> is not specified. Otherwise, <code class="docutils literal notranslate"><span class="pre">xp</span></code> is internally sorted
+after normalizing the periodic boundaries with <code class="docutils literal notranslate"><span class="pre">xp</span> <span class="pre">=</span> <span class="pre">xp</span> <span class="pre">%</span> <span class="pre">period</span></code>.</p>
+</dd>
+<dt><strong>fp</strong><span class="classifier">1-D sequence of floats</span></dt><dd><p>The y-coordinates of the data points, same length as <code class="docutils literal notranslate"><span class="pre">xp</span></code>.</p>
+</dd>
+<dt><strong>left</strong><span class="classifier">float, optional</span></dt><dd><p>Value to return for <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">xp[0]</span></code>, default is <code class="docutils literal notranslate"><span class="pre">fp[0]</span></code>.</p>
+</dd>
+<dt><strong>right</strong><span class="classifier">float, optional</span></dt><dd><p>Value to return for <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&gt;</span> <span class="pre">xp[-1]</span></code>, default is <code class="docutils literal notranslate"><span class="pre">fp[-1]</span></code>.</p>
+</dd>
+<dt><strong>period</strong><span class="classifier">float, optional</span></dt><dd><p>A period for the x-coordinates. This parameter allows the proper
+interpolation of angular x-coordinates. Parameters <code class="docutils literal notranslate"><span class="pre">left</span></code> and
+<code class="docutils literal notranslate"><span class="pre">right</span></code> are ignored if <code class="docutils literal notranslate"><span class="pre">period</span></code> is specified.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">{float, ndarray}</span></dt><dd><p>The interpolated values, same shape as <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">xp</span></code> and <code class="docutils literal notranslate"><span class="pre">fp</span></code> have different length
+If <code class="docutils literal notranslate"><span class="pre">xp</span></code> or <code class="docutils literal notranslate"><span class="pre">fp</span></code> are not 1-D sequences
+If <code class="docutils literal notranslate"><span class="pre">period==0</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
-<p>Does not check that the x-coordinate sequence <code class="docutils literal"><span class="pre">xp</span></code> is increasing.
-If <code class="docutils literal"><span class="pre">xp</span></code> is not increasing, the results are nonsense.
+<p>Does not check that the x-coordinate sequence <code class="docutils literal notranslate"><span class="pre">xp</span></code> is increasing.
+If <code class="docutils literal notranslate"><span class="pre">xp</span></code> is not increasing, the results are nonsense.
 A simple check for increasing is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">xp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">xp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">interp</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">xp</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span>
 <span class="go">1.0</span>
@@ -205,7 +167,7 @@ A simple check for increasing is:</p>
 </pre></div>
 </div>
 <p>Plot an interpolant to the sine function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">yinterp</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -218,7 +180,7 @@ A simple check for increasing is:</p>
 </pre></div>
 </div>
 <p>Interpolation with periodic x-coordinates:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">170</span><span class="p">,</span> <span class="o">-</span><span class="mi">185</span><span class="p">,</span> <span class="mi">185</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">365</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">170</span><span class="p">,</span> <span class="o">-</span><span class="mi">185</span><span class="p">,</span> <span class="mi">185</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">365</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">190</span><span class="p">,</span> <span class="o">-</span><span class="mi">190</span><span class="p">,</span> <span class="mi">350</span><span class="p">,</span> <span class="o">-</span><span class="mi">350</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">interp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xp</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">360</span><span class="p">)</span>
@@ -240,7 +202,7 @@ A simple check for increasing is:</p>
             </a></p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="../integrate/index.html"
-                        title="previous chapter">Integrate &lt;<code class="docutils literal"><span class="pre">compmech.integrate</span></code>&gt;</a></p>
+                        title="previous chapter">Integrate &lt;<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.integrate</span></code>&gt;</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../lib/index.html"
                         title="next chapter">Compmech shared libraries (lib)</a></p>
@@ -252,13 +214,13 @@ A simple check for increasing is:</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -286,8 +248,8 @@ A simple check for increasing is:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Dec 10, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+      Last updated on Sep 03, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
