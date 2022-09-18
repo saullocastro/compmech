@@ -20,6 +20,7 @@ Requirements
 ------------
 - numpy
 - scipy
+- matplotlib
 - (for building only) Cython and a C compiler
 
 Licensing
