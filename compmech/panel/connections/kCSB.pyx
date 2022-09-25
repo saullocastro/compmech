@@ -35,9 +35,36 @@ INT = np.int64
 
 cdef int num = 3
 
-
+# TODO: explain dsb parameter
 def fkCSB11(double kt, double dsb, object p1,
             int size, int row0, int col0):
+    '''
+    Penalty approach calculation to skin-base ycte panel 1 position.
+
+    Parameters
+    ----------
+    kt : float
+        Translation penalty stiffness.
+    dsb : float
+    p1 : Panel
+        Panel() object
+    ycte1 : float
+        Dimension value that determines the flag value eta.
+        If ycte1 = 0 => eta = -1, if ycte1 = p1.b => eta = 1.
+        Where eta=-1 stands for boundary 1 and eta=1 stands for boundary 2.
+    size : int
+        Size of assembly stiffness matrix, which are calculated by sum([3*p.m*p.n for p in self.panels]).
+        The size of the assembly can be calculated calling the PanelAssemly.get_size() method.
+    row0 : int
+        Row position of constitutive matrix being calculated.
+    col0 : int
+        Collumn position of constitutive matrix being calculated.
+
+    Returns
+    -------
+    kCSB11 : scipy.sparse.coo_matrix
+        A sparse matrix that adds the penalty stiffness to ycte of panel p1 position.
+    '''
     cdef int i1, k1, j1, l1, c, row, col
     cdef int m1, n1
     cdef double a1, b1
@@ -137,8 +164,42 @@ def fkCSB11(double kt, double dsb, object p1,
     return kCSB11
 
 
+# TODO: explain dsb parameter
 def fkCSB12(double kt, double dsb, object p1, object p2,
             int size, int row0, int col0):
+    '''
+    Penalty approach calculation to skin-base ycte panel 1 and panel 2 coupling position.
+
+    Parameters
+    ----------
+    kt : float
+        Translation penalty stiffness.
+    dsb : float
+    p1 : Panel
+        First Panel object
+    p2 : Panel
+        Second Panel object
+    ycte1 : float
+        Dimension value that determines the flag value eta.
+        If ycte1 = 0 => eta = -1, if ycte1 = p1.b => eta = 1.
+        Where eta=-1 stands for boundary 1 and eta=1 stands for boundary 2.
+    ycte2 : float
+        Dimension value that determines the flag value eta.
+        If ycte1 = 0 => eta = -1, if ycte1 = p1.b => eta = 1.
+        Where eta=-1 stands for boundary 1 and eta=1 stands for boundary 2.
+    size : int
+        Size of assembly stiffness matrix, which are calculated by sum([3*p.m*p.n for p in self.panels]).
+        The size of the assembly can be calculated calling the PanelAssemly.get_size() method.
+    row0 : int
+        Row position of constitutive matrix being calculated.
+    col0 : int
+        Collumn position of constitutive matrix being calculated.
+
+    Returns
+    -------
+    kCBFycte12 : scipy.sparse.coo_matrix
+        A sparse matrix that adds the penalty stiffness to ycte of panel 1 and panel 2 coupling position.
+    '''
     cdef int i1, j1, k2, l2, c, row, col
     cdef int m1, n1, m2, n2
     cdef double a1, b1
@@ -235,6 +296,35 @@ def fkCSB12(double kt, double dsb, object p1, object p2,
 
 def fkCSB22(double kt, object p1, object p2,
             int size, int row0, int col0):
+    '''
+    Penalty approach calculation to skin-base ycte panel 2 position.
+
+    Parameters
+    ----------
+    kt : float
+        Translation penalty stiffness.
+    p1 : Panel
+        First Panel object
+    p2 : Panel
+        Second Panel object
+    ycte2 : float
+        Dimension value that determines the flag value eta.
+        If ycte1 = 0 => eta = -1, if ycte1 = p1.b => eta = 1.
+        Where eta=-1 stands for boundary 1 and eta=1 stands for boundary 2.
+    size : int
+        Size of assembly stiffness matrix, which are calculated by sum([3*p.m*p.n for p in self.panels]).
+        The size of the assembly can be calculated calling the PanelAssemly.get_size() method.
+    row0 : int
+        Row position of constitutive matrix being calculated.
+    col0 : int
+        Collumn position of constitutive matrix being calculated.
+
+    Returns
+    -------
+    kCSB22 : scipy.sparse.coo_matrix
+        A sparse matrix that adds the penalty stiffness to ycte of panel p2 position.
+    '''
+
     cdef int i2, k2, j2, l2, c, row, col
     cdef int m2, n2
     cdef double a1, b1
