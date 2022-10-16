@@ -22,6 +22,7 @@ def configuration(parent_package='', top_path=None):
 
     bardell_sources = [os.path.join(src_path, 'bardell.c')]
     bardell_functions_sources = [os.path.join(src_path, 'bardell_functions.c')]
+     # TODO: check the difference between bardel_integral functions
     bardell_integral_sources = [
         os.path.join(src_path, 'bardell_12_integral_ff.c'),
         os.path.join(src_path, 'bardell_12_integral_ffxi.c'),
@@ -62,6 +63,7 @@ def configuration(parent_package='', top_path=None):
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']
 
+    # TODO: check commented keyword arguments
     config.add_extension('bladestiff1d_clt_donnell_bardell',
                      ['bladestiff1d_clt_donnell_bardell.pyx'] + bardell_sources + bardell_functions_sources,
                      #extra_compile_args=args_linear,

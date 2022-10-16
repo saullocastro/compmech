@@ -42,6 +42,7 @@ def configuration(parent_package='', top_path=None):
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']
 
+    # TODO: check commented keyword arguments
     config.add_extension('kCBFycte',
               sources=['kCBFycte.pyx'] + bardel_sources,
             #   extra_compile_args=args_linear,

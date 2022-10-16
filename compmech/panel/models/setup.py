@@ -20,6 +20,7 @@ def configuration(parent_package='', top_path=None):
     )
     src_path = os.path.join(compmech_path, 'lib', 'src')
 
+    # TODO: check the difference between bardel_integral functions
     bardell_sources = [os.path.join(src_path, 'bardell.c')]
     bardell_functions_sources = [os.path.join(src_path, 'bardell_functions.c')]
     bardell_integral_sources = [
@@ -62,6 +63,7 @@ def configuration(parent_package='', top_path=None):
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']
 
+    # TODO: check commented keyword arguments
     config.add_extension('clt_bardell_field',
               sources=['clt_bardell_field.pyx'] + bardell_functions_sources,
               #extra_compile_args=args_linear,
