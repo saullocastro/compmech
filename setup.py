@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 """CompMech: Computational Mechanics in Python
-
 Collection of theories and implementations on the field of Computational
 Mechanics, currently almost exclusively on Solid Mechanics and simple
 fluid-structure interaction with the panel flutter analyzes available.
-
 """
 import os
 from os.path import join
@@ -40,7 +38,6 @@ Topic :: Scientific/Engineering :: Mathematics
 Topic :: Software Development
 Operating System :: Microsoft :: Windows
 Operating System :: Unix
-
 """
 
 MAJOR = 0
@@ -68,7 +65,6 @@ if isreleased:
     __version__ = version
 else:
     __version__ = full_version
-
 if not isreleased:
     version = full_version
 """
