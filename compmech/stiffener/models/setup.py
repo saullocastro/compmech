@@ -22,24 +22,17 @@ def configuration(parent_package='', top_path=None):
 
     bardell_sources = [os.path.join(src_path, 'bardell.c')]
     bardell_functions_sources = [os.path.join(src_path, 'bardell_functions.c')]
-     # TODO: check the difference between bardel_integral functions
     bardell_integral_sources = [
-        os.path.join(src_path, 'bardell_12_integral_ff.c'),
-        os.path.join(src_path, 'bardell_12_integral_ffxi.c'),
-        os.path.join(src_path, 'bardell_12_integral_ffxixi.c'),
-        os.path.join(src_path, 'bardell_12_integral_fxifxi.c'),
-        os.path.join(src_path, 'bardell_12_integral_fxifxixi.c'),
-        os.path.join(src_path, 'bardell_12_integral_fxixifxixi.c'),
-        #os.path.join(src_path, 'bardell_integral_ff_12.c'),
+        os.path.join(src_path, 'bardell_integral_ff_12.c'),
         os.path.join(src_path, 'bardell_integral_ff_c0c1.c'),
-        #os.path.join(src_path, 'bardell_integral_ffxi_12.c'),
+        os.path.join(src_path, 'bardell_integral_ffxi_12.c'),
         os.path.join(src_path, 'bardell_integral_ffxi_c0c1.c'),
-        #os.path.join(src_path, 'bardell_integral_ffxixi_12.c'),
+        os.path.join(src_path, 'bardell_integral_ffxixi_12.c'),
         os.path.join(src_path, 'bardell_integral_fxif_c0c1.c'),
-        #os.path.join(src_path, 'bardell_integral_fxifxi_12.c'),
+        os.path.join(src_path, 'bardell_integral_fxifxi_12.c'),
         os.path.join(src_path, 'bardell_integral_fxifxi_c0c1.c'),
-        #os.path.join(src_path, 'bardell_integral_fxifxixi_12.c'),
-        #os.path.join(src_path, 'bardell_integral_fxixifxixi_12.c'),
+        os.path.join(src_path, 'bardell_integral_fxifxixi_12.c'),
+        os.path.join(src_path, 'bardell_integral_fxixifxixi_12.c'),
         os.path.join(src_path, 'bardell_integral_fxixifxixi_c0c1.c'),
     ] 
     legendre_gauss_sources = [os.path.join(src_path, 'legendre_gauss_quadrature.c')]
@@ -67,27 +60,17 @@ def configuration(parent_package='', top_path=None):
     config.add_extension('bladestiff1d_clt_donnell_bardell',
                      ['bladestiff1d_clt_donnell_bardell.pyx'] + bardell_sources + bardell_functions_sources,
                      #extra_compile_args=args_linear,
-                     #runtime_library_dirs=runtime_library_dirs,
                      include_dirs=[include],
-                     #libraries=['bardell_functions', 'bardell'],
-                     #library_dirs=[lib]
                      )
     config.add_extension('bladestiff2d_clt_donnell_bardell',
                      ['bladestiff2d_clt_donnell_bardell.pyx'] + bardell_sources + bardell_functions_sources,
                      #extra_compile_args=args_linear,
-                     #runtime_library_dirs=runtime_library_dirs,
                      include_dirs=[include],
-                     #libraries=['bardell_functions', 'bardell'],
-                     #library_dirs=[lib]
                      )
     config.add_extension('tstiff2d_clt_donnell_bardell',
                      ['tstiff2d_clt_donnell_bardell.pyx'] + bardell_sources + bardell_functions_sources + bardell_integral_sources,
                      #extra_compile_args=args_linear,
-                     #runtime_library_dirs=runtime_library_dirs,
                      include_dirs=[include],
-                     #libraries=['bardell_functions', 'bardell',
-                     #   'bardell_12', 'bardell_c0c1'],
-                     #library_dirs=[lib]
                      )
     cythonize(config.ext_modules)
 

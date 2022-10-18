@@ -46,34 +46,22 @@ def configuration(parent_package='', top_path=None):
     config.add_extension('kCBFycte',
               sources=['kCBFycte.pyx'] + bardel_sources,
             #   extra_compile_args=args_linear,
-            #   runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-            #   libraries=['bardell', 'bardell_functions'],
-            #   library_dirs=[lib]
                         )
     config.add_extension('kCSB',
               sources=['kCSB.pyx'] + bardel_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell', 'bardell_functions'],
-              #library_dirs=[lib]
               )
     config.add_extension('kCSSxcte',
               sources=['kCSSxcte.pyx'] + bardel_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell', 'bardell_functions'],
-              #library_dirs=[lib]
               )
     config.add_extension('kCSSycte',
               sources=['kCSSycte.pyx'] + bardel_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell', 'bardell_functions'],
-              #library_dirs=[lib]
               )
 
     for ext in config.ext_modules:

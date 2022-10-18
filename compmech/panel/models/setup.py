@@ -20,26 +20,19 @@ def configuration(parent_package='', top_path=None):
     )
     src_path = os.path.join(compmech_path, 'lib', 'src')
 
-    # TODO: check the difference between bardel_integral functions
     bardell_sources = [os.path.join(src_path, 'bardell.c')]
     bardell_functions_sources = [os.path.join(src_path, 'bardell_functions.c')]
     bardell_integral_sources = [
-        os.path.join(src_path, 'bardell_12_integral_ff.c'),
-        os.path.join(src_path, 'bardell_12_integral_ffxi.c'),
-        os.path.join(src_path, 'bardell_12_integral_ffxixi.c'),
-        os.path.join(src_path, 'bardell_12_integral_fxifxi.c'),
-        os.path.join(src_path, 'bardell_12_integral_fxifxixi.c'),
-        os.path.join(src_path, 'bardell_12_integral_fxixifxixi.c'),
-        #os.path.join(src_path, 'bardell_integral_ff_12.c'),
+        os.path.join(src_path, 'bardell_integral_ff_12.c'),
         os.path.join(src_path, 'bardell_integral_ff_c0c1.c'),
-        #os.path.join(src_path, 'bardell_integral_ffxi_12.c'),
+        os.path.join(src_path, 'bardell_integral_ffxi_12.c'),
         os.path.join(src_path, 'bardell_integral_ffxi_c0c1.c'),
-        #os.path.join(src_path, 'bardell_integral_ffxixi_12.c'),
+        os.path.join(src_path, 'bardell_integral_ffxixi_12.c'),
         os.path.join(src_path, 'bardell_integral_fxif_c0c1.c'),
-        #os.path.join(src_path, 'bardell_integral_fxifxi_12.c'),
+        os.path.join(src_path, 'bardell_integral_fxifxi_12.c'),
         os.path.join(src_path, 'bardell_integral_fxifxi_c0c1.c'),
-        #os.path.join(src_path, 'bardell_integral_fxifxixi_12.c'),
-        #os.path.join(src_path, 'bardell_integral_fxixifxixi_12.c'),
+        os.path.join(src_path, 'bardell_integral_fxifxixi_12.c'),
+        os.path.join(src_path, 'bardell_integral_fxixifxixi_12.c'),
         os.path.join(src_path, 'bardell_integral_fxixifxixi_c0c1.c'),
     ] 
     legendre_gauss_sources = [os.path.join(src_path, 'legendre_gauss_quadrature.c')]
@@ -67,66 +60,42 @@ def configuration(parent_package='', top_path=None):
     config.add_extension('clt_bardell_field',
               sources=['clt_bardell_field.pyx'] + bardell_functions_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell_functions'],
-              #library_dirs=[lib]
               )
     config.add_extension('clt_bardell_field_w',
               sources=['clt_bardell_field_w.pyx'] + bardell_functions_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell_functions'],
-              #library_dirs=[lib]
               )
     config.add_extension('kpanel_clt_donnell_bardell',
               sources=['kpanel_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell', 'bardell_12'],
-              #library_dirs=[lib])
               )
     config.add_extension('cpanel_clt_donnell_bardell',
               sources=['cpanel_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell', 'bardell_12'],
-              #library_dirs=[lib]
               )
     config.add_extension('cpanel_clt_donnell_bardell_num',
               sources=['cpanel_clt_donnell_bardell_num.pyx'] + bardell_functions_sources + legendre_gauss_sources,
               #extra_compile_args=args_nonlinear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell_functions', 'legendre_gauss_quadrature'],
-              #library_dirs=[lib]
               )
     config.add_extension('plate_clt_donnell_bardell',
               sources=['plate_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell', 'bardell_12'],
-              #library_dirs=[lib]
               )
     config.add_extension('plate_clt_donnell_bardell_num',
               sources=['plate_clt_donnell_bardell_num.pyx'] + bardell_functions_sources + legendre_gauss_sources,
               #extra_compile_args=args_nonlinear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell_functions', 'legendre_gauss_quadrature'],
-              #library_dirs=[lib]
               )
     config.add_extension('plate_clt_donnell_bardell_w',
               sources=['plate_clt_donnell_bardell_w.pyx'] + bardell_sources + bardell_integral_sources,
               #extra_compile_args=args_linear,
-              #runtime_library_dirs=runtime_library_dirs,
               include_dirs=[include],
-              #libraries=['bardell', 'bardell_12'],
-              #library_dirs=[lib]
               )
 
     cythonize(config.ext_modules)
