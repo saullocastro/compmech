@@ -26,24 +26,28 @@ Development Status :: 4 - Beta
 Intended Audience :: Science/Research
 Intended Audience :: Developers
 Intended Audience :: Education
-License :: OSI Approved :: BSD License
-Programming Language :: Fortran
-Programming Language :: C
-Programming Language :: Python :: 2.7
-Programming Language :: Python :: 3.5
-Programming Language :: Python :: 3.6
-Programming Language :: Python :: 3.7
+Intended Audience :: End Users/Desktop
 Topic :: Scientific/Engineering
 Topic :: Scientific/Engineering :: Mathematics
+Topic :: Education
 Topic :: Software Development
+Topic :: Software Development :: Libraries :: Python Modules
 Operating System :: Microsoft :: Windows
 Operating System :: Unix
+Operating System :: POSIX :: BSD
+Programming Language :: Fortran
+Programming Language :: C
+Programming Language :: Python :: 3.7
+Programming Language :: Python :: 3.8
+Programming Language :: Python :: 3.9
+Programming Language :: Python :: 3.10
+License :: OSI Approved :: BSD License
 """
 
 MAJOR = 0
-MINOR = 7
-MICRO = 2
-ISRELEASED = True
+MINOR = 8
+MICRO = 0
+ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 
@@ -172,7 +176,6 @@ def setup_package():
         license='BSD',
         cmdclass=cmdclass,
         classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
-        platforms=['Windows', 'Linux'],
     )
 
 
