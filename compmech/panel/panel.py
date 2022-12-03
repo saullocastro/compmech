@@ -92,8 +92,8 @@ class Panel(object):
         self.offset = offset
         # assembly
         self.group = None
-        self.x0 = None
-        self.y0 = None
+        self.x0 = 0
+        self.y0 = 0
         self.row_start = None
         self.col_start = None
         self.row_end = None
