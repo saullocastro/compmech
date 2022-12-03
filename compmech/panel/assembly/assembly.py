@@ -60,19 +60,19 @@ class PanelAssembly(object):
     Notes
     -----
 
-    Concerning the conn dictionary, the key 'func' stands for the connection function that 
+    Concerning the conn dictionary, the key 'func' stands for the connection function that
     builds the compatibility relations between the panels.
 
     The connections functions available are:
-        - 'SSycte' : defines a skin-skin connection and calls the following functions ``fkCSSycte11``, ``fkCSSycte12``, ``fkCSSycte22`` 
+        - 'SSycte' : defines a skin-skin connection and calls the following functions ``fkCSSycte11``, ``fkCSSycte12``, ``fkCSSycte22``
         - 'SSxcte' : defines a skin-skin connection and calls the following functions ``fkCSSxcte11``, ``fkCSSxcte12``, ``fkCSSxcte22``
         - 'SB' : defines a skin-base connection and calls the following functions ``fkCBFycte11``, ``fkCBFycte12``, ``fkCBFycte22``
         - 'BFycte': defines a base-flange connection and calls the following functions ``fkCBFycte11``, ``fkCBFycte12``, ``fkCBFycte22``
 
     Explanations about the connetion functions are found in ``connections`` module.
     """
-    def __init__(self, panels):
-        self.conn = None
+    def __init__(self, panels, conn=None):
+        self.conn = conn
         self.k0_conn = None
         self.panels = panels
         self.size = None
