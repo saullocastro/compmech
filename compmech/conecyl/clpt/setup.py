@@ -7,16 +7,16 @@ def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
 
     if os.name == 'nt':
-        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
-            #NOTE removing openmp to compile in MiniConda
+        if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
+            #NOTE removing openmp and optimizations for CI
             args_linear = ['-O0']
             args_nonlinear = ['-O0']
         else:
             args_linear = ['/openmp']
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
-        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
-            #NOTE removing openmp to compile in MiniConda
+        if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
+            #NOTE removing openmp and optimizations for CI
             args_linear = ['-O0']
             args_nonlinear = ['-O0']
         else:

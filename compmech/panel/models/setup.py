@@ -34,13 +34,13 @@ def configuration(parent_package='', top_path=None):
         os.path.join(src_path, 'bardell_integral_fxifxixi_12.c'),
         os.path.join(src_path, 'bardell_integral_fxixifxixi_12.c'),
         os.path.join(src_path, 'bardell_integral_fxixifxixi_c0c1.c'),
-    ] 
+    ]
     legendre_gauss_sources = [os.path.join(src_path, 'legendre_gauss_quadrature.c')]
 
     if os.name == 'nt':
         runtime_library_dirs = None
-        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
-            #NOTE removing openmp to compile in MiniConda
+        if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
+            #NOTE removing openmp and optimizations for CI
             args_linear = ['-O0']
             args_nonlinear = ['-O0']
         else:
@@ -48,53 +48,52 @@ def configuration(parent_package='', top_path=None):
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
         runtime_library_dirs = [lib]
-        if os.environ.get('CONDA_DEFAULT_ENV') is not None:
-            #NOTE removing openmp to compile in MiniConda
+        if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
+            #NOTE removing openmp and optimizations for CI
             args_linear = ['-O0']
             args_nonlinear = ['-O0']
         else:
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']
 
-    # TODO: check commented keyword arguments
     config.add_extension('clt_bardell_field',
               sources=['clt_bardell_field.pyx'] + bardell_functions_sources,
-              #extra_compile_args=args_linear,
+              extra_compile_args=args_linear,
               include_dirs=[include],
               )
     config.add_extension('clt_bardell_field_w',
               sources=['clt_bardell_field_w.pyx'] + bardell_functions_sources,
-              #extra_compile_args=args_linear,
+              extra_compile_args=args_linear,
               include_dirs=[include],
               )
     config.add_extension('kpanel_clt_donnell_bardell',
               sources=['kpanel_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
-              #extra_compile_args=args_linear,
+              extra_compile_args=args_linear,
               include_dirs=[include],
               )
     config.add_extension('cpanel_clt_donnell_bardell',
               sources=['cpanel_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
-              #extra_compile_args=args_linear,
+              extra_compile_args=args_linear,
               include_dirs=[include],
               )
     config.add_extension('cpanel_clt_donnell_bardell_num',
               sources=['cpanel_clt_donnell_bardell_num.pyx'] + bardell_functions_sources + legendre_gauss_sources,
-              #extra_compile_args=args_nonlinear,
+              extra_compile_args=args_nonlinear,
               include_dirs=[include],
               )
     config.add_extension('plate_clt_donnell_bardell',
               sources=['plate_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
-              #extra_compile_args=args_linear,
+              extra_compile_args=args_linear,
               include_dirs=[include],
               )
     config.add_extension('plate_clt_donnell_bardell_num',
               sources=['plate_clt_donnell_bardell_num.pyx'] + bardell_functions_sources + legendre_gauss_sources,
-              #extra_compile_args=args_nonlinear,
+              extra_compile_args=args_nonlinear,
               include_dirs=[include],
               )
     config.add_extension('plate_clt_donnell_bardell_w',
               sources=['plate_clt_donnell_bardell_w.pyx'] + bardell_sources + bardell_integral_sources,
-              #extra_compile_args=args_linear,
+              extra_compile_args=args_linear,
               include_dirs=[include],
               )
 
