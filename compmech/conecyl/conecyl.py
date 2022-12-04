@@ -35,7 +35,7 @@ def load(name):
 
 
 class ConeCyl(object):
-    """
+    r"""
     """
     __slots__ = ['_load_rebuilt', 'name', 'alphadeg', 'alpharad', 'r1', 'r2',
             'L', 'H', 'h', 'K', 'is_cylinder', 'inf', 'zero',
@@ -223,7 +223,6 @@ class ConeCyl(object):
                 self._rebuild()
 
         self.model = self.model.lower()
-        model_dict = get_model(self.model)
 
         # boundary conditions
         inf = self.inf
@@ -460,7 +459,7 @@ class ConeCyl(object):
 
 
     def from_DB(self, name):
-        """Load cone / cylinder data from the local database
+        r"""Load cone/cylinder data from the local database
 
         Parameters
         ----------
@@ -482,7 +481,7 @@ class ConeCyl(object):
     def exclude_dofs_matrix(self, k, return_kkk=False,
                                      return_kku=False,
                                      return_kuk=False):
-        """Makes the partition of the dofs for prescribed displacements
+        r"""Makes the partition of the dofs for prescribed displacements
 
         Makes the following partition of a given matrix::
 
@@ -576,7 +575,7 @@ class ConeCyl(object):
 
 
     def calc_full_c(self, cu, inc=1.):
-        """Returns the full set of Ritz constants
+        r"""Returns the full set of Ritz constants
 
         When prescribed displacements take place the matrices and the Ritz
         constants are partitioned like::
@@ -649,7 +648,6 @@ class ConeCyl(object):
         model = self.model
         alpharad = self.alpharad
         cosa = self.cosa
-        r1 = self.r1
         r2 = self.r2
         L = self.L
         m1 = self.m1
@@ -833,7 +831,7 @@ class ConeCyl(object):
 
 
     def lb(self, c=None, tol=0, combined_load_case=None):
-        """Performs a linear buckling analysis
+        r"""Performs a linear buckling analysis
 
         The following parameters of the ``ConeCyl`` object will affect the
         linear buckling analysis:
@@ -891,10 +889,7 @@ class ConeCyl(object):
         msg('Eigenvalue solver... ', level=2)
 
         model_dict = get_model(self.model)
-        i0 = model_dict['i0']
         num0 = model_dict['num0']
-        num1 = model_dict['num1']
-        num2 = model_dict['num2']
 
         pos = num0
 
@@ -948,8 +943,8 @@ class ConeCyl(object):
         self.analysis.last_analysis = 'lb'
 
 
-    def eigen(self, c=None, tol=0, kL=None, kG=None):
-        """Performs a non-linear eigenvalue analysis at a given state
+    def eigen(self, c=None, tol=0, kL=None, kG=None, combined_load_case=None):
+        r"""Performs a non-linear eigenvalue analysis at a given state
 
         The following attributes of the ``ConeCyl`` object will affect the
         non-linear eigenvalue analysis:
@@ -968,7 +963,7 @@ class ConeCyl(object):
 
         Parameters
         ----------
-        combined_load_case : int, optional
+        combined_load_case : int or None, optional
             It tells whether the linear buckling analysis must be computed
             considering combined load cases, each value will tell
             the algorithm to rearrange the linear matrices in a different
@@ -1009,14 +1004,11 @@ class ConeCyl(object):
         msg('Eigenvalue solver... ', level=2)
 
         model_dict = get_model(self.model)
-        i0 = model_dict['i0']
         num0 = model_dict['num0']
-        num1 = model_dict['num1']
-        num2 = model_dict['num2']
 
         pos = num0
 
-        if not combined_load_case:
+        if combined_load_case is None:
             M = csr_matrix(self.k0)
             A = csr_matrix(self.kG0)
         elif combined_load_case == 1:
@@ -1028,6 +1020,8 @@ class ConeCyl(object):
         elif combined_load_case == 3:
             M = csr_matrix(self.k0) + csr_matrix(self.kG0_Fc)
             A = csr_matrix(self.kG0_T)
+        else:
+            raise ValueError('Invalid value for the "combined_load_case" parameter')
 
         A = A[pos:, pos:]
         M = M[pos:, pos:]
@@ -1110,7 +1104,6 @@ class ConeCyl(object):
         c0 = self.c0
         m0 = self.m0
         n0 = self.n0
-        funcnum = self.funcnum
 
         model = self.model
         model_dict = get_model(model)
@@ -1281,7 +1274,6 @@ class ConeCyl(object):
         """
         xs, ts, xshape, tshape = self._default_field(xs, ts, gridx, gridt)
 
-        alpharad = self.alpharad
         L = self.L
         r2 = self.r2
         sina = self.sina
@@ -1345,7 +1337,6 @@ class ConeCyl(object):
         xs, ts, xshape, tshape = self._default_field(xs, ts, gridx, gridt)
 
         F = self.F
-        alpharad = self.alpharad
         L = self.L
         r2 = self.r2
         sina = self.sina
@@ -1443,7 +1434,7 @@ class ConeCyl(object):
 
 
     def add_SPL(self, PL, pt=0.5, thetadeg=0., increment=False):
-        """Add a Single Perturbation Load `\{{F_{PL}}_i\}`
+        r"""Add a Single Perturbation Load `\{{F_{PL}}_i\}`
 
         Adds a perturbation load to the ``ConeCyl`` object, the perturbation
         load is a particular case of the punctual load with only a normal
@@ -1508,7 +1499,7 @@ class ConeCyl(object):
 
 
     def calc_fext(self, inc=1., kuk=None, silent=False):
-        """Calculates the external force vector `\{F_{ext}\}`
+        r"""Calculates the external force vector `\{F_{ext}\}`
 
         Recall that:
 
@@ -1557,7 +1548,6 @@ class ConeCyl(object):
         m1 = self.m1
         m2 = self.m2
         n2 = self.n2
-        pdC = self.pdC
         pdT = self.pdT
         model = self.model
 
@@ -1667,7 +1657,7 @@ class ConeCyl(object):
 
 
     def static(self, NLgeom=False, silent=False):
-        """Static analysis for cones and cylinders
+        r"""Static analysis for cones and cylinders
 
         The analysis can be linear or geometrically non-linear. See
         :class:`.Analysis` for further details about the parameters
@@ -2103,7 +2093,6 @@ class ConeCyl(object):
                 frame = utils.get_current_frame()
             if not frame:
                 raise ValueError('A frame must be selected!')
-            frame_num = int(frame.frameValue)
             coords = np.array([n.coordinates for n in nodes
                                if n.label not in ignore])
             #TODO include more outputs like stress etc
@@ -2114,8 +2103,6 @@ class ConeCyl(object):
             u_rec = uvw_rec[:,0]
             v_rec = uvw_rec[:,1]
             w_rec = uvw_rec[:,2]
-
-            res_alpha = np.arctan2(v_rec, u_rec)
 
             thetas = np.arctan2(coords[:, 1], coords[:, 0])
 
@@ -2272,7 +2259,7 @@ class ConeCyl(object):
 
 
     def SPLA(self, PLs, NLgeom=True, plot=False):
-        """Runs the Single Perturbation Load Approach (SPLA)
+        r"""Runs the Single Perturbation Load Approach (SPLA)
 
         A set of non-linear results will be
 
@@ -2390,7 +2377,6 @@ class ConeCyl(object):
 
         """
         ts = linspace(-np.pi, np.pi, ncpts)
-        xs = np.zeros_like(ts)
         us = np.zeros_like(ts)
         self.static(NLgeom=False)
         thetashim = width/self.r2
@@ -2398,7 +2384,6 @@ class ConeCyl(object):
         theta1 = thetarad - thetashim
         theta2 = thetarad + thetashim
         uTM = self.cs[0][0]
-        utop = uTM/self.cosa
         us += uTM
         shim_region = (ts >= theta1) & (ts <= theta2)
         us[shim_region] += thick
@@ -2457,7 +2442,7 @@ class ConeCyl(object):
 
 
     def save(self):
-        """Save the ``ConeCyl`` object using ``pickle``
+        r"""Save the ``ConeCyl`` object using ``pickle``
 
         Notes
         -----
