@@ -2,25 +2,16 @@ from __future__ import division, absolute_import
 
 import platform
 import gc
-import os
-import sys
-import traceback
-from collections import Iterable
-import time
 import pickle
 from multiprocessing import cpu_count
 
 import numpy as np
 from scipy.sparse import csr_matrix
-from scipy.sparse.linalg import eigs, eigsh
-from scipy.linalg import eig, eigh
 from numpy import linspace
 
-import compmech.composite.laminate as laminate
-from compmech.logger import msg, warn
+from compmech.logger import msg
 from compmech.constants import DOUBLE
-from compmech.sparse import (finalize_symmetric_matrix, make_skew_symmetric,
-                             remove_null_cols)
+from compmech.sparse import (finalize_symmetric_matrix, make_skew_symmetric)
 from compmech.panel import Panel, modelDB as panelmDB
 from compmech.stiffener import (BladeStiff1D, BladeStiff2D, TStiff2D)
 
