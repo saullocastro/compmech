@@ -2,7 +2,7 @@ import numpy as np
 from scipy.sparse.linalg import eigs
 from scipy.linalg import eig
 
-from compmech.logger import msg, warn
+from compmech.logger import msg
 from compmech.sparse import remove_null_cols
 
 

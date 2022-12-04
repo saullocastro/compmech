@@ -15,8 +15,6 @@ Analysis Module (:mod:`compmech.analysis`)
 .. autofunction:: static
 
 """
-from __future__ import absolute_import
-
 from .analysis import Analysis
 from .freq import freq
 from .linear_buckling import lb

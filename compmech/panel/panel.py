@@ -1,5 +1,3 @@
-from __future__ import division, absolute_import
-
 import platform
 import gc
 import pickle
@@ -283,7 +281,7 @@ class Panel(object):
         return xs, ys, xshape, yshape
 
 
-    def _get_lam_F(self):
+    def _get_lam_F(self, silent=False):
         if self.lam is None:
             raise RuntimeError('lam object is None!')
         if 'clt' in self.model:
@@ -325,7 +323,7 @@ class Panel(object):
 
     def calc_k0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
             c=None, nx=None, ny=None, Fnxny=None, inc=None, NLgeom=False):
-        """Calculate the constitutive stiffness matrix
+        r"""Calculate the constitutive stiffness matrix
 
         If ``c`` is not given it calculates the linear constitutive stiffness
         matrix, otherwise the large displacement linear constitutive stiffness
@@ -440,7 +438,7 @@ class Panel(object):
 
     def calc_kG0(self, size=None, row0=0, col0=0, silent=False, finalize=True,
             c=None, nx=None, ny=None, Fnxny=None, NLgeom=False):
-        """Calculate the linear geometric stiffness matrix
+        r"""Calculate the linear geometric stiffness matrix
 
         See :meth:`.Panel.calc_k0` for details on each parameter.
 
@@ -508,7 +506,7 @@ class Panel(object):
 
 
     def calc_kM(self, size=None, row0=0, col0=0, silent=False, finalize=True):
-        """Calculate the mass matrix
+        r"""Calculate the mass matrix
         """
         msg('Calculating kM... ', level=2, silent=silent)
 
@@ -527,8 +525,6 @@ class Panel(object):
         if self.mu is None:
             raise ValueError('Attribute "mu" (density) must be defined')
 
-
-        h = sum(self.plyts)
         if y1 is not None and y2 is not None:
             kM = matrices.fkMy1y2(y1, y2, self.offset, self, size, row0, col0)
         else:
@@ -547,7 +543,7 @@ class Panel(object):
 
 
     def calc_kA(self, size=None, row0=0, col0=0, silent=False, finalize=True):
-        """Calculate the aerodynamic matrix using the linear piston theory
+        r"""Calculate the aerodynamic matrix using the linear piston theory
         """
         msg('Calculating kA... ', level=2, silent=silent)
 
@@ -603,10 +599,11 @@ class Panel(object):
 
 
     def calc_cA(self, aeromu, silent=False, finalize=True):
-        """Calculate the aerodynamic damping matrix using the piston theory
+        r"""Calculate the aerodynamic damping matrix using the piston theory
         """
         msg('Calculating cA... ', level=2, silent=silent)
 
+        matrices = modelDB.db[self.model]['matrices']
         cA = matrices.fcA(aeromu, self, self.size, 0, 0)
         cA = cA*(0+1j)
 
@@ -622,7 +619,7 @@ class Panel(object):
 
     def lb(self, tol=0, sparse_solver=True, calc_kA=False, silent=False,
            nx=10, ny=10, c=None, ckL=None, Fnxny=None):
-        """Linear buckling analysis
+        r"""Linear buckling analysis
 
         .. note:: This will be deprecated soon, use
                   :func:`.compmech.analysis.lb`.
@@ -732,14 +729,14 @@ class Panel(object):
 
         msg('first {0} eigenvalues:'.format(self.num_eigvalues_print), level=1,
             silent=silent)
-        for eig in eigvals[:self.num_eigvalues_print]:
-            msg('{0}'.format(eig), level=2, silent=silent)
+        for eigi in eigvals[:self.num_eigvalues_print]:
+            msg('{0}'.format(eigi), level=2, silent=silent)
         self.analysis.last_analysis = 'lb'
 
 
     def freq(self, atype=4, tol=0, sparse_solver=True, silent=False,
              sort=True, damping=False, reduced_dof=False):
-        """Natural frequency analysis
+        r"""Natural frequency analysis
 
         .. note:: This will be deprecated soon, use
                   :func:`.compmech.analysis.freq`.
@@ -864,7 +861,7 @@ class Panel(object):
                 cA = cA[:, check][check, :]
                 if reduced_dof:
                     cA = cA[:, take][take, :]
-                I = np.identity(M.shape[0])
+                I = np.identity(size)
                 Z = np.zeros_like(M)
                 M = np.row_stack((np.column_stack((I, Z)),
                                   np.column_stack((Z, -M))))
@@ -1071,8 +1068,8 @@ class Panel(object):
         if F is None:
             raise ValueError('Laminate ABD matrix not defined for panel')
         res = {}
-        res['x'] = res_strain['x']
-        res['y'] = res_strain['y']
+        res['x'] = x
+        res['y'] = y
         res['Nxx'] = exx*F[0, 0] + eyy*F[0, 1] + gxy*F[0, 2] + kxx*F[0, 3] + kyy*F[0, 4] + kxy*F[0, 5]
         res['Nyy'] = exx*F[1, 0] + eyy*F[1, 1] + gxy*F[1, 2] + kxx*F[1, 3] + kyy*F[1, 4] + kxy*F[1, 5]
         res['Nxy'] = exx*F[2, 0] + eyy*F[2, 1] + gxy*F[2, 2] + kxx*F[2, 3] + kyy*F[2, 4] + kxy*F[2, 5]
@@ -1144,7 +1141,6 @@ class Panel(object):
             raise ValueError(
                     '{} is not a valid model option'.format(model))
         db = modelDB.db
-        num = db[model]['num']
         dofs = db[model]['dofs']
         fg = db[model]['field'].fg
 
@@ -1218,11 +1214,11 @@ class Panel(object):
                     '{0} is not a valid model option'.format(model))
         matrices_num = modelDB.db[model].get('matrices_num')
         if matrices_num is None:
-            raise ValuError('matrices_num not implemented for model {0}'.
+            raise ValueError('matrices_num not implemented for model {0}'.
                     format(model))
         calc_fint = getattr(matrices_num, 'calc_fint', None)
         if calc_fint is None:
-            raise ValuError('calc_fint not implemented for model {0}'.
+            raise ValueError('calc_fint not implemented for model {0}'.
                     format(model))
 
         if size is None:

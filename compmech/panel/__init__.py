@@ -9,6 +9,4 @@ Semi-analytical Models for Panels (:mod:`compmech.panel`)
     :members:
 
 """
-from __future__ import absolute_import
-
 from . panel import Panel

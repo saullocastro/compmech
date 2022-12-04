@@ -1,8 +1,3 @@
-from __future__ import absolute_import
-
-import numpy as np
-from numpy import dot
-
 from compmech.sparse import solve
 from compmech.logger import msg
 from .newton_raphson import _solver_NR
@@ -140,9 +135,9 @@ class Analysis(object):
         if NLgeom:
             self.maxInc = max(self.initialInc, self.maxInc)
             msg('Started Non-Linear Static Analysis', silent=silent)
-            if self.NL_method is 'NR':
+            if self.NL_method == 'NR':
                 _solver_NR(self, silent=silent)
-            elif self.NL_method is 'arc_length':
+            elif self.NL_method == 'arc_length':
                 _solver_arc_length(self)
             else:
                 raise ValueError('{0} is an invalid NL_method')
