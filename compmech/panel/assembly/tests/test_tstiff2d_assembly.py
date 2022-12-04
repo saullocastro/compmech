@@ -114,7 +114,7 @@ def test_tstiff2d_1stiff_flutter():
         speed_sound=343.,
         run_static_case=True,
         )
-    assert np.isclose(eigvals[0], 1423.254820+0.j, rtol=0.001)
+    assert np.isclose(eigvals[0], 958.7080550167907+0.j, rtol=0.001)
 
 if __name__ == '__main__':
     test_tstiff2d_1stiff_freq()
