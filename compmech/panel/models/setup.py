@@ -9,7 +9,6 @@ def configuration(parent_package='', top_path=None):
     config = Configuration('models', parent_package, top_path)
 
     include = os.path.join(get_python_lib(), 'compmech', 'include')
-    lib = os.path.join(get_python_lib(), 'compmech', 'lib')
 
     compmech_path = os.path.dirname(
     os.path.dirname(
@@ -38,20 +37,18 @@ def configuration(parent_package='', top_path=None):
     legendre_gauss_sources = [os.path.join(src_path, 'legendre_gauss_quadrature.c')]
 
     if os.name == 'nt':
-        runtime_library_dirs = None
         if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
             #NOTE removing openmp and optimizations for CI
-            args_linear = ['-O0']
-            args_nonlinear = ['-O0']
+            args_linear = ['/O0', '/openmp']
+            args_nonlinear = ['/O0', '/openmp', '/fp:fast']
         else:
             args_linear = ['/openmp']
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
-        runtime_library_dirs = [lib]
         if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
             #NOTE removing openmp and optimizations for CI
-            args_linear = ['-O0']
-            args_nonlinear = ['-O0']
+            args_linear = ['-O0', '-fopenmp']
+            args_nonlinear = ['-O0', '-fopenmp', '-ffast-math']
         else:
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']

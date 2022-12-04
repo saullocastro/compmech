@@ -9,16 +9,16 @@ def configuration(parent_package='', top_path=None):
     if os.name == 'nt':
         if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
             #NOTE removing openmp and optimizations for CI
-            args_linear = ['-O0']
-            args_nonlinear = ['-O0']
+            args_linear = ['/O0', '/openmp']
+            args_nonlinear = ['/O0', '/openmp', '/fp:fast']
         else:
             args_linear = ['/openmp']
             args_nonlinear = ['/openmp', '/fp:fast']
     else:
         if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
             #NOTE removing openmp and optimizations for CI
-            args_linear = ['-O0']
-            args_nonlinear = ['-O0']
+            args_linear = ['-O0', '-fopenmp']
+            args_nonlinear = ['-O0', '-fopenmp', '-ffast-math']
         else:
             args_linear = ['-fopenmp']
             args_nonlinear = ['-fopenmp', '-ffast-math']
