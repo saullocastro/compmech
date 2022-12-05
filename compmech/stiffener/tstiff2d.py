@@ -1,12 +1,7 @@
-from __future__ import division, absolute_import
 import gc
-
-import numpy as np
-from numpy import deg2rad
 
 from . import modelDB as stiffmDB
 from compmech.panel import Panel
-import compmech.panel.modelDB as panelmDB
 from compmech.logger import msg, warn
 from compmech.composite import laminate
 from compmech.panel.connections import (fkCBFycte11, fkCBFycte12, fkCBFycte22,

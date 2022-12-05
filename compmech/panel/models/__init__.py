@@ -27,8 +27,6 @@ Fourth part:
 - num - functions to numerically integrate the stiffness matrices
 
 """
-from __future__ import absolute_import
-
 module_names = [
           'clt_bardell_field',
           'clt_bardell_field_w',

@@ -1,14 +1,8 @@
-from __future__ import division, absolute_import
 import gc
 
-import numpy as np
-from numpy import deg2rad
-
-import compmech.panel.modelDB as panmodelDB
 from compmech.panel import Panel
-from compmech.logger import msg, warn
+from compmech.logger import msg
 from compmech.composite import laminate
-from compmech.panel.connections import fkCBFycte11, fkCBFycte12, fkCBFycte22
 from compmech.panel.connections import calc_kt_kr
 from .modelDB import db
 from compmech.sparse import finalize_symmetric_matrix
@@ -108,8 +102,6 @@ class BladeStiff2D(object):
         """
         self._rebuild()
         msg('Calculating k0... ', level=2, silent=silent)
-
-        flangemod = panmodelDB.db[self.flange.model]['matrices']
 
         bay = self.bay
         a = bay.a

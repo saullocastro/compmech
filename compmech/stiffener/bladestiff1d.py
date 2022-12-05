@@ -1,14 +1,8 @@
-from __future__ import division, absolute_import
 import gc
-import copy
-
-import numpy as np
-from numpy import deg2rad
 
 from . import modelDB
-import compmech.panel.modelDB as panmodelDB
 from compmech.panel import Panel
-from compmech.logger import msg, warn
+from compmech.logger import msg
 from compmech.composite import laminate
 from compmech.sparse import finalize_symmetric_matrix
 
@@ -80,6 +74,7 @@ class BladeStiff1D(object):
 
         h = 0.5*sum(self.panel1.plyts) + 0.5*sum(self.panel2.plyts)
         hb = 0.
+        bay = self.bay
         if self.bstack is not None:
             hb = sum(self.bplyts)
             y1 = self.ys - self.bb/2.
