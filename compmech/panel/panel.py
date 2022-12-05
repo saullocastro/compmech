@@ -1107,7 +1107,7 @@ class Panel(object):
 
 
     def calc_fext(self, inc=1., size=None, col0=0, silent=False):
-        """Calculate the external force vector `\{F_{ext}\}`
+        r"""Calculate the external force vector `\{F_{ext}\}`
 
         Recall that:
 
@@ -1175,7 +1175,7 @@ class Panel(object):
 
     def calc_fint(self, c, size=None, col0=0, silent=False, nx=None,
             ny=None, Fnxny=None, inc=None):
-        """Calculate the internal force vector `\{F_{int}\}`
+        r"""Calculate the internal force vector `\{F_{int}\}`
 
 
         Parameters
@@ -1242,7 +1242,7 @@ class Panel(object):
 
 
     def static(self, NLgeom=False, silent=False):
-        """Static analysis for cones and cylinders
+        r"""Static analysis for cones and cylinders
 
         .. note:: This will be deprecated soon, use
                   :func:`.compmech.analysis.static`.
@@ -1520,7 +1520,7 @@ class Panel(object):
 
 
     def save(self):
-        """Save the ``Panel`` object using ``pickle``
+        r"""Save the ``Panel`` object using ``pickle``
 
         Notes
         -----
