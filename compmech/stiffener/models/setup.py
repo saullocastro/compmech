@@ -1,10 +1,14 @@
 import os
+from distutils.sysconfig import get_python_lib
+
 from Cython.Build import cythonize
 
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('models', parent_package, top_path)
+
+    include = os.path.join(get_python_lib(), 'compmech', 'include')
 
     compmech_path = os.path.dirname(
     os.path.dirname(
@@ -48,14 +52,17 @@ def configuration(parent_package='', top_path=None):
     config.add_extension('bladestiff1d_clt_donnell_bardell',
                      ['bladestiff1d_clt_donnell_bardell.pyx'] + bardell_sources + bardell_functions_sources,
                      extra_compile_args=args_linear,
+                     include_dirs=[include],
                      )
     config.add_extension('bladestiff2d_clt_donnell_bardell',
                      ['bladestiff2d_clt_donnell_bardell.pyx'] + bardell_sources + bardell_functions_sources,
                      extra_compile_args=args_linear,
+                     include_dirs=[include],
                      )
     config.add_extension('tstiff2d_clt_donnell_bardell',
                      ['tstiff2d_clt_donnell_bardell.pyx'] + bardell_sources + bardell_functions_sources + bardell_integral_sources,
                      extra_compile_args=args_linear,
+                     include_dirs=[include],
                      )
     cythonize(config.ext_modules)
 

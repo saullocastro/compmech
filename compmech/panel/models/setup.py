@@ -1,10 +1,14 @@
 import os
+from distutils.sysconfig import get_python_lib
+
 from Cython.Build import cythonize
 
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('models', parent_package, top_path)
+
+    include = os.path.join(get_python_lib(), 'compmech', 'include')
 
     compmech_path = os.path.dirname(
     os.path.dirname(
@@ -52,34 +56,42 @@ def configuration(parent_package='', top_path=None):
     config.add_extension('clt_bardell_field',
               sources=['clt_bardell_field.pyx'] + bardell_functions_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
     config.add_extension('clt_bardell_field_w',
               sources=['clt_bardell_field_w.pyx'] + bardell_functions_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
     config.add_extension('kpanel_clt_donnell_bardell',
               sources=['kpanel_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
     config.add_extension('cpanel_clt_donnell_bardell',
               sources=['cpanel_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
     config.add_extension('cpanel_clt_donnell_bardell_num',
               sources=['cpanel_clt_donnell_bardell_num.pyx'] + bardell_functions_sources + legendre_gauss_sources,
               extra_compile_args=args_nonlinear,
+              include_dirs=[include],
               )
     config.add_extension('plate_clt_donnell_bardell',
               sources=['plate_clt_donnell_bardell.pyx'] + bardell_sources + bardell_integral_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
     config.add_extension('plate_clt_donnell_bardell_num',
               sources=['plate_clt_donnell_bardell_num.pyx'] + bardell_functions_sources + legendre_gauss_sources,
               extra_compile_args=args_nonlinear,
+              include_dirs=[include],
               )
     config.add_extension('plate_clt_donnell_bardell_w',
               sources=['plate_clt_donnell_bardell_w.pyx'] + bardell_sources + bardell_integral_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
 
     cythonize(config.ext_modules)

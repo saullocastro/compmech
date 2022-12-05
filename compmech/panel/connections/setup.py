@@ -1,10 +1,14 @@
 import os
+from distutils.sysconfig import get_python_lib
+
 from Cython.Build import cythonize
 
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('connections', parent_package, top_path)
+
+    include = os.path.join(get_python_lib(), 'compmech', 'include')
 
     compmech_path = os.path.dirname(
     os.path.dirname(
@@ -34,18 +38,22 @@ def configuration(parent_package='', top_path=None):
     config.add_extension('kCBFycte',
               sources=['kCBFycte.pyx'] + bardel_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
     config.add_extension('kCSB',
               sources=['kCSB.pyx'] + bardel_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
     config.add_extension('kCSSxcte',
               sources=['kCSSxcte.pyx'] + bardel_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
     config.add_extension('kCSSycte',
               sources=['kCSSycte.pyx'] + bardel_sources,
               extra_compile_args=args_linear,
+              include_dirs=[include],
               )
 
     for ext in config.ext_modules:
