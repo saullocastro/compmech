@@ -231,7 +231,7 @@ class StiffPanelBay(object):
             bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
             bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
             flaminaprop=None, **kwargs):
-        """Add a new BladeStiff1D to the current panel bay
+        r"""Add a new BladeStiff1D to the current panel bay
 
         Parameters
         ----------
@@ -344,7 +344,7 @@ class StiffPanelBay(object):
             bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
             bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
             flaminaprop=None, mf=14, nf=11, **kwargs):
-        """Add a new BladeStiff2D to the current panel bay
+        r"""Add a new BladeStiff2D to the current panel bay
 
         Parameters
         ----------
@@ -461,7 +461,7 @@ class StiffPanelBay(object):
             bplyts=None, bplyt=None, blaminaprops=None, blaminaprop=None,
             bf=None, fstack=None, fplyts=None, fplyt=None, flaminaprops=None,
             flaminaprop=None, mb=12, nb=13, mf=11, nf=12, Nxxf=0., **kwargs):
-        """Add a new TStiff2D to the current panel bay
+        r"""Add a new TStiff2D to the current panel bay
 
         Parameters
         ----------
@@ -579,7 +579,7 @@ class StiffPanelBay(object):
 
     def add_panel(self, y1, y2, stack=None, plyts=None, plyt=None,
             laminaprops=None, laminaprop=None, model=None, mu=None, **kwargs):
-        """Add a new panel to the current panel bay
+        r"""Add a new panel to the current panel bay
 
         Parameters
         ----------
@@ -1540,7 +1540,7 @@ class StiffPanelBay(object):
 
 
     def save(self):
-        """Save the :class:`StiffPanelBay` object using ``pickle``
+        r"""Save the :class:`StiffPanelBay` object using ``pickle``
 
         Notes
         -----
@@ -1559,7 +1559,7 @@ class StiffPanelBay(object):
 
 
     def calc_fext(self, silent=False):
-        """Calculates the external force vector `\{F_{ext}\}`
+        r"""Calculates the external force vector `\{F_{ext}\}`
 
         Parameters
         ----------
