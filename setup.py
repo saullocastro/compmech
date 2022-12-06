@@ -104,7 +104,6 @@ data_files = [('', [
         'README.md',
         'LICENSE',
         'ROADMAP.rst',
-        'setup.cfg',
         'setup.py',
         'compmech/version.py',
         ])]

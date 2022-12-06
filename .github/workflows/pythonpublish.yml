@@ -18,6 +18,9 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Setting up OpenMP for Linux or MAC-OS
+      if: matrix.runs-on == 'ubuntu-latest' || matrix.runs-on == 'macos-latest'
+        sudo apt-get update; sudo apt-get install -y libomp5 libomp-dev
     - name: Install dependencies
       if: matrix.runs-on == 'windows-latest' || (matrix.runs-on == 'ubuntu-latest' && matrix.python-version == '3.10') || (matrix.runs-on == 'macos-latest')
       run: |
