@@ -113,6 +113,7 @@ package_data = {
         '': ['tests/*.*'],
         }
 
+link_args = []
 if os.name == 'nt': # Windows
     if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
         compiler_args = ['/openmp', '/Od']
@@ -124,12 +125,14 @@ elif os.name == 'posix': # MAC-OS
         compiler_args = ['-fopenmp', '-O0']
     else:
         compiler_args = ['-fopenmp']
+    link_args = ['-fopenmp']
     compiler_args_NL = compiler_args + ['-ffast-math']
 else: # Linux
     if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
         compiler_args = ['-fopenmp', '-O0']
     else:
         compiler_args = ['-fopenmp']
+    link_args = ['-fopenmp']
     compiler_args_NL = compiler_args + ['-ffast-math']
 
 root_path = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/') + '/compmech'
@@ -164,14 +167,14 @@ extensions = [
             root_path + '/integrate/integrate.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.integrate.integratev',
         sources=[
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.imperfections.mgi',
@@ -179,7 +182,7 @@ extensions = [
             root_path + '/conecyl/imperfections/mgi.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.clpt.clpt_commons_bc1',
@@ -190,7 +193,7 @@ extensions = [
             root_path + '/conecyl/imperfections/mgi.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_commons_bc2',
         sources=[
@@ -200,7 +203,7 @@ extensions = [
             root_path + '/conecyl/imperfections/mgi.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_commons_bc3',
         sources=[
@@ -210,7 +213,7 @@ extensions = [
             root_path + '/conecyl/imperfections/mgi.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_commons_bc4',
         sources=[
@@ -220,7 +223,7 @@ extensions = [
             root_path + '/conecyl/imperfections/mgi.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.clpt.clpt_donnell_bc1_linear',
@@ -228,28 +231,28 @@ extensions = [
             root_path + '/conecyl/clpt/clpt_donnell_bc1_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_donnell_bc2_linear',
         sources=[
             root_path + '/conecyl/clpt/clpt_donnell_bc2_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_donnell_bc3_linear',
         sources=[
             root_path + '/conecyl/clpt/clpt_donnell_bc3_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_donnell_bc4_linear',
         sources=[
             root_path + '/conecyl/clpt/clpt_donnell_bc4_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.clpt.clpt_geier1997_bc2',
@@ -257,7 +260,7 @@ extensions = [
             root_path + '/conecyl/clpt/clpt_geier1997_bc2.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.clpt.clpt_donnell_bc1_nonlinear',
@@ -270,7 +273,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_donnell_bc2_nonlinear',
         sources=[
@@ -282,7 +285,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_donnell_bc3_nonlinear',
         sources=[
@@ -294,7 +297,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_donnell_bc4_nonlinear',
         sources=[
@@ -306,7 +309,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.clpt.clpt_sanders_bc1_linear',
@@ -314,28 +317,28 @@ extensions = [
             root_path + '/conecyl/clpt/clpt_sanders_bc1_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_sanders_bc2_linear',
         sources=[
             root_path + '/conecyl/clpt/clpt_sanders_bc2_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_sanders_bc3_linear',
         sources=[
             root_path + '/conecyl/clpt/clpt_sanders_bc3_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_sanders_bc4_linear',
         sources=[
             root_path + '/conecyl/clpt/clpt_sanders_bc4_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.clpt.clpt_sanders_bc1_nonlinear',
@@ -348,7 +351,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_sanders_bc2_nonlinear',
         sources=[
@@ -360,7 +363,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_sanders_bc3_nonlinear',
         sources=[
@@ -372,7 +375,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.clpt_sanders_bc4_nonlinear',
         sources=[
@@ -384,21 +387,21 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.iso_clpt_donnell_bc2_linear',
         sources=[
             root_path + '/conecyl/clpt/iso_clpt_donnell_bc2_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.iso_clpt_donnell_bc3_linear',
         sources=[
             root_path + '/conecyl/clpt/iso_clpt_donnell_bc3_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.iso_clpt_donnell_bc2_nonlinear',
         sources=[
@@ -410,7 +413,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.clpt.iso_clpt_donnell_bc3_nonlinear',
         sources=[
@@ -422,7 +425,7 @@ extensions = [
             root_path + '/integrate/integratev.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.fsdt.fsdt_commons_bc1',
@@ -430,35 +433,35 @@ extensions = [
             root_path + '/conecyl/fsdt/fsdt_commons_bc1.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_commons_bc2',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_commons_bc2.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_commons_bc3',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_commons_bc3.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_commons_bc4',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_commons_bc4.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_commons_bcn',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_commons_bcn.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bc1_linear',
@@ -466,35 +469,35 @@ extensions = [
             root_path + '/conecyl/fsdt/fsdt_donnell_bc1_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bc2_linear',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_donnell_bc2_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bc3_linear',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_donnell_bc3_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bc4_linear',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_donnell_bc4_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bcn_linear',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_donnell_bcn_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.fsdt.fsdt_geier1997_bc2',
@@ -502,7 +505,7 @@ extensions = [
             root_path + '/conecyl/fsdt/fsdt_geier1997_bc2.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.fsdt.fsdt_sanders_bcn_linear',
@@ -510,21 +513,21 @@ extensions = [
             root_path + '/conecyl/fsdt/fsdt_sanders_bcn_linear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_shadmehri2012_bc2',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_shadmehri2012_bc2.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_shadmehri2012_bc3',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_shadmehri2012_bc3.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bc1_nonlinear',
@@ -532,35 +535,35 @@ extensions = [
             root_path + '/conecyl/fsdt/fsdt_donnell_bc1_nonlinear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bc2_nonlinear',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_donnell_bc2_nonlinear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bc3_nonlinear',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_donnell_bc3_nonlinear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bc4_nonlinear',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_donnell_bc4_nonlinear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
     Extension('compmech.conecyl.fsdt.fsdt_donnell_bcn_nonlinear',
         sources=[
             root_path + '/conecyl/fsdt/fsdt_donnell_bcn_nonlinear.pyx',
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args_NL,
+        extra_compile_args=compiler_args_NL, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.panel.models.clt_bardell_field',
@@ -569,7 +572,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.panel.models.clt_bardell_field_w',
@@ -578,7 +581,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.panel.models.cpanel_clt_donnell_bardell',
         sources=[
@@ -587,7 +590,7 @@ extensions = [
             bardell_func_src,
             ] + bardell_int12_src,
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.panel.models.cpanel_clt_donnell_bardell_num',
         sources=[
@@ -596,7 +599,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.panel.models.kpanel_clt_donnell_bardell',
         sources=[
@@ -604,7 +607,7 @@ extensions = [
             bardell_int_src,
             ] + bardell_int12_src,
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     #TODO kpanel is not completely developed yet
     #root_path + '/panel/models/kpanel_clt_donnell_bardell_num.pyx',
@@ -614,7 +617,7 @@ extensions = [
             bardell_int_src,
             ] + bardell_int12_src,
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.panel.models.plate_clt_donnell_bardell_num',
         sources=[
@@ -623,7 +626,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.panel.models.plate_clt_donnell_bardell_w',
         sources=[
@@ -631,7 +634,7 @@ extensions = [
             bardell_int_src,
             ] + bardell_int12_src,
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.panel.connections.kCSSxcte',
@@ -641,7 +644,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.panel.connections.kCSSycte',
         sources=[
@@ -650,7 +653,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.panel.connections.kCBFycte',
         sources=[
@@ -659,7 +662,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.panel.connections.kCSB',
         sources=[
@@ -668,7 +671,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
 
     Extension('compmech.stiffener.models.bladestiff1d_clt_donnell_bardell',
@@ -679,7 +682,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.stiffener.models.bladestiff2d_clt_donnell_bardell',
         sources=[
@@ -689,7 +692,7 @@ extensions = [
             bardell_func_src,
             ],
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     Extension('compmech.stiffener.models.tstiff2d_clt_donnell_bardell',
         sources=[
@@ -699,7 +702,7 @@ extensions = [
             bardell_func_src,
             ] + bardell_int12_src + bardell_intc0c1_src,
         include_dirs=include_dirs,
-        extra_compile_args=compiler_args,
+        extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
     ]
 
