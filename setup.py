@@ -5,21 +5,73 @@ Mechanics, currently almost exclusively on Solid Mechanics and simple
 fluid-structure interaction with the panel flutter analyzes available.
 """
 import os
-from os.path import join
-import sys
+import inspect
 import subprocess
-pyversion = sys.version_info
-from distutils.sysconfig import get_python_lib
+from setuptools import setup, find_packages, Extension
+#from distutils.extension import Extension
 
-if sys.version_info[:2] < (2, 7) or sys.version_info[0:2] < (3, 5):
-    raise RuntimeError("Python version 2.7, >= 3.5 required.")
+import numpy as np
+from Cython.Build import cythonize
 
-if sys.version_info[0] < 3:
-    import __builtin__ as builtins
-else:
-    import builtins
 
 DOCLINES = __doc__.split("\n")
+
+
+def git_version():
+    def _minimal_ext_cmd(cmd):
+        # construct minimal environment
+        env = {}
+        for k in ['SYSTEMROOT', 'PATH']:
+            v = os.environ.get(k)
+            if v is not None:
+                env[k] = v
+        # LANGUAGE is used on win32
+        env['LANGUAGE'] = 'C'
+        env['LANG'] = 'C'
+        env['LC_ALL'] = 'C'
+        out = subprocess.Popen(cmd, stdout=subprocess.PIPE, env=env).communicate()[0]
+        return out
+
+    try:
+        out = _minimal_ext_cmd(['git', 'rev-parse', 'HEAD'])
+        git_revision = out.strip().decode('ascii')
+    except OSError:
+        git_revision = "Unknown"
+
+    return git_revision
+
+
+def get_version_info(version, is_released):
+    fullversion = version
+    if not is_released:
+        git_revision = git_version()
+        fullversion += '.dev0+' + git_revision[:7]
+    return fullversion
+
+
+def write_version_py(version, is_released, filename='compmech/version.py'):
+    fullversion = get_version_info(version, is_released)
+    with open("./compmech/version.py", "wb") as f:
+        f.write(('__version__ = "%s"\n' % fullversion).encode())
+    return fullversion
+
+
+# Utility function to read the README file.
+# Used for the long_description.  It's nice, because now 1) we have a top level
+# README file and 2) it's easier to type in the README file than to put a raw
+# string in below ...
+def read(fname):
+    setupdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+    return open(os.path.join(setupdir, fname)).read()
+
+
+#_____________________________________________________________________________
+
+install_requires = [
+        "numpy",
+        "scipy",
+        "matplotlib",
+        ]
 
 CLASSIFIERS = """\
 Development Status :: 4 - Beta
@@ -44,173 +96,626 @@ Programming Language :: Python :: 3.10
 License :: OSI Approved :: BSD License
 """
 
-MAJOR = 0
-MINOR = 8
-MICRO = 0
-ISRELEASED = False
-VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
+is_released = False
+version = '0.8.0'
 
+fullversion = write_version_py(version, is_released)
 
-# BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
-# update it when the contents of directories change.
-if os.path.exists('MANIFEST'):
-    os.remove('MANIFEST')
+data_files = [('', [
+        'README.md',
+        'LICENSE',
+        'ROADMAP.rst',
+        'setup.cfg',
+        'setup.py',
+        'compmech/version.py',
+        ])]
 
+package_data = {
+        'compmech': ['*.pxd'],
+        '': ['tests/*.*'],
+        }
 
-def write_version_py(filename='compmech/version.py'):
-    cnt = """
-# THIS FILE IS GENERATED FROM CompMech setup.py
-short_version = '%(version)s'
-version = '%(version)s'
-full_version = '%(full_version)s'
-git_revision = '%(git_revision)s'
-isreleased = %(isreleased)s
-if isreleased:
-    __version__ = version
-else:
-    __version__ = full_version
-if not isreleased:
-    version = full_version
-"""
-    FULLVERSION, GIT_REVISION = get_version_info()
+if os.name == 'nt': # Windows
+    compiler_args = ['/openmp', '/O2']
+    compiler_args_NL = compiler_args + ['/fp:fast']
+elif os.name == 'posix': # MAC-OS
+    compiler_args = ['-fopenmp', '-static', '-static-libgcc', '-static-libstdc++']
+    compiler_args_NL = compiler_args + ['-ffast-math']
+else: # Linux
+    compiler_args = ['-fopenmp', '-static', '-static-libgcc', '-static-libstdc++']
+    compiler_args_NL = compiler_args + ['-ffast-math']
 
-    a = open(filename, 'w')
-    try:
-        a.write(cnt % {'version': VERSION,
-                       'full_version': FULLVERSION,
-                       'git_revision': GIT_REVISION,
-                       'isreleased': str(ISRELEASED)})
-    finally:
-        a.close()
+root_path = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/') + '/compmech'
 
+include_dirs = [
+            np.get_include(),
+            root_path +  '/include',
+            ]
 
-# Return the git revision as a string
-def git_version():
-    def _minimal_ext_cmd(cmd):
-        # construct minimal environment
-        env = {}
-        for k in ['SYSTEMROOT', 'PATH']:
-            v = os.environ.get(k)
-            if v is not None:
-                env[k] = v
-        # LANGUAGE is used on win32
-        env['LANGUAGE'] = 'C'
-        env['LANG'] = 'C'
-        env['LC_ALL'] = 'C'
-        out = subprocess.Popen(cmd, stdout=subprocess.PIPE, env=env).communicate()[0]
-        return out
+legendre_src = root_path + '/lib/src/legendre_gauss_quadrature.c'
+bardell_int_src = root_path + '/lib/src/bardell.c'
+bardell_func_src = root_path + '/lib/src/bardell_functions.c'
+bardell_int12_src = [
+    root_path + '/lib/src/bardell_integral_ff_12.c',
+    root_path + '/lib/src/bardell_integral_ff_c0c1.c',
+    root_path + '/lib/src/bardell_integral_ffxi_12.c',
+    root_path + '/lib/src/bardell_integral_ffxi_c0c1.c',
+    root_path + '/lib/src/bardell_integral_ffxixi_12.c',
+    root_path + '/lib/src/bardell_integral_fxif_c0c1.c',
+    root_path + '/lib/src/bardell_integral_fxifxi_12.c',
+    root_path + '/lib/src/bardell_integral_fxifxi_c0c1.c',
+    root_path + '/lib/src/bardell_integral_fxifxixi_12.c',
+    root_path + '/lib/src/bardell_integral_fxixifxixi_12.c',
+    root_path + '/lib/src/bardell_integral_fxixifxixi_c0c1.c',
+]
 
-    try:
-        out = _minimal_ext_cmd(['git', 'rev-parse', 'HEAD'])
-        GIT_REVISION = out.strip().decode('ascii')
-    except OSError:
-        GIT_REVISION = "Unknown"
+extensions = [
+    Extension('compmech.integrate.integrate',
+        sources=[
+            root_path + '/integrate/integrate.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.integrate.integratev',
+        sources=[
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-    return GIT_REVISION
+    Extension('compmech.conecyl.imperfections.mgi',
+        sources=[
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
+    Extension('compmech.conecyl.clpt.clpt_commons_bc1',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_commons_bc1.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_commons_bc2',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_commons_bc2.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_commons_bc3',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_commons_bc3.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_commons_bc4',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_commons_bc4.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-def get_version_info():
-    FULLVERSION = VERSION
-    GIT_REVISION = git_version()
-    if not ISRELEASED:
-        FULLVERSION += '.dev0+' + GIT_REVISION[:7]
+    Extension('compmech.conecyl.clpt.clpt_donnell_bc1_linear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_donnell_bc1_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_donnell_bc2_linear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_donnell_bc2_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_donnell_bc3_linear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_donnell_bc3_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_donnell_bc4_linear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_donnell_bc4_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-    return FULLVERSION, GIT_REVISION
+    Extension('compmech.conecyl.clpt.clpt_geier1997_bc2',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_geier1997_bc2.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
+    Extension('compmech.conecyl.clpt.clpt_donnell_bc1_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_donnell_bc1_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc1.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_donnell_bc2_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_donnell_bc2_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc2.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_donnell_bc3_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_donnell_bc3_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc3.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_donnell_bc4_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_donnell_bc4_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc4.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
 
-def configuration(parent_package='', top_path=None):
-    from numpy.distutils.misc_util import Configuration
-    config = Configuration(None, parent_package, top_path)
-    config.set_options(ignore_setup_xxx_py=True,
-                       assume_default_configuration=True,
-                       delegate_options_to_subpackages=True,
-                       quiet=True)
+    Extension('compmech.conecyl.clpt.clpt_sanders_bc1_linear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_sanders_bc1_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_sanders_bc2_linear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_sanders_bc2_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_sanders_bc3_linear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_sanders_bc3_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_sanders_bc4_linear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_sanders_bc4_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-    config.add_data_files(('compmech', 'LICENSE'))
-    config.add_data_files(('compmech', 'README.rst'))
-    config.add_data_files(('compmech', 'ROADMAP.rst'))
-    config.add_data_files(('compmech', 'setup.cfg'))
-    config.add_data_files(('compmech', 'setup.py'))
+    Extension('compmech.conecyl.clpt.clpt_sanders_bc1_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_sanders_bc1_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc1.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_sanders_bc2_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_sanders_bc2_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc2.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_sanders_bc3_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_sanders_bc3_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc3.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.clpt.clpt_sanders_bc4_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/clpt_sanders_bc4_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc4.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.clpt.iso_clpt_donnell_bc2_linear',
+        sources=[
+            root_path + '/conecyl/clpt/iso_clpt_donnell_bc2_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.iso_clpt_donnell_bc3_linear',
+        sources=[
+            root_path + '/conecyl/clpt/iso_clpt_donnell_bc3_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.clpt.iso_clpt_donnell_bc2_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/iso_clpt_donnell_bc2_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc2.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.clpt.iso_clpt_donnell_bc3_nonlinear',
+        sources=[
+            root_path + '/conecyl/clpt/iso_clpt_donnell_bc3_nonlinear.pyx',
+            ],
+        depends=[
+            root_path + '/conecyl/clpt/clpt_commons_bc3.pyx',
+            root_path + '/conecyl/imperfections/mgi.pyx',
+            root_path + '/integrate/integratev.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
 
-    if 'bdist_wheel' in sys.argv[1:]:
-        includedir = join(get_python_lib(), 'compmech', 'include')
-        libdir = join(get_python_lib(), 'compmech', 'lib')
-        if not (os.path.isdir(includedir) and os.path.isdir(libdir)):
-            raise RuntimeError('Need to run first: python setup.py install')
-        config.add_data_dir(('compmech/include', includedir))
-        config.add_data_dir(('compmech/lib', libdir))
-        config.add_data_dir(('compmech/theory', 'theory'))
-        config.add_data_dir(('compmech/doc', 'doc/build/html'))
-    elif sys.argv[1] in ('bdist', 'sdist'):
-        config.add_data_dir('compmech/include')
-        config.add_data_dir('compmech/lib')
+    Extension('compmech.conecyl.fsdt.fsdt_commons_bc1',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_commons_bc1.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_commons_bc2',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_commons_bc2.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_commons_bc3',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_commons_bc3.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_commons_bc4',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_commons_bc4.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_commons_bcn',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_commons_bcn.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-    config.add_subpackage('compmech')
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bc1_linear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bc1_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bc2_linear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bc2_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bc3_linear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bc3_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bc4_linear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bc4_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bcn_linear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bcn_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-    config.get_version('compmech/__version__.py')
+    Extension('compmech.conecyl.fsdt.fsdt_geier1997_bc2',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_geier1997_bc2.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-    return config
+    Extension('compmech.conecyl.fsdt.fsdt_sanders_bcn_linear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_sanders_bcn_linear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_shadmehri2012_bc2',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_shadmehri2012_bc2.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_shadmehri2012_bc3',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_shadmehri2012_bc3.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bc1_nonlinear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bc1_nonlinear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bc2_nonlinear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bc2_nonlinear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bc3_nonlinear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bc3_nonlinear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bc4_nonlinear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bc4_nonlinear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
+    Extension('compmech.conecyl.fsdt.fsdt_donnell_bcn_nonlinear',
+        sources=[
+            root_path + '/conecyl/fsdt/fsdt_donnell_bcn_nonlinear.pyx',
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args_NL,
+        language='c'),
 
-def setup_package():
-    cmdclass = {}
-    # Figure out whether to add ``*_requires = ['numpy']``.
-    # We don't want to do that unconditionally, because we risk updating
-    # an installed numpy which fails too often.  Just if it's not installed, we
-    # may give it a try.  See gh-3379.
-    FULLVERSION, GIT_REVISION = get_version_info()
+    Extension('compmech.panel.models.clt_bardell_field',
+        sources=[
+            root_path + '/panel/models/clt_bardell_field.pyx',
+            bardell_func_src,
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-    metadata = dict(
-        name='compmech',
-        maintainer='Saullo G. P. Castro',
-        maintainer_email='castrosaullo@gmail.com',
-        version=FULLVERSION,
-        description=DOCLINES[0],
-        long_description='\n'.join(DOCLINES[2:]),
-        author='Saullo G. P. Castro',
-        author_email='castrosaullo@gmail.com',
-        url='http://compmech.github.io/compmech/',
-        download_url='https://github.com/compmech/compmech/releases',
-        keywords=['computational', 'mechanics', 'structural', 'analysis',
-            'analytical', 'Bardell', 'Ritz'],
-        license='BSD',
-        cmdclass=cmdclass,
-        classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
-    )
+    Extension('compmech.panel.models.clt_bardell_field_w',
+        sources=[
+            root_path + '/panel/models/clt_bardell_field_w.pyx',
+            bardell_func_src,
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.panel.models.cpanel_clt_donnell_bardell',
+        sources=[
+            root_path + '/panel/models/cpanel_clt_donnell_bardell.pyx',
+            bardell_int_src,
+            bardell_func_src,
+            ] + bardell_int12_src,
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.panel.models.cpanel_clt_donnell_bardell_num',
+        sources=[
+            root_path + '/panel/models/cpanel_clt_donnell_bardell_num.pyx',
+            legendre_src,
+            bardell_func_src,
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.panel.models.kpanel_clt_donnell_bardell',
+        sources=[
+            root_path + '/panel/models/kpanel_clt_donnell_bardell.pyx',
+            bardell_int_src,
+            ] + bardell_int12_src,
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    #TODO kpanel is not completely developed yet
+    #root_path + '/panel/models/kpanel_clt_donnell_bardell_num.pyx',
+    Extension('compmech.panel.models.plate_clt_donnell_bardell',
+        sources=[
+            root_path + '/panel/models/plate_clt_donnell_bardell.pyx',
+            bardell_int_src,
+            ] + bardell_int12_src,
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.panel.models.plate_clt_donnell_bardell_num',
+        sources=[
+            root_path + '/panel/models/plate_clt_donnell_bardell_num.pyx',
+            legendre_src,
+            bardell_func_src,
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.panel.models.plate_clt_donnell_bardell_w',
+        sources=[
+            root_path + '/panel/models/plate_clt_donnell_bardell_w.pyx',
+            bardell_int_src,
+            ] + bardell_int12_src,
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
+    Extension('compmech.panel.connections.kCSSxcte',
+        sources=[
+            root_path + '/panel/connections/kCSSxcte.pyx',
+            bardell_int_src,
+            bardell_func_src,
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.panel.connections.kCSSycte',
+        sources=[
+            root_path + '/panel/connections/kCSSycte.pyx',
+            bardell_int_src,
+            bardell_func_src,
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.panel.connections.kCBFycte',
+        sources=[
+            root_path + '/panel/connections/kCBFycte.pyx',
+            bardell_int_src,
+            bardell_func_src,
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.panel.connections.kCSB',
+        sources=[
+            root_path + '/panel/connections/kCSB.pyx',
+            bardell_int_src,
+            bardell_func_src,
+            ],
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
 
-    if len(sys.argv) >= 2 and ('--help' in sys.argv[1:] or
-            sys.argv[1] in ('--help-commands', 'egg_info', '--version',
-                            'clean')):
-        # For these actions, NumPy is not required.
-        #
-        # They are required to succeed without Numpy for example when
-        # pip is used to install Scipy when Numpy is not yet present in
-        # the system.
-        try:
-            from setuptools import setup
-        except ImportError:
-            from distutils.core import setup
+    Extension('compmech.stiffener.models.bladestiff1d_clt_donnell_bardell',
+        sources=[
+            root_path + '/stiffener/models/bladestiff1d_clt_donnell_bardell.pyx',
+            legendre_src,
+            bardell_int_src,
+            bardell_func_src,
+            ] + bardell_int12_src,
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.stiffener.models.bladestiff2d_clt_donnell_bardell',
+        sources=[
+            root_path + '/stiffener/models/bladestiff2d_clt_donnell_bardell.pyx',
+            legendre_src,
+            bardell_int_src,
+            bardell_func_src,
+            ] + bardell_int12_src,
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    Extension('compmech.stiffener.models.tstiff2d_clt_donnell_bardell',
+        sources=[
+            root_path + '/stiffener/models/tstiff2d_clt_donnell_bardell.pyx',
+            legendre_src,
+            bardell_int_src,
+            bardell_func_src,
+            ] + bardell_int12_src,
+        include_dirs=include_dirs,
+        extra_compile_args=compiler_args,
+        language='c'),
+    ]
 
-        metadata['version'] = FULLVERSION
-    else:
-        if (len(sys.argv) >= 2 and sys.argv[1] in ('bdist_wheel', 'bdist_egg')) or (
-                    'develop' in sys.argv):
-            # bdist_wheel/bdist_egg needs setuptools
-            import setuptools
+ext_modules = cythonize(extensions,
+        compiler_directives={'linetrace': True},
+        language_level='3',
+        )
 
-        from numpy.distutils.core import setup
-
-        metadata['configuration'] = configuration
-
-    setup(**metadata)
-
-
-if __name__ == '__main__':
-    write_version_py()
-
-    if os.name == 'nt' and os.environ.get('CONDA_DEFAULT_ENV') is None:
-        os.environ['DISTUTILS_USE_SDK'] = '1'
-        os.environ['MSSdk'] = '1'
-
-    setup_package()
+s = setup(
+    name = "compmech",
+    version = fullversion,
+    author = "Saullo G. P. Castro",
+    author_email = "S.G.P.Castro@tudelft.nl",
+    description = DOCLINES[0],
+    long_description = read('README.md'),
+    long_description_content_type = 'text/markdown',
+    license = "BSD",
+    download_url='https://github.com/saullocastro/compmech/releases',
+    keywords=['computational', 'mechanics', 'structural', 'analysis',
+        'analytical', 'Bardell', 'Ritz'],
+    url='http://saullocastro.github.io/compmech/',
+    package_data = package_data,
+    data_files = data_files,
+    classifiers = [_f for _f in CLASSIFIERS.split('\n') if _f],
+    install_requires = install_requires,
+    ext_modules = ext_modules,
+    packages = find_packages(),
+)
