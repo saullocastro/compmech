@@ -151,6 +151,13 @@ bardell_int12_src = [
     root_path + '/lib/src/bardell_integral_fxifxixi_12.c',
     root_path + '/lib/src/bardell_integral_fxixifxixi_12.c',
     ]
+bardell_intc0c1_src = [
+    root_path + '/lib/src/bardell_integral_ff_c0c1.c',
+    root_path + '/lib/src/bardell_integral_ffxi_c0c1.c',
+    root_path + '/lib/src/bardell_integral_fxif_c0c1.c',
+    root_path + '/lib/src/bardell_integral_fxifxi_c0c1.c',
+    root_path + '/lib/src/bardell_integral_fxixifxixi_c0c1.c',
+    ]
 
 extensions = [
     Extension('compmech.integrate.integrate',
@@ -691,7 +698,7 @@ extensions = [
             legendre_src,
             bardell_int_src,
             bardell_func_src,
-            ] + bardell_int12_src,
+            ] + bardell_int12_src + bardell_intc0c1_src,
         include_dirs=include_dirs,
         extra_compile_args=compiler_args,
         language='c'),
