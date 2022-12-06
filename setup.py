@@ -8,7 +8,6 @@ import os
 import inspect
 import subprocess
 from setuptools import setup, find_packages, Extension
-#from distutils.extension import Extension
 
 import numpy as np
 from Cython.Build import cythonize
@@ -116,13 +115,22 @@ package_data = {
         }
 
 if os.name == 'nt': # Windows
-    compiler_args = ['/openmp', '/O2']
+    if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
+        compiler_args = ['/openmp', '/Od']
+    else:
+        compiler_args = ['/openmp']
     compiler_args_NL = compiler_args + ['/fp:fast']
 elif os.name == 'posix': # MAC-OS
-    compiler_args = ['-fopenmp', '-static', '-static-libgcc', '-static-libstdc++']
+    if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
+        compiler_args = ['-fopenmp', '-O0']
+    else:
+        compiler_args = ['-fopenmp']
     compiler_args_NL = compiler_args + ['-ffast-math']
 else: # Linux
-    compiler_args = ['-fopenmp', '-static', '-static-libgcc', '-static-libstdc++']
+    if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
+        compiler_args = ['-fopenmp', '-O0']
+    else:
+        compiler_args = ['-fopenmp']
     compiler_args_NL = compiler_args + ['-ffast-math']
 
 root_path = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/') + '/compmech'
@@ -137,17 +145,12 @@ bardell_int_src = root_path + '/lib/src/bardell.c'
 bardell_func_src = root_path + '/lib/src/bardell_functions.c'
 bardell_int12_src = [
     root_path + '/lib/src/bardell_integral_ff_12.c',
-    root_path + '/lib/src/bardell_integral_ff_c0c1.c',
     root_path + '/lib/src/bardell_integral_ffxi_12.c',
-    root_path + '/lib/src/bardell_integral_ffxi_c0c1.c',
     root_path + '/lib/src/bardell_integral_ffxixi_12.c',
-    root_path + '/lib/src/bardell_integral_fxif_c0c1.c',
     root_path + '/lib/src/bardell_integral_fxifxi_12.c',
-    root_path + '/lib/src/bardell_integral_fxifxi_c0c1.c',
     root_path + '/lib/src/bardell_integral_fxifxixi_12.c',
     root_path + '/lib/src/bardell_integral_fxixifxixi_12.c',
-    root_path + '/lib/src/bardell_integral_fxixifxixi_c0c1.c',
-]
+    ]
 
 extensions = [
     Extension('compmech.integrate.integrate',
@@ -668,7 +671,7 @@ extensions = [
             legendre_src,
             bardell_int_src,
             bardell_func_src,
-            ] + bardell_int12_src,
+            ],
         include_dirs=include_dirs,
         extra_compile_args=compiler_args,
         language='c'),
@@ -678,7 +681,7 @@ extensions = [
             legendre_src,
             bardell_int_src,
             bardell_func_src,
-            ] + bardell_int12_src,
+            ],
         include_dirs=include_dirs,
         extra_compile_args=compiler_args,
         language='c'),
