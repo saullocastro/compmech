@@ -20,6 +20,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Setting up OpenMP for Linux or MAC-OS
       if: matrix.runs-on == 'ubuntu-latest' || matrix.runs-on == 'macos-latest'
+      run: |
         sudo apt-get update; sudo apt-get install -y libomp5 libomp-dev
     - name: Install dependencies
       run: |
