@@ -33,8 +33,16 @@ jobs:
         python3 -m pip install -r requirements.txt
         python3 -m pip install --upgrade -r requirements.txt
     - name: Install module
+      if: matrix.runs-on != 'macos-latest'
       run: |
         export CYTHON_TRACE_NOGIL=1
+        python3 setup.py build_ext --inplace --force --define CYTHON_TRACE_NOGIL
+    - name: Install module for MAC-OS
+      if: matrix.runs-on == 'macos-latest'
+      run: |
+        export CYTHON_TRACE_NOGIL=1
+        export CFLAGS="-Xpreprocessor -fopenmp $CFLAGS"
+        export CXXFLAGS="-Xpreprocessor -fopenmp $CXXFLAGS"
         python3 setup.py build_ext --inplace --force --define CYTHON_TRACE_NOGIL
 #  - name: Lint with flake8
 #    run: |

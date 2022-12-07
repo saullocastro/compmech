@@ -120,8 +120,8 @@ if os.name == 'nt': # Windows
     compiler_args = ['/openmp']
     compiler_args_NL = compiler_args + ['/fp:fast']
 elif os.name == 'posix': # MAC-OS
-    compiler_args = ['-Xpreprocessor', '-fopenmp']
-    link_args = ['-fopenmp']
+    compiler_args = [] # NOTE had to export variables in the Github-Action files
+    link_args = ['-lomp']
     compiler_args_NL = compiler_args + ['-ffast-math']
 else: # Linux
     compiler_args = ['-fopenmp']
@@ -134,9 +134,6 @@ include_dirs = [
             np.get_include(),
             root_path +  '/include',
             ]
-
-if os.name == 'posix': # MAC-OS
-    include_dirs.append(os.environ['OpenMP_C_INCLUDE_DIR'])
 
 legendre_src = root_path + '/lib/src/legendre_gauss_quadrature.c'
 bardell_int_src = root_path + '/lib/src/bardell.c'
