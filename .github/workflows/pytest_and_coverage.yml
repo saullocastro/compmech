@@ -27,6 +27,8 @@ jobs:
       run: |
         brew update
         brew install llvm
+        export LDFLAGS="-L/usr/local/opt/llvm/lib"
+        export CPPFLAGS="-I/usr/local/opt/llvm/include"
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip

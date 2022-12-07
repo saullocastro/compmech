@@ -27,6 +27,8 @@ jobs:
       run: |
         brew update
         brew install llvm
+        export LDFLAGS="-L/usr/local/opt/llvm/lib"
+        export CPPFLAGS="-I/usr/local/opt/llvm/include"
     - name: Install dependencies
       if: matrix.runs-on == 'windows-latest' || (matrix.runs-on == 'ubuntu-latest' && matrix.python-version == '3.10') || (matrix.runs-on == 'macos-latest')
       run: |
