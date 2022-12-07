@@ -124,11 +124,11 @@ if os.name == 'nt': # Windows
 elif os.name == 'posix': # MAC-OS
     if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
         #compiler_args = ['-fopenmp', '-O0']
-        compiler_args = ['-Xclang', '-fopenmp']
+        compiler_args = ['-fopenmp']
     else:
-        compiler_args = ['-Xclang', '-fopenmp']
-    link_args = ['-lomp']
-    compiler_args_NL = compiler_args
+        compiler_args = ['-fopenmp']
+    link_args = ['-fopenmp']
+    compiler_args_NL = compiler_args + ['-ffast-math']
 else: # Linux
     if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
         #compiler_args = ['-fopenmp', '-O0']
@@ -144,9 +144,6 @@ include_dirs = [
             np.get_include(),
             root_path +  '/include',
             ]
-
-if os.name == 'posix': # MAC-OS
-    include_dirs.append('/usr/local/opt/libomp/include')
 
 legendre_src = root_path + '/lib/src/legendre_gauss_quadrature.c'
 bardell_int_src = root_path + '/lib/src/bardell.c'
