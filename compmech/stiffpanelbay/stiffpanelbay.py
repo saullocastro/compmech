@@ -1268,7 +1268,10 @@ class StiffPanelBay(object):
             if cbar_title:
                 cax.text(0.5, 1.05, cbar_title, horizontalalignment='center',
                          verticalalignment='bottom', fontsize=fsize)
-            cbar.outline.remove()
+            try:
+                cbar.outline.remove()
+            except NotImplementedError:
+                pass
             cbar.ax.tick_params(labelsize=fsize, pad=0., tick2On=False)
 
         if invert_y == True:
@@ -1489,7 +1492,10 @@ class StiffPanelBay(object):
             if cbar_title:
                 cax.text(0.5, 1.05, cbar_title, horizontalalignment='center',
                          verticalalignment='bottom', fontsize=fsize)
-            cbar.outline.remove()
+            try:
+                cbar.outline.remove()
+            except NotImplementedError:
+                pass
             cbar.ax.tick_params(labelsize=fsize, pad=0., tick2On=False)
 
         if invert_y == True:
