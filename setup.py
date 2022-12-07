@@ -124,11 +124,11 @@ if os.name == 'nt': # Windows
 elif os.name == 'posix': # MAC-OS
     if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
         #compiler_args = ['-fopenmp', '-O0']
-        compiler_args = ['-fopenmp']
+        compiler_args = ['-Xclang', '-fopenmp']
     else:
-        compiler_args = ['-fopenmp']
-    link_args = ['-fopenmp']
-    compiler_args_NL = compiler_args + ['-ffast-math']
+        compiler_args = ['-Xclang', '-fopenmp']
+    link_args = ['-lomp']
+    compiler_args_NL = compiler_args
 else: # Linux
     if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
         #compiler_args = ['-fopenmp', '-O0']
