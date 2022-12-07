@@ -3,7 +3,6 @@
 .. image:: https://ci.appveyor.com/api/projects/status/github/saullocastro/compmech
 
 
-==================================
 Computational Mechanics (compmech)
 ==================================
 
