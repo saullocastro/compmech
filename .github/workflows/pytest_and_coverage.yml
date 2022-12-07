@@ -41,8 +41,8 @@ jobs:
       if: matrix.runs-on == 'macos-latest'
       run: |
         export CYTHON_TRACE_NOGIL=1
-        export CFLAGS="-Xpreprocessor -fopenmp $CFLAGS"
-        export CXXFLAGS="-Xpreprocessor -fopenmp $CXXFLAGS"
+        export CFLAGS="-Xclang -fopenmp $CFLAGS"
+        export CXXFLAGS="-Xclang -fopenmp $CXXFLAGS"
         python3 setup.py build_ext --inplace --force --define CYTHON_TRACE_NOGIL
 #  - name: Lint with flake8
 #    run: |
