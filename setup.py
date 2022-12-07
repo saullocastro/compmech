@@ -115,23 +115,16 @@ package_data = {
 
 link_args = []
 if os.name == 'nt': # Windows
-    if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
-        compiler_args = ['/openmp']
-    else:
-        compiler_args = ['/openmp']
+    #if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
+        #compiler_args = ['/openmp']
+    compiler_args = ['/openmp']
     compiler_args_NL = compiler_args + ['/fp:fast']
 elif os.name == 'posix': # MAC-OS
-    if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
-        compiler_args = ['-fopenmp']
-    else:
-        compiler_args = ['-fopenmp']
+    compiler_args = ['-Xpreprocessor', '-fopenmp']
     link_args = ['-fopenmp']
     compiler_args_NL = compiler_args + ['-ffast-math']
 else: # Linux
-    if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
-        compiler_args = ['-fopenmp']
-    else:
-        compiler_args = ['-fopenmp']
+    compiler_args = ['-fopenmp']
     link_args = ['-fopenmp']
     compiler_args_NL = compiler_args + ['-ffast-math']
 
