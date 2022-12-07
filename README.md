@@ -1,6 +1,7 @@
-.. image:: https://travis-ci.org/saullocastro/compmech.svg?branch=master
+Github Actions status:
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/saullocastro/compmech
+Coverage status:
+[![codecov](https://codecov.io/gh/saullocastro/compmech/branch/master/graph/badge.svg?token=12LJVZAYTL)](https://codecov.io/gh/saullocastro/compmech)
 
 
 Computational Mechanics (compmech)
