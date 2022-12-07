@@ -76,16 +76,13 @@ class Model(object):
             coords = np.array([self.ncoords[nid] for nid in pnseq],
                               dtype=np.float64)
 
-            ptype.calc_el_attr(coords):
+            ptype.calc_el_attr(coords)
 
             # transform the node coordinates to the local element
             # calculate jacobians
             # calculate other arrays required by the property type
             #  - such as rs with the radii
             #  - such as arads with the semi-vertex angles
-
-
-            # c
 
 
 class Property(object):
