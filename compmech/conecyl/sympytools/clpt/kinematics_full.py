@@ -10,7 +10,7 @@ sympy.var('vx, vt', commutative=False)
 sympy.var('wx, wt', commutative=False)
 sympy.var('wxt, wtt', commutative=False)
 #
-d = Matrix(\
+d = Matrix(
     [[     D(x),             0,                             0],
      [ 1/r*sina,      1/r*D(t),                      1/r*cosa],
      [ 1/r*D(t), D(x)-sina*1/r,                             0],
@@ -19,7 +19,7 @@ d = Matrix(\
      [        0,             0, -1/r*(2*D(x,t)-1/r*sina*D(t))]])
 
 #
-dNL = Matrix(\
+dNL = Matrix(
     [[ux*D(x)/2, vx*D(x)/2, wx*D(x)/2],
      [1/(2*r**2)*(sina**2*u + 2*sina*(cosa*w + vt) - 2*sina*v*D(t) + ut*D(t)),
       1/(2*r**2)*(v + 2*cosa*w*D(t) + vt*D(t)),
@@ -36,7 +36,7 @@ dNL = Matrix(\
       1/r*((1/r)*(sina*ux + cosa*wx)*D(t) + (sina*v - ut)*D(x,x) - (1/r)*(sina*u + vt)*D(x,t)
            -(1/r)*vx*D(t,t) - (1/r)*cosa*wxt)]])
 #
-P = Matrix(\
+P = Matrix(
         [[  0, 0,                      0],
          [  0, 0,                      0],
          [  0, 0, 1/(2*pi*cosa*r)*D(x,x)]])

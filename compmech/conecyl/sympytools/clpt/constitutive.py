@@ -1,5 +1,6 @@
 import sympy
 from sympy import Matrix
+
 sympy.var('A11, A12, A16, A22, A26, A66', commutative=False)
 sympy.var('B11, B12, B16, B22, B26, B66', commutative=False)
 sympy.var('D11, D12, D16, D22, D26, D66', commutative=False)

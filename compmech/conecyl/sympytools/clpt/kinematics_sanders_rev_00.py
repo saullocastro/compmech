@@ -6,7 +6,7 @@ from mapy.sympytools.doperator import D
 sympy.var('x, t, sina, cosa, r, L', commutative=False)
 sympy.var('ux, ut, v, vx, vt, wx, wt, w0x, w0t', commutative=False)
 #
-d = Matrix(\
+d = Matrix(
     [[     D(x),             0,                             0],
      [ 1/r*sina,      1/r*D(t),                      1/r*cosa],
      [ 1/r*D(t), D(x)-sina*1/r,                             0],

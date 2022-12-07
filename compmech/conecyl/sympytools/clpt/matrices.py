@@ -8,6 +8,7 @@ from compmech.symbolic.doperator import evaluateExpr
 
 from constitutive import LC
 
+
 def calc_matrices(cs_left, gs_left, cs_right, gs_right,
                   prefix='print_integrands', NL='Donnell',
                   analytical=False,

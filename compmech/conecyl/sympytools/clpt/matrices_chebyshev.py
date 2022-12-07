@@ -1,5 +1,3 @@
-from itertools import product
-
 import numpy as np
 import sympy
 from sympy import Matrix
@@ -7,6 +5,7 @@ from sympy import Matrix
 from mapy.sympytools.doperator import evaluateExpr
 
 from constitutive import LC
+
 
 def calc_matrices(c, g,
                   prefix='print_derivations', NL_kinematics='donnell',
@@ -19,7 +18,7 @@ def calc_matrices(c, g,
     elif NL_kinematics=='sanders_rev_00':
         from kinematics_sanders_rev_00 import d, A, Gaux
     else:
-        print NL_kinematics
+        print(NL_kinematics)
         raise ValueError(
                 'Non-linear kinematics option "{}" not defined!'.format(
                     NL_kinematics))
@@ -67,7 +66,6 @@ def calc_matrices(c, g,
     print('Not assigned variables:')
     print('\t{}'.format(set(not_assigned)))
     #
-    print 'here1'
     if analytical:
         # NON-LINEAR substitutions
         dummy, dummy, wxb = g.diff(x)*c
@@ -77,11 +75,9 @@ def calc_matrices(c, g,
                 wt: wtb,
                  }
         BL = BL.subs(subs_b)
-    print 'here2'
     #
     eL = (BL/2)*c
     #
-    print 'here3'
     # kG linear
     Nxx, Ntt, Nxt, Mxx, Mtt, Mxt = sympy.var(
                                    'Nxx, Ntt, Nxt, Mxx, Mtt, Mxt')
@@ -115,7 +111,6 @@ def calc_matrices(c, g,
     Mxt = N_vec[5]
     N_NL = Matrix([[Nxx, Nxt],
                    [Nxt, Ntt]])
-    print 'here4'
     if NL_kinematics=='donnellmb_rev_00':
         N_NL = Matrix(
                 [[Ntt*cosa**2, -1/(2*r)*Mtt*sina*cosa, 0, -1/r*Mxt*cosa, -1/(2*r)*Mtt*cosa],
@@ -138,12 +133,10 @@ def calc_matrices(c, g,
     kNLL = r*BL.T*LC*B0
     kNLNL = r*BL.T*LC*BL
     #
-    print 'here5'
     # kG
     kG = r*G.T*N*G
     kG_NL = r*G.T*N_NL*G
     #
-    print 'here6'
     #
     ks = [['k00'+sufix, kLL],
           ['k0L'+sufix, kLNL],
@@ -154,7 +147,6 @@ def calc_matrices(c, g,
           ['eL', eL],
           ]
     #
-    print 'here7'
     #
     with open('{prefix}_k{sufix}.txt'.format(prefix=prefix,
                                              sufix=sufix), 'w') as outf:
@@ -170,7 +162,6 @@ def calc_matrices(c, g,
                 if v:
                     myprint(kname+'[{0},{1}] = {2}'.format(i, j, str(v)))
     #
-    print 'here8'
     #
     matrices['kALL'] = ks
 
