@@ -145,6 +145,9 @@ include_dirs = [
             root_path +  '/include',
             ]
 
+if os.name == 'posix': # MAC-OS
+    include_dirs.append('/usr/local/opt/libomp/include')
+
 legendre_src = root_path + '/lib/src/legendre_gauss_quadrature.c'
 bardell_int_src = root_path + '/lib/src/bardell.c'
 bardell_func_src = root_path + '/lib/src/bardell_functions.c'
