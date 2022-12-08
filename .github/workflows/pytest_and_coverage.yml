@@ -11,7 +11,7 @@ jobs:
         python-version: [3.7, 3.8, 3.9, '3.10']
     runs-on: ${{ matrix.runs-on }}
     env:
-        use_coverage: ${{ matrix.runs-on == 'ubuntu-latest' && matrix.python-version == '3.10' }}
+        USE_COVERAGE: ${{ matrix.runs-on == 'ubuntu-latest' && matrix.python-version == '3.10' }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -33,12 +33,12 @@ jobs:
         python3 -m pip install -r requirements.txt
         python3 -m pip install --upgrade -r requirements.txt
     - name: Install module for coverage on Linux
-      if: ${use_coverage} == true
+      if: $USE_COVERAGE == true
       run: |
         export CYTHON_TRACE_NOGIL=1
         python3 setup.py build_ext --inplace --force --define CYTHON_TRACE_NOGIL
     - name: Install module
-      if: ${use_coverage} == false
+      if: $USE_COVERAGE == false
       run: |
         python3 setup.py install
 #  - name: Lint with flake8
@@ -49,16 +49,16 @@ jobs:
 #      # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
 #      flake8 ./compmech --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest and coverage report
-      if: ${use_coverage} == true
+      if: $USE_COVERAGE == true
       run: |
         coverage run -m pytest compmech
         coverage report
     - name: Test with pytest
-      if: ${use_coverage} == false
+      if: $USE_COVERAGE == false
       run: |
         pytest compmech
     - name: Upload coverage to Codecov
-      if: ${use_coverage} == true
+      if: $USE_COVERAGE == true
       uses: codecov/codecov-action@v2
       with:
         token: ${{ secrets.CODECOV_UPLOAD_TOKEN }} 
