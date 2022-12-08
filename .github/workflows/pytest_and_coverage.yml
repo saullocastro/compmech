@@ -21,6 +21,7 @@ jobs:
     - name: Setting up OpenMP for Linux
       if: matrix.runs-on == 'ubuntu-latest'
       run: |
+        echo $USE_COVERAGE
         sudo apt-get update; sudo apt-get install -y libomp5 libomp-dev
     - name: Setting up OpenMP for MAC-OS
       if: matrix.runs-on == 'macos-latest'
