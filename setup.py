@@ -5,6 +5,7 @@ Mechanics, currently almost exclusively on Solid Mechanics and simple
 fluid-structure interaction with the panel flutter analyzes available.
 """
 import os
+import platform
 import inspect
 import subprocess
 from setuptools import setup, find_packages, Extension
@@ -114,12 +115,12 @@ package_data = {
         }
 
 link_args = []
-if os.name == 'nt': # Windows
+if platform.system() == 'Windows':
     #if os.environ.get('CYTHON_TRACE_NOGIL') is not None:
         #compiler_args = ['/openmp']
     compiler_args = ['/openmp']
     compiler_args_NL = compiler_args + ['/fp:fast']
-elif os.name == 'posix': # MAC-OS
+elif platform.system() == 'Darwin': # MAC-OS
     compiler_args = ['-Xclang', '-fopenmp']
     link_args = ['-lomp']
     compiler_args_NL = compiler_args + ['-ffast-math']
