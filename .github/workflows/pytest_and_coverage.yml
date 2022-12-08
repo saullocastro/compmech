@@ -6,7 +6,6 @@ jobs:
   build:
 
     strategy:
-      max-parallel: 4
       matrix:
         runs-on: [macos-latest, windows-latest, ubuntu-latest]
         python-version: [3.7, 3.8, 3.9, '3.10']
@@ -32,10 +31,15 @@ jobs:
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements.txt
         python3 -m pip install --upgrade -r requirements.txt
-    - name: Install module
+    - name: Install module for coverage on Linux
+      if: matrix.runs-on == 'ubuntu-latest' && matrix.python-version == '3.10'
       run: |
         export CYTHON_TRACE_NOGIL=1
         python3 setup.py build_ext --inplace --force --define CYTHON_TRACE_NOGIL
+    - name: Install module
+      if: matrix.runs-on != 'ubuntu-latest' || matrix.python-version == '3.10'
+      run: |
+        python3 setup.py install
 #  - name: Lint with flake8
 #    run: |
 #      pip install flake8
@@ -44,10 +48,16 @@ jobs:
 #      # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
 #      flake8 ./compmech --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest and coverage report
+      if: matrix.runs-on == 'ubuntu-latest' && matrix.python-version == '3.10'
       run: |
         coverage run -m pytest compmech
         coverage report
+    - name: Test with pytest
+      if: matrix.runs-on != 'ubuntu-latest' || matrix.python-version == '3.10'
+      run: |
+        pytest compmech
     - name: Upload coverage to Codecov
+      if: matrix.runs-on == 'ubuntu-latest' && matrix.python-version == '3.10'
       uses: codecov/codecov-action@v2
       with:
         token: ${{ secrets.CODECOV_UPLOAD_TOKEN }} 
