@@ -1,8 +1,10 @@
 Version 0.8.0
 -------------
+- more connectivities for PanelAssembly
 - elliptical panel, only with numerical integration
 - parallel processing to compute kT for PanelAssembly
 - strain / stress calculation for all panels
+
 
 Version 0.9.0
 -------------
@@ -17,6 +19,7 @@ Version 0.9.0
   SymPy
 - check why plate lb with reduced_dof=True is not the same as plate_w
 - reconsider reading bardell_12 from the C code and reuse in FORTRAN
+
 
 Version 0.10.0
 -------------
@@ -34,6 +37,4 @@ Version 0.10.0
   shear correction factors
 - finish implementing compmech.plate for Monteiro
 
-Version 1.0.0 (long term)
---------------------------
-- finite element solver
+
