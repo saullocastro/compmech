@@ -1,5 +1,5 @@
 Github Actions status:
-[![Unit tests and code coverage](https://github.com/saullocastro/compmech/actions/workflows/pytest_and_coverage.yml/badge.svg)](https://github.com/saullocastro/compmech/actions/workflows/pytest_and_coverage.yml)
+[![Test and coverage](https://github.com/saullocastro/compmech/actions/workflows/pytest_and_coverage.yml/badge.svg)](https://github.com/saullocastro/compmech/actions/workflows/pytest_and_coverage.yml)
 [![Release](https://github.com/saullocastro/compmech/actions/workflows/auto_release.yml/badge.svg)](https://github.com/saullocastro/compmech/actions/workflows/auto_release.yml)
 [![Documentation](https://github.com/saullocastro/compmech/actions/workflows/auto_doc.yml/badge.svg)](https://github.com/saullocastro/compmech/actions/workflows/auto_doc.yml)
 [![Deploy](https://github.com/saullocastro/compmech/actions/workflows/pythonpublish.yml/badge.svg)](https://github.com/saullocastro/compmech/actions/workflows/pythonpublish.yml)
