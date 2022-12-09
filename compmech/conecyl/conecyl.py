@@ -2232,7 +2232,7 @@ class ConeCyl(object):
                 f.write("ax.yaxis.set_ticks_position('left')\n")
                 f.write("ax.xaxis.set_ticks([{0}, 0, {1}])\n".format(
                         -self.r2*pi, self.r2*pi))
-                f.write("ax.xaxis.set_ticklabels([r'$-\pi$', '$0$', r'$+\pi$'])\n")
+                f.write(r"ax.xaxis.set_ticklabels([r'$-\pi$', '$0$', r'$+\pi$'])\n")
                 f.write("ax.set_title(r'Abaqus, $PL=20 N$, $F_{{C}}=50 kN$, $w_{{PL}}=\beta$, $mm$')\n")
                 f.write("if clean:\n")
                 f.write("    ax.xaxis.set_ticks_position('none')\n")
