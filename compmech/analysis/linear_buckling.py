@@ -7,7 +7,7 @@ from compmech.sparse import remove_null_cols
 
 def lb(K, KG, tol=0, sparse_solver=True, silent=False,
        num_eigvalues=25, num_eigvalues_print=5):
-    """Linear Buckling Analysis
+    r"""Linear Buckling Analysis
 
     It can also be used for more general eigenvalue analyzes if `K` is the
     tangent stiffness matrix of a given load state.
