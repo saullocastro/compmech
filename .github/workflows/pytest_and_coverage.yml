@@ -21,7 +21,6 @@ jobs:
     - name: Setting up OpenMP for Linux
       if: matrix.runs-on == 'ubuntu-latest'
       run: |
-        echo $USE_COVERAGE
         sudo apt-get update; sudo apt-get install -y libomp5 libomp-dev
     - name: Setting up OpenMP for MAC-OS
       if: matrix.runs-on == 'macos-latest'
@@ -34,12 +33,12 @@ jobs:
         python3 -m pip install -r requirements.txt
         python3 -m pip install --upgrade -r requirements.txt
     - name: Install module for coverage on Linux
-      if: env.USE_COVERAGE == true
+      if: env.USE_COVERAGE == 'true'
       run: |
         export CYTHON_TRACE_NOGIL=1
         python3 setup.py build_ext --inplace --force --define CYTHON_TRACE_NOGIL
     - name: Install module
-      if: env.USE_COVERAGE == false
+      if: env.USE_COVERAGE == 'false'
       run: |
         python3 setup.py install
 #  - name: Lint with flake8
@@ -50,16 +49,16 @@ jobs:
 #      # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
 #      flake8 ./compmech --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest and coverage report
-      if: env.USE_COVERAGE == true
+      if: env.USE_COVERAGE == 'true'
       run: |
         coverage run -m pytest compmech
         coverage report
     - name: Test with pytest
-      if: env.USE_COVERAGE == false
+      if: env.USE_COVERAGE == 'false'
       run: |
         pytest compmech
     - name: Upload coverage to Codecov
-      if: env.USE_COVERAGE == true
+      if: env.USE_COVERAGE == 'true'
       uses: codecov/codecov-action@v2
       with:
         token: ${{ secrets.CODECOV_UPLOAD_TOKEN }} 
