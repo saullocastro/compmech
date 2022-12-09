@@ -30,8 +30,8 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
-        python3 -m pip install -r requirements.txt
-        python3 -m pip install --upgrade -r requirements.txt
+        python3 -m pip install -r ci_requirements.txt
+        python3 -m pip install --upgrade -r ci_requirements.txt
     - name: Install module for coverage
       if: env.USE_COVERAGE == 'true'
       run: |
@@ -40,7 +40,7 @@ jobs:
     - name: Install module
       if: env.USE_COVERAGE == 'false'
       run: |
-        python3 setup.py install
+        python3 -m pip install .
 #  - name: Lint with flake8
 #    run: |
 #      pip install flake8
