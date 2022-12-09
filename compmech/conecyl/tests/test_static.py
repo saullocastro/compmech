@@ -13,6 +13,7 @@ def test_static():
             ['fsdt_donnell_bc2', -0.0505316013923],
             ['fsdt_donnell_bc3', -0.0513959737413],
             ['fsdt_donnell_bc4', -0.0502561654612],
+            ['fsdt_donnell_bcn', -0.048930392670706084],
             ]
 
     for model, wmin in wmin_ref:
@@ -42,6 +43,7 @@ def test_NL_static():
             ['clpt_donnell_bc3', -0.012634776822892537],
             ['clpt_donnell_bc4', -0.011499181513525969],
             ['fsdt_donnell_bc1', -0.012621439862441628],
+            ['fsdt_donnell_bcn', -0.01129143658649284],
             ]
 
     for model, wmin in wmin_ref:
