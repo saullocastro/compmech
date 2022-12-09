@@ -1,4 +1,5 @@
 Github Actions status:
+[![pytest and coverage](https://github.com/saullocastro/compmech/actions/workflows/pytest_and_coverage.yml/badge.svg)](https://github.com/saullocastro/compmech/actions/workflows/pytest_and_coverage.yml)
 
 Coverage status:
 [![codecov](https://codecov.io/gh/saullocastro/compmech/branch/master/graph/badge.svg?token=12LJVZAYTL)](https://codecov.io/gh/saullocastro/compmech)
