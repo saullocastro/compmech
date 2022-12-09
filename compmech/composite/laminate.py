@@ -5,14 +5,12 @@ Composite Laminate Module (:mod:`compmech.composite.laminate`)
 .. currentmodule:: compmech.composite.laminate
 
 """
-from __future__ import division, absolute_import
-
 import numpy as np
 
 from .lamina import Lamina
 from .matlamina import read_laminaprop
 from compmech.constants import DOUBLE
-from compmech.logger import *
+from compmech.logger import error
 
 
 def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],
@@ -189,7 +187,7 @@ class Laminate(object):
             e1, e2, g12, nu12, nu21
 
         """
-        AI = np.matrix(self.ABD, dtype=DOUBLE).I
+        AI = np.linalg.inv(self.ABD)
         a11, a12, a22, a33 = AI[0,0], AI[0,1], AI[1,1], AI[2,2]
         self.e1 = 1./(self.t*a11)
         self.e2 = 1./(self.t*a22)
