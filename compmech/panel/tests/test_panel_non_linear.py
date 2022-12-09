@@ -1,8 +1,6 @@
 import numpy as np
 
 from compmech.panel import Panel
-from compmech.analysis import Analysis
-from compmech.sparse import solve
 
 
 def test_kT():
@@ -79,10 +77,8 @@ def test_fint():
 
         p.static(NLgeom=True, silent=True)
         c = p.analysis.cs[0]
-        p.plot(c, vec='w', filename='tmp_test_non_linear.png', colorbar=True)
 
-
-        p.uvw(p.analysis.cs[0])
+        p.uvw(c)
         assert np.isclose(p.w.max(), 0.000144768080125, rtol=0.001)
 
 
