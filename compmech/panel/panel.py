@@ -1,4 +1,3 @@
-import platform
 import gc
 import pickle
 from multiprocessing import cpu_count
@@ -1393,8 +1392,6 @@ class Panel(object):
                                               self.phix, self.phiy)
 
         import matplotlib
-        if platform.system().lower() == 'linux':
-            matplotlib.use('Agg')
         import matplotlib.pyplot as plt
 
         msg('Computing field variables...', level=1)

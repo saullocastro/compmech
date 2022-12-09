@@ -1,4 +1,3 @@
-import platform
 import gc
 import pickle
 from multiprocessing import cpu_count
@@ -757,7 +756,6 @@ class StiffPanelBay(object):
     def calc_kM(self, silent=False):
         self._rebuild()
         msg('Calculating kM... ', level=2, silent=silent)
-        model = self.model
 
         size = self.get_size()
 
@@ -818,13 +816,11 @@ class StiffPanelBay(object):
     def calc_kA(self, silent=False):
         self._rebuild()
         msg('Calculating kA... ', level=2, silent=silent)
-        model = self.model
         a = self.a
         b = self.b
         r = self.r if self.r is not None else 0.
         m = self.m
         n = self.n
-        size = self.get_size()
 
         if self.beta is None:
             if self.Mach < 1:
@@ -882,7 +878,6 @@ class StiffPanelBay(object):
     def calc_cA(self, silent=False):
         self._rebuild()
         msg('Calculating cA... ', level=2, silent=silent)
-        model = self.model
         a = self.a
         b = self.b
         r = self.r
@@ -1205,8 +1200,6 @@ class StiffPanelBay(object):
                                               self.phix, self.phiy)
 
         import matplotlib
-        if platform.system().lower() == 'linux':
-            matplotlib.use('Agg')
         import matplotlib.pyplot as plt
 
         msg('Computing field variables...', level=1, silent=silent)

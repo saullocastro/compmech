@@ -1,4 +1,3 @@
-import platform
 import gc
 import os
 import traceback
@@ -1829,8 +1828,6 @@ class ConeCyl(object):
                                               self.phix, self.phit)
 
         import matplotlib
-        if platform.system().lower() == 'linux':
-            matplotlib.use('Agg')
         import matplotlib.pyplot as plt
 
         from . plotutils import get_filename
