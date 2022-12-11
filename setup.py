@@ -68,7 +68,7 @@ def read(fname):
 #_____________________________________________________________________________
 
 install_requires = [
-        "numpy >= 1.20.0",
+        "numpy >= 1.23.0",
         "scipy",
         "matplotlib",
         ]
@@ -89,7 +89,6 @@ Operating System :: Unix
 Operating System :: POSIX :: BSD
 Programming Language :: Fortran
 Programming Language :: C
-Programming Language :: Python :: 3.7
 Programming Language :: Python :: 3.8
 Programming Language :: Python :: 3.9
 Programming Language :: Python :: 3.10
