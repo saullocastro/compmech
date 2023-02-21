@@ -19,6 +19,8 @@ def calc_kt_kr(p1, p2, connection_type):
             - 'xcte'
             - 'ycte'
             - 'bot-top'
+            - 'xcte-ycte': to a 90° connection
+            - 'ycte-xcte': to a 90° connection
 
     Returns
     -------
@@ -71,5 +73,13 @@ def calc_kt_kr(p1, p2, connection_type):
     elif connection_type.lower() == 'bot-top':
         kt = 4*A11_p1*A11_p2/((A11_p1 + A11_p2)*(hp1 + hp2)) / min(p1.a, p1.b)
         kr = None
+        return kt, kr
+    elif connection_type.lower() == 'xcte-ycte':
+        kt = 4*A11_p1*A22_p2 / ((A11_p1+A22_p2)*(hp1+hp2))
+        kr = 4*D11_p1*D22_p2 / ((D11_p1+D22_p2)*(hp1+hp2))
+        return kt, kr
+    elif connection_type.lower() == 'ycte-xcte':
+        kt = 4*A22_p1*A11_p2 / ((A22_p1+A11_p2)*(hp1+hp2))
+        kr = 4*D22_p1*D11_p2 / ((D22_p1+D11_p2)*(hp1+hp2))
         return kt, kr
 
