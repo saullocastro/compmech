@@ -127,15 +127,15 @@ def fkCBFxcte11(double kt, double kr, object p1, double xcte1,
                         c += 1
                         kCBFxcte11r[c] = row+0
                         kCBFxcte11c[c] = col+0
-                        kCBFxcte11v[c] += 0.25*b1*a2 * f1Auf1Bu*g1Au*g1Bu*kt
+                        kCBFxcte11v[c] += 0.5*b1 * f1Auf1Bu*g1Au*g1Bu*kt
                         c += 1
                         kCBFxcte11r[c] = row+1
                         kCBFxcte11c[c] = col+1
-                        kCBFxcte11v[c] += 0.25*b1*a2 * f1Avf1Bv*g1Av*g1Bv*kt
+                        kCBFxcte11v[c] += 0.5*b1 * f1Avf1Bv*g1Av*g1Bv*kt
                         c += 1
                         kCBFxcte11r[c] = row+2
                         kCBFxcte11c[c] = col+2
-                        kCBFxcte11v[c] += 0.25*b1*a2*kt * (f1Awf1Bw*g1Aw*g1Bw + 4*f1Awf1Bw*g1Awxi*g1Bwxi*kr/((a1*a1)*kt))
+                        kCBFxcte11v[c] += 0.5*b1*kt * (f1Awf1Bw*g1Aw*g1Bw + 4*f1Awf1Bw*g1Awxi*g1Bwxi*kr/((a1*a1)*kt))
 
     kCBFxcte11 = coo_matrix((kCBFxcte11v, (kCBFxcte11r, kCBFxcte11c)), shape=(size, size))
 
@@ -181,7 +181,7 @@ def fkCBFxycte12(double kt, double kr, object p1, object p2,
     '''
     cdef int i1, j1, k2, l2, c, row, col
     cdef int m1, n1, m2, n2
-    cdef double a1, b1, b2
+    cdef double a1, a2, b1, b2
     cdef double u1tx1, u1rx1, u2tx1, u2rx1, u1tx2, u1rx2, u2tx2, u2rx2
     cdef double v1tx1, v1rx1, v2tx1, v2rx1, v1tx2, v1rx2, v2tx2, v2rx2
     cdef double w1tx1, w1rx1, w2tx1, w2rx1, w1tx2, w1rx2, w2tx2, w2rx2
@@ -189,14 +189,15 @@ def fkCBFxycte12(double kt, double kr, object p1, object p2,
     cdef double v1ty1, v1ry1, v2ty1, v2ry1, v1ty2, v1ry2, v2ty2, v2ry2
     cdef double w1ty1, w1ry1, w2ty1, w2ry1, w1ty2, w1ry2, w2ty2, w2ry2
 
-    cdef np.ndarray[cINT, ndim=1] kCBFxcte12r, kCBFxcte12c
-    cdef np.ndarray[cDOUBLE, ndim=1] kCBFxcte12v
+    cdef np.ndarray[cINT, ndim=1] kCBFxycte12r, kCBFxycte12c
+    cdef np.ndarray[cDOUBLE, ndim=1] kCBFxycte12v
 
     cdef double xicte1, etacte2
-    cdef double f1Auf2Bu, f1Avf2Bw, f1Awf2Bv, f1Awf2Bw
+    cdef double f1Auf2Bw, f1Avf2Bu, f1Awf2Bv, f1Awf2Bw
     cdef double g1Au, g1Av, g1Aw, g1Awxi, g2Bu, g2Bv, g2Bw, g2Bwxi
 
     a1 = p1.a
+    a2 = p2.a
     b1 = p1.b
     b2 = p2.b
     m1 = p1.m
@@ -218,7 +219,7 @@ def fkCBFxycte12(double kt, double kr, object p1, object p2,
     w1ty2 = p2.w1ty ; w1ry2 = p2.w1ry ; w2ty2 = p2.w2ty ; w2ry2 = p2.w2ry
 
     xicte1 = 2*xcte1/a1 - 1.
-    etacte2 = 2*xcte2/b2 - 1.
+    etacte2 = 2*ycte2/b2 - 1.
 
     fdim = 4*m1*n1*m2*n2
 
@@ -231,9 +232,9 @@ def fkCBFxycte12(double kt, double kr, object p1, object p2,
         for i1 in range(m1):
             for k2 in range(m2):
                 f1Auf2Bw = integral_ff(i1, k2, u1ty1, u1ry1, u2ty1, u2ry1, w1tx2, w1rx2, w2tx2, w2rx2)
-                f1Avf2Bu = integral_ff(i1, k2, v1ty1, v1ry1, v2ty1, v2ry1, u1tx2, u1rx2, u2tx2, u2rxy2)
+                f1Avf2Bu = integral_ff(i1, k2, v1ty1, v1ry1, v2ty1, v2ry1, u1tx2, u1rx2, u2tx2, u2rx2)
                 f1Awf2Bv = integral_ff(i1, k2, w1ty1, w1ry1, w2ty1, w2ry1, v1tx2, v1rx2, v2tx2, v2rx2)
-                f1Awf2Bw = integral_ff(i1, k2, w1ty1, w1ry1, w2ty1, w2ry1, w1tx2, w1rx2, w2tx2, w2rxy2)
+                f1Awf2Bw = integral_ff(i1, k2, w1ty1, w1ry1, w2ty1, w2ry1, w1tx2, w1rx2, w2tx2, w2rx2)
 
                 for j1 in range(n1):
                     g1Au = calc_f(j1, xicte1, u1tx1, u1rx1, u2tx1, u2rx1)
@@ -311,7 +312,7 @@ def fkCBFycte22(double kt, double kr, object p1, object p2,
     '''
     cdef int i2, k2, j2, l2, c, row, col
     cdef int m2, n2
-    cdef double a1, b2
+    cdef double a1, a2, b1, b2
     cdef double u1tx2, u1rx2, u2tx2, u2rx2
     cdef double v1tx2, v1rx2, v2tx2, v2rx2
     cdef double w1tx2, w1rx2, w2tx2, w2rx2
@@ -319,13 +320,15 @@ def fkCBFycte22(double kt, double kr, object p1, object p2,
     cdef double v1ty2, v1ry2, v2ty2, v2ry2
     cdef double w1ty2, w1ry2, w2ty2, w2ry2
 
-    cdef np.ndarray[cINT, ndim=1] kCBFxcte22r, kCBFxcte22c
-    cdef np.ndarray[cDOUBLE, ndim=1] kCBFxcte22v
+    cdef np.ndarray[cINT, ndim=1] kCBFycte22r, kCBFycte22c
+    cdef np.ndarray[cDOUBLE, ndim=1] kCBFycte22v
 
-    cdef double yicte2
+    cdef double etacte2
     cdef double f2Auf2Bu, f2Avf2Bv, f2Awf2Bw
     cdef double g2Au, g2Bu, g2Av, g2Bv, g2Aw, g2Bw, g2Awxi, g2Bwxi
     a1 = p1.a
+    a2 = p2.a
+    b1 = p1.b
     b2 = p2.b
     m2 = p2.m
     n2 = p2.n
@@ -372,18 +375,18 @@ def fkCBFycte22(double kt, double kr, object p1, object p2,
                         g2Bwxi = calc_fxi(l2, etacte2, w1ty2, w1ry2, w2ty2, w2ry2)
 
                         c += 1
-                        kCBFxcte22r[c] = row+0
-                        kCBFxcte22c[c] = col+0
-                        kCBFxcte22v[c] += 0.25*b1*a2 * f2Auf2Bu*g2Au*g2Bu*kt
+                        kCBFycte22r[c] = row+0
+                        kCBFycte22c[c] = col+0
+                        kCBFycte22v[c] += 0.25*b1*a2 * f2Auf2Bu*g2Au*g2Bu*kt
                         c += 1
-                        kCBFxcte22r[c] = row+1
-                        kCBFxcte22c[c] = col+1
-                        kCBFxcte22v[c] += 0.25*b1*a2 * f2Avf2Bv*g2Av*g2Bv*kt
+                        kCBFycte22r[c] = row+1
+                        kCBFycte22c[c] = col+1
+                        kCBFycte22v[c] += 0.25*b1*a2 * f2Avf2Bv*g2Av*g2Bv*kt
                         c += 1
-                        kCBFxcte22r[c] = row+2
-                        kCBFxcte22c[c] = col+2
-                        kCBFxcte22v[c] += 0.25*b1*a2 * kt*(f2Awf2Bw*g2Aw*g2Bw + 4*f2Awf2Bw*g2Awxi*g2Bwxi*kr/((b2*b2)*kt))
+                        kCBFycte22r[c] = row+2
+                        kCBFycte22c[c] = col+2
+                        kCBFycte22v[c] += 0.25*b1*a2 * kt*(f2Awf2Bw*g2Aw*g2Bw + 4*f2Awf2Bw*g2Awxi*g2Bwxi*kr/((b2*b2)*kt))
 
-    kCBFxcte22 = coo_matrix((kCBFxcte22v, (kCBFxcte22r, kCBFxcte22c)), shape=(size, size))
+    kCBFycte22 = coo_matrix((kCBFycte22v, (kCBFycte22r, kCBFycte22c)), shape=(size, size))
 
-    return kCBFxcte22
+    return kCBFycte22

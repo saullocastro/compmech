@@ -193,7 +193,7 @@ def fkCBFxcte12(double kt, double kr, object p1, object p2,
     cdef np.ndarray[cDOUBLE, ndim=1] kCBFxcte12v
 
     cdef double xicte1, xicte2
-    cdef double f1Auf2Bu, f1Avf2Bw, f1Awf2Bv, f1Awf2Bw
+    cdef double f1Auf2Bw, f1Avf2Bv, f1Awf2Bu, f1Awf2Bw
     cdef double g1Au, g1Av, g1Aw, g1Awxi, g2Bu, g2Bv, g2Bw, g2Bwxi
 
     a1 = p1.a
