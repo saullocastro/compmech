@@ -11,7 +11,7 @@ import matplotlib.cm as cm
 
 from compmech.logger import msg, warn
 from compmech.constants import DOUBLE
-from compmech.panel.panel import check_c
+from compmech.panel._panel import check_c
 import compmech.panel.modelDB as modelDB
 import compmech.panel.connections as connections
 from compmech.sparse import make_symmetric, finalize_symmetric_matrix
