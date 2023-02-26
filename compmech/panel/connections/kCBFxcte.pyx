@@ -197,7 +197,7 @@ def fkCBFxcte12(double kt, double kr, object p1, object p2,
     cdef double g1Au, g1Av, g1Aw, g1Awxi, g2Bu, g2Bv, g2Bw, g2Bwxi
 
     a1 = p1.a
-    a2 = p1.a2
+    a2 = p1.a
     b1 = p1.b
     b2 = p2.b
     m1 = p1.m
