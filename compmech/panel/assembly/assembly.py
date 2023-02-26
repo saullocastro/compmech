@@ -502,7 +502,8 @@ class PanelAssembly(object):
         for connecti in conn:
             p1 = connecti['p1']
             p2 = connecti['p2']
-            if connecti['func'] == 'SSycte':
+            connection_function = connecti['func']
+            if connection_function == 'SSycte':
                 kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
                 k0_conn += connections.kCSSycte.fkCSSycte11(
                         kt, kr, p1, connecti['ycte1'],
@@ -513,7 +514,7 @@ class PanelAssembly(object):
                 k0_conn += connections.kCSSycte.fkCSSycte22(
                         kt, kr, p1, p2, connecti['ycte2'],
                         size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'SSxcte':
+            elif connection_function == 'SSxcte':
                 kt, kr = connections.calc_kt_kr(p1, p2, 'xcte')
                 k0_conn += connections.kCSSxcte.fkCSSxcte11(
                         kt, kr, p1, connecti['xcte1'],
@@ -524,7 +525,7 @@ class PanelAssembly(object):
                 k0_conn += connections.kCSSxcte.fkCSSxcte22(
                         kt, kr, p1, p2, connecti['xcte2'],
                         size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'SB':
+            elif connection_function == 'SB':
                 kt, kr = connections.calc_kt_kr(p1, p2, 'bot-top')
                 dsb = sum(p1.plyts)/2. + sum(p2.plyts)/2.
                 k0_conn += connections.kCSB.fkCSB11(kt, dsb, p1,
@@ -533,7 +534,7 @@ class PanelAssembly(object):
                         size, p1.row_start, col0=p2.col_start)
                 k0_conn += connections.kCSB.fkCSB22(kt, p1, p2,
                         size, p2.row_start, col0=p2.col_start)
-            elif connecti['func'] == 'BFycte':
+            elif connection_function == 'BFycte':
                 kt, kr = connections.calc_kt_kr(p1, p2, 'ycte')
                 k0_conn += connections.kCBFycte.fkCBFycte11(
                         kt, kr, p1, connecti['ycte1'],
@@ -544,8 +545,30 @@ class PanelAssembly(object):
                 k0_conn += connections.kCBFycte.fkCBFycte22(
                         kt, kr, p1, p2, connecti['ycte2'],
                         size, p2.row_start, col0=p2.col_start)
+            elif connection_function == 'BFxcte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'xcte')
+                k0_conn += connections.kCBFxcte.fkCBFxcte11(
+                        kt, kr, p1, connecti['xcte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCBFxcte.fkCBFxcte12(
+                        kt, kr, p1, p2, connecti['xcte1'], connecti['xcte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCBFxcte.fkCBFxcte22(
+                        kt, kr, p1, p2, connecti['xcte2'],
+                        size, p2.row_start, col0=p2.col_start)
+            elif connection_function == 'kCLTxycte':
+                kt, kr = connections.calc_kt_kr(p1, p2, 'xcte-ycte')
+                k0_conn += connections.kCLTxycte.fkCBFxcte11(
+                        kt, kr, p1, connecti['xcte1'],
+                        size, p1.row_start, col0=p1.col_start)
+                k0_conn += connections.kCLTxycte.fkCBFxycte12(
+                        kt, kr, p1, p2, connecti['xcte1'], connecti['ycte2'],
+                        size, p1.row_start, col0=p2.col_start)
+                k0_conn += connections.kCLTxycte.fkCBFycte22(
+                        kt, kr, p1, p2, connecti['ycte2'],
+                        size, p2.row_start, col0=p2.col_start)
             else:
-                raise
+                raise ValueError(f'{connection_function} not recognized.')
 
         if finalize:
             k0_conn = finalize_symmetric_matrix(k0_conn)
