@@ -119,10 +119,10 @@ def fkCBFxcte11(double kt, double kr, object p1, double xcte1,
                         if row > col:
                             continue
 
-                        g1Bu = calc_f(k1, xicte1, u1tx1, u1rx1, u2tx1, u2rx1)
-                        g1Bv = calc_f(k1, xicte1, v1tx1, v1rx1, v2tx1, v2rx1)
-                        g1Bw = calc_f(k1, xicte1, w1tx1, w1rx1, w2tx1, w2rx1)
-                        g1Bwxi = calc_fxi(k1, xicte1, w1tx1, w1rx1, w2tx1, w2rx1)
+                        f1Bu = calc_f(k1, xicte1, u1tx1, u1rx1, u2tx1, u2rx1)
+                        f1Bv = calc_f(k1, xicte1, v1tx1, v1rx1, v2tx1, v2rx1)
+                        f1Bw = calc_f(k1, xicte1, w1tx1, w1rx1, w2tx1, w2rx1)
+                        f1Bwxi = calc_fxi(k1, xicte1, w1tx1, w1rx1, w2tx1, w2rx1)
 
                         c += 1
                         kCBFxcte11r[c] = row+0
@@ -135,7 +135,7 @@ def fkCBFxcte11(double kt, double kr, object p1, double xcte1,
                         c += 1
                         kCBFxcte11r[c] = row+2
                         kCBFxcte11c[c] = col+2
-                        kCBFxcte11v[c] += 0.5*b1*kt*(f1Aw*f1Bw*g1Awf1Bw + 4*f1Awxi*f1Bwxi*f1Awf1Bw*kr/((a1*a1)*kt))
+                        kCBFxcte11v[c] += 0.5*b1*kt*(f1Aw*f1Bw*g1Awf1Bw + 4*f1Awxi*f1Bwxi*g1Awf1Bw*kr/((a1*a1)*kt))
 
     kCBFxcte11 = coo_matrix((kCBFxcte11v, (kCBFxcte11r, kCBFxcte11c)), shape=(size, size))
 
@@ -375,7 +375,7 @@ def fkCBFxcte22(double kt, double kr, object p1, object p2,
                         c += 1
                         kCBFxcte22r[c] = row+0
                         kCBFxcte22c[c] = col+0
-                        kCBFxcte22v[c] += 0.5*b1*f2Au*f2Bu*f2Auf2Bu*kt
+                        kCBFxcte22v[c] += 0.5*b1*f2Au*f2Bu*g2Auf2Bu*kt
                         c += 1
                         kCBFxcte22r[c] = row+1
                         kCBFxcte22c[c] = col+1
@@ -383,7 +383,7 @@ def fkCBFxcte22(double kt, double kr, object p1, object p2,
                         c += 1
                         kCBFxcte22r[c] = row+2
                         kCBFxcte22c[c] = col+2
-                        kCBFxcte22v[c] += 0.5*b1*kt*(f2Aw*f2Bw*f2Awf2Bw + 4*f2Awxi*f2Bwxi*g2Awf2Bw*kr/((a2*a2)*kt))
+                        kCBFxcte22v[c] += 0.5*b1*kt*(f2Aw*f2Bw*g2Awf2Bw + 4*f2Awxi*f2Bwxi*g2Awf2Bw*kr/((a2*a2)*kt))
 
     kCBFxcte22 = coo_matrix((kCBFxcte22v, (kCBFxcte22r, kCBFxcte22c)), shape=(size, size))
 
