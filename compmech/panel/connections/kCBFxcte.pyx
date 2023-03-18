@@ -197,7 +197,7 @@ def fkCBFxcte12(double kt, double kr, object p1, object p2,
     cdef double f1Au, f1Av, f1Aw, f1Awxi, f2Bu, f2Bv, f2Bw, f2Bwxi
 
     a1 = p1.a
-    a2 = p1.a
+    a2 = p2.a
     b1 = p1.b
     b2 = p2.b
     m1 = p1.m
@@ -260,13 +260,13 @@ def fkCBFxcte12(double kt, double kr, object p1, object p2,
                         kCBFxcte12c[c] = col+2
                         kCBFxcte12v[c] += -0.5*b1*f1Au*f2Bw*g1Auf2Bw*kt
                         c += 1
-                        kCBFxcte12r[c] = row+2
-                        kCBFxcte12c[c] = col+0
-                        kCBFxcte12v[c] += -0.5*b1*f1Aw*f2Bu*g1Awf2Bu*kt
-                        c += 1
                         kCBFxcte12r[c] = row+1
                         kCBFxcte12c[c] = col+1
                         kCBFxcte12v[c] += -0.5*b1*f1Av*f2Bv*g1Avf2Bv*kt
+                        c += 1
+                        kCBFxcte12r[c] = row+2
+                        kCBFxcte12c[c] = col+0
+                        kCBFxcte12v[c] += 0.5*b1*f1Aw*f2Bu*g1Awf2Bu*kt
                         c += 1
                         kCBFxcte12r[c] = row+2
                         kCBFxcte12c[c] = col+2
