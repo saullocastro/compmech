@@ -90,4 +90,6 @@ from . kCBFycte import *
 from . kCSB import *
 from . kCSSxcte import *
 from . kCSSycte import *
+from . kCBFxcte import *
+from . kCLTxycte import *
 from . penalty_constants import calc_kt_kr

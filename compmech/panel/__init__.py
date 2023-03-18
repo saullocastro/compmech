@@ -9,4 +9,4 @@ Semi-analytical Models for Panels (:mod:`compmech.panel`)
     :members:
 
 """
-from . panel import Panel
+from . _panel import Panel
