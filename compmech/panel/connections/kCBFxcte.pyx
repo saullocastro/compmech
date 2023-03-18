@@ -262,7 +262,7 @@ def fkCBFxcte12(double kt, double kr, object p1, object p2,
                         c += 1
                         kCBFxcte12r[c] = row+2
                         kCBFxcte12c[c] = col+0
-                        kCBFxcte12v[c] += 0.5*b1*f1Aw*f2Bu*g1Awf2Bu*kt
+                        kCBFxcte12v[c] += -0.5*b1*f1Aw*f2Bu*g1Awf2Bu*kt
                         c += 1
                         kCBFxcte12r[c] = row+1
                         kCBFxcte12c[c] = col+1
