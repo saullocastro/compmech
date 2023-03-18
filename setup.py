@@ -681,15 +681,6 @@ extensions = [
         include_dirs=include_dirs, library_dirs=library_dirs,
         extra_compile_args=compiler_args, extra_link_args=link_args,
         language='c'),
-    Extension('compmech.panel.connections.kCLTxycte',
-        sources=[
-            root_path + '/panel/connections/kCLTxycte.pyx',
-            bardell_int_src,
-            bardell_func_src,
-            ],
-        include_dirs=include_dirs, library_dirs=library_dirs,
-        extra_compile_args=compiler_args, extra_link_args=link_args,
-        language='c'),
 
     Extension('compmech.stiffener.models.bladestiff1d_clt_donnell_bardell',
         sources=[
