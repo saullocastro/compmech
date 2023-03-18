@@ -3,10 +3,19 @@ Test description
 ================
 
 This test verifies the connection kCBFxcte.
+It is built two identical panels using different connections.
 
-It is built two identical panels using....
+panel_BFycte: 
+    Closed section using the existing BFycte connection.
 
+panel_BFxcte: 
+    Closed section using the BFxcte connection. 
+    This model is equivalent the "panel_BFycte", except it used loads, connections and BCs
+    in the xcte direction.
 
+The first eigen value of each model are compared in this test and a reference NASTRAN model
+"reference_model_BFxcte.dat" is used to double check the results. Compmech models presents an error 
+less than 1% compared with NASTRAN.
 '''
 
 import pytest
@@ -19,7 +28,13 @@ from compmech.analysis import lb, static
 
 @pytest.fixture
 def eig_value_panel_BFycte():
+    '''
+    Closed section using BFYcte connections
 
+    returns
+    -------
+        First eigenvalue of the assembly.   
+    '''
 
     # Properties
     E1 = 127560 # MPa
@@ -119,7 +134,13 @@ def eig_value_panel_BFycte():
 
 @pytest.fixture
 def eig_value_panel_BFxcte():
+    '''
+    Closed section using BFxcte connections
 
+    returns
+    -------
+        First eigenvalue of the assembly.   
+    '''
 
     # Properties
     E1 = 127560 # MPa
@@ -217,6 +238,10 @@ def eig_value_panel_BFxcte():
 
 
 def test_kCBFxte(eig_value_panel_BFycte, eig_value_panel_BFxcte):
+    '''
+    This test compare the first eigenvalue of the assemblies.
+    They cannot present an error higher than 1%.
+    '''
     assert np.isclose(eig_value_panel_BFycte, eig_value_panel_BFycte, atol=0.01, rtol=0.01)
     
 
