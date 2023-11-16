@@ -4,11 +4,8 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-from __future__ import division
-
 from scipy.sparse import coo_matrix
 import numpy as np
-cimport numpy as np
 
 from compmech.panel import Panel
 
@@ -24,9 +21,7 @@ cdef extern from 'bardell_functions.h':
     double calc_fxi(int i, double xi, double xi1t, double xi1r,
                     double xi2t, double xi2r) nogil
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 cdef int num = 3
@@ -72,8 +67,8 @@ def fkCSSycte11(double kt, double kr, object p1, double ycte1,
     cdef double v1ty1, v1ry1, v2ty1, v2ry1
     cdef double w1ty1, w1ry1, w2ty1, w2ry1
 
-    cdef np.ndarray[cINT, ndim=1] kCSSycte11r, kCSSycte11c
-    cdef np.ndarray[cDOUBLE, ndim=1] kCSSycte11v
+    cdef long [:] kCSSycte11r, kCSSycte11c
+    cdef double [:] kCSSycte11v
 
     cdef double etacte1
     cdef double f1Auf1Bu, f1Avf1Bv, f1Awf1Bw
@@ -191,8 +186,8 @@ def fkCSSycte12(double kt, double kr, object p1, object p2,
     cdef double v1ty1, v1ry1, v2ty1, v2ry1, v1ty2, v1ry2, v2ty2, v2ry2
     cdef double w1ty1, w1ry1, w2ty1, w2ry1, w1ty2, w1ry2, w2ty2, w2ry2
 
-    cdef np.ndarray[cINT, ndim=1] kCSSycte12r, kCSSycte12c
-    cdef np.ndarray[cDOUBLE, ndim=1] kCSSycte12v
+    cdef long [:] kCSSycte12r, kCSSycte12c
+    cdef double [:] kCSSycte12v
 
     cdef double etacte1, etacte2
     cdef double f1Auf2Bu, f1Avf2Bv, f1Awf2Bw
@@ -318,8 +313,8 @@ def fkCSSycte22(double kt, double kr, object p1, object p2,
     cdef double v1ty2, v1ry2, v2ty2, v2ry2
     cdef double w1ty2, w1ry2, w2ty2, w2ry2
 
-    cdef np.ndarray[cINT, ndim=1] kCSSycte22r, kCSSycte22c
-    cdef np.ndarray[cDOUBLE, ndim=1] kCSSycte22v
+    cdef long [:] kCSSycte22r, kCSSycte22c
+    cdef double [:] kCSSycte22v
 
     cdef double etacte2
     cdef double f2Auf2Bu, f2Avf2Bv, f2Awf2Bw

@@ -4,11 +4,8 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-from __future__ import division
-
 from scipy.sparse import coo_matrix
 import numpy as np
-cimport numpy as np
 
 cdef extern from 'bardell.h':
     double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
@@ -44,9 +41,7 @@ cdef extern from 'bardell_12.h':
                        double x1t, double x1r, double x2t, double x2r,
                        double y1t, double y1r, double y2t, double y2r) nogil
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 cdef int num = 3
@@ -54,7 +49,7 @@ cdef int num = 3
 
 def fk0(object panel, int size, int row0, int col0):
     cdef double a, b, r
-    cdef np.ndarray[cDOUBLE, ndim=2] F
+    cdef double [:, ::1] F
     cdef int m, n
     cdef double u1tx, u1rx, u2tx, u2rx
     cdef double v1tx, v1rx, v2tx, v2rx
@@ -68,8 +63,8 @@ def fk0(object panel, int size, int row0, int col0):
     cdef double B11, B12, B16, B22, B26, B66
     cdef double D11, D12, D16, D22, D26, D66
 
-    cdef np.ndarray[cINT, ndim=1] k0r, k0c
-    cdef np.ndarray[cDOUBLE, ndim=1] k0v
+    cdef long [:] k0r, k0c
+    cdef double [:] k0v
 
     cdef double fAufBu, fAufBuxi, fAuxifBu, fAuxifBuxi, fAufBv, fAufBvxi,
     cdef double fAuxifBv, fAuxifBvxi, fAuxifBwxixi, fAuxifBw, fAufBwxixi,
@@ -295,7 +290,7 @@ def fk0(object panel, int size, int row0, int col0):
 
 def fk0y1y2(double y1, double y2, object panel, int size, int row0, int col0):
     cdef double a, b, r
-    cdef np.ndarray[cDOUBLE, ndim=2] F
+    cdef double [:, ::1] F
     cdef int m, n
     cdef double u1tx, u1rx, u2tx, u2rx
     cdef double v1tx, v1rx, v2tx, v2rx
@@ -310,8 +305,8 @@ def fk0y1y2(double y1, double y2, object panel, int size, int row0, int col0):
     cdef double B11, B12, B16, B22, B26, B66
     cdef double D11, D12, D16, D22, D26, D66
 
-    cdef np.ndarray[cINT, ndim=1] k0y1y2r, k0y1y2c
-    cdef np.ndarray[cDOUBLE, ndim=1] k0y1y2v
+    cdef long [:] k0y1y2r, k0y1y2c
+    cdef double [:] k0y1y2v
 
     cdef double fAufBu, fAufBuxi, fAuxifBu, fAuxifBuxi, fAufBv, fAufBvxi,
     cdef double fAuxifBv, fAuxifBvxi, fAuxifBwxixi, fAuxifBw, fAufBwxixi,
@@ -547,8 +542,8 @@ def fkG0(double Nxx, double Nyy, double Nxy, object panel,
 
     cdef int i, k, j, l, c, row, col
 
-    cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
-    cdef np.ndarray[cDOUBLE, ndim=1] kG0v
+    cdef long [:] kG0r, kG0c
+    cdef double [:] kG0v
 
     cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
     cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
@@ -614,8 +609,8 @@ def fkG0y1y2(double y1, double y2, double Nxx, double Nyy, double Nxy,
     cdef int i, k, j, l, c, row, col
     cdef double eta1, eta2
 
-    cdef np.ndarray[cINT, ndim=1] kG0y1y2r, kG0y1y2c
-    cdef np.ndarray[cDOUBLE, ndim=1] kG0y1y2v
+    cdef long [:] kG0y1y2r, kG0y1y2c
+    cdef double [:] kG0y1y2v
 
     cdef double fAwxifBwxi, fAwfBwxi, fAwxifBw, fAwfBw
     cdef double gAwetagBweta, gAwgBweta, gAwetagBw, gAwgBw
@@ -686,8 +681,8 @@ def fkM(double d, object panel, int size, int row0, int col0):
 
     cdef int i, k, j, l, c, row, col
 
-    cdef np.ndarray[cINT, ndim=1] kMr, kMc
-    cdef np.ndarray[cDOUBLE, ndim=1] kMv
+    cdef long [:] kMr, kMc
+    cdef double [:] kMv
 
     cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwxifBu, fAwfBv, fAwfBw, fAwxifBwxi
     cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBu, gAwetagBv, gAwgBw, gAwetagBweta
@@ -795,8 +790,8 @@ def fkMy1y2(double y1, double y2, double d, object panel,
     cdef int i, k, j, l, c, row, col
     cdef double eta1, eta2
 
-    cdef np.ndarray[cINT, ndim=1] kMy1y2r, kMy1y2c
-    cdef np.ndarray[cDOUBLE, ndim=1] kMy1y2v
+    cdef long [:] kMy1y2r, kMy1y2c
+    cdef double [:] kMy1y2v
 
     cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwxifBu, fAwfBv, fAwfBw, fAwxifBwxi
     cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBu, gAwetagBv, gAwgBw, gAwetagBweta
@@ -901,8 +896,8 @@ def fkAx(double beta, double gamma, object panel,
     cdef double w1ty, w1ry, w2ty, w2ry
 
     cdef int i, k, j, l, c, row, col
-    cdef np.ndarray[cINT, ndim=1] kAxr, kAxc
-    cdef np.ndarray[cDOUBLE, ndim=1] kAxv
+    cdef long [:] kAxr, kAxc
+    cdef double [:] kAxv
 
     cdef double fAwfBw, fAwxifBw, gAwgBw
 
@@ -959,8 +954,8 @@ def fkAy(double beta, object panel, int size, int row0, int col0):
     cdef double w1ty, w1ry, w2ty, w2ry
 
     cdef int i, k, j, l, c, row, col
-    cdef np.ndarray[cINT, ndim=1] kAyr, kAyc
-    cdef np.ndarray[cDOUBLE, ndim=1] kAyv
+    cdef long [:] kAyr, kAyc
+    cdef double [:] kAyv
 
     cdef double fAwfBw, gAwetagBw
 
@@ -1016,8 +1011,8 @@ def fcA(double aeromu, object panel, int size, int row0, int col0):
     cdef double w1ty, w1ry, w2ty, w2ry
 
     cdef int i, k, j, l, c, row, col
-    cdef np.ndarray[cINT, ndim=1] cAr, cAc
-    cdef np.ndarray[cDOUBLE, ndim=1] cAv
+    cdef long [:] cAr, cAc
+    cdef double [:] cAv
 
     cdef double fAwfBw, gAwgBw
 

@@ -4,7 +4,6 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-cimport numpy as np
 import numpy as np
 from libc.stdlib cimport malloc, free
 from cython.parallel import prange
@@ -16,15 +15,12 @@ cdef extern from 'bardell_functions.h':
                   double xi2t, double xi2r) nogil
 
 DOUBLE = np.float64
-ctypedef np.double_t cDOUBLE
 
 cdef int nmax = 30
 cdef int num = 1
 
 
-def fuvw(np.ndarray[cDOUBLE, ndim=1] c, object p,
-        np.ndarray[cDOUBLE, ndim=1] xs, np.ndarray[cDOUBLE, ndim=1] ys,
-        int num_cores=4):
+def fuvw(double [:] c, object p, double [:] xs, double [:] ys, int num_cores=4):
     cdef double a, b
     cdef int m, n
     cdef double w1tx, w1rx, w2tx, w2rx
@@ -35,9 +31,9 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, object p,
     n = p.n
     w1tx = p.w1tx ; w1rx = p.w1rx ; w2tx = p.w2tx ; w2rx = p.w2rx
     w1ty = p.w1ty ; w1ry = p.w1ry ; w2ty = p.w2ty ; w2ry = p.w2ry
-    cdef int size_core, pti
-    cdef np.ndarray[cDOUBLE, ndim=2] us, vs, ws, phixs, phiys
-    cdef np.ndarray[cDOUBLE, ndim=2] xs_core, ys_core
+    cdef int size_core, pti, j
+    cdef double [:, ::1] us, vs, ws, phixs, phiys
+    cdef double [:, ::1] xs_core, ys_core
 
     size = xs.shape[0]
     add_size = num_cores - (size % num_cores)
@@ -77,8 +73,10 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, object p,
              w1tx, w1rx, w2tx, w2rx,
              w1ty, w1ry, w2ty, w2ry)
 
-    phixs *= -1.
-    phiys *= -1.
+    for pti in range(num_cores):
+        for j in range(size_core):
+            phixs[pti, j] *= -1.
+            phiys[pti, j] *= -1.
     return (us.ravel()[:size], vs.ravel()[:size], ws.ravel()[:size],
             phixs.ravel()[:size], phiys.ravel()[:size])
 

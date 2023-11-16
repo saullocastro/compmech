@@ -4,11 +4,8 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-from __future__ import division
-
 from scipy.sparse import coo_matrix
 import numpy as np
-cimport numpy as np
 
 
 cdef extern from 'bardell_functions.h':
@@ -23,15 +20,13 @@ cdef extern from 'legendre_gauss_quadrature.h':
     void leggauss_quad(int n, double *points, double* weights) nogil
 
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 cdef int num = 3
 
 
-def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
+def fkL_num(double [:] cs, object Finput, object panel,
         int size, int row0, int col0, int nx, int ny, int NLgeom=0):
     cdef double a, b, ra, rb
     cdef int m, n
@@ -47,8 +42,8 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef double B11, B12, B16, B22, B26, B66
     cdef double D11, D12, D16, D22, D26, D66
 
-    cdef np.ndarray[cINT, ndim=1] kLr, kLc
-    cdef np.ndarray[cDOUBLE, ndim=1] kLv
+    cdef long [:] kLr, kLc
+    cdef double [:] kLv
 
     cdef double fAu, fAuxi, fAv, fAvxi, fAw, fAwxi, fAwxixi
     cdef double fBu, fBuxi, fBv, fBvxi, fBw, fBwxi, fBwxixi
@@ -57,12 +52,12 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef double xi, eta, weight
     cdef double wxi, weta
 
-    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
+    cdef double [:] xis, etas, weightsxi, weightseta
 
     # F as 4-D matrix, must be [nx, ny, 6, 6], when there is one ABD[6, 6] for
     # each of the nx * ny integration points
     cdef double F[6 * 6]
-    cdef np.ndarray[cDOUBLE, ndim=4] Fnxny
+    cdef double [:, :, :, ::1] Fnxny
 
     cdef int one_F_each_point = 0
 
@@ -271,7 +266,7 @@ def fkL_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     return kL
 
 
-def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
+def fkG_num(double [:] cs, object Finput, object panel,
             int size, int row0, int col0, int nx, int ny, int NLgeom=0):
     cdef double a, b, r
     cdef int m, n
@@ -285,8 +280,8 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef int i, k, j, l, c, row, col, ptx, pty
     cdef double xi, eta, x, y, weight
 
-    cdef np.ndarray[cINT, ndim=1] kGr, kGc
-    cdef np.ndarray[cDOUBLE, ndim=1] kGv
+    cdef long [:] kGr, kGc
+    cdef double [:] kGv
 
     cdef double fAu, fAv, fAw, fAuxi, fAvxi, fAwxi, fAwxixi
     cdef double gAu, gAv, gAw, gAueta, gAveta, gAweta, gAwetaeta
@@ -297,12 +292,12 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef double B11, B12, B16, B22, B26, B66
     cdef double wxi, weta, Nxx, Nyy, Nxy
 
-    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
+    cdef double [:] xis, etas, weightsxi, weightseta
 
     # F as 4-D matrix, must be [nx, ny, 6, 6], when there is one ABD[6, 6] for
     # each of the nx * ny integration points
     cdef double F[6 * 6]
-    cdef np.ndarray[cDOUBLE, ndim=4] Fnxny
+    cdef double [:, :, :, ::1] Fnxny
 
     cdef int one_F_each_point = 0
 
@@ -473,7 +468,7 @@ def fkG_num(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     return kG
 
 
-def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
+def calc_fint(double [:] cs, object Finput, object panel,
         int size, int col0, int nx, int ny):
     cdef double a, b, r
     cdef int m, n
@@ -499,12 +494,12 @@ def calc_fint(np.ndarray[cDOUBLE, ndim=1] cs, object Finput, object panel,
     cdef double gAu, gAueta, gAv, gAveta, gAw, gAweta, gAwetaeta
     cdef double gBu, gBueta, gBv, gBveta, gBw, gBweta, gBwetaeta
 
-    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta, fint
+    cdef double [:] xis, etas, weightsxi, weightseta, fint
 
     # F as 4-D matrix, must be [nx, ny, 6, 6], when there is one ABD[6, 6] for
     # each of the nx * ny integration points
     cdef double F[6 * 6]
-    cdef np.ndarray[cDOUBLE, ndim=4] Fnxny
+    cdef double [:, :, :, ::1] Fnxny
 
     cdef int one_F_each_point = 0
 
