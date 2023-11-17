@@ -4,7 +4,7 @@ from multiprocessing import cpu_count
 
 import numpy as np
 from scipy.sparse import csr_matrix
-from numpy import linspace
+from numpy import linspace, reshape
 
 from compmech.logger import msg
 from compmech.constants import DOUBLE
