@@ -977,11 +977,11 @@ class StiffPanelBay(object):
         fuvw = panelmDB.db[self.model]['field'].fuvw
         us, vs, ws, phixs, phiys = fuvw(c, self, xs, ys, self.out_num_cores)
 
-        self.u = us.reshape(xshape)
-        self.v = vs.reshape(xshape)
-        self.w = ws.reshape(xshape)
-        self.phix = phixs.reshape(xshape)
-        self.phiy = phiys.reshape(xshape)
+        self.u = reshape(us, xshape)
+        self.v = reshape(vs, xshape)
+        self.w = reshape(ws, xshape)
+        self.phix = reshape(phixs, xshape)
+        self.phiy = reshape(phiys, xshape)
 
         return self.u, self.v, self.w, self.phix, self.phiy
 
@@ -1087,11 +1087,11 @@ class StiffPanelBay(object):
             fuvw = panelmDB.db[s.base.model]['field'].fuvw
             us, vs, ws, phixs, phiys = fuvw(c, s.base, xs, ys, self.out_num_cores)
 
-        self.u = us.reshape(xshape)
-        self.v = vs.reshape(xshape)
-        self.w = ws.reshape(xshape)
-        self.phix = phixs.reshape(xshape)
-        self.phiy = phiys.reshape(xshape)
+        self.u = reshape(us, xshape)
+        self.v = reshape(vs, xshape)
+        self.w = reshape(ws, xshape)
+        self.phix = reshape(phixs, xshape)
+        self.phiy = reshape(phiys, xshape)
 
         return self.u, self.v, self.w, self.phix, self.phiy
 
