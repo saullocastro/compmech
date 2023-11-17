@@ -1,14 +1,11 @@
 import numpy as np
-cimport numpy as np
 from scipy.sparse import coo_matrix
 from libc.stdlib cimport malloc, free
 
 from compmech.conecyl.imperfections.mgi cimport cfw0x, cfw0t
 from compmech.integrate.integratev cimport integratev
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 cdef extern from "math.h":

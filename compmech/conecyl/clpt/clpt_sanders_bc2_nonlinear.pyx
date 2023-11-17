@@ -12,17 +12,17 @@ from compmech.conecyl.clpt.clpt_commons_bc2 cimport cfwx, cfwt, cfN, cfv
 cdef int NL_kinematics=1 # to use cfstrain_sanders in cfN
 
 
-def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
+def calc_k0L(double [:] coeffs,
              double alpharad, double r2, double L, double tLA,
-             np.ndarray[cDOUBLE, ndim=2] F,
+             double[:, ::1] F,
              int m1, int m2, int n2,
              int nx, int nt, int num_cores, str method,
-             np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0):
+             double [:] c0, int m0, int n0):
     cdef double sina, cosa, xa, xb, ta, tb
     cdef int c, row, col
     cdef int i1, k1, i2, j2, k2, l2
-    cdef np.ndarray[cINT, ndim=1] rows, cols
-    cdef np.ndarray[cDOUBLE, ndim=1] k0Lv
+    cdef long [:] rows, cols
+    cdef double [:] k0Lv
 
     cdef cc_attributes args
 
@@ -56,7 +56,7 @@ def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    integratev(<void *>cfk0L, fdim, k0Lv, xa, xb, nx, ta, tb, nt,
+    integratev(<void *>cfk0L, fdim, &k0Lv[0], xa, xb, nx, ta, tb, nt,
                &args, num_cores, method)
 
     c = -1
@@ -862,19 +862,19 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     free(k0Lq_2_q25)
 
 
-def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
+def calc_kG(double [:] coeffs,
             double alpharad, double r2, double L, double tLA,
-            np.ndarray[cDOUBLE, ndim=2] F,
+            double[:, ::1] F,
             int m1, int m2, int n2,
             int nx, int nt, int num_cores, str method,
-            np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0):
+            double [:] c0, int m0, int n0):
     cdef double sina, cosa, xa, xb, ta, tb
     cdef int c, row, col
     cdef int i1, k1, i2, j2, k2, l2
     cdef int size
 
-    cdef np.ndarray[cINT, ndim=1] rows, cols
-    cdef np.ndarray[cDOUBLE, ndim=1] kGv
+    cdef long [:] rows, cols
+    cdef double [:] kGv
 
     cdef cc_attributes args
 
@@ -907,7 +907,7 @@ def calc_kG(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    integratev(<void *>cfkG, fdim, kGv, xa, xb, nx, ta, tb, nt,
+    integratev(<void *>cfkG, fdim, &kGv[0], xa, xb, nx, ta, tb, nt,
                &args, num_cores, method)
 
     c = -1
@@ -1374,19 +1374,19 @@ cdef void cfkG(int npts, double *xs, double *ts, double *out,
     free(kGq_2_q23)
 
 
-def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
+def calc_kLL(double [:] coeffs,
              double alpharad, double r2, double L, double tLA,
-             np.ndarray[cDOUBLE, ndim=2] F,
+             double[:, ::1] F,
              int m1, int m2, int n2,
              int nx, int nt, int num_cores, str method,
-             np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0):
+             double [:] c0, int m0, int n0):
     cdef double sina, cosa, xa, xb, ta, tb
     cdef int c, row, col
     cdef int i1, k1, i2, j2, k2, l2
     cdef int size
 
-    cdef np.ndarray[cINT, ndim=1] rows, cols
-    cdef np.ndarray[cDOUBLE, ndim=1] kLLv
+    cdef long [:] rows, cols
+    cdef double [:] kLLv
 
     cdef cc_attributes args
 
@@ -1419,7 +1419,7 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    integratev(<void *>cfkLL, fdim, kLLv, xa, xb, nx, ta, tb, nt,
+    integratev(<void *>cfkLL, fdim, &kLLv[0], xa, xb, nx, ta, tb, nt,
                &args, num_cores, method)
 
     c = -1
@@ -1951,14 +1951,15 @@ cdef void cfkLL(int npts, double *xs, double *ts, double *out,
     free(kLLq_2_q25)
 
 
-def calc_fint_0L_L0_LL(np.ndarray[cDOUBLE, ndim=1] coeffs,
+def calc_fint_0L_L0_LL(double [:] coeffs,
               double alpharad, double r2, double L, double tLA,
-              np.ndarray[cDOUBLE, ndim=2] F,
+                       double[:, ::1] F,
               int m1, int m2, int n2,
               int nx, int nt, int num_cores, str method,
-              np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0):
+                       double [:] c0, int m0, int n0):
     cdef cc_attributes args
     cdef double sina, cosa
+    cdef double [:] fint
 
     fdim = num0 + num1*m1 + num2*m2*n2
     fint = np.zeros((fdim,), dtype=DOUBLE)
@@ -1986,7 +1987,7 @@ def calc_fint_0L_L0_LL(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    integratev(<void *>cffint, fdim, fint, xa, xb, nx, ta, tb, nt,
+    integratev(<void *>cffint, fdim, &fint[0], xa, xb, nx, ta, tb, nt,
                &args, num_cores, method)
 
     return fint

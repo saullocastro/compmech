@@ -4,7 +4,6 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-cimport numpy as np
 import numpy as np
 from scipy.sparse import coo_matrix
 from libc.stdlib cimport malloc, free
@@ -14,9 +13,7 @@ from compmech.conecyl.imperfections.mgi cimport cfw0x, cfw0t
 from compmech.integrate.integratev cimport integratev
 
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 
@@ -58,17 +55,17 @@ cdef struct cc_attributes:
 cdef int NL_kinematics=0 # to use cfstrain_donnell in cfN
 
 
-def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
+def calc_k0L(double [:] coeffs,
              double alpharad, double r2, double L, double tLA,
              double E11, double nu, double h,
              int m1, int m2, int n2,
              int nx, int nt, int num_cores, str method,
-             np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0):
+             double [:] c0, int m0, int n0):
     cdef double sina, cosa, xa, xb, ta, tb
     cdef int c, row, col
     cdef int i1, k1, i2, j2, k2, l2
-    cdef np.ndarray[cINT, ndim=1] rows, cols
-    cdef np.ndarray[cDOUBLE, ndim=1] k0Lv
+    cdef long [:] rows, cols
+    cdef double [:] k0Lv
 
     cdef int fdim
     cdef cc_attributes args
@@ -104,7 +101,7 @@ def calc_k0L(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    integratev(<void *>cfk0L, fdim, k0Lv, xa, xb, nx, ta, tb, nt,
+    integratev(<void *>cfk0L, fdim, &k0Lv[0], xa, xb, nx, ta, tb, nt,
                &args, num_cores, method)
 
     c = -1
@@ -558,19 +555,19 @@ cdef void cfk0L(int npts, double *xs, double *ts, double *out,
     free(k0Lq_2_q25)
 
 
-def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
+def calc_kLL(double [:] coeffs,
              double alpharad, double r2, double L, double tLA,
              double E11, double nu, double h,
              int m1, int m2, int n2,
              int nx, int nt, int num_cores, str method,
-             np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0):
+             double [:] c0, int m0, int n0):
     cdef double sina, cosa, xa, xb, ta, tb
     cdef int c, row, col
     cdef int i1, k1, i2, j2, k2, l2
     cdef int size
 
-    cdef np.ndarray[cINT, ndim=1] rows, cols
-    cdef np.ndarray[cDOUBLE, ndim=1] kLLv
+    cdef long [:] rows, cols
+    cdef double [:] kLLv
 
     cdef int fdim
     cdef cc_attributes args
@@ -606,7 +603,7 @@ def calc_kLL(np.ndarray[cDOUBLE, ndim=1] coeffs,
     tb = 2*pi
 
     # numerical integration
-    integratev(<void *>cfkLL, fdim, kLLv, xa, xb, nx, ta, tb, nt,
+    integratev(<void *>cfkLL, fdim, &kLLv[0], xa, xb, nx, ta, tb, nt,
                &args, num_cores, method)
 
     c = -1

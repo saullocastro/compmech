@@ -5,7 +5,7 @@ import gc
 from multiprocessing import Pool
 
 import numpy as np
-from numpy import linspace
+from numpy import linspace, reshape
 from scipy.sparse import csr_matrix
 import matplotlib.cm as cm
 
@@ -360,13 +360,13 @@ class PanelAssembly(object):
             x = np.ascontiguousarray(x)
             y = np.ascontiguousarray(y)
             u, v, w, phix, phiy = fuvw(c_panel, panel, x, y, self.out_num_cores)
-            res['x'].append(x.reshape(shape))
-            res['y'].append(y.reshape(shape))
-            res['u'].append(u.reshape(shape))
-            res['v'].append(v.reshape(shape))
-            res['w'].append(w.reshape(shape))
-            res['phix'].append(phix.reshape(shape))
-            res['phiy'].append(phiy.reshape(shape))
+            res['x'].append(reshape(x, shape))
+            res['y'].append(reshape(y, shape))
+            res['u'].append(reshape(u, shape))
+            res['v'].append(reshape(v, shape))
+            res['w'].append(reshape(w, shape))
+            res['phix'].append(reshape(phix, shape))
+            res['phiy'].append(reshape(phiy, shape))
 
         return res
 
@@ -411,14 +411,14 @@ class PanelAssembly(object):
             y = np.ascontiguousarray(y)
             exx, eyy, gxy, kxx, kyy, kxy = fstrain(c_panel, panel, x, y,
                     self.out_num_cores, NLterms=int(NLterms))
-            res['x'].append(x.reshape(shape))
-            res['y'].append(y.reshape(shape))
-            res['exx'].append(exx.reshape(shape))
-            res['eyy'].append(eyy.reshape(shape))
-            res['gxy'].append(gxy.reshape(shape))
-            res['kxx'].append(kxx.reshape(shape))
-            res['kyy'].append(kyy.reshape(shape))
-            res['kxy'].append(kxy.reshape(shape))
+            res['x'].append(reshape(x, shape))
+            res['y'].append(reshape(y, shape))
+            res['exx'].append(reshape(exx, shape))
+            res['eyy'].append(reshape(eyy, shape))
+            res['gxy'].append(reshape(gxy, shape))
+            res['kxx'].append(reshape(kxx, shape))
+            res['kyy'].append(reshape(kyy, shape))
+            res['kxy'].append(reshape(kxy, shape))
 
         return res
 
@@ -463,12 +463,12 @@ class PanelAssembly(object):
             y = np.ascontiguousarray(y)
             exx, eyy, gxy, kxx, kyy, kxy = fstrain(c_panel, panel, x, y,
                     self.out_num_cores, NLterms=int(NLterms))
-            exx = exx.reshape(shape)
-            eyy = eyy.reshape(shape)
-            gxy = gxy.reshape(shape)
-            kxx = kxx.reshape(shape)
-            kyy = kyy.reshape(shape)
-            kxy = kxy.reshape(shape)
+            exx = reshape(exx, shape)
+            eyy = reshape(eyy, shape)
+            gxy = reshape(gxy, shape)
+            kxx = reshape(kxx, shape)
+            kyy = reshape(kyy, shape)
+            kxy = reshape(kxy, shape)
             Ns = np.zeros((exx.shape + (6,)))
             F = panel.F
             if F is None:
@@ -476,8 +476,8 @@ class PanelAssembly(object):
             for i in range(6):
                 Ns[..., i] = (exx*F[i, 0] + eyy*F[i, 1] + gxy*F[i, 2]
                             + kxx*F[i, 3] + kyy*F[i, 4] + kxy*F[i, 5])
-            res['x'].append(x.reshape(shape))
-            res['y'].append(y.reshape(shape))
+            res['x'].append(reshape(x, shape))
+            res['y'].append(reshape(y, shape))
             res['Nxx'].append(Ns[..., 0])
             res['Nyy'].append(Ns[..., 1])
             res['Nxy'].append(Ns[..., 2])

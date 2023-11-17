@@ -56,8 +56,8 @@ def fuvw(double [:] c, object p, double [:] xs, double [:] ys, int num_cores=4):
         xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
         ys_core = np.ascontiguousarray(np.hstack((ys, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
     else:
-        xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
-        ys_core = np.ascontiguousarray(ys.reshape(num_cores, -1), dtype=DOUBLE)
+        xs_core = np.ascontiguousarray(np.reshape(xs, (num_cores, -1)), dtype=DOUBLE)
+        ys_core = np.ascontiguousarray(np.reshape(ys, (num_cores, -1)), dtype=DOUBLE)
 
     size_core = xs_core.shape[1]
 
@@ -92,8 +92,8 @@ def fuvw(double [:] c, object p, double [:] xs, double [:] ys, int num_cores=4):
         for j in range(size_core):
             phixs[pti, j] *= -1.
             phiys[pti, j] *= -1.
-    return (us.ravel()[:size], vs.ravel()[:size], ws.ravel()[:size],
-            phixs.ravel()[:size], phiys.ravel()[:size])
+    return (np.ravel(us)[:size], np.ravel(vs)[:size], np.ravel(ws)[:size],
+            np.ravel(phixs)[:size], np.ravel(phiys)[:size])
 
 
 def fstrain(double [:] c, object p, double [:] xs, double [:] ys, int num_cores=4, int NLterms=0):
@@ -132,8 +132,8 @@ def fstrain(double [:] c, object p, double [:] xs, double [:] ys, int num_cores=
         xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
         ys_core = np.ascontiguousarray(np.hstack((ys, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
     else:
-        xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
-        ys_core = np.ascontiguousarray(ys.reshape(num_cores, -1), dtype=DOUBLE)
+        xs_core = np.ascontiguousarray(np.reshape(xs, (num_cores, -1)), dtype=DOUBLE)
+        ys_core = np.ascontiguousarray(np.reshape(ys, (num_cores, -1)), dtype=DOUBLE)
 
     size_core = xs_core.shape[1]
 
@@ -160,8 +160,8 @@ def fstrain(double [:] c, object p, double [:] xs, double [:] ys, int num_cores=
               v1ty, v1ry, v2ty, v2ry,
               w1ty, w1ry, w2ty, w2ry, NLterms)
 
-    return (exxs.ravel()[:size], eyys.ravel()[:size], gxys.ravel()[:size],
-            kxxs.ravel()[:size], kyys.ravel()[:size], kxys.ravel()[:size])
+    return (np.ravel(exxs)[:size], np.ravel(eyys)[:size], np.ravel(gxys)[:size],
+            np.ravel(kxxs)[:size], np.ravel(kyys)[:size], np.ravel(kxys)[:size])
 
 
 cdef void cfuvw(double *c, int m, int n, double a, double b, double *xs,

@@ -4,7 +4,6 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-cimport numpy as np
 import numpy as np
 from libc.stdlib cimport malloc, free
 from cython.parallel import prange
@@ -13,8 +12,6 @@ from compmech.conecyl.imperfections.mgi cimport cfw0x, cfw0t
 
 DOUBLE = np.float64
 INT = np.int64
-ctypedef np.double_t cDOUBLE
-ctypedef np.int64_t cINT
 
 cdef extern from "math.h":
     double cos(double t) nogil
@@ -30,12 +27,12 @@ cdef int castro = 0
 cdef int num_cores = 4
 cdef double pi=3.141592653589793
 
-def fstrain(str model, np.ndarray[cDOUBLE, ndim=1] c,
+def fstrain(str model, double [:] c,
             double sina, double cosa, double tLA,
-            np.ndarray[cDOUBLE, ndim=1] xs,
-            np.ndarray[cDOUBLE, ndim=1] ts,
+            double [:] xs,
+            double [:] ts,
             double r2, double L, int m1, int m2, int n2,
-            np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0, int funcnum,
+            double [:] c0, int m0, int n0, int funcnum,
             int NL_kinematics):
     model = model.lower()
     if not 'clpt' in model:
@@ -47,7 +44,7 @@ def fstrain(str model, np.ndarray[cDOUBLE, ndim=1] c,
         raise ImportError('Could not cimport {0}'.format(model))
     # NL_kinematics = 0 donnell
     # NL_kinematics = 1 sanders
-    cdef np.ndarray[cDOUBLE, ndim=1] es
+    cdef double [:] es
     cdef cfstraintype *cfstrain
     if NL_kinematics==0:
         cfstrain = &cfstrain_donnell
@@ -59,9 +56,9 @@ def fstrain(str model, np.ndarray[cDOUBLE, ndim=1] c,
               &c0[0], m0, n0, funcnum, &es[0])
     return es
 
-def fuvw(str model, np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
+def fuvw(str model, double [:] c, int m1, int m2, int n2,
          double alpharad, double r2, double L, double tLA,
-         np.ndarray[cDOUBLE, ndim=1] xs, np.ndarray[cDOUBLE, ndim=1] ts):
+         double [:] xs, double [:] ts):
     model = model.lower()
     if not 'clpt' in model:
         raise ValueError('{0} is not a valid CLPT model!'.format(model))
@@ -73,8 +70,8 @@ def fuvw(str model, np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
         raise ImportError('Could not cimport {0}'.format(model))
     cdef int i, core_size
     cdef double sina, cosa
-    cdef np.ndarray[cDOUBLE, ndim=2] us, vs, ws, phixs, phits
-    cdef np.ndarray[cDOUBLE, ndim=2] xs_r, ts_r
+    cdef double[:, ::1] us, vs, ws, phixs, phits
+    cdef double[:, ::1] xs_r, ts_r
 
     sina = sin(alpharad)
     cosa = cos(alpharad)
@@ -111,11 +108,8 @@ def fuvw(str model, np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
     phixs *= -1
     r = r2 + xs_r*sina
     phits *= -1/r
-    return (us.ravel()[:size],
-            vs.ravel()[:size],
-            ws.ravel()[:size],
-            phixs.ravel()[:size],
-            phits.ravel()[:size])
+    return (np.ravel(us)[:size], np.ravel(vs)[:size], np.ravel(ws)[:size],
+            np.ravel(phixs)[:size], np.ravel(phits)[:size])
 
 cdef void cfN(double *c, double sina, double cosa, double tLA,
               double *xs, double *ts, int size,

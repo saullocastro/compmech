@@ -16,6 +16,7 @@ cdef void cfuvw(double *c, int m1, int m2, int n2, double r2,
                 double *phixs, double *phits) nogil:
     cdef int i1, i2, j2, col, i
     cdef double sinbi, cosbi, sinbj, cosbj, u, v, w, phix, phit, x, t
+
     for i in range(size):
         x = xs[i]
         t = ts[i]

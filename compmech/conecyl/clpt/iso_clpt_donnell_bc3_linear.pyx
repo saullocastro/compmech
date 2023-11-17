@@ -4,18 +4,13 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-from __future__ import division
-
 from scipy.sparse import coo_matrix
 import numpy as np
-cimport numpy as np
 cimport cython
 from cpython cimport bool
 
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 
@@ -44,8 +39,8 @@ def fk0(double alpharad, double r2, double L, double E11, double nu, double h,
     cdef double cosk2xa, cosk2xb, sink2xa, sink2xb
     cdef double sin2i1xa, sin2i1xb, cos2i1xa, cos2i1xb
 
-    cdef np.ndarray[cINT, ndim=1] k0r, k0c
-    cdef np.ndarray[cDOUBLE, ndim=1] k0v
+    cdef long [:] k0r, k0c
+    cdef double [:] k0v
 
     sina = sin(alpharad)
     cosa = cos(alpharad)
@@ -381,8 +376,8 @@ def fk0_cyl(double r2, double L, double E11, double nu, double h,
     cdef double B11, B12, B16, B22, B26, B66
     cdef double D11, D12, D16, D22, D26, D66
     cdef double r
-    cdef np.ndarray[cINT, ndim=1] k0r, k0c
-    cdef np.ndarray[cDOUBLE, ndim=1] k0v
+    cdef long [:] k0r, k0c
+    cdef double [:] k0v
 
     # sparse parameters
     k11_cond_1 = 3

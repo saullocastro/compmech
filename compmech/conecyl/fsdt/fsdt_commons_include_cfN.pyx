@@ -1,16 +1,16 @@
-def fstress(np.ndarray[cDOUBLE, ndim=1] c,
-            np.ndarray[cDOUBLE, ndim=2] F,
+def fstress(double [:] c,
+            double [:, ::1] F,
             double sina, double cosa, double tLA,
-            np.ndarray[cDOUBLE, ndim=1] xs,
-            np.ndarray[cDOUBLE, ndim=1] ts,
+            double [:] xs,
+            double [:] ts,
             double r2, double L, int m1, int m2, int n2,
-            np.ndarray[cDOUBLE, ndim=1] c0, int m0, int n0, int funcnum,
+            double [:] c0, int m0, int n0, int funcnum,
             int NL_kinematics, int num_cores=4):
     # NL_kinematics = 0 donnell
     # NL_kinematics = 1 sanders
     cdef int size_core, i
-    cdef np.ndarray[cDOUBLE, ndim=2] Ns
-    cdef np.ndarray[cDOUBLE, ndim=2] xs_core, ts_core
+    cdef double [:, ::1] Ns
+    cdef double [:, ::1] xs_core, ts_core
 
     size = xs.shape[0]
     add_size = num_cores - (size % num_cores)
@@ -22,8 +22,8 @@ def fstress(np.ndarray[cDOUBLE, ndim=1] c,
         xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
         ts_core = np.ascontiguousarray(np.hstack((ts, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
     else:                              
-        xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
-        ts_core = np.ascontiguousarray(ts.reshape(num_cores, -1), dtype=DOUBLE)
+        xs_core = np.ascontiguousarray(np.reshape(xs, (num_cores, -1)), dtype=DOUBLE)
+        ts_core = np.ascontiguousarray(np.reshape(ts, (num_cores, -1)), dtype=DOUBLE)
 
     size_core = xs_core.shape[1]
 
@@ -33,7 +33,7 @@ def fstress(np.ndarray[cDOUBLE, ndim=1] c,
         cfN(&c[0], sina, cosa, tLA, &xs_core[i,0], &ts_core[i,0],
             size_core, r2, L, &F[0,0], m1, m2, n2,
             &c0[0], m0, n0, funcnum, &Ns[i,0], NL_kinematics)
-    return Ns.ravel()[:size*e_num]
+    return np.ravel(Ns)[:size*e_num]
 
 cdef void cfN(double *c, double sina, double cosa, double tLA,
               double *xs, double *ts, int size,

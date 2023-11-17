@@ -4,18 +4,13 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-from __future__ import division
-
 from scipy.sparse import coo_matrix
 import numpy as np
-cimport numpy as np
 cimport cython
 from cpython cimport bool
 
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 
@@ -32,7 +27,7 @@ cdef int num2 = 10
 cdef double pi = 3.141592653589793
 
 
-def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
+def fk0(double alpharad, double r2, double L, double [:, ::1] F,
         int m1, int m2, int n2, int s):
     cdef int i1, k1, i2, j2, k2, l2, c, row, col, section
     cdef double A11, A12, A16, A22, A26, A66, A44, A45, A55
@@ -47,8 +42,8 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
     cdef double cosk2xa, cosk2xb, sink2xa, sink2xb
     cdef double sin2i1xa, cos2i1xa, sin2i1xb, cos2i1xb
 
-    cdef np.ndarray[cINT, ndim=1] k0r, k0c
-    cdef np.ndarray[cDOUBLE, ndim=1] k0v
+    cdef long [:] k0r, k0c
+    cdef double [:] k0v
 
     sina = sin(alpharad)
     cosa = cos(alpharad)
@@ -1229,15 +1224,15 @@ def fk0(double alpharad, double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
     return k0
 
 
-def fk0_cyl(double r2, double L, np.ndarray[cDOUBLE, ndim=2] F,
+def fk0_cyl(double r2, double L, double [:, ::1] F,
             int m1, int m2, int n2):
     cdef int i1, k1, i2, j2, k2, l2, c, row, col
     cdef double A11, A12, A16, A22, A26, A66, A44, A45, A55
     cdef double B11, B12, B16, B22, B26, B66
     cdef double D11, D12, D16, D22, D26, D66
     cdef double r
-    cdef np.ndarray[cINT, ndim=1] k0r, k0c
-    cdef np.ndarray[cDOUBLE, ndim=1] k0v
+    cdef long [:] k0r, k0c
+    cdef double [:] k0v
 
     # sparse parameters
     k11_cond_1 = 13
@@ -1928,8 +1923,8 @@ def fk0edges(int m1, int m2, int n2, double r1, double r2,
              double kuBot, double kuTop,
              double kphixBot, double kphixTop):
     cdef int i1, k1, i2, j2, k2, l2, row, col, c
-    cdef np.ndarray[cINT, ndim=1] k0edgesr, k0edgesc
-    cdef np.ndarray[cDOUBLE, ndim=1] k0edgesv
+    cdef long [:] k0edgesr, k0edgesc
+    cdef double [:] k0edgesv
 
     k11_cond_1 = 1
     k11_cond_2 = 1
@@ -2039,8 +2034,8 @@ def fkG0(double Fc, double P, double T, double r2, double alpharad, double L,
     cdef double cosk2xa, cosk2xb, sink2xa, sink2xb
     cdef double sin2i1xa, sin2i1xb
 
-    cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
-    cdef np.ndarray[cDOUBLE, ndim=1] kG0v
+    cdef long [:] kG0r, kG0c
+    cdef double [:] kG0v
 
     # sparse parameters
     k11_cond_1 = 1
@@ -2170,8 +2165,8 @@ def fkG0_cyl(double Fc, double P, double T, double r2, double L,
             int m1, int m2, int n2):
     cdef int i1, k1, i2, j2, k2, l2, c, row, col
     cdef double r=r2
-    cdef np.ndarray[cINT, ndim=1] kG0r, kG0c
-    cdef np.ndarray[cDOUBLE, ndim=1] kG0v
+    cdef long [:] kG0r, kG0c
+    cdef double [:] kG0v
 
     # sparse parameters
     k11_cond_1 = 1

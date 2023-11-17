@@ -45,8 +45,8 @@ def fuvw(double [:] c, object p, double [:] xs, double [:] ys, int num_cores=4):
         xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
         ys_core = np.ascontiguousarray(np.hstack((ys, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
     else:                              
-        xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
-        ys_core = np.ascontiguousarray(ys.reshape(num_cores, -1), dtype=DOUBLE)
+        xs_core = np.ascontiguousarray(np.reshape(xs, (num_cores, -1)), dtype=DOUBLE)
+        ys_core = np.ascontiguousarray(np.reshape(ys, (num_cores, -1)), dtype=DOUBLE)
 
     size_core = xs_core.shape[1]
 
@@ -77,8 +77,8 @@ def fuvw(double [:] c, object p, double [:] xs, double [:] ys, int num_cores=4):
         for j in range(size_core):
             phixs[pti, j] *= -1.
             phiys[pti, j] *= -1.
-    return (us.ravel()[:size], vs.ravel()[:size], ws.ravel()[:size],
-            phixs.ravel()[:size], phiys.ravel()[:size])
+    return (np.ravel(us)[:size], np.ravel(vs)[:size], np.ravel(ws)[:size],
+            np.ravel(phixs)[:size], np.ravel(phiys)[:size])
 
 
 cdef void cfw(double *c, int m, int n, double a, double b, double *xs,

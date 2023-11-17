@@ -1,11 +1,11 @@
-def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
+def fuvw(double [:] c, int m1, int m2, int n2,
          double alpharad, double r2, double L, double tLA,
-         np.ndarray[cDOUBLE, ndim=1] xs,
-         np.ndarray[cDOUBLE, ndim=1] ts, int num_cores=4):
+         double [:] xs,
+         double [:] ts, int num_cores=4):
     cdef int i, size_core
     cdef double sina, cosa
-    cdef np.ndarray[cDOUBLE, ndim=2] us, vs, ws, phixs, phits
-    cdef np.ndarray[cDOUBLE, ndim=2] xs_core, ts_core
+    cdef double [:, ::1] us, vs, ws, phixs, phits
+    cdef double [:, ::1] xs_core, ts_core
 
     sina = sin(alpharad)
     cosa = cos(alpharad)
@@ -20,8 +20,8 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
         xs_core = np.ascontiguousarray(np.hstack((xs, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
         ts_core = np.ascontiguousarray(np.hstack((ts, np.zeros(add_size))).reshape(num_cores, -1), dtype=DOUBLE)
     else:                              
-        xs_core = np.ascontiguousarray(xs.reshape(num_cores, -1), dtype=DOUBLE)
-        ts_core = np.ascontiguousarray(ts.reshape(num_cores, -1), dtype=DOUBLE)
+        xs_core = np.ascontiguousarray(np.reshape(xs, (num_cores, -1)), dtype=DOUBLE)
+        ts_core = np.ascontiguousarray(np.reshape(ts, (num_cores, -1)), dtype=DOUBLE)
 
     size_core = xs_core.shape[1]
 
@@ -37,8 +37,5 @@ def fuvw(np.ndarray[cDOUBLE, ndim=1] c, int m1, int m2, int n2,
               size_core, cosa, tLA, &us[i,0], &vs[i,0], &ws[i,0],
               &phixs[i,0], &phits[i,0])
 
-    return (us.ravel()[:size],
-            vs.ravel()[:size],
-            ws.ravel()[:size],
-            phixs.ravel()[:size],
-            phits.ravel()[:size])
+    return (np.ravel(us)[:size], np.ravel(vs)[:size], np.ravel(ws)[:size],
+            np.ravel(phixs)[:size], np.ravel(phits)[:size])

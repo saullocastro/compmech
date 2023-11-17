@@ -6,7 +6,6 @@
 #cython: infer_types=False
 #cython: embedsignatures=True
 import numpy as np
-cimport numpy as np
 
 from cython.parallel import prange
 
@@ -16,7 +15,6 @@ cdef extern from "math.h":
     double cos(double t) nogil
     double sin(double t) nogil
 
-ctypedef np.double_t cDOUBLE
 
 ctypedef void *cftype(int m, int n, int num,
                       double *xs, double *thetas, double *a) nogil
@@ -25,9 +23,8 @@ cdef double pi = 3.141592653589793
 cdef int num_threads = 4
 
 
-def fa(m0, n0, np.ndarray[cDOUBLE, ndim=1] xs,
-               np.ndarray[cDOUBLE, ndim=1] ts, funcnum):
-    cdef np.ndarray[cDOUBLE, ndim=2] a
+def fa(m0, n0, double [:] xs, double [:] ts, funcnum):
+    cdef double [:, ::1] a
     cdef cftype *cf
     '''Creates the coefficients matrix necessary for the least-squares method.
 
@@ -220,12 +217,12 @@ cdef void *cfa03(int m0, int n0, int num,
 
 
 def fw0(int m0, int n0,
-        np.ndarray[cDOUBLE, ndim=1] c0,
-        np.ndarray[cDOUBLE, ndim=1] xs,
-        np.ndarray[cDOUBLE, ndim=1] ts, funcnum):
+        double [:] c0,
+        double [:] xs,
+        double [:] ts, funcnum):
     cdef int ix, i, j, col, size
     cdef double x, t, sinix, cosix, sinjt, cosjt, w0
-    cdef np.ndarray[cDOUBLE, ndim=1] w0s
+    cdef double [:] w0s
     w0s = np.zeros_like(xs)
     size = np.shape(xs)[0]
 

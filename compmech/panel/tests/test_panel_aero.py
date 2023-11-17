@@ -21,8 +21,8 @@ def test_panel_aero():
             E2 = 8.7e9
             p.laminaprop = (142.5e9, E2, 0.28, 5.1e9, 5.1e9, 5.1e9)
             p.mu = 1.5e3
-            p.m = 8
-            p.n = 9
+            p.m = 7
+            p.n = 8
 
             # pre-stress applied when atype == 1
             p.Nxx = -60.

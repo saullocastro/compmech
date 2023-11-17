@@ -1,4 +1,3 @@
-cimport numpy as np
 import numpy as np
 from libc.stdlib cimport malloc, free
 from cython.parallel import prange
@@ -7,8 +6,6 @@ from ..imperfections.mgi cimport cfw0x, cfw0t
 
 DOUBLE = np.float64
 INT = np.int64
-ctypedef np.double_t cDOUBLE
-ctypedef np.int64_t cINT
 
 cdef extern from "math.h":
     double cos(double t) nogil

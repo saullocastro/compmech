@@ -5,10 +5,8 @@
 #cython: profile=False
 #cython: infer_types=False
 import numpy as np
-cimport numpy as np
 
 
-ctypedef np.float_t cDOUBLE
 DOUBLE = np.float64
 
 
@@ -29,8 +27,8 @@ def trapz2d_points(double xmin, double xmax, int nx,
                    double ymin, double ymax, int ny):
     cdef int i, j, c
     cdef double x, y, xi, eta, ctex, ctey
-    cdef np.ndarray[cDOUBLE, ndim=1] xis, etas, weightsxi, weightseta
-    cdef np.ndarray[cDOUBLE, ndim=1] xs2, ys2, alphas, betas
+    cdef double [:] xis, etas, weightsxi, weightseta
+    cdef double [:] xs2, ys2, alphas, betas
 
     xis = np.zeros(nx, dtype=DOUBLE)
     weightsxi = np.zeros(nx, dtype=DOUBLE)
@@ -72,7 +70,7 @@ def simps2d_points(double xmin, double xmax, int nx,
                    double ymin, double ymax, int ny):
     cdef int i, j, npts, k
     cdef double c, hx, hy, x, y, alpha, beta
-    cdef np.ndarray[cDOUBLE, ndim=1] xs, ys, xs2, ys2, alphas, betas
+    cdef double [:] xs, ys, xs2, ys2, alphas, betas
 
     if nx % 2 != 0:
         nx += 1
@@ -163,7 +161,6 @@ def simps2d_points(double xmin, double xmax, int nx,
     return xs2, ys2, alphas, betas
 
 
-def python_trapz_quad(int n, np.ndarray[cDOUBLE, ndim=1] xis,
-                     np.ndarray[cDOUBLE, ndim=1] weights):
+def python_trapz_quad(int n, double [:] xis, double [:] weights):
     trapz_quad(n, &xis[0], &weights[0])
 

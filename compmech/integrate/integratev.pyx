@@ -5,7 +5,6 @@
 #cython: profile=False
 #cython: infer_types=False
 import numpy as np
-cimport numpy as np
 from cython.parallel import prange
 
 from compmech.integrate.integrate import trapz2d_points, simps2d_points
@@ -21,19 +20,19 @@ cdef extern from "math.h":
     double atan(double x) nogil
 
 
-cdef int integratev(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
+cdef int integratev(void *fin, int fdim, double *out,
                     double xmin, double xmax, int nx,
                     double ymin, double ymax, int ny,
                     void *args, int num_cores, str method):
-    """Integration of vecto-valued functions
+    """Integration of vector-valued functions
     """
     cdef int i, npts, k, rest
-    cdef np.ndarray[cDOUBLE, ndim=1] xs2, ys2, alphas, betas
-    cdef np.ndarray[cDOUBLE, ndim=2] outs
+    cdef double [:] xs2, ys2, alphas, betas, out_tmp
+    cdef double [:, ::1] outs
     cdef f_type f
     f = <f_type>fin
 
-    outs = np.zeros((num_cores, out.shape[0]), DOUBLE)
+    outs = np.zeros((num_cores, fdim), DOUBLE)
     if method == 'trapz2d':
         xs2, ys2, alphas, betas = trapz2d_points(xmin, xmax, nx, ymin, ymax, ny)
     elif method == 'simps2d':
@@ -51,11 +50,14 @@ cdef int integratev(void *fin, int fdim, np.ndarray[cDOUBLE, ndim=1] out,
 
     rest = npts - k*num_cores
     assert rest >= 0, 'ERROR rest < 0!'
-    if rest>0:
+    if rest > 0:
         f(rest, &xs2[k*num_cores], &ys2[k*num_cores], &outs[0, 0],
           &alphas[k*num_cores], &betas[k*num_cores], args=args)
 
-    np.sum(outs, axis=0, out=out)
+    out_tmp = np.sum(outs, axis=0)
+
+    for i in range(fdim):
+        out[i] = out_tmp[i]
 
     return 0
 
@@ -92,8 +94,13 @@ cdef void _fsinsin(int npts, double *xs, double *ys, double *out,
 
 def _test_integratev(nx, ny, method):
     cdef double args
+    cdef double [:] out
+
     args = 0.
+
     out = np.zeros((3,), dtype=DOUBLE)
-    integratev(<void *>_fsinsin, 3, out, 0., 1., nx, 0., 1., ny,
+
+    integratev(<void *>_fsinsin, 3, &out[0], 0., 1., nx, 0., 1., ny,
                <void *>&args, 1, method)
-    return out
+
+    return np.asarray(out)
