@@ -10,7 +10,6 @@ import inspect
 import subprocess
 from setuptools import setup, find_packages, Extension
 
-import numpy as np
 from Cython.Build import cythonize
 
 
@@ -132,7 +131,6 @@ else: # Linux
 root_path = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/') + '/compmech'
 
 include_dirs = [
-            np.get_include(),
             root_path +  '/include',
             ]
 
