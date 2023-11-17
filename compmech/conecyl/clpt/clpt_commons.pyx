@@ -10,8 +10,8 @@ from cython.parallel import prange
 
 from compmech.conecyl.imperfections.mgi cimport cfw0x, cfw0t
 
+
 DOUBLE = np.float64
-INT = np.int64
 
 cdef extern from "math.h":
     double cos(double t) nogil

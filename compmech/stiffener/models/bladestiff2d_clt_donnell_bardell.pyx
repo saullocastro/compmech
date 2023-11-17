@@ -7,6 +7,8 @@
 from scipy.sparse import coo_matrix
 import numpy as np
 
+from compmech import INT
+
 
 cdef extern from 'bardell.h':
     double integral_ff(int i, int j, double x1t, double x1r, double x2t, double x2r,
@@ -19,7 +21,6 @@ cdef extern from 'bardell_functions.h':
                     double xi2t, double xi2r) nogil
 
 DOUBLE = np.float64
-INT = np.int64
 
 cdef int num = 3
 cdef int num1 = 3

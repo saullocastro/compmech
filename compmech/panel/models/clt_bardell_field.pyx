@@ -8,6 +8,7 @@ import numpy as np
 from libc.stdlib cimport malloc, free
 from cython.parallel import prange
 
+
 cdef extern from 'bardell_functions.h':
     double calc_vec_f(double *f, double xi, double xi1t, double xi1r,
                   double xi2t, double xi2r) nogil

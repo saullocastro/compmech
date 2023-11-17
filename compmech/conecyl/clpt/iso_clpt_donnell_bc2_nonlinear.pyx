@@ -8,13 +8,13 @@ import numpy as np
 from scipy.sparse import coo_matrix
 from libc.stdlib cimport malloc, free
 
+from compmech import INT
 from compmech.conecyl.clpt.clpt_commons_bc2 cimport cfwx, cfwt, cfN
 from compmech.conecyl.imperfections.mgi cimport cfw0x, cfw0t
 from compmech.integrate.integratev cimport integratev
 
 
 DOUBLE = np.float64
-INT = np.int64
 
 
 cdef extern from "math.h":

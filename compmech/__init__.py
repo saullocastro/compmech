@@ -25,3 +25,4 @@ programmed in C and Cython.
 
 """
 from compmech.version import __version__
+INT = int

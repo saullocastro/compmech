@@ -7,6 +7,8 @@
 from scipy.sparse import coo_matrix
 import numpy as np
 
+from compmech import INT
+
 
 cdef extern from 'bardell_functions.h':
     double calc_f(int i, double xi, double xi1t, double xi1r,
@@ -21,7 +23,6 @@ cdef extern from 'legendre_gauss_quadrature.h':
 
 
 DOUBLE = np.float64
-INT = np.int64
 
 cdef int num = 3
 

@@ -2,11 +2,11 @@ import numpy as np
 from scipy.sparse import coo_matrix
 from libc.stdlib cimport malloc, free
 
+from compmech import INT
 from compmech.conecyl.imperfections.mgi cimport cfw0x, cfw0t
 from compmech.integrate.integratev cimport integratev, trapz_wp
 
 DOUBLE = np.float64
-INT = np.int64
 
 cdef extern from "math.h":
     double cos(double t) nogil

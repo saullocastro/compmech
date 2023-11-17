@@ -5,12 +5,12 @@
 #cython: profile=False
 #cython: infer_types=False
 import numpy as np
-
 from scipy.sparse import coo_matrix
+
+from compmech import INT
 
 
 DOUBLE = np.float64
-INT = np.int64
 
 
 cdef extern from "math.h":

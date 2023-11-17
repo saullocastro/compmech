@@ -10,8 +10,10 @@ cimport cython
 from cpython cimport bool
 
 
+from compmech import INT
+
+
 DOUBLE = np.float64
-INT = np.int64
 
 
 cdef extern from "math.h":
