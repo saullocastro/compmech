@@ -4,11 +4,8 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-from __future__ import division
-
 from scipy.sparse import coo_matrix
 import numpy as np
-cimport numpy as np
 
 
 cdef extern from 'bardell.h':
@@ -21,9 +18,7 @@ cdef extern from 'bardell_functions.h':
     double calc_fxi(int i, double xi, double xi1t, double xi1r,
                     double xi2t, double xi2r) nogil
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 cdef int num = 3
@@ -41,8 +36,8 @@ def fkCss(double kt, double kr, double ys, double a, double b, int m, int n,
     cdef int i, k, j, l, c, row, col
     cdef double eta
 
-    cdef np.ndarray[cINT, ndim=1] kCssr, kCssc
-    cdef np.ndarray[cDOUBLE, ndim=1] kCssv
+    cdef long [:] kCssr, kCssc
+    cdef double [:] kCssv
 
     cdef double fAufBu, fAvfBv, fAwfBw
     cdef double gAu, gBu, gAv, gBv, gAw, gBw, gAweta, gBweta
@@ -119,8 +114,8 @@ def fkCsf(double kt, double kr, double ys, double a, double b, double bf,
     cdef int i, j, k1, l1, c, row, col
     cdef double eta
 
-    cdef np.ndarray[cINT, ndim=1] kCsfr, kCsfc
-    cdef np.ndarray[cDOUBLE, ndim=1] kCsfv
+    cdef long [:] kCsfr, kCsfc
+    cdef double [:] kCsfv
 
     cdef double fAurBu, fAvrBw, fAwrBv, fAwrBw
     cdef double gAu, gAv, gAw, gAweta, sBu, sBv, sBw, sBweta
@@ -194,8 +189,8 @@ def fkCff(double kt, double kr, double a, double bf, int m1, int n1,
           int size, int row0, int col0):
     cdef int i1, k1, j1, l1, c, row, col
 
-    cdef np.ndarray[cINT, ndim=1] kCffr, kCffc
-    cdef np.ndarray[cDOUBLE, ndim=1] kCffv
+    cdef long [:] kCffr, kCffc
+    cdef double [:] kCffv
 
     cdef double rAurBu, rAvrBv, rAwrBw
     cdef double sAu, sBu, sAv, sBv, sAw, sBw, sAweta, sBweta

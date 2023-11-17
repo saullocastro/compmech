@@ -4,11 +4,8 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-from __future__ import division
-
 from scipy.sparse import coo_matrix
 import numpy as np
-cimport numpy as np
 
 
 cdef extern from 'bardell.h':
@@ -41,9 +38,7 @@ cdef extern from 'bardell_c0c1.h':
             double x1t, double x1r, double x2t, double x2r,
             double y1t, double y1r, double y2t, double y2r) nogil
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 cdef int num = 3
@@ -63,8 +58,8 @@ def fkCppy1y2(double y1, double y2,
     cdef int i, k, j, l, c, row, col
     cdef double eta1, eta2
 
-    cdef np.ndarray[cINT, ndim=1] kCppr, kCppc
-    cdef np.ndarray[cDOUBLE, ndim=1] kCppv
+    cdef long [:] kCppr, kCppc
+    cdef double [:] kCppv
 
     cdef double fAufBu, fAufBwxi, fAvfBv, fAvfBw, fAwfBv, fAwfBw, fAwxifBu, fAwxifBwxi
     cdef double gAugBu, gAugBw, gAvgBv, gAvgBweta, gAwgBu, gAwgBw, gAwetagBv, gAwetagBweta
@@ -163,8 +158,8 @@ def fkCpby1y2(double y1, double y2,
     cdef int i, j, k1, l1, c, row, col
     cdef double eta1, eta2, c0, c1
 
-    cdef np.ndarray[cINT, ndim=1] kCpbr, kCpbc
-    cdef np.ndarray[cDOUBLE, ndim=1] kCpbv
+    cdef long [:] kCpbr, kCpbc
+    cdef double [:] kCpbv
 
     cdef double fAupBu, fAvpBv, fAwpBw, fAwxipBu, fAwpBv
     cdef double gAuqBu, gAvqBv, gAwqBw, gAwetaqBv, gAwqBu
@@ -243,11 +238,11 @@ def fkCbbpby1y2(double y1, double y2,
     cdef int i1, k1, j1, l1, c, row, col
     cdef double eta1, eta2, c1
 
-    cdef np.ndarray[cINT, ndim=1] kCbbpbr, kCbbpbc
-    cdef np.ndarray[cDOUBLE, ndim=1] kCbbpbv
+    cdef long [:] kCbbpbr, kCbbpbc
+    cdef double [:] kCbbpbv
 
     cdef double pAupBu, pAvpBv, pAwpBw
-    cdef double qAuqBu, qAvqBv, qAwqBw, qAwetaqBweta
+    cdef double qAuqBu, qAvqBv, qAwqBw
 
     eta1 = 2*y1/b - 1.
     eta2 = 2*y2/b - 1.

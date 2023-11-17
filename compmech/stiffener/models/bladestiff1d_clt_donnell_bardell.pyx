@@ -4,11 +4,8 @@
 #cython: nonecheck=False
 #cython: profile=False
 #cython: infer_types=False
-from __future__ import division
-
 from scipy.sparse import coo_matrix
 import numpy as np
-cimport numpy as np
 
 
 cdef extern from 'bardell.h':
@@ -31,9 +28,7 @@ cdef extern from 'bardell_functions.h':
     double calc_fxi(int i, double xi, double xi1t, double xi1r,
                     double xi2t, double xi2r) nogil
 
-ctypedef np.double_t cDOUBLE
 DOUBLE = np.float64
-ctypedef np.int64_t cINT
 INT = np.int64
 
 cdef int num = 3
@@ -54,8 +49,8 @@ def fk0f(double ys, double a, double b, double bf, double df, double E1, double 
     cdef double fAwxixifBwxixi
     cdef double gAu, gBu, gAw, gBw, gAweta, gBweta
 
-    cdef np.ndarray[cINT, ndim=1] k0fr, k0fc
-    cdef np.ndarray[cDOUBLE, ndim=1] k0fv
+    cdef long [:] k0fr, k0fc
+    cdef double [:] k0fv
 
     eta = 2*ys/b - 1.
 
@@ -127,8 +122,8 @@ def fkG0f(double ys, double Fx, double a, double b, double bf, int m, int n,
     cdef int i, k, j, l, c, row, col
     cdef double eta
 
-    cdef np.ndarray[cINT, ndim=1] kG0fr, kG0fc
-    cdef np.ndarray[cDOUBLE, ndim=1] kG0fv
+    cdef long [:] kG0fr, kG0fc
+    cdef double [:] kG0fv
 
     cdef double fAwxifBwxi, gAw, gBw
 
@@ -187,8 +182,8 @@ def fkMf(double ys, double mu, double h, double hb, double hf, double a,
     cdef int i, k, j, l, c, row, col
     cdef double eta
 
-    cdef np.ndarray[cINT, ndim=1] kMfr, kMfc
-    cdef np.ndarray[cDOUBLE, ndim=1] kMfv
+    cdef long [:] kMfr, kMfc
+    cdef double [:] kMfv
 
     eta = 2*ys/b - 1.
 
