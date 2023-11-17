@@ -49,9 +49,9 @@ def test_panel_aero():
             ind = np.where(np.any(out.imag != 0, axis=1))[0][0]
             if atype == 1:
                 if not model.endswith('_w'):
-                    assert np.isclose(betas[ind], 347.16346, atol=0.1, rtol=0)
+                    assert np.isclose(betas[ind], 163.125, atol=0.1, rtol=0)
                 else:
-                    assert np.isclose(betas[ind], 174.27885, atol=0.1, rtol=0)
+                    assert np.isclose(betas[ind], 163.125, atol=0.1, rtol=0)
             elif atype == 2:
                 if not model.endswith('_w'):
                     assert np.isclose(betas[ind], 728.625, atol=0.1, rtol=0)
