@@ -15,9 +15,9 @@ jobs:
         USE_COVERAGE: ${{ matrix.runs-on == 'ubuntu-latest' && matrix.python-version == '3.10' }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Setting up OpenMP for Linux
@@ -61,7 +61,7 @@ jobs:
         pytest compmech
     - name: Upload coverage to Codecov
       if: env.USE_COVERAGE == 'true'
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_UPLOAD_TOKEN }} 
         fail_ci_if_error: true

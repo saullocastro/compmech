@@ -1,4 +1,4 @@
-name: Documentation
+name: auto-doc
 
 on:
   push:
@@ -10,24 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: '3.11'
     - name: Install dependencies
       run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install --upgrade -r ci_requirements_doc.txt
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade -r ci_requirements_doc.txt
     - name: Install module
       run: |
-        python3 -m pip install .
+        python -m pip install .
     - name: Building documentation
       run: |
         cd doc
         make html
     - name: Deploying documentation
-      uses: JamesIves/github-pages-deploy-action@v4
+      uses: JamesIves/github-pages-deploy-action@v4.4.3
       with:
         branch: gh-pages # The branch the action should deploy to.
         folder: ./doc/build/html # The folder the action should deploy.
