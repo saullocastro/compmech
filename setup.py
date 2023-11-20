@@ -67,7 +67,7 @@ def read(fname):
 #_____________________________________________________________________________
 
 install_requires = [
-        "numpy >= 1.23.0",
+        "numpy",
         "scipy",
         "matplotlib",
         ]
@@ -95,7 +95,7 @@ Programming Language :: Python :: 3.11
 License :: OSI Approved :: BSD License
 """
 
-is_released = False
+is_released = True
 version = '0.8.0'
 
 fullversion = write_version_py(version, is_released)
