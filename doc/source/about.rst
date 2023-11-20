@@ -50,6 +50,7 @@ Requirements
 ------------
 - NumPy
 - SciPy
+- MatPlotLib
 - (for building only) Cython and a C compiler
 
 Licensing

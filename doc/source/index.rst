@@ -1,6 +1,3 @@
-.. compmech documentation master file, created by
-   sphinx-quickstart.
-
 Computational Mechanics (compmech)
 ==================================
 
@@ -38,6 +35,9 @@ Released Versions
 
 `All released versions available here
 <https://github.com/saullocastro/compmech/releases>`_
+
+`Version 0.8.0
+<https://github.com/saullocastro/compmech/releases/tag/0.8.0>`_
 
 `Version 0.7.2
 <https://github.com/saullocastro/compmech/releases/tag/0.7.2>`_

@@ -5,7 +5,7 @@ Semi-analytical Models for Panels (:mod:`compmech.panel`)
 
 .. currentmodule:: compmech.panel
 
-.. automodule:: compmech.panel.panel
+.. autoclass:: compmech.panel.Panel
     :members:
 
 """

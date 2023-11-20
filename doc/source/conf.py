@@ -23,16 +23,12 @@ sys.path = [''] + sys.path
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.addons.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode',
-              'sphinx.ext.imgmath', 'sphinx.ext.autosummary',
+              'sphinx.ext.mathjax', 'sphinx.ext.autosummary',
               'numpydoc', 'sphinx.ext.graphviz',
               'matplotlib.sphinxext.plot_directive']
 
-# Use this to use pngmath instead
-#extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.pngmath', ]
-
 # MathJax file, which is free to use.
-# See http://www.mathjax.org/docs/2.0/start.html
-mathjax_path = 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full'
+mathjax_path = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
 
 # Add any paths that contain templates here, relative to this directory.
 #templates_path = ['.templates']
@@ -45,7 +41,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = 'CompMech'
-copyright = '2012-2016 Saullo G. P. Castro'
+copyright = '2012-2023 Saullo G. P. Castro'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
@@ -102,7 +98,7 @@ html_last_updated_fmt = '%b %d, %Y'
 html_logo = '../logo/logo.png'
 html_favicon = '../logo/logo.png'
 # See http://sphinx-doc.org/theming.html#builtin-themes.
-html_theme = 'default'
+html_theme = 'pydata_sphinx_theme'
 if html_theme=='default':
     html_theme_options = {
         'collapsiblesidebar': False,
