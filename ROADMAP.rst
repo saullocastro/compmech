@@ -1,13 +1,14 @@
 Version 0.8.0
 -------------
-- more connectivities for PanelAssembly
-- elliptical panel, only with numerical integration
-- parallel processing to compute kT for PanelAssembly
-- strain / stress calculation for all panels
+- new simpler setup, compatible with Windows, Linux and MAC-OS
 
 
 Version 0.9.0
 -------------
+- more connectivities for PanelAssembly
+- elliptical panel, only with numerical integration
+- parallel processing to compute kT for PanelAssembly
+- strain / stress calculation for all panels
 - mass matrices also valid for variable property along domain (perhaps with
   numerical integration)
 - create a boundary class with w1tx etc?
