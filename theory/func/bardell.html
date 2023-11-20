@@ -1,57 +1,421 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <title>Bardell’s Hierarchical Functions &#8212; CompMech 0.7.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    
-    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bardell’s Hierarchical Functions &#8212; CompMech 0.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../_static/documentation_options.js?v=486e5634"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'theory/func/bardell';</script>
+    <link rel="icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="References" href="ref.html" />
-    <link rel="prev" title="Approximation Functions Used in Various Models" href="index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="ref.html" title="References"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Approximation Functions Used in Various Models"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Approximation Functions Used in Various Models</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="Approximation Functions Used in Various Models" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Nov 20, 2023"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="bardell-s-hierarchical-functions">
-<span id="theory-func-bardell"></span><h1>Bardell’s Hierarchical Functions<a class="headerlink" href="#bardell-s-hierarchical-functions" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="CompMech 0.8.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="CompMech 0.8.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules/index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules/index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../conecyl/index.html">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../conecyl/dev_of_conecyl.html">Developing the code for the conecyl module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../conecyl/esl_theories.html">Equivalent Single Layer (ESL) Theories</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../conecyl/clpt.html">CLPT - Classical Laminated Plate Theory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../conecyl/fsdt.html">FSDT - First-order Shear Deformation Theory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../conecyl/bcs.html">Boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../conecyl/tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../conecyl/ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../fem/index.html">Finite Element Method</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../fem/elem_stiff_matrix.html">Element Stiffness Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Approximation Functions Used in Various Models</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Bardell’s Hierarchical Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../integrate/index.html">Numerical Integration Methods</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../integrate/legendre_gauss.html">Legendre-Gauss Quadrature Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../integrate/ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../meshfree/index.html">Meshfree Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">References</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Theory, Implementation and Tutorials</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Approximation Functions Used in Various Models</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Bardell’s...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="bardell-s-hierarchical-functions">
+<span id="theory-func-bardell"></span><h1>Bardell’s Hierarchical Functions<a class="headerlink" href="#bardell-s-hierarchical-functions" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>Bardell (1991) <a class="reference internal" href="ref.html#bardell1991" id="id1"><span>[bardell1991]</span></a> proposed a very convinient set of approximation
 functions based on hierarchical polynomials. The convenience comes from the
 fast convergence and from the easiness to simulate practically any type of
@@ -59,22 +423,22 @@ boundary conditions.</p>
 <p>The boundary condition is controlled by the first 4 terms of the approximation
 function, herein defined as:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">t1</span></code>: the translation at extremity 1 (<img class="math" src="../../_images/math/6d37951da6fac525d700d880937aed139a70ed91.png" alt="\xi = -1"/>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t1</span></code>: the translation at extremity 1 (<span class="math notranslate nohighlight">\(\xi = -1\)</span>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">r1</span></code>: the rotation at extremity 1</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">t2</span></code>: the translation at extremity 2 (<img class="math" src="../../_images/math/48c6948c39e939f64803d7b06acff46a9ed88b47.png" alt="\xi = +1"/>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t2</span></code>: the translation at extremity 2 (<span class="math notranslate nohighlight">\(\xi = +1\)</span>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">r2</span></code>: the rotation at extremity 2</p></li>
 </ul>
-</div>
-<div class="section" id="generating-bardell-s-functions">
-<h2>Generating Bardell’s functions<a class="headerlink" href="#generating-bardell-s-functions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="generating-bardell-s-functions">
+<h2>Generating Bardell’s functions<a class="headerlink" href="#generating-bardell-s-functions" title="Link to this heading">#</a></h2>
 <p>The following code can be used to generate the Bardell functions for a given
 number of terms <code class="docutils literal notranslate"><span class="pre">nmax</span></code>. The substitution <code class="docutils literal notranslate"><span class="pre">replace('**',</span> <span class="pre">'^')</span></code> aims to
 create an input to Mathematica.</p>
 <div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell.py</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sympy</span> <span class="k">import</span> <span class="n">var</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">factorial2</span><span class="p">,</span> <span class="n">sympify</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">var</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">factorial2</span><span class="p">,</span> <span class="n">sympify</span>
 
 <span class="n">nmax</span> <span class="o">=</span> <span class="mi">40</span>
 
@@ -107,65 +471,15 @@ create an input to Mathematica.</p>
 </div>
 </div>
 <p>The output of the code above is:</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell.txt</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Bardell</span><span class="s1">&#39;s hierarchical functions</span>
-
-<span class="n">Number</span> <span class="n">of</span> <span class="n">terms</span><span class="p">:</span> <span class="mi">40</span>
-
-<span class="n">t1</span><span class="o">*</span><span class="p">(</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">4</span> <span class="o">-</span> <span class="mi">3</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
-<span class="n">r1</span><span class="o">*</span><span class="p">(</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">8</span> <span class="o">-</span> <span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">8</span> <span class="o">-</span> <span class="n">xi</span><span class="o">/</span><span class="mi">8</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">8</span><span class="p">),</span>
-<span class="n">t2</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
-<span class="n">r2</span><span class="o">*</span><span class="p">(</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">8</span> <span class="o">+</span> <span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">8</span> <span class="o">-</span> <span class="n">xi</span><span class="o">/</span><span class="mi">8</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">8</span><span class="p">),</span>
-<span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">8</span> <span class="o">-</span> <span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span>
-<span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">8</span> <span class="o">-</span> <span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">4</span> <span class="o">+</span> <span class="n">xi</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span>
-<span class="mi">7</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">48</span> <span class="o">-</span> <span class="mi">5</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">16</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">16</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">48</span><span class="p">,</span>
-<span class="mi">3</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">16</span> <span class="o">-</span> <span class="mi">7</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">16</span> <span class="o">+</span> <span class="mi">5</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">16</span> <span class="o">-</span> <span class="n">xi</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span>
-<span class="mi">33</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">128</span> <span class="o">-</span> <span class="mi">21</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">32</span> <span class="o">+</span> <span class="mi">35</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">64</span> <span class="o">-</span> <span class="mi">5</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">32</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">128</span><span class="p">,</span>
-<span class="mi">143</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">384</span> <span class="o">-</span> <span class="mi">33</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">32</span> <span class="o">+</span> <span class="mi">63</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">64</span> <span class="o">-</span> <span class="mi">35</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">96</span> <span class="o">+</span> <span class="mi">5</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">128</span><span class="p">,</span>
-<span class="mi">143</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">256</span> <span class="o">-</span> <span class="mi">429</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">256</span> <span class="o">+</span> <span class="mi">231</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">128</span> <span class="o">-</span> <span class="mi">105</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">128</span> <span class="o">+</span> <span class="mi">35</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">256</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">256</span><span class="p">,</span>
-<span class="mi">221</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">256</span> <span class="o">-</span> <span class="mi">715</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">256</span> <span class="o">+</span> <span class="mi">429</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">128</span> <span class="o">-</span> <span class="mi">231</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">128</span> <span class="o">+</span> <span class="mi">105</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">256</span> <span class="o">-</span> <span class="mi">7</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">256</span><span class="p">,</span>
-<span class="mi">4199</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">3072</span> <span class="o">-</span> <span class="mi">2431</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">512</span> <span class="o">+</span> <span class="mi">6435</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">1024</span> <span class="o">-</span> <span class="mi">1001</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">256</span> <span class="o">+</span> <span class="mi">1155</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">1024</span> <span class="o">-</span> <span class="mi">63</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">512</span> <span class="o">+</span> <span class="mi">7</span><span class="o">/</span><span class="mi">3072</span><span class="p">,</span>
-<span class="mi">2261</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">1024</span> <span class="o">-</span> <span class="mi">4199</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">512</span> <span class="o">+</span> <span class="mi">12155</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">1024</span> <span class="o">-</span> <span class="mi">2145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">256</span> <span class="o">+</span> <span class="mi">3003</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">1024</span> <span class="o">-</span> <span class="mi">231</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">512</span> <span class="o">+</span> <span class="mi">21</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">1024</span><span class="p">,</span>
-<span class="mi">7429</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">2048</span> <span class="o">-</span> <span class="mi">29393</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">2048</span> <span class="o">+</span> <span class="mi">46189</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">2048</span> <span class="o">-</span> <span class="mi">36465</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">2048</span> <span class="o">+</span> <span class="mi">15015</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">2048</span> <span class="o">-</span> <span class="mi">3003</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">2048</span> <span class="o">+</span> <span class="mi">231</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">2048</span> <span class="o">-</span> <span class="mi">3</span><span class="o">/</span><span class="mi">2048</span><span class="p">,</span>
-<span class="mi">37145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">6144</span> <span class="o">-</span> <span class="mi">52003</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">2048</span> <span class="o">+</span> <span class="mi">88179</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">2048</span> <span class="o">-</span> <span class="mi">230945</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">6144</span> <span class="o">+</span> <span class="mi">36465</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">2048</span> <span class="o">-</span> <span class="mi">9009</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">2048</span> <span class="o">+</span> <span class="mi">1001</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">2048</span> <span class="o">-</span> <span class="mi">33</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">2048</span><span class="p">,</span>
-<span class="mi">334305</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">32768</span> <span class="o">-</span> <span class="mi">185725</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">4096</span> <span class="o">+</span> <span class="mi">676039</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">8192</span> <span class="o">-</span> <span class="mi">323323</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">4096</span> <span class="o">+</span> <span class="mi">692835</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">16384</span> <span class="o">-</span> <span class="mi">51051</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">4096</span> <span class="o">+</span> <span class="mi">15015</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">8192</span> <span class="o">-</span> <span class="mi">429</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">4096</span> <span class="o">+</span> <span class="mi">33</span><span class="o">/</span><span class="mi">32768</span><span class="p">,</span>
-<span class="mi">570285</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">32768</span> <span class="o">-</span> <span class="mi">334305</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">4096</span> <span class="o">+</span> <span class="mi">1300075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">8192</span> <span class="o">-</span> <span class="mi">676039</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">4096</span> <span class="o">+</span> <span class="mi">1616615</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">16384</span> <span class="o">-</span> <span class="mi">138567</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">4096</span> <span class="o">+</span> <span class="mi">51051</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">8192</span> <span class="o">-</span> <span class="mi">2145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">4096</span> <span class="o">+</span> <span class="mi">429</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">32768</span><span class="p">,</span>
-<span class="mi">1964315</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">65536</span> <span class="o">-</span> <span class="mi">9694845</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">65536</span> <span class="o">+</span> <span class="mi">5014575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">16384</span> <span class="o">-</span> <span class="mi">16900975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">49152</span> <span class="o">+</span> <span class="mi">7436429</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">32768</span> <span class="o">-</span> <span class="mi">2909907</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">32768</span> <span class="o">+</span> <span class="mi">323323</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">16384</span> <span class="o">-</span> <span class="mi">36465</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">16384</span> <span class="o">+</span> <span class="mi">6435</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">65536</span> <span class="o">-</span> <span class="mi">143</span><span class="o">/</span><span class="mi">196608</span><span class="p">,</span>
-<span class="mi">3411705</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">65536</span> <span class="o">-</span> <span class="mi">17678835</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">65536</span> <span class="o">+</span> <span class="mi">9694845</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">16384</span> <span class="o">-</span> <span class="mi">11700675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">16384</span> <span class="o">+</span> <span class="mi">16900975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">32768</span> <span class="o">-</span> <span class="mi">7436429</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">32768</span> <span class="o">+</span> <span class="mi">969969</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">16384</span> <span class="o">-</span> <span class="mi">138567</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">16384</span> <span class="o">+</span> <span class="mi">36465</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">65536</span> <span class="o">-</span> <span class="mi">715</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">65536</span><span class="p">,</span>
-<span class="mi">23881935</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">64822395</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">131072</span> <span class="o">+</span> <span class="mi">300540195</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">48474225</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">32768</span> <span class="o">+</span> <span class="mi">152108775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">131072</span> <span class="o">-</span> <span class="mi">37182145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">65536</span> <span class="o">+</span> <span class="mi">22309287</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">131072</span> <span class="o">-</span> <span class="mi">969969</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">32768</span> <span class="o">+</span> <span class="mi">692835</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">12155</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">131072</span> <span class="o">+</span> <span class="mi">143</span><span class="o">/</span><span class="mi">262144</span><span class="p">,</span>
-<span class="mi">42077695</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">119409675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">131072</span> <span class="o">+</span> <span class="mi">583401555</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">100180065</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">32768</span> <span class="o">+</span> <span class="mi">339319575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">131072</span> <span class="o">-</span> <span class="mi">91265265</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">65536</span> <span class="o">+</span> <span class="mi">185910725</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">393216</span> <span class="o">-</span> <span class="mi">3187041</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">32768</span> <span class="o">+</span> <span class="mi">2909907</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">230945</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">393216</span> <span class="o">+</span> <span class="mi">2431</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">262144</span><span class="p">,</span>
-<span class="mi">149184555</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">524288</span> <span class="o">-</span> <span class="mi">883631595</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">2268783825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">524288</span> <span class="o">-</span> <span class="mi">3305942145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">1502700975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">882230895</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">262144</span> <span class="o">+</span> <span class="mi">334639305</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">79676025</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">262144</span> <span class="o">+</span> <span class="mi">22309287</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">524288</span> <span class="o">-</span> <span class="mi">1616615</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">46189</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">524288</span> <span class="o">-</span> <span class="mi">221</span><span class="o">/</span><span class="mi">524288</span><span class="p">,</span>
-<span class="mi">265937685</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">524288</span> <span class="o">-</span> <span class="mi">1641030105</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">4418157975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">524288</span> <span class="o">-</span> <span class="mi">6806351475</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">3305942145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">2103781365</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">262144</span> <span class="o">+</span> <span class="mi">882230895</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">262144</span> <span class="o">-</span> <span class="mi">239028075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">262144</span> <span class="o">+</span> <span class="mi">79676025</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">524288</span> <span class="o">-</span> <span class="mi">7436429</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">323323</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">524288</span> <span class="o">-</span> <span class="mi">4199</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">524288</span><span class="p">,</span>
-<span class="mi">3811773485</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">24</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">6116566755</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">+</span> <span class="mi">34461632205</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">2097152</span> <span class="o">-</span> <span class="mi">27981667175</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">+</span> <span class="mi">115707975075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">9917826435</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">9116385915</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">-</span> <span class="mi">1386362835</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">2151252675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">185910725</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">3145728</span> <span class="o">+</span> <span class="mi">7436429</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">2097152</span> <span class="o">-</span> <span class="mi">88179</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">+</span> <span class="mi">4199</span><span class="o">/</span><span class="mi">12582912</span><span class="p">,</span>
-<span class="mi">6861192273</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">25</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">11435320455</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">+</span> <span class="mi">67282234305</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">2097152</span> <span class="o">-</span> <span class="mi">57436053675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">+</span> <span class="mi">251835004575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">23141595015</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">23141595015</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">-</span> <span class="mi">3907022535</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">524288</span> <span class="o">+</span> <span class="mi">6931814175</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">239028075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">+</span> <span class="mi">37182145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">2097152</span> <span class="o">-</span> <span class="mi">676039</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">1048576</span> <span class="o">+</span> <span class="mi">29393</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">4194304</span><span class="p">,</span>
-<span class="mi">24805848987</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">26</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">-</span> <span class="mi">171529806825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">24</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">263012370465</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">470975640135</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">+</span> <span class="mi">1091285019825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">-</span> <span class="mi">856239015555</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">115707975075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">2097152</span> <span class="o">-</span> <span class="mi">42977247885</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">2097152</span> <span class="o">+</span> <span class="mi">42977247885</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">-</span> <span class="mi">6931814175</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">334639305</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">16900975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">+</span> <span class="mi">676039</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">-</span> <span class="mi">2261</span><span class="o">/</span><span class="mi">8388608</span><span class="p">,</span>
-<span class="mi">135054066707</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">27</span><span class="o">/</span><span class="mi">25165824</span> <span class="o">-</span> <span class="mi">322476036831</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">25</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">514589420475</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">964378691705</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">+</span> <span class="mi">2354878200675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">-</span> <span class="mi">1964313035685</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">285413005185</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">2097152</span> <span class="o">-</span> <span class="mi">115707975075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">2097152</span> <span class="o">+</span> <span class="mi">128931743655</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">-</span> <span class="mi">23876248825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">1386362835</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">-</span> <span class="mi">91265265</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">+</span> <span class="mi">16900975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">25165824</span> <span class="o">-</span> <span class="mi">52003</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">8388608</span><span class="p">,</span>
-<span class="mi">327988447717</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">28</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">1215486600363</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">26</span><span class="o">/</span><span class="mi">16777216</span> <span class="o">+</span> <span class="mi">8061900920775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">24</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">3945185556975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">20251952525805</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">8948537162565</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">16777216</span> <span class="o">+</span> <span class="mi">11131107202215</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">611599296825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">+</span> <span class="mi">1504203675975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">157583242245</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">16777216</span> <span class="o">+</span> <span class="mi">42977247885</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">882230895</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">152108775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">1300075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">16777216</span> <span class="o">+</span> <span class="mi">7429</span><span class="o">/</span><span class="mi">33554432</span><span class="p">,</span>
-<span class="mi">599427163069</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">29</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">2295919134019</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">27</span><span class="o">/</span><span class="mi">16777216</span> <span class="o">+</span> <span class="mi">15801325804719</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">25</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">8061900920775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">43397041126725</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">20251952525805</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">16777216</span> <span class="o">+</span> <span class="mi">26845611487695</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">1590158171745</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">4194304</span> <span class="o">+</span> <span class="mi">4281195077775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">501401225325</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">16777216</span> <span class="o">+</span> <span class="mi">157583242245</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">3907022535</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">8388608</span> <span class="o">+</span> <span class="mi">882230895</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">33554432</span> <span class="o">-</span> <span class="mi">11700675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">16777216</span> <span class="o">+</span> <span class="mi">185725</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">33554432</span><span class="p">,</span>
-<span class="mi">6593698793759</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">30</span><span class="o">/</span><span class="mi">201326592</span> <span class="o">-</span> <span class="mi">17383387729001</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">28</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">61989816618513</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">26</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">131677715039325</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">24</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">185423721177825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">182267572732245</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">128262365996765</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">65196485041545</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">23852372576175</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">6183948445675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">1103082695715</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">128931743655</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">9116385915</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">339319575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">5014575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">37145</span><span class="o">/</span><span class="mi">201326592</span><span class="p">,</span>
-<span class="mi">4041299260691</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">31</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">32968493968795</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">29</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">121683714103007</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">27</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">268622538680223</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">25</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">395033145117975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">407932186591215</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">303779287887075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">164908756281555</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">65196485041545</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">18551845337025</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">3710369067405</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">501401225325</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">42977247885</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">2103781365</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">+</span> <span class="mi">48474225</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">67108864</span> <span class="o">-</span> <span class="mi">334305</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">67108864</span><span class="p">,</span>
-<span class="mi">238436656380769</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">32</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">-</span> <span class="mi">125280277081421</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">30</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">956086325095055</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">28</span><span class="o">/</span><span class="mi">268435456</span> <span class="o">-</span> <span class="mi">1095153426927063</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">26</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">6715563467005575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">24</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">1817152467542685</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">2855525306138505</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">268435456</span> <span class="o">-</span> <span class="mi">824543781407775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">2803448856786435</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">-</span> <span class="mi">108660808402575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">48234797876265</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">268435456</span> <span class="o">-</span> <span class="mi">3710369067405</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">1504203675975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">23141595015</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">1502700975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">268435456</span> <span class="o">-</span> <span class="mi">9694845</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">334305</span><span class="o">/</span><span class="mi">2147483648</span><span class="p">,</span>
-<span class="mi">1322239639929719</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">33</span><span class="o">/</span><span class="mi">6442450944</span> <span class="o">-</span> <span class="mi">238436656380769</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">31</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">1879204156221315</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">29</span><span class="o">/</span><span class="mi">268435456</span> <span class="o">-</span> <span class="mi">6692604275665385</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">27</span><span class="o">/</span><span class="mi">402653184</span> <span class="o">+</span> <span class="mi">14236994550051819</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">25</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">4029338080203345</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">6662892380989845</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">268435456</span> <span class="o">-</span> <span class="mi">2039660932956075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">7420894032669975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">-</span> <span class="mi">311494317420715</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">152125131763605</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">268435456</span> <span class="o">-</span> <span class="mi">13154944875345</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">6183948445675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">115707975075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">9917826435</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">268435456</span> <span class="o">-</span> <span class="mi">100180065</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">134217728</span> <span class="o">+</span> <span class="mi">9694845</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">2147483648</span><span class="p">,</span>
-<span class="mi">1633354849324947</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">34</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">14544636039226909</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">32</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">+</span> <span class="mi">7391536347803839</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">30</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">18165640176806045</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">28</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">+</span> <span class="mi">60233438480988465</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">26</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">-</span> <span class="mi">71184972750259095</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">24</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">30891591948225645</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">19988677142969535</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">+</span> <span class="mi">38753557726165425</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">-</span> <span class="mi">14017244283932175</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">+</span> <span class="mi">934482952262145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">179784246629715</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">+</span> <span class="mi">48234797876265</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">-</span> <span class="mi">4281195077775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">115707975075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">3305942145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">+</span> <span class="mi">300540195</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">570285</span><span class="o">/</span><span class="mi">4294967296</span><span class="p">,</span>
-<span class="mi">3033373291603473</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">35</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">27767032438524099</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">33</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">+</span> <span class="mi">14544636039226909</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">31</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">36957681739019195</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">29</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">+</span> <span class="mi">127159481237642315</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">27</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">-</span> <span class="mi">156606940050570009</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">25</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">71184972750259095</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">48543930204354585</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">+</span> <span class="mi">99943385714847675</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">-</span> <span class="mi">38753557726165425</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">+</span> <span class="mi">2803448856786435</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">594670969621365</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">+</span> <span class="mi">179784246629715</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">-</span> <span class="mi">18551845337025</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">611599296825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">-</span> <span class="mi">23141595015</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">536870912</span> <span class="o">+</span> <span class="mi">3305942145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">17678835</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">4294967296</span><span class="p">,</span>
-<span class="mi">67745336845810897</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">36</span><span class="o">/</span><span class="mi">51539607552</span> <span class="o">-</span> <span class="mi">106168065206121555</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">34</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">916312070471295267</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">32</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">450883717216034179</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">30</span><span class="o">/</span><span class="mi">3221225472</span> <span class="o">+</span> <span class="mi">1071772770431556655</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">28</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">686661198683268501</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">26</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">+</span> <span class="mi">1305057833754750075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">24</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">233893481893708455</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">1019422534291446285</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">210991592064678425</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">+</span> <span class="mi">131762096268962445</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">3822884804708775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">2576907535025915</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">152125131763605</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">+</span> <span class="mi">23852372576175</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">285413005185</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">115707975075</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">583401555</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">1964315</span><span class="o">/</span><span class="mi">17179869184</span><span class="p">,</span>
-<span class="mi">42111966147395963</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">37</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">203236010537432691</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">35</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">1804857108504066435</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">33</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">305437356823765089</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">31</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">2254418586080170895</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">29</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">1500481878604179317</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">27</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">+</span> <span class="mi">2975531860960830171</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">25</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">559310500180607175</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">2572828300830793005</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">566345852384136825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">+</span> <span class="mi">379784865716421165</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">11978372388087495</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">8920064544320475</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">594670969621365</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">2147483648</span> <span class="o">+</span> <span class="mi">108660808402575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">4294967296</span> <span class="o">-</span> <span class="mi">1590158171745</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">1073741824</span> <span class="o">+</span> <span class="mi">856239015555</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">6806351475</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">64822395</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">17179869184</span><span class="p">,</span>
-<span class="mi">157365768235005967</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">38</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">-</span> <span class="mi">1558142747453650631</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">36</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">+</span> <span class="mi">7113260368810144185</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">34</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">-</span> <span class="mi">19853428193544730785</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">32</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">+</span> <span class="mi">9468558061536717759</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">30</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">13075627799264991191</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">28</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">13504336907437613853</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">26</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">10626899503431536325</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">24</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">12864141504153965025</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">22</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">6003266035271850345</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">20</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">+</span> <span class="mi">2152114239059719935</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">18</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">586940247016287255</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">16</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">+</span> <span class="mi">59891861940437475</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">14</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">8920064544320475</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">12</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">934482952262145</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">10</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">65196485041545</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">8</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">11131107202215</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">6</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">-</span> <span class="mi">251835004575</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">4</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">+</span> <span class="mi">2268783825</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">2</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">-</span> <span class="mi">3411705</span><span class="o">/</span><span class="mi">34359738368</span><span class="p">,</span>
-<span class="mi">883669313935033507</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">39</span><span class="o">/</span><span class="mi">103079215104</span> <span class="o">-</span> <span class="mi">2989949596465113373</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">37</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">+</span> <span class="mi">14023284727082855679</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">35</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">-</span> <span class="mi">40308475423257483715</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">33</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">+</span> <span class="mi">19853428193544730785</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">31</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">28405674184610153277</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">29</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">91529394594854938337</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">27</span><span class="o">/</span><span class="mi">25769803776</span> <span class="o">-</span> <span class="mi">25079482828098425727</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">25</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">31880698510294608975</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">23</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">15722839616188179475</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">21</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">+</span> <span class="mi">6003266035271850345</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">19</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">-</span> <span class="mi">1760820741048861765</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">17</span><span class="o">/</span><span class="mi">17179869184</span> <span class="o">+</span> <span class="mi">195646749005429085</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">15</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">32249464121774025</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">13</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">3822884804708775</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">11</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">-</span> <span class="mi">311494317420715</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">9</span><span class="o">/</span><span class="mi">8589934592</span> <span class="o">+</span> <span class="mi">65196485041545</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">7</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">-</span> <span class="mi">1964313035685</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">5</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">+</span> <span class="mi">27981667175</span><span class="o">*</span><span class="n">xi</span><span class="o">^</span><span class="mi">3</span><span class="o">/</span><span class="mi">34359738368</span> <span class="o">-</span> <span class="mi">119409675</span><span class="o">*</span><span class="n">xi</span><span class="o">/</span><span class="mi">34359738368</span>
-
-</pre></div>
-</div>
-</div>
 <p>In order to calculate the displacement, strain of stress fields using Cython,
 the above output is not adequate due to very long integer numbers that will
 cause precision overflows. The code below should be used to create an input to
 Cython:</p>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell_floating_point.py</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">../../../../theory/func/bardell/bardell_floating_point.py</span><a class="headerlink" href="#id3" title="Link to this code">#</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sympy</span> <span class="k">import</span> <span class="n">var</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">factorial2</span><span class="p">,</span> <span class="n">sympify</span><span class="p">,</span> <span class="n">diff</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">var</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">factorial2</span><span class="p">,</span> <span class="n">sympify</span><span class="p">,</span> <span class="n">diff</span>
 
 <span class="n">nmax</span> <span class="o">=</span> <span class="mi">30</span>
 
@@ -234,105 +548,143 @@ Cython:</p>
 </div>
 </div>
 <p>Generating the following output:</p>
-</div>
-<div class="section" id="implemented-modules">
-<h2>Implemented modules<a class="headerlink" href="#implemented-modules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="implemented-modules">
+<h2>Implemented modules<a class="headerlink" href="#implemented-modules" title="Link to this heading">#</a></h2>
 <p>Three modules were created and they are called in <code class="docutils literal notranslate"><span class="pre">compmech</span></code> shared library.
 These libraries are available in <code class="docutils literal notranslate"><span class="pre">compmech/lib</span></code> after installation.</p>
 <p>Three modules are currently available:</p>
 <ul class="simple">
 <li><p>bardell: for the integration along the full domain</p></li>
 </ul>
-<div class="math">
-<p><img src="../../_images/math/f2ee8465b74a44d8b53efbc2bb53827d82a5139f.png" alt="\int_{\xi=-1}^{\xi=+1} {f(\xi) g(\xi)}"/></p>
-</div><ul class="simple">
+<div class="math notranslate nohighlight">
+\[\int_{\xi=-1}^{\xi=+1} {f(\xi) g(\xi)}\]</div>
+<ul class="simple">
 <li><p>bardell_12: for the integration in any interval</p></li>
 </ul>
-<div class="math">
-<p><img src="../../_images/math/9f7de7afe05a4ba2392ab258f1d87a24d7665e84.png" alt="\int_{\xi=\xi_1}^{\xi=\xi_2} {f(\xi) g(\xi)}"/></p>
-</div><ul class="simple">
+<div class="math notranslate nohighlight">
+\[\int_{\xi=\xi_1}^{\xi=\xi_2} {f(\xi) g(\xi)}\]</div>
+<ul class="simple">
 <li><p>bardell_c0c1: for the integration of two linearly dependent field variables
-<img class="math" src="../../_images/math/4b0fcdf5bbee5b94367e76452870b31d7c74f348.png" alt="\xi"/> and <img class="math" src="../../_images/math/a22af28a02e80d41cf51fe4163aa6d99f6bdc1b4.png" alt="\xi'"/></p></li>
+<span class="math notranslate nohighlight">\(\xi\)</span> and <span class="math notranslate nohighlight">\(\xi'\)</span></p></li>
 </ul>
-<div class="math">
-<p><img src="../../_images/math/dff6e1807895b9fb7d37514ab5cbd2ebf6ca224a.png" alt="\int_{\xi=-1}^{\xi=+1} {f(\xi) g(\xi')}"/></p>
-</div><p>such that:</p>
-<div class="math">
-<p><img src="../../_images/math/367a0ada718b53db80e14f8c8cd17cb4920fbe6c.png" alt="\xi' = c_0 + c_1 \xi"/></p>
-</div><p>with <img class="math" src="../../_images/math/0e737f293729c4135dbc78f453a7c82b3dc68dcd.png" alt="c_0"/> and <img class="math" src="../../_images/math/5d0e4ae755a4921b3abb1a7ea959aada4ed54b17.png" alt="c_1"/> being constant values.</p>
-</div>
-</div>
+<div class="math notranslate nohighlight">
+\[\int_{\xi=-1}^{\xi=+1} {f(\xi) g(\xi')}\]</div>
+<p>such that:</p>
+<div class="math notranslate nohighlight">
+\[\xi' = c_0 + c_1 \xi\]</div>
+<p>with <span class="math notranslate nohighlight">\(c_0\)</span> and <span class="math notranslate nohighlight">\(c_1\)</span> being constant values.</p>
+</section>
+</section>
 
 
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Approximation Functions Used in Various Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ref.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">References</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-bardell-s-functions">Generating Bardell’s functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implemented-modules">Implemented modules</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/theory/func/bardell.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
-            </a></p>
-  <h3><a href="../../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Bardell’s Hierarchical Functions</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#generating-bardell-s-functions">Generating Bardell’s functions</a></li>
-<li><a class="reference internal" href="#implemented-modules">Implemented modules</a></li>
-</ul>
-</li>
-</ul>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Approximation Functions Used in Various Models</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ref.html"
-                        title="next chapter">References</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/func/bardell.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2012-2023 Saullo G. P. Castro.
+      <br/>
+    
+  </p>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="ref.html" title="References"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Approximation Functions Used in Various Models"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Approximation Functions Used in Various Models</a> &#187;</li> 
-      </ul>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Sep 03, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>

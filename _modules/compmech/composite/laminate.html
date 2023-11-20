@@ -1,44 +1,368 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <title>compmech.composite.laminate &#8212; CompMech 0.7.2 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
-    <link rel="shortcut icon" href="../../../_static/logo.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>compmech.composite.laminate &#8212; CompMech 0.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../../_static/documentation_options.js?v=486e5634"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/compmech/composite/laminate';</script>
+    <link rel="icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Nov 20, 2023"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="CompMech 0.8.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/logo.png" class="logo__image only-dark" alt="CompMech 0.8.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../modules/index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../modules/index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">compmech.com...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <h1>Source code for compmech.composite.laminate</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Composite Laminate Module (:mod:`compmech.composite.laminate`)</span>
@@ -47,19 +371,19 @@
 <span class="sd">.. currentmodule:: compmech.composite.laminate</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
-
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.lamina</span> <span class="k">import</span> <span class="n">Lamina</span>
-<span class="kn">from</span> <span class="nn">.matlamina</span> <span class="k">import</span> <span class="n">read_laminaprop</span>
-<span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="k">import</span> <span class="n">DOUBLE</span>
-<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.lamina</span> <span class="kn">import</span> <span class="n">Lamina</span>
+<span class="kn">from</span> <span class="nn">.matlamina</span> <span class="kn">import</span> <span class="n">read_laminaprop</span>
+<span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">DOUBLE</span>
+<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="n">error</span>
 
 
-<div class="viewcode-block" id="read_stack"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.read_stack">[docs]</a><span class="k">def</span> <span class="nf">read_stack</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">laminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="p">[],</span> <span class="n">laminaprops</span><span class="o">=</span><span class="p">[],</span>
+<div class="viewcode-block" id="read_stack">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.read_stack">[docs]</a>
+<span class="k">def</span> <span class="nf">read_stack</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">laminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="p">[],</span> <span class="n">laminaprops</span><span class="o">=</span><span class="p">[],</span>
                <span class="n">offset</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read a laminate stacking sequence data.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read a laminate stacking sequence data.</span>
 
 <span class="sd">    An ``Laminate`` object is returned based on the inputs given.</span>
 
@@ -127,12 +451,15 @@
     <span class="k">return</span> <span class="n">lam</span></div>
 
 
-<div class="viewcode-block" id="read_lamination_parameters"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.read_lamination_parameters">[docs]</a><span class="k">def</span> <span class="nf">read_lamination_parameters</span><span class="p">(</span><span class="n">thickness</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
+
+<div class="viewcode-block" id="read_lamination_parameters">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.read_lamination_parameters">[docs]</a>
+<span class="k">def</span> <span class="nf">read_lamination_parameters</span><span class="p">(</span><span class="n">thickness</span><span class="p">,</span> <span class="n">laminaprop</span><span class="p">,</span>
                                <span class="n">xiA1</span><span class="p">,</span> <span class="n">xiA2</span><span class="p">,</span> <span class="n">xiA3</span><span class="p">,</span> <span class="n">xiA4</span><span class="p">,</span>
                                <span class="n">xiB1</span><span class="p">,</span> <span class="n">xiB2</span><span class="p">,</span> <span class="n">xiB3</span><span class="p">,</span> <span class="n">xiB4</span><span class="p">,</span>
                                <span class="n">xiD1</span><span class="p">,</span> <span class="n">xiD2</span><span class="p">,</span> <span class="n">xiD3</span><span class="p">,</span> <span class="n">xiD4</span><span class="p">,</span>
                                <span class="n">xiE1</span><span class="p">,</span> <span class="n">xiE2</span><span class="p">,</span> <span class="n">xiE3</span><span class="p">,</span> <span class="n">xiE4</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates a laminate based on the lamination parameters.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates a laminate based on the lamination parameters.</span>
 
 <span class="sd">    The lamination parameters:</span>
 <span class="sd">    `\xi_{A1} \cdots \xi_{A4}`,  `\xi_{B1} \cdots \xi_{B4}`,</span>
@@ -168,8 +495,11 @@
     <span class="k">return</span> <span class="n">lam</span></div>
 
 
-<div class="viewcode-block" id="Laminate"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate">[docs]</a><span class="k">class</span> <span class="nc">Laminate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Laminate">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate">[docs]</a>
+<span class="k">class</span> <span class="nc">Laminate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    =========  ===========================================================</span>
 <span class="sd">    attribute  description</span>
 <span class="sd">    =========  ===========================================================</span>
@@ -193,7 +523,7 @@
 <span class="sd">    =========  ===========================================================</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plies</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matobj</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="kc">None</span>
@@ -224,14 +554,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">lam_thick</span>
 
 
-<div class="viewcode-block" id="Laminate.calc_equivalent_modulus"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_equivalent_modulus">[docs]</a>    <span class="k">def</span> <span class="nf">calc_equivalent_modulus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Calculates the equivalent laminate properties.</span>
+<div class="viewcode-block" id="Laminate.calc_equivalent_modulus">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_equivalent_modulus">[docs]</a>
+    <span class="k">def</span> <span class="nf">calc_equivalent_modulus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculates the equivalent laminate properties.</span>
 
 <span class="sd">        The following attributes are calculated:</span>
 <span class="sd">            e1, e2, g12, nu12, nu21</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">AI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span><span class="o">.</span><span class="n">I</span>
+        <span class="n">AI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">)</span>
         <span class="n">a11</span><span class="p">,</span> <span class="n">a12</span><span class="p">,</span> <span class="n">a22</span><span class="p">,</span> <span class="n">a33</span> <span class="o">=</span> <span class="n">AI</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">AI</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">AI</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">AI</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e1</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">*</span><span class="n">a11</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">*</span><span class="n">a22</span><span class="p">)</span>
@@ -240,8 +572,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nu21</span> <span class="o">=</span> <span class="o">-</span> <span class="n">a12</span> <span class="o">/</span> <span class="n">a22</span></div>
 
 
-<div class="viewcode-block" id="Laminate.calc_lamination_parameters"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_lamination_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">calc_lamination_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Calculate the lamination parameters.</span>
+
+<div class="viewcode-block" id="Laminate.calc_lamination_parameters">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_lamination_parameters">[docs]</a>
+    <span class="k">def</span> <span class="nf">calc_lamination_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the lamination parameters.</span>
 
 <span class="sd">        The following attributes are calculated:</span>
 <span class="sd">            xiA, xiB, xiD, xiE</span>
@@ -297,8 +632,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">xiE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">xiE1</span><span class="p">,</span> <span class="n">xiE2</span><span class="p">,</span> <span class="n">xiE3</span><span class="p">,</span> <span class="n">xiE4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Laminate.calc_ABDE_from_lamination_parameters"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_ABDE_from_lamination_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">calc_ABDE_from_lamination_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Use the ABDE matrix based on lamination parameters.</span>
+
+<div class="viewcode-block" id="Laminate.calc_ABDE_from_lamination_parameters">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_ABDE_from_lamination_parameters">[docs]</a>
+    <span class="k">def</span> <span class="nf">calc_ABDE_from_lamination_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the ABDE matrix based on lamination parameters.</span>
 
 <span class="sd">        Given the lamination parameters ``xiA``, ``xiB``, ``xiC`` and ``xiD``,</span>
 <span class="sd">        the ABD matrix is calculated.</span>
@@ -354,8 +692,11 @@
                                <span class="n">dtype</span><span class="o">=</span><span class="n">DOUBLE</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Laminate.calc_constitutive_matrix"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_constitutive_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">calc_constitutive_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Calculates the laminate constitutive matrix</span>
+
+<div class="viewcode-block" id="Laminate.calc_constitutive_matrix">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.calc_constitutive_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">calc_constitutive_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculates the laminate constitutive matrix</span>
 
 <span class="sd">        This is the commonly called ``ABD`` matrix with ``shape=(6, 6)`` when</span>
 <span class="sd">        the classical laminated plate theory is used, or the ``ABDE`` matrix</span>
@@ -393,8 +734,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E</span></div>
 
 
-<div class="viewcode-block" id="Laminate.force_balanced_LP"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_balanced_LP">[docs]</a>    <span class="k">def</span> <span class="nf">force_balanced_LP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Force balanced lamination parameters</span>
+
+<div class="viewcode-block" id="Laminate.force_balanced_LP">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_balanced_LP">[docs]</a>
+    <span class="k">def</span> <span class="nf">force_balanced_LP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Force balanced lamination parameters</span>
 
 <span class="sd">        The lamination parameters `\xi_{A2}` and `\xi_{A4}` are set to null</span>
 <span class="sd">        to force a balanced laminate.</span>
@@ -405,8 +749,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_ABDE_from_lamination_parameters</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="Laminate.force_symmetric_LP"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_symmetric_LP">[docs]</a>    <span class="k">def</span> <span class="nf">force_symmetric_LP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Force symmetric lamination parameters</span>
+
+<div class="viewcode-block" id="Laminate.force_symmetric_LP">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_symmetric_LP">[docs]</a>
+    <span class="k">def</span> <span class="nf">force_symmetric_LP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Force symmetric lamination parameters</span>
 
 <span class="sd">        The lamination parameters `\xi_{Bi}` are set to null</span>
 <span class="sd">        to force a symmetric laminate.</span>
@@ -416,8 +763,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_ABDE_from_lamination_parameters</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="Laminate.force_orthotropic"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_orthotropic">[docs]</a>    <span class="k">def</span> <span class="nf">force_orthotropic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Force an orthotropic laminate</span>
+
+<div class="viewcode-block" id="Laminate.force_orthotropic">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_orthotropic">[docs]</a>
+    <span class="k">def</span> <span class="nf">force_orthotropic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Force an orthotropic laminate</span>
 
 <span class="sd">        The terms</span>
 <span class="sd">        `A_{13}`, `A_{23}`, `A_{31}`, `A_{32}`,</span>
@@ -485,8 +835,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span> <span class="c1"># D62</span></div>
 
 
-<div class="viewcode-block" id="Laminate.force_symmetric"><a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_symmetric">[docs]</a>    <span class="k">def</span> <span class="nf">force_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Force a symmetric laminate</span>
+
+<div class="viewcode-block" id="Laminate.force_symmetric">
+<a class="viewcode-back" href="../../../modules/composite/index.html#compmech.composite.laminate.Laminate.force_symmetric">[docs]</a>
+    <span class="k">def</span> <span class="nf">force_symmetric</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Force a symmetric laminate</span>
 
 <span class="sd">        The `B` terms of the constitutive matrix are set to zero.</span>
 
@@ -499,49 +852,77 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ABD</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ABDE</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
+</div>
+
 
 </pre></div>
 
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../../index.html">
-              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
-            </a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
-      </ul>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2012-2023 Saullo G. P. Castro.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Sep 03, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
     </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>

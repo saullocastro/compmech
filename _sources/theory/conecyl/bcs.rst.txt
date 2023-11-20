@@ -6,44 +6,44 @@ Boundary conditions
 The classification of Som and Deb (2014) [som2014]_ has been used for the
 boundary conditions.
 
-The simply-supported boundary conditions are:
+The simply-supported boundary conditions are `u_v = test`:
 
 .. math::
 
-    \begin{tabular}{l c r}
+    \begin{array}{l c r}
         Name & Displ. Vector & Elastic Constants \\
         \hline
-        SS1  & $u=v=w=0$        & $K^u=K^v=K^w=\infty$ \\
-             &                  & $K^{\phi_x}=K^{\phi_\theta}=0$ \\
+        SS1  & u=v=w=0        & K^u=K^v=K^w=\infty \\
+             &                & K^{\phi_x}=K^{\phi_\theta}=0 \\
         \hline
-        SS2  & $v=w=0$          & $K^v=K^w=\infty$ \\
-             &                  & $K^u=K^{\phi_x}=K^{\phi_\theta}=0$ \\
+        SS2  & v=w=0          & K^v=K^w=\infty \\
+             &                & K^u=K^{\phi_x}=K^{\phi_\theta}=0 \\
         \hline
-        SS3  & $u=w=0$          & $K^u=K^w=\infty$ \\
-             &                  & $K^v=K^{\phi_x}=K^{\phi_\theta}=0$ \\
+        SS3  & u=w=0          & K^u=K^w=\infty \\
+             &                & K^v=K^{\phi_x}=K^{\phi_\theta}=0 \\
         \hline
-        SS4  & $w=0$            & $K^w=\infty$ \\
-             &                  & $K^u=K^v=K^{\phi_x}=K^{\phi_\theta}=0$
-    \end{tabular}
+        SS4  & w=0            & K^w=\infty \\
+             &                 & K^u=K^v=K^{\phi_x}=K^{\phi_\theta}=0
+    \end{array}
 
 and the clamped are:
 
 .. math::
-    \begin{tabular}{l c r}
+    \begin{array}{l c r}
         Name & Displ. Vector & Elastic Constants \\
         \hline
-        CC1  & $u=v=w=w_{,x}=0$ & $K^u=K^v=K^w=K^{\phi_x}=\infty$ \\
-             &                  & $K^{\phi_\theta}=0$ \\
+        CC1  & u=v=w=w_{,x}=0 & K^u=K^v=K^w=K^{\phi_x}=\infty \\
+             &                & K^{\phi_\theta}=0 \\
         \hline
-        CC2  & $v=w=w_{,x}=0$   & $K^v=K^w=K^{\phi_x}=\infty$ \\
-             &                  & $K^u=K^{\phi_\theta}=0$ \\
+        CC2  & v=w=w_{,x}=0   & K^v=K^w=K^{\phi_x}=\infty \\
+             &                & K^u=K^{\phi_\theta}=0 \\
         \hline
-        CC3  & $u=w=w_{,x}=0$   & $K^u=K^w=K^{\phi_x}=\infty$ \\
-             &                  & $K^v=K^{\phi_\theta}=0$ \\
+        CC3  & u=w=w_{,x}=0   & K^u=K^w=K^{\phi_x}=\infty \\
+             &                & K^v=K^{\phi_\theta}=0 \\
         \hline
-        CC4  & $w=w_{,x}=0$     & $K^w=K^{\phi_x}=\infty$ \\
-             &                  & $K^u=K^v=K^{\phi_\theta}=0$ 
-    \end{tabular}
+        CC4  & w=w_{,x}=0     & K^w=K^{\phi_x}=\infty \\
+             &                & K^u=K^v=K^{\phi_\theta}=0 
+    \end{array}
 
 Using the default boundary conditions
 -------------------------------------
@@ -81,13 +81,13 @@ in the table above. The table below shows the models that can be used for each
 boundary condition:
 
 .. math::
-    \begin{tabular}{l c r}
+    \begin{array}{l c r}
         Name       & Model         \\ \hline
         SS1 / CC1  & bc2, bc3, bc4 \\ \hline
         SS2 / CC2  & bc2, bc4      \\ \hline
         SS3 / CC3  & bc3, bc4      \\ \hline
         SS4 / CC4  & bc4
-    \end{tabular}
+    \end{array}
 
 Note that the models ``bc4`` can be used for all the cases listed above. It
 is expected that **more terms are required** in the approximation when 

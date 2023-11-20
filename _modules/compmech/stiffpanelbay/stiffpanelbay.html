@@ -1,70 +1,382 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <title>compmech.stiffpanelbay.stiffpanelbay &#8212; CompMech 0.7.2 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
-    <link rel="shortcut icon" href="../../../_static/logo.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>compmech.stiffpanelbay.stiffpanelbay &#8212; CompMech 0.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../../_static/documentation_options.js?v=486e5634"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/compmech/stiffpanelbay/stiffpanelbay';</script>
+    <link rel="icon" href="../../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Nov 20, 2023"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="CompMech 0.8.0 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/logo.png" class="logo__image only-dark" alt="CompMech 0.8.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../modules/index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../modules/index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">compmech.sti...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <h1>Source code for compmech.stiffpanelbay.stiffpanelbay</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
-
-<span class="kn">import</span> <span class="nn">platform</span>
-<span class="kn">import</span> <span class="nn">gc</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">traceback</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Iterable</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<span></span><span class="kn">import</span> <span class="nn">gc</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">cpu_count</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">cpu_count</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="k">import</span> <span class="n">eigs</span><span class="p">,</span> <span class="n">eigsh</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">eig</span><span class="p">,</span> <span class="n">eigh</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">linspace</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">reshape</span>
 
-<span class="kn">import</span> <span class="nn">compmech.composite.laminate</span> <span class="k">as</span> <span class="nn">laminate</span>
-<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="k">import</span> <span class="n">msg</span><span class="p">,</span> <span class="n">warn</span>
-<span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="k">import</span> <span class="n">DOUBLE</span>
-<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="k">import</span> <span class="p">(</span><span class="n">finalize_symmetric_matrix</span><span class="p">,</span> <span class="n">make_skew_symmetric</span><span class="p">,</span>
-                             <span class="n">remove_null_cols</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">compmech.panel</span> <span class="k">import</span> <span class="n">Panel</span><span class="p">,</span> <span class="n">modelDB</span> <span class="k">as</span> <span class="n">panelmDB</span>
-<span class="kn">from</span> <span class="nn">compmech.stiffener</span> <span class="k">import</span> <span class="p">(</span><span class="n">BladeStiff1D</span><span class="p">,</span> <span class="n">BladeStiff2D</span><span class="p">,</span> <span class="n">TStiff2D</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">compmech.logger</span> <span class="kn">import</span> <span class="n">msg</span>
+<span class="kn">from</span> <span class="nn">compmech.constants</span> <span class="kn">import</span> <span class="n">DOUBLE</span>
+<span class="kn">from</span> <span class="nn">compmech.sparse</span> <span class="kn">import</span> <span class="p">(</span><span class="n">finalize_symmetric_matrix</span><span class="p">,</span> <span class="n">make_skew_symmetric</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">compmech.panel</span> <span class="kn">import</span> <span class="n">Panel</span><span class="p">,</span> <span class="n">modelDB</span> <span class="k">as</span> <span class="n">panelmDB</span>
+<span class="kn">from</span> <span class="nn">compmech.stiffener</span> <span class="kn">import</span> <span class="p">(</span><span class="n">BladeStiff1D</span><span class="p">,</span> <span class="n">BladeStiff2D</span><span class="p">,</span> <span class="n">TStiff2D</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -74,8 +386,10 @@
         <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.StiffPanelBay&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="StiffPanelBay"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay">[docs]</a><span class="k">class</span> <span class="nc">StiffPanelBay</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Stiffened Panel Bay</span>
+<div class="viewcode-block" id="StiffPanelBay">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay">[docs]</a>
+<span class="k">class</span> <span class="nc">StiffPanelBay</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Stiffened Panel Bay</span>
 
 <span class="sd">    Can be used for supersonic Aeroelastic studies with the Piston Theory.</span>
 
@@ -90,7 +404,7 @@
 <span class="sd">    - ``tstiff2ds`` contains the :class:`.TStiff2D` stiffeners</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
         <span class="c1"># boundary conditions</span>
@@ -251,8 +565,10 @@
         <span class="k">return</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">xshape</span><span class="p">,</span> <span class="n">yshape</span>
 
 
-<div class="viewcode-block" id="StiffPanelBay.get_size"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.get_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the size of the stiffness matrices</span>
+<div class="viewcode-block" id="StiffPanelBay.get_size">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.get_size">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the size of the stiffness matrices</span>
 
 <span class="sd">        The size of the stiffness matrices can be interpreted as the number of</span>
 <span class="sd">        rows or columns, recalling that this will be the size of the Ritz</span>
@@ -280,11 +596,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.add_bladestiff1d"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d">[docs]</a>    <span class="k">def</span> <span class="nf">add_bladestiff1d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="StiffPanelBay.add_bladestiff1d">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_bladestiff1d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">bplyts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bplyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blaminaprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blaminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">bf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fplyts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fplyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flaminaprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">flaminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a new BladeStiff1D to the current panel bay</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a new BladeStiff1D to the current panel bay</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -393,11 +712,14 @@
         <span class="k">return</span> <span class="n">s</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.add_bladestiff2d"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d">[docs]</a>    <span class="k">def</span> <span class="nf">add_bladestiff2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="StiffPanelBay.add_bladestiff2d">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_bladestiff2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">bplyts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bplyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blaminaprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blaminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">bf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fplyts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fplyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flaminaprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">flaminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mf</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">nf</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a new BladeStiff2D to the current panel bay</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a new BladeStiff2D to the current panel bay</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -510,11 +832,14 @@
         <span class="k">return</span> <span class="n">s</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.add_tstiff2d"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d">[docs]</a>    <span class="k">def</span> <span class="nf">add_tstiff2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="StiffPanelBay.add_tstiff2d">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_tstiff2d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">bplyts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bplyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blaminaprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blaminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">bf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fstack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fplyts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fplyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flaminaprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">flaminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mb</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">mf</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">nf</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">Nxxf</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a new TStiff2D to the current panel bay</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a new TStiff2D to the current panel bay</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -630,9 +955,12 @@
         <span class="k">return</span> <span class="n">s</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.add_panel"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.add_panel">[docs]</a>    <span class="k">def</span> <span class="nf">add_panel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="StiffPanelBay.add_panel">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.add_panel">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_panel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">stack</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plyts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plyt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">laminaprops</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">laminaprop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a new panel to the current panel bay</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add a new panel to the current panel bay</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -687,6 +1015,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">p</span></div>
+
 
 
     <span class="k">def</span> <span class="nf">calc_k0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -810,7 +1139,6 @@
     <span class="k">def</span> <span class="nf">calc_kM</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating kM... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
 
         <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
 
@@ -871,13 +1199,11 @@
     <span class="k">def</span> <span class="nf">calc_kA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating kA... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
         <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">0.</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mach</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -935,7 +1261,6 @@
     <span class="k">def</span> <span class="nf">calc_cA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Calculating cA... &#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
         <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
         <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span>
@@ -976,8 +1301,10 @@
         <span class="k">return</span> <span class="n">cA</span>
 
 
-<div class="viewcode-block" id="StiffPanelBay.uvw_skin"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.uvw_skin">[docs]</a>    <span class="k">def</span> <span class="nf">uvw_skin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the displacement field</span>
+<div class="viewcode-block" id="StiffPanelBay.uvw_skin">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.uvw_skin">[docs]</a>
+    <span class="k">def</span> <span class="nf">uvw_skin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the displacement field</span>
 
 <span class="sd">        For a given full set of Ritz constants ``c``, the displacement</span>
 <span class="sd">        field is calculated and stored in the parameters</span>
@@ -1035,18 +1362,21 @@
         <span class="n">fuvw</span> <span class="o">=</span> <span class="n">panelmDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;field&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fuvw</span>
         <span class="n">us</span><span class="p">,</span> <span class="n">vs</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">phixs</span><span class="p">,</span> <span class="n">phiys</span> <span class="o">=</span> <span class="n">fuvw</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">us</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phix</span> <span class="o">=</span> <span class="n">phixs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span> <span class="o">=</span> <span class="n">phiys</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">us</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phix</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">phixs</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">phiys</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.uvw_stiffener"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener">[docs]</a>    <span class="k">def</span> <span class="nf">uvw_stiffener</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">si</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="s1">&#39;flange&#39;</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="StiffPanelBay.uvw_stiffener">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener">[docs]</a>
+    <span class="k">def</span> <span class="nf">uvw_stiffener</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">si</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="s1">&#39;flange&#39;</span><span class="p">,</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the displacement field on a stiffener</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the displacement field on a stiffener</span>
 
 <span class="sd">        For a given full set of Ritz constants ``c``, the displacement</span>
 <span class="sd">        field is calculated and stored in the parameters</span>
@@ -1145,23 +1475,26 @@
             <span class="n">fuvw</span> <span class="o">=</span> <span class="n">panelmDB</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;field&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fuvw</span>
             <span class="n">us</span><span class="p">,</span> <span class="n">vs</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">phixs</span><span class="p">,</span> <span class="n">phiys</span> <span class="o">=</span> <span class="n">fuvw</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_num_cores</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">us</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phix</span> <span class="o">=</span> <span class="n">phixs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span> <span class="o">=</span> <span class="n">phiys</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">us</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phix</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">phixs</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">phiys</span><span class="p">,</span> <span class="n">xshape</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.plot_skin"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.plot_skin">[docs]</a>    <span class="k">def</span> <span class="nf">plot_skin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">invert_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+
+<div class="viewcode-block" id="StiffPanelBay.plot_skin">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.plot_skin">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_skin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">invert_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
             <span class="n">deform_u</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">deform_u_sf</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">),</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">cbar_nticks</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cbar_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbar_title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cbar_fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
             <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="p">[],</span> <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">num_levels</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">vecmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vecmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1258,8 +1591,6 @@
                                               <span class="bp">self</span><span class="o">.</span><span class="n">phix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phiy</span><span class="p">)</span>
 
         <span class="kn">import</span> <span class="nn">matplotlib</span>
-        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;linux&#39;</span><span class="p">:</span>
-            <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
         <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;Computing field variables...&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
@@ -1310,7 +1641,7 @@
         <span class="n">contour</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">colorbar</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="k">import</span> <span class="n">make_axes_locatable</span>
+            <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
 
             <span class="n">fsize</span> <span class="o">=</span> <span class="n">cbar_fontsize</span>
             <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
@@ -1321,7 +1652,10 @@
             <span class="k">if</span> <span class="n">cbar_title</span><span class="p">:</span>
                 <span class="n">cax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="n">cbar_title</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
                          <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fsize</span><span class="p">)</span>
-            <span class="n">cbar</span><span class="o">.</span><span class="n">outline</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cbar</span><span class="o">.</span><span class="n">outline</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+                <span class="k">pass</span>
             <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">fsize</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tick2On</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">invert_y</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
@@ -1371,14 +1705,17 @@
         <span class="k">return</span> <span class="n">ax</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.plot_stiffener"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.plot_stiffener">[docs]</a>    <span class="k">def</span> <span class="nf">plot_stiffener</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">si</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="s1">&#39;flange&#39;</span><span class="p">,</span> <span class="n">invert_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+
+<div class="viewcode-block" id="StiffPanelBay.plot_stiffener">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.plot_stiffener">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_stiffener</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">si</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="s1">&#39;flange&#39;</span><span class="p">,</span> <span class="n">invert_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">plot_type</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vec</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">deform_u</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">deform_u_sf</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span>
             <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.</span><span class="p">),</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cbar_nticks</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cbar_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbar_title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="n">cbar_fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="p">[],</span>
             <span class="n">xs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gridx</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">gridy</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">num_levels</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
             <span class="n">vecmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vecmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Contour plot for a Ritz constants vector.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1531,7 +1868,7 @@
         <span class="n">contour</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">colorbar</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="k">import</span> <span class="n">make_axes_locatable</span>
+            <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
 
             <span class="n">fsize</span> <span class="o">=</span> <span class="n">cbar_fontsize</span>
             <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
@@ -1542,7 +1879,10 @@
             <span class="k">if</span> <span class="n">cbar_title</span><span class="p">:</span>
                 <span class="n">cax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="n">cbar_title</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
                          <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fsize</span><span class="p">)</span>
-            <span class="n">cbar</span><span class="o">.</span><span class="n">outline</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cbar</span><span class="o">.</span><span class="n">outline</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+                <span class="k">pass</span>
             <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">fsize</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tick2On</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">invert_y</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
@@ -1592,8 +1932,11 @@
         <span class="k">return</span> <span class="n">ax</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.save"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Save the :class:`StiffPanelBay` object using ``pickle``</span>
+
+<div class="viewcode-block" id="StiffPanelBay.save">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Save the :class:`StiffPanelBay` object using ``pickle``</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -1611,8 +1954,11 @@
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="StiffPanelBay.calc_fext"><a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.calc_fext">[docs]</a>    <span class="k">def</span> <span class="nf">calc_fext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Calculates the external force vector `\{F_{ext}\}`</span>
+
+<div class="viewcode-block" id="StiffPanelBay.calc_fext">
+<a class="viewcode-back" href="../../../modules/stiffpanelbay/index.html#compmech.stiffpanelbay.StiffPanelBay.calc_fext">[docs]</a>
+    <span class="k">def</span> <span class="nf">calc_fext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculates the external force vector `\{F_{ext}\}`</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1684,48 +2030,76 @@
 
         <span class="n">msg</span><span class="p">(</span><span class="s1">&#39;finished!&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fext</span></div></div>
+        <span class="k">return</span> <span class="n">fext</span></div>
+</div>
+
 </pre></div>
 
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../../index.html">
-              <img class="logo" src="../../../_static/logo.png" alt="Logo"/>
-            </a></p>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
-      </ul>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2012-2023 Saullo G. P. Castro.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Sep 03, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
     </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>

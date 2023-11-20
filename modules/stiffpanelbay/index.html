@@ -1,64 +1,421 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <title>Stiffened Panel Bay (compmech.stiffpanelbay) &#8212; CompMech 0.7.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    
-    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Stiffened Panel Bay (compmech.stiffpanelbay) &#8212; CompMech 0.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../_static/documentation_options.js?v=486e5634"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/stiffpanelbay/index';</script>
+    <link rel="icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Theory, Implementation and Tutorials" href="../../theory/index.html" />
-    <link rel="prev" title="Semi-analytical models for Stiffeners (compmech.stiffener)" href="../stiffener/index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../../theory/index.html" title="Theory, Implementation and Tutorials"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../stiffener/index.html" title="Semi-analytical models for Stiffeners (compmech.stiffener)"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="Semi-analytical models for Stiffeners (compmech.stiffener)" href="../stiffener/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Nov 20, 2023"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <span class="target" id="module-compmech.stiffpanelbay"></span><div class="section" id="stiffened-panel-bay-compmech-stiffpanelbay">
-<h1>Stiffened Panel Bay (<a class="reference internal" href="#module-compmech.stiffpanelbay" title="compmech.stiffpanelbay"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffpanelbay</span></code></a>)<a class="headerlink" href="#stiffened-panel-bay-compmech-stiffpanelbay" title="Permalink to this headline">¶</a></h1>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="CompMech 0.8.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="CompMech 0.8.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../analysis/index.html">Analysis Module (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.analysis</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../composite/index.html">Composite Module (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.composite</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../conecyl/index.html">Semi-analytical Models for Cones and Cylinder (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integrate/index.html">Integrate &lt;<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.integrate</span></code>&gt;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/index.html">Compmech shared libraries (lib)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../panel/index.html">Flat Plates, Curved Panels and Assemblies</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../panel/panel.html">Semi-analytical Models for Panels (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../panel/connections.html">Panel Connections (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.connections</span></code>)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../panel/assembly/assembly_intro.html">Assembly of Semi-Analytical Models</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../panel/assembly/assembly.html">Assembly of Plate and Panel Models (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.assembly</span></code>)</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../panel/assembly/assembly_functions.html">Functions using Assemblies of Panels</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../panel/assembly/tstiff2d.html">T-Stiffened Panels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../panel/assembly/cylinder_unstiffened.html">Unstiffened Cylinder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../panel/assembly/cylinder_blade_stiffened.html">Blade-Stiffened Cylinder</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../panel/assembly/assembly_example_to_create.html">Example to Create a Panel Assembly</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../stiffener/index.html">Semi-analytical models for Stiffeners (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffener</span></code>)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Stiffened Panel Bay (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffpanelbay</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Modules</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Stiffened...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="stiffened-panel-bay-compmech-stiffpanelbay">
+<span id="module-compmech.stiffpanelbay"></span><h1>Stiffened Panel Bay (<a class="reference internal" href="#module-compmech.stiffpanelbay" title="compmech.stiffpanelbay"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffpanelbay</span></code></a>)<a class="headerlink" href="#stiffened-panel-bay-compmech-stiffpanelbay" title="Link to this heading">#</a></h1>
 <p>Main features:</p>
 <ul class="simple">
 <li><p>possibility to use many panels with different properties. In such case the
-panels are separated by their <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> (circumferential) coordinate. Usually
-there is a stiffener positioned at the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> coordinate between two panels.</p></li>
+panels are separated by their <span class="math notranslate nohighlight">\(y\)</span> (circumferential) coordinate. Usually
+there is a stiffener positioned at the <span class="math notranslate nohighlight">\(y\)</span> coordinate between two panels.</p></li>
 <li><p>possibility to use stiffeners (blade) modeled with 1D or 2D formulation.</p></li>
 </ul>
-<dl class="class">
-<dt id="compmech.stiffpanelbay.StiffPanelBay">
-<em class="property">class </em><code class="sig-prename descclassname">compmech.stiffpanelbay.</code><code class="sig-name descname">StiffPanelBay</code><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compmech.stiffpanelbay.</span></span><span class="sig-name descname"><span class="pre">StiffPanelBay</span></span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay" title="Link to this definition">#</a></dt>
 <dd><p>Stiffened Panel Bay</p>
 <p>Can be used for supersonic Aeroelastic studies with the Piston Theory.</p>
 <p>Stiffeners are modeled either with 1D or 2D formulations.</p>
@@ -71,52 +428,44 @@ Controlled by the parameter <code class="docutils literal notranslate"><span cla
 <li><p><code class="docutils literal notranslate"><span class="pre">tstiff2ds</span></code> contains the <a class="reference internal" href="../stiffener/index.html#compmech.stiffener.TStiff2D" title="compmech.stiffener.TStiff2D"><code class="xref py py-class docutils literal notranslate"><span class="pre">TStiff2D</span></code></a> stiffeners</p></li>
 </ul>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d" title="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bladestiff1d</span></code></a>(self, ys[, mu, bb, bstack, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d" title="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bladestiff1d</span></code></a>(ys[, mu, bb, bstack, ...])</p></td>
 <td><p>Add a new BladeStiff1D to the current panel bay</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d" title="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bladestiff2d</span></code></a>(self, ys[, mu, bb, bstack, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d" title="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bladestiff2d</span></code></a>(ys[, mu, bb, bstack, ...])</p></td>
 <td><p>Add a new BladeStiff2D to the current panel bay</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.add_panel" title="compmech.stiffpanelbay.StiffPanelBay.add_panel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_panel</span></code></a>(self, y1, y2[, stack, plyts, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.add_panel" title="compmech.stiffpanelbay.StiffPanelBay.add_panel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_panel</span></code></a>(y1, y2[, stack, plyts, plyt, ...])</p></td>
 <td><p>Add a new panel to the current panel bay</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d" title="compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_tstiff2d</span></code></a>(self, ys[, mu, bb, bstack, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d" title="compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_tstiff2d</span></code></a>(ys[, mu, bb, bstack, bplyts, ...])</p></td>
 <td><p>Add a new TStiff2D to the current panel bay</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.calc_fext" title="compmech.stiffpanelbay.StiffPanelBay.calc_fext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fext</span></code></a>(self[, silent])</p></td>
-<td><p>Calculates the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.calc_fext" title="compmech.stiffpanelbay.StiffPanelBay.calc_fext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fext</span></code></a>([silent])</p></td>
+<td><p>Calculates the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.get_size" title="compmech.stiffpanelbay.StiffPanelBay.get_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_size</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.get_size" title="compmech.stiffpanelbay.StiffPanelBay.get_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_size</span></code></a>()</p></td>
 <td><p>Calculate the size of the stiffness matrices</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.plot_skin" title="compmech.stiffpanelbay.StiffPanelBay.plot_skin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_skin</span></code></a>(self, c[, invert_y, plot_type, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.plot_skin" title="compmech.stiffpanelbay.StiffPanelBay.plot_skin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_skin</span></code></a>(c[, invert_y, plot_type, vec, ...])</p></td>
 <td><p>Contour plot for a Ritz constants vector.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.plot_stiffener" title="compmech.stiffpanelbay.StiffPanelBay.plot_stiffener"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_stiffener</span></code></a>(self, c, si[, region, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.plot_stiffener" title="compmech.stiffpanelbay.StiffPanelBay.plot_stiffener"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_stiffener</span></code></a>(c, si[, region, invert_y, ...])</p></td>
 <td><p>Contour plot for a Ritz constants vector.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.save" title="compmech.stiffpanelbay.StiffPanelBay.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.save" title="compmech.stiffpanelbay.StiffPanelBay.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
 <td><p>Save the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object using <code class="docutils literal notranslate"><span class="pre">pickle</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_skin" title="compmech.stiffpanelbay.StiffPanelBay.uvw_skin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uvw_skin</span></code></a>(self, c[, xs, ys, gridx, gridy])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_skin" title="compmech.stiffpanelbay.StiffPanelBay.uvw_skin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uvw_skin</span></code></a>(c[, xs, ys, gridx, gridy])</p></td>
 <td><p>Calculate the displacement field</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener" title="compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uvw_stiffener</span></code></a>(self, c, si[, region, xs, ys, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener" title="compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uvw_stiffener</span></code></a>(c, si[, region, xs, ys, ...])</p></td>
 <td><p>Calculate the displacement field on a stiffener</p></td>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 55%" />
-<col style="width: 45%" />
-</colgroup>
+<table class="table">
 <tbody>
 <tr class="row-odd"><td><p><strong>calc_cA</strong></p></td>
 <td></td>
@@ -135,12 +484,12 @@ Controlled by the parameter <code class="docutils literal notranslate"><span cla
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d">
-<code class="sig-name descname">add_bladestiff1d</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">ys</em>, <em class="sig-param">mu=None</em>, <em class="sig-param">bb=None</em>, <em class="sig-param">bstack=None</em>, <em class="sig-param">bplyts=None</em>, <em class="sig-param">bplyt=None</em>, <em class="sig-param">blaminaprops=None</em>, <em class="sig-param">blaminaprop=None</em>, <em class="sig-param">bf=None</em>, <em class="sig-param">fstack=None</em>, <em class="sig-param">fplyts=None</em>, <em class="sig-param">fplyt=None</em>, <em class="sig-param">flaminaprops=None</em>, <em class="sig-param">flaminaprop=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_bladestiff1d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d">
+<span class="sig-name descname"><span class="pre">add_bladestiff1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bstack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bplyts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bplyt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blaminaprops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blaminaprop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fstack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fplyts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fplyt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flaminaprops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flaminaprop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_bladestiff1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d" title="Link to this definition">#</a></dt>
 <dd><p>Add a new BladeStiff1D to the current panel bay</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ys</strong><span class="classifier">float</span></dt><dd><p>Stiffener position.</p>
 </dd>
@@ -173,7 +522,7 @@ used.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>s</strong><span class="classifier"><a class="reference internal" href="../stiffener/index.html#compmech.stiffener.BladeStiff1D" title="compmech.stiffener.BladeStiff1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">BladeStiff1D</span></code></a> object</span></dt><dd></dd>
 </dl>
@@ -183,12 +532,12 @@ used.</p>
 <p>Additional parameters can be passed using the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d">
-<code class="sig-name descname">add_bladestiff2d</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">ys</em>, <em class="sig-param">mu=None</em>, <em class="sig-param">bb=None</em>, <em class="sig-param">bstack=None</em>, <em class="sig-param">bplyts=None</em>, <em class="sig-param">bplyt=None</em>, <em class="sig-param">blaminaprops=None</em>, <em class="sig-param">blaminaprop=None</em>, <em class="sig-param">bf=None</em>, <em class="sig-param">fstack=None</em>, <em class="sig-param">fplyts=None</em>, <em class="sig-param">fplyt=None</em>, <em class="sig-param">flaminaprops=None</em>, <em class="sig-param">flaminaprop=None</em>, <em class="sig-param">mf=14</em>, <em class="sig-param">nf=11</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_bladestiff2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d">
+<span class="sig-name descname"><span class="pre">add_bladestiff2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bstack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bplyts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bplyt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blaminaprops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blaminaprop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fstack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fplyts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fplyt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flaminaprops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flaminaprop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_bladestiff2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d" title="Link to this definition">#</a></dt>
 <dd><p>Add a new BladeStiff2D to the current panel bay</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ys</strong><span class="classifier">float</span></dt><dd><p>Stiffener position.</p>
 </dd>
@@ -219,13 +568,13 @@ used.</p>
 </dd>
 <dt><strong>flaminaprop</strong><span class="classifier">float, optional</span></dt><dd><p>Unique lamina properties for all stiffener flange plies.</p>
 </dd>
-<dt><strong>mf</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>.</p>
+<dt><strong>mf</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for flange, along <span class="math notranslate nohighlight">\(x\)</span>.</p>
 </dd>
-<dt><strong>nf</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>.</p>
+<dt><strong>nf</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for flange, along <span class="math notranslate nohighlight">\(y\)</span>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>s</strong><span class="classifier"><a class="reference internal" href="../stiffener/index.html#compmech.stiffener.BladeStiff2D" title="compmech.stiffener.BladeStiff2D"><code class="xref py py-class docutils literal notranslate"><span class="pre">BladeStiff2D</span></code></a> object</span></dt><dd></dd>
 </dl>
@@ -235,16 +584,16 @@ used.</p>
 <p>Additional parameters can be passed using the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.add_panel">
-<code class="sig-name descname">add_panel</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">y1</em>, <em class="sig-param">y2</em>, <em class="sig-param">stack=None</em>, <em class="sig-param">plyts=None</em>, <em class="sig-param">plyt=None</em>, <em class="sig-param">laminaprops=None</em>, <em class="sig-param">laminaprop=None</em>, <em class="sig-param">model=None</em>, <em class="sig-param">mu=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_panel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_panel" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.add_panel">
+<span class="sig-name descname"><span class="pre">add_panel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plyts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plyt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">laminaprops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">laminaprop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_panel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_panel" title="Link to this definition">#</a></dt>
 <dd><p>Add a new panel to the current panel bay</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>y1</strong><span class="classifier">float</span></dt><dd><p>Position of the first panel edge along <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>.</p>
+<dt><strong>y1</strong><span class="classifier">float</span></dt><dd><p>Position of the first panel edge along <span class="math notranslate nohighlight">\(y\)</span>.</p>
 </dd>
-<dt><strong>y2</strong><span class="classifier">float</span></dt><dd><p>Position of the second panel edge along <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>.</p>
+<dt><strong>y2</strong><span class="classifier">float</span></dt><dd><p>Position of the second panel edge along <span class="math notranslate nohighlight">\(y\)</span>.</p>
 </dd>
 <dt><strong>stack</strong><span class="classifier">list, optional</span></dt><dd><p>Panel stacking sequence. If not given the stacking sequence of the
 bay will be used.</p>
@@ -272,12 +621,12 @@ different model for each panel. It is recommended to defined
 <p>Additional parameters can be passed using the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d">
-<code class="sig-name descname">add_tstiff2d</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">ys</em>, <em class="sig-param">mu=None</em>, <em class="sig-param">bb=None</em>, <em class="sig-param">bstack=None</em>, <em class="sig-param">bplyts=None</em>, <em class="sig-param">bplyt=None</em>, <em class="sig-param">blaminaprops=None</em>, <em class="sig-param">blaminaprop=None</em>, <em class="sig-param">bf=None</em>, <em class="sig-param">fstack=None</em>, <em class="sig-param">fplyts=None</em>, <em class="sig-param">fplyt=None</em>, <em class="sig-param">flaminaprops=None</em>, <em class="sig-param">flaminaprop=None</em>, <em class="sig-param">mb=12</em>, <em class="sig-param">nb=13</em>, <em class="sig-param">mf=11</em>, <em class="sig-param">nf=12</em>, <em class="sig-param">Nxxf=0.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_tstiff2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d">
+<span class="sig-name descname"><span class="pre">add_tstiff2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bstack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bplyts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bplyt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blaminaprops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blaminaprop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fstack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fplyts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fplyt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flaminaprops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flaminaprop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">13</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nxxf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.add_tstiff2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d" title="Link to this definition">#</a></dt>
 <dd><p>Add a new TStiff2D to the current panel bay</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>ys</strong><span class="classifier">float</span></dt><dd><p>Stiffener position.</p>
 </dd>
@@ -308,17 +657,17 @@ used.</p>
 </dd>
 <dt><strong>flaminaprop</strong><span class="classifier">float, optional</span></dt><dd><p>Unique lamina properties for all stiffener flange plies.</p>
 </dd>
-<dt><strong>mb</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for base, along <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>.</p>
+<dt><strong>mb</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for base, along <span class="math notranslate nohighlight">\(x\)</span>.</p>
 </dd>
-<dt><strong>nb</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for base, along <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>.</p>
+<dt><strong>nb</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for base, along <span class="math notranslate nohighlight">\(y\)</span>.</p>
 </dd>
-<dt><strong>mf</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>.</p>
+<dt><strong>mf</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for flange, along <span class="math notranslate nohighlight">\(x\)</span>.</p>
 </dd>
-<dt><strong>nf</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for flange, along <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>.</p>
+<dt><strong>nf</strong><span class="classifier">int, optional</span></dt><dd><p>Number of approximation terms for flange, along <span class="math notranslate nohighlight">\(y\)</span>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>s</strong><span class="classifier"><a class="reference internal" href="../stiffener/index.html#compmech.stiffener.TStiff2D" title="compmech.stiffener.TStiff2D"><code class="xref py py-class docutils literal notranslate"><span class="pre">TStiff2D</span></code></a> object</span></dt><dd></dd>
 </dl>
@@ -328,18 +677,18 @@ used.</p>
 <p>Additional parameters can be passed using the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.calc_fext">
-<code class="sig-name descname">calc_fext</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.calc_fext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.calc_fext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.calc_fext">
+<span class="sig-name descname"><span class="pre">calc_fext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.calc_fext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.calc_fext" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>silent</strong><span class="classifier">bool, optional</span></dt><dd><p>A boolean to tell whether the msg messages should be printed.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fext</strong><span class="classifier">np.ndarray</span></dt><dd><p>The external force vector</p>
 </dd>
@@ -348,18 +697,18 @@ used.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.get_size">
-<code class="sig-name descname">get_size</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.get_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.get_size" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.get_size">
+<span class="sig-name descname"><span class="pre">get_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.get_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.get_size" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the size of the stiffness matrices</p>
 <p>The size of the stiffness matrices can be interpreted as the number of
 rows or columns, recalling that this will be the size of the Ritz
-constants’ vector <img class="math" src="../../_images/math/a4acf9ac84baad22892cc8ac8f55a3467e4f4612.png" alt="\{c\}"/>, the internal force vector <img class="math" src="../../_images/math/abf38893eb062f70c9f222127d0c0870fd1bf666.png" alt="\{F_{int}\}"/> and
-the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/>.</p>
+constants’ vector <span class="math notranslate nohighlight">\(\{c\}\)</span>, the internal force vector <span class="math notranslate nohighlight">\(\{F_{int}\}\)</span> and
+the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span>.</p>
 <p>It takes into account the independent degrees of freedom from each of
-the <img class="math" src="../../_images/math/215f16269371e43fe1367b08794a86745d72ef72.png" alt=".Stiffener2D"/> objects that belong to the current assembly.</p>
+the <span class="math notranslate nohighlight">\(.Stiffener2D\)</span> objects that belong to the current assembly.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>size</strong><span class="classifier">int</span></dt><dd><p>The size of the stiffness matrices.</p>
 </dd>
@@ -368,12 +717,12 @@ the <img class="math" src="../../_images/math/215f16269371e43fe1367b08794a86745d
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.plot_skin">
-<code class="sig-name descname">plot_skin</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">invert_y=False</em>, <em class="sig-param">plot_type=1</em>, <em class="sig-param">vec='w'</em>, <em class="sig-param">deform_u=False</em>, <em class="sig-param">deform_u_sf=100.0</em>, <em class="sig-param">filename=''</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">figsize=(3.5</em>, <em class="sig-param">2.0)</em>, <em class="sig-param">save=True</em>, <em class="sig-param">title=''</em>, <em class="sig-param">colorbar=False</em>, <em class="sig-param">cbar_nticks=2</em>, <em class="sig-param">cbar_format=None</em>, <em class="sig-param">cbar_title=''</em>, <em class="sig-param">cbar_fontsize=10</em>, <em class="sig-param">aspect='equal'</em>, <em class="sig-param">clean=True</em>, <em class="sig-param">dpi=400</em>, <em class="sig-param">texts=[]</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ys=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridy=300</em>, <em class="sig-param">num_levels=400</em>, <em class="sig-param">vecmin=None</em>, <em class="sig-param">vecmax=None</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.plot_skin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.plot_skin" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.plot_skin">
+<span class="sig-name descname"><span class="pre">plot_skin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deform_u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deform_u_sf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3.5,</span> <span class="pre">2.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_nticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.plot_skin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.plot_skin" title="Link to this definition">#</a></dt>
 <dd><p>Contour plot for a Ritz constants vector.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants that will be used to compute the field contour.</p>
 </dd>
@@ -390,7 +739,7 @@ the <img class="math" src="../../_images/math/215f16269371e43fe1367b08794a86745d
 </dd>
 <dt><strong>deform_u_sf</strong><span class="classifier">float, optional</span></dt><dd><p>The scaling factor used to deform the contour.</p>
 </dd>
-<dt><strong>invert_y</strong><span class="classifier">bool, optional</span></dt><dd><p>Inverts the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> axis of the plot. It may be used to match
+<dt><strong>invert_y</strong><span class="classifier">bool, optional</span></dt><dd><p>Inverts the <span class="math notranslate nohighlight">\(y\)</span> axis of the plot. It may be used to match
 the coordinate system of the finite element models created
 using the <code class="docutils literal notranslate"><span class="pre">desicos.abaqus</span></code> module.</p>
 </dd>
@@ -400,8 +749,8 @@ For cones all the following types can be used:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: concave up (with <code class="docutils literal notranslate"><span class="pre">invert_y=False</span></code>) (default)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: concave down (with <code class="docutils literal notranslate"><span class="pre">invert_y=False</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">3</span></code>: stretched closed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code>: stretched opened (<img class="math" src="../../_images/math/e12ed4304bc864c53e2b9159f25ea3b9d2e6df41.png" alt="r \times y"/> vs. <img class="math" src="../../_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">5</span></code>: stretched opened (<img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> vs. <img class="math" src="../../_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code>: stretched opened (<span class="math notranslate nohighlight">\(r \times y\)</span> vs. <span class="math notranslate nohighlight">\(a\)</span>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5</span></code>: stretched opened (<span class="math notranslate nohighlight">\(y\)</span> vs. <span class="math notranslate nohighlight">\(a\)</span>)</p></li>
 </ul>
 </dd>
 <dt><strong>save</strong><span class="classifier">bool, optional</span></dt><dd><p>Flag telling whether the contour should be saved to an image file.</p>
@@ -409,7 +758,7 @@ For cones all the following types can be used:</p>
 <dt><strong>dpi</strong><span class="classifier">int, optional</span></dt><dd><p>Resolution of the saved file in dots per inch.</p>
 </dd>
 <dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../_images/math/75e26805b9431ddf4904cde00d9a08e963728387.png" alt="name"/> parameter of the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object
+the <span class="math notranslate nohighlight">\(name\)</span> parameter of the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object
 will be used.</p>
 </dd>
 <dt><strong>ax</strong><span class="classifier">AxesSubplot, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">ax</span></code> is given, the contour plot will be created inside it.</p>
@@ -433,16 +782,16 @@ method.</p>
 </dd>
 <dt><strong>clean</strong><span class="classifier">bool, optional</span></dt><dd><p>Clean axes ticks, grids, spines etc.</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions where to calculate the displacement field.
+<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
 <dt><strong>ys</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">y</span></code> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
-<dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis where to calculate the
+<dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(x\)</span> axis where to calculate the
 displacement field.</p>
 </dd>
-<dt><strong>gridy</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> where to calculate the
+<dt><strong>gridy</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(y\)</span> where to calculate the
 displacement field.</p>
 </dd>
 <dt><strong>num_levels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of contour levels (higher values make the contour smoother).</p>
@@ -457,7 +806,7 @@ field.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The Matplotlib object that can be used to modify the current plot
 if needed.</p>
@@ -467,12 +816,12 @@ if needed.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.plot_stiffener">
-<code class="sig-name descname">plot_stiffener</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">si</em>, <em class="sig-param">region='flange'</em>, <em class="sig-param">invert_y=False</em>, <em class="sig-param">plot_type=1</em>, <em class="sig-param">vec='w'</em>, <em class="sig-param">deform_u=False</em>, <em class="sig-param">deform_u_sf=100.0</em>, <em class="sig-param">filename=''</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">figsize=(3.5</em>, <em class="sig-param">2.0)</em>, <em class="sig-param">save=True</em>, <em class="sig-param">title=''</em>, <em class="sig-param">colorbar=False</em>, <em class="sig-param">cbar_nticks=2</em>, <em class="sig-param">cbar_format=None</em>, <em class="sig-param">cbar_title=''</em>, <em class="sig-param">cbar_fontsize=10</em>, <em class="sig-param">aspect='equal'</em>, <em class="sig-param">clean=True</em>, <em class="sig-param">dpi=400</em>, <em class="sig-param">texts=[]</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ys=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridy=300</em>, <em class="sig-param">num_levels=400</em>, <em class="sig-param">vecmin=None</em>, <em class="sig-param">vecmax=None</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.plot_stiffener"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.plot_stiffener" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.plot_stiffener">
+<span class="sig-name descname"><span class="pre">plot_stiffener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">si</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'flange'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deform_u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deform_u_sf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3.5,</span> <span class="pre">2.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_nticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.plot_stiffener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.plot_stiffener" title="Link to this definition">#</a></dt>
 <dd><p>Contour plot for a Ritz constants vector.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants that will be used to compute the field contour.</p>
 </dd>
@@ -493,7 +842,7 @@ if needed.</p>
 </dd>
 <dt><strong>deform_u_sf</strong><span class="classifier">float, optional</span></dt><dd><p>The scaling factor used to deform the contour.</p>
 </dd>
-<dt><strong>invert_y</strong><span class="classifier">bool, optional</span></dt><dd><p>Inverts the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> axis of the plot. It may be used to match
+<dt><strong>invert_y</strong><span class="classifier">bool, optional</span></dt><dd><p>Inverts the <span class="math notranslate nohighlight">\(y\)</span> axis of the plot. It may be used to match
 the coordinate system of the finite element models created
 using the <code class="docutils literal notranslate"><span class="pre">desicos.abaqus</span></code> module.</p>
 </dd>
@@ -503,8 +852,8 @@ For cones all the following types can be used:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: concave up (with <code class="docutils literal notranslate"><span class="pre">invert_y=False</span></code>) (default)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: concave down (with <code class="docutils literal notranslate"><span class="pre">invert_y=False</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">3</span></code>: stretched closed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code>: stretched opened (<img class="math" src="../../_images/math/e12ed4304bc864c53e2b9159f25ea3b9d2e6df41.png" alt="r \times y"/> vs. <img class="math" src="../../_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">5</span></code>: stretched opened (<img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> vs. <img class="math" src="../../_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code>: stretched opened (<span class="math notranslate nohighlight">\(r \times y\)</span> vs. <span class="math notranslate nohighlight">\(a\)</span>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5</span></code>: stretched opened (<span class="math notranslate nohighlight">\(y\)</span> vs. <span class="math notranslate nohighlight">\(a\)</span>)</p></li>
 </ul>
 </dd>
 <dt><strong>save</strong><span class="classifier">bool, optional</span></dt><dd><p>Flag telling whether the contour should be saved to an image file.</p>
@@ -512,7 +861,7 @@ For cones all the following types can be used:</p>
 <dt><strong>dpi</strong><span class="classifier">int, optional</span></dt><dd><p>Resolution of the saved file in dots per inch.</p>
 </dd>
 <dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../_images/math/75e26805b9431ddf4904cde00d9a08e963728387.png" alt="name"/> parameter of the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object
+the <span class="math notranslate nohighlight">\(name\)</span> parameter of the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object
 will be used.</p>
 </dd>
 <dt><strong>ax</strong><span class="classifier">AxesSubplot, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">ax</span></code> is given, the contour plot will be created inside it.</p>
@@ -536,16 +885,16 @@ method.</p>
 </dd>
 <dt><strong>clean</strong><span class="classifier">bool, optional</span></dt><dd><p>Clean axes ticks, grids, spines etc.</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions where to calculate the displacement field.
+<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
 <dt><strong>ys</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">y</span></code> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
-<dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis where to calculate the
+<dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(x\)</span> axis where to calculate the
 displacement field.</p>
 </dd>
-<dt><strong>gridy</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> where to calculate the
+<dt><strong>gridy</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(y\)</span> where to calculate the
 displacement field.</p>
 </dd>
 <dt><strong>num_levels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of contour levels (higher values make the contour smoother).</p>
@@ -560,7 +909,7 @@ field.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The Matplotlib object that can be used to modify the current plot
 if needed.</p>
@@ -570,9 +919,9 @@ if needed.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.save" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.save" title="Link to this definition">#</a></dt>
 <dd><p>Save the <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object using <code class="docutils literal notranslate"><span class="pre">pickle</span></code></p>
 <p class="rubric">Notes</p>
 <p>The pickled file will have the name stored in
@@ -580,34 +929,34 @@ if needed.</p>
 <code class="docutils literal notranslate"><span class="pre">'.StiffPanelBay'</span></code> extension.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.uvw_skin">
-<code class="sig-name descname">uvw_skin</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ys=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridy=300</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.uvw_skin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_skin" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.uvw_skin">
+<span class="sig-name descname"><span class="pre">uvw_skin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.uvw_skin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_skin" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the displacement field</p>
 <p>For a given full set of Ritz constants <code class="docutils literal notranslate"><span class="pre">c</span></code>, the displacement
 field is calculated and stored in the parameters
 <code class="docutils literal notranslate"><span class="pre">u</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code>, <code class="docutils literal notranslate"><span class="pre">w</span></code>, <code class="docutils literal notranslate"><span class="pre">phix</span></code>, <code class="docutils literal notranslate"><span class="pre">phiy</span></code> of the
 <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">float</span></dt><dd><p>The full set of Ritz constants</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions where to calculate the displacement field.
+<dt><strong>xs</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
 <dt><strong>ys</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">y</span></code> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
-<dt><strong>gridx</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis where to calculate the
+<dt><strong>gridx</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(x\)</span> axis where to calculate the
 displacement field.</p>
 </dd>
-<dt><strong>gridy</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> where to calculate the
+<dt><strong>gridy</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(y\)</span> where to calculate the
 displacement field.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">tuple</span></dt><dd><p>A tuple of <code class="docutils literal notranslate"><span class="pre">np.ndarrays</span></code> containing
 <code class="docutils literal notranslate"><span class="pre">(u,</span> <span class="pre">v,</span> <span class="pre">w,</span> <span class="pre">phix,</span> <span class="pre">phiy)</span></code>.</p>
@@ -621,16 +970,16 @@ stored as parameters with the same name in the
 <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener">
-<code class="sig-name descname">uvw_stiffener</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">si</em>, <em class="sig-param">region='flange'</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ys=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridy=300</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.uvw_stiffener"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener">
+<span class="sig-name descname"><span class="pre">uvw_stiffener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">si</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'flange'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/stiffpanelbay/stiffpanelbay.html#StiffPanelBay.uvw_stiffener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the displacement field on a stiffener</p>
 <p>For a given full set of Ritz constants <code class="docutils literal notranslate"><span class="pre">c</span></code>, the displacement
 field is calculated and stored in the parameters
 <code class="docutils literal notranslate"><span class="pre">u</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code>, <code class="docutils literal notranslate"><span class="pre">w</span></code>, <code class="docutils literal notranslate"><span class="pre">phix</span></code>, <code class="docutils literal notranslate"><span class="pre">phiy</span></code> of the
 <a class="reference internal" href="#compmech.stiffpanelbay.StiffPanelBay" title="compmech.stiffpanelbay.StiffPanelBay"><code class="xref py py-class docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a> object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">float</span></dt><dd><p>The full set of Ritz constants</p>
 </dd>
@@ -638,21 +987,21 @@ field is calculated and stored in the parameters
 </dd>
 <dt><strong>region</strong><span class="classifier">str, optional</span></dt><dd><p>Stiffener region (‘base’, ‘flange’ etc).</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions where to calculate the displacement field.
+<dt><strong>xs</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
 <dt><strong>ys</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">y</span></code> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
-<dt><strong>gridx</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis where to calculate the
+<dt><strong>gridx</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(x\)</span> axis where to calculate the
 displacement field.</p>
 </dd>
-<dt><strong>gridy</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> where to calculate the
+<dt><strong>gridy</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(y\)</span> where to calculate the
 displacement field.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">tuple</span></dt><dd><p>A tuple of <code class="docutils literal notranslate"><span class="pre">np.ndarrays</span></code> containing
 <code class="docutils literal notranslate"><span class="pre">(u,</span> <span class="pre">v,</span> <span class="pre">w,</span> <span class="pre">phix,</span> <span class="pre">phiy)</span></code>.</p>
@@ -668,67 +1017,127 @@ stored as parameters with the same name in the
 
 </dd></dl>
 
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../stiffener/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Semi-analytical models for Stiffeners (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffener</span></code>)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../theory/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Theory, Implementation and Tutorials</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff1d"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.add_bladestiff1d()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.add_bladestiff2d"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.add_bladestiff2d()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.add_panel"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.add_panel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.add_tstiff2d"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.add_tstiff2d()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.calc_fext"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.calc_fext()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.get_size"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.get_size()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.plot_skin"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.plot_skin()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.plot_stiffener"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.plot_stiffener()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.save"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.save()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_skin"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.uvw_skin()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.stiffpanelbay.StiffPanelBay.uvw_stiffener"><code class="docutils literal notranslate"><span class="pre">StiffPanelBay.uvw_stiffener()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/modules/stiffpanelbay/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
 </div>
 
-
+</div></div>
+              
+            
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
-            </a></p>
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../stiffener/index.html"
-                        title="previous chapter">Semi-analytical models for Stiffeners (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffener</span></code>)</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../../theory/index.html"
-                        title="next chapter">Theory, Implementation and Tutorials</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/stiffpanelbay/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2012-2023 Saullo G. P. Castro.
+      <br/>
+    
+  </p>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../../theory/index.html" title="Theory, Implementation and Tutorials"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../stiffener/index.html" title="Semi-analytical models for Stiffeners (compmech.stiffener)"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li> 
-      </ul>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Sep 03, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>

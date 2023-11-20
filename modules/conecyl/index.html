@@ -1,54 +1,411 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <title>Semi-analytical Models for Cones and Cylinder (compmech.conecyl) &#8212; CompMech 0.7.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    
-    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Semi-analytical Models for Cones and Cylinder (compmech.conecyl) &#8212; CompMech 0.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../_static/documentation_options.js?v=486e5634"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/conecyl/index';</script>
+    <link rel="icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Integrate &lt;compmech.integrate&gt;" href="../integrate/index.html" />
-    <link rel="prev" title="Composite Module (compmech.composite)" href="../composite/index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../integrate/index.html" title="Integrate &lt;compmech.integrate&gt;"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../composite/index.html" title="Composite Module (compmech.composite)"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Modules</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="Composite Module (compmech.composite)" href="../composite/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Nov 20, 2023"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <span class="target" id="module-compmech.conecyl"></span><div class="section" id="semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">
-<h1>Semi-analytical Models for Cones and Cylinder (<a class="reference internal" href="#module-compmech.conecyl" title="compmech.conecyl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl</span></code></a>)<a class="headerlink" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl" title="Permalink to this headline">¶</a></h1>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="CompMech 0.8.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="CompMech 0.8.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../analysis/index.html">Analysis Module (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.analysis</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../composite/index.html">Composite Module (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.composite</span></code>)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Semi-analytical Models for Cones and Cylinder (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integrate/index.html">Integrate &lt;<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.integrate</span></code>&gt;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/index.html">Compmech shared libraries (lib)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../panel/index.html">Flat Plates, Curved Panels and Assemblies</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../panel/panel.html">Semi-analytical Models for Panels (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../panel/connections.html">Panel Connections (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.connections</span></code>)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../panel/assembly/assembly_intro.html">Assembly of Semi-Analytical Models</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../panel/assembly/assembly.html">Assembly of Plate and Panel Models (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.assembly</span></code>)</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../panel/assembly/assembly_functions.html">Functions using Assemblies of Panels</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../panel/assembly/tstiff2d.html">T-Stiffened Panels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../panel/assembly/cylinder_unstiffened.html">Unstiffened Cylinder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../panel/assembly/cylinder_blade_stiffened.html">Blade-Stiffened Cylinder</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../panel/assembly/assembly_example_to_create.html">Example to Create a Panel Assembly</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../stiffener/index.html">Semi-analytical models for Stiffeners (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffener</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stiffpanelbay/index.html">Stiffened Panel Bay (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffpanelbay</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Modules</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Semi-analyti...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="semi-analytical-models-for-cones-and-cylinder-compmech-conecyl">
+<span id="module-compmech.conecyl"></span><h1>Semi-analytical Models for Cones and Cylinder (<a class="reference internal" href="#module-compmech.conecyl" title="compmech.conecyl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl</span></code></a>)<a class="headerlink" href="#semi-analytical-models-for-cones-and-cylinder-compmech-conecyl" title="Link to this heading">#</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> class embodies all the methods and functions necessary to
 perform:</p>
 <ul class="simple">
@@ -59,18 +416,18 @@ perform:</p>
 <p>in conical and cylindrical structures.</p>
 <p>The implementation focused on laminate composite shells with a constant
 laminate constitutive relation. This means that the semi-analtical
-models were derived doing an integration using a constant <img class="math" src="../../_images/math/d39982d8eff6c8bc359d5882d704a2b8a6e49653.png" alt="[F]"/> for the whole
-domain. Recalling that <img class="math" src="../../_images/math/d39982d8eff6c8bc359d5882d704a2b8a6e49653.png" alt="[F]"/> correlates the strains and the distributed
+models were derived doing an integration using a constant <span class="math notranslate nohighlight">\([F]\)</span> for the whole
+domain. Recalling that <span class="math notranslate nohighlight">\([F]\)</span> correlates the strains and the distributed
 stresses by the relation:</p>
-<div class="math">
-<p><img src="../../_images/math/077b259710d004850c697a8235c4f9f5089757e2.png" alt="\{N\} = [F] \{\varepsilon\}"/></p>
-</div><div class="section" id="the-conecyl-object">
-<h2>The <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object<a class="headerlink" href="#the-conecyl-object" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="compmech.conecyl.ConeCyl">
-<em class="property">class </em><code class="sig-prename descclassname">compmech.conecyl.</code><code class="sig-name descname">ConeCyl</code><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl" title="Permalink to this definition">¶</a></dt>
+<div class="math notranslate nohighlight">
+\[\{N\} = [F] \{\varepsilon\}\]</div>
+<section id="the-conecyl-object">
+<h2>The <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object<a class="headerlink" href="#the-conecyl-object" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compmech.conecyl.</span></span><span class="sig-name descname"><span class="pre">ConeCyl</span></span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>E11</strong></dt><dd></dd>
 <dt><strong>F</strong></dt><dd></dd>
@@ -181,95 +538,87 @@ stresses by the relation:</p>
 </dd>
 </dl>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.SPLA" title="compmech.conecyl.ConeCyl.SPLA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SPLA</span></code></a>(self, PLs[, NLgeom, plot])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.SPLA" title="compmech.conecyl.ConeCyl.SPLA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SPLA</span></code></a>(PLs[, NLgeom, plot])</p></td>
 <td><p>Runs the Single Perturbation Load Approach (SPLA)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_SPL" title="compmech.conecyl.ConeCyl.add_SPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_SPL</span></code></a>(self, PL[, pt, thetadeg, increment])</p></td>
-<td><p>Add a Single Perturbation Load <img class="math" src="../../_images/math/b396988e43ba4433386bd6ac60b205f1f30f1e1b.png" alt="\{{F_{PL}}_i\}"/></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_SPL" title="compmech.conecyl.ConeCyl.add_SPL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_SPL</span></code></a>(PL[, pt, thetadeg, increment])</p></td>
+<td><p>Add a Single Perturbation Load <span class="math notranslate nohighlight">\(\{{F_{PL}}_i\}\)</span></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_force" title="compmech.conecyl.ConeCyl.add_force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_force</span></code></a>(self, x, thetadeg, fx, ftheta, fz)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.add_force" title="compmech.conecyl.ConeCyl.add_force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_force</span></code></a>(x, thetadeg, fx, ftheta, fz[, ...])</p></td>
 <td><p>Add a punctual force</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.apply_shim" title="compmech.conecyl.ConeCyl.apply_shim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_shim</span></code></a>(self, thetadeg, width, thick[, ncpts])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.apply_shim" title="compmech.conecyl.ConeCyl.apply_shim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_shim</span></code></a>(thetadeg, width, thick[, ncpts])</p></td>
 <td><p>Distributes the axial load in order to simulate a shim</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fext" title="compmech.conecyl.ConeCyl.calc_fext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fext</span></code></a>(self[, inc, kuk, silent])</p></td>
-<td><p>Calculates the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fext" title="compmech.conecyl.ConeCyl.calc_fext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fext</span></code></a>([inc, kuk, silent])</p></td>
+<td><p>Calculates the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fint</span></code></a>(self, c[, inc, m, return_u, silent])</p></td>
-<td><p>Calculates the internal force vector <img class="math" src="../../_images/math/abf38893eb062f70c9f222127d0c0870fd1bf666.png" alt="\{F_{int}\}"/></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_fint" title="compmech.conecyl.ConeCyl.calc_fint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fint</span></code></a>(c[, inc, m, return_u, silent])</p></td>
+<td><p>Calculates the internal force vector <span class="math notranslate nohighlight">\(\{F_{int}\}\)</span></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_full_c</span></code></a>(self, cu[, inc])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_full_c" title="compmech.conecyl.ConeCyl.calc_full_c"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_full_c</span></code></a>(cu[, inc])</p></td>
 <td><p>Returns the full set of Ritz constants</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_kT" title="compmech.conecyl.ConeCyl.calc_kT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_kT</span></code></a>(self, c[, inc, silent])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.calc_kT" title="compmech.conecyl.ConeCyl.calc_kT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_kT</span></code></a>(c[, inc, silent])</p></td>
 <td><p>Calculates the tangent stiffness matrix</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.eigen" title="compmech.conecyl.ConeCyl.eigen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eigen</span></code></a>(self[, c, tol, kL, kG])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.eigen" title="compmech.conecyl.ConeCyl.eigen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eigen</span></code></a>([c, tol, kL, kG, combined_load_case])</p></td>
 <td><p>Performs a non-linear eigenvalue analysis at a given state</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exclude_dofs_matrix</span></code></a>(self, k[, return_kkk, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="compmech.conecyl.ConeCyl.exclude_dofs_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exclude_dofs_matrix</span></code></a>(k[, return_kkk, ...])</p></td>
 <td><p>Makes the partition of the dofs for prescribed displacements</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.fit_Nxxtop" title="compmech.conecyl.ConeCyl.fit_Nxxtop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_Nxxtop</span></code></a>(self, ts, us[, update_Nxxtop])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.fit_Nxxtop" title="compmech.conecyl.ConeCyl.fit_Nxxtop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_Nxxtop</span></code></a>(ts, us[, update_Nxxtop])</p></td>
 <td><p>Adjusts the axial load distribution for a desired top edge displacement</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.from_DB" title="compmech.conecyl.ConeCyl.from_DB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_DB</span></code></a>(self, name)</p></td>
-<td><p>Load cone / cylinder data from the local database</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.from_DB" title="compmech.conecyl.ConeCyl.from_DB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_DB</span></code></a>(name)</p></td>
+<td><p>Load cone/cylinder data from the local database</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.get_size" title="compmech.conecyl.ConeCyl.get_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_size</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.get_size" title="compmech.conecyl.ConeCyl.get_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_size</span></code></a>()</p></td>
 <td><p>Calculates the size of the stiffness matrices</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lb</span></code></a>(self[, c, tol, combined_load_case])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.lb" title="compmech.conecyl.ConeCyl.lb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lb</span></code></a>([c, tol, combined_load_case])</p></td>
 <td><p>Performs a linear buckling analysis</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(self, c[, invert_x, plot_type, vec, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.plot" title="compmech.conecyl.ConeCyl.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(c[, invert_x, plot_type, vec, ...])</p></td>
 <td><p>Contour plot for a Ritz constants vector.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.plotAbaqus" title="compmech.conecyl.ConeCyl.plotAbaqus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotAbaqus</span></code></a>(self, frame, fieldOutputKey, vec, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.plotAbaqus" title="compmech.conecyl.ConeCyl.plotAbaqus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotAbaqus</span></code></a>(frame, fieldOutputKey, vec, ...)</p></td>
 <td><p>Print a field output for a cylinder/cone model from Abaqus</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.save" title="compmech.conecyl.ConeCyl.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
 <td><p>Save the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object using <code class="docutils literal notranslate"><span class="pre">pickle</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><code class="xref py py-obj docutils literal notranslate"><span class="pre">static</span></code></a>(self[, NLgeom, silent])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><code class="xref py py-obj docutils literal notranslate"><span class="pre">static</span></code></a>([NLgeom, silent])</p></td>
 <td><p>Static analysis for cones and cylinders</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strain</span></code></a>(self, c[, xs, ts, gridx, gridt, inc])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.strain" title="compmech.conecyl.ConeCyl.strain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strain</span></code></a>(c[, xs, ts, gridx, gridt, inc])</p></td>
 <td><p>Calculates the strain field</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.stress" title="compmech.conecyl.ConeCyl.stress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stress</span></code></a>(self, c[, xs, ts, gridx, gridt, inc])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.stress" title="compmech.conecyl.ConeCyl.stress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stress</span></code></a>(c[, xs, ts, gridx, gridt, inc])</p></td>
 <td><p>Calculates the stress field</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uvw</span></code></a>(self, c[, xs, ts, gridx, gridt, inc])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.conecyl.ConeCyl.uvw" title="compmech.conecyl.ConeCyl.uvw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uvw</span></code></a>(c[, xs, ts, gridx, gridt, inc])</p></td>
 <td><p>Calculates the displacement field</p></td>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 52%" />
-<col style="width: 48%" />
-</colgroup>
+<table class="table">
 <tbody>
 <tr class="row-odd"><td><p><strong>calc_k0</strong></p></td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.SPLA">
-<code class="sig-name descname">SPLA</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">PLs</em>, <em class="sig-param">NLgeom=True</em>, <em class="sig-param">plot=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.SPLA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.SPLA" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.SPLA">
+<span class="sig-name descname"><span class="pre">SPLA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">PLs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NLgeom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.SPLA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.SPLA" title="Link to this definition">#</a></dt>
 <dd><p>Runs the Single Perturbation Load Approach (SPLA)</p>
 <p>A set of non-linear results will be</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>PLs: list</strong></dt><dd><p>The perturbation loads used to build the knock-down curve. It must
 be a list of float values.</p>
@@ -279,16 +628,12 @@ geometrically non-linear analysis is to be performed.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt><strong>curves</strong><span class="classifier">list</span></dt><dd><p>The sequence of curves, one curve for each perturbation load given
 in the input parameter <code class="docutils literal notranslate"><span class="pre">PLs</span></code>.
 Each curve in the list is a <code class="docutils literal notranslate"><span class="pre">dict</span></code> object with the keys:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 27%" />
-<col style="width: 73%" />
-</colgroup>
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Key</p></th>
 <th class="head"><p>Description</p></th>
@@ -332,19 +677,19 @@ for each load increment</p></td>
 <code class="docutils literal notranslate"><span class="pre">outputs['SPLA_curves']</span></code>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.add_SPL">
-<code class="sig-name descname">add_SPL</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">PL</em>, <em class="sig-param">pt=0.5</em>, <em class="sig-param">thetadeg=0.0</em>, <em class="sig-param">increment=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.add_SPL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_SPL" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a Single Perturbation Load <img class="math" src="../../_images/math/b396988e43ba4433386bd6ac60b205f1f30f1e1b.png" alt="\{{F_{PL}}_i\}"/></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.add_SPL">
+<span class="sig-name descname"><span class="pre">add_SPL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">PL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.add_SPL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_SPL" title="Link to this definition">#</a></dt>
+<dd><p>Add a Single Perturbation Load <span class="math notranslate nohighlight">\(\{{F_{PL}}_i\}\)</span></p>
 <p>Adds a perturbation load to the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object, the perturbation
 load is a particular case of the punctual load with only a normal
 component.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>PL</strong><span class="classifier">float</span></dt><dd><p>The perturbation load value.</p>
 </dd>
-<dt><strong>pt</strong><span class="classifier">float, optional</span></dt><dd><p>The normalized position along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis in which the new SPL
+<dt><strong>pt</strong><span class="classifier">float, optional</span></dt><dd><p>The normalized position along the <span class="math notranslate nohighlight">\(x\)</span> axis in which the new SPL
 will be included.</p>
 </dd>
 <dt><strong>thetadeg</strong><span class="classifier">float, optional</span></dt><dd><p>The angular position of the SPL in degrees.</p>
@@ -361,24 +706,24 @@ of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</spa
 any time.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.add_force">
-<code class="sig-name descname">add_force</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">thetadeg</em>, <em class="sig-param">fx</em>, <em class="sig-param">ftheta</em>, <em class="sig-param">fz</em>, <em class="sig-param">increment=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.add_force"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_force" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.add_force">
+<span class="sig-name descname"><span class="pre">add_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetadeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.add_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.add_force" title="Link to this definition">#</a></dt>
 <dd><p>Add a punctual force</p>
-<p>Adds a force vector <img class="math" src="../../_images/math/63966b88e047ed498541f1cff6cedaf26c47ee02.png" alt="\{f_x, f_\theta, f_z\}^T"/> to the <code class="docutils literal notranslate"><span class="pre">forces</span></code>
+<p>Adds a force vector <span class="math notranslate nohighlight">\(\{f_x, f_\theta, f_z\}^T\)</span> to the <code class="docutils literal notranslate"><span class="pre">forces</span></code>
 parameter of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> position.</p>
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> position.</p>
 </dd>
-<dt><strong>thetadeg</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> position in degrees.</p>
+<dt><strong>thetadeg</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\theta\)</span> position in degrees.</p>
 </dd>
-<dt><strong>fx</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> component of the force vector.</p>
+<dt><strong>fx</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> component of the force vector.</p>
 </dd>
-<dt><strong>ftheta</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> component of the force vector.</p>
+<dt><strong>ftheta</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\theta\)</span> component of the force vector.</p>
 </dd>
-<dt><strong>fz</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/> component of the force vector.</p>
+<dt><strong>fz</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(z\)</span> component of the force vector.</p>
 </dd>
 <dt><strong>increment</strong><span class="classifier">bool, optional</span></dt><dd><p>If this punctual force should be incrementally applied in a
 non-linear analysis.</p>
@@ -388,15 +733,15 @@ non-linear analysis.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.apply_shim">
-<code class="sig-name descname">apply_shim</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">thetadeg</em>, <em class="sig-param">width</em>, <em class="sig-param">thick</em>, <em class="sig-param">ncpts=10000</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.apply_shim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.apply_shim" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.apply_shim">
+<span class="sig-name descname"><span class="pre">apply_shim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetadeg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thick</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.apply_shim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.apply_shim" title="Link to this definition">#</a></dt>
 <dd><p>Distributes the axial load in order to simulate a shim</p>
-<p>The axial load distribution <img class="math" src="../../_images/math/b42ce514484cb37c7bec6f9e3312088fc39cd3b8.png" alt="{N_{xx}}_{top}"/> will be adjusted such
-that the resulting displacement <img class="math" src="../../_images/math/9b444cf6329a14140aee8ff5a06ff30772cc1c2f.png" alt="u"/> at <img class="math" src="../../_images/math/c34170440d4046a9b3e1ef2635a2f5d6a529a421.png" alt="x=0"/> (top edge) will look
+<p>The axial load distribution <span class="math notranslate nohighlight">\({N_{xx}}_{top}\)</span> will be adjusted such
+that the resulting displacement <span class="math notranslate nohighlight">\(u\)</span> at <span class="math notranslate nohighlight">\(x=0\)</span> (top edge) will look
 similar to a case where a shim is applied.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>thetadeg</strong><span class="classifier">float</span></dt><dd><p>Position in degrees of the center of the shim.</p>
 </dd>
@@ -408,11 +753,11 @@ similar to a case where a shim is applied.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>ts</strong><span class="classifier">np.ndarray</span></dt><dd><p>Positions <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> of the control points.</p>
+<dt><strong>ts</strong><span class="classifier">np.ndarray</span></dt><dd><p>Positions <span class="math notranslate nohighlight">\(\theta\)</span> of the control points.</p>
 </dd>
-<dt><strong>us</strong><span class="classifier">np.ndarray</span></dt><dd><p>Displacements <img class="math" src="../../_images/math/9b444cf6329a14140aee8ff5a06ff30772cc1c2f.png" alt="u"/> of the control points.</p>
+<dt><strong>us</strong><span class="classifier">np.ndarray</span></dt><dd><p>Displacements <span class="math notranslate nohighlight">\(u\)</span> of the control points.</p>
 </dd>
 </dl>
 </dd>
@@ -422,25 +767,25 @@ similar to a case where a shim is applied.</p>
 <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object. Returning <code class="docutils literal notranslate"><span class="pre">ts</span></code> and <code class="docutils literal notranslate"><span class="pre">us</span></code> is useful for post
 processing purposes only.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="p">,</span> <span class="n">us</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">apply_shim</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">25.4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="p">,</span> <span class="n">us</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">apply_shim</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">25.4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.calc_fext">
-<code class="sig-name descname">calc_fext</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">inc=1.0</em>, <em class="sig-param">kuk=None</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_fext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.calc_fext">
+<span class="sig-name descname"><span class="pre">calc_fext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kuk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_fext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fext" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span></p>
 <p>Recall that:</p>
-<div class="math">
-<p><img src="../../_images/math/43454b09a08f63c3bc640d713ca3fa3d92d9fd58.png" alt="\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}"/></p>
-</div><p>such that the terms in <img class="math" src="../../_images/math/1ebf141ce64286419223117edb7d8a9890b65fd8.png" alt="\{{F_{ext}}_0\}"/> are constant and the terms in
-<img class="math" src="../../_images/math/7f3fff52d4953502d59cd325a856ab2fdb1af36b.png" alt="\{{F_{ext}}_\lambda\}"/> will be scaled by the parameter <code class="docutils literal notranslate"><span class="pre">inc</span></code>.</p>
+<div class="math notranslate nohighlight">
+\[\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}\]</div>
+<p>such that the terms in <span class="math notranslate nohighlight">\(\{{F_{ext}}_0\}\)</span> are constant and the terms in
+<span class="math notranslate nohighlight">\(\{{F_{ext}}_\lambda\}\)</span> will be scaled by the parameter <code class="docutils literal notranslate"><span class="pre">inc</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>inc</strong><span class="classifier">float, optional</span></dt><dd><p>Since this function is called during the non-linear analysis,
-<code class="docutils literal notranslate"><span class="pre">inc</span></code> will multiply the terms <img class="math" src="../../_images/math/7f3fff52d4953502d59cd325a856ab2fdb1af36b.png" alt="\{{F_{ext}}_\lambda\}"/>.</p>
+<code class="docutils literal notranslate"><span class="pre">inc</span></code> will multiply the terms <span class="math notranslate nohighlight">\(\{{F_{ext}}_\lambda\}\)</span>.</p>
 </dd>
 <dt><strong>kuk</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>Obsolete, created for displacement controlled analyses, but the
 implementation has not been finished, see
@@ -450,7 +795,7 @@ implementation has not been finished, see
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fext</strong><span class="classifier">np.ndarray</span></dt><dd><p>The external force vector</p>
 </dd>
@@ -459,16 +804,12 @@ implementation has not been finished, see
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.calc_fint">
-<code class="sig-name descname">calc_fint</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">inc=1.0</em>, <em class="sig-param">m=1</em>, <em class="sig-param">return_u=True</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_fint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the internal force vector <img class="math" src="../../_images/math/abf38893eb062f70c9f222127d0c0870fd1bf666.png" alt="\{F_{int}\}"/></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.calc_fint">
+<span class="sig-name descname"><span class="pre">calc_fint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_fint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_fint" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the internal force vector <span class="math notranslate nohighlight">\(\{F_{int}\}\)</span></p>
 <p>The following attributes will affect the numerical integration:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 74%" />
-</colgroup>
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
 <th class="head"><p>Description</p></th>
@@ -491,16 +832,16 @@ integration</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nx</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code>, number of integration points along the
-<img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinate</p></td>
+<span class="math notranslate nohighlight">\(x\)</span> coordinate</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nt</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code>, number of integration points along the
-<img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> coordinate</p></td>
+<span class="math notranslate nohighlight">\(\theta\)</span> coordinate</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants that will be used to compute the internal
 forces.</p>
@@ -518,7 +859,7 @@ set of Ritz constants should be returned.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fint</strong><span class="classifier">np.ndarray</span></dt><dd><p>The internal force vector.</p>
 </dd>
@@ -527,9 +868,9 @@ set of Ritz constants should be returned.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.calc_full_c">
-<code class="sig-name descname">calc_full_c</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">cu</em>, <em class="sig-param">inc=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_full_c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_full_c" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.calc_full_c">
+<span class="sig-name descname"><span class="pre">calc_full_c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_full_c"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_full_c" title="Link to this definition">#</a></dt>
 <dd><p>Returns the full set of Ritz constants</p>
 <p>When prescribed displacements take place the matrices and the Ritz
 constants are partitioned like:</p>
@@ -545,7 +886,7 @@ constants are partitioned like:</p>
 <p>This function adds the set of known Ritz constants (<code class="docutils literal notranslate"><span class="pre">ck</span></code>)
 to the set of unknown (<code class="docutils literal notranslate"><span class="pre">cu</span></code>) based on the prescribed displacements.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>cu</strong><span class="classifier">np.ndarray</span></dt><dd><p>The set of unknown Ritz constants</p>
 </dd>
@@ -554,7 +895,7 @@ constants.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The full set of Ritz constants.</p>
 </dd>
@@ -563,16 +904,12 @@ constants.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.calc_kT">
-<code class="sig-name descname">calc_kT</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">inc=1.0</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_kT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_kT" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.calc_kT">
+<span class="sig-name descname"><span class="pre">calc_kT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.calc_kT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.calc_kT" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the tangent stiffness matrix</p>
 <p>The following attributes will affect the numerical integration:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 26%" />
-<col style="width: 74%" />
-</colgroup>
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
 <th class="head"><p>Description</p></th>
@@ -595,16 +932,16 @@ integration</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nx</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code>, number of integration points along the
-<img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinate</p></td>
+<span class="math notranslate nohighlight">\(x\)</span> coordinate</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nt</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">int</span></code>, number of integration points along the
-<img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> coordinate</p></td>
+<span class="math notranslate nohighlight">\(\theta\)</span> coordinate</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants vector of the current state.</p>
 </dd>
@@ -615,7 +952,7 @@ constants using <a class="reference internal" href="#compmech.conecyl.ConeCyl.ca
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>kTuu</strong><span class="classifier">sparse matrix</span></dt><dd><p>The tangent stiffness matrix corresponding to the unknown degrees
 of freedom.</p>
@@ -625,17 +962,13 @@ of freedom.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.eigen">
-<code class="sig-name descname">eigen</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c=None</em>, <em class="sig-param">tol=0</em>, <em class="sig-param">kL=None</em>, <em class="sig-param">kG=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.eigen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.eigen" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.eigen">
+<span class="sig-name descname"><span class="pre">eigen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kL</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kG</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combined_load_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.eigen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.eigen" title="Link to this definition">#</a></dt>
 <dd><p>Performs a non-linear eigenvalue analysis at a given state</p>
 <p>The following attributes of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object will affect the
 non-linear eigenvalue analysis:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 38%" />
-<col style="width: 62%" />
-</colgroup>
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
 <th class="head"><p>Description</p></th>
@@ -655,9 +988,9 @@ the analysis is completed</p></td>
 <a class="reference internal" href="#compmech.conecyl.ConeCyl.static" title="compmech.conecyl.ConeCyl.static"><code class="xref py py-meth docutils literal notranslate"><span class="pre">static()</span></code></a> will affect the integration of the non-linear matrices
 <code class="docutils literal notranslate"><span class="pre">kL</span></code> and <code class="docutils literal notranslate"><span class="pre">kG</span></code> if they are not given as input parameters.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>combined_load_case</strong><span class="classifier">int, optional</span></dt><dd><p>It tells whether the linear buckling analysis must be computed
+<dt><strong>combined_load_case</strong><span class="classifier">int or None, optional</span></dt><dd><p>It tells whether the linear buckling analysis must be computed
 considering combined load cases, each value will tell
 the algorithm to rearrange the linear matrices in a different
 way. The valid values are <code class="docutils literal notranslate"><span class="pre">1</span></code>, or <code class="docutils literal notranslate"><span class="pre">2</span></code>, where:</p>
@@ -672,13 +1005,13 @@ way. The valid values are <code class="docutils literal notranslate"><span class
 </dl>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal notranslate"><span class="pre">eigvals</span></code> parameter
-of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object and the <img class="math" src="../../_images/math/3d2006e56cc72c929d49557c7d4b01e336b4ce6b.png" alt="i^{th}"/> eigenvector in the
+of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object and the <span class="math notranslate nohighlight">\(i^{th}\)</span> eigenvector in the
 <code class="docutils literal notranslate"><span class="pre">eigvecs[i-1,</span> <span class="pre">:]</span></code> parameter.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.exclude_dofs_matrix">
-<code class="sig-name descname">exclude_dofs_matrix</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">k</em>, <em class="sig-param">return_kkk=False</em>, <em class="sig-param">return_kku=False</em>, <em class="sig-param">return_kuk=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.exclude_dofs_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.exclude_dofs_matrix">
+<span class="sig-name descname"><span class="pre">exclude_dofs_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_kkk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_kku</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_kuk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.exclude_dofs_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix" title="Link to this definition">#</a></dt>
 <dd><p>Makes the partition of the dofs for prescribed displacements</p>
 <p>Makes the following partition of a given matrix:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="o">|</span> <span class="n">kkk</span>    <span class="n">kku</span> <span class="o">|</span>
@@ -686,19 +1019,19 @@ of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</spa
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>k</strong><span class="classifier">scipy.sparse.coo_matrix</span></dt><dd><p>Matrix to be partitioned.</p>
 </dd>
-<dt><strong>return_kkk</strong><span class="classifier">bool, optional</span></dt><dd><p>If the region <img class="math" src="../../_images/math/9217a6aa76ba97274ec94ad8e25bc5b19c335158.png" alt="kkk"/> must be returned.</p>
+<dt><strong>return_kkk</strong><span class="classifier">bool, optional</span></dt><dd><p>If the region <span class="math notranslate nohighlight">\(kkk\)</span> must be returned.</p>
 </dd>
-<dt><strong>return_kku</strong><span class="classifier">bool, optional</span></dt><dd><p>If the region <img class="math" src="../../_images/math/8589ca4d7f1c47f6314d1fa91b31edff1b51235b.png" alt="kku"/> must be returned.</p>
+<dt><strong>return_kku</strong><span class="classifier">bool, optional</span></dt><dd><p>If the region <span class="math notranslate nohighlight">\(kku\)</span> must be returned.</p>
 </dd>
-<dt><strong>return_kuk</strong><span class="classifier">bool, optional</span></dt><dd><p>If the region <img class="math" src="../../_images/math/d68fa4a2f246a9b72b6f93e56d742a03daf343b0.png" alt="kuk"/> must be returned.</p>
+<dt><strong>return_kuk</strong><span class="classifier">bool, optional</span></dt><dd><p>If the region <span class="math notranslate nohighlight">\(kuk\)</span> must be returned.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">dict</span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">dict</span></code> object containing the keys for the
 corresponding sub-matrices <code class="docutils literal notranslate"><span class="pre">kkk</span></code>, <code class="docutils literal notranslate"><span class="pre">kku</span></code>, <code class="docutils literal notranslate"><span class="pre">kuk</span></code>, <code class="docutils literal notranslate"><span class="pre">kuu</span></code>.
@@ -710,37 +1043,37 @@ while the others are 2-D <code class="docutils literal notranslate"><span class=
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.fit_Nxxtop">
-<code class="sig-name descname">fit_Nxxtop</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">ts</em>, <em class="sig-param">us</em>, <em class="sig-param">update_Nxxtop=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.fit_Nxxtop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.fit_Nxxtop" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.fit_Nxxtop">
+<span class="sig-name descname"><span class="pre">fit_Nxxtop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">us</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_Nxxtop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.fit_Nxxtop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.fit_Nxxtop" title="Link to this definition">#</a></dt>
 <dd><p>Adjusts the axial load distribution for a desired top edge
 displacement</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>ts</strong><span class="classifier">np.ndarray</span></dt><dd><p>Corrdinates <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> of each control point.</p>
+<dt><strong>ts</strong><span class="classifier">np.ndarray</span></dt><dd><p>Corrdinates <span class="math notranslate nohighlight">\(\theta\)</span> of each control point.</p>
 </dd>
-<dt><strong>us</strong><span class="classifier">np.ndarray</span></dt><dd><p>Desired displacement <img class="math" src="../../_images/math/9b444cf6329a14140aee8ff5a06ff30772cc1c2f.png" alt="u"/> for each control point.</p>
+<dt><strong>us</strong><span class="classifier">np.ndarray</span></dt><dd><p>Desired displacement <span class="math notranslate nohighlight">\(u\)</span> for each control point.</p>
 </dd>
 <dt><strong>update_Nxxtop</strong><span class="classifier">bool, optional</span></dt><dd><p>Tells whether <code class="docutils literal notranslate"><span class="pre">self.Nxxtop</span></code> should be updated.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>Nxxtop</strong><span class="classifier">np.ndarray</span></dt><dd><p>The coefficients for the <img class="math" src="../../_images/math/b42ce514484cb37c7bec6f9e3312088fc39cd3b8.png" alt="{N_{xx}}_{top}"/> function.</p>
+<dt><strong>Nxxtop</strong><span class="classifier">np.ndarray</span></dt><dd><p>The coefficients for the <span class="math notranslate nohighlight">\({N_{xx}}_{top}\)</span> function.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.from_DB">
-<code class="sig-name descname">from_DB</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.from_DB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.from_DB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load cone / cylinder data from the local database</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.from_DB">
+<span class="sig-name descname"><span class="pre">from_DB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.from_DB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.from_DB" title="Link to this definition">#</a></dt>
+<dd><p>Load cone/cylinder data from the local database</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>A key contained in the <code class="docutils literal notranslate"><span class="pre">ccs</span></code> dictionary of module
 <a class="reference internal" href="#module-compmech.conecyl.conecylDB" title="compmech.conecyl.conecylDB"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.conecylDB</span></code></a>.</p>
@@ -750,16 +1083,16 @@ displacement</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.get_size">
-<code class="sig-name descname">get_size</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.get_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.get_size" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.get_size">
+<span class="sig-name descname"><span class="pre">get_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.get_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.get_size" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the size of the stiffness matrices</p>
 <p>The size of the stiffness matrices can be interpreted as the number of
 rows or columns, recalling that this will be the size of the Ritz
-constants’ vector <img class="math" src="../../_images/math/a4acf9ac84baad22892cc8ac8f55a3467e4f4612.png" alt="\{c\}"/>, the internal force vector <img class="math" src="../../_images/math/abf38893eb062f70c9f222127d0c0870fd1bf666.png" alt="\{F_{int}\}"/> and
-the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/>.</p>
+constants’ vector <span class="math notranslate nohighlight">\(\{c\}\)</span>, the internal force vector <span class="math notranslate nohighlight">\(\{F_{int}\}\)</span> and
+the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>size</strong><span class="classifier">int</span></dt><dd><p>The size of the stiffness matrices.</p>
 </dd>
@@ -768,17 +1101,13 @@ the external force vector <img class="math" src="../../_images/math/dcff9afc351f
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.lb">
-<code class="sig-name descname">lb</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c=None</em>, <em class="sig-param">tol=0</em>, <em class="sig-param">combined_load_case=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.lb" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.lb">
+<span class="sig-name descname"><span class="pre">lb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combined_load_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.lb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.lb" title="Link to this definition">#</a></dt>
 <dd><p>Performs a linear buckling analysis</p>
 <p>The following parameters of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object will affect the
 linear buckling analysis:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 38%" />
-<col style="width: 62%" />
-</colgroup>
+<table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
 <th class="head"><p>Description</p></th>
@@ -795,7 +1124,7 @@ the analysis is completed</p></td>
 </tbody>
 </table>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>combined_load_case</strong><span class="classifier">int, optional</span></dt><dd><p>It tells whether the linear buckling analysis must be computed
 considering combined load cases, each value will tell
@@ -812,16 +1141,16 @@ way. The valid values are <code class="docutils literal notranslate"><span class
 </dl>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal notranslate"><span class="pre">eigvals</span></code> parameter
-of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object and the <img class="math" src="../../_images/math/3d2006e56cc72c929d49557c7d4b01e336b4ce6b.png" alt="i^{th}"/> eigenvector in the
+of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object and the <span class="math notranslate nohighlight">\(i^{th}\)</span> eigenvector in the
 <code class="docutils literal notranslate"><span class="pre">eigvecs[i-1,</span> <span class="pre">:]</span></code> parameter.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">invert_x=False</em>, <em class="sig-param">plot_type=1</em>, <em class="sig-param">vec='w'</em>, <em class="sig-param">deform_u=False</em>, <em class="sig-param">deform_u_sf=100.0</em>, <em class="sig-param">filename=''</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">figsize=(3.5</em>, <em class="sig-param">2.0)</em>, <em class="sig-param">save=True</em>, <em class="sig-param">add_title=True</em>, <em class="sig-param">title=''</em>, <em class="sig-param">colorbar=False</em>, <em class="sig-param">cbar_nticks=2</em>, <em class="sig-param">cbar_format=None</em>, <em class="sig-param">cbar_title=''</em>, <em class="sig-param">cbar_fontsize=10</em>, <em class="sig-param">aspect='equal'</em>, <em class="sig-param">clean=True</em>, <em class="sig-param">dpi=400</em>, <em class="sig-param">texts=[]</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ts=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridt=300</em>, <em class="sig-param">num_levels=400</em>, <em class="sig-param">inc=1.0</em>, <em class="sig-param">vecmin=None</em>, <em class="sig-param">vecmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.plot" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deform_u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deform_u_sf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3.5,</span> <span class="pre">2.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_nticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.plot" title="Link to this definition">#</a></dt>
 <dd><p>Contour plot for a Ritz constants vector.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants that will be used to compute the field contour.</p>
 </dd>
@@ -842,7 +1171,7 @@ of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</spa
 </dd>
 <dt><strong>deform_u_sf</strong><span class="classifier">float, optional</span></dt><dd><p>The scaling factor used to deform the contour.</p>
 </dd>
-<dt><strong>invert_x</strong><span class="classifier">bool, optional</span></dt><dd><p>Inverts the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis of the plot. It may be used to match
+<dt><strong>invert_x</strong><span class="classifier">bool, optional</span></dt><dd><p>Inverts the <span class="math notranslate nohighlight">\(x\)</span> axis of the plot. It may be used to match
 the coordinate system of the finite element models created
 using the <code class="docutils literal notranslate"><span class="pre">desicos.abaqus</span></code> module.</p>
 </dd>
@@ -852,8 +1181,8 @@ For cones all the following types can be used:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: concave up (with <code class="docutils literal notranslate"><span class="pre">invert_x=False</span></code>) (default)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: concave down (with <code class="docutils literal notranslate"><span class="pre">invert_x=False</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">3</span></code>: stretched closed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code>: stretched opened (<img class="math" src="../../_images/math/d4d4d0da5586cab70ecbe2e441c619f6954f7651.png" alt="r \times \theta"/> vs. <img class="math" src="../../_images/math/cb5de54f699cf4b3c7c1a3e87313d11d536c0d88.png" alt="H"/>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">5</span></code>: stretched opened (<img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> vs. <img class="math" src="../../_images/math/cb5de54f699cf4b3c7c1a3e87313d11d536c0d88.png" alt="H"/>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code>: stretched opened (<span class="math notranslate nohighlight">\(r \times \theta\)</span> vs. <span class="math notranslate nohighlight">\(H\)</span>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5</span></code>: stretched opened (<span class="math notranslate nohighlight">\(\theta\)</span> vs. <span class="math notranslate nohighlight">\(H\)</span>)</p></li>
 </ul>
 </dd>
 <dt><strong>save</strong><span class="classifier">bool, optional</span></dt><dd><p>Flag telling whether the contour should be saved to an image file.</p>
@@ -861,7 +1190,7 @@ For cones all the following types can be used:</p>
 <dt><strong>dpi</strong><span class="classifier">int, optional</span></dt><dd><p>Resolution of the saved file in dots per inch.</p>
 </dd>
 <dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../_images/math/75e26805b9431ddf4904cde00d9a08e963728387.png" alt="name"/> parameter of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object will be used.</p>
+the <span class="math notranslate nohighlight">\(name\)</span> parameter of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object will be used.</p>
 </dd>
 <dt><strong>ax</strong><span class="classifier">AxesSubplot, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">ax</span></code> is given, the contour plot will be created inside it.</p>
 </dd>
@@ -887,16 +1216,16 @@ method.</p>
 </dd>
 <dt><strong>clean</strong><span class="classifier">bool, optional</span></dt><dd><p>Clean axes ticks, grids, spines etc.</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions where to calculate the displacement field.
+<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
 <dt><strong>ts</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">theta</span></code> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
-<dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis where to calculate the
+<dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(x\)</span> axis where to calculate the
 displacement field.</p>
 </dd>
-<dt><strong>gridt</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/f4597c28f3c924e5650bf95286b4a8ae08a2f862.png" alt="theta"/> where to calculate the
+<dt><strong>gridt</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(theta\)</span> where to calculate the
 displacement field.</p>
 </dd>
 <dt><strong>num_levels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of contour levels (higher values make the contour smoother).</p>
@@ -912,7 +1241,7 @@ field.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The Matplotlib object that can be used to modify the current plot
 if needed.</p>
@@ -922,9 +1251,9 @@ if needed.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.plotAbaqus">
-<code class="sig-name descname">plotAbaqus</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">frame</em>, <em class="sig-param">fieldOutputKey</em>, <em class="sig-param">vec</em>, <em class="sig-param">nodes</em>, <em class="sig-param">numel_cir</em>, <em class="sig-param">elem_type='S4R'</em>, <em class="sig-param">ignore=[]</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">figsize=(3.3</em>, <em class="sig-param">3.3)</em>, <em class="sig-param">save=True</em>, <em class="sig-param">aspect='equal'</em>, <em class="sig-param">clean=True</em>, <em class="sig-param">plot_type=1</em>, <em class="sig-param">outpath=''</em>, <em class="sig-param">filename=''</em>, <em class="sig-param">npzname=''</em>, <em class="sig-param">pyname=''</em>, <em class="sig-param">num_levels=400</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.plotAbaqus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.plotAbaqus" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.plotAbaqus">
+<span class="sig-name descname"><span class="pre">plotAbaqus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldOutputKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numel_cir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elem_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'S4R'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3.3,</span> <span class="pre">3.3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npzname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pyname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.plotAbaqus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.plotAbaqus" title="Link to this definition">#</a></dt>
 <dd><p>Print a field output for a cylinder/cone model from Abaqus</p>
 <p>This function is intended to be used with models created by the
 <a class="reference external" href="http://desicos.github.io/desicos/">DESICOS plug-in for Abaqus</a>,
@@ -933,12 +1262,12 @@ models of <a class="reference internal" href="#module-compmech.conecyl" title="c
 <p>The <code class="docutils literal notranslate"><span class="pre">frame</span></code> and <code class="docutils literal notranslate"><span class="pre">nodes</span></code> input types are described in
 <a class="reference external" href="http://abaqus.me.chalmers.se/v6.11/books/ker/default.htm">Abaqus Scripting Reference Manual</a> and
 they can be obtained through:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">odbs</span><span class="p">[</span><span class="s1">&#39;odb_name.odb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="s1">&#39;step_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">odbs</span><span class="p">[</span><span class="s1">&#39;odb_name.odb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="s1">&#39;step_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span> <span class="o">=</span> <span class="n">mdb</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="s1">&#39;model_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="s1">&#39;part_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>frame</strong><span class="classifier">OdbFrame</span></dt><dd><p>The frame from where the field output will be taken from.</p>
 </dd>
@@ -984,7 +1313,7 @@ saved (see notes).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">tuple</span></dt><dd><p>Where <code class="docutils literal notranslate"><span class="pre">out[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">out[1]</span></code> contain the circumferential and
 meridional grids of coordinates and <code class="docutils literal notranslate"><span class="pre">out[2]</span></code> the corresponding
@@ -1000,24 +1329,24 @@ field output.</p>
 importable from Abaqus.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.save" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.save" title="Link to this definition">#</a></dt>
 <dd><p>Save the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object using <code class="docutils literal notranslate"><span class="pre">pickle</span></code></p>
 <p class="rubric">Notes</p>
 <p>The pickled file will have the name stored in <code class="docutils literal notranslate"><span class="pre">ConeCyl.name</span></code>
 followed by a <code class="docutils literal notranslate"><span class="pre">'.ConeCyl'</span></code> extension.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.static">
-<code class="sig-name descname">static</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">NLgeom=False</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.static" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.static">
+<span class="sig-name descname"><span class="pre">static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NLgeom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.static"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.static" title="Link to this definition">#</a></dt>
 <dd><p>Static analysis for cones and cylinders</p>
 <p>The analysis can be linear or geometrically non-linear. See
 <a class="reference internal" href="../analysis/index.html#compmech.analysis.Analysis" title="compmech.analysis.Analysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">Analysis</span></code></a> for further details about the parameters
 controlling the non-linear analysis.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>NLgeom</strong><span class="classifier">bool</span></dt><dd><p>Flag to indicate whether a linear or a non-linear analysis is to
 be performed.</p>
@@ -1026,7 +1355,7 @@ be performed.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>cs</strong><span class="classifier">list</span></dt><dd><p>A list containing the Ritz constants for each load increment of
 the static analysis. The list will have only one entry in case
@@ -1041,19 +1370,19 @@ of a linear analysis.</p>
 analysis are stored in the <code class="docutils literal notranslate"><span class="pre">increments</span></code> parameter.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.strain">
-<code class="sig-name descname">strain</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ts=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridt=300</em>, <em class="sig-param">inc=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.strain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.strain" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.strain">
+<span class="sig-name descname"><span class="pre">strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.strain" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the strain field</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants vector to be used for the strain field
 calculation.</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinates where to calculate the strains.</p>
+<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> coordinates where to calculate the strains.</p>
 </dd>
-<dt><strong>ts</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> coordinates where to calculate the strains, must
+<dt><strong>ts</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\theta\)</span> coordinates where to calculate the strains, must
 have the same shape as <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
 </dd>
 <dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">xs</span></code> and <code class="docutils literal notranslate"><span class="pre">ts</span></code> are not supplied, <code class="docutils literal notranslate"><span class="pre">gridx</span></code> and <code class="docutils literal notranslate"><span class="pre">gridt</span></code>
@@ -1070,19 +1399,19 @@ constants using <a class="reference internal" href="#compmech.conecyl.ConeCyl.ca
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.stress">
-<code class="sig-name descname">stress</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ts=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridt=300</em>, <em class="sig-param">inc=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.stress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.stress" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.stress">
+<span class="sig-name descname"><span class="pre">stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.stress" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the stress field</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants vector to be used for the strain field
 calculation.</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinates where to calculate the strains.</p>
+<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> coordinates where to calculate the strains.</p>
 </dd>
-<dt><strong>ts</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> coordinates where to calculate the strains, must
+<dt><strong>ts</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(\theta\)</span> coordinates where to calculate the strains, must
 have the same shape as <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
 </dd>
 <dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">xs</span></code> and <code class="docutils literal notranslate"><span class="pre">ts</span></code> are not supplied, <code class="docutils literal notranslate"><span class="pre">gridx</span></code> and <code class="docutils literal notranslate"><span class="pre">gridt</span></code>
@@ -1099,28 +1428,28 @@ constants using <a class="reference internal" href="#compmech.conecyl.ConeCyl.ca
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.conecyl.ConeCyl.uvw">
-<code class="sig-name descname">uvw</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ts=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridt=300</em>, <em class="sig-param">inc=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.uvw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.uvw" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.conecyl.ConeCyl.uvw">
+<span class="sig-name descname"><span class="pre">uvw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/conecyl.html#ConeCyl.uvw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.ConeCyl.uvw" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the displacement field</p>
 <p>For a given full set of Ritz constants <code class="docutils literal notranslate"><span class="pre">c</span></code>, the displacement
 field is calculated and stored in the parameters
 <code class="docutils literal notranslate"><span class="pre">u</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code>, <code class="docutils literal notranslate"><span class="pre">w</span></code>, <code class="docutils literal notranslate"><span class="pre">phix</span></code>, <code class="docutils literal notranslate"><span class="pre">phit</span></code> of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">float</span></dt><dd><p>The full set of Ritz constants</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions where to calculate the displacement field.
+<dt><strong>xs</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
 <dt><strong>ts</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">theta</span></code> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
-<dt><strong>gridx</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis where to calculate the
+<dt><strong>gridx</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(x\)</span> axis where to calculate the
 displacement field.</p>
 </dd>
-<dt><strong>gridt</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/f4597c28f3c924e5650bf95286b4a8ae08a2f862.png" alt="theta"/> where to calculate the
+<dt><strong>gridt</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(theta\)</span> where to calculate the
 displacement field.</p>
 </dd>
 <dt><strong>inc</strong><span class="classifier">float, optional</span></dt><dd><p>Load increment, necessary to calculate the full set of Ritz
@@ -1128,7 +1457,7 @@ constants using <a class="reference internal" href="#compmech.conecyl.ConeCyl.ca
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">tuple</span></dt><dd><p>A tuple of <code class="docutils literal notranslate"><span class="pre">np.ndarrays</span></code> containing
 <code class="docutils literal notranslate"><span class="pre">(u,</span> <span class="pre">v,</span> <span class="pre">w,</span> <span class="pre">phix,</span> <span class="pre">phit)</span></code>.</p>
@@ -1143,12 +1472,12 @@ stored as parameters with the same name in the <code class="docutils literal not
 
 </dd></dl>
 
-</div>
-<div class="section" id="non-linear-analysis-compmech-conecyl-non-linear">
-<h2>Non-linear analysis (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.non_linear</span></code>)<a class="headerlink" href="#non-linear-analysis-compmech-conecyl-non-linear" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-compmech.conecyl.conecylDB">
-<span id="cone-cylinder-database-compmech-conecyl-conecyldb"></span><h2>Cone / Cylinder Database (<a class="reference internal" href="#module-compmech.conecyl.conecylDB" title="compmech.conecyl.conecylDB"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.conecylDB</span></code></a>)<a class="headerlink" href="#module-compmech.conecyl.conecylDB" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="non-linear-analysis-compmech-conecyl-non-linear">
+<h2>Non-linear analysis (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.non_linear</span></code>)<a class="headerlink" href="#non-linear-analysis-compmech-conecyl-non-linear" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-compmech.conecyl.conecylDB">
+<span id="cone-cylinder-database-compmech-conecyl-conecyldb"></span><h2>Cone / Cylinder Database (<a class="reference internal" href="#module-compmech.conecyl.conecylDB" title="compmech.conecyl.conecylDB"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.conecylDB</span></code></a>)<a class="headerlink" href="#module-compmech.conecyl.conecylDB" title="Link to this heading">#</a></h2>
 <p>This database is a group of three dictionaries defines as following:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">laminaprops</span></code>: the material properties for an orthotropic lamina</p></li>
@@ -1157,23 +1486,23 @@ stored as parameters with the same name in the <code class="docutils literal not
 cylindrical structure</p></li>
 </ul>
 <p>One could import these dictionaries doing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compmech.conecyl.conecylDB</span> <span class="k">import</span> <span class="n">laminaprops</span><span class="p">,</span> <span class="n">allowables</span><span class="p">,</span> <span class="n">ccs</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compmech.conecyl.conecylDB</span> <span class="kn">import</span> <span class="n">laminaprops</span><span class="p">,</span> <span class="n">allowables</span><span class="p">,</span> <span class="n">ccs</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="module-compmech.conecyl.modelDB">
-<span id="models-database-compmech-conecyl-modeldb"></span><h2>Models’ Database (<a class="reference internal" href="#module-compmech.conecyl.modelDB" title="compmech.conecyl.modelDB"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.modelDB</span></code></a>)<a class="headerlink" href="#module-compmech.conecyl.modelDB" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-compmech.conecyl.modelDB">
+<span id="models-database-compmech-conecyl-modeldb"></span><h2>Models’ Database (<a class="reference internal" href="#module-compmech.conecyl.modelDB" title="compmech.conecyl.modelDB"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.modelDB</span></code></a>)<a class="headerlink" href="#module-compmech.conecyl.modelDB" title="Link to this heading">#</a></h2>
 <p>Used to configure the main parameters for each implemented model.</p>
-<dl class="function">
-<dt id="compmech.conecyl.modelDB.get_linear_matrices">
-<code class="sig-prename descclassname">compmech.conecyl.modelDB.</code><code class="sig-name descname">get_linear_matrices</code><span class="sig-paren">(</span><em class="sig-param">cc</em>, <em class="sig-param">combined_load_case=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/modelDB.html#get_linear_matrices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.modelDB.get_linear_matrices" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="compmech.conecyl.modelDB.get_linear_matrices">
+<span class="sig-prename descclassname"><span class="pre">compmech.conecyl.modelDB.</span></span><span class="sig-name descname"><span class="pre">get_linear_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combined_load_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/modelDB.html#get_linear_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.modelDB.get_linear_matrices" title="Link to this definition">#</a></dt>
 <dd><p>Obtain the right functions to calculate hte linear matrices
 for a given model.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">model</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object is used to search
 for the functions <code class="docutils literal notranslate"><span class="pre">fG0</span></code>, <code class="docutils literal notranslate"><span class="pre">fG0_cyl</span></code>, <code class="docutils literal notranslate"><span class="pre">fkG0</span></code>, <code class="docutils literal notranslate"><span class="pre">fkG0_cyl</span></code>,
 and the matrix <code class="docutils literal notranslate"><span class="pre">k0edges</span></code> is calculated, when applicable.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>cc</strong><span class="classifier">compmech.conecyl.ConeCyl</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object.</p>
 </dd>
@@ -1183,7 +1512,7 @@ which combined load case should be used. Default is <code class="docutils litera
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">tuple</span></dt><dd><p>A tuple containing <code class="docutils literal notranslate"><span class="pre">(fk0,</span> <span class="pre">fk0_cyl,</span> <span class="pre">fkG0,</span> <span class="pre">fkG0_cyl,</span> <span class="pre">k0edges)</span></code>.</p>
 </dd>
@@ -1192,17 +1521,17 @@ which combined load case should be used. Default is <code class="docutils litera
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="module-compmech.conecyl.imperfections">
-<span id="imperfections-compmech-conecyl-imperfections"></span><h2>Imperfections (<a class="reference internal" href="#module-compmech.conecyl.imperfections" title="compmech.conecyl.imperfections"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.imperfections</span></code></a>)<a class="headerlink" href="#module-compmech.conecyl.imperfections" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-compmech.conecyl.imperfections">
+<span id="imperfections-compmech-conecyl-imperfections"></span><h2>Imperfections (<a class="reference internal" href="#module-compmech.conecyl.imperfections" title="compmech.conecyl.imperfections"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.imperfections</span></code></a>)<a class="headerlink" href="#module-compmech.conecyl.imperfections" title="Link to this heading">#</a></h2>
 <p>Convenient routines to transform discrete measured data
 into continuous functions applicable in semi-analytical analyses.</p>
 <p>The implemented geometric imperfection of this module is the one
 representing the normal displacement of the mid-surface and will be
 called <em>Measured Geometric Imperfection (MGI)</em>.</p>
 <p>The non-linear analysis using a MGI require the calculation
-of the initial imperfection field, called <img class="math" src="../../_images/math/73036b31511ada0e09ed38a1a5ad0c9f8a2a5e86.png" alt="w_0"/>, and the corresponding
-partial derivatives <img class="math" src="../../_images/math/0b788865302be862c8839d1c5d844faf6f8b9d9e.png" alt="{w_0}_{,x}"/> and <img class="math" src="../../_images/math/6f872c968c6830b1bc2996af2e607596cf4b24ff.png" alt="{w_0}_{,\theta}"/>.</p>
+of the initial imperfection field, called <span class="math notranslate nohighlight">\(w_0\)</span>, and the corresponding
+partial derivatives <span class="math notranslate nohighlight">\({w_0}_{,x}\)</span> and <span class="math notranslate nohighlight">\({w_0}_{,\theta}\)</span>.</p>
 <p>The function <code class="docutils literal notranslate"><span class="pre">calc_c0</span></code> described below is implemented to find
 the best-fit for a given imperfection data. Three different approximation
 functions can be selected using the <code class="docutils literal notranslate"><span class="pre">funcnum</span></code> parameter.</p>
@@ -1215,7 +1544,7 @@ functions can be selected using the <code class="docutils literal notranslate"><
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">height</span></code> is measured from the bottom to the top of the cylinder
 or cone, parallel to the axial axis, and <code class="docutils literal notranslate"><span class="pre">theta</span></code> is the circumferential
-coordinate <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> measured as shown
+coordinate <span class="math notranslate nohighlight">\(\theta\)</span> measured as shown
 <a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><span class="std std-ref">in the semi-analytical model</span></a>.</p>
 <p>When implementing a non-linear analysis algorithm, see for example
 <a class="reference external" href="https://github.com/compmech/compmech/blob/master/compmech/conecyl/fsdt/fsdt_donnell_bc1_nonlinear.pyx">fsdt_donnell_bc1_nonlinear.pyx</a>
@@ -1234,71 +1563,69 @@ imperfection are accessible using Cython</p>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">c0</span></code> is the array containing the coefficients of the approximation
 function, <code class="docutils literal notranslate"><span class="pre">L</span></code> is the meridional length of the cone or cylinder
-(<a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><span class="std std-ref">as shown here</span></a>), <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code> the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> and
-<img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> coordinates, <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span></code> the number of terms of the
+(<a class="reference internal" href="../../theory/conecyl/tutorials.html#conecyl-figure"><span class="std std-ref">as shown here</span></a>), <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code> the <span class="math notranslate nohighlight">\(x\)</span> and
+<span class="math notranslate nohighlight">\(\theta\)</span> coordinates, <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span></code> the number of terms of the
 approximation series as described above, and finally,
 <code class="docutils literal notranslate"><span class="pre">w0xref</span></code> and <code class="docutils literal notranslate"><span class="pre">w0tref</span></code> are pointers to <code class="docutils literal notranslate"><span class="pre">double</span></code> variables.</p>
-<span class="target" id="module-compmech.conecyl.imperfections.imperfections"></span><dl class="function">
-<dt id="compmech.conecyl.imperfections.imperfections.calc_c0">
-<code class="sig-prename descclassname">compmech.conecyl.imperfections.imperfections.</code><code class="sig-name descname">calc_c0</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">m0=40</em>, <em class="sig-param">n0=40</em>, <em class="sig-param">funcnum=2</em>, <em class="sig-param">sample_size=None</em>, <em class="sig-param">maxmem=8</em>, <em class="sig-param">save=True</em>, <em class="sig-param">offset_w0=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/imperfections/imperfections.html#calc_c0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.imperfections.imperfections.calc_c0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the coefficients <img class="math" src="../../_images/math/0e737f293729c4135dbc78f453a7c82b3dc68dcd.png" alt="c_0"/> that best fit the <img class="math" src="../../_images/math/73036b31511ada0e09ed38a1a5ad0c9f8a2a5e86.png" alt="w_0"/> function.</p>
+<span class="target" id="module-compmech.conecyl.imperfections.imperfections"></span><dl class="py function">
+<dt class="sig sig-object py" id="compmech.conecyl.imperfections.imperfections.calc_c0">
+<span class="sig-prename descclassname"><span class="pre">compmech.conecyl.imperfections.imperfections.</span></span><span class="sig-name descname"><span class="pre">calc_c0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funcnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxmem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset_w0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/imperfections/imperfections.html#calc_c0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.imperfections.imperfections.calc_c0" title="Link to this definition">#</a></dt>
+<dd><p>Find the coefficients <span class="math notranslate nohighlight">\(c_0\)</span> that best fit the <span class="math notranslate nohighlight">\(w_0\)</span> function.</p>
 <p>The measured data will be fit using one of the following functions,
 selected using the <code class="docutils literal notranslate"><span class="pre">funcnum</span></code> parameter:</p>
 <p><code class="docutils literal notranslate"><span class="pre">funcnum=1</span></code></p>
-<div class="math">
-<p><img src="../../_images/math/2ed7c608b1ed6c3334c9125f62214cbe0b2c8417.png" alt="w_0 = \sum_{i=1}^{m_0}{ \sum_{j=0}^{n_0}{
+<div class="math notranslate nohighlight">
+\[w_0 = \sum_{i=1}^{m_0}{ \sum_{j=0}^{n_0}{
          c_{ij}^a sin{b_x} sin{b_\theta}
-        +c_{ij}^b sin{b_x} cos{b_\theta}}}"/></p>
-</div><p><code class="docutils literal notranslate"><span class="pre">funcnum=2</span></code> (default)</p>
-<div class="math">
-<p><img src="../../_images/math/da8810fdea1c93348ec48518c097b367a39a7d08.png" alt="w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{
+        +c_{ij}^b sin{b_x} cos{b_\theta}}}\]</div>
+<p><code class="docutils literal notranslate"><span class="pre">funcnum=2</span></code> (default)</p>
+<div class="math notranslate nohighlight">
+\[w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{
         c_{ij}^a cos{b_x} sin{b_\theta}
-        +c_{ij}^b cos{b_x} cos{b_\theta}}}"/></p>
-</div><p><code class="docutils literal notranslate"><span class="pre">funcnum=3</span></code></p>
-<div class="math">
-<p><img src="../../_images/math/3748ee50c9ace0fb2383537097d26c54ef4f431b.png" alt="w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{
+        +c_{ij}^b cos{b_x} cos{b_\theta}}}\]</div>
+<p><code class="docutils literal notranslate"><span class="pre">funcnum=3</span></code></p>
+<div class="math notranslate nohighlight">
+\[w_0 = \sum_{i=0}^{m_0}{ \sum_{j=0}^{n_0}{
          c_{ij}^a sin{b_x} sin{b_\theta}
         +c_{ij}^b sin{b_x} cos{b_\theta}
         +c_{ij}^c cos{b_x} sin{b_\theta}
-        +c_{ij}^d cos{b_x} cos{b_\theta}}}"/></p>
-</div><p>where:</p>
-<div class="math">
-<p><img src="../../_images/math/96258ae9cb38d8b22e9942143d2c5061edbea3e5.png" alt="b_x = i \pi \frac x L_{points}
-
-b_\theta = j \theta"/></p>
-</div><p>where <img class="math" src="../../_images/math/caffe2afea81f6664de84b9b11b3e097f68b468d.png" alt="L_{points}"/> represents the difference between the maximum and
+        +c_{ij}^d cos{b_x} cos{b_\theta}}}\]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}b_x = i \pi \frac x L_{points}\\b_\theta = j \theta\end{aligned}\end{align} \]</div>
+<p>where <span class="math notranslate nohighlight">\(L_{points}\)</span> represents the difference between the maximum and
 the height values in the imperfection file divided by the cosine
 of the semi-vertex angle:</p>
-<div class="math">
-<p><img src="../../_images/math/5662e7ab86df2083cff6b89b157cf2dd1a3d7544.png" alt="L_{points} = \frac{H_{max} - H_{min}}{cos(\alpha)}
-           = \frac{H_{points}}{cos(\alpha)}"/></p>
-</div><p>In this form <img class="math" src="../../_images/math/6938d503a1af41db2154460369f8d9eace50de12.png" alt="{}^x/_{L_{points}}"/> will vary from <img class="math" src="../../_images/math/f121246a0a8d33e4c4cf77aae0d243bb8c036b53.png" alt="0."/> (at the top)
-to <img class="math" src="../../_images/math/a6f3122eb302b340ede5e17c510c3f553d267b2a.png" alt="1."/> (at the bottom).</p>
+<div class="math notranslate nohighlight">
+\[L_{points} = \frac{H_{max} - H_{min}}{cos(\alpha)}
+           = \frac{H_{points}}{cos(\alpha)}\]</div>
+<p>In this form <span class="math notranslate nohighlight">\({}^x/_{L_{points}}\)</span> will vary from <span class="math notranslate nohighlight">\(0.\)</span> (at the top)
+to <span class="math notranslate nohighlight">\(1.\)</span> (at the bottom).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Note that if the measured sample does not
 cover all the height, <strong>it will be stretched</strong>.</p>
 </div>
 <p>The approximation can be written in matrix form as:</p>
-<div class="math">
-<p><img src="../../_images/math/a1d1d21bb9ef5bc2a2501485aa133f5e6c4763f3.png" alt="w_0 = [g] \{c\}"/></p>
-</div><p>where <img class="math" src="../../_images/math/8ae4ed85fbb6054838a85f3d25f4c693621cbbf0.png" alt="[g]"/> carries the base functions and <img class="math" src="../../_images/math/781fd0a0ddc872700a6493282b05d8e830c58a55.png" alt="{c}"/> the respective
-amplitudes. The solution consists on finding the best <img class="math" src="../../_images/math/a4acf9ac84baad22892cc8ac8f55a3467e4f4612.png" alt="\{c\}"/> that minimizes
+<div class="math notranslate nohighlight">
+\[w_0 = [g] \{c\}\]</div>
+<p>where <span class="math notranslate nohighlight">\([g]\)</span> carries the base functions and <span class="math notranslate nohighlight">\({c}\)</span> the respective
+amplitudes. The solution consists on finding the best <span class="math notranslate nohighlight">\(\{c\}\)</span> that minimizes
 the least-square error between the measured imperfection pattern and the
-<img class="math" src="../../_images/math/73036b31511ada0e09ed38a1a5ad0c9f8a2a5e86.png" alt="w_0"/> function.</p>
+<span class="math notranslate nohighlight">\(w_0\)</span> function.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>path</strong><span class="classifier">str or numpy.ndarray</span></dt><dd><p>The path of the file containing the data. Can be a full path using
 <code class="docutils literal notranslate"><span class="pre">r&quot;C:\Temp\inputfile.txt&quot;</span></code>, for example.
-The input file must have 3 columns: <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/>, <img class="math" src="../../_images/math/292b6c151686132cc09ffd98ef0d1ab72deb8ed5.png" alt="height"/>, <img class="math" src="../../_images/math/de3645446a888e17a70c677bce72bcbdfa20a886.png" alt="imp"/>;
+The input file must have 3 columns: <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(height\)</span>, <span class="math notranslate nohighlight">\(imp\)</span>;
 expressed in Cartesian coordinates.</p>
 <p>This input can also be a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> object, with
-<img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/>, <img class="math" src="../../_images/math/292b6c151686132cc09ffd98ef0d1ab72deb8ed5.png" alt="height"/>, <img class="math" src="../../_images/math/de3645446a888e17a70c677bce72bcbdfa20a886.png" alt="imp"/> in each corresponding column.</p>
+<span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\(height\)</span>, <span class="math notranslate nohighlight">\(imp\)</span> in each corresponding column.</p>
 </dd>
-<dt><strong>m0</strong><span class="classifier">int</span></dt><dd><p>Number of terms along the meridian (<img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>).</p>
+<dt><strong>m0</strong><span class="classifier">int</span></dt><dd><p>Number of terms along the meridian (<span class="math notranslate nohighlight">\(x\)</span>).</p>
 </dd>
-<dt><strong>n0</strong><span class="classifier">int</span></dt><dd><p>Number of terms along the circumference (<img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/>).</p>
+<dt><strong>n0</strong><span class="classifier">int</span></dt><dd><p>Number of terms along the circumference (<span class="math notranslate nohighlight">\(\theta\)</span>).</p>
 </dd>
 <dt><strong>funcnum</strong><span class="classifier">int, optional</span></dt><dd><p>As explained above, selects the base functions used for
 the approximation.</p>
@@ -1314,7 +1641,7 @@ The <code class="docutils literal notranslate"><span class="pre">scipy.interpola
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>A 1-D array with the best-fit coefficients.</p>
 </dd>
@@ -1323,12 +1650,12 @@ The <code class="docutils literal notranslate"><span class="pre">scipy.interpola
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="compmech.conecyl.imperfections.imperfections.fw0">
-<code class="sig-prename descclassname">compmech.conecyl.imperfections.imperfections.</code><code class="sig-name descname">fw0</code><span class="sig-paren">(</span><em class="sig-param">m0</em>, <em class="sig-param">n0</em>, <em class="sig-param">c0</em>, <em class="sig-param">xs_norm</em>, <em class="sig-param">ts</em>, <em class="sig-param">funcnum=2</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/imperfections/imperfections.html#fw0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.conecyl.imperfections.imperfections.fw0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the imperfection field <img class="math" src="../../_images/math/73036b31511ada0e09ed38a1a5ad0c9f8a2a5e86.png" alt="w_0"/> for a given input.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="compmech.conecyl.imperfections.imperfections.fw0">
+<span class="sig-prename descclassname"><span class="pre">compmech.conecyl.imperfections.imperfections.</span></span><span class="sig-name descname"><span class="pre">fw0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funcnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/conecyl/imperfections/imperfections.html#fw0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.conecyl.imperfections.imperfections.fw0" title="Link to this definition">#</a></dt>
+<dd><p>Calculates the imperfection field <span class="math notranslate nohighlight">\(w_0\)</span> for a given input.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>m0</strong><span class="classifier">int</span></dt><dd><p>The number of terms along the meridian.</p>
 </dd>
@@ -1336,11 +1663,11 @@ The <code class="docutils literal notranslate"><span class="pre">scipy.interpola
 </dd>
 <dt><strong>c0</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The coefficients of the imperfection pattern.</p>
 </dd>
-<dt><strong>xs_norm</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The meridian coordinate (<img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>) normalized to be between <code class="docutils literal notranslate"><span class="pre">0.</span></code> and
+<dt><strong>xs_norm</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The meridian coordinate (<span class="math notranslate nohighlight">\(x\)</span>) normalized to be between <code class="docutils literal notranslate"><span class="pre">0.</span></code> and
 <code class="docutils literal notranslate"><span class="pre">1.</span></code>.</p>
 </dd>
 <dt><strong>ts</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>The angles in radians representing the circumferential coordinate
-(<img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/>).</p>
+(<span class="math notranslate nohighlight">\(\theta\)</span>).</p>
 </dd>
 <dt><strong>funcnum</strong><span class="classifier">int, optional</span></dt><dd><p>The function used for the approximation (see the <code class="docutils literal notranslate"><span class="pre">calc_c0</span></code> function)</p>
 </dd>
@@ -1353,80 +1680,152 @@ The <code class="docutils literal notranslate"><span class="pre">scipy.interpola
 <code class="docutils literal notranslate"><span class="pre">size=4</span></code> and the inputs must satisfy <code class="docutils literal notranslate"><span class="pre">c0.shape[0]</span> <span class="pre">==</span> <span class="pre">size*m0*n0</span></code>.</p>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
-          </div>
-        </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../composite/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Composite Module (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.composite</span></code>)</p>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
-            </a></p>
-  <h3><a href="../../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Semi-analytical Models for Cones and Cylinder (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl</span></code>)</a><ul>
-<li><a class="reference internal" href="#the-conecyl-object">The <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object</a></li>
-<li><a class="reference internal" href="#non-linear-analysis-compmech-conecyl-non-linear">Non-linear analysis (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.non_linear</span></code>)</a></li>
-<li><a class="reference internal" href="#module-compmech.conecyl.conecylDB">Cone / Cylinder Database (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.conecylDB</span></code>)</a></li>
-<li><a class="reference internal" href="#module-compmech.conecyl.modelDB">Models’ Database (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.modelDB</span></code>)</a></li>
-<li><a class="reference internal" href="#module-compmech.conecyl.imperfections">Imperfections (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.imperfections</span></code>)</a></li>
+    </a>
+    <a class="right-next"
+       href="../integrate/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Integrate &lt;<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.integrate</span></code>&gt;</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-conecyl-object">The <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> object</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl"><code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.SPLA"><code class="docutils literal notranslate"><span class="pre">ConeCyl.SPLA()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.add_SPL"><code class="docutils literal notranslate"><span class="pre">ConeCyl.add_SPL()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.add_force"><code class="docutils literal notranslate"><span class="pre">ConeCyl.add_force()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.apply_shim"><code class="docutils literal notranslate"><span class="pre">ConeCyl.apply_shim()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.calc_fext"><code class="docutils literal notranslate"><span class="pre">ConeCyl.calc_fext()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.calc_fint"><code class="docutils literal notranslate"><span class="pre">ConeCyl.calc_fint()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.calc_full_c"><code class="docutils literal notranslate"><span class="pre">ConeCyl.calc_full_c()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.calc_kT"><code class="docutils literal notranslate"><span class="pre">ConeCyl.calc_kT()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.eigen"><code class="docutils literal notranslate"><span class="pre">ConeCyl.eigen()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.exclude_dofs_matrix"><code class="docutils literal notranslate"><span class="pre">ConeCyl.exclude_dofs_matrix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.fit_Nxxtop"><code class="docutils literal notranslate"><span class="pre">ConeCyl.fit_Nxxtop()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.from_DB"><code class="docutils literal notranslate"><span class="pre">ConeCyl.from_DB()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.get_size"><code class="docutils literal notranslate"><span class="pre">ConeCyl.get_size()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.lb"><code class="docutils literal notranslate"><span class="pre">ConeCyl.lb()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.plot"><code class="docutils literal notranslate"><span class="pre">ConeCyl.plot()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.plotAbaqus"><code class="docutils literal notranslate"><span class="pre">ConeCyl.plotAbaqus()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.save"><code class="docutils literal notranslate"><span class="pre">ConeCyl.save()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.static"><code class="docutils literal notranslate"><span class="pre">ConeCyl.static()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.strain"><code class="docutils literal notranslate"><span class="pre">ConeCyl.strain()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.stress"><code class="docutils literal notranslate"><span class="pre">ConeCyl.stress()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.ConeCyl.uvw"><code class="docutils literal notranslate"><span class="pre">ConeCyl.uvw()</span></code></a></li>
 </ul>
 </li>
 </ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#non-linear-analysis-compmech-conecyl-non-linear">Non-linear analysis (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.non_linear</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-compmech.conecyl.conecylDB">Cone / Cylinder Database (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.conecylDB</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-compmech.conecyl.modelDB">Models’ Database (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.modelDB</span></code>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.modelDB.get_linear_matrices"><code class="docutils literal notranslate"><span class="pre">get_linear_matrices()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-compmech.conecyl.imperfections">Imperfections (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl.imperfections</span></code>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.imperfections.imperfections.calc_c0"><code class="docutils literal notranslate"><span class="pre">calc_c0()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.conecyl.imperfections.imperfections.fw0"><code class="docutils literal notranslate"><span class="pre">fw0()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../composite/index.html"
-                        title="previous chapter">Composite Module (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.composite</span></code>)</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../integrate/index.html"
-                        title="next chapter">Integrate &lt;<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.integrate</span></code>&gt;</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/conecyl/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/modules/conecyl/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../integrate/index.html" title="Integrate &lt;compmech.integrate&gt;"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../composite/index.html" title="Composite Module (compmech.composite)"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li> 
-      </ul>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2012-2023 Saullo G. P. Castro.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Sep 03, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
     </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>

@@ -1,88 +1,452 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <title>FSDT - First-order Shear Deformation Theory &#8212; CompMech 0.7.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    
-    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>FSDT - First-order Shear Deformation Theory &#8212; CompMech 0.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../_static/documentation_options.js?v=486e5634"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'theory/conecyl/fsdt';</script>
+    <link rel="icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Boundary conditions" href="bcs.html" />
-    <link rel="prev" title="CLPT - Classical Laminated Plate Theory" href="clpt.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="bcs.html" title="Boundary conditions"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="esl_theories.html" accesskey="U">Equivalent Single Layer (ESL) Theories</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="CLPT - Classical Laminated Plate Theory" href="clpt.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Nov 20, 2023"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="fsdt-first-order-shear-deformation-theory">
-<span id="theory-conecyl-fsdt"></span><h1>FSDT - First-order Shear Deformation Theory<a class="headerlink" href="#fsdt-first-order-shear-deformation-theory" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="CompMech 0.8.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="CompMech 0.8.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules/index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules/index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dev_of_conecyl.html">Developing the code for the conecyl module</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="esl_theories.html">Equivalent Single Layer (ESL) Theories</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="clpt.html">CLPT - Classical Laminated Plate Theory</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">FSDT - First-order Shear Deformation Theory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bcs.html">Boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../fem/index.html">Finite Element Method</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../fem/elem_stiff_matrix.html">Element Stiffness Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../func/index.html">Approximation Functions Used in Various Models</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../func/bardell.html">Bardell’s Hierarchical Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../func/ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../integrate/index.html">Numerical Integration Methods</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../integrate/legendre_gauss.html">Legendre-Gauss Quadrature Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../integrate/ref.html">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../meshfree/index.html">Meshfree Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">References</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Theory, Implementation and Tutorials</a></li>
+    
+    
+    <li class="breadcrumb-item"><i class="fa-solid fa-ellipsis"></i></li>
+    
+    
+    <li class="breadcrumb-item"><a href="esl_theories.html" class="nav-link">Equivalent Single Layer (ESL) Theories</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">FSDT -...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="fsdt-first-order-shear-deformation-theory">
+<span id="theory-conecyl-fsdt"></span><h1>FSDT - First-order Shear Deformation Theory<a class="headerlink" href="#fsdt-first-order-shear-deformation-theory" title="Link to this heading">#</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h2>
 <p>For the FSDT the displacement field components are:</p>
-<div class="math">
-<p><img src="../../_images/math/6535e53e6c72e966381fff591d5c39b1f887c2c0.png" alt="u, v, w, \phi_x, \phi_t"/></p>
-</div><p>The displacement field is approximated similarly to the
-<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><span class="std std-ref">CLPT</span></a>, but here <img class="math" src="../../_images/math/5e085837d08c75ec79594318f5a902a543513bd9.png" alt="\phi_x"/> and <img class="math" src="../../_images/math/1a321ff4d7fb43d49eb5b6a5da87e7f6ea40950f.png" alt="\phi_\theta"/>
+<div class="math notranslate nohighlight">
+\[u, v, w, \phi_x, \phi_t\]</div>
+<p>The displacement field is approximated similarly to the
+<a class="reference internal" href="clpt.html#theory-conecyl-clpt"><span class="std std-ref">CLPT</span></a>, but here <span class="math notranslate nohighlight">\(\phi_x\)</span> and <span class="math notranslate nohighlight">\(\phi_\theta\)</span>
 are independent variables, relaxing the approximation.</p>
 <p>For the <code class="docutils literal notranslate"><span class="pre">ConeCyl</span></code> implementations, the approximation functions are
 separated into three components:</p>
-<div class="math">
-<p><img src="../../_images/math/aeb106d18fe8efdaa6fdd418d9c52e006ddf44df.png" alt="u = u_0 + u_1 + u_2\\
-
-\vdots
-
-{{\phi}_\theta} = {{\phi}_\theta}_0 + {{\phi}_\theta}_1
-                  + {{\phi}_\theta}_2"/></p>
-</div><p>where <img class="math" src="../../_images/math/d1a17cd80da51b6b0c6c84707c6b7ac1ebadbb5a.png" alt="u_0"/> contains the approximation functions corresponding to the
-prescribed degrees of freedom, <img class="math" src="../../_images/math/01acf36efebddffcbbc0d8e444fb558e322b4755.png" alt="u_1"/> contains the functions independent
-of <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/> and <img class="math" src="../../_images/math/263f2238c58df635872e2de89eca1801ca68d1d4.png" alt="u_2"/> the functions that depend on both <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>
-and <img class="math" src="../../_images/math/8a87f04e7d7cca18343c084cceca5237fae62491.png" alt="\theta"/>.</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{split}u = u_0 + u_1 + u_2\\\end{split}\\\vdots\\{{\phi}_\theta} = {{\phi}_\theta}_0 + {{\phi}_\theta}_1
+                  + {{\phi}_\theta}_2\end{aligned}\end{align} \]</div>
+<p>where <span class="math notranslate nohighlight">\(u_0\)</span> contains the approximation functions corresponding to the
+prescribed degrees of freedom, <span class="math notranslate nohighlight">\(u_1\)</span> contains the functions independent
+of <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(u_2\)</span> the functions that depend on both <span class="math notranslate nohighlight">\(x\)</span>
+and <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
 <p>The aim is to have a model capable to simulate non-rigid supports, and where
-the displacement components <img class="math" src="../../_images/math/6dce847c72ab7d7b9627939ac0a3ca5f244d62e1.png" alt="u, \phi_x"/> can habe a non-costant value
+the displacement components <span class="math notranslate nohighlight">\(u, \phi_x\)</span> can habe a non-costant value
 along the edges.</p>
-<p>It is of special importance to allow <img class="math" src="../../_images/math/5e085837d08c75ec79594318f5a902a543513bd9.png" alt="\phi_x"/> to be between zero
+<p>It is of special importance to allow <span class="math notranslate nohighlight">\(\phi_x\)</span> to be between zero
 (clamped) and another value (up to simply supported),
 by using elastic stiffnesses for the corresponding degrees of freedom. The
 elastic stiffnesses are implemented for the FSDT in the same manner described
 for the <a class="reference internal" href="clpt.html#elastic-constraints"><span class="std std-ref">CLPT</span></a>.</p>
-</div>
-<div class="section" id="models">
-<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Link to this heading">#</a></h2>
 <p>The <strong>recommended models</strong>, according to the
 <a class="reference internal" href="bcs.html#boundary-conditions"><span class="std std-ref">desired boundary condition</span></a> , are:</p>
 <ul class="simple">
@@ -98,7 +462,7 @@ constraints</span></a>.</p>
 <a class="reference internal" href="#fsdt-sanders-bcn">fsdt_sanders_bcn</a>) has been proposed and despite it has the largest
 simulation capabilities, it can be unstable for high stiffeness applied
 to the elastic constraints. Moreover, this model cannot simulate the linear
-buckling analysis of the <img class="math" src="../../_images/math/365f0ec92f0a170dfcf14cd266210a425e038924.png" alt="4^{th}"/> type of boundary conditions.</p>
+buckling analysis of the <span class="math notranslate nohighlight">\(4^{th}\)</span> type of boundary conditions.</p>
 <p>The models below were kept for future reference only and have
 been used in comparative studies:</p>
 <ul class="simple">
@@ -106,11 +470,11 @@ been used in comparative studies:</p>
 <li><p><a class="reference internal" href="#fsdt-shadmehri2012-bc2">fsdt_shadmehri2012_bc2</a></p></li>
 <li><p><a class="reference internal" href="#fsdt-shadmehri2012-bc3">fsdt_shadmehri2012_bc3</a></p></li>
 </ul>
-<div class="section" id="fsdt-donnell-bc1">
-<span id="id1"></span><h3>fsdt_donnell_bc1<a class="headerlink" href="#fsdt-donnell-bc1" title="Permalink to this headline">¶</a></h3>
+<section id="fsdt-donnell-bc1">
+<span id="id1"></span><h3>fsdt_donnell_bc1<a class="headerlink" href="#fsdt-donnell-bc1" title="Link to this heading">#</a></h3>
 <p>SS1- and CC1-types of boundary conditions.</p>
-<div class="math">
-<p><img src="../../_images/math/f50e3e653ee3ccf627decb12c059b7ce4d356098.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<div class="math notranslate nohighlight">
+\[\begin{split}u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -139,19 +503,19 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
-</div><p>Observations:</p>
+          \right)\end{split}\]</div>
+<p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> non-linear analysis implemented</p>
 </div></blockquote>
-</div>
-<div class="section" id="fsdt-donnell-bc2">
-<span id="id2"></span><h3>fsdt_donnell_bc2<a class="headerlink" href="#fsdt-donnell-bc2" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fsdt-donnell-bc2">
+<span id="id2"></span><h3>fsdt_donnell_bc2<a class="headerlink" href="#fsdt-donnell-bc2" title="Link to this heading">#</a></h3>
 <p>SS2- and CC2-types of boundary conditions.</p>
-<div class="math">
-<p><img src="../../_images/math/a9b975f07066e0ac39a207f417d358c3d5bd7311.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<div class="math notranslate nohighlight">
+\[\begin{split}u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -180,19 +544,19 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
-</div><p>Observations:</p>
+          \right)\end{split}\]</div>
+<p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> non-linear analysis implemented</p>
 </div></blockquote>
-</div>
-<div class="section" id="fsdt-donnell-bc3">
-<span id="id3"></span><h3>fsdt_donnell_bc3<a class="headerlink" href="#fsdt-donnell-bc3" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fsdt-donnell-bc3">
+<span id="id3"></span><h3>fsdt_donnell_bc3<a class="headerlink" href="#fsdt-donnell-bc3" title="Link to this heading">#</a></h3>
 <p>SS3- and CC3-types of boundary conditions.</p>
-<div class="math">
-<p><img src="../../_images/math/51348abe50f66973dbf349b8449adde436f4f54e.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<div class="math notranslate nohighlight">
+\[\begin{split}u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \sin{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \sin{{b_x}_2} \cos{j_2 \theta}
@@ -221,19 +585,19 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
-</div><p>Observations:</p>
+          \right)\end{split}\]</div>
+<p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> non-linear analysis implemented</p>
 </div></blockquote>
-</div>
-<div class="section" id="fsdt-donnell-bc4">
-<span id="id4"></span><h3>fsdt_donnell_bc4<a class="headerlink" href="#fsdt-donnell-bc4" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fsdt-donnell-bc4">
+<span id="id4"></span><h3>fsdt_donnell_bc4<a class="headerlink" href="#fsdt-donnell-bc4" title="Link to this heading">#</a></h3>
 <p>SS4- and CC4-types of boundary conditions.</p>
-<div class="math">
-<p><img src="../../_images/math/9208aecf3e770acf67dfadb9cced08c7145a161b.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<div class="math notranslate nohighlight">
+\[\begin{split}u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -262,20 +626,20 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
-</div><p>Observations:</p>
+          \right)\end{split}\]</div>
+<p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> non-linear analysis implemented</p>
 </div></blockquote>
-</div>
-<div class="section" id="fsdt-donnell-bcn">
-<span id="id5"></span><h3>fsdt_donnell_bcn<a class="headerlink" href="#fsdt-donnell-bcn" title="Permalink to this headline">¶</a></h3>
-<p>The current attempt adds more flexibility in <img class="math" src="../../_images/math/35dfa1639c417a67e8e2787520b87bd4d69736b6.png" alt="v,w,\phi_\theta"/>.
+</section>
+<section id="fsdt-donnell-bcn">
+<span id="id5"></span><h3>fsdt_donnell_bcn<a class="headerlink" href="#fsdt-donnell-bcn" title="Link to this heading">#</a></h3>
+<p>The current attempt adds more flexibility in <span class="math notranslate nohighlight">\(v,w,\phi_\theta\)</span>.
 The resulting approximation functions are:</p>
-<div class="math">
-<p><img src="../../_images/math/36222a2e478dee660f02a8e3e31eb6d0cbc157f4.png" alt="u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
+<div class="math notranslate nohighlight">
+\[\begin{split}u = u_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{u} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
                  {c_{i_2 j_2}}_a^{u} \cos{{b_x}_2} \sin{j_2 \theta}
                 +{c_{i_2 j_2}}_b^{u} \cos{{b_x}_2} \cos{j_2 \theta}
@@ -304,26 +668,26 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
         + \sum_{i_2=0}^{m_2} \sum_{j_2=1}^{n_2} \left(
      {c_{i_2 j_2}}_a^{{\phi}_\theta} \cos{{b_x}_2} \sin{j_2 \theta}
     +{c_{i_2 j_2}}_b^{{\phi}_\theta} \cos{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
-</div><p>Observations:</p>
+          \right)\end{split}\]</div>
+<p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/> linear buckling not working</p>
-<p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> non-linear analysis implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math notranslate nohighlight">\(\times\)</span> linear buckling not working</p>
+<p><span class="math notranslate nohighlight">\(\checkmark\)</span> non-linear analysis implemented</p>
 </div></blockquote>
-</div>
-<div class="section" id="fsdt-sanders-bcn">
-<span id="id6"></span><h3>fsdt_sanders_bcn<a class="headerlink" href="#fsdt-sanders-bcn" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fsdt-sanders-bcn">
+<span id="id6"></span><h3>fsdt_sanders_bcn<a class="headerlink" href="#fsdt-sanders-bcn" title="Link to this heading">#</a></h3>
 <p>Counterpart of <a class="reference internal" href="#fsdt-donnell-bcn"><span class="std std-ref">fsdt_donnell_bcn</span></a> using the Sanders non-linear equations.</p>
 <p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear static implemented</p>
-<p><img class="math" src="../../_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/> linear buckling not working</p>
-<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear static implemented</p>
+<p><span class="math notranslate nohighlight">\(\times\)</span> linear buckling not working</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
-</div>
-<div class="section" id="fsdt-shadmehri2012-bc2">
-<span id="id7"></span><h3>fsdt_shadmehri2012_bc2<a class="headerlink" href="#fsdt-shadmehri2012-bc2" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fsdt-shadmehri2012-bc2">
+<span id="id7"></span><h3>fsdt_shadmehri2012_bc2<a class="headerlink" href="#fsdt-shadmehri2012-bc2" title="Link to this heading">#</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>NOT RECOMMENDED, implemented for comparative purposes only.</p>
@@ -332,8 +696,8 @@ w = w_0 + \sum_{i_1=0}^{m_1} {c_{i_1}}^{w} \sin{{b_x}_1}
 (<a class="reference internal" href="ref.html#shadmehri2012" id="id8"><span>[shadmehri2012]</span></a>, <a class="reference internal" href="ref.html#shadmehri2012thesis" id="id9"><span>[shadmehri2012thesis]</span></a>) for the SS2- and CC2-types
 of boundary conditions. Uses the Donnell’s equations and
 the approximation functions are:</p>
-<div class="math">
-<p><img src="../../_images/math/ee0851aa65437f2a07bd83169a4e9bc5c6c40aab.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<div class="math notranslate nohighlight">
+\[\begin{split}u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -351,16 +715,16 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 \\
 {\phi}_\theta =  \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
      {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
-</div><p>Observations:</p>
+          \right)\end{split}\]</div>
+<p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> linear static not implemented</p>
-<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> linear static not implemented</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
-</div>
-<div class="section" id="fsdt-shadmehri2012-bc3">
-<span id="id10"></span><h3>fsdt_shadmehri2012_bc3<a class="headerlink" href="#fsdt-shadmehri2012-bc3" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fsdt-shadmehri2012-bc3">
+<span id="id10"></span><h3>fsdt_shadmehri2012_bc3<a class="headerlink" href="#fsdt-shadmehri2012-bc3" title="Link to this heading">#</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>NOT RECOMMENDED, implemented for comparative purposes only.</p>
@@ -369,8 +733,8 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 for more details). This model was developed to simulate the SS3- and
 CC3-types of boundary condition. Uses the Donnell’s
 equations and the approximation functions are:</p>
-<div class="math">
-<p><img src="../../_images/math/ff2140710f932d30ffb5d6e44f093d84a813603e.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<div class="math notranslate nohighlight">
+\[\begin{split}u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \sin{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -388,16 +752,16 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 \\
 {\phi}_\theta =  \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
      {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \cos{j_2 \theta}
-          \right)"/></p>
-</div><p>Observations:</p>
+          \right)\end{split}\]</div>
+<p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> linear static not implemented</p>
-<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> linear static not implemented</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
-</div>
-<div class="section" id="fsdt-geier1997-bc2">
-<span id="id13"></span><h3>fsdt_geier1997_bc2<a class="headerlink" href="#fsdt-geier1997-bc2" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fsdt-geier1997-bc2">
+<span id="id13"></span><h3>fsdt_geier1997_bc2<a class="headerlink" href="#fsdt-geier1997-bc2" title="Link to this heading">#</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>NOT RECOMMENDED, implemented for comparative purposes only.</p>
@@ -407,8 +771,8 @@ for more details). This model was developed to simulate the SS2- and
 CC2-types of boundary condition. Such models seem to be originally
 proposed by Khdeir et al. (1989) (see <a class="reference internal" href="ref.html#khdeir1989" id="id15"><span>[khdeir1989]</span></a>).
 Uses the Donnell’s equations and the approximation functions are:</p>
-<div class="math">
-<p><img src="../../_images/math/2fa974c2dc2a0417db86a46be2de972671fe70a8.png" alt="u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
+<div class="math notranslate nohighlight">
+\[\begin{split}u = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
                  {c_{i_2 j_2}}^{u} \cos{{b_x}_2} \cos{j_2 \theta}
               \right)
 \\
@@ -426,98 +790,135 @@ w = \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
 \\
 {\phi}_\theta =  \sum_{i_2=0}^{m_2} \sum_{j_2=0}^{n_2} \left(
      {c_{i_2 j_2}}^{{\phi}_\theta} \sin{{b_x}_2} \sin{j_2 \theta}
-          \right)"/></p>
-</div><p>Observations:</p>
+          \right)\end{split}\]</div>
+<p>Observations:</p>
 <blockquote>
-<div><p><img class="math" src="../../_images/math/eb43d5592546eaaff233c50b390d221dc5c75cd9.png" alt="\checkmark"/> linear buckling implemented</p>
-<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> linear static not implemented</p>
-<p><img class="math" src="../../_images/math/8c8a765a28b30e31a1ab27a5df8aed228f8b57fb.png" alt="\rightarrow"/> non-linear analysis not implemented</p>
+<div><p><span class="math notranslate nohighlight">\(\checkmark\)</span> linear buckling implemented</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> linear static not implemented</p>
+<p><span class="math notranslate nohighlight">\(\rightarrow\)</span> non-linear analysis not implemented</p>
 </div></blockquote>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="clpt.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CLPT - Classical Laminated Plate Theory</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="bcs.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Boundary conditions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-donnell-bc1">fsdt_donnell_bc1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-donnell-bc2">fsdt_donnell_bc2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-donnell-bc3">fsdt_donnell_bc3</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-donnell-bc4">fsdt_donnell_bc4</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-donnell-bcn">fsdt_donnell_bcn</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-sanders-bcn">fsdt_sanders_bcn</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-shadmehri2012-bc2">fsdt_shadmehri2012_bc2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-shadmehri2012-bc3">fsdt_shadmehri2012_bc3</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fsdt-geier1997-bc2">fsdt_geier1997_bc2</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/theory/conecyl/fsdt.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
-            </a></p>
-  <h3><a href="../../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">FSDT - First-order Shear Deformation Theory</a><ul>
-<li><a class="reference internal" href="#description">Description</a></li>
-<li><a class="reference internal" href="#models">Models</a><ul>
-<li><a class="reference internal" href="#fsdt-donnell-bc1">fsdt_donnell_bc1</a></li>
-<li><a class="reference internal" href="#fsdt-donnell-bc2">fsdt_donnell_bc2</a></li>
-<li><a class="reference internal" href="#fsdt-donnell-bc3">fsdt_donnell_bc3</a></li>
-<li><a class="reference internal" href="#fsdt-donnell-bc4">fsdt_donnell_bc4</a></li>
-<li><a class="reference internal" href="#fsdt-donnell-bcn">fsdt_donnell_bcn</a></li>
-<li><a class="reference internal" href="#fsdt-sanders-bcn">fsdt_sanders_bcn</a></li>
-<li><a class="reference internal" href="#fsdt-shadmehri2012-bc2">fsdt_shadmehri2012_bc2</a></li>
-<li><a class="reference internal" href="#fsdt-shadmehri2012-bc3">fsdt_shadmehri2012_bc3</a></li>
-<li><a class="reference internal" href="#fsdt-geier1997-bc2">fsdt_geier1997_bc2</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="clpt.html"
-                        title="previous chapter">CLPT - Classical Laminated Plate Theory</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="bcs.html"
-                        title="next chapter">Boundary conditions</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/theory/conecyl/fsdt.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2012-2023 Saullo G. P. Castro.
+      <br/>
+    
+  </p>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="bcs.html" title="Boundary conditions"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="clpt.html" title="CLPT - Classical Laminated Plate Theory"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Theory, Implementation and Tutorials</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Semi-Analytical Models for Conical and Cylindrical Shells (conecyl)</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="esl_theories.html" >Equivalent Single Layer (ESL) Theories</a> &#187;</li> 
-      </ul>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Sep 03, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>

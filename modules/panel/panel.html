@@ -1,58 +1,417 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <title>Semi-analytical Models for Panels (compmech.panel) &#8212; CompMech 0.7.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    
-    <link rel="shortcut icon" href="../../_static/logo.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Semi-analytical Models for Panels (compmech.panel) &#8212; CompMech 0.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../_static/documentation_options.js?v=486e5634"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/panel/panel';</script>
+    <link rel="icon" href="../../_static/logo.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Panel Connections (compmech.panel.connections)" href="connections.html" />
-    <link rel="prev" title="Flat Plates, Curved Panels and Assemblies" href="index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="connections.html" title="Panel Connections (compmech.panel.connections)"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Flat Plates, Curved Panels and Assemblies"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Flat Plates, Curved Panels and Assemblies</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="Flat Plates, Curved Panels and Assemblies" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Nov 20, 2023"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <span class="target" id="module-compmech.panel"></span><div class="section" id="module-compmech.panel.panel">
-<span id="semi-analytical-models-for-panels-compmech-panel"></span><h1>Semi-analytical Models for Panels (<a class="reference internal" href="#module-compmech.panel" title="compmech.panel"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel</span></code></a>)<a class="headerlink" href="#module-compmech.panel.panel" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="compmech.panel.panel.Panel">
-<em class="property">class </em><code class="sig-prename descclassname">compmech.panel.panel.</code><code class="sig-name descname">Panel</code><span class="sig-paren">(</span><em class="sig-param">a=None</em>, <em class="sig-param">b=None</em>, <em class="sig-param">r=None</em>, <em class="sig-param">alphadeg=None</em>, <em class="sig-param">stack=None</em>, <em class="sig-param">plyt=None</em>, <em class="sig-param">laminaprop=None</em>, <em class="sig-param">mu=None</em>, <em class="sig-param">m=11</em>, <em class="sig-param">n=11</em>, <em class="sig-param">offset=0.0</em>, <em class="sig-param">y1=None</em>, <em class="sig-param">y2=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel" title="Permalink to this definition">¶</a></dt>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="CompMech 0.8.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="CompMech 0.8.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Modules
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../theory/index.html">
+                        Theory, Implementation and Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about.html">
+                        About
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../next_steps.html">
+                        Next Steps
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Contributing to CompMech
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../analysis/index.html">Analysis Module (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.analysis</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../composite/index.html">Composite Module (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.composite</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../conecyl/index.html">Semi-analytical Models for Cones and Cylinder (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.conecyl</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integrate/index.html">Integrate &lt;<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.integrate</span></code>&gt;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/index.html">Compmech shared libraries (lib)</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Flat Plates, Curved Panels and Assemblies</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Semi-analytical Models for Panels (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connections.html">Panel Connections (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.connections</span></code>)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="assembly/assembly_intro.html">Assembly of Semi-Analytical Models</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="assembly/assembly.html">Assembly of Plate and Panel Models (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.assembly</span></code>)</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="assembly/assembly_functions.html">Functions using Assemblies of Panels</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="assembly/tstiff2d.html">T-Stiffened Panels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="assembly/cylinder_unstiffened.html">Unstiffened Cylinder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="assembly/cylinder_blade_stiffened.html">Blade-Stiffened Cylinder</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="assembly/assembly_example_to_create.html">Example to Create a Panel Assembly</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../stiffener/index.html">Semi-analytical models for Stiffeners (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffener</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stiffpanelbay/index.html">Stiffened Panel Bay (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.stiffpanelbay</span></code>)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Modules</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Flat Plates, Curved Panels and Assemblies</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Semi-analyti...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="semi-analytical-models-for-panels-compmech-panel">
+<span id="module-compmech.panel"></span><h1>Semi-analytical Models for Panels (<a class="reference internal" href="#module-compmech.panel" title="compmech.panel"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel</span></code></a>)<a class="headerlink" href="#semi-analytical-models-for-panels-compmech-panel" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="compmech.panel.Panel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compmech.panel.</span></span><span class="sig-name descname"><span class="pre">Panel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plyt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">laminaprop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel" title="Link to this definition">#</a></dt>
 <dd><p>General Panel class</p>
 <p>It works for both flat plates, cylindrical and conical panels. The right
 model is selected according to parameters <code class="docutils literal notranslate"><span class="pre">r</span></code> (radius) and <code class="docutils literal notranslate"><span class="pre">alphadeg</span></code>
@@ -60,11 +419,11 @@ model is selected according to parameters <code class="docutils literal notransl
 <p>The approximation functions for the displacement fields are built using
 <a class="reference internal" href="../../theory/func/bardell.html#theory-func-bardell"><span class="std std-ref">Bardell’s functions</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>a</strong><span class="classifier">float, optional</span></dt><dd><p>Length (along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinate).</p>
+<dt><strong>a</strong><span class="classifier">float, optional</span></dt><dd><p>Length (along the <span class="math notranslate nohighlight">\(x\)</span> coordinate).</p>
 </dd>
-<dt><strong>b</strong><span class="classifier">float, optional</span></dt><dd><p>Width (along the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> coordinate).</p>
+<dt><strong>b</strong><span class="classifier">float, optional</span></dt><dd><p>Width (along the <span class="math notranslate nohighlight">\(y\)</span> coordinate).</p>
 </dd>
 <dt><strong>r</strong><span class="classifier">float, optional</span></dt><dd><p>Radius for cylindrical panels.</p>
 </dd>
@@ -74,109 +433,101 @@ model is selected according to parameters <code class="docutils literal notransl
 </dd>
 <dt><strong>plyt</strong><span class="classifier">float, optional</span></dt><dd><p>Ply thickness.</p>
 </dd>
-<dt><strong>laminaprop</strong><span class="classifier">list or tuple, optional</span></dt><dd><p>Orthotropic lamina properties: <img class="math" src="../../_images/math/ccfbb261bc985b06e710fdf112e6617a56aa18c5.png" alt="E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}"/>.</p>
+<dt><strong>laminaprop</strong><span class="classifier">list or tuple, optional</span></dt><dd><p>Orthotropic lamina properties: <span class="math notranslate nohighlight">\(E_1, E_2, \nu_{12}, G_{12}, G_{13}, G_{23}\)</span>.</p>
 </dd>
 <dt><strong>mu</strong><span class="classifier">float, optional</span></dt><dd><p>Material density.</p>
 </dd>
-<dt><strong>m, n</strong><span class="classifier">int, optional</span></dt><dd><p>Number of terms for the approximation functions along <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> and <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>,
+<dt><strong>m, n</strong><span class="classifier">int, optional</span></dt><dd><p>Number of terms for the approximation functions along <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>,
 respectively.</p>
 </dd>
 <dt><strong>offset</strong><span class="classifier">float, optional</span></dt><dd><p>Laminate offset about panel mid-surface. The offset is measured along
-the normal (<img class="math" src="../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/>) axis.</p>
+the normal (<span class="math notranslate nohighlight">\(z\)</span>) axis.</p>
 </dd>
-<dt><strong>y1, y2</strong><span class="classifier">float, optional</span></dt><dd><p>Define the lower and upper limit along <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> for panel with incomplete
+<dt><strong>y1, y2</strong><span class="classifier">float, optional</span></dt><dd><p>Define the lower and upper limit along <span class="math notranslate nohighlight">\(y\)</span> for panel with incomplete
 domains.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.add_force" title="compmech.panel.panel.Panel.add_force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_force</span></code></a>(self, x, y, fx, fy, fz[, cte])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.add_force" title="compmech.panel.Panel.add_force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_force</span></code></a>(x, y, fx, fy, fz[, cte])</p></td>
 <td><p>Add a punctual force with three components</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.calc_cA" title="compmech.panel.panel.Panel.calc_cA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_cA</span></code></a>(self, aeromu[, silent, finalize])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.Panel.calc_cA" title="compmech.panel.Panel.calc_cA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_cA</span></code></a>(aeromu[, silent, finalize])</p></td>
 <td><p>Calculate the aerodynamic damping matrix using the piston theory</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fext" title="compmech.panel.panel.Panel.calc_fext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fext</span></code></a>(self[, inc, size, col0, silent])</p></td>
-<td><p>Calculate the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.calc_fext" title="compmech.panel.Panel.calc_fext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fext</span></code></a>([inc, size, col0, silent])</p></td>
+<td><p>Calculate the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.calc_fint" title="compmech.panel.panel.Panel.calc_fint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fint</span></code></a>(self, c[, size, col0, silent, nx, …])</p></td>
-<td><p>Calculate the internal force vector <img class="math" src="../../_images/math/abf38893eb062f70c9f222127d0c0870fd1bf666.png" alt="\{F_{int}\}"/></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.Panel.calc_fint" title="compmech.panel.Panel.calc_fint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_fint</span></code></a>(c[, size, col0, silent, nx, ny, ...])</p></td>
+<td><p>Calculate the internal force vector <span class="math notranslate nohighlight">\(\{F_{int}\}\)</span></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.calc_k0" title="compmech.panel.panel.Panel.calc_k0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_k0</span></code></a>(self[, size, row0, col0, silent, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.calc_k0" title="compmech.panel.Panel.calc_k0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_k0</span></code></a>([size, row0, col0, silent, ...])</p></td>
 <td><p>Calculate the constitutive stiffness matrix</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.calc_kA" title="compmech.panel.panel.Panel.calc_kA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_kA</span></code></a>(self[, size, row0, col0, silent, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.Panel.calc_kA" title="compmech.panel.Panel.calc_kA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_kA</span></code></a>([size, row0, col0, silent, finalize])</p></td>
 <td><p>Calculate the aerodynamic matrix using the linear piston theory</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.calc_kG0" title="compmech.panel.panel.Panel.calc_kG0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_kG0</span></code></a>(self[, size, row0, col0, silent, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.calc_kG0" title="compmech.panel.Panel.calc_kG0"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_kG0</span></code></a>([size, row0, col0, silent, ...])</p></td>
 <td><p>Calculate the linear geometric stiffness matrix</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.calc_kM" title="compmech.panel.panel.Panel.calc_kM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_kM</span></code></a>(self[, size, row0, col0, silent, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.Panel.calc_kM" title="compmech.panel.Panel.calc_kM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_kM</span></code></a>([size, row0, col0, silent, finalize])</p></td>
 <td><p>Calculate the mass matrix</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.freq" title="compmech.panel.panel.Panel.freq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">freq</span></code></a>(self[, atype, tol, sparse_solver, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.freq" title="compmech.panel.Panel.freq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">freq</span></code></a>([atype, tol, sparse_solver, silent, ...])</p></td>
 <td><p>Natural frequency analysis</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.get_size" title="compmech.panel.panel.Panel.get_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_size</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.Panel.get_size" title="compmech.panel.Panel.get_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_size</span></code></a>()</p></td>
 <td><p>Calculate the size of the stiffness matrices</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.lb" title="compmech.panel.panel.Panel.lb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lb</span></code></a>(self[, tol, sparse_solver, calc_kA, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.lb" title="compmech.panel.Panel.lb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lb</span></code></a>([tol, sparse_solver, calc_kA, silent, ...])</p></td>
 <td><p>Linear buckling analysis</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.plot" title="compmech.panel.panel.Panel.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(self, c[, invert_y, vec, deform_u, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.Panel.plot" title="compmech.panel.Panel.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(c[, invert_y, vec, deform_u, ...])</p></td>
 <td><p>Contour plot for a Ritz constants vector.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.save" title="compmech.panel.panel.Panel.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(self)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.save" title="compmech.panel.Panel.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
 <td><p>Save the <code class="docutils literal notranslate"><span class="pre">Panel</span></code> object using <code class="docutils literal notranslate"><span class="pre">pickle</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.static" title="compmech.panel.panel.Panel.static"><code class="xref py py-obj docutils literal notranslate"><span class="pre">static</span></code></a>(self[, NLgeom, silent])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.Panel.static" title="compmech.panel.Panel.static"><code class="xref py py-obj docutils literal notranslate"><span class="pre">static</span></code></a>([NLgeom, silent])</p></td>
 <td><p>Static analysis for cones and cylinders</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.strain" title="compmech.panel.panel.Panel.strain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strain</span></code></a>(self, c[, xs, ys, gridx, gridy, NLterms])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.strain" title="compmech.panel.Panel.strain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strain</span></code></a>(c[, xs, ys, gridx, gridy, NLterms])</p></td>
 <td><p>Calculate the strain field</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.stress" title="compmech.panel.panel.Panel.stress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stress</span></code></a>(self, c[, F, xs, ys, gridx, gridy, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#compmech.panel.Panel.stress" title="compmech.panel.Panel.stress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stress</span></code></a>(c[, F, xs, ys, gridx, gridy, NLterms])</p></td>
 <td><p>Calculate the stress field</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.panel.Panel.uvw" title="compmech.panel.panel.Panel.uvw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uvw</span></code></a>(self, c[, xs, ys, gridx, gridy])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#compmech.panel.Panel.uvw" title="compmech.panel.Panel.uvw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uvw</span></code></a>(c[, xs, ys, gridx, gridy])</p></td>
 <td><p>Calculate the displacement field</p></td>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 52%" />
-<col style="width: 48%" />
-</colgroup>
+<table class="table">
 <tbody>
 <tr class="row-odd"><td><p><strong>calc_kT</strong></p></td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.add_force">
-<code class="sig-name descname">add_force</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">fx</em>, <em class="sig-param">fy</em>, <em class="sig-param">fz</em>, <em class="sig-param">cte=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.add_force"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.add_force" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.add_force">
+<span class="sig-name descname"><span class="pre">add_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cte</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.add_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.add_force" title="Link to this definition">#</a></dt>
 <dd><p>Add a punctual force with three components</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> position.</p>
+<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> position.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> position in radians.</p>
+<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(y\)</span> position in radians.</p>
 </dd>
-<dt><strong>fx</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> component of the force vector.</p>
+<dt><strong>fx</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> component of the force vector.</p>
 </dd>
-<dt><strong>fy</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> component of the force vector.</p>
+<dt><strong>fy</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(y\)</span> component of the force vector.</p>
 </dd>
-<dt><strong>fz</strong><span class="classifier">float</span></dt><dd><p>The <img class="math" src="../../_images/math/8d051150f8669295ecdbe92367941012175a824d.png" alt="z"/> component of the force vector.</p>
+<dt><strong>fz</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(z\)</span> component of the force vector.</p>
 </dd>
 <dt><strong>cte</strong><span class="classifier">bool, optional</span></dt><dd><p>Constant forces are not incremented during the non-linear
 analysis.</p>
@@ -186,32 +537,32 @@ analysis.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.calc_cA">
-<code class="sig-name descname">calc_cA</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">aeromu</em>, <em class="sig-param">silent=False</em>, <em class="sig-param">finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_cA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_cA" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.calc_cA">
+<span class="sig-name descname"><span class="pre">calc_cA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aeromu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.calc_cA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.calc_cA" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the aerodynamic damping matrix using the piston theory</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.calc_fext">
-<code class="sig-name descname">calc_fext</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">inc=1.0</em>, <em class="sig-param">size=None</em>, <em class="sig-param">col0=0</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_fext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_fext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.calc_fext">
+<span class="sig-name descname"><span class="pre">calc_fext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.calc_fext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.calc_fext" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span></p>
 <p>Recall that:</p>
-<div class="math">
-<p><img src="../../_images/math/43454b09a08f63c3bc640d713ca3fa3d92d9fd58.png" alt="\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}"/></p>
-</div><p>such that the terms in <img class="math" src="../../_images/math/1ebf141ce64286419223117edb7d8a9890b65fd8.png" alt="\{{F_{ext}}_0\}"/> are constant and the terms in
-<img class="math" src="../../_images/math/7f3fff52d4953502d59cd325a856ab2fdb1af36b.png" alt="\{{F_{ext}}_\lambda\}"/> will be scaled by the parameter <code class="docutils literal notranslate"><span class="pre">inc</span></code>.</p>
+<div class="math notranslate nohighlight">
+\[\{F_{ext}\}=\{{F_{ext}}_0\} + \{{F_{ext}}_\lambda\}\]</div>
+<p>such that the terms in <span class="math notranslate nohighlight">\(\{{F_{ext}}_0\}\)</span> are constant and the terms in
+<span class="math notranslate nohighlight">\(\{{F_{ext}}_\lambda\}\)</span> will be scaled by the parameter <code class="docutils literal notranslate"><span class="pre">inc</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>inc</strong><span class="classifier">float, optional</span></dt><dd><p>Since this function is called during the non-linear analysis,
-<code class="docutils literal notranslate"><span class="pre">inc</span></code> will multiply the terms <img class="math" src="../../_images/math/7f3fff52d4953502d59cd325a856ab2fdb1af36b.png" alt="\{{F_{ext}}_\lambda\}"/>.</p>
+<code class="docutils literal notranslate"><span class="pre">inc</span></code> will multiply the terms <span class="math notranslate nohighlight">\(\{{F_{ext}}_\lambda\}\)</span>.</p>
 </dd>
 <dt><strong>silent</strong><span class="classifier">bool, optional</span></dt><dd><p>A boolean to tell whether the log messages should be printed.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fext</strong><span class="classifier">np.ndarray</span></dt><dd><p>The external force vector</p>
 </dd>
@@ -220,12 +571,12 @@ analysis.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.calc_fint">
-<code class="sig-name descname">calc_fint</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">size=None</em>, <em class="sig-param">col0=0</em>, <em class="sig-param">silent=False</em>, <em class="sig-param">nx=None</em>, <em class="sig-param">ny=None</em>, <em class="sig-param">Fnxny=None</em>, <em class="sig-param">inc=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_fint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_fint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the internal force vector <img class="math" src="../../_images/math/abf38893eb062f70c9f222127d0c0870fd1bf666.png" alt="\{F_{int}\}"/></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.calc_fint">
+<span class="sig-name descname"><span class="pre">calc_fint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fnxny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.calc_fint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.calc_fint" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the internal force vector <span class="math notranslate nohighlight">\(\{F_{int}\}\)</span></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants vector to be used for the internal forces
 calculation.</p>
@@ -237,9 +588,9 @@ internal force vector of an assembly.</p>
 </dd>
 <dt><strong>silent</strong><span class="classifier">bool, optional</span></dt><dd><p>A boolean to tell whether the log messages should be printed.</p>
 </dd>
-<dt><strong>nx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of integration points along <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/>.</p>
+<dt><strong>nx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of integration points along <span class="math notranslate nohighlight">\(x\)</span>.</p>
 </dd>
-<dt><strong>ny</strong><span class="classifier">int, optional</span></dt><dd><p>Number of integration points along <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>.</p>
+<dt><strong>ny</strong><span class="classifier">int, optional</span></dt><dd><p>Number of integration points along <span class="math notranslate nohighlight">\(y\)</span>.</p>
 </dd>
 <dt><strong>Fnxny</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>Laminate stiffness for each integration point, if not supplied it
 will assume constant properties over the panel domain.</p>
@@ -248,7 +599,7 @@ will assume constant properties over the panel domain.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fint</strong><span class="classifier">np.ndarray</span></dt><dd><p>The internal force vector</p>
 </dd>
@@ -257,9 +608,9 @@ will assume constant properties over the panel domain.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.calc_k0">
-<code class="sig-name descname">calc_k0</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">size=None</em>, <em class="sig-param">row0=0</em>, <em class="sig-param">col0=0</em>, <em class="sig-param">silent=False</em>, <em class="sig-param">finalize=True</em>, <em class="sig-param">c=None</em>, <em class="sig-param">nx=None</em>, <em class="sig-param">ny=None</em>, <em class="sig-param">Fnxny=None</em>, <em class="sig-param">inc=None</em>, <em class="sig-param">NLgeom=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_k0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_k0" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.calc_k0">
+<span class="sig-name descname"><span class="pre">calc_k0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fnxny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NLgeom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.calc_k0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.calc_k0" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the constitutive stiffness matrix</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">c</span></code> is not given it calculates the linear constitutive stiffness
 matrix, otherwise the large displacement linear constitutive stiffness
@@ -270,7 +621,7 @@ calculated may have the <code class="docutils literal notranslate"><span class="
 current constitutive matrix being calculated starts at position
 <code class="docutils literal notranslate"><span class="pre">row0</span></code> and <code class="docutils literal notranslate"><span class="pre">col0</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>size</strong><span class="classifier">int</span></dt><dd><p>The size of the calculated sparse matrices.</p>
 </dd>
@@ -285,7 +636,7 @@ symmetric, should be <code class="docutils literal notranslate"><span class="pre
 <dt><strong>c</strong><span class="classifier">array-like or None, optional</span></dt><dd><p>This must be the result of a static analysis, used to compute
 non-linear terms based on the actual displacement field.</p>
 </dd>
-<dt><strong>nx, ny</strong><span class="classifier">int or None, optional</span></dt><dd><p>Number of integration points along <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> and <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>, respectively, for
+<dt><strong>nx, ny</strong><span class="classifier">int or None, optional</span></dt><dd><p>Number of integration points along <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, respectively, for
 the Legendre-Gauss quadrature rule applied in the numerical
 integration. Only used when <code class="docutils literal notranslate"><span class="pre">c</span></code> is given.</p>
 </dd>
@@ -301,28 +652,28 @@ considered.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.calc_kA">
-<code class="sig-name descname">calc_kA</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">size=None</em>, <em class="sig-param">row0=0</em>, <em class="sig-param">col0=0</em>, <em class="sig-param">silent=False</em>, <em class="sig-param">finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_kA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_kA" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.calc_kA">
+<span class="sig-name descname"><span class="pre">calc_kA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.calc_kA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.calc_kA" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the aerodynamic matrix using the linear piston theory</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.calc_kG0">
-<code class="sig-name descname">calc_kG0</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">size=None</em>, <em class="sig-param">row0=0</em>, <em class="sig-param">col0=0</em>, <em class="sig-param">silent=False</em>, <em class="sig-param">finalize=True</em>, <em class="sig-param">c=None</em>, <em class="sig-param">nx=None</em>, <em class="sig-param">ny=None</em>, <em class="sig-param">Fnxny=None</em>, <em class="sig-param">NLgeom=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_kG0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_kG0" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.calc_kG0">
+<span class="sig-name descname"><span class="pre">calc_kG0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fnxny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NLgeom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.calc_kG0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.calc_kG0" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the linear geometric stiffness matrix</p>
-<p>See <a class="reference internal" href="#compmech.panel.panel.Panel.calc_k0" title="compmech.panel.panel.Panel.calc_k0"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Panel.calc_k0()</span></code></a> for details on each parameter.</p>
+<p>See <a class="reference internal" href="#compmech.panel.Panel.calc_k0" title="compmech.panel.Panel.calc_k0"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Panel.calc_k0()</span></code></a> for details on each parameter.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.calc_kM">
-<code class="sig-name descname">calc_kM</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">size=None</em>, <em class="sig-param">row0=0</em>, <em class="sig-param">col0=0</em>, <em class="sig-param">silent=False</em>, <em class="sig-param">finalize=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.calc_kM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.calc_kM" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.calc_kM">
+<span class="sig-name descname"><span class="pre">calc_kM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.calc_kM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.calc_kM" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the mass matrix</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.freq">
-<code class="sig-name descname">freq</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">atype=4</em>, <em class="sig-param">tol=0</em>, <em class="sig-param">sparse_solver=True</em>, <em class="sig-param">silent=False</em>, <em class="sig-param">sort=True</em>, <em class="sig-param">damping=False</em>, <em class="sig-param">reduced_dof=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.freq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.freq" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.freq">
+<span class="sig-name descname"><span class="pre">freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduced_dof</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.freq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.freq" title="Link to this definition">#</a></dt>
 <dd><p>Natural frequency analysis</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -332,7 +683,7 @@ considered.</p>
 <p>The following parameters of the will affect the linear buckling
 analysis:</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>atype</strong><span class="classifier">int, optional</span></dt><dd><p>Tells which analysis type should be performed:</p>
 <ul class="simple">
@@ -359,7 +710,7 @@ for some cases, though the sparse solver is faster.</p>
 </dd>
 <dt><strong>damping</strong><span class="classifier">bool, optinal</span></dt><dd><p>If aerodynamic damping should be taken into account.</p>
 </dd>
-<dt><strong>reduced_dof</strong><span class="classifier">bool, optional</span></dt><dd><p>Considers only the contributions of <img class="math" src="../../_images/math/02d98909b5d6acd6a7ff927d4d42790bdd407d58.png" alt="v"/> and <img class="math" src="../../_images/math/cc87ee665749db882f94e0d3707eb23e39638650.png" alt="w"/> to the stiffness
+<dt><strong>reduced_dof</strong><span class="classifier">bool, optional</span></dt><dd><p>Considers only the contributions of <span class="math notranslate nohighlight">\(v\)</span> and <span class="math notranslate nohighlight">\(w\)</span> to the stiffness
 matrix and accelerates the run. Only effective when
 <code class="docutils literal notranslate"><span class="pre">sparse_solver=False</span></code>.</p>
 </dd>
@@ -368,19 +719,19 @@ matrix and accelerates the run. Only effective when
 </dl>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal notranslate"><span class="pre">eigvals</span></code> parameter and
-the <img class="math" src="../../_images/math/3d2006e56cc72c929d49557c7d4b01e336b4ce6b.png" alt="i^{th}"/> eigenvector in the <code class="docutils literal notranslate"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
+the <span class="math notranslate nohighlight">\(i^{th}\)</span> eigenvector in the <code class="docutils literal notranslate"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.get_size">
-<code class="sig-name descname">get_size</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.get_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.get_size" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.get_size">
+<span class="sig-name descname"><span class="pre">get_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.get_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.get_size" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the size of the stiffness matrices</p>
 <p>The size of the stiffness matrices can be interpreted as the number of
 rows or columns, recalling that this will be the size of the Ritz
-constants’ vector <img class="math" src="../../_images/math/a4acf9ac84baad22892cc8ac8f55a3467e4f4612.png" alt="\{c\}"/>, the internal force vector <img class="math" src="../../_images/math/abf38893eb062f70c9f222127d0c0870fd1bf666.png" alt="\{F_{int}\}"/> and
-the external force vector <img class="math" src="../../_images/math/dcff9afc351ff28d151c75e3542fbeb5a094c014.png" alt="\{F_{ext}\}"/>.</p>
+constants’ vector <span class="math notranslate nohighlight">\(\{c\}\)</span>, the internal force vector <span class="math notranslate nohighlight">\(\{F_{int}\}\)</span> and
+the external force vector <span class="math notranslate nohighlight">\(\{F_{ext}\}\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>size</strong><span class="classifier">int</span></dt><dd><p>The size of the stiffness matrices.</p>
 </dd>
@@ -389,9 +740,9 @@ the external force vector <img class="math" src="../../_images/math/dcff9afc351f
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.lb">
-<code class="sig-name descname">lb</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">tol=0</em>, <em class="sig-param">sparse_solver=True</em>, <em class="sig-param">calc_kA=False</em>, <em class="sig-param">silent=False</em>, <em class="sig-param">nx=10</em>, <em class="sig-param">ny=10</em>, <em class="sig-param">c=None</em>, <em class="sig-param">ckL=None</em>, <em class="sig-param">Fnxny=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.lb" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.lb">
+<span class="sig-name descname"><span class="pre">lb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparse_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_kA</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ckL</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fnxny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.lb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.lb" title="Link to this definition">#</a></dt>
 <dd><p>Linear buckling analysis</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -400,7 +751,7 @@ the external force vector <img class="math" src="../../_images/math/dcff9afc351f
 </div>
 <p>The following parameters will affect the linear buckling analysis:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>A float tolerance passsed to the eigenvalue solver.</p>
 </dd>
@@ -415,7 +766,7 @@ the external force vector <img class="math" src="../../_images/math/dcff9afc351f
 </dd>
 <dt><strong>ckL</strong><span class="classifier">array-like, optional</span></dt><dd><p>A set of Ritz constants that will be use to compute KL.</p>
 </dd>
-<dt><strong>nx and ny</strong><span class="classifier">int or None, optional</span></dt><dd><p>Number of integration points along <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> and <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/>, respectively, for
+<dt><strong>nx and ny</strong><span class="classifier">int or None, optional</span></dt><dd><p>Number of integration points along <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, respectively, for
 the Legendre-Gauss quadrature rule applied in the numerical
 integration.</p>
 </dd>
@@ -428,16 +779,16 @@ classical laminated plate theory models.</p>
 </dl>
 <p class="rubric">Notes</p>
 <p>The extracted eigenvalues are stored in the <code class="docutils literal notranslate"><span class="pre">eigvals</span></code> parameter
-of the <code class="docutils literal notranslate"><span class="pre">Panel</span></code> object and the <img class="math" src="../../_images/math/3d2006e56cc72c929d49557c7d4b01e336b4ce6b.png" alt="i^{th}"/> eigenvector in the
+of the <code class="docutils literal notranslate"><span class="pre">Panel</span></code> object and the <span class="math notranslate nohighlight">\(i^{th}\)</span> eigenvector in the
 <code class="docutils literal notranslate"><span class="pre">eigvecs[:,</span> <span class="pre">i-1]</span></code> parameter.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">invert_y=False</em>, <em class="sig-param">vec='w'</em>, <em class="sig-param">deform_u=False</em>, <em class="sig-param">deform_u_sf=100.0</em>, <em class="sig-param">filename=''</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">figsize=(3.5</em>, <em class="sig-param">2.0)</em>, <em class="sig-param">save=True</em>, <em class="sig-param">title=''</em>, <em class="sig-param">colorbar=False</em>, <em class="sig-param">cbar_nticks=2</em>, <em class="sig-param">cbar_format=None</em>, <em class="sig-param">cbar_title=''</em>, <em class="sig-param">cbar_fontsize=10</em>, <em class="sig-param">colormap='jet'</em>, <em class="sig-param">aspect='equal'</em>, <em class="sig-param">clean=True</em>, <em class="sig-param">dpi=400</em>, <em class="sig-param">texts=[]</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ys=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridy=300</em>, <em class="sig-param">num_levels=400</em>, <em class="sig-param">vecmin=None</em>, <em class="sig-param">vecmax=None</em>, <em class="sig-param">plotoffsetxs=0.0</em>, <em class="sig-param">plotoffsetys=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.plot" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deform_u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deform_u_sf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3.5,</span> <span class="pre">2.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_nticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colormap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'jet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">texts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotoffsetxs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotoffsetys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.plot" title="Link to this definition">#</a></dt>
 <dd><p>Contour plot for a Ritz constants vector.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants that will be used to compute the field contour.</p>
 </dd>
@@ -454,14 +805,14 @@ of the <code class="docutils literal notranslate"><span class="pre">Panel</span>
 </dd>
 <dt><strong>deform_u_sf</strong><span class="classifier">float, optional</span></dt><dd><p>The scaling factor used to deform the contour.</p>
 </dd>
-<dt><strong>invert_y</strong><span class="classifier">bool, optional</span></dt><dd><p>Inverts the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> axis of the plot.</p>
+<dt><strong>invert_y</strong><span class="classifier">bool, optional</span></dt><dd><p>Inverts the <span class="math notranslate nohighlight">\(y\)</span> axis of the plot.</p>
 </dd>
 <dt><strong>save</strong><span class="classifier">bool, optional</span></dt><dd><p>Flag telling whether the contour should be saved to an image file.</p>
 </dd>
 <dt><strong>dpi</strong><span class="classifier">int, optional</span></dt><dd><p>Resolution of the saved file in dots per inch.</p>
 </dd>
 <dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>The file name for the generated image file. If no value is given,
-the <img class="math" src="../../_images/math/75e26805b9431ddf4904cde00d9a08e963728387.png" alt="name"/> parameter of the <code class="docutils literal notranslate"><span class="pre">Panel</span></code> object will be used.</p>
+the <span class="math notranslate nohighlight">\(name\)</span> parameter of the <code class="docutils literal notranslate"><span class="pre">Panel</span></code> object will be used.</p>
 </dd>
 <dt><strong>ax</strong><span class="classifier">AxesSubplot, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">ax</span></code> is given, the contour plot will be created inside it.</p>
 </dd>
@@ -486,16 +837,16 @@ method.</p>
 </dd>
 <dt><strong>clean</strong><span class="classifier">bool, optional</span></dt><dd><p>Clean axes ticks, grids, spines etc.</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions where to calculate the displacement field.
+<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
 <dt><strong>ys</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">y</span></code> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
-<dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis where to calculate the
+<dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(x\)</span> axis where to calculate the
 displacement field.</p>
 </dd>
-<dt><strong>gridy</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> where to calculate the
+<dt><strong>gridy</strong><span class="classifier">int, optional</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(y\)</span> where to calculate the
 displacement field.</p>
 </dd>
 <dt><strong>num_levels</strong><span class="classifier">int, optional</span></dt><dd><p>Number of contour levels (higher values make the contour smoother).</p>
@@ -508,7 +859,7 @@ field.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib.axes.Axes</span></dt><dd><p>The Matplotlib object that can be used to modify the current plot
 if needed.</p>
@@ -518,18 +869,18 @@ if needed.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.save" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.save" title="Link to this definition">#</a></dt>
 <dd><p>Save the <code class="docutils literal notranslate"><span class="pre">Panel</span></code> object using <code class="docutils literal notranslate"><span class="pre">pickle</span></code></p>
 <p class="rubric">Notes</p>
 <p>The pickled file will have the name stored in <code class="docutils literal notranslate"><span class="pre">Panel.name</span></code>
 followed by a <code class="docutils literal notranslate"><span class="pre">'.Panel'</span></code> extension.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.static">
-<code class="sig-name descname">static</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">NLgeom=False</em>, <em class="sig-param">silent=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.static"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.static" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.static">
+<span class="sig-name descname"><span class="pre">static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NLgeom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.static"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.static" title="Link to this definition">#</a></dt>
 <dd><p>Static analysis for cones and cylinders</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -540,7 +891,7 @@ followed by a <code class="docutils literal notranslate"><span class="pre">'.Pan
 <a class="reference internal" href="../analysis/index.html#compmech.analysis.Analysis" title="compmech.analysis.Analysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">Analysis</span></code></a> for further details about the parameters
 controlling the non-linear analysis.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>NLgeom</strong><span class="classifier">bool</span></dt><dd><p>Flag to indicate whether a linear or a non-linear analysis is to
 be performed.</p>
@@ -549,7 +900,7 @@ be performed.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>cs</strong><span class="classifier">list</span></dt><dd><p>A list containing the Ritz constants for each load increment of
 the static analysis. The list will have only one entry in case
@@ -564,19 +915,19 @@ increments used in the non-linear analysis are stored in the
 <code class="docutils literal notranslate"><span class="pre">self.analysis.increments</span></code> parameter.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.strain">
-<code class="sig-name descname">strain</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ys=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridy=300</em>, <em class="sig-param">NLterms=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.strain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.strain" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.strain">
+<span class="sig-name descname"><span class="pre">strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NLterms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.strain" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the strain field</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants vector to be used for the strain field
 calculation.</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinates where to calculate the strains.</p>
+<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> coordinates where to calculate the strains.</p>
 </dd>
-<dt><strong>ys</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> coordinates where to calculate the strains, must
+<dt><strong>ys</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(y\)</span> coordinates where to calculate the strains, must
 have the same shape as <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
 </dd>
 <dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">xs</span></code> and <code class="docutils literal notranslate"><span class="pre">ys</span></code> are not supplied, <code class="docutils literal notranslate"><span class="pre">gridx</span></code> and <code class="docutils literal notranslate"><span class="pre">gridy</span></code>
@@ -589,7 +940,7 @@ are used.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>res</strong><span class="classifier">dict</span></dt><dd><p>A dictionary of <code class="docutils literal notranslate"><span class="pre">np.ndarrays</span></code> with the keys:
 <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">exx,</span> <span class="pre">eyy,</span> <span class="pre">gxy,</span> <span class="pre">kxx,</span> <span class="pre">kyy,</span> <span class="pre">kxy)</span></code></p>
@@ -599,12 +950,12 @@ are used.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.stress">
-<code class="sig-name descname">stress</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">F=None</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ys=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridy=300</em>, <em class="sig-param">NLterms=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.stress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.stress" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.stress">
+<span class="sig-name descname"><span class="pre">stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NLterms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.stress" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the stress field</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">np.ndarray</span></dt><dd><p>The Ritz constants vector to be used for the strain field
 calculation.</p>
@@ -612,9 +963,9 @@ calculation.</p>
 <dt><strong>F</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The laminate stiffness matrix. Can be a 6 x 6 (ABD) matrix for
 homogeneous laminates over the whole domain.</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> coordinates where to calculate the strains.</p>
+<dt><strong>xs</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> coordinates where to calculate the strains.</p>
 </dd>
-<dt><strong>ys</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> coordinates where to calculate the strains, must
+<dt><strong>ys</strong><span class="classifier">np.ndarray, optional</span></dt><dd><p>The <span class="math notranslate nohighlight">\(y\)</span> coordinates where to calculate the strains, must
 have the same shape as <code class="docutils literal notranslate"><span class="pre">xs</span></code>.</p>
 </dd>
 <dt><strong>gridx</strong><span class="classifier">int, optional</span></dt><dd><p>When <code class="docutils literal notranslate"><span class="pre">xs</span></code> and <code class="docutils literal notranslate"><span class="pre">ys</span></code> are not supplied, <code class="docutils literal notranslate"><span class="pre">gridx</span></code> and <code class="docutils literal notranslate"><span class="pre">gridy</span></code>
@@ -627,7 +978,7 @@ are used.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>res</strong><span class="classifier">dict</span></dt><dd><p>A dictionary of <code class="docutils literal notranslate"><span class="pre">np.ndarrays</span></code> with the keys:
 <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">Nxx,</span> <span class="pre">Nyy,</span> <span class="pre">Nxy,</span> <span class="pre">Mxx,</span> <span class="pre">Myy,</span> <span class="pre">Mxy)</span></code></p>
@@ -637,33 +988,33 @@ are used.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="compmech.panel.panel.Panel.uvw">
-<code class="sig-name descname">uvw</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">c</em>, <em class="sig-param">xs=None</em>, <em class="sig-param">ys=None</em>, <em class="sig-param">gridx=300</em>, <em class="sig-param">gridy=300</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/panel.html#Panel.uvw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#compmech.panel.panel.Panel.uvw" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="compmech.panel.Panel.uvw">
+<span class="sig-name descname"><span class="pre">uvw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/compmech/panel/_panel.html#Panel.uvw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#compmech.panel.Panel.uvw" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the displacement field</p>
 <p>For a given full set of Ritz constants <code class="docutils literal notranslate"><span class="pre">c</span></code>, the displacement
 field is calculated and stored in the parameters
 <code class="docutils literal notranslate"><span class="pre">u</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code>, <code class="docutils literal notranslate"><span class="pre">w</span></code>, <code class="docutils literal notranslate"><span class="pre">phix</span></code>, <code class="docutils literal notranslate"><span class="pre">phiy</span></code> of the <code class="docutils literal notranslate"><span class="pre">Panel</span></code> object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>c</strong><span class="classifier">float</span></dt><dd><p>The full set of Ritz constants</p>
 </dd>
-<dt><strong>xs</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> positions where to calculate the displacement field.
+<dt><strong>xs</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <span class="math notranslate nohighlight">\(x\)</span> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
 <dt><strong>ys</strong><span class="classifier">np.ndarray</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">y</span></code> positions where to calculate the displacement field.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code> and the method <code class="docutils literal notranslate"><span class="pre">_default_field</span></code> is used.</p>
 </dd>
-<dt><strong>gridx</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" alt="x"/> axis where to calculate the
+<dt><strong>gridx</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(x\)</span> axis where to calculate the
 displacement field.</p>
 </dd>
-<dt><strong>gridy</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <img class="math" src="../../_images/math/1b5e577d6216dca3af7d87aa122a0b9b360d6cb3.png" alt="y"/> where to calculate the
+<dt><strong>gridy</strong><span class="classifier">int</span></dt><dd><p>Number of points along the <span class="math notranslate nohighlight">\(y\)</span> where to calculate the
 displacement field.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">tuple</span></dt><dd><p>A tuple of <code class="docutils literal notranslate"><span class="pre">np.ndarrays</span></code> containing
 <code class="docutils literal notranslate"><span class="pre">(u,</span> <span class="pre">v,</span> <span class="pre">w,</span> <span class="pre">phix,</span> <span class="pre">phiy)</span></code>.</p>
@@ -678,68 +1029,133 @@ stored as parameters with the same name in the <code class="docutils literal not
 
 </dd></dl>
 
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Flat Plates, Curved Panels and Assemblies</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="connections.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Panel Connections (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.connections</span></code>)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel"><code class="docutils literal notranslate"><span class="pre">Panel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.add_force"><code class="docutils literal notranslate"><span class="pre">Panel.add_force()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.calc_cA"><code class="docutils literal notranslate"><span class="pre">Panel.calc_cA()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.calc_fext"><code class="docutils literal notranslate"><span class="pre">Panel.calc_fext()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.calc_fint"><code class="docutils literal notranslate"><span class="pre">Panel.calc_fint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.calc_k0"><code class="docutils literal notranslate"><span class="pre">Panel.calc_k0()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.calc_kA"><code class="docutils literal notranslate"><span class="pre">Panel.calc_kA()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.calc_kG0"><code class="docutils literal notranslate"><span class="pre">Panel.calc_kG0()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.calc_kM"><code class="docutils literal notranslate"><span class="pre">Panel.calc_kM()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.freq"><code class="docutils literal notranslate"><span class="pre">Panel.freq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.get_size"><code class="docutils literal notranslate"><span class="pre">Panel.get_size()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.lb"><code class="docutils literal notranslate"><span class="pre">Panel.lb()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.plot"><code class="docutils literal notranslate"><span class="pre">Panel.plot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.save"><code class="docutils literal notranslate"><span class="pre">Panel.save()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.static"><code class="docutils literal notranslate"><span class="pre">Panel.static()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.strain"><code class="docutils literal notranslate"><span class="pre">Panel.strain()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.stress"><code class="docutils literal notranslate"><span class="pre">Panel.stress()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compmech.panel.Panel.uvw"><code class="docutils literal notranslate"><span class="pre">Panel.uvw()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/modules/panel/panel.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
 </div>
 
-
+</div></div>
+              
+            
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../../index.html">
-              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
-            </a></p>
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Flat Plates, Curved Panels and Assemblies</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="connections.html"
-                        title="next chapter">Panel Connections (<code class="xref py py-mod docutils literal notranslate"><span class="pre">compmech.panel.connections</span></code>)</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/modules/panel/panel.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2012-2023 Saullo G. P. Castro.
+      <br/>
+    
+  </p>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="connections.html" title="Panel Connections (compmech.panel.connections)"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Flat Plates, Curved Panels and Assemblies"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">CompMech 0.7.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Modules</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="index.html" >Flat Plates, Curved Panels and Assemblies</a> &#187;</li> 
-      </ul>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+</p></div>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012-2016 Saullo G. P. Castro.
-      Last updated on Sep 03, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>
